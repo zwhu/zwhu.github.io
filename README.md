@@ -24,15 +24,15 @@
 - 各文章 HTML：标题、日期、正文；新增文章时复制一篇并同步首页目录。
 - `style.css`：共用颜色、字体与布局；`translation.css`：对照阅读样式；`archive.css`：专栏与评论样式。使用系统字体。
 
-## GitHub 评论（待安装 giscus 后启用）
+## GitHub 评论
 
-所有五篇文章均接入共用的 `comments.js`。采用 [giscus](https://giscus.app/zh-CN)，评论存放在本仓库的 GitHub Discussions。仓库已启用 Discussions，公开仓库 ID 和 Announcements 分类 ID 已填好。安装 giscus 前保留 `enabled: false`，不加载第三方评论脚本。
+所有五篇文章均接入共用的 `comments.js`。采用 [giscus](https://giscus.app/zh-CN)，评论存放在本仓库的 GitHub Discussions。仓库已启用 Discussions，giscus 已安装，公开仓库 ID 和 Announcements 分类 ID 已填好，`enabled: true` 启用评论。
 
 完成启用：
 
 1. 将 [giscus GitHub App](https://github.com/apps/giscus/installations/new) 安装到 `zwhu/zwhu.github.io`，只选择此仓库。
 2. 将 `comments-config.js` 的 `enabled` 改为 `true`，提交并推送。
-3. 在真实域名下验证评论加载、GitHub 登录和发表评论。浏览器当前未登录 GitHub，安装及实际发表评论尚未完成。
+3. 在真实域名下验证评论加载；访客登录 GitHub 后可发表评论。
 
 配置里只有公开 ID，不需要 Token。评论按 `blog/文件名.html` 的固定标识对应讨论，因此之后更换域名不会改变标识；文章文件名应保持稳定且唯一。访客评论需要 GitHub 登录授权。正式接通后的登录与评论尚未验证。
 
