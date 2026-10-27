@@ -1,0 +1,118 @@
+.lesson-ai-coding-playbook *{box-sizing:border-box;}
+.lesson-ai-coding-playbook{scroll-behavior:smooth;scroll-padding-top:90px;}
+.lesson-ai-coding-playbook{margin:0;background:var(--code);color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;}
+.lesson-ai-coding-playbook button,.lesson-ai-coding-playbook a,.lesson-ai-coding-playbook input{touch-action:manipulation;}
+.lesson-ai-coding-playbook button{font:inherit;cursor:pointer;}
+.lesson-ai-coding-playbook a{color:var(--accent);text-underline-offset:3px;}
+.lesson-ai-coding-playbook button:focus-visible,.lesson-ai-coding-playbook a:focus-visible,.lesson-ai-coding-playbook summary:focus-visible{outline:3px solid #d58947;outline-offset:4px;}
+.lesson-ai-coding-playbook header{padding:64px 6vw 36px;max-width:1400px;margin:auto;}
+.lesson-ai-coding-playbook .eyebrow{font-size:12px;letter-spacing:.14em;font-weight:750;color:var(--accent);}
+.lesson-ai-coding-playbook h1{font-size:clamp(32px,4vw,56px);line-height:1.2;letter-spacing:-.035em;margin:16px 0 20px;}
+.lesson-ai-coding-playbook h1 span{display:block;color:var(--accent);}
+.lesson-ai-coding-playbook .intro{max-width:720px;color:var(--muted);font-size:18px;margin:0;}
+.lesson-ai-coding-playbook .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;}
+.lesson-ai-coding-playbook .pill{background:var(--code);border:1px solid var(--line);border-radius:4px;font-size:12px;padding:5px 12px;}
+.lesson-ai-coding-playbook .toolbar{position:sticky;top:0;z-index:3;background:var(--code);border-block:1px solid var(--line);padding:12px 6vw;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.lesson-ai-coding-playbook nav{display:flex;gap:6px;flex-wrap:wrap;}
+.lesson-ai-coding-playbook nav a{font-size:13px;color:var(--muted);text-decoration:none;padding:7px 12px;border-radius:4px;}
+.lesson-ai-coding-playbook nav a:hover{background:var(--soft);color:var(--accent);}
+.lesson-ai-coding-playbook .tools{display:flex;gap:8px;flex-shrink:0;}
+.lesson-ai-coding-playbook .quiet{background:transparent;border:1px solid var(--line);border-radius:4px;padding:6px 12px;font-size:13px;color:var(--ink);}
+.lesson-ai-coding-playbook [data-lesson-main]{max-width:1240px;margin:0 auto;padding:32px 28px 64px;}
+.lesson-ai-coding-playbook .map{background:var(--code);color:var(--text);border-radius:4px;padding:28px 32px;margin-bottom:32px;}
+.lesson-ai-coding-playbook .map h2{font-size:18px;margin:0 0 20px;}
+.lesson-ai-coding-playbook .flow{display:grid;grid-template-columns:1fr 2fr 1fr 1fr;gap:14px;align-items:stretch;}
+.lesson-ai-coding-playbook .flowbox{border:1px solid var(--line);border-radius:4px;padding:16px;display:flex;flex-direction:column;justify-content:center;}
+.lesson-ai-coding-playbook .flowbox small{color:var(--muted);}
+.lesson-ai-coding-playbook .flowbox strong{font-size:17px;}
+.lesson-ai-coding-playbook .split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.lesson-ai-coding-playbook .split div{background:var(--code);border-radius:4px;padding:8px;font-size:13px;}
+.lesson-ai-coding-playbook .map-note{font-size:13px;color:var(--muted);margin:16px 0 0;}
+.lesson-ai-coding-playbook .howto{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px;}
+.lesson-ai-coding-playbook .howto>div{padding:20px 24px;border:1px solid var(--line);border-radius:4px;}
+.lesson-ai-coding-playbook .howto h3{font-size:15px;margin:0 0 6px;}
+.lesson-ai-coding-playbook .howto p{font-size:14px;color:var(--muted);margin:0;}
+.lesson-ai-coding-playbook .step{display:grid;grid-template-columns:180px minmax(0,1fr);gap:28px;margin:0 0 32px;scroll-margin-top:90px;}
+.lesson-ai-coding-playbook .step-side{padding:20px 0;}
+.lesson-ai-coding-playbook .number{font-size:48px;line-height:1;color:var(--muted);font-weight:300;letter-spacing:-.04em;}
+.lesson-ai-coding-playbook .step-side h2{font-size:21px;line-height:1.4;margin:12px 0;}
+.lesson-ai-coding-playbook .chat{font-size:13px;color:var(--muted);}
+.lesson-ai-coding-playbook .step-card{background:var(--code);border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+.lesson-ai-coding-playbook .step-{padding:26px 30px;}
+.lesson-ai-coding-playbook .label{display:inline-block;color:var(--accent);background:var(--soft);font-size:12px;padding:4px 10px;border-radius:4px;font-weight:600;}
+.lesson-ai-coding-playbook .action{margin:16px 0 12px;}
+.lesson-ai-coding-playbook .ready{border-left:3px solid var(--line);padding:10px 14px;background:var(--code);font-size:14px;margin:16px 0;}
+.lesson-ai-coding-playbook .ready b{color:var(--orange);}
+.lesson-ai-coding-playbook .output{font-size:13px;color:var(--muted);margin:12px 0 0;}
+.lesson-ai-coding-playbook .prompt{border-top:1px solid var(--line);}
+.lesson-ai-coding-playbook .promptbar{display:flex;align-items:center;gap:16px;background:var(--code);padding:14px 24px;}
+.lesson-ai-coding-playbook .promptbar details{flex:1;}
+.lesson-ai-coding-playbook .prompt-title{font-size:14px;font-weight:650;flex:1;}
+.lesson-ai-coding-playbook .copy{border:0;border-radius:4px;padding:8px 16px;background:var(--accent);color:var(--text);font-weight:600;font-size:13px;min-width:110px;}
+.lesson-ai-coding-playbook .copy:hover{background:var(--code);}
+.lesson-ai-coding-playbook .prompt details>summary{padding:14px 30px;color:var(--muted);font-size:13px;cursor:pointer;user-select:none;}
+.lesson-ai-coding-playbook .prompt pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.95 ui-monospace,SFMono-Regular,Consolas,"PingFang SC",monospace;margin:0;padding:8px 30px 30px;color:var(--muted);}
+.lesson-ai-coding-playbook .hint{font-size:13px;color:var(--muted);margin:14px 0 0;}
+.lesson-ai-coding-playbook .inline{background:var(--soft);padding:2px 6px;border-radius:4px;font-family:ui-monospace,monospace;}
+.lesson-ai-coding-playbook .handoff{border:1px solid var(--line);border-radius:4px;padding:26px 30px;margin-left:208px;}
+.lesson-ai-coding-playbook .handoff h2{font-size:18px;margin:0 0 12px;}
+.lesson-ai-coding-playbook .routes{width:100%;border-collapse:collapse;font-size:14px;}
+.lesson-ai-coding-playbook .routes td{padding:10px 0;border-top:1px solid var(--line);vertical-align:top;}
+.lesson-ai-coding-playbook .routes td:first-child{width:45%;overflow-wrap:anywhere;font-family:ui-monospace,monospace;font-size:12px;padding-right:16px;}
+.lesson-ai-coding-playbook .footer{max-width:1240px;padding:0 28px 36px;margin:auto;font-size:12px;color:var(--muted);}
+.lesson-ai-coding-playbook #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--code);color:var(--text);border-radius:4px;padding:12px 22px;z-index:10;font-size:14px;box-shadow:none;max-width:90vw;}
+.lesson-ai-coding-playbook #toast:empty{display:none;}
+@media(max-width:900px){.lesson-ai-coding-playbook .toolbar{position:static;flex-wrap:wrap;}
+.lesson-ai-coding-playbook .flow{grid-template-columns:1fr 1fr;}
+.lesson-ai-coding-playbook .step{grid-template-columns:130px minmax(0,1fr);gap:16px;}
+.lesson-ai-coding-playbook .handoff{margin-left:146px;}
+}
+@media(max-width:600px){.lesson-ai-coding-playbook header{padding:36px 24px 28px;}
+.lesson-ai-coding-playbook .intro{font-size:16px;}
+.lesson-ai-coding-playbook .toolbar{padding:10px 18px;}
+.lesson-ai-coding-playbook .toolbar nav{gap:0;}
+.lesson-ai-coding-playbook .toolbar nav a{padding:7px 9px;}
+.lesson-ai-coding-playbook .tools{width:100%;}
+.lesson-ai-coding-playbook [data-lesson-main]{padding:22px 16px 40px;}
+.lesson-ai-coding-playbook .map{padding:22px 20px;}
+.lesson-ai-coding-playbook .flow{grid-template-columns:1fr;}
+.lesson-ai-coding-playbook .flowbox{padding:12px 14px;}
+.lesson-ai-coding-playbook .howto{grid-template-columns:1fr;gap:12px;}
+.lesson-ai-coding-playbook .step{display:block;}
+.lesson-ai-coding-playbook .step-side{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 4px;}
+.lesson-ai-coding-playbook .number{font-size:30px;}
+.lesson-ai-coding-playbook .step-side h2{font-size:21px;margin:0;}
+.lesson-ai-coding-playbook .chat{flex-basis:100%;margin-top:-4px;}
+.lesson-ai-coding-playbook .step-{padding:22px;}
+.lesson-ai-coding-playbook .promptbar{padding:12px 20px;}
+.lesson-ai-coding-playbook .prompt pre{padding:8px 22px 24px;font-size:13px;}
+.lesson-ai-coding-playbook .prompt details>summary{padding:12px 22px;}
+.lesson-ai-coding-playbook .handoff{margin-left:0;padding:22px;}
+.lesson-ai-coding-playbook .routes td{display:block;width:100%!important;padding:8px 0;}
+.lesson-ai-coding-playbook .routes td+td{border:0;padding-top:0;}
+.lesson-ai-coding-playbook .footer{padding:0 22px 28px;}
+}
+@media print{.lesson-ai-coding-playbook{background:var(--code);font-size:11pt;}
+.lesson-ai-coding-playbook .toolbar,.lesson-ai-coding-playbook .tools,.lesson-ai-coding-playbook .copy,.lesson-ai-coding-playbook #toast{display:none;}
+.lesson-ai-coding-playbook header{padding:0 0 20px;}
+.lesson-ai-coding-playbook h1{font-size:28pt;}
+.lesson-ai-coding-playbook h1 span{display:inline;}
+.lesson-ai-coding-playbook .map{background:var(--code);color:black;border:1px solid var(--line);}
+.lesson-ai-coding-playbook .map small,.lesson-ai-coding-playbook .map-note{color:var(--muted);}
+.lesson-ai-coding-playbook .split div{background:var(--code);}
+.lesson-ai-coding-playbook .flowbox{border-color:var(--line);}
+.lesson-ai-coding-playbook [data-lesson-main]{padding:0;}
+.lesson-ai-coding-playbook .step{display:block;break-before:page;}
+.lesson-ai-coding-playbook .step-side{display:flex;align-items:center;gap:15px;}
+.lesson-ai-coding-playbook .number{font-size:24pt;}
+.lesson-ai-coding-playbook .chat{margin-left:auto;}
+.lesson-ai-coding-playbook .step-card{border:0;}
+.lesson-ai-coding-playbook .step-{padding:12px 0;}
+.lesson-ai-coding-playbook .promptbar{padding:10px 0;}
+.lesson-ai-coding-playbook .prompt pre{font-size:10pt;padding:10px 0;}
+.lesson-ai-coding-playbook .prompt details>summary{display:none;}
+.lesson-ai-coding-playbook .handoff{margin-left:0;break-before:page;}
+.lesson-ai-coding-playbook .footer{padding:20px 0;}
+.lesson-ai-coding-playbook .howto{margin-bottom:16px;}
+.lesson-ai-coding-playbook a{color:inherit;}
+}

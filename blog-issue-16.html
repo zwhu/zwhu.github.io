@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="我们在写node的时候有可能会遇到循环依赖的情况，什么是循环依赖，怎么避免或解决循环依赖问题？"><title>Node.js 中的循环依赖 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>Node.js 中的循环依赖</h1><div class="meta"><time datetime="2015-12-15">2015-12-15</time> · 记录 · 学习 · 思考 · <a href="https://github.com/zwhu/blog/issues/16">原 issue #16 ↗</a></div><div class="prose"><h1>Node.js 中的循环依赖</h1>
+<p>我们在写node的时候有可能会遇到循环依赖的情况，什么是循环依赖，怎么避免或解决循环依赖问题？</p>
+<p>先看一段官网给出的循环依赖的代码:</p>
+<p><code>a.js</code>:</p>
+<div><pre><span>console</span><span>.</span><span>log</span><span>(</span><span>'a starting'</span><span>)</span><span>;</span> 
+<span>exports</span><span>.</span><span>done</span> <span>=</span> <span>false</span><span>;</span>
+<span>var</span> <span>b</span> <span>=</span> <span>require</span><span>(</span><span>'./b.js'</span><span>)</span><span>;</span> <span>// ---&gt; 1</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>'in a, b.done = %j'</span><span>,</span> <span>b</span><span>.</span><span>done</span><span>)</span><span>;</span>
+<span>exports</span><span>.</span><span>done</span> <span>=</span> <span>true</span><span>;</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>'a done'</span><span>)</span> <span>// ---&gt; 4</span></pre></div>
+<p><code>b.js</code>:</p>
+<div><pre><span>console</span><span>.</span><span>log</span><span>(</span><span>'b starting'</span><span>)</span><span>;</span> 
+<span>exports</span><span>.</span><span>done</span> <span>=</span> <span>false</span><span>;</span>
+<span>var</span> <span>a</span> <span>=</span> <span>require</span><span>(</span><span>'./a.js'</span><span>)</span><span>;</span>  <span>// ---&gt; 2</span>
+<span>// console.log(a);  ---&gt; {done:false}</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>'in b, a.done = %j'</span><span>,</span> <span>a</span><span>.</span><span>done</span><span>)</span><span>;</span> <span>// ---&gt; 3</span>
+<span>exports</span><span>.</span><span>done</span> <span>=</span> <span>true</span><span>;</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>'b done'</span><span>)</span><span>;</span></pre></div>
+<p><code>main.js</code>:</p>
+<div><pre><span>console</span><span>.</span><span>log</span><span>(</span><span>'main starting'</span><span>)</span><span>;</span> 
+<span>var</span> <span>a</span> <span>=</span> <span>require</span><span>(</span><span>'./a.js'</span><span>)</span><span>;</span> <span>// --&gt; 0</span>
+<span>var</span> <span>b</span> <span>=</span> <span>require</span><span>(</span><span>'./b.js'</span><span>)</span><span>;</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>'in main, a.done=%j, b.done=%j'</span><span>,</span> <span>a</span><span>.</span><span>done</span><span>,</span> <span>b</span><span>.</span><span>done</span><span>)</span><span>;</span></pre></div>
+<p>如果我们启动 <code>main.js</code> 会出现什么情况？ 在 <code>a.js</code> 中加载 <code>b.js</code>，然后在<code>b.js</code>中加载 <code>a.js</code>，然后再在 <code>a.js</code>中加载 <code>b.js</code> 吗？这样就会造成循环依赖死循环。</p>
+<p>让我们执行看看：</p>
+<div><pre>$ node main.js
+
+main starting
+a starting
+b starting
+<span>in</span> b, a.done = <span>false</span>
+b <span>done</span>
+<span>in</span> a, b.done = <span>true</span>
+a <span>done</span>
+<span>in</span> main, a.done=true, b.done=true
+</pre></div>
+<p>可以看到程序并没有陷入死循环，从上面的执行结果可以看到 <code>main.js</code> 中先<code>require</code>了 <code>a.js</code> ，<code>a.js</code> 中执行完了<code>console</code>和<code>export.done=fasle</code>之后，转而去加载<code>b.js</code>，待<code>b.js</code>被load完之后，再返回<code>a.js</code>中执行完剩下的代码。</p>
+<p>我在官网的代码基础上增加了一些注释，基本 load 顺序就是按照这个<code>0--&gt;1--&gt;2--&gt;3--&gt;4</code>的顺序去执行的，然后在第二步下面我打印出了<code>require('./a')</code>的结果，可以看到是<code>{done:false}</code>，可以猜测在<code>b.js</code>中<code>require('./a')</code>的结果是<code>a.js</code>中已经执行到的<code>exports</code>出的值。</p>
+<p>上面所说的还只是基于结果基础上的猜测，没有什么说服力，为了验证我的猜测是正确的，我把 Node 的源码稍微翻看了一些，C++ 的代码看不懂没关系，能看懂 JS 的部分就可以了，下面就是 Node 源码的分析（主要是 module 的分析， <a href="https://github.com/nodejs/node">Node 源码在此</a>）：</p>
+<p>将会分析的主要源码：</p>
+<ol>
+<li>node/src/node.js</li>
+<li>node/lib/module.js</li>
+</ol>
+<h2>启动 $ node main.js</h2>
+<p>C++ 的代码我看不懂，总而言之，在我查了资料之后知道当我们在<code>shell</code>中输入<code>node main.js</code>之后，会先执行 <code>node/src/node.cc</code>，然后会执行 <code>node/src/node.js</code>， 所以C++代码不分析，从分析 <code>node/src/node.js</code> 开始（只会分析和主题相关的代码）。</p>
+<h2>node.js 源码分析</h2>
+<p><code>node.js</code>文件主要结构为</p>
+<div><pre><span>(</span><span>function</span><span>(</span><span>process</span><span>)</span> <span>{</span>
+
+    <span>this</span><span>.</span><span>global</span> <span>=</span> <span>this</span>
+
+    <span>function</span> <span>startup</span><span>(</span><span>)</span> <span>{</span>
+      ...
+    <span>}</span>
+
+    <span>startup</span><span>(</span><span>)</span>
+
+<span>}</span><span>)</span></pre></div>
+<p>这种闭包代码很常见，从名字可以看出，此处为启动文件。接下来看看 startup 函数中有一大块条件语句，我删除大多数无关代码，如下：</p>
+<div><pre><span>if</span> <span>(</span><span>process</span><span>.</span><span>argv</span><span>[</span><span>1</span><span>]</span><span>)</span> <span>{</span>
+     <span>// ...</span>
+
+    <span>var</span> <span>Module</span> <span>=</span> <span>NativeModule</span><span>.</span><span>require</span><span>(</span><span>'module'</span><span>)</span><span>;</span>
+    <span>Module</span><span>.</span><span>runMain</span><span>(</span><span>)</span><span>;</span>
+<span>}</span></pre></div>
+<p>我把无关的代码基本都删除了。可以看到这段代码主要做的事是先通过 Native 引入<code>module</code>模块，执行 <code>Module.runMain()</code>。</p>
+<p>很多人都知道 <code>require</code> 核心代码，如 require('path')，不需要写全路径，Node 是怎样做到的呢？</p>
+<blockquote>
+<p>Node 采用了 V8 附带的 js2c.py 工具，将所有内置的 JavasSript 代码( src/node.js 和 lib/*.js) 转成 c++ 里面的数组生成 node_navtives.h 头文件。<br>
+在这个过程中， JavasSript 以字符串的形式存储在 node 命名空间中， 是不可直接执行的。<br>
+在启动 Node 进程时， JavaScript 代码直接加载进内存中。</p>
+<p>Node 在启动时，会生成一个全局变量 process， 并提供 binding() 方法来协助加载内建模块。</p>
+</blockquote>
+<p>上面大段介绍基本引自朴老师的「深入浅出 Node.js」。大概理解就是在启动命令的时候，Node 会把 <code>node.js</code> 和 <code>lib/*.js</code> 的内容都放到 <code>process</code> 中传入当前闭包中，我们在当前函数就可以通过<code>process.binding('natives')</code>取出来放到 _source 中，如下代码所示：</p>
+<div><pre>  <span>function</span> <span>NativeModule</span><span>(</span><span>id</span><span>)</span> <span>{</span>
+    <span>this</span><span>.</span><span>filename</span> <span>=</span> <span>id</span> <span>+</span> <span>'.js'</span><span>;</span>
+    <span>this</span><span>.</span><span>id</span> <span>=</span> <span>id</span><span>;</span>
+    <span>this</span><span>.</span><span>exports</span> <span>=</span> <span>{</span><span>}</span><span>;</span>
+    <span>this</span><span>.</span><span>loaded</span> <span>=</span> <span>false</span><span>;</span>
+  <span>}</span>
+
+  <span>NativeModule</span><span>.</span><span>_source</span> <span>=</span> <span>process</span><span>.</span><span>binding</span><span>(</span><span>'natives'</span><span>)</span><span>;</span>
+  <span>NativeModule</span><span>.</span><span>_cache</span> <span>=</span> <span>{</span><span>}</span><span>;</span></pre></div>
+<p>接下来看看<code>NativeModule.require</code>做了哪些事情：</p>
+<div><pre>  <span>NativeModule</span><span>.</span><span>require</span> <span>=</span> <span>function</span><span>(</span><span>id</span><span>)</span> <span>{</span>
+    <span>if</span> <span>(</span><span>id</span> <span>==</span> <span>'native_module'</span><span>)</span> <span>{</span>
+      <span>return</span> <span>NativeModule</span><span>;</span>
+    <span>}</span>
+
+    <span>var</span> <span>cached</span> <span>=</span> <span>NativeModule</span><span>.</span><span>getCached</span><span>(</span><span>id</span><span>)</span><span>;</span>
+    <span>if</span> <span>(</span><span>cached</span><span>)</span> <span>{</span>
+      <span>return</span> <span>cached</span><span>.</span><span>exports</span><span>;</span>
+    <span>}</span>
+
+    <span>var</span> <span>nativeModule</span> <span>=</span> <span>new</span> <span>NativeModule</span><span>(</span><span>id</span><span>)</span><span>;</span>
+
+    <span>nativeModule</span><span>.</span><span>cache</span><span>(</span><span>)</span><span>;</span>
+    <span>nativeModule</span><span>.</span><span>compile</span><span>(</span><span>)</span><span>;</span>
+
+    <span>return</span> <span>nativeModule</span><span>.</span><span>exports</span><span>;</span>
+  <span>}</span><span>;</span></pre></div>
+<p>这上面的代码表明内建模块被缓存，就直接返回内建模块的<code>exports</code>，如果没有的话，就生成一个核心模块的实例，然后先把模块根据id来<code>cache</code>，然后调用<code>nativeModule.compile</code>接口编译源文件：</p>
+<div><pre>  <span>NativeModule</span><span>.</span><span>getSource</span> <span>=</span> <span>function</span><span>(</span><span>id</span><span>)</span> <span>{</span>
+    <span>return</span> <span>NativeModule</span><span>.</span><span>_source</span><span>[</span><span>id</span><span>]</span><span>;</span>
+  <span>}</span><span>;</span>
+
+  <span>NativeModule</span><span>.</span><span>wrap</span> <span>=</span> <span>function</span><span>(</span><span>script</span><span>)</span> <span>{</span>
+    <span>return</span> <span>NativeModule</span><span>.</span><span>wrapper</span><span>[</span><span>0</span><span>]</span> <span>+</span> <span>script</span> <span>+</span> <span>NativeModule</span><span>.</span><span>wrapper</span><span>[</span><span>1</span><span>]</span><span>;</span>
+  <span>}</span><span>;</span>
+
+  <span>NativeModule</span><span>.</span><span>wrapper</span> <span>=</span> <span>[</span>
+    <span>'(function (exports, require, module, __filename, __dirname) {\n'</span><span>,</span>
+    <span>'\n});'</span>
+  <span>]</span><span>;</span>
+
+  <span>NativeModule</span><span>.</span><span>prototype</span><span>.</span><span>compile</span> <span>=</span> <span>function</span><span>(</span><span>)</span> <span>{</span>
+    <span>var</span> <span>source</span> <span>=</span> <span>NativeModule</span><span>.</span><span>getSource</span><span>(</span><span>this</span><span>.</span><span>id</span><span>)</span><span>;</span>
+    <span>source</span> <span>=</span> <span>NativeModule</span><span>.</span><span>wrap</span><span>(</span><span>source</span><span>)</span><span>;</span>
+
+    <span>var</span> <span>fn</span> <span>=</span> <span>runInThisContext</span><span>(</span><span>source</span><span>,</span> <span>{</span>
+      <span>filename</span>: <span>this</span><span>.</span><span>filename</span><span>,</span>
+      <span>lineOffset</span>: <span>-</span><span>1</span>
+    <span>}</span><span>)</span><span>;</span>
+    <span>fn</span><span>(</span><span>this</span><span>.</span><span>exports</span><span>,</span> <span>NativeModule</span><span>.</span><span>require</span><span>,</span> <span>this</span><span>,</span> <span>this</span><span>.</span><span>filename</span><span>)</span><span>;</span>
+
+    <span>this</span><span>.</span><span>loaded</span> <span>=</span> <span>true</span><span>;</span>
+  <span>}</span><span>;</span>
+
+  <span>NativeModule</span><span>.</span><span>prototype</span><span>.</span><span>cache</span> <span>=</span> <span>function</span><span>(</span><span>)</span> <span>{</span>
+    <span>NativeModule</span><span>.</span><span>_cache</span><span>[</span><span>this</span><span>.</span><span>id</span><span>]</span> <span>=</span> <span>this</span><span>;</span>
+  <span>}</span><span>;</span></pre></div>
+<p>cache 是把实例根据 id 放到 _cache 对象中。先从 _source 中取出对应id的源文件字符串，包上一层<code>(function (exports, require, module, __filename, __dirname) {\n', '\n});</code>。比如<code>main.js</code>最终变成如下JS代码的字符串:</p>
+<div><pre><span>(</span><span>function</span> <span>(</span><span>exports</span><span>,</span> <span>require</span><span>,</span> <span>module</span><span>,</span> <span>__filename</span><span>,</span> <span>__dirname</span><span>)</span> <span>{</span>
+ <span>// 如果是main.js</span>
+    <span>console</span><span>.</span><span>log</span><span>(</span><span>'main starting'</span><span>)</span><span>;</span> 
+    <span>var</span> <span>a</span> <span>=</span> <span>require</span><span>(</span><span>'./a.js'</span><span>)</span><span>;</span> <span>// --&gt; 0</span>
+    <span>var</span> <span>b</span> <span>=</span> <span>require</span><span>(</span><span>'./b.js'</span><span>)</span><span>;</span>
+    <span>console</span><span>.</span><span>log</span><span>(</span><span>'in main, a.done=%j, b.done=%j'</span><span>,</span> <span>a</span><span>.</span><span>done</span><span>,</span> <span>b</span><span>.</span><span>done</span><span>)</span><span>;</span>
+<span>}</span><span>)</span></pre></div>
+<p><code>runInThisContext</code>是将被包装后的源字符串转成可执行函数，（<code>runInThisContext</code>来自<code>contextify</code>模块），<code>runInThisContext</code>的作用，类似<code>eval</code>，再执行这个被<code>eval</code>后的函数，就算被 load 完成了，最后把 load 设为 true。</p>
+<p>可以看到<code>fn</code>的实参为 <code>this.exports; NativeModule.require; this; this.filename;</code>。</p>
+<p>所以<code>require('module')</code>的作用是加载<code>/lib/module.js</code>文件。让我们再回到 startup 函数，加载完 module.js，紧接着运行 <code>Module.runMain()</code>方法。（估计有人忘了前面的startup函数是干嘛的，我再放一次，省得再拉回去了）</p>
+<div><pre><span>if</span> <span>(</span><span>process</span><span>.</span><span>argv</span><span>[</span><span>1</span><span>]</span><span>)</span> <span>{</span>
+     <span>// ...</span>
+
+    <span>var</span> <span>Module</span> <span>=</span> <span>NativeModule</span><span>.</span><span>require</span><span>(</span><span>'module'</span><span>)</span><span>;</span>
+    <span>Module</span><span>.</span><span>runMain</span><span>(</span><span>)</span><span>;</span>
+<span>}</span></pre></div>
+<h2>module.js源码分析</h2>
+<p>上面走完了<code>NatvieModule</code>的加载代码。再看看<code>module.js</code>是怎样加载用户使用的文件的。</p>
+<div><pre><span>function</span> <span>Module</span><span>(</span><span>id</span><span>,</span> <span>parent</span><span>)</span> <span>{</span>
+  <span>this</span><span>.</span><span>id</span> <span>=</span> <span>id</span><span>;</span>
+  <span>this</span><span>.</span><span>exports</span> <span>=</span> <span>{</span><span>}</span><span>;</span>
+  <span>this</span><span>.</span><span>parent</span> <span>=</span> <span>parent</span><span>;</span>
+  <span>if</span> <span>(</span><span>parent</span> <span>&amp;&amp;</span> <span>parent</span><span>.</span><span>children</span><span>)</span> <span>{</span>
+    <span>parent</span><span>.</span><span>children</span><span>.</span><span>push</span><span>(</span><span>this</span><span>)</span><span>;</span>
+  <span>}</span>
+
+  <span>this</span><span>.</span><span>filename</span> <span>=</span> <span>null</span><span>;</span>
+  <span>this</span><span>.</span><span>loaded</span> <span>=</span> <span>false</span><span>;</span>
+  <span>this</span><span>.</span><span>children</span> <span>=</span> <span>[</span><span>]</span><span>;</span>
+<span>}</span>
+<span>module</span><span>.</span><span>exports</span> <span>=</span> <span>Module</span><span>;</span>
+
+<span>Module</span><span>.</span><span>_cache</span> <span>=</span> <span>{</span><span>}</span><span>;</span>
+<span>Module</span><span>.</span><span>_pathCache</span> <span>=</span> <span>{</span><span>}</span><span>;</span>
+<span>Module</span><span>.</span><span>_extensions</span> <span>=</span> <span>{</span><span>}</span><span>;</span>
+<span>var</span> <span>modulePaths</span> <span>=</span> <span>[</span><span>]</span><span>;</span>
+<span>Module</span><span>.</span><span>globalPaths</span> <span>=</span> <span>[</span><span>]</span><span>;</span>
+
+<span>Module</span><span>.</span><span>wrapper</span> <span>=</span> <span>NativeModule</span><span>.</span><span>wrapper</span><span>;</span>
+<span>Module</span><span>.</span><span>wrap</span> <span>=</span> <span>NativeModule</span><span>.</span><span>wrap</span><span>;</span></pre></div>
+<p>这是<code>Module</code>的构造函数，<code>Module.wrapper</code>和<code>Module.wrap</code>，是由<code>NativeModule</code>赋值来的，<code>Module._cache</code>是个空对象，存放所有被 load 后的模块 id。</p>
+<p>在<code>node.js</code>文件的 startup 函数中，最后一步走到<code>Module.runMain()</code>:</p>
+<div><pre><span>Module</span><span>.</span><span>runMain</span> <span>=</span> <span>function</span><span>(</span><span>)</span> <span>{</span>
+  <span>// Load the main module--the command line argument.</span>
+  <span>Module</span><span>.</span><span>_load</span><span>(</span><span>process</span><span>.</span><span>argv</span><span>[</span><span>1</span><span>]</span><span>,</span> <span>null</span><span>,</span> <span>true</span><span>)</span><span>;</span>
+  <span>// Handle any nextTicks added in the first tick of the program</span>
+  <span>process</span><span>.</span><span>_tickCallback</span><span>(</span><span>)</span><span>;</span>
+<span>}</span><span>;</span></pre></div>
+<p>在<code>runMain</code>方法中调用了<code>_load</code>方法:</p>
+<div><pre><span>Module</span><span>.</span><span>_load</span> <span>=</span> <span>function</span><span>(</span><span>request</span><span>,</span> <span>parent</span><span>,</span> <span>isMain</span><span>)</span> <span>{</span>
+  <span>var</span> <span>filename</span> <span>=</span> <span>Module</span><span>.</span><span>_resolveFilename</span><span>(</span><span>request</span><span>,</span> <span>parent</span><span>)</span><span>;</span>
+  <span>var</span> <span>cachedModule</span> <span>=</span> <span>Module</span><span>.</span><span>_cache</span><span>[</span><span>filename</span><span>]</span><span>;</span>
+
+  <span>if</span> <span>(</span><span>cachedModule</span><span>)</span> <span>{</span>
+    <span>return</span> <span>cachedModule</span><span>.</span><span>exports</span><span>;</span>
+  <span>}</span>
+
+  <span>var</span> <span>module</span> <span>=</span> <span>new</span> <span>Module</span><span>(</span><span>filename</span><span>,</span> <span>parent</span><span>)</span><span>;</span>
+  <span>Module</span><span>.</span><span>_cache</span><span>[</span><span>filename</span><span>]</span> <span>=</span> <span>module</span><span>;</span>
+
+  <span>module</span><span>.</span><span>load</span><span>(</span><span>filename</span><span>)</span><span>;</span>
+
+  <span>return</span> <span>module</span><span>.</span><span>exports</span><span>;</span>
+<span>}</span><span>;</span></pre></div>
+<p>上述代码照例我删除了一些不是很相关的代码，从剩下的代码可以看出<code>_load</code>函数的主要干了两件事（还有一件加载NativeModule的代码被我删掉了）:</p>
+<ol>
+<li>先判断当前的源文件有没有被加载过，如果 _cache 对象中存在，直接返回 _cache 中的exports对象</li>
+<li>如果没有被加载过，新建这个源文件的 module 的实例，并存放到 _cache 中，然后调用 load 方法。</li>
+</ol>
+<div><pre><span>Module</span><span>.</span><span>prototype</span><span>.</span><span>load</span> <span>=</span> <span>function</span><span>(</span><span>filename</span><span>)</span> <span>{</span>
+  <span>this</span><span>.</span><span>filename</span> <span>=</span> <span>filename</span><span>;</span>
+  <span>this</span><span>.</span><span>paths</span> <span>=</span> <span>Module</span><span>.</span><span>_nodeModulePaths</span><span>(</span><span>path</span><span>.</span><span>dirname</span><span>(</span><span>filename</span><span>)</span><span>)</span><span>;</span>
+
+  <span>var</span> <span>extension</span> <span>=</span> <span>path</span><span>.</span><span>extname</span><span>(</span><span>filename</span><span>)</span> <span>||</span> <span>'.js'</span><span>;</span>
+  <span>if</span> <span>(</span><span>!</span><span>Module</span><span>.</span><span>_extensions</span><span>[</span><span>extension</span><span>]</span><span>)</span> <span>extension</span> <span>=</span> <span>'.js'</span><span>;</span>
+  <span>Module</span><span>.</span><span>_extensions</span><span>[</span><span>extension</span><span>]</span><span>(</span><span>this</span><span>,</span> <span>filename</span><span>)</span><span>;</span>
+  <span>this</span><span>.</span><span>loaded</span> <span>=</span> <span>true</span><span>;</span>
+<span>}</span><span>;</span></pre></div>
+<p>在<code>load</code>方法中判断源文件的扩展名是什么，默认是<code>'.js'</code>，（我这里也只分析后缀是 <code>.js</code> 的情况），然后调用 <code>Module._extensions[extension]()</code> 方法，并传入 this 和 filename；当<code>extension</code>是<code>'.js'</code>的时候， 调用<code>Module._extensions['.js']()</code> 方法。</p>
+<div><pre><span>// Native extension for .js</span>
+<span>Module</span><span>.</span><span>_extensions</span><span>[</span><span>'.js'</span><span>]</span> <span>=</span> <span>function</span><span>(</span><span>module</span><span>,</span> <span>filename</span><span>)</span> <span>{</span>
+  <span>var</span> <span>content</span> <span>=</span> <span>fs</span><span>.</span><span>readFileSync</span><span>(</span><span>filename</span><span>,</span> <span>'utf8'</span><span>)</span><span>;</span>
+  <span>module</span><span>.</span><span>_compile</span><span>(</span><span>internalModule</span><span>.</span><span>stripBOM</span><span>(</span><span>content</span><span>)</span><span>,</span> <span>filename</span><span>)</span><span>;</span>
+<span>}</span><span>;</span></pre></div>
+<p>这个方法是读到源文件的字符串后，调用<code>module._compile</code>方法。</p>
+<div><pre><span>Module</span><span>.</span><span>prototype</span><span>.</span><span>_compile</span> <span>=</span> <span>function</span><span>(</span><span>content</span><span>,</span> <span>filename</span><span>)</span> <span>{</span>
+
+  <span>var</span> <span>self</span> <span>=</span> <span>this</span><span>;</span>
+
+  <span>function</span> <span>require</span><span>(</span><span>path</span><span>)</span> <span>{</span>
+    <span>return</span> <span>self</span><span>.</span><span>require</span><span>(</span><span>path</span><span>)</span><span>;</span>
+  <span>}</span>
+
+  <span>var</span> <span>dirname</span> <span>=</span> <span>path</span><span>.</span><span>dirname</span><span>(</span><span>filename</span><span>)</span><span>;</span>
+  <span>// create wrapper function</span>
+  <span>var</span> <span>wrapper</span> <span>=</span> <span>Module</span><span>.</span><span>wrap</span><span>(</span><span>content</span><span>)</span><span>;</span>
+
+  <span>var</span> <span>compiledWrapper</span> <span>=</span> <span>runInThisContext</span><span>(</span><span>wrapper</span><span>,</span>
+                                      <span>{</span> <span>filename</span>: <span>filename</span><span>,</span> <span>lineOffset</span>: <span>-</span><span>1</span> <span>}</span><span>)</span><span>;</span>
+
+  <span>var</span> <span>args</span> <span>=</span> <span>[</span><span>self</span><span>.</span><span>exports</span><span>,</span> <span>require</span><span>,</span> <span>self</span><span>,</span> <span>filename</span><span>,</span> <span>dirname</span><span>]</span><span>;</span>
+  <span>return</span> <span>compiledWrapper</span><span>.</span><span>apply</span><span>(</span><span>self</span><span>.</span><span>exports</span><span>,</span> <span>args</span><span>)</span><span>;</span>
+<span>}</span><span>;</span></pre></div>
+<p>其实跟<code>NativeModule</code>的<code>_complie</code>做的事情差不多。先把源文件<code>content</code>包装一层<code>(function (exports, require, module, __filename, __dirname) {\n', '\n});</code>， 然后通过 <code>runInThisContext</code> 把字符串转成可执行的函数，最后把<br>
+<code>self.exports, require, self, filename, dirname</code> 这几个实参传入可执行函数中。</p>
+<p><code>require</code> 方法为:</p>
+<div><pre><span>Module</span><span>.</span><span>prototype</span><span>.</span><span>require</span> <span>=</span> <span>function</span><span>(</span><span>path</span><span>)</span> <span>{</span>
+  <span>return</span> <span>Module</span><span>.</span><span>_load</span><span>(</span><span>path</span><span>,</span> <span>this</span><span>)</span><span>;</span>
+<span>}</span><span>;</span></pre></div>
+<h2>循环依赖的时候为什么不会无限循环引用</h2>
+<p>所谓的循环依赖就是在两个不同的文件中互相应用了对方。假设按照最上面官网给出的例子中，</p>
+<p>在 <code>main.js</code> 中:</p>
+<ol>
+<li><code>require('./a.js')</code>；此时会调用 <code>self.require()</code>,<br>
+然后会走到<code>module._load</code>，在<code>_load</code>中会判断<code>./a.js</code>是否被load过，当然运行到这里，<code>./a.js</code>还没被 load 过，所以会走完整个load流程，直到<code>_compile</code>。</li>
+<li>运行<code>./a.js</code>，运行到 <code>exports.done = false</code> 的时候，给 esports 增加了一个属性。此时的 <code>exports={done: false}</code>。</li>
+<li>运行<code>require('./b.js')</code>，同 第 1 步。</li>
+<li>运行<code>./b.js</code>，到<code>require('./a.js')</code>。此时走到<code>_load</code>函数的时候发现<code>./a.js</code>已经被load过了，所以会直接从<code>_cache</code>中返回。所以此时<code>./a.js</code>还没有运行完，<code>exports = {done.false}</code>，那么返回的结果就是 <code>in b, a.done = false</code>;</li>
+<li><code>./b.js</code>全部运行完毕，回到<code>./a.js</code>中，继续向下运行，此时的<code>./b.js</code>的 <code>exports={done:true}</code>， 结果自然是<code>in main, a.done=true, b.done=true</code></li>
+</ol></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-17.html">较新一篇：Node.js 中 module.exports 和 exports 的区别</a><a href="./blog-issue-15.html">较早一篇：Node.js 逐行读取文件</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

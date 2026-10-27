@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "llm-study",
+    "title": "大模型是怎样学会与回答的？",
+    "description": "从预训练、后训练到推理，用 Attention 实验、闪卡和测验串起大模型的学习过程。",
+    "tags": "大模型 · 实验与测验",
+    "file": "learn-llm-study.html"
+  },
+  {
+    "slug": "aime-paper",
+    "title": "AIME：交互式中文论文解读",
+    "description": "切换架构模块和实验结果，理解动态规划、角色装配与共享状态，以及论文的证据与局限。",
+    "tags": "多智能体 · 论文导读",
+    "file": "learn-aime-paper.html"
+  },
+  {
+    "slug": "react-token-accumulation",
+    "title": "ReAct token 如何累积",
+    "description": "沿着五轮模型调用，观察工具结果如何进入上下文，以及输入 token 为什么会反复累积。",
+    "tags": "Agent · 动画演示",
+    "file": "learn-react-token-accumulation.html"
+  },
+  {
+    "slug": "pi-compaction",
+    "title": "Pi 上下文压缩流程",
+    "description": "逐步走过阈值检查、切点选择、摘要与上下文重建，对比标准压缩、超大单轮和再次压缩。",
+    "tags": "上下文 · 分步讲解",
+    "file": "learn-pi-compaction.html"
+  },
+  {
+    "slug": "agent-memory",
+    "title": "Agent 记忆流程讲解",
+    "description": "以 TencentDB-Agent-Memory 为例，跟随一个约束走过对话回流、记忆提炼、权限管理与新会话召回。",
+    "tags": "记忆系统 · 流程与自测",
+    "file": "learn-agent-memory.html"
+  },
+  {
+    "slug": "ai-coding-playbook",
+    "title": "AI 编程笔试操作手册",
+    "description": "把读题、初始化、需求分析、实现和验收整理成五步流程，配有可展开、可复制的完整提示词。",
+    "tags": "AI 编程 · 操作手册",
+    "file": "learn-ai-coding-playbook.html"
+  }
+]

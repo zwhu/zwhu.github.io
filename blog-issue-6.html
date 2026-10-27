@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="最近在用 node 学写爬虫，也可以叫模拟登陆，遇到某个网站在返回的 HTML 中插入了一个生成页面token的script。"><title>JavaScript 中使用 new Function 执行字符串拼接表达式 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>JavaScript 中使用 new Function 执行字符串拼接表达式</h1><div class="meta"><time datetime="2015-10-12">2015-10-12</time> ·  · <a href="https://github.com/zwhu/blog/issues/6">原 issue #6 ↗</a></div><div class="prose"><p>最近在用 node 学写爬虫，也可以叫模拟登陆，遇到某个网站在返回的 HTML 中插入了一个生成页面token的script。</p>
+<p>这个HTML的结构大概类似</p>
+<div><pre><span>&lt;!Doctype html<span>&gt;</span></span>
+<span>&lt;</span><span>html</span><span>&gt;</span>
+    <span>&lt;</span><span>head</span><span>&gt;</span><span>&lt;/</span><span>head</span><span>&gt;</span>
+    <span>&lt;</span><span>body</span><span>&gt;</span>
+        <span>&lt;</span><span>div</span><span>&gt;</span><span>&lt;/</span><span>div</span><span>&gt;</span>
+        <span>&lt;</span><span>script</span><span>&gt;</span>       
+            <span>(</span><span>function</span> <span>(</span><span>w</span><span>)</span> <span>{</span>
+                <span>w</span><span>.</span><span>token</span> <span>=</span> <span>(</span><span>function</span> <span>(</span><span>)</span> <span>{</span>
+                    <span>// ....</span>
+                    <span>// 生成token</span>
+
+                <span>return</span> <span>token</span><span>;</span>
+                <span>}</span><span>)</span><span>(</span><span>)</span><span>;</span><span>;</span>
+            <span>}</span><span>)</span><span>(</span><span>window</span><span>)</span><span>;</span>
+        <span>&lt;/</span><span>script</span><span>&gt;</span>
+    <span>&lt;/</span><span>body</span><span>&gt;</span>
+<span>&lt;/</span><span>html</span><span>&gt;</span></pre></div>
+<p>首先拿到这个页面，然后获取script标签的表达式字符串，剩下的事就是怎样执行表达式字符串，并获取token。</p>
+<p>在此处的情景中用eval也是挺不错的选择，但是既然 JS 不推荐这种用法，那我们就换成 new Function 来做。</p>
+<p>看下 new Function 的用法如下</p>
+<blockquote>
+<div><pre><span>new</span> <span>Function</span> <span>(</span><span>[</span><span>arg1</span><span>[</span><span>,</span> <span>arg2</span><span>[</span><span>,</span> ...<span>argN</span><span>]</span><span>]</span><span>,</span><span>]</span> <span>functionBody</span><span>)</span></pre></div>
+</blockquote>
+<p>new Function会返回一个函数。例如 <code>fn = new Function('a', 'b', 'return a + b')</code> 会返回一个函数对象</p>
+<div><pre><span>fn</span> <span>=</span> <span>function</span><span>(</span><span>a</span><span>,</span> <span>b</span><span>)</span> <span>{</span>
+    <span>return</span> <span>a</span> <span>+</span> <span>b</span>
+<span>}</span></pre></div>
+<p>so，我们可以使用 new Function 构造一个函数，用来执行获取到得表达式，并返回token。</p>
+<div><pre>    <span>fn</span> <span>=</span> <span>new</span> <span>Function</span><span>(</span><span>'window'</span><span>,</span> <span>functionBody</span> <span>+</span> <span>';return window.token'</span><span>)</span>
+    <span>var</span> <span>token</span> <span>=</span> <span>fn</span><span>(</span><span>{</span><span>}</span><span>)</span>
+    <span>console</span><span>.</span><span>log</span><span>(</span><span>token</span><span>)</span></pre></div>
+<p>构造的这个函数有个window形参，作为函数体中立即执行表达式的实参传入最内层的函数中。所以在最后执行的时候 return window.token 便会获得token 的内容。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-7.html">较新一篇：记一次用 NodeJs 实现模拟登录的思路</a><a href="./blog-issue-5.html">较早一篇：一个人的团队（一）</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

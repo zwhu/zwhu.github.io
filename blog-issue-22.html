@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="今天一个初学者问我怎样在老的浏览器下实现通用的事件绑定函数。这个问题挺简单，我随手写了如下的函数:"><title>Javascript 中的惰性加载 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>Javascript 中的惰性加载</h1><div class="meta"><time datetime="2016-03-10">2016-03-10</time> · 记录 · <a href="https://github.com/zwhu/blog/issues/22">原 issue #22 ↗</a></div><div class="prose"><p>今天一个初学者问我怎样在老的浏览器下实现通用的事件绑定函数。这个问题挺简单，我随手写了如下的函数:</p>
+<div><pre><span>var</span> <span>addEvent</span> <span>=</span> <span>function</span><span>(</span><span>el</span><span>,</span> <span>type</span><span>,</span> <span>handler</span><span>)</span> <span>{</span>
+  <span>if</span><span>(</span><span>window</span><span>.</span><span>addEventListener</span><span>)</span> <span>{</span>
+    <span>return</span> <span>el</span><span>.</span><span>addEventListener</span><span>(</span> <span>type</span><span>,</span> <span>handler</span><span>,</span> <span>false</span><span>)</span>
+  <span>}</span> <span>else</span> <span>if</span><span>(</span><span>window</span><span>.</span><span>attachEvent</span><span>)</span> <span>{</span>
+    <span>return</span> <span>el</span><span>.</span><span>attachEvent</span><span>(</span><span>'on'</span> <span>+</span> <span>type</span><span>,</span> <span>handler</span><span>)</span>
+  <span>}</span>
+<span>}</span></pre></div>
+<p>但是这个函数写完之后我就感觉到有些问题，那就是每次调用的时候都要对浏览器进行嗅探，即执行 if 判断。虽然执行 if 不会对计算机造成太大开销，但是作为一个有追求的程序员，怎会放弃如此可以优化的机会。</p>
+<p>所以回到问题的原点，为什么要对浏览器进行嗅探？因为不同浏览器有不同的兼容性。那么我们只要嗅探一次且要保证在没有调用过这个函数的情况下不进行嗅探可不可以？当然可以！下面的代码就是利用惰性加载函数的方法：</p>
+<div><pre><span>var</span> <span>addEvent</span> <span>=</span> <span>function</span><span>(</span><span>el</span><span>,</span> <span>type</span><span>,</span> <span>handler</span><span>)</span> <span>{</span>
+  <span>if</span><span>(</span><span>window</span><span>.</span><span>addEventListener</span><span>)</span> <span>{</span>
+    <span>addEvent</span> <span>=</span> <span>function</span><span>(</span><span>el</span><span>,</span> <span>type</span><span>,</span> <span>handler</span><span>)</span> <span>{</span>
+      <span>el</span><span>.</span><span>addEventListener</span><span>(</span> <span>type</span><span>,</span> <span>handler</span><span>,</span> <span>false</span><span>)</span>
+    <span>}</span>
+  <span>}</span> <span>else</span> <span>if</span><span>(</span><span>window</span><span>.</span><span>attachEvent</span><span>)</span> <span>{</span>
+    <span>addEvent</span> <span>=</span> <span>function</span><span>(</span><span>el</span><span>,</span> <span>type</span><span>,</span> <span>handler</span><span>)</span> <span>{</span>
+      <span>el</span><span>.</span><span>attachEvent</span><span>(</span><span>'on'</span> <span>+</span> <span>type</span><span>,</span> <span>handler</span><span>)</span>
+   <span>}</span>
+  <span>}</span>
+  <span>addEvent</span><span>.</span><span>apply</span><span>(</span><span>null</span><span>,</span> <span>arguments</span><span>)</span>
+<span>}</span></pre></div>
+<p>第一次调用 addEvent 的时候会对浏览器进行嗅探，然后把嗅探之后的结果再重新替换掉 addEvent。早期的 Redux 的 applymiddleware 实现也是使用这个方法。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-23.html">较新一篇：学「编译原理」能干嘛</a><a href="./blog-issue-21.html">较早一篇：Absolute 和 Relative</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

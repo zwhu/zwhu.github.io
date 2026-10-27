@@ -1,0 +1,8 @@
+.lesson-agent-memory #am-walkthrough .am-flow{ display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); gap:16px; align-items:center; margin:24px 0; }
+.lesson-agent-memory #am-walkthrough .am-node{ display:flex; flex-direction:column; gap:8px; overflow-wrap:anywhere; }
+.lesson-agent-memory #am-walkthrough .am-arrow{ color:var(--muted-foreground); }
+.lesson-agent-memory #am-walkthrough .am-followups{ margin-top:12px; }
+.lesson-agent-memory #am-walkthrough #am-detail{ min-height:3em; }
+@media(max-width:520px){.lesson-agent-memory #am-walkthrough .am-flow{ grid-template-columns:1fr; gap:12px; margin:16px 0; }
+.lesson-agent-memory #am-walkthrough .am-arrow{ transform:rotate(90deg); justify-self:center; }
+}

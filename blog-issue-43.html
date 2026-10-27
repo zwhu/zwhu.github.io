@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="代码笔记。"><title>vdom(3) · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>vdom(3)</h1><div class="meta"><time datetime="2018-04-15">2018-04-15</time> · 学习 · <a href="https://github.com/zwhu/blog/issues/43">原 issue #43 ↗</a></div><div class="prose"><div><pre><span>// /roki/index.js</span>
+<span>const</span> <span>roki</span> <span>=</span> <span>function</span> <span>(</span><span>)</span> <span>{</span>
+
+    <span>let</span> <span>oldvnode</span>
+
+    <span>return</span> <span>{</span>
+        h<span>,</span>
+        render
+    <span>}</span>
+
+    <span>function</span> <span>isString</span><span>(</span><span>s</span><span>)</span> <span>{</span>
+        <span>return</span> <span>typeof</span> <span>s</span> <span>===</span> <span>'string'</span>
+    <span>}</span>
+
+    <span>function</span> <span>h</span><span>(</span><span>type</span><span>,</span> <span>props</span> <span>=</span> <span>{</span><span>}</span><span>,</span> <span>children</span> <span>=</span> <span>[</span><span>]</span><span>)</span> <span>{</span>
+        <span>children</span> <span>=</span> <span>children</span><span>.</span><span>map</span><span>(</span><span>(</span><span>child</span><span>)</span> <span>=&gt;</span> <span>{</span>
+            <span>if</span> <span>(</span><span>isString</span><span>(</span><span>child</span><span>)</span><span>)</span> <span>return</span> <span>createTextVNode</span><span>(</span><span>child</span><span>,</span> <span>void</span> <span>0</span><span>)</span>
+            <span>return</span> <span>child</span>
+        <span>}</span><span>)</span>
+        <span>return</span> <span>createVNode</span><span>(</span><span>type</span><span>,</span> <span>props</span><span>,</span> <span>props</span><span>.</span><span>key</span><span>,</span> <span>children</span><span>,</span> <span>void</span> <span>0</span><span>)</span>
+    <span>}</span>
+
+    <span>function</span> <span>patch</span><span>(</span><span>oldvnode</span> <span>=</span> <span>{</span><span>}</span><span>,</span> <span>vnode</span><span>)</span> <span>{</span>
+        <span>let</span> <span>element</span>
+        <span>if</span> <span>(</span><span>vnode</span><span>.</span><span>type</span><span>)</span> <span>{</span>
+            <span>if</span> <span>(</span><span>oldvnode</span> <span>&amp;&amp;</span> <span>oldvnode</span><span>.</span><span>type</span> <span>===</span> <span>vnode</span><span>.</span><span>type</span><span>)</span> <span>{</span>
+                <span>element</span> <span>=</span> <span>oldvnode</span><span>.</span><span>dom</span>
+                <span>updateProps</span><span>(</span><span>element</span><span>,</span> <span>vnode</span><span>.</span><span>props</span><span>,</span> <span>oldvnode</span><span>.</span><span>props</span><span>)</span>
+            <span>}</span> <span>else</span> <span>{</span>
+                <span>element</span> <span>=</span> <span>createElement</span><span>(</span><span>vnode</span><span>.</span><span>type</span><span>,</span> <span>vnode</span><span>.</span><span>props</span><span>)</span>
+            <span>}</span>
+            <span>vnode</span><span>.</span><span>children</span> <span>&amp;&amp;</span> <span>patchChildren</span><span>(</span><span>oldvnode</span><span>.</span><span>children</span><span>,</span> <span>vnode</span><span>.</span><span>children</span><span>,</span> <span>element</span><span>)</span>
+        <span>}</span> <span>else</span> <span>if</span> <span>(</span><span>vnode</span><span>.</span><span>text</span><span>)</span> <span>{</span>
+            <span>if</span> <span>(</span><span>oldvnode</span><span>.</span><span>text</span><span>)</span> <span>{</span>
+                <span>element</span> <span>=</span> <span>oldvnode</span><span>.</span><span>dom</span>
+                <span>if</span> <span>(</span><span>vnode</span><span>.</span><span>text</span> <span>!==</span> <span>oldvnode</span><span>.</span><span>text</span><span>)</span> <span>element</span><span>.</span><span>nodeValue</span> <span>=</span> <span>vnode</span><span>.</span><span>text</span>
+            <span>}</span> <span>else</span> <span>{</span>
+                <span>element</span> <span>=</span> <span>createTextNode</span><span>(</span><span>vnode</span><span>.</span><span>text</span><span>)</span>
+            <span>}</span>
+        <span>}</span>
+        <span>vnode</span><span>.</span><span>dom</span> <span>=</span> <span>element</span>
+        <span>return</span> <span>vnode</span>
+    <span>}</span>
+
+    <span>function</span> <span>patchChildren</span><span>(</span><span>oldChildren</span> <span>=</span> <span>[</span><span>]</span><span>,</span> <span>children</span> <span>=</span> <span>[</span><span>]</span><span>,</span> <span>parentElement</span><span>)</span> <span>{</span>
+        <span>children</span><span>.</span><span>forEach</span><span>(</span><span>(</span><span>child</span><span>,</span> <span>index</span><span>)</span> <span>=&gt;</span> <span>{</span>
+            <span>let</span> <span>oldChild</span> <span>=</span> <span>null</span>
+            <span>if</span> <span>(</span><span>oldChildren</span><span>)</span> <span>oldChild</span> <span>=</span> <span>oldChildren</span><span>[</span><span>index</span><span>]</span>
+            <span>if</span> <span>(</span><span>oldChild</span><span>)</span> <span>{</span>
+                <span>let</span> <span>newNode</span> <span>=</span> <span>patch</span><span>(</span><span>oldChild</span><span>,</span> <span>child</span><span>)</span>
+                <span>if</span> <span>(</span><span>oldChild</span><span>.</span><span>type</span> <span>!==</span> <span>child</span><span>.</span><span>type</span><span>)</span> <span>{</span>
+                    <span>replaceChild</span><span>(</span><span>parentElement</span><span>,</span> <span>oldChild</span><span>.</span><span>dom</span><span>,</span> <span>newNode</span><span>.</span><span>dom</span><span>)</span>
+                <span>}</span>
+            <span>}</span> <span>else</span> <span>{</span>
+                <span>let</span> <span>newNode</span> <span>=</span> <span>patch</span><span>(</span><span>undefined</span><span>,</span> <span>child</span><span>)</span>
+                <span>appendChild</span><span>(</span><span>parentElement</span><span>,</span> <span>newNode</span><span>.</span><span>dom</span><span>)</span>
+            <span>}</span>
+        <span>}</span><span>)</span>
+
+        <span>oldChildren</span><span>.</span><span>slice</span><span>(</span><span>children</span><span>.</span><span>length</span><span>)</span><span>.</span><span>forEach</span><span>(</span><span>(</span><span>child</span><span>)</span> <span>=&gt;</span> <span>removeChild</span><span>(</span><span>parentElement</span><span>,</span> <span>child</span><span>.</span><span>dom</span><span>)</span><span>)</span>
+    <span>}</span>
+
+    <span>function</span> <span>render</span><span>(</span><span>vnode</span><span>,</span> <span>container</span><span>)</span> <span>{</span>
+        <span>vnode</span> <span>=</span> <span>patch</span><span>(</span><span>oldvnode</span><span>,</span> <span>vnode</span><span>)</span>
+        <span>if</span> <span>(</span><span>!</span><span>oldvnode</span><span>)</span> <span>appendChild</span><span>(</span><span>container</span><span>,</span> <span>vnode</span><span>.</span><span>dom</span><span>)</span>
+        <span>oldvnode</span> <span>=</span> <span>vnode</span>
+    <span>}</span>
+
+    <span>function</span> <span>createVNode</span><span>(</span><span>type</span><span>,</span> <span>props</span><span>,</span> <span>key</span><span>,</span> <span>children</span><span>,</span> <span>dom</span><span>)</span> <span>{</span>
+        <span>return</span> <span>{</span>
+            type<span>,</span>
+            children<span>,</span>
+            props<span>,</span>
+            dom<span>,</span>
+            key
+        <span>}</span>
+    <span>}</span>
+
+    <span>function</span> <span>createTextVNode</span><span>(</span><span>text</span><span>,</span> <span>dom</span><span>)</span> <span>{</span>
+        <span>return</span> <span>{</span>
+            text<span>,</span>
+            dom
+        <span>}</span>
+    <span>}</span>
+
+
+    <span>function</span> <span>removeChild</span><span>(</span><span>element</span><span>,</span> <span>child</span><span>)</span> <span>{</span>
+        <span>element</span><span>.</span><span>removeChild</span><span>(</span><span>child</span><span>)</span>
+    <span>}</span>
+
+    <span>function</span> <span>appendChild</span><span>(</span><span>element</span><span>,</span> <span>child</span><span>)</span> <span>{</span>
+        <span>element</span><span>.</span><span>appendChild</span><span>(</span><span>child</span><span>)</span>
+    <span>}</span>
+
+    <span>function</span> <span>replaceChild</span><span>(</span><span>element</span><span>,</span> <span>oldChild</span><span>,</span> <span>newChild</span><span>)</span> <span>{</span>
+        <span>element</span><span>.</span><span>replaceChild</span><span>(</span><span>newChild</span><span>,</span> <span>oldChild</span><span>)</span>
+    <span>}</span>
+
+    <span>function</span> <span>createElement</span><span>(</span><span>tag</span><span>,</span> <span>props</span> <span>=</span> <span>{</span><span>}</span><span>)</span> <span>{</span>
+        <span>const</span> <span>element</span> <span>=</span> <span>document</span><span>.</span><span>createElement</span><span>(</span><span>tag</span><span>)</span>
+        <span>updateProps</span><span>(</span><span>element</span><span>,</span> <span>props</span><span>)</span>
+        <span>return</span> <span>element</span>
+    <span>}</span>
+
+    <span>function</span> <span>updateProps</span><span>(</span><span>element</span><span>,</span> <span>props</span> <span>=</span> <span>{</span><span>}</span><span>,</span> <span>oldProps</span> <span>=</span> <span>{</span><span>}</span><span>)</span> <span>{</span>
+        <span>Object</span><span>.</span><span>keys</span><span>(</span><span>oldProps</span><span>)</span>
+            <span>.</span><span>filter</span><span>(</span><span>(</span><span>key</span><span>)</span> <span>=&gt;</span> <span>!</span><span>key</span><span>.</span><span>startsWith</span><span>(</span><span>'on'</span><span>)</span><span>)</span>
+            <span>.</span><span>forEach</span><span>(</span><span>(</span><span>key</span><span>)</span> <span>=&gt;</span> <span>{</span> <span>element</span><span>.</span><span>removeAttribute</span><span>(</span><span>key</span><span>)</span> <span>}</span><span>)</span>
+
+        <span>Object</span><span>.</span><span>keys</span><span>(</span><span>oldProps</span><span>)</span>
+            <span>.</span><span>filter</span><span>(</span><span>(</span><span>key</span><span>)</span> <span>=&gt;</span> <span>key</span><span>.</span><span>startsWith</span><span>(</span><span>'on'</span><span>)</span><span>)</span>
+            <span>.</span><span>forEach</span><span>(</span><span>(</span><span>key</span><span>)</span> <span>=&gt;</span> <span>{</span>
+                <span>const</span> <span>eventType</span> <span>=</span> <span>key</span><span>.</span><span>toLowerCase</span><span>(</span><span>)</span><span>.</span><span>substring</span><span>(</span><span>2</span><span>)</span><span>;</span>
+                <span>element</span><span>.</span><span>removeEventListener</span><span>(</span><span>eventType</span><span>,</span> <span>oldProps</span><span>[</span><span>key</span><span>]</span><span>)</span><span>;</span>
+            <span>}</span><span>)</span>
+
+        <span>Object</span><span>.</span><span>keys</span><span>(</span><span>props</span><span>)</span>
+            <span>.</span><span>filter</span><span>(</span><span>(</span><span>key</span><span>)</span> <span>=&gt;</span> <span>!</span><span>key</span><span>.</span><span>startsWith</span><span>(</span><span>'on'</span><span>)</span><span>)</span>
+            <span>.</span><span>forEach</span><span>(</span><span>(</span><span>key</span><span>)</span> <span>=&gt;</span> <span>{</span> <span>element</span><span>.</span><span>setAttribute</span><span>(</span><span>key</span><span>,</span> <span>props</span><span>[</span><span>key</span><span>]</span><span>)</span> <span>}</span><span>)</span>
+
+        <span>Object</span><span>.</span><span>keys</span><span>(</span><span>props</span><span>)</span>
+            <span>.</span><span>filter</span><span>(</span><span>(</span><span>key</span><span>)</span> <span>=&gt;</span> <span>key</span><span>.</span><span>startsWith</span><span>(</span><span>'on'</span><span>)</span><span>)</span>
+            <span>.</span><span>forEach</span><span>(</span><span>(</span><span>key</span><span>)</span> <span>=&gt;</span> <span>{</span>
+                <span>const</span> <span>eventType</span> <span>=</span> <span>key</span><span>.</span><span>toLowerCase</span><span>(</span><span>)</span><span>.</span><span>substring</span><span>(</span><span>2</span><span>)</span><span>;</span>
+                <span>element</span><span>.</span><span>addEventListener</span><span>(</span><span>eventType</span><span>,</span> <span>props</span><span>[</span><span>key</span><span>]</span><span>)</span><span>;</span>
+            <span>}</span><span>)</span>
+    <span>}</span>
+
+    <span>function</span> <span>createTextNode</span><span>(</span><span>text</span><span>)</span> <span>{</span>
+        <span>return</span> <span>document</span><span>.</span><span>createTextNode</span><span>(</span><span>text</span><span>)</span>
+    <span>}</span>
+
+<span>}</span>
+
+
+<span>window</span><span>.</span><span>Roki</span> <span>=</span> <span>roki</span><span>(</span><span>)</span></pre></div>
+<div><pre><span>&lt;</span><span>html</span> <span>lang</span>="<span>en</span>"<span>&gt;</span>
+
+<span>&lt;</span><span>head</span><span>&gt;</span>
+    <span>&lt;</span><span>meta</span> <span>charset</span>="<span>UTF-8</span>"<span>&gt;</span>
+    <span>&lt;</span><span>meta</span> <span>name</span>="<span>viewport</span>" <span>content</span>="<span>width=device-width, initial-scale=1.0</span>"<span>&gt;</span>
+    <span>&lt;</span><span>meta</span> <span>http-equiv</span>="<span>X-UA-Compatible</span>" <span>content</span>="<span>ie=edge</span>"<span>&gt;</span>
+    <span>&lt;</span><span>title</span><span>&gt;</span>Document<span>&lt;/</span><span>title</span><span>&gt;</span>
+<span>&lt;/</span><span>head</span><span>&gt;</span>
+
+<span>&lt;</span><span>body</span><span>&gt;</span>
+    <span>&lt;</span><span>button</span> <span>id</span>="<span>update</span>"<span>&gt;</span>update<span>&lt;/</span><span>button</span><span>&gt;</span>
+    <span>&lt;</span><span>div</span> <span>id</span>="<span>root</span>"<span>&gt;</span><span>&lt;/</span><span>div</span><span>&gt;</span>
+    <span>&lt;</span><span>script</span> <span>src</span>="<span>./roki/index.js</span>"<span>&gt;</span><span>&lt;/</span><span>script</span><span>&gt;</span>
+    <span>&lt;</span><span>script</span><span>&gt;</span>
+        <span>const</span> <span>{</span>
+            render<span>,</span>
+            h
+        <span>}</span> <span>=</span> <span>Roki</span>
+
+        <span>let</span> <span>vnode</span> <span>=</span> <span>h</span><span>(</span><span>'div'</span><span>,</span> <span>{</span><span>}</span><span>,</span> <span>[</span>
+            <span>h</span><span>(</span><span>'span'</span><span>,</span> <span>{</span>
+                <span>style</span>: <span>'font-weight:bold;'</span><span>,</span>
+                <span>onclick</span>: <span>function</span> <span>(</span><span>)</span> <span>{</span>
+                    <span>console</span><span>.</span><span>log</span><span>(</span><span>'old span'</span><span>)</span>
+                <span>}</span>
+            <span>}</span><span>,</span> <span>[</span><span>'This is bold'</span><span>]</span><span>)</span><span>,</span>
+            <span>' and this is just normal text'</span><span>,</span>
+            <span>h</span><span>(</span><span>'a'</span><span>,</span> <span>{</span> <span>href</span>: <span>'/foo'</span> <span>}</span><span>,</span> <span>[</span><span>'I\'ll take you places!'</span><span>]</span><span>)</span><span>,</span>
+            <span>h</span><span>(</span><span>'br'</span><span>)</span><span>,</span>
+            <span>'this will delete'</span>
+        <span>]</span><span>)</span>
+
+        <span>let</span> <span>newVnode</span> <span>=</span> <span>h</span><span>(</span><span>'div'</span><span>,</span> <span>{</span> <span>onclick</span>: <span>function</span> <span>(</span><span>)</span> <span>{</span> <span>console</span><span>.</span><span>log</span><span>(</span><span>'new div'</span><span>)</span> <span>}</span> <span>}</span><span>,</span> <span>[</span>
+            <span>h</span><span>(</span><span>'span'</span><span>,</span> <span>{</span> <span>style</span>: <span>'font-weight: normal; font-style: italic;'</span> <span>}</span><span>,</span> <span>[</span><span>'This is now italic type'</span><span>]</span><span>)</span><span>,</span>
+            <span>' and this is still just normal text'</span><span>,</span>
+            <span>h</span><span>(</span><span>'a'</span><span>,</span> <span>{</span> <span>href</span>: <span>'/bar'</span> <span>}</span><span>,</span> <span>[</span><span>'I\'ll take you places!!!'</span><span>]</span><span>)</span><span>,</span>
+            <span>h</span><span>(</span><span>'br'</span><span>)</span><span>,</span>
+        <span>]</span><span>)</span><span>;</span>
+
+
+        <span>render</span><span>(</span><span>vnode</span><span>,</span> <span>root</span><span>)</span>
+
+        <span>update</span><span>.</span><span>addEventListener</span><span>(</span><span>'click'</span><span>,</span> <span>(</span><span>)</span> <span>=&gt;</span> <span>{</span>
+            <span>console</span><span>.</span><span>log</span><span>(</span><span>222</span><span>)</span>
+            <span>render</span><span>(</span><span>newVnode</span><span>,</span> <span>root</span><span>)</span>
+        <span>}</span><span>)</span>
+
+    <span>&lt;/</span><span>script</span><span>&gt;</span>
+<span>&lt;/</span><span>body</span><span>&gt;</span>
+
+<span>&lt;/</span><span>html</span><span>&gt;</span></pre></div></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-44.html">较新一篇：杀人诛心</a><a href="./blog-issue-42.html">较早一篇：vdom(2.5) - diff</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

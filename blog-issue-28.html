@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="在 官网下载 MIT/GNU Scheme 。我的电脑是 MBP， 所以选择 OSX 版本下载。 下载完了之后解压缩，把下图的 MIT/GNU Scheme 拖拽到 Applications 文件夹即可。"><title>MIT-Scheme 安装入门 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>MIT-Scheme 安装入门</h1><div class="meta"><time datetime="2016-11-22">2016-11-22</time> · 记录 · 学习 · <a href="https://github.com/zwhu/blog/issues/28">原 issue #28 ↗</a></div><div class="prose"><h2>初心</h2>
+<ol>
+<li>最近 <code>FP(Functionial Programming)</code> 的概念很火，<code>React</code>、<code>Redux</code> 全家桶系列都是基于 <code>FP</code> 的概念，而 <code>Scheme</code> 作为 <code>FP</code> 的鼻祖 <code>Lisp</code> 的一门方言，又是王垠曾经很推崇的语言，很是期待掌握这门语言。</li>
+<li><a href="https://book.douban.com/subject/1148282/">SICP</a> 里的例子都是用 <code>Scheme</code> 写的，而我最近想学习这本经典书籍，且书里推荐使用 <code>Scheme</code> 来学习。不过不用 <code>Scheme</code> 也没有关系， 老赵在 <a href="http://blog.zhaojie.me/2009/07/recommended-reading-2-sicp.html">老赵书托（2）：计算机程序的构造与解释</a> 有推荐 <code>IronScheme</code>。</li>
+</ol>
+<h2>Download &amp;&amp; Install</h2>
+<p>在 <a href="https://www.gnu.org/software/mit-scheme/">官网</a>下载 <code>MIT/GNU Scheme</code> 。我的电脑是 MBP， 所以选择 OSX 版本下载。 下载完了之后解压缩，把下图的 <code>MIT/GNU Scheme</code> 拖拽到 Applications 文件夹即可。</p>
+<p><a href="https://camo.githubusercontent.com/cc34a50e9dde1c797814f231bea2fa343a9746cc08a27d4398580bbe49ea8d5b/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f323031362d31312d32322d312e31342e34352e706e67"><span class="missing-image">原图暂不可用：屏幕快照 2016-11-22 上午1.14.45.png（查看原图）</span></a></p>
+<p>打开 Finder 在 Applications 或者应用程序文件夹中找到 MIT/GNU Scheme app</p>
+<p><a href="https://camo.githubusercontent.com/f6d7a49bf8d65e195d33074fc2a1bc96db6168b34be27fbb49ef5cc2414f9113/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f323031362d31312d32322d312e31382e34372e706e67"><span class="missing-image">原图暂不可用：屏幕快照 2016-11-22 上午1.18.47.png（查看原图）</span></a></p>
+<p>右键选择显示包内容</p>
+<p><a href="https://camo.githubusercontent.com/9c1f2567503eefb8a1e6bb4c35278803d5c8896b683b894302394a1cc57a2345/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f323031362d31312d32322d312e31392e30382e706e67"><span class="missing-image">原图暂不可用：屏幕快照 2016-11-22 上午1.19.08.png（查看原图）</span></a></p>
+<p>然后进入 /Contents/Resources/ 目录，双击 mit-scheme bash<br>
+<a href="https://camo.githubusercontent.com/d1513d0623290e84a9d5b351c03491499d8053b38e178908782db88ee0dc7590/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f323031362d31312d32322d312e32322e30362e706e67"><span class="missing-image">原图暂不可用：屏幕快照 2016-11-22 上午1.22.06.png（查看原图）</span></a></p>
+<p>如下图，说明安装一切顺利</p>
+<p><a href="https://camo.githubusercontent.com/b018541ce3974d7470e5a60bef2e5e2a9781e606adc99bc8bf293a60fe83a421/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f323031362d31312d32322d312e32332e35382e706e67"><span class="missing-image">原图暂不可用：屏幕快照 2016-11-22 上午1.23.58.png（查看原图）</span></a></p>
+<p>不过每次这样每次通过 Finder 启动 <code>Scheme</code> 都非常麻烦，所以我们需要简单点的方法来启动:</p>
+<h2>优化启动</h2>
+<h3>设置一个软连接</h3>
+<div><pre>$ sudo ln -s /Applications/MIT<span>\:</span>GNU<span>\ </span>Scheme.app/Contents/Resources/mit-scheme /usr/bin/scheme</pre></div>
+<p>如果你出现 <code>ln: /usr/bin/scheme: Operation not permitted</code> 的错误，这是因为 mac osx 在 <code>El Capitan</code> 加入 <code>Rootless</code> 机制，所以没有权限来设置软连接，在网络上搜索之后有些简单的设置方法：<a href="http://apple.stackexchange.com/questions/196224/unix-ln-s-command-not-permitted-in-osx-el-capitan-beta3">设置方法链接</a></p>
+<h3>设置环境变量</h3>
+<div><pre>$ <span>echo</span> <span><span>"</span>export MITSCHEME_LIBRARY_PATH=<span>\"</span>/Applications/MIT\:GNU\ Scheme.app/Contents/Resources<span>\"</span><span>"</span></span> <span>&gt;&gt;</span> <span>~</span>/.profile
+ 
+$ <span>echo</span> <span><span>"</span>export MIT_SCHEME_EXE=<span>\"</span>/usr/local/scheme<span>\"</span><span>"</span></span> <span>&gt;&gt;</span> <span>~</span>/.profile
+</pre></div>
+<h3>重启 terminal 或者 reload bash profile:</h3>
+<div><pre>$ <span>source</span> <span>~</span>/.profile</pre></div>
+<h3>Done</h3>
+<p>如果在输入下面的命令之后，出现下图内容，说明设置已经生效</p>
+<div><pre><code>$ scheme
+</code></pre></div>
+<p><a href="https://camo.githubusercontent.com/7c530d486a7099e1f61ca21546457a9fc64584ca3fd9263b4e378dab7a307052/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f323031362d31312d32322d30312e34302e35382e706e67"><span class="missing-image">原图暂不可用：屏幕快照 2016-11-22 01.40.58.png（查看原图）</span></a></p>
+<p>注： 设置快捷启动方式的 <a href="https://dustingram.com/articles/2012/08/01/using-scheme-in-macos-x-on-the-command-line/">原文</a> 在此，但是不知道为什么打不开了，还好我很久之前保存过这个页面的快照，遂整理并加入解决权限问题的方法一并放在此处。</p>
+<h2>运行 scm 文件</h2>
+<p>在 <code>MIT-Scheme</code> 中输入 code 非常麻烦，光标不能回退和上下移动，所以比较简单的方法就是运行已经写完的文件：</p>
+<div><pre>$: scheme -load yourfile.scm </pre></div>
+<h2>一些快捷键</h2>
+<ol>
+<li>ctrl + g 跳出错误</li>
+<li>ctrl + z 跳出 <code>MIT-Scheme</code></li>
+</ol>
+<h2>结尾</h2>
+<p>到此，可以愉快地使用 <code>MIT-Scheme</code> 开始我的 <code>SICP</code> 之旅了，祝大家也能早日熟练使用 <code>Scheme</code> 开发程序。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-29.html">较新一篇：10进制转2进制的尾递归版本</a><a href="./blog-issue-27.html">较早一篇：ssh 执行远程主机命令的自动化 bash 脚本</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

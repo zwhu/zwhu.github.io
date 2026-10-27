@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="现在有100块钱人民币，将 100 块钱换成零钱（最小币值 1 元），一共有多少方式？"><title>100块钱换零钱，最多有多少种方式的 JavaScript 版本实现 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>100块钱换零钱，最多有多少种方式的 JavaScript 版本实现</h1><div class="meta"><time datetime="2016-12-11">2016-12-11</time> · 思考 · 读书笔记 · 算法 · <a href="https://github.com/zwhu/blog/issues/30">原 issue #30 ↗</a></div><div class="prose"><p>现在有100块钱人民币，将 100 块钱换成零钱（最小币值 1 元），一共有多少方式？</p>
+<p>总的不同方式的数目等于：</p>
+<ul>
+<li>将现金数 100 换成除第一种币值之外的所有其他硬币的不同方式数据， 加上</li>
+<li>将现金数 （100 - 第一种币值） 换成所有种类的币值的不同方式</li>
+</ul>
+<p>ok， 根据上面的说法来实现吧：</p>
+<div><pre><span>'use strict'</span>
+
+<span>// 实现 lisp 中的 list</span>
+<span>// car 是 list 中的第一个值</span>
+<span>// cdr 是 list 中的剩下的值的集合</span>
+<span>const</span> <span>list</span> <span>=</span> <span>(</span>...<span>args</span><span>)</span> <span>=&gt;</span> <span>args</span>
+  <span>,</span><span>car</span> <span>=</span> <span>(</span><span>list</span><span>)</span> <span>=&gt;</span> <span>list</span><span>[</span><span>0</span><span>]</span>
+  <span>,</span><span>cdr</span> <span>=</span> <span>(</span><span>list</span><span>)</span> <span>=&gt;</span> <span>list</span><span>.</span><span>slice</span><span>(</span><span>1</span><span>)</span>
+
+<span>// 换零钱的方式</span>
+<span>// 如果换 0 元钱，就算是有一种换钱方式</span>
+<span>// 如果换的钱小于 0， 那么就算有零种换钱方式</span>
+<span>// 如果币值的长度为 0， 那么也算是有零种换钱方式</span>
+<span>function</span> <span>count_change</span><span>(</span><span>amount</span><span>,</span> <span>coin_values</span><span>)</span> <span>{</span>
+  <span>switch</span> <span>(</span><span>true</span><span>)</span> <span>{</span>
+    <span>case</span> <span>(</span><span>amount</span> <span>===</span> <span>0</span><span>)</span>:
+      <span>return</span> <span>1</span>
+    <span>case</span> <span>(</span><span>amount</span> <span>&lt;</span> <span>0</span> <span>||</span> <span>no_more</span><span>(</span><span>coin_values</span><span>)</span><span>)</span>:
+      <span>return</span> <span>0</span>
+    <span>default</span>:
+      <span>return</span> <span>(</span>
+         <span>count_change</span><span>(</span><span>amount</span><span>,</span> <span>except_first_denomination</span><span>(</span><span>coin_values</span><span>)</span><span>)</span>
+         <span>+</span>
+         <span>count_change</span><span>(</span>
+           <span>amount</span> <span>-</span> <span>first_denomination</span><span>(</span><span>coin_values</span><span>)</span><span>,</span>
+           <span>coin_values</span>
+         <span>)</span>
+      <span>)</span>
+  <span>}</span>
+<span>}</span>
+
+<span>function</span> <span>no_more</span><span>(</span><span>coin_values</span><span>)</span> <span>{</span>
+  <span>return</span> <span>coin_values</span><span>.</span><span>length</span> <span>===</span> <span>0</span>
+<span>}</span>
+
+<span>function</span> <span>first_denomination</span><span>(</span><span>coin_values</span><span>)</span> <span>{</span>
+  <span>return</span> <span>car</span><span>(</span><span>coin_values</span><span>)</span>
+<span>}</span>
+
+<span>function</span> <span>except_first_denomination</span><span>(</span><span>coin_values</span><span>)</span> <span>{</span>
+  <span>return</span> <span>cdr</span><span>(</span><span>coin_values</span><span>)</span>
+<span>}</span></pre></div>
+<p>测试一下:</p>
+<div><pre><span>const</span> <span>cn_coins</span> <span>=</span> <span>list</span><span>(</span><span>100</span><span>,</span> <span>50</span><span>,</span> <span>20</span><span>,</span> <span>10</span><span>,</span> <span>5</span><span>,</span> <span>2</span><span>,</span> <span>1</span><span>)</span>
+
+<span>count_change</span><span>(</span><span>100</span><span>,</span> <span>cn_coins</span><span>)</span> <span>// ---&gt; 4563</span></pre></div></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-31.html">较新一篇：用 Node.js 写前端自己的 Git-hooks</a><a href="./blog-issue-29.html">较早一篇：10进制转2进制的尾递归版本</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

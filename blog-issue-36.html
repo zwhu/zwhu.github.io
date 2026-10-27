@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="莱文斯坦距离，又称Levenshtein距离，是编辑距离的一种。指两个字串之间，由一个转成另一个所需的最少编辑操作次数。许可的编辑操作包括将一个字符替换成另一个字符，插入一个字符，删除一个字符。"><title>莱文斯坦距离的 JavaScript 版本实现 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>莱文斯坦距离的 JavaScript 版本实现</h1><div class="meta"><time datetime="2017-04-10">2017-04-10</time> · 思考 · 算法 · <a href="https://github.com/zwhu/blog/issues/36">原 issue #36 ↗</a></div><div class="prose"><blockquote>
+<p>莱文斯坦距离，又称Levenshtein距离，是编辑距离的一种。指两个字串之间，由一个转成另一个所需的最少编辑操作次数。许可的编辑操作包括将一个字符替换成另一个字符，插入一个字符，删除一个字符。</p>
+</blockquote>
+<p>莱文斯坦距离与 react 有千丝万缕的关系，所以花了几天的时间研究了 levenshtein 的算法，以及使用 js 实现了一遍，从 <a href="https://rosettacode.org/wiki/Levenshtein_distance#JavaScript">这里</a> （此链接给出了大多数语言版本的实现）copy 了测试用例。后面如果有时间我再另写一篇莱文斯坦距离与 React 的 <code>key</code> 的关系的文章。</p>
+<div><pre><span>'use strict'</span>
+
+<span>const</span> <span>min</span> <span>=</span> <span>Math</span><span>.</span><span>min</span>
+
+<span>// 构造二维数组</span>
+<span>const</span> <span>initialArray</span> <span>=</span> <span>(</span><span>lgt1</span><span>,</span> <span>lgt2</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>let</span> <span>array</span> <span>=</span> <span>[</span><span>]</span>
+  <span>for</span> <span>(</span><span>let</span> <span>i</span> <span>=</span> <span>0</span><span>;</span> <span>i</span> <span>&lt;</span> <span>lgt1</span><span>;</span> <span>i</span><span>++</span><span>)</span> <span>{</span>
+    <span>array</span><span>[</span><span>i</span><span>]</span> <span>=</span> <span>Array</span><span>(</span><span>lgt2</span><span>)</span>
+  <span>}</span>
+  <span>return</span> <span>array</span>
+<span>}</span>
+
+<span>/**</span>
+<span> * Levenshtein Distance</span>
+<span> * 从一个字符串转成另一个字符串所需要的最小操作步数</span>
+<span> */</span>
+<span>const</span> <span>levenshtein</span> <span>=</span> <span>(</span><span>sa</span><span>,</span> <span>sb</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>let</span> <span>d</span> <span>=</span> <span>[</span><span>]</span>
+  <span>,</span> <span>algt</span> <span>=</span> <span>sa</span><span>.</span><span>length</span>
+  <span>,</span> <span>blgt</span> <span>=</span> <span>sb</span><span>.</span><span>length</span>
+  <span>,</span> <span>i</span> <span>=</span> <span>0</span>
+  <span>,</span> <span>j</span> <span>=</span> <span>0</span>
+
+  <span>if</span><span>(</span><span>algt</span> <span>===</span> <span>0</span><span>)</span> <span>return</span> <span>blgt</span> 
+
+  <span>if</span><span>(</span><span>blgt</span> <span>===</span> <span>0</span><span>)</span> <span>return</span> <span>algt</span>
+  
+  <span>// 初始化二维数组</span>
+  <span>d</span> <span>=</span> <span>initialArray</span><span>(</span><span>algt</span> <span>+</span> <span>1</span><span>,</span> <span>blgt</span> <span>+</span> <span>1</span><span>)</span>
+
+  <span>for</span> <span>(</span><span>i</span> <span>=</span> <span>0</span><span>;</span> <span>i</span> <span>&lt;</span> <span>algt</span> <span>+</span> <span>1</span><span>;</span> <span>i</span><span>++</span><span>)</span> <span>{</span>
+    <span>d</span><span>[</span><span>i</span><span>]</span><span>[</span><span>0</span><span>]</span>  <span>=</span> <span>i</span>
+  <span>}</span>
+
+  <span>for</span> <span>(</span><span>j</span> <span>=</span> <span>0</span><span>;</span> <span>j</span> <span>&lt;</span> <span>blgt</span> <span>+</span> <span>1</span><span>;</span> <span>j</span><span>++</span><span>)</span> <span>{</span>
+    <span>d</span><span>[</span><span>0</span><span>]</span><span>[</span><span>j</span><span>]</span> <span>=</span> <span>j</span>
+  <span>}</span>
+
+  <span>for</span><span>(</span><span>i</span> <span>=</span> <span>1</span><span>;</span> <span>i</span> <span>&lt;</span> <span>algt</span> <span>+</span> <span>1</span><span>;</span> <span>i</span><span>++</span><span>)</span> <span>{</span>
+    <span>for</span><span>(</span><span>j</span> <span>=</span> <span>1</span><span>;</span> <span>j</span> <span>&lt;</span> <span>blgt</span> <span>+</span> <span>1</span><span>;</span> <span>j</span><span>++</span><span>)</span> <span>{</span>
+      <span>if</span><span>(</span><span>sa</span><span>[</span><span>i</span> <span>-</span> <span>1</span><span>]</span> <span>===</span> <span>sb</span><span>[</span><span>j</span> <span>-</span> <span>1</span><span>]</span><span>)</span> <span>{</span>
+        <span>d</span><span>[</span><span>i</span><span>]</span><span>[</span><span>j</span><span>]</span> <span>=</span> <span>d</span><span>[</span><span>i</span> <span>-</span> <span>1</span><span>]</span><span>[</span><span>j</span> <span>-</span> <span>1</span><span>]</span>
+      <span>}</span> <span>else</span> <span>{</span>
+        <span>d</span><span>[</span><span>i</span><span>]</span><span>[</span><span>j</span><span>]</span> <span>=</span> <span>min</span><span>(</span>
+          <span>d</span><span>[</span><span>i</span> <span>-</span> <span>1</span><span>]</span><span>[</span><span>j</span><span>]</span> <span>+</span> <span>1</span><span>,</span>
+          <span>d</span><span>[</span><span>i</span><span>]</span><span>[</span><span>j</span> <span>-</span> <span>1</span><span>]</span> <span>+</span> <span>1</span><span>,</span>
+          <span>d</span><span>[</span><span>i</span> <span>-</span> <span>1</span><span>]</span><span>[</span><span>j</span> <span>-</span> <span>1</span><span>]</span> <span>+</span> <span>1</span>
+        <span>)</span>  
+      <span>}</span>
+    <span>}</span>
+  <span>}</span>
+
+  <span>return</span> <span>d</span><span>[</span><span>i</span> <span>-</span> <span>1</span><span>]</span><span>[</span><span>j</span> <span>-</span> <span>1</span><span>]</span>
+<span>}</span>
+
+
+<span>// test case</span>
+<span>// copy from https://rosettacode.org/wiki/Levenshtein_distance#JavaScript</span>
+<span>;</span><span>[</span> 
+  <span>[</span><span>''</span><span>,</span> <span>''</span><span>,</span> <span>0</span><span>]</span><span>,</span>
+  <span>[</span><span>'yo'</span><span>,</span> <span>''</span><span>,</span> <span>2</span><span>]</span><span>,</span>
+  <span>[</span><span>''</span><span>,</span> <span>'yo'</span><span>,</span> <span>2</span><span>]</span><span>,</span>
+  <span>[</span><span>'yo'</span><span>,</span> <span>'yo'</span><span>,</span> <span>0</span><span>]</span><span>,</span>
+  <span>[</span><span>'tier'</span><span>,</span> <span>'tor'</span><span>,</span> <span>2</span><span>]</span><span>,</span>
+  <span>[</span><span>'saturday'</span><span>,</span> <span>'sunday'</span><span>,</span> <span>3</span><span>]</span><span>,</span>
+  <span>[</span><span>'mist'</span><span>,</span> <span>'dist'</span><span>,</span> <span>1</span><span>]</span><span>,</span>
+  <span>[</span><span>'tier'</span><span>,</span> <span>'tor'</span><span>,</span> <span>2</span><span>]</span><span>,</span>
+  <span>[</span><span>'kitten'</span><span>,</span> <span>'sitting'</span><span>,</span> <span>3</span><span>]</span><span>,</span>
+  <span>[</span><span>'stop'</span><span>,</span> <span>'tops'</span><span>,</span> <span>2</span><span>]</span><span>,</span>
+  <span>[</span><span>'rosettacode'</span><span>,</span> <span>'raisethysword'</span><span>,</span> <span>8</span><span>]</span><span>,</span>
+  <span>[</span><span>'mississippi'</span><span>,</span> <span>'swiss miss'</span><span>,</span> <span>8</span><span>]</span>
+<span>]</span><span>.</span><span>forEach</span><span>(</span><span>function</span><span>(</span><span>v</span><span>)</span> <span>{</span>
+  <span>var</span> <span>a</span> <span>=</span> <span>v</span><span>[</span><span>0</span><span>]</span><span>,</span> <span>b</span> <span>=</span> <span>v</span><span>[</span><span>1</span><span>]</span><span>,</span> <span>t</span> <span>=</span> <span>v</span><span>[</span><span>2</span><span>]</span><span>,</span> <span>d</span> <span>=</span> <span>levenshtein</span><span>(</span><span>a</span><span>,</span> <span>b</span><span>)</span><span>;</span>
+  <span>if</span> <span>(</span><span>d</span> <span>!==</span> <span>t</span><span>)</span> <span>{</span>
+    <span>console</span><span>.</span><span>log</span><span>(</span><span>'levenstein("'</span> <span>+</span> <span>a</span> <span>+</span> <span>'","'</span> <span>+</span> <span>b</span> <span>+</span> <span>'") was '</span> <span>+</span> <span>d</span> <span>+</span> <span>' should be '</span> <span>+</span> <span>t</span><span>)</span>
+  <span>}</span>
+<span>}</span><span>)</span></pre></div></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-37.html">较新一篇：前端的数据结构与算法（1）-- dfs</a><a href="./blog-issue-35.html">较早一篇：Fix the Problem, Not the Blame</a></nav></article><section class="historical-comments" aria-labelledby="history-title"><h2 id="history-title">历史评论</h2><p class="comments-status">以下为原 issue 的评论存档；新评论可在下方发表。</p><article class="historical-comment" id="issuecomment-292796170"><div class="meta">zwhu · <time datetime="2017-04-09T16:28:21Z">2017-04-10</time> · <a href="https://github.com/zwhu/blog/issues/36#issuecomment-292796170">原评论 ↗</a></div><div class="prose"><p>上面初始化数组还有效率优化的空间，不过我为了让代码有良好的可读性，就没有再继续压缩循环的次数了。</p></div></article></section><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

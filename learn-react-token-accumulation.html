@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="沿着五轮模型调用，观察工具结果如何进入上下文，以及输入 token 为什么会反复累积。"><title>ReAct token 如何累积 · 交互式学习 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="stylesheet" href="./assets/learning/react-token-accumulation.css"><link rel="stylesheet" href="./learning.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head>
+<body class="learning-page"><a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html" aria-current="page">交互式学习</a><a href="./index.html#about">关于</a></nav></header>
+<main id="main" class="learning-main"><article class="learning-article"><div class="lesson-heading"><a class="back" href="./learning.html">← 交互式学习</a><h1>ReAct token 如何累积</h1><p class="meta">Agent · 动画演示 · 整理于 2026-10-27</p><p class="lesson-summary">沿着五轮模型调用，观察工具结果如何进入上下文，以及输入 token 为什么会反复累积。</p></div>
+<div class="learning-content lesson-react-token-accumulation"><header><button id="toggle">暂停</button><button id="restart">重播</button><button id="final">看完整结果</button><span>20 秒循环 · 输入逐轮累积 · 可离线打开</span></header><p class="diagram-hint">用“暂停”和“看完整结果”控制演示；窄屏可左右滑动图表。</p><div data-lesson-main class="react-diagram" tabindex="0" aria-label="ReAct 累积示意图，可横向滚动"><svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1290" viewBox="0 0 1500 1290" role="img" aria-labelledby="title desc" data-style="1">
+<title id="title">一次任务，五轮 ReAct：输入如何累计到 208k token</title>
+<desc id="desc">数值为示例。每轮将已有历史、模型输出和新增工具结果拼为下一轮上下文。五轮输入为2k、20.2k、44.4k、60.6k、80.8k，累计208k。模型输出累计2k，输入约占99%。20秒循环动画。</desc>
+
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 1 1 L 9 5 L 1 9" fill="none" stroke="#77746e" stroke-width="1.8"/></marker></defs>
+<rect x="0" y="0" width="1500" height="1290" rx="0" fill="#faf8f3" stroke="none" />
+<rect x="52" y="38" width="229" height="30" rx="8" fill="#f0ede6" stroke="none" />
+<text x="68" y="59" font-size="16" fill="#a64335" font-weight="600" text-anchor="start">ReAct 上下文累积示意</text>
+<text x="52" y="119" font-size="40" fill="#292825" font-weight="700" text-anchor="start">一次对话，为什么会消耗大量 token？</text>
+<text x="52" y="160" font-size="22" fill="#77746e" font-weight="400" text-anchor="start">每轮都带上已有上下文；读入的代码、文档和工具结果，会继续进入后续轮次。</text>
+<text x="52" y="194" font-size="17" fill="#77746e" font-weight="400" text-anchor="start">同一任务 · 5 次模型调用 · 数值为示例 · 1k = 1,000 token</text>
+<text x="67" y="233" font-size="17" fill="#77746e" font-weight="600" text-anchor="start">轮次</text>
+<text x="230" y="233" font-size="17" fill="#77746e" font-weight="600" text-anchor="start">本轮输入：已有上下文 + 上轮输出 + 新增工具结果</text>
+<text x="1082" y="233" font-size="17" fill="#77746e" font-weight="600" text-anchor="end">输入量</text>
+<text x="1190" y="233" font-size="17" fill="#77746e" font-weight="600" text-anchor="middle">模型</text>
+<text x="1350" y="233" font-size="17" fill="#77746e" font-weight="600" text-anchor="middle">模型输出</text>
+<g id="round-1">
+<rect x="40" y="252" width="1420" height="118" rx="12" fill="#f5f2ec" stroke="#e6e2da" data-graph-role="container"/>
+<text x="67" y="297" font-size="23" fill="#292825" font-weight="600" text-anchor="start">第 1 轮</text>
+<text x="67" y="327" font-size="17" fill="#77746e" font-weight="400" text-anchor="start">ReAct</text>
+<rect x="230" y="275" width="750" height="34" rx="5" fill="#ebe5da" stroke="none" />
+<g><title>初始提示：2k token</title>
+<rect x="230" y="275" width="18.564" height="34" rx="0" fill="#a8a097" stroke="none" />
+</g>
+<text x="1082" y="300" font-size="27" fill="#a64335" font-weight="700" text-anchor="end">2k</text>
+<path d="M 1096 292 H 1130" fill="none" stroke="#77746e" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1140" y="269" width="100" height="46" rx="8" fill="#f0ede6" stroke="#dfbdab" />
+<text x="1190" y="299" font-size="21" fill="#a64335" font-weight="600" text-anchor="middle">模型</text>
+<path d="M 1250 292 H 1280" fill="none" stroke="#77746e" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1350" y="299" font-size="27" fill="#754338" font-weight="700" text-anchor="middle">0.2k</text>
+<text x="1350" y="332" font-size="16" fill="#77746e" font-weight="400" text-anchor="middle">工具调用</text>
+<text x="230" y="343" font-size="20" fill="#292825" font-weight="500" text-anchor="start">读取代码 A：工具返回 +18k</text>
+<text x="700" y="343" font-size="18" fill="#77746e" font-weight="400" text-anchor="start">→ 拼入下一轮，再与历史一起送入模型</text>
+</g>
+<g id="round-2">
+<animate attributeName="opacity" values="0.10;0.10;1;1" keyTimes="0;0.15;0.175;1" dur="20s" repeatCount="indefinite"/>
+<rect x="40" y="382" width="1420" height="118" rx="12" fill="#f5f2ec" stroke="#e6e2da" data-graph-role="container"/>
+<text x="67" y="427" font-size="23" fill="#292825" font-weight="600" text-anchor="start">第 2 轮</text>
+<text x="67" y="457" font-size="17" fill="#77746e" font-weight="400" text-anchor="start">ReAct</text>
+<rect x="230" y="405" width="750" height="34" rx="5" fill="#ebe5da" stroke="none" />
+<g><title>初始提示：2k token</title>
+<rect x="230" y="405" width="18.564" height="34" rx="0" fill="#a8a097" stroke="none" />
+</g>
+<g><title>第1轮输出：0.2k token</title>
+<rect x="248.564" y="405" width="1.856" height="34" rx="0" fill="#d6b4a3" stroke="none" />
+</g>
+<g><title>代码 A：18k token</title>
+<rect x="250.421" y="405" width="167.079" height="34" rx="0" fill="#a64335" stroke="none" />
+<text x="333.96039603960395" y="428" font-size="17" fill="#faf8f3" font-weight="600" text-anchor="middle">代码 A 18k</text>
+</g>
+<text x="1082" y="430" font-size="27" fill="#a64335" font-weight="700" text-anchor="end">20.2k</text>
+<path d="M 1096 422 H 1130" fill="none" stroke="#77746e" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1140" y="399" width="100" height="46" rx="8" fill="#f0ede6" stroke="#dfbdab" />
+<text x="1190" y="429" font-size="21" fill="#a64335" font-weight="600" text-anchor="middle">模型</text>
+<path d="M 1250 422 H 1280" fill="none" stroke="#77746e" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1350" y="429" font-size="27" fill="#754338" font-weight="700" text-anchor="middle">0.2k</text>
+<text x="1350" y="462" font-size="16" fill="#77746e" font-weight="400" text-anchor="middle">工具调用</text>
+<text x="230" y="473" font-size="20" fill="#292825" font-weight="500" text-anchor="start">读取文档：工具返回 +24k</text>
+<text x="700" y="473" font-size="18" fill="#77746e" font-weight="400" text-anchor="start">→ 拼入下一轮，再与历史一起送入模型</text>
+</g>
+<g id="round-3">
+<animate attributeName="opacity" values="0.10;0.10;1;1" keyTimes="0;0.3;0.325;1" dur="20s" repeatCount="indefinite"/>
+<rect x="40" y="512" width="1420" height="118" rx="12" fill="#f5f2ec" stroke="#e6e2da" data-graph-role="container"/>
+<text x="67" y="557" font-size="23" fill="#292825" font-weight="600" text-anchor="start">第 3 轮</text>
+<text x="67" y="587" font-size="17" fill="#77746e" font-weight="400" text-anchor="start">ReAct</text>
+<rect x="230" y="535" width="750" height="34" rx="5" fill="#ebe5da" stroke="none" />
+<g><title>初始提示：2k token</title>
+<rect x="230" y="535" width="18.564" height="34" rx="0" fill="#a8a097" stroke="none" />
+</g>
+<g><title>第1轮输出：0.2k token</title>
+<rect x="248.564" y="535" width="1.856" height="34" rx="0" fill="#d6b4a3" stroke="none" />
+</g>
+<g><title>代码 A：18k token</title>
+<rect x="250.421" y="535" width="167.079" height="34" rx="0" fill="#a64335" stroke="none" />
+<text x="333.96039603960395" y="558" font-size="17" fill="#faf8f3" font-weight="600" text-anchor="middle">代码 A 18k</text>
+</g>
+<g><title>第2轮输出：0.2k token</title>
+<rect x="417.5" y="535" width="1.856" height="34" rx="0" fill="#d6b4a3" stroke="none" />
+</g>
+<g><title>文档：24k token</title>
+<rect x="419.356" y="535" width="222.772" height="34" rx="0" fill="#8b5cf6" stroke="none" />
+<text x="530.7425742574258" y="558" font-size="17" fill="#faf8f3" font-weight="600" text-anchor="middle">文档 24k</text>
+</g>
+<text x="1082" y="560" font-size="27" fill="#a64335" font-weight="700" text-anchor="end">44.4k</text>
+<path d="M 1096 552 H 1130" fill="none" stroke="#77746e" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1140" y="529" width="100" height="46" rx="8" fill="#f0ede6" stroke="#dfbdab" />
+<text x="1190" y="559" font-size="21" fill="#a64335" font-weight="600" text-anchor="middle">模型</text>
+<path d="M 1250 552 H 1280" fill="none" stroke="#77746e" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1350" y="559" font-size="27" fill="#754338" font-weight="700" text-anchor="middle">0.2k</text>
+<text x="1350" y="592" font-size="16" fill="#77746e" font-weight="400" text-anchor="middle">工具调用</text>
+<text x="230" y="603" font-size="20" fill="#292825" font-weight="500" text-anchor="start">读取代码 B：工具返回 +16k</text>
+<text x="700" y="603" font-size="18" fill="#77746e" font-weight="400" text-anchor="start">→ 拼入下一轮，再与历史一起送入模型</text>
+</g>
+<g id="round-4">
+<animate attributeName="opacity" values="0.10;0.10;1;1" keyTimes="0;0.45;0.47500000000000003;1" dur="20s" repeatCount="indefinite"/>
+<rect x="40" y="642" width="1420" height="118" rx="12" fill="#f5f2ec" stroke="#e6e2da" data-graph-role="container"/>
+<text x="67" y="687" font-size="23" fill="#292825" font-weight="600" text-anchor="start">第 4 轮</text>
+<text x="67" y="717" font-size="17" fill="#77746e" font-weight="400" text-anchor="start">ReAct</text>
+<rect x="230" y="665" width="750" height="34" rx="5" fill="#ebe5da" stroke="none" />
+<g><title>初始提示：2k token</title>
+<rect x="230" y="665" width="18.564" height="34" rx="0" fill="#a8a097" stroke="none" />
+</g>
+<g><title>第1轮输出：0.2k token</title>
+<rect x="248.564" y="665" width="1.856" height="34" rx="0" fill="#d6b4a3" stroke="none" />
+</g>
+<g><title>代码 A：18k token</title>
+<rect x="250.421" y="665" width="167.079" height="34" rx="0" fill="#a64335" stroke="none" />
+<text x="333.96039603960395" y="688" font-size="17" fill="#faf8f3" font-weight="600" text-anchor="middle">代码 A 18k</text>
+</g>
+<g><title>第2轮输出：0.2k token</title>
+<rect x="417.5" y="665" width="1.856" height="34" rx="0" fill="#d6b4a3" stroke="none" />
+</g>
+<g><title>文档：24k token</title>
+<rect x="419.356" y="665" width="222.772" height="34" rx="0" fill="#8b5cf6" stroke="none" />
+<text x="530.7425742574258" y="688" font-size="17" fill="#faf8f3" font-weight="600" text-anchor="middle">文档 24k</text>
+</g>
+<g><title>第3轮输出：0.2k token</title>
+<rect x="642.129" y="665" width="1.856" height="34" rx="0" fill="#d6b4a3" stroke="none" />
+</g>
+<g><title>代码 B：16k token</title>
+<rect x="643.985" y="665" width="148.515" height="34" rx="0" fill="#14b8a6" stroke="none" />
+<text x="718.2425742574258" y="688" font-size="17" fill="#faf8f3" font-weight="600" text-anchor="middle">代码 B 16k</text>
+</g>
+<text x="1082" y="690" font-size="27" fill="#a64335" font-weight="700" text-anchor="end">60.6k</text>
+<path d="M 1096 682 H 1130" fill="none" stroke="#77746e" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1140" y="659" width="100" height="46" rx="8" fill="#f0ede6" stroke="#dfbdab" />
+<text x="1190" y="689" font-size="21" fill="#a64335" font-weight="600" text-anchor="middle">模型</text>
+<path d="M 1250 682 H 1280" fill="none" stroke="#77746e" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1350" y="689" font-size="27" fill="#754338" font-weight="700" text-anchor="middle">0.2k</text>
+<text x="1350" y="722" font-size="16" fill="#77746e" font-weight="400" text-anchor="middle">工具调用</text>
+<text x="230" y="733" font-size="20" fill="#292825" font-weight="500" text-anchor="start">运行测试：工具返回日志 +20k</text>
+<text x="700" y="733" font-size="18" fill="#77746e" font-weight="400" text-anchor="start">→ 拼入下一轮，再与历史一起送入模型</text>
+</g>
+<g id="round-5">
+<animate attributeName="opacity" values="0.10;0.10;1;1" keyTimes="0;0.6;0.625;1" dur="20s" repeatCount="indefinite"/>
+<rect x="40" y="772" width="1420" height="118" rx="12" fill="#f5f2ec" stroke="#e6e2da" data-graph-role="container"/>
+<text x="67" y="817" font-size="23" fill="#292825" font-weight="600" text-anchor="start">第 5 轮</text>
+<text x="67" y="847" font-size="17" fill="#77746e" font-weight="400" text-anchor="start">完成</text>
+<rect x="230" y="795" width="750" height="34" rx="5" fill="#ebe5da" stroke="none" />
+<g><title>初始提示：2k token</title>
+<rect x="230" y="795" width="18.564" height="34" rx="0" fill="#a8a097" stroke="none" />
+</g>
+<g><title>第1轮输出：0.2k token</title>
+<rect x="248.564" y="795" width="1.856" height="34" rx="0" fill="#d6b4a3" stroke="none" />
+</g>
+<g><title>代码 A：18k token</title>
+<rect x="250.421" y="795" width="167.079" height="34" rx="0" fill="#a64335" stroke="none" />
+<text x="333.96039603960395" y="818" font-size="17" fill="#faf8f3" font-weight="600" text-anchor="middle">代码 A 18k</text>
+</g>
+<g><title>第2轮输出：0.2k token</title>
+<rect x="417.5" y="795" width="1.856" height="34" rx="0" fill="#d6b4a3" stroke="none" />
+</g>
+<g><title>文档：24k token</title>
+<rect x="419.356" y="795" width="222.772" height="34" rx="0" fill="#8b5cf6" stroke="none" />
+<text x="530.7425742574258" y="818" font-size="17" fill="#faf8f3" font-weight="600" text-anchor="middle">文档 24k</text>
+</g>
+<g><title>第3轮输出：0.2k token</title>
+<rect x="642.129" y="795" width="1.856" height="34" rx="0" fill="#d6b4a3" stroke="none" />
+</g>
+<g><title>代码 B：16k token</title>
+<rect x="643.985" y="795" width="148.515" height="34" rx="0" fill="#14b8a6" stroke="none" />
+<text x="718.2425742574258" y="818" font-size="17" fill="#faf8f3" font-weight="600" text-anchor="middle">代码 B 16k</text>
+</g>
+<g><title>第4轮输出：0.2k token</title>
+<rect x="792.5" y="795" width="1.856" height="34" rx="0" fill="#d6b4a3" stroke="none" />
+</g>
+<g><title>测试日志：20k token</title>
+<rect x="794.356" y="795" width="185.644" height="34" rx="0" fill="#f59e0b" stroke="none" />
+<text x="887.1782178217823" y="818" font-size="17" fill="#faf8f3" font-weight="600" text-anchor="middle">测试日志 20k</text>
+</g>
+<text x="1082" y="820" font-size="27" fill="#a64335" font-weight="700" text-anchor="end">80.8k</text>
+<path d="M 1096 812 H 1130" fill="none" stroke="#77746e" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1140" y="789" width="100" height="46" rx="8" fill="#f0ede6" stroke="#dfbdab" />
+<text x="1190" y="819" font-size="21" fill="#a64335" font-weight="600" text-anchor="middle">模型</text>
+<path d="M 1250 812 H 1280" fill="none" stroke="#77746e" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1350" y="819" font-size="27" fill="#754338" font-weight="700" text-anchor="middle">1.2k</text>
+<text x="1350" y="852" font-size="16" fill="#77746e" font-weight="400" text-anchor="middle">最终回答</text>
+<text x="230" y="863" font-size="20" fill="#292825" font-weight="500" text-anchor="start">任务完成：向用户返回最终答案</text>
+<text x="700" y="863" font-size="18" fill="#a64335" font-weight="600" text-anchor="start">这一轮输入已达初始 2k 的 40.4 倍</text>
+</g>
+<g id="carry-1">
+<animate attributeName="opacity" values="0.10;0.10;1;1" keyTimes="0;0.15;0.175;1" dur="20s" repeatCount="indefinite"/>
+<path id="carry-path-1" d="M 208 312 V 422 H 220" fill="none" stroke="#a8a097" stroke-width="1.5" marker-end="url(#arrow)"/>
+</g>
+<circle cx="208" cy="312" r="5" fill="#a64335" opacity="0">
+<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.10000000000000002;0.11000000000000001;0.16499999999999998;0.175;1" dur="20s" repeatCount="indefinite"/>
+<animate attributeName="cy" values="312;312;422;422" keyTimes="0;0.11000000000000001;0.16499999999999998;1" dur="20s" repeatCount="indefinite"/>
+</circle>
+<g id="carry-2">
+<animate attributeName="opacity" values="0.10;0.10;1;1" keyTimes="0;0.3;0.325;1" dur="20s" repeatCount="indefinite"/>
+<path id="carry-path-2" d="M 208 442 V 552 H 220" fill="none" stroke="#a8a097" stroke-width="1.5" marker-end="url(#arrow)"/>
+</g>
+<circle cx="208" cy="442" r="5" fill="#a64335" opacity="0">
+<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.25;0.26;0.315;0.325;1" dur="20s" repeatCount="indefinite"/>
+<animate attributeName="cy" values="442;442;552;552" keyTimes="0;0.26;0.315;1" dur="20s" repeatCount="indefinite"/>
+</circle>
+<g id="carry-3">
+<animate attributeName="opacity" values="0.10;0.10;1;1" keyTimes="0;0.45;0.47500000000000003;1" dur="20s" repeatCount="indefinite"/>
+<path id="carry-path-3" d="M 208 572 V 682 H 220" fill="none" stroke="#a8a097" stroke-width="1.5" marker-end="url(#arrow)"/>
+</g>
+<circle cx="208" cy="572" r="5" fill="#a64335" opacity="0">
+<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.39999999999999997;0.41;0.465;0.47500000000000003;1" dur="20s" repeatCount="indefinite"/>
+<animate attributeName="cy" values="572;572;682;682" keyTimes="0;0.41;0.465;1" dur="20s" repeatCount="indefinite"/>
+</circle>
+<g id="carry-4">
+<animate attributeName="opacity" values="0.10;0.10;1;1" keyTimes="0;0.6;0.625;1" dur="20s" repeatCount="indefinite"/>
+<path id="carry-path-4" d="M 208 702 V 812 H 220" fill="none" stroke="#a8a097" stroke-width="1.5" marker-end="url(#arrow)"/>
+</g>
+<circle cx="208" cy="702" r="5" fill="#a64335" opacity="0">
+<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.5499999999999999;0.5599999999999999;0.615;0.625;1" dur="20s" repeatCount="indefinite"/>
+<animate attributeName="cy" values="702;702;812;812" keyTimes="0;0.5599999999999999;0.615;1" dur="20s" repeatCount="indefinite"/>
+</circle>
+<rect x="52" y="918" width="13" height="13" rx="3" fill="#a8a097" stroke="none" />
+<text x="74" y="931" font-size="16" fill="#77746e" font-weight="400" text-anchor="start">初始提示</text>
+<rect x="245" y="918" width="13" height="13" rx="3" fill="#a64335" stroke="none" />
+<text x="267" y="931" font-size="16" fill="#77746e" font-weight="400" text-anchor="start">代码 A</text>
+<rect x="407" y="918" width="13" height="13" rx="3" fill="#8b5cf6" stroke="none" />
+<text x="429" y="931" font-size="16" fill="#77746e" font-weight="400" text-anchor="start">文档</text>
+<rect x="551" y="918" width="13" height="13" rx="3" fill="#14b8a6" stroke="none" />
+<text x="573" y="931" font-size="16" fill="#77746e" font-weight="400" text-anchor="start">代码 B</text>
+<rect x="716" y="918" width="13" height="13" rx="3" fill="#f59e0b" stroke="none" />
+<text x="738" y="931" font-size="16" fill="#77746e" font-weight="400" text-anchor="start">测试日志</text>
+<rect x="909" y="918" width="13" height="13" rx="3" fill="#d6b4a3" stroke="none" />
+<text x="931" y="931" font-size="16" fill="#77746e" font-weight="400" text-anchor="start">前几轮模型输出</text>
+<rect x="40" y="956" width="1420" height="238" rx="14" fill="#f0ede6" stroke="#dbeafe" />
+<text x="67" y="993" font-size="22" fill="#1e3a8a" font-weight="600" text-anchor="start">累计用量 = 各轮用量相加</text>
+<text x="67" y="1038" font-size="22" fill="#a64335" font-weight="600" text-anchor="start">输入</text>
+<text x="377" y="1038" font-size="22" fill="#754338" font-weight="600" text-anchor="start">输出</text>
+<g opacity="0" class="num" id="counter-1">
+<animate attributeName="opacity" values="1;0;0;0;0;0" keyTimes="0;0.15;0.30;0.45;0.60;1" calcMode="discrete" dur="20s" repeatCount="indefinite"/>
+<text x="127" y="1041" font-size="40" fill="#a64335" font-weight="700" text-anchor="start">2k</text>
+<text x="437" y="1041" font-size="40" fill="#754338" font-weight="700" text-anchor="start">0.2k</text>
+</g>
+<g opacity="0" class="num" id="counter-2">
+<animate attributeName="opacity" values="0;1;0;0;0;0" keyTimes="0;0.15;0.30;0.45;0.60;1" calcMode="discrete" dur="20s" repeatCount="indefinite"/>
+<text x="127" y="1041" font-size="40" fill="#a64335" font-weight="700" text-anchor="start">22.2k</text>
+<text x="437" y="1041" font-size="40" fill="#754338" font-weight="700" text-anchor="start">0.4k</text>
+</g>
+<g opacity="0" class="num" id="counter-3">
+<animate attributeName="opacity" values="0;0;1;0;0;0" keyTimes="0;0.15;0.30;0.45;0.60;1" calcMode="discrete" dur="20s" repeatCount="indefinite"/>
+<text x="127" y="1041" font-size="40" fill="#a64335" font-weight="700" text-anchor="start">66.6k</text>
+<text x="437" y="1041" font-size="40" fill="#754338" font-weight="700" text-anchor="start">0.6k</text>
+</g>
+<g opacity="0" class="num" id="counter-4">
+<animate attributeName="opacity" values="0;0;0;1;0;0" keyTimes="0;0.15;0.30;0.45;0.60;1" calcMode="discrete" dur="20s" repeatCount="indefinite"/>
+<text x="127" y="1041" font-size="40" fill="#a64335" font-weight="700" text-anchor="start">127.2k</text>
+<text x="437" y="1041" font-size="40" fill="#754338" font-weight="700" text-anchor="start">0.8k</text>
+</g>
+<g opacity="1" class="num" id="counter-5">
+<animate attributeName="opacity" values="0;0;0;0;1;1" keyTimes="0;0.15;0.30;0.45;0.60;1" calcMode="discrete" dur="20s" repeatCount="indefinite"/>
+<text x="127" y="1041" font-size="40" fill="#a64335" font-weight="700" text-anchor="start">208k</text>
+<text x="437" y="1041" font-size="40" fill="#754338" font-weight="700" text-anchor="start">2k</text>
+</g>
+<text x="680" y="1038" font-size="24" fill="#1e3a8a" font-weight="600" text-anchor="start">完成后：208k 输入 + 2k 输出 = 210k</text>
+<rect x="67" y="1063" width="1366" height="20" rx="5" fill="#754338" stroke="none" />
+<rect x="67" y="1063" width="1352.990476190476" height="20" rx="5" fill="#a64335" stroke="none" />
+<text x="67" y="1115" font-size="25" fill="#1e3a8a" font-weight="700" text-anchor="start">输入约 99%｜输出约 1%</text>
+<text x="67" y="1157" font-size="20" fill="#292825" font-weight="400" text-anchor="start">208k = 2k + 20.2k + 44.4k + 60.6k + 80.8k；同一段历史可在多轮中重复计入输入。</text>
+<text x="52" y="1232" font-size="17" fill="#77746e" font-weight="400" text-anchor="start">说明：示例假设每轮保留全部历史，未压缩或截断。工具返回归入下一轮输入；输出含工具调用与最终回答。</text>
+<text x="52" y="1262" font-size="17" fill="#77746e" font-weight="400" text-anchor="start">若启用推理，思考 token 也可能计入输出；缓存命中仍可计入输入统计，但价格更低。此图展示数量，不代表费用。</text>
+</svg></div></div>
+<section class="lesson-related" aria-labelledby="related-title"><h2 id="related-title">继续学习</h2><a href="./learn-llm-study.html">大模型是怎样学会与回答的？ →</a><a href="./learn-aime-paper.html">AIME：交互式中文论文解读 →</a><a href="./learn-pi-compaction.html">Pi 上下文压缩流程 →</a><a class="back" href="./learning.html">← 全部交互式学习</a></section></article>
+<section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section></main><footer class="site-footer"><span>zwhu / Tech &amp; Notes</span><a href="./learning.html">交互式学习 →</a></footer>
+<script src="./assets/learning/react-token-accumulation.js"></script><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></body></html>

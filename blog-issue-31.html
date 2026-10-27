@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Git 钩子是指在特定的 Git 动作（如：git commit、 git push ）下被触发的脚本。而钩子主要被分为两种："><title>用 Node.js 写前端自己的 Git-hooks · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>用 Node.js 写前端自己的 Git-hooks</h1><div class="meta"><time datetime="2016-12-16">2016-12-16</time> · 记录 · <a href="https://github.com/zwhu/blog/issues/31">原 issue #31 ↗</a></div><div class="prose"><blockquote>
+<p>TLDR;</p>
+<ol>
+<li>介绍 Git 钩子的基本开发流程</li>
+<li>介绍如何用 Node.js 写 Git 钩子</li>
+</ol>
+</blockquote>
+<h2>Hooks-钩子</h2>
+<h3>简介</h3>
+<p>Git 钩子是指在特定的 Git 动作（如：<code>git commit</code>、 <code>git push </code>）下被触发的脚本。而钩子主要被分为两种：</p>
+<ol>
+<li>客户端钩子</li>
+<li>服务端钩子</li>
+</ol>
+<p>而客户端钩子又被分为以下几种：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="正文表格（可横向滚动）"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>钩子名称</th>
+<th>接收参数</th>
+<th>可否终止操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提交工作流钩子</td>
+<td>pre-commit</td>
+<td>\</td>
+<td>是</td>
+</tr>
+<tr>
+<td>提交工作流钩子</td>
+<td>prepare-commit-msg</td>
+<td>filepath、committype、sha-1</td>
+<td>\</td>
+</tr>
+<tr>
+<td>提交工作流钩子</td>
+<td>commit-msg</td>
+<td>filepath</td>
+<td>是</td>
+</tr>
+<tr>
+<td>提交工作流钩子</td>
+<td>post-commit</td>
+<td>\</td>
+<td>\</td>
+</tr>
+<tr>
+<td>电子邮件工作流钩子</td>
+<td>applypatch-msg</td>
+<td>merge-filename</td>
+<td>是</td>
+</tr>
+<tr>
+<td>电子邮件工作流钩子</td>
+<td>pre-applypatch</td>
+<td>\</td>
+<td>是</td>
+</tr>
+<tr>
+<td>电子邮件工作流钩子</td>
+<td>post-commit</td>
+<td>\</td>
+<td>否</td>
+</tr>
+<tr>
+<td>其它客户端钩子</td>
+<td>pre-rebase</td>
+<td>| 是</td>
+<td></td>
+</tr>
+<tr>
+<td>其它客户端钩子</td>
+<td>post-rewrite、post-checkout 和 post-merge</td>
+<td>commandname</td>
+<td>|</td>
+</tr>
+<tr>
+<td>其它客户端钩子</td>
+<td>pre-push</td>
+<td>originbranhname &amp; head</td>
+<td>是</td>
+</tr>
+</tbody>
+</table></div>
+<p>服务器端钩子主要有三种：</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="正文表格（可横向滚动）"><table>
+<thead>
+<tr>
+<th>钩子名称</th>
+<th>接收参数</th>
+<th>可否终止操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pre-receive</td>
+<td>推送的引用</td>
+<td>是</td>
+</tr>
+<tr>
+<td>update</td>
+<td>引用的名字（分支），推送前的引用指向的内容的 SHA-1 值，以及用户准备推送的内容的 SHA-1 值</td>
+<td>是</td>
+</tr>
+<tr>
+<td>post-receive</td>
+<td>同pre-receive</td>
+<td>否</td>
+</tr>
+</tbody>
+</table></div>
+<h3>客户端钩子和服务端钩子的异同</h3>
+<p>Git 的钩子不管客户端钩子还是服务端钩子，都是放在当前项目的<br>
+<code>.git/hooks</code> 目录下。不同的是，客户端钩子是放置在你的本地项目的目录下，而服务器端钩子是放在对应的服务器上的目录。</p>
+<p>我们知道 Git 相当于本地的文件数据库，而 <code>.git</code> 目录存放了项目文件的快照以及其他一系列 git 信息，且 <code>.git</code> 目录是不会被提交到服务器上的，所以放置在 <code>.git/hooks</code> 目录中的客户端脚本也不会被提交。所以如果想让项目中的其他人使用你的钩子，就需要一种策略来偷偷的安装这个钩子或者在服务端放置实现这个钩子的功能。</p>
+<h2>如何用 Nodejs 写一个钩子</h2>
+<blockquote>
+<p>钩子都被存储在 Git 目录下的 hooks 子目录中。 也即绝大部分项目中的 .git/hooks 。 当你用 git init 初始化一个新版本库时，Git 默认会在这个目录中放置一些示例脚本。这些脚本除了本身可以被调用外，它们还透露了被触发时所传入的参数。 所有的示例都是 shell 脚本，其中一些还混杂了 Perl 代码，不过，任何正确命名的可执行脚本都可以正常使用 —— 你可以用 Ruby 或 Python，或其它语言编写它们。 这些示例的名字都是以 .sample 结尾，如果你想启用它们，得先移除这个后缀。</p>
+<p>把一个正确命名且可执行的文件放入 Git 目录下的 hooks 子目录中，即可激活该钩子脚本。</p>
+</blockquote>
+<p>之后我会用 Node.js 来写一个<code>拒绝提交没有被解决的冲突的文件</code>的钩子。</p>
+<p>需要的知识储备：</p>
+<ul>
+<li>会写 Javascript</li>
+<li>了解一点环境变量的知识</li>
+<li>了解 Nodejs require 路径规则</li>
+</ul>
+<p>写这个钩子的初衷是因为在多人合作项目中，总是难免会遇到文件冲突的情况，而有些同事没有找到全部的冲突文件并一一解决，这个钩子就会在 commit 的时候检查是否有冲突，如果有冲突，就会把所有冲突找到，并提示出错文件后，拒绝 commit。</p>
+<p>直接上源码:</p>
+<div><pre>#!/usr/bin/env node
+<span>// 在 commit 之前检查是否有冲突，如果有冲突就 process.exit(1)</span>
+
+<span>const</span> <span>execSync</span> <span>=</span> <span>require</span><span>(</span><span>'child_process'</span><span>)</span><span>.</span><span>execSync</span>
+
+<span>// git 对所有冲突的地方都会生成下面这种格式的信息，所以写个检测冲突文件的正则</span>
+<span>const</span> <span>isConflictRegular</span> <span>=</span> <span>"^&lt;&lt;&lt;&lt;&lt;&lt;&lt;\\s|^=======$|^&gt;&gt;&gt;&gt;&gt;&gt;&gt;\\s"</span>
+
+<span>let</span> <span>results</span>
+
+<span>try</span> <span>{</span>
+ <span>// git grep 命令会执行 perl 的正则匹配所有满足冲突条件的文件</span>
+    <span>results</span> <span>=</span> <span>execSync</span><span>(</span><span>`git grep -n -P "<span><span>${</span><span>isConflictRegular</span><span>}</span></span>"`</span><span>,</span> <span>{</span><span>encoding</span>: <span>'utf-8'</span><span>}</span><span>)</span>
+<span>}</span> <span>catch</span> <span>(</span><span>e</span><span>)</span> <span>{</span>
+    <span>console</span><span>.</span><span>log</span><span>(</span><span>'没有发现冲突，等待 commit'</span><span>)</span>
+    <span>process</span><span>.</span><span>exit</span><span>(</span><span>0</span><span>)</span>
+<span>}</span>
+
+<span>if</span><span>(</span><span>results</span><span>)</span> <span>{</span>
+    <span>console</span><span>.</span><span>error</span><span>(</span><span>'发现冲突，请解决后再提交，冲突文件：'</span><span>)</span>
+    <span>console</span><span>.</span><span>error</span><span>(</span><span>results</span><span>.</span><span>trim</span><span>(</span><span>)</span><span>)</span>
+    <span>process</span><span>.</span><span>exit</span><span>(</span><span>1</span><span>)</span>
+<span>}</span>
+
+<span>process</span><span>.</span><span>exit</span><span>(</span><span>0</span><span>)</span></pre></div>
+<p>把这个文件拷贝到 <code>.git/hooks/pre-commit</code> 下，并执行 <code>chmod 777 pre-commit</code> 就可以在每次 commit 的情况下检查之前文件是否有冲突。</p>
+<h3>有没有更好的做法？</h3>
+<p>试想一下，我们在写钩子的时候，并不会一次就把代码写对，所以需要经常把这个文件拷贝到 <code>.git/hooks</code> 目录下；有没有更好的做法？ 有的。只需要在<code>.git/hooks</code>下面创建一个 shell 脚本，来调用这个 js 文件即可。</p>
+<div><pre>#!/usr/bin/env node
+<span>const</span> <span>execSync</span> <span>=</span> <span>require</span><span>(</span><span>'child_process'</span><span>)</span><span>.</span><span>execSync</span>
+<span>execSync</span><span>(</span><span>"./pre-commit.js"</span> <span>)</span></pre></div>
+<p>这中 <code>shebang</code> 写法在使用 git 的命令来运行的时候是没有问题的，但是在使用 <code>Source Tree</code> 的 Git-GUI，会报 node 命令不存在， 这是新版本的 osx 的安全策略造成的（可以运行 which node 命令看看和上面的 shebang 有什么区别），对于这种情况使用下面的脚本可以完美解决。</p>
+<div><pre><span><span>#!</span>/usr/bin/env bash</span>
+
+<span><span>#</span> 支持 sourcetree</span>
+<span>export</span> PATH=/usr/local/bin:<span>$PATH</span>
+node <span><span>"</span>./pre-commit.js<span>"</span></span></pre></div>
+<p>NOTE:<br>
+注意 <code>node './pre-commit.js'</code> 这个路径，是指如果在当前项目的根目录下运行 <code>git commit</code>，所以 <code>pre-commit.js</code> 是相对于当前根目录的路径。想优化的话可以通过 Git 的一些默认环境变量来配置。</p>
+<p>到这里就基本结束了，但是我们再回忆下之前说过的内容『客户端钩子是不会被其他项目成员 clone 下来的』，所以需要一种策略来保证项目中每个成员都安装了这个钩子。由于我们的前端项目是需要每个成员都通过 npm start 命令开启服务的，所以可以在 npm start 中做些手脚。</p>
+<div><pre><span>const</span> <span>fs</span> <span>=</span> <span>require</span><span>(</span><span>'fs'</span><span>)</span><span>;</span>
+
+<span>// 判断是否已经存在 pre-commit，不存在就读取 pre-commit.sh 并写入</span>
+<span>if</span> <span>(</span><span>!</span><span>fs</span><span>.</span><span>existsSync</span><span>(</span><span>'.git/hooks/pre-commit'</span><span>)</span><span>)</span> <span>{</span>
+    <span>if</span><span>(</span><span>!</span><span>fs</span><span>.</span><span>existsSync</span><span>(</span><span>'.git/hooks/'</span><span>)</span><span>)</span> <span>{</span>
+        <span>fs</span><span>.</span><span>mkdirSync</span><span>(</span><span>'.git/hooks/'</span><span>)</span><span>;</span>
+    <span>}</span>
+
+    <span>let</span> <span>preCommitFile</span> <span>=</span> <span>fs</span><span>.</span><span>readFileSync</span><span>(</span><span>'./pre-commit.sh'</span><span>)</span><span>;</span>
+
+    <span>fs</span><span>.</span><span>writeFileSync</span><span>(</span><span>'.git/hooks/pre-commit'</span><span>,</span> <span>preCommitFile</span><span>,</span> <span>{</span>
+        <span>encoding</span>: <span>'utf8'</span><span>,</span>
+        <span>mode</span>: <span>0o777</span>
+    <span>}</span><span>)</span><span>;</span>
+<span>}</span></pre></div>
+<h3>总结：</h3>
+<p>凡是能被 JS 重写的项目，最终一定会被 JS 重写。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-32.html">较新一篇：『理解 unix 进程』读书笔记</a><a href="./blog-issue-30.html">较早一篇：100块钱换零钱，最多有多少种方式的 JavaScript 版本实现</a></nav></article><section class="historical-comments" aria-labelledby="history-title"><h2 id="history-title">历史评论</h2><p class="comments-status">以下为原 issue 的评论存档；新评论可在下方发表。</p><article class="historical-comment" id="issuecomment-270318507"><div class="meta">yangjiqiao86 · <time datetime="2017-01-04T08:27:14Z">2017-01-04</time> · <a href="https://github.com/zwhu/blog/issues/31#issuecomment-270318507">原评论 ↗</a></div><div class="prose"><p>赞</p></div></article></section><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

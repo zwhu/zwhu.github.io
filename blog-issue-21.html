@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="花了一个周末的时间，把 css-postion 的标准读了一遍，把关于 Absolute 和 Relative 的部分的理解在这里记录一下。"><title>Absolute 和 Relative · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>Absolute 和 Relative</h1><div class="meta"><time datetime="2016-02-29">2016-02-29</time> · 记录 · 学习 · <a href="https://github.com/zwhu/blog/issues/21">原 issue #21 ↗</a></div><div class="prose"><p>花了一个周末的时间，把 css-postion 的标准读了一遍，把关于 Absolute 和 Relative 的部分的理解在这里记录一下。</p>
+<h2>Positioning schemes</h2>
+<p>在 css 中，有三种定位方案:</p>
+<ol>
+<li>Normal flow</li>
+<li>Floats</li>
+<li>Absolute positioning</li>
+</ol>
+<p>Normal flow 是最常见的 BFC 和 IFC，也就是常说的块级元素从上到下，内联元素从左到右布局的情况；Floats 即常见的盒子水平布局的情况；Absolute positioning 让盒子完全脱离 Normal flow， 通过设置 top，left 等属性来决定 position。</p>
+<p>注意：这里只说到 Floats 和 Absolute 是 <code>out-of-flow</code> 的，没有说 Relative。我看过很多文章都说 Relative 也让盒子脱离了流，是错误的说法（我就深受其害）。</p>
+<h2>Containing Blocks</h2>
+<p>一个元素的盒子的位置和大小通常是由一个特定的矩形计算出来的，这个特定的矩形就是元素的 <code>containing block</code>。 对于 <code>static</code> 和 <code>relative</code> 的元素，它的 <code>containing block</code> 同普通盒子，一般是指包含它的最近的父级元素（<code>nearest ancestor</code>）。对于 fixed（不在这次文章之内，按下不表）和 absolute 有如下的表现:</p>
+<ul>
+<li>
+<p><code>containing block</code> 被最近的<code>positon</code>不等于<code>static</code>的祖先元素创建:</p>
+<ol>
+<li>如果最近的祖先元素是块级元素(block-level)，<code>containing block</code> 由盒子的内边距层(padding edge) 创建。</li>
+<li>如果最近的祖先元素是内联级元素(inline-level)，那么<code>containing block</code> 由书写模式的 <code>direction</code> 属性决定。这种情况比较少用，不分析了。</li>
+<li>如果没有祖先元素，或者祖先元素没有设置 <code>position</code> 为 <code>static</code> 以外的值，那么 <code>containing block</code> 就是 <code>initial containing block</code>。</li>
+</ol>
+<p>注意：对于上面第三点，<code>initial containing block</code> 并不是指 <code>body</code>， 我看到很多文章都把这里说成 <code>body</code>。</p>
+</li>
+</ul>
+<h2>Relative positioning</h2>
+<p>相对定位：是相对于自己定位。在 <code>normal flow</code> 中，元素的大小是不变的，通过设置<code>top</code>等属性，改变元素相对于自身的位置。所以被 <code>relative</code> 的元素，是可能会和其他元素重叠的，但是不会对之后的元素的位置有影响。 一个相对定位的盒子会为后代节点创建一个新的绝对定位的 <code>containing block</code>。</p>
+<h2>Absolute positioning</h2>
+<p>对于 <code>position： absolute</code> 和 <code>position： fixed</code> 都是指 <code>Absolute positioning</code>。 本文暂只讨论 <code>position: absolute</code>。 <code>Absolute positioning</code> 被称为绝对定位。 绝对定位的元素是根据其 <code>containing block</code> 决定的，完全脱离 <code>normal flow</code>， 对后续的兄弟节点的布局无任何影响。一个绝对定位的盒子会为后代节点创建一个新的绝对定位的 <code>containing block</code> 和为子节点创建一个 <code>normal flow</code> 的<code>containing block</code></p>
+<h2>top, right, bottom, left</h2>
+<p>当一个元素的 position 属性被设置了除 <code>static</code> 之外的值， 这个元素的位置可以被 <code>top, right, bottom, left</code>这四个物理属性决定。注意，在同时设置 <code>left、right</code> 或者 <code>bottom、top</code> 的时候会出现竞争情况。</p>
+<h2>结尾</h2>
+<p>因为女朋友在学 css，需要我在旁指导 而 css 一直是我的弱项，所以我花了一个周末时间把 css-position 的标准梳理了下，这样指导起来也比较有底气。这篇文章基本都是对下面参考的链接的笔记，我之前学这部分的内容时，都是从网上找的别人的博客看的，有很多和标准出入的地方，这一天也解了不少的疑惑；如果有想学的同学，还请直接看 css-positon 的草案比较靠谱，而且草案中 example 也有不少。</p>
+<h2>参考:</h2>
+<p><a href="https://drafts.csswg.org/css-position-3">草案</a></p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-22.html">较新一篇：Javascript 中的惰性加载</a><a href="./blog-issue-20.html">较早一篇：理解 Redux</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

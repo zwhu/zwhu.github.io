@@ -1,1 +1,27 @@
 .home-translations{padding-top:34px}.section-heading>a{font-size:12px;color:var(--muted)}.archive-note{font-size:12px;color:var(--muted);margin:28px 0 45px}.comments{margin:12px 0 40px;padding-top:24px;border-top:1px solid var(--line)}.comments h2{font-size:16px;font-weight:500;margin:0 0 14px}.comments-status{font-size:12px;color:var(--muted);line-height:1.8}.translation-page>.comments{padding-top:24px;margin-top:30px}.translation-page .cover{display:block;margin:20px 0 0;max-width:430px}.translation-page .cover img{max-height:160px;width:auto;max-width:100%;border:0}.giscus{min-width:0}@media(max-width:400px){nav{gap:14px;font-size:12px}.brand{font-size:18px}}
+
+/* Issue 迁入文章：复用正文样式，长代码和表格仅在各自区域滚动。 */
+.issue-page .prose,.issue-page .article h1,.issue-page .post h3{overflow-wrap:anywhere}
+.issue-page .prose a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.issue-page .prose img{max-width:100%;height:auto}
+.issue-page .prose pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;overflow-wrap:normal}
+.issue-page .prose h1{font-size:23px;margin:30px 0 12px}
+.issue-page .prose h3{font-size:17px;line-height:1.6;margin:26px 0 10px}
+.issue-page .prose blockquote{margin:20px 0;padding-left:16px;border-left:2px solid var(--line);color:var(--muted)}
+.table-scroll{max-width:100%;overflow-x:auto;margin:20px 0}
+.table-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.issue-page .prose table{border-collapse:collapse;width:100%;font-size:13px}
+.issue-page .prose th,.issue-page .prose td{border:1px solid var(--line);padding:9px 12px;text-align:left;min-width:120px;vertical-align:top}
+.issue-page .prose th{background:var(--code);font-weight:600}
+.issue-page .article-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.historical-comments{border-top:1px solid var(--line);padding-top:24px;margin-bottom:36px}
+.historical-comments h2{font-size:16px;font-weight:500}
+.historical-comment{border-bottom:1px solid var(--line);padding:20px 0}
+.historical-comment .meta{margin-bottom:14px}
+.issue-page .archive-note a{color:var(--accent)}
+.missing-image{display:block;padding:12px 16px;border-left:2px solid var(--line);color:var(--muted);font-size:12px;overflow-wrap:anywhere}
+
+/* The fourth navigation item wraps as a row on narrow screens. */
+.home-learning{padding-top:34px}
+.site-header>nav{flex-wrap:wrap;row-gap:4px}
+@media(max-width:560px){.site-header{flex-wrap:wrap;gap:12px}.site-header>nav{gap:16px;font-size:12px}}

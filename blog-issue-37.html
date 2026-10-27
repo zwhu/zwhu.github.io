@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="前端在开发过程中接触到的算法最多的莫过于排序和 dfs(深度优先遍历) 。 dfs 算法广泛用于图（树是图的一种）的遍历，如：没有 querySelectorAll 的时候，根据 classname 或者 ta…"><title>前端的数据结构与算法（1）-- dfs · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>前端的数据结构与算法（1）-- dfs</h1><div class="meta"><time datetime="2017-08-12">2017-08-12</time> · 算法 · <a href="https://github.com/zwhu/blog/issues/37">原 issue #37 ↗</a></div><div class="prose"><p><a href="https://camo.githubusercontent.com/541e602d432f3d79a09e532c983452fbab375684667ec12e25a8b5ea07b30f0f/68747470733a2f2f696d672e616c6963646e2e636f6d2f7466732f5442317968723953465858585861695856585858585858585858582d313539342d313134322e706e67"><img src="./assets/blog-issues/b50b0d19da75b728.png" alt="dfs" loading="lazy"></a></p>
+<h2>dfs</h2>
+<blockquote>
+<p>前端在开发过程中接触到的算法最多的莫过于排序和 dfs(深度优先遍历) 。 dfs 算法广泛用于图（树是图的一种）的遍历，如：没有 <code>querySelectorAll</code> 的时候，根据 classname 或者 tag 查找 element。</p>
+</blockquote>
+<p>关于 dfs 算法的遍历过程，我简略的画了一个示例图：</p>
+<p><a href="https://camo.githubusercontent.com/2e30fb192aa16e94fcc3e2ff954a14d4205aa3c72d9c99b1489cf8faddd6558e/68747470733a2f2f696d672e616c6963646e2e636f6d2f7466732f5442313377556553465858585862355846585858585858585858582d3936302d3732302e676966"><img src="./assets/blog-issues/6a4814b72f5912ae.gif" alt="dfs.gif" loading="lazy"></a></p>
+<h3>实例：</h3>
+<p>最近在实际业务场景中，跟后端约定页面中所有组件的消息根据页面上的组件 id 聚合到一个对象中，后端返回的是类似如下的一个树形数据结构。前端需要把所有的错误信息都拿出来，按照页面上所有组件的顺序聚合显示在一个全局信息面板组件上（至于按照组件顺序排序算法本文暂且略过）</p>
+<div><pre><span>let</span> <span>tree</span> <span>=</span> <span>{</span>
+    <span>'id1'</span>: <span>{</span>
+		<span>message</span>: <span>'hello'</span>
+	<span>}</span><span>,</span>
+	<span>'id2'</span>: <span>{</span>
+		<span>message</span>: <span>'world'</span><span>,</span>
+		<span>children</span>: <span>{</span>
+		  <span>'id2-1'</span>: <span>{</span>
+			  <span>message</span>: <span>'haha'</span><span>,</span>
+			  <span>children</span>: <span>{</span>
+			  <span>}</span>
+		  <span>}</span><span>,</span>
+		  <span>'id2-2'</span>: <span>{</span>
+			  <span>message</span>: <span>'heihei'</span>
+		  <span>}</span>
+		<span>}</span>
+	<span>}</span>
+<span>}</span></pre></div>
+<p>由于某些大组件可能是由多个小组件层层嵌套组合而来，且每个小组件都有相应的 message 需要展示，所以就选择了上述的树形结构来表达组件的信息。这个时候就会有人问，为什么不让后端把所有 message 都聚合到数组里面？因为前端不仅需要把这些错误信息聚合到一起展示，也需要把错误定位到具体组件上</p>
+<h3>递归版本实现</h3>
+<div><pre><span>function</span> <span>dfs</span><span>(</span><span>tree</span> <span>=</span> <span>{</span><span>}</span><span>,</span> <span>messages</span> <span>=</span> <span>[</span><span>]</span><span>)</span> <span>{</span>
+	<span>let</span> <span>i</span> <span>=</span> <span>0</span><span>;</span>
+	<span>if</span><span>(</span><span>!</span><span>messages</span><span>)</span> <span>messages</span> <span>=</span> <span>[</span><span>]</span><span>;</span>
+	<span>if</span><span>(</span><span>tree</span><span>.</span><span>message</span><span>)</span> <span>messages</span><span>.</span><span>push</span><span>(</span><span>tree</span><span>.</span><span>message</span><span>)</span><span>;</span>
+	
+	<span>const</span> <span>keys</span> <span>=</span> <span>Object</span><span>.</span><span>keys</span><span>(</span><span>tree</span><span>.</span><span>children</span> <span>||</span> <span>{</span><span>}</span><span>)</span><span>;</span>
+	<span>while</span> <span>(</span><span>i</span> <span>&lt;</span> <span>keys</span><span>.</span><span>length</span><span>)</span> <span>{</span>
+		<span>dfs</span><span>(</span><span>tree</span><span>.</span><span>children</span><span>[</span><span>keys</span><span>[</span><span>i</span><span>]</span><span>]</span><span>,</span> <span>messages</span><span>)</span><span>;</span>
+		<span>i</span> <span>+=</span> <span>1</span><span>;</span>
+	<span>}</span>
+	<span>return</span> <span>messages</span><span>;</span>
+<span>}</span>
+
+ <span>tree</span> <span>=</span> <span>{</span>
+	<span>message</span>: <span>null</span><span>,</span>
+	<span>children</span>: <span>tree</span>
+ <span>}</span><span>;</span>  
+ 
+ <span>dfs</span><span>(</span><span>tree</span><span>)</span><span>;</span></pre></div>
+<h3>非递归版本实现</h3>
+<div><pre>  <span>function</span> <span>dfs</span><span>(</span><span>tree</span> <span>=</span> <span>{</span><span>}</span><span>)</span> <span>{</span>
+	<span>const</span> <span>array</span> <span>=</span> <span>[</span><span>tree</span><span>]</span><span>;</span>
+	<span>let</span> <span>messages</span> <span>=</span> <span>[</span><span>]</span><span>;</span>
+	<span>while</span> <span>(</span><span>array</span><span>.</span><span>length</span><span>)</span> <span>{</span>
+	  <span>const</span> <span>top</span> <span>=</span> <span>array</span><span>.</span><span>pop</span><span>(</span><span>)</span><span>;</span>
+	  <span>if</span> <span>(</span><span>top</span><span>.</span><span>message</span><span>)</span> <span>{</span>
+		<span>messages</span><span>.</span><span>push</span><span>(</span><span>top</span><span>.</span><span>message</span><span>)</span><span>;</span>
+	  <span>}</span>
+	  <span>const</span> <span>keys</span> <span>=</span> <span>Object</span><span>.</span><span>keys</span><span>(</span><span>top</span><span>.</span><span>children</span> <span>||</span> <span>{</span><span>}</span><span>)</span><span>;</span>
+	  <span>let</span> <span>i</span> <span>=</span> <span>keys</span><span>.</span><span>length</span><span>;</span>
+	  <span>while</span> <span>(</span><span>i</span> <span>&gt;</span> <span>0</span><span>)</span> <span>{</span>
+		<span>i</span> <span>-=</span> <span>1</span><span>;</span>
+		<span>array</span><span>.</span><span>push</span><span>(</span><span>top</span><span>.</span><span>children</span><span>[</span><span>keys</span><span>[</span><span>i</span><span>]</span><span>]</span><span>)</span><span>;</span>
+	  <span>}</span>
+	<span>}</span>
+	<span>return</span> <span>messages</span>
+  <span>}</span>
+  
+ <span>tree</span> <span>=</span> <span>{</span>
+	<span>message</span>: <span>null</span><span>,</span>
+	<span>children</span>: <span>tree</span>
+ <span>}</span><span>;</span>  
+ 
+ <span>dfs</span><span>(</span><span>tree</span><span>)</span><span>;</span></pre></div>
+<p>在实际使用中，考虑到数据结构的层数没那么多，其实尾递归版本和非递归版本所消耗的时间在浏览器的优化下几乎可忽略了。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-38.html">较新一篇：组件 Changelog 标准</a><a href="./blog-issue-36.html">较早一篇：莱文斯坦距离的 JavaScript 版本实现</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

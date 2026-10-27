@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="给自己定下写文章的目标后，就去找了几家博客平台来发布文章；作为一个懒人，不能所有博客文章都手动去各家平台发布，只好通过编写脚本来发布。但是除了Github提供了比较详细的Api外，其他国内的博客平台都没有提供对…"><title>记一次用 NodeJs 实现模拟登录的思路 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>记一次用 NodeJs 实现模拟登录的思路</h1><div class="meta"><time datetime="2015-10-13">2015-10-13</time> · 记录 · <a href="https://github.com/zwhu/blog/issues/7">原 issue #7 ↗</a></div><div class="prose"><h1>记一次用 NodeJs 实现模拟登录的思路</h1>
+<blockquote>
+<p>工欲善其事，必先利其器。</p>
+</blockquote>
+<p>给自己定下写文章的目标后，就去找了几家博客平台来发布文章；作为一个懒人，不能所有博客文章都手动去各家平台发布，只好通过编写脚本来发布。但是除了<code>Github</code>提供了比较详细的<code>Api</code>外，其他国内的博客平台都没有提供对应的接口，但总有办法的。</p>
+<p>下面是我对某家博客平台模拟登录流程的记录（打死我都不会说这家平台是S开头的），个人觉得挺有意思的，也能从中学到不少产品安全设计的思路。</p>
+<h3>工具</h3>
+<ul>
+<li><code>Babel</code></li>
+<li><code>Cheerio.js</code></li>
+<li><code>SuperAgent</code></li>
+<li><code>Chrome 浏览器</code></li>
+</ul>
+<p>注：工具只是实现结果的一个手段，并不一定需要掌握这些工具，只要知道它们是干嘛的就行了。</p>
+<h3>开始分析</h3>
+<p>先进入主页找到用户登录页，如下图所示：</p>
+<p><a href="https://camo.githubusercontent.com/610be5cf2f58cd1954bd033c6bfa550885dcdadcea2bd87c47110736956e18d7/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f31393235383831332d413934332d343235432d423738372d4146463846414641314638322e706e67"><span class="missing-image">原图暂不可用：登录（查看原图）</span></a></p>
+<p>标准的登录框，在这边需要把<code>Chrome</code>的控制台打开，进入<code>Network</code>页，把 Preserve log （页面跳转也能记录日志，感谢 <a href="http://www.chun.dog">铁臂狗</a> 告知）的选项勾中， 如下图所示：<br>
+<a href="https://camo.githubusercontent.com/1f476f5e03a7fe189edf426c7e7498fe093787f8f5a74a4b918f9d3ead3042bc/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f39303833314243302d324437362d343232322d424542442d4535444639303535334532302e706e67"><span class="missing-image">原图暂不可用：Chrome 控制台（查看原图）</span></a></p>
+<p>抓包分析请求，先从输入正确密码开始：</p>
+<h4>输入正确密码</h4>
+<p><a href="https://camo.githubusercontent.com/83c28ffe80ae47727d7fe044ddfbf5dc5f7abd7df90310de9dd5042a22b4fdee/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f37453842384339452d454635382d343436352d413344372d3941353133323939464235362e706e67"><span class="missing-image">原图暂不可用：正确密码的包（查看原图）</span></a></p>
+<p>我把暴露隐私的两个地方打码了（这两块也是我们接下来要着重要分析的点）</p>
+<p>可以从中看到请求头，我们先把这些请求头照抄下来</p>
+<div><pre><span>const</span> <span>base_headers</span> <span>=</span> <span>{</span>
+    <span>Accept</span>: <span>'*/*'</span><span>,</span>
+    <span>'Accept-Encoding'</span>:<span>'gzip, deflate'</span><span>,</span>
+    <span>'Accept-Language'</span>:<span>'zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4,ja;q=0.2'</span><span>,</span>
+    <span>'Cache-Control'</span>:<span>'no-cache'</span><span>,</span>
+    <span>Connection</span>:<span>'keep-alive'</span><span>,</span>
+    <span>DNT</span>:<span>1</span><span>,</span>
+    <span>Host</span>:<span>'segmentfault.com'</span><span>,</span>
+    <span>Origin</span>: <span>'http://segmentfault.com'</span><span>,</span>
+    <span>Pragma</span>:<span>'no-cache'</span><span>,</span>
+    <span>Referer</span>: <span>'http://segmentfault.com/'</span><span>,</span>
+    <span>'User-Agent'</span>: <span>'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36'</span><span>,</span>
+    <span>'X-Requested-With'</span>: <span>'XMLHttpRequest'</span>
+    <span>}</span></pre></div>
+<h4>排除法删除 Cookie</h4>
+<p>我们可以看到在请求登录的时候 Header 就已经带有 Cookie 了，这在我平常的设计中没有做过，所以我就试着把 Cookie 删后再请求，看看有什么效果。删除 Cookie 的方法如下所示：</p>
+<p><a href="https://camo.githubusercontent.com/4d6c8682c7edb7094ed3725996084cda31ab25d04642a386094ce9d7e903e053/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f34303738444232322d314131362d343037422d393538422d3130463533313639303136362e706e67"><span class="missing-image">原图暂不可用：删除Cookie的方法（查看原图）</span></a></p>
+<p>利用排除法不停删除并继续试着登录，都能完成登录；直到删除 PHPSESSID 的时候发现删除之后再登陆是会报错的，所以这个 PHPSESSID 肯定是有用的（没用过PHP对这个不太了解），因此我断定这个 Cookie 是在后端作为验证登录的一个字段；因此我可以通过在登录之前先下载首页并拿到 Cookie，放到请求头上做作为模拟 Header。</p>
+<h4>获取 Cookie</h4>
+<div><pre><span>import</span> <span>request</span> <span>from</span> <span>'superagent'</span>
+
+<span>let</span> <span>cookie</span><span>;</span>
+
+<span>req</span>
+<span>.</span><span>get</span><span>(</span><span>urls</span><span>.</span><span>mainpage</span><span>)</span>
+<span>.</span><span>end</span><span>(</span><span>(</span><span>err</span><span>,</span> <span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+   <span>// 从上图可以看到我们需要的cookie是PHPSESSID开头的</span>
+    <span>cookie</span> <span>=</span> <span>res</span><span>.</span><span>headers</span><span>[</span><span>'set-cookie'</span><span>]</span>
+                <span>.</span><span>join</span><span>(</span><span>','</span><span>)</span><span>.</span><span>match</span><span>(</span><span><span>/</span><span>(</span><span>P</span><span>H</span><span>P</span><span>S</span><span>E</span><span>S</span><span>S</span><span>I</span><span>D</span><span>=</span>.<span>+</span>?<span>)</span><span>;</span><span>/</span></span><span>)</span><span>[</span><span>1</span><span>]</span>
+<span>}</span><span>)</span></pre></div>
+<h4>获取页面 token</h4>
+<p>本以为拿到 Cookie 之后就可以开开心心的做登录请求，然而这么简单的话这篇文章页也就没什么写的必要了。</p>
+<p>继续分析请求 HTTP 包，可以发现在每次请求的时候，url 后面总是会带一个 queryString（图 2），我在这里耗费了不少时间，毫无头绪，只能追进源码里面摸索。</p>
+<p><a href="https://camo.githubusercontent.com/92f3bb9baeef897aafa32e3dc62d6e8246f729fc4d7f49a3a5ad3fd66fdf7273/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f36463446433437302d413645392d343332412d423544462d3738383146303339453234372e706e67"><span class="missing-image">原图暂不可用：压缩后的源码（查看原图）</span></a></p>
+<p>找到上图中的源码，可以看到这个源码是被压缩过的，不要着急，chrome 提供了 formatt 功能，点击最下面的<code>{}</code>，可以对压缩的代码重排，至少是勉强可以阅读的代码了。</p>
+<p><a href="https://camo.githubusercontent.com/cf167c18b5e5bb68cb7f459913ed3c4fce67f8151d74dc6cfe3adc5a5b00a1fb/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f30434239304330322d453930322d343531442d423343462d3243463831343638393739422e706e67"><span class="missing-image">原图暂不可用：美化后的代码（查看原图）</span></a></p>
+<p>接下来的事情就是怎么从这堆代码中抽丝剥茧找到对我们有用的信息，可是这么多的代码一步步看下来也会看到头晕脑胀，眼睛滴血。那么就试试看能不能使用查找的方式从源码中找到我需要的东西。使用快捷键 ctrl+F，键入 <code>/login</code> （<code>/login</code>是作为登录的链接的，感觉上可能会有很大概率能搜到相关代码）</p>
+<p><a href="https://camo.githubusercontent.com/f28c5fa0265d39ec361dd68e1a6bbd59420e519fd86aa9d12309d122ce6d356e/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f42313442454344422d413036372d343244302d413843382d4330414530453836364337392e706e67"><span class="missing-image">原图暂不可用：搜索代码（查看原图）</span></a></p>
+<p>很巧的是，搜到了相关的代码。从中可以看到此网站使用了 JQuery 的 Ajax 发送相关 HTTP 请求，那么，url 便是 <code>e.attr("action")</code>，从下面的 DOM 结构能看到 action 是<code>api/user/login</code>。</p>
+<p><a href="https://camo.githubusercontent.com/2f5353208c1849380f7355f77289659d05ceac0638fcb89a591d85d517dcb496/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f45324533453141392d464436462d343846412d394335332d3342373138334335383337332e706e67"><span class="missing-image">原图暂不可用：DOM结构（查看原图）</span></a></p>
+<p>还是没有找到 queryString, 那就换个关键词试试看，这次搜索 <code>_=</code>（看图2，queryString 是由<code>_=</code>拼接起来的）</p>
+<p><a href="https://camo.githubusercontent.com/2768dc18400922bd3668b1f9ba6e72f1c4a3a372879490d8a7888ea2457bfd7b/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f41313344393843332d353544312d343644352d393339392d3446374432354332303341342e706e67"><span class="missing-image">原图暂不可用：搜索代码2（查看原图）</span></a></p>
+<p>从上图可以看到有7个结果，而被黄色标注出来的那行才是我们想要的。JQ 的 ajaxSend 可以在 Ajax 发送之前做一些处理。从上图可以看出，请求的时候在 url 的后面增加一个 <code>n._</code> ，那就继续去找n._是什么？由于截图截少了，我就不再重新截图，从上图的第一行可以看到 _ 是window.SF.token，由此我们就摸到 token 的 G 点，整个流程明朗了许多。接下来全局搜索 window.SF.token，没找到。我知道 window 是全局变量，为什么把 token 放到 window 上？可以想多的是 token 并没有在当前的 script 标签内。接下来去 index.html 内查找：</p>
+<p><a href="https://camo.githubusercontent.com/60fc0a250092e9a5e731e2c8252fa9160b3ceecccaba421d040caa0b0a098286/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f41314432303034422d453430302d344335312d394130372d4146344431364644343346312e706e67"><span class="missing-image">原图暂不可用：token（查看原图）</span></a></p>
+<p>找到了！可以看到 token 是被包裹在一个独立的 script 标签内，在后端生成HTML模板的时候就已经插入。</p>
+<p>找到 token 之后就很简单了，拿到这个字符串表达式，运行，拿到token。<br>
+<a href="./blog-issue-6.html">原理我之前写过一篇文章，移步</a></p>
+<div><pre><span>import</span> <span>cheerio</span> <span>from</span> <span>'cheerio'</span>
+<span>import</span> <span>request</span> <span>from</span> <span>'superagent'</span>
+
+<span>let</span> <span>cookie</span><span>;</span>
+
+
+<span>// 为什么这样做</span>
+<span>function</span> <span>getToken</span><span>(</span><span>s</span><span>)</span> <span>{</span>
+  <span>let</span> <span>$</span> <span>=</span> <span>cheerio</span><span>.</span><span>load</span><span>(</span><span>s</span><span>)</span>
+  <span>,</span> <span>text</span> <span>=</span> <span>$</span><span>(</span><span>'body script'</span><span>)</span><span>.</span><span>eq</span><span>(</span><span>2</span><span>)</span><span>.</span><span>text</span><span>(</span><span>)</span>
+  <span>,</span> <span>fn</span> <span>=</span> <span>new</span> <span>Function</span><span>(</span><span>'window'</span><span>,</span> <span>text</span> <span>+</span> <span>';return window.SF.token'</span><span>)</span>
+  <span>,</span> <span>token</span> <span>=</span> <span>fn</span><span>(</span><span>{</span><span>}</span><span>)</span>
+
+  <span>$</span> <span>=</span> <span>null</span>
+  <span>return</span> <span>token</span>
+<span>}</span>
+
+
+<span>req</span>
+<span>.</span><span>get</span><span>(</span><span>urls</span><span>.</span><span>mainpage</span><span>)</span>
+<span>.</span><span>end</span><span>(</span><span>(</span><span>err</span><span>,</span> <span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+   <span>let</span> <span>token</span> <span>=</span> <span>getToken</span><span>(</span><span>res</span><span>.</span><span>text</span><span>)</span>
+
+   <span>// 从上图可以看到我们需要的cookie是PHPSESSID开头的</span>
+    <span>cookie</span> <span>=</span> <span>res</span><span>.</span><span>headers</span><span>[</span><span>'set-cookie'</span><span>]</span>
+                    <span>.</span><span>join</span><span>(</span><span>','</span><span>)</span>
+                    <span>.</span><span>match</span><span>(</span><span><span>/</span><span>(</span><span>P</span><span>H</span><span>P</span><span>S</span><span>E</span><span>S</span><span>S</span><span>I</span><span>D</span><span>=</span>.<span>+</span>?<span>)</span><span>;</span><span>/</span></span><span>)</span><span>[</span><span>1</span><span>]</span>
+<span>}</span><span>)</span></pre></div>
+<h4>开始登录吧</h4>
+<p>拿到 token 和 Cookie ，抓包分析所需要的登录字段:</p>
+<div><pre><span>{</span>
+    <span>mail</span>: <span>'xxxxx@xx.xx'</span><span>,</span> <span>// 邮箱</span>
+    <span>password</span>: <span>'xxxxxxx'</span><span>,</span> <span>// 密码</span>
+    <span>remember</span>: <span>'1'</span>  <span>// 是否记住登录</span>
+<span>}</span></pre></div>
+<p>登录:</p>
+<div><pre><span>req</span>
+<span>.</span><span>get</span><span>(</span><span>urls</span><span>.</span><span>mainpage</span><span>)</span>
+<span>.</span><span>end</span><span>(</span><span>(</span><span>err</span><span>,</span> <span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+   <span>let</span> <span>token</span> <span>=</span> <span>getToken</span><span>(</span><span>res</span><span>.</span><span>text</span><span>)</span>
+
+   <span>// 从上图可以看到我们需要的cookie是PHPSESSID开头的</span>
+    <span>cookie</span> <span>=</span> <span>res</span><span>.</span><span>headers</span><span>[</span><span>'set-cookie'</span><span>]</span><span>.</span><span>join</span><span>(</span><span>','</span><span>)</span>
+                <span>.</span><span>match</span><span>(</span><span><span>/</span><span>(</span><span>P</span><span>H</span><span>P</span><span>S</span><span>E</span><span>S</span><span>S</span><span>I</span><span>D</span><span>=</span>.<span>+</span>?<span>)</span><span>;</span><span>/</span></span><span>)</span><span>[</span><span>1</span><span>]</span>
+
+    <span>req</span>
+   <span>.</span><span>post</span><span>(</span><span>urls</span><span>.</span><span>login</span><span>)</span>
+   <span>.</span><span>query</span><span>(</span><span>{</span><span>'_'</span>: <span>token</span><span>}</span><span>)</span>
+   <span>.</span><span>set</span><span>(</span><span>base_headers</span><span>)</span>
+   <span>.</span><span>set</span><span>(</span><span>'Cookie'</span><span>,</span> <span>cookie</span><span>)</span>
+   <span>.</span><span>type</span><span>(</span><span>'form'</span><span>)</span>
+   <span>.</span><span>send</span><span>(</span><span>conf</span><span>)</span>
+   <span>.</span><span>redirects</span><span>(</span><span>0</span><span>)</span>
+   <span>.</span><span>end</span><span>(</span><span>(</span><span>err</span><span>,</span> <span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+        <span>console</span><span>.</span><span>log</span><span>(</span><span>res</span><span>)</span>
+    <span>}</span><span>)</span>
+  <span>}</span><span>)</span>
+<span>}</span><span>)</span></pre></div>
+<h3>总结</h3>
+<blockquote>
+<p>世上无难事只怕有心人</p>
+</blockquote>
+<p>登录是最基础也最核心的功能，通过对登录流程的分析，基本弄清楚了此博客平台的验证机制，在分析的过程中斗智斗勇，利用自己掌握的知识一步一步破解谜题的本身就是一件很有意思的事情，以后也可以将此方法用到自己的登录流程设计中。</p>
+<h4>TODO</h4>
+<p>登录之后能施展的手段就很多了: 提问题，发表文章，创建标签等等，用到得知识都在上面说过了，按下不表。</p>
+<p>有需要源码的同学，欢迎 <a href="https://github.com/zwhu/sf">Star</a></p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-8.html">较新一篇：JSX 生成dl dd dt</a><a href="./blog-issue-6.html">较早一篇：JavaScript 中使用 new Function 执行字符串拼接表达式</a></nav></article><section class="historical-comments" aria-labelledby="history-title"><h2 id="history-title">历史评论</h2><p class="comments-status">以下为原 issue 的评论存档；新评论可在下方发表。</p><article class="historical-comment" id="issuecomment-1002477496"><div class="meta">mirrors-cl · <time datetime="2021-12-29T09:20:26Z">2021-12-29</time> · <a href="https://github.com/zwhu/blog/issues/7#issuecomment-1002477496">原评论 ↗</a></div><div class="prose"><p>图片失效了</p></div></article></section><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="老板让我这个不会P图的伪前端把公司的Logo放到公司网站上，结果给了我一张 JPEG 格式的图片，作为一个有追求的码农，怎么能现学 ps，于是利用一点HTML5+NODE的知识写了个转换的脚本。"><title>利用 Canvas 将白色背景的 JPEG 图片转成透明的 PNG 图片 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>利用 Canvas 将白色背景的 JPEG 图片转成透明的 PNG 图片</h1><div class="meta"><time datetime="2015-09-08">2015-09-08</time> ·  · <a href="https://github.com/zwhu/blog/issues/2">原 issue #2 ↗</a></div><div class="prose"><h1>利用 Canvas 将白色背景的 JPEG 图片转成透明的 PNG 图片</h1>
+<p>作者 @<a href="https://github.com/zwhu">zwhu</a></p>
+<p>源码 @<a href="https://github.com/zwhu/2Alpha">raw</a></p>
+<h2>使用场景</h2>
+<p>老板让我这个不会P图的伪前端把公司的Logo放到公司网站上，结果给了我一张 JPEG 格式的图片，作为一个有追求的码农，怎么能现学 ps，于是利用一点HTML5+NODE的知识写了个转换的脚本。</p>
+<p>此脚本的功能是将 JPEG 格式的图片中的白色背景转成透明，然后再保存成PNG格式的图片；如果图片本身有不想被转换的白色区域，使用其他方法吧。</p>
+<h2>实现原理</h2>
+<p>原理很简单，只有两点：</p>
+<h3>RGBA</h3>
+<p><a href="http://baike.baidu.com/link?url=8dKW5gJTfDEnbaWWByFXbp_321Uh4obywGet-wfzpmsYzlkZeZOCujWTcgMIG2z4sVGFsiMl7qfdGW9IW5ooZq">RGBA的解释</a> 我们知道图片由很多个像素点组成，每个像素点都有颜色，而颜色是由三基色RGB构成。而A是Alpha通道，用作不透明度参数，0%为完全透明，100%是完全不透明。所以说如果我们想实现白色背景的JPEG 图片转成透明的 PNG 图片，只需要将白色背景对应的像素点得Alpha值变成0就好了。</p>
+<h3>canvas</h3>
+<p>HTML5新增加了canvas，可以用来绘制图形，也可以对图片的像素进行操作。通过 <code>getImageData()</code> 方法可以返回原始的像素信息 ImageData 对象。ImageData 对象中的像素是可写的（由 RGBA 组成），因此我们可以修改像素的Alpha通道值，然后再通过 putImageData() 方法将这些像素复制到画布中。</p>
+<h3>部分代码</h3>
+<p>有了上面的知识，我们可以很轻松的通过查 canvas 的 API 来写出转换的代码(ES6)，代码在下面，代码不难，也写了很详细的注释：</p>
+<div><pre><span>import</span> <span>Canvas</span>  <span>from</span> <span>'canvas'</span>
+<span>import</span> <span>fs</span> <span>from</span> <span>'fs'</span>
+
+<span>const</span> <span>Image</span> <span>=</span> <span>Canvas</span><span>.</span><span>Image</span>
+
+<span>// 初始化 img 和 start time</span>
+<span>// 获取命令行输入的源图片和保存的图片地址</span>
+<span>let</span> <span>img</span> <span>=</span> <span>new</span> <span>Image</span>
+  <span>,</span> <span>start</span> <span>=</span> <span>new</span> <span>Date</span><span>(</span><span>)</span>
+  <span>,</span> <span>rawPath</span> <span>=</span>  <span>process</span><span>.</span><span>argv</span><span>[</span><span>2</span><span>]</span>
+  <span>,</span> <span>savePath</span> <span>=</span> <span>process</span><span>.</span><span>argv</span><span>[</span><span>3</span><span>]</span>
+
+<span>// 在命令行中没有输入图片地址，抛错</span>
+<span>if</span><span>(</span><span>!</span><span>rawPath</span><span>)</span>
+  <span>throw</span> <span>new</span> <span>Error</span><span>(</span><span>'input raw image path'</span><span>)</span>
+
+<span>if</span><span>(</span><span>!</span><span>savePath</span><span>)</span>
+  <span>throw</span> <span>new</span> <span>Error</span><span>(</span><span>'input save image path'</span><span>)</span>
+
+<span>img</span><span>.</span><span>onerror</span> <span>=</span> <span>function</span><span>(</span><span>err</span><span>)</span><span>{</span>
+  <span>throw</span> <span>err</span>
+<span>}</span>
+
+<span>// 图片加载完成</span>
+<span>img</span><span>.</span><span>onload</span> <span>=</span> <span>function</span><span>(</span><span>)</span><span>{</span>
+    <span>//  获取图片的width和height</span>
+  <span>let</span> <span>width</span> <span>=</span> <span>img</span><span>.</span><span>width</span>
+    <span>,</span> <span>height</span> <span>=</span> <span>img</span><span>.</span><span>height</span>
+    <span>,</span> <span>canvas</span> <span>=</span> <span>new</span> <span>Canvas</span><span>(</span><span>width</span><span>,</span> <span>height</span><span>)</span>
+    <span>,</span> <span>ctx</span> <span>=</span> <span>canvas</span><span>.</span><span>getContext</span><span>(</span><span>'2d'</span><span>)</span>
+
+  <span>// 将源图片复制到画布上</span>
+  <span>// canvas 所有的操作都是在 context 上，所以要先将图片放到画布上才能操作</span>
+  <span>ctx</span><span>.</span><span>drawImage</span><span>(</span><span>img</span><span>,</span> <span>0</span><span>,</span> <span>0</span><span>,</span> <span>width</span><span>,</span> <span>height</span><span>)</span>
+
+  <span>let</span> <span>imageData</span> <span>=</span> <span>ctx</span><span>.</span><span>getImageData</span><span>(</span><span>0</span><span>,</span> <span>0</span><span>,</span> <span>width</span><span>,</span> <span>height</span><span>)</span>
+
+  <span>// 获取画布的像素信息</span>
+  <span>// 是一个一维数组，包含以 RGBA 顺序的数据，数据使用  0 至 255（包含）的整数表示</span>
+  <span>// 如：图片由两个像素构成，一个像素是白色，一个像素是黑色，那么 data 为</span>
+  <span>// [255,255,255,255,0,0,0,255] </span>
+  <span>// 这个一维数组可以看成是两个像素中RBGA通道的数组的集合即:</span>
+  <span>// [R,G,B,A].concat([R,G,B,A])</span>
+    <span>,</span> <span>data</span> <span>=</span> <span>imageData</span><span>.</span><span>data</span>
+
+ <span>// 对像素集合中的单个像素进行循环，每个像素是由4个通道组成，所以 i=i+4</span>
+  <span>for</span><span>(</span><span>let</span> <span>i</span> <span>=</span> <span>0</span><span>;</span> <span>i</span> <span>&lt;</span> <span>data</span><span>.</span><span>length</span><span>;</span> <span>i</span><span>+=</span><span>4</span><span>)</span> <span>{</span>
+    <span>// 得到 RGBA 通道的值</span>
+    <span>let</span> <span>r</span> <span>=</span> <span>data</span><span>[</span><span>i</span><span>]</span>
+      <span>,</span> <span>g</span> <span>=</span> <span>data</span><span>[</span><span>i</span><span>+</span><span>1</span><span>]</span>
+      <span>,</span> <span>b</span> <span>=</span> <span>data</span><span>[</span><span>i</span><span>+</span><span>2</span><span>]</span>
+
+    <span>// 我们从最下面那张颜色生成器中可以看到在图片的右上角区域，有一小块在</span>
+    <span>// 肉眼的观察下基本都是白色的，所以我在这里把 RGB 值都在 245 以上的</span>
+    <span>// 的定义为白色</span>
+    <span>// 大家也可以自己定义的更精确，或者更宽泛一些</span>
+    <span>if</span><span>(</span><span>[</span><span>r</span><span>,</span><span>g</span><span>,</span><span>b</span><span>]</span><span>.</span><span>every</span><span>(</span><span>v</span> <span>=&gt;</span> <span>v</span> <span>&lt;</span> <span>256</span> <span>&amp;&amp;</span> <span>v</span> <span>&gt;</span> <span>245</span><span>)</span><span>)</span> <span>data</span><span>[</span><span>i</span><span>+</span><span>3</span><span>]</span> <span>=</span> <span>0</span>
+  <span>}</span>
+
+  <span>// 将修改后的代码复制回画布中</span>
+  <span>ctx</span><span>.</span><span>putImageData</span><span>(</span><span>imageData</span><span>,</span> <span>0</span><span>,</span> <span>0</span><span>)</span>
+
+  <span>// 将修改后的图片保存</span>
+  <span>let</span> <span>out</span> <span>=</span> <span>fs</span><span>.</span><span>createWriteStream</span><span>(</span><span>`<span><span>${</span><span>__dirname</span><span>}</span></span>/<span><span>${</span><span>savePath</span><span>}</span></span>`</span><span>)</span>
+    <span>,</span> <span>stream</span> <span>=</span> <span>canvas</span><span>.</span><span>pngStream</span><span>(</span><span>)</span>
+
+  <span>stream</span><span>.</span><span>on</span><span>(</span><span>'data'</span><span>,</span> <span>function</span> <span>(</span><span>chunk</span><span>)</span> <span>{</span>
+    <span>out</span><span>.</span><span>write</span><span>(</span><span>chunk</span><span>)</span>
+  <span>}</span><span>)</span>
+
+  <span>stream</span><span>.</span><span>on</span><span>(</span><span>'end'</span><span>,</span> <span>function</span> <span>(</span><span>)</span> <span>{</span>
+    <span>console</span><span>.</span><span>log</span><span>(</span><span>`保存到 <span><span>${</span><span>__dirname</span><span>}</span></span>/<span><span>${</span><span>savePath</span><span>}</span></span>`</span><span>)</span>
+    <span>console</span><span>.</span><span>log</span><span>(</span><span>`耗时: <span><span>${</span><span>new</span> <span>Date</span><span>(</span><span>)</span><span>-</span><span>start</span><span>}</span></span>ms`</span><span>)</span>
+  <span>}</span><span>)</span>
+<span>}</span>
+
+<span>img</span><span>.</span><span>src</span> <span>=</span> <span>`<span><span>${</span><span>__dirname</span><span>}</span></span>/<span><span>${</span><span>rawpath</span><span>}</span></span>`</span></pre></div>
+<p><a href="https://camo.githubusercontent.com/fdb79692253b6195f9caa11955d4427b2792283b7cb8c7de0bfc3a81d7a59a26/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f72676261322e706e67"><span class="missing-image">原图暂不可用：src（查看原图）</span></a></p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-3.html">较新一篇：JavaScript String 转到 UTF-16 编码</a><a href="./blog-issue-1.html">较早一篇：利用 ES6 的字符串模板和 JQuery 简单理解 MVVM</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

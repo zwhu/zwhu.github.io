@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="我之前开发网站的时候一直用的是 Flux， 自从出了 Redux 之后由于种种原因没有跟进了解，最近手头上的事情基本忙的差不多了，抽空阅读了 Redux 的源码，并整理了这篇博文。"><title>理解 Redux · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>理解 Redux</h1><div class="meta"><time datetime="2016-01-11">2016-01-11</time> · 记录 · 思考 · <a href="https://github.com/zwhu/blog/issues/20">原 issue #20 ↗</a></div><div class="prose"><h1>理解 Redux</h1>
+<h2>前言</h2>
+<p>我之前开发网站的时候一直用的是 Flux， 自从出了 Redux 之后由于种种原因没有跟进了解，最近手头上的事情基本忙的差不多了，抽空阅读了 Redux 的源码，并整理了这篇博文。</p>
+<p>先说<strong>重点</strong>： Redux 与 React 没有关系，就好像 Javascript 和 Java ，雷锋和雷峰塔的关系一样。 Redux 旨在处理数据的流动。</p>
+<blockquote>
+<p>Redux 是 JavaScript 状态容器，提供可预测化的状态管理。 Redux 是由 Flux 演变而来。</p>
+</blockquote>
+<p>那么 Flux 是什么？ Flux 在这里并不是一个框架，而是提供了一套数据流动的方案，类似 MVVM 的概念。</p>
+<h2>一些概念点</h2>
+<h3>状态容器</h3>
+<p>Redux 是一个状态容器，这句话挺难理解的，下面的分析也是我的个人见解，不见得正确，欢迎指正。</p>
+<p>我们知道<a href="https://zh.wikipedia.org/wiki/%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA">状态机</a>是表示有限个状态以及在这些状态之间的转移和动作等行为的数学模型。</p>
+<p>例子：<br>
+有一个提供简单加减计算的二则运算的算法。初始值为0，可以增加一个值和减去一个值。</p>
+<p>可以如下自己实现一个状态机：</p>
+<div><pre><span>const</span> <span>fsm</span> <span>=</span> <span>{</span>
+    <span>currentState</span>: <span>0</span><span>,</span>
+    <span>create</span><span>(</span><span>state</span><span>)</span> <span>{</span> <span>this</span><span>.</span><span>currentState</span> <span>=</span> <span>state</span> <span>}</span><span>,</span>
+    <span>getState</span><span>(</span><span>)</span> <span>{</span>
+        <span>return</span> <span>this</span><span>.</span> <span>currentState</span>
+    <span>}</span><span>,</span>
+    <span>transition</span><span>(</span><span>action</span><span>)</span> <span>{</span>
+        <span>switch</span><span>(</span><span>action</span><span>.</span><span>type</span><span>)</span> <span>{</span>
+            <span>case</span> <span>'add'</span>: 
+                <span>this</span><span>.</span><span>currentState</span> <span>=</span>  <span>this</span><span>.</span><span>currentState</span> <span>+</span> <span>action</span><span>.</span><span>num</span>
+                <span>break</span>
+            <span>case</span> <span>'sub'</span>: 
+                <span>this</span><span>.</span><span>currentState</span> <span>=</span>  <span>this</span><span>.</span><span>currentState</span> <span>-</span> <span>action</span><span>.</span><span>num</span>
+                <span>break</span>   
+            <span>default</span>:
+                <span>break</span>
+        <span>}</span> 
+    <span>}</span>
+<span>}</span>
+
+<span>fsm</span><span>.</span><span>create</span><span>(</span><span>5</span><span>)</span>
+<span>fsm</span><span>.</span><span>transition</span><span>(</span><span>{</span><span>'type'</span>:<span>'add'</span><span>,</span> <span>'num'</span>:<span>-</span><span>1</span><span>}</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>fsm</span><span>.</span><span>getState</span><span>(</span><span>)</span><span>)</span>   <span>// ==&gt;  4</span>
+<span>fsm</span><span>.</span><span>transition</span><span>(</span><span>{</span><span>'type'</span>:<span>'sub'</span><span>,</span> <span>'num'</span>:<span>1</span><span>}</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>fsm</span><span>.</span><span>getState</span><span>(</span><span>)</span><span>)</span>   <span>// ==&gt;  3</span></pre></div>
+<p>从上面的例子可以看到状态的改变方式为：输入初始状态值5，此时的 currentState 为0，输入<code>{'type':'add', 'num': 1}</code>，经过条件判断是要将状态值 5 加 -1 变成 4，再输入<code>{'type':'sub', 'num': 1}</code>，经过条件判断是要将状态值 4 减 1 变成 3。</p>
+<p>对比 Redux 来看的话， 我们的 fsm 就是 Redux 的 createStore 返回的 store，store.getState() 返回的状态对应 fsm.getState()。 那么 reducer + dispatch + action 对应的就是 fsm.transition()。之后会我们分析源码看看 Redux 是怎样把 reducer + dispatch + action 转成 fsm.transition。</p>
+<p>整理了一张 Redux 的状态图如下：<br>
+<a href="https://camo.githubusercontent.com/eb00b46381af2449a92e95b647a3ac5e16d3a58684b68de14a20873263e06f66/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f726564757873746174652e706e67"><span class="missing-image">原图暂不可用：redux状态图（查看原图）</span></a></p>
+<p>对于 Redux 来说，就是把数据当成状态来处理，reducer 就是根据行为（action） 将当前数据（状态）转成新的状态，新的数据状态可以继续被 reducer 处理。</p>
+<h3>Action</h3>
+<p><strong>Action</strong> 是把数据从应用传到 stateTree（状态树）的输入动作（payloads）。按照约定来说 action 是一个带有 type 属性的 <code>javascript plain object</code>，对应着 Flux 中的 payload。</p>
+<p><strong>Action Creator</strong> 是一个创建 Action 的函数，额，其实就是函数式编程搞出的概念，把一个表达式包装成一个函数，返回这个 Action。</p>
+<p>对照上面我们自己写的状态机代码可以看出 action 的作用告诉 statetree (状态树)发生什么变化，及所需要的数据是什么。</p>
+<h3>Reducer</h3>
+<p>Reducer 的是根据 action 来决定数据应该变化成什么样子的函数，即将上面 fsm 中的switch case 表达式包装而成的函数。</p>
+<h3>Dispatch</h3>
+<p>dispatch 是更新状态树的方法，在 dispatch 中会调用 reducer， 且通知监听者数据已发生变化。</p>
+<p>从上面的分析应该可以推断出 Redux 暴露的 dispatch 会接受一个 action，来决定根据 reducer 去转换状态树，那么也可以推断出 Redux 一定也需要提供一个接受 reducer 函数的API。</p>
+<p>Redux 提供的 <code>createStore(reducers, initialState)</code> API 确实如我们推断，会在此时传入 reducer，以及一个可选的初始状态。 <code>createStore</code> 返回的是一个 <code>store</code>， store 和状态树是不同的，此处的store具有<code>dispatch(action)</code> 方法的对象，真正的状态树是 store.getState()（也就是我们真正要使用的数据）。</p>
+<h2>Redux 的部分源码分析</h2>
+<div><pre><span>export</span> <span>default</span> <span>function</span> <span>createStore</span><span>(</span><span>reducer</span><span>,</span> <span>initialState</span><span>)</span> <span>{</span>
+  <span>// 在调用 createStore 的时候，必须传入 reducer， 且 reducer 必须为函数</span>
+  <span>if</span> <span>(</span><span>typeof</span> <span>reducer</span> <span>!==</span> <span>'function'</span><span>)</span> <span>{</span>
+    <span>throw</span> <span>new</span> <span>Error</span><span>(</span><span>'Expected the reducer to be a function.'</span><span>)</span>
+  <span>}</span>
+
+  <span>var</span> <span>currentReducer</span> <span>=</span> <span>reducer</span>
+  <span>var</span> <span>currentState</span> <span>=</span> <span>initialState</span>
+  <span>var</span> <span>listeners</span> <span>=</span> <span>[</span><span>]</span>
+  <span>var</span> <span>isDispatching</span> <span>=</span> <span>false</span>
+
+  <span>// 返回此时的状态</span>
+  <span>function</span> <span>getState</span><span>(</span><span>)</span> <span>{</span>
+    <span>return</span> <span>currentState</span>
+  <span>}</span>
+
+  <span>// 订阅函数，调用 dispatch 的时候会调用 listener</span>
+  <span>function</span> <span>subscribe</span><span>(</span><span>listener</span><span>)</span> <span>{</span>
+        <span>// ...</span>
+  <span>}</span>
+
+  <span>// 发布函数， 在 action 触发状态的改变后，通知所有订阅的 listener</span>
+  <span>function</span> <span>dispatch</span><span>(</span><span>action</span><span>)</span> <span>{</span>
+    <span>// 传入的 action 必须为 plain object，也就是 action creator 返回的对象</span>
+    <span>// 自己传入 action 对象也是可以的</span>
+    <span>// 但是 Redux 推荐的写法是 action creator 的写法</span>
+    <span>// 至于写成函数的好处不在这里讨论</span>
+    <span>if</span> <span>(</span><span>!</span><span>isPlainObject</span><span>(</span><span>action</span><span>)</span><span>)</span> <span>{</span>
+      <span>throw</span> <span>new</span> <span>Error</span><span>(</span>
+        <span>'Actions must be plain objects. '</span> <span>+</span>
+        <span>'Use custom middleware for async actions.'</span>
+      <span>)</span>
+    <span>}</span>
+
+    <span>// 强制要求 action 必须带入 type 属性，比 Flux 有更强的约束</span>
+    <span>if</span> <span>(</span><span>typeof</span> <span>action</span><span>.</span><span>type</span> <span>===</span> <span>'undefined'</span><span>)</span> <span>{</span>
+      <span>throw</span> <span>new</span> <span>Error</span><span>(</span>
+        <span>'Actions may not have an undefined "type" property. '</span> <span>+</span>
+        <span>'Have you misspelled a constant?'</span>
+      <span>)</span>
+    <span>}</span>
+
+    <span>if</span> <span>(</span><span>isDispatching</span><span>)</span> <span>{</span>
+      <span>throw</span> <span>new</span> <span>Error</span><span>(</span><span>'Reducers may not dispatch actions.'</span><span>)</span>
+    <span>}</span>
+
+    <span>try</span> <span>{</span>
+      <span>isDispatching</span> <span>=</span> <span>true</span>
+      <span>// 这里就是把 action 和当前状态经过 reducer 处理之后返回一个新的状态</span>
+      <span>// currentReducer 就是 createStore 传进来的 reducer</span>
+      <span>// 可以切回去看看上面我总结的图</span>
+      <span>currentState</span> <span>=</span> <span>currentReducer</span><span>(</span><span>currentState</span><span>,</span> <span>action</span><span>)</span>
+    <span>}</span> <span>finally</span> <span>{</span>
+      <span>isDispatching</span> <span>=</span> <span>false</span>
+    <span>}</span>
+    <span>// 通知订阅的事件</span>
+    <span>listeners</span><span>.</span><span>slice</span><span>(</span><span>)</span><span>.</span><span>forEach</span><span>(</span><span>listener</span> <span>=&gt;</span> <span>listener</span><span>(</span><span>)</span><span>)</span>
+    <span>return</span> <span>action</span>
+  <span>}</span>
+
+  <span>// 状态初始话，此时的 Action 为 { type: ActionTypes.INIT }</span>
+  <span>dispatch</span><span>(</span><span>{</span> <span>type</span>: <span>ActionTypes</span><span>.</span><span>INIT</span> <span>}</span><span>)</span>
+
+  <span>// createStore 最后返回一个含有 dispatch 和 getState 的对象</span>
+  <span>return</span> <span>{</span>
+    dispatch<span>,</span>
+    subscribe<span>,</span>
+    getState<span>,</span>
+    replaceReducer
+  <span>}</span>
+<span>}</span></pre></div>
+<h2>总结</h2>
+<p>Redux 就像是作者自己的介绍，是一个 JavasSript 的状态容器，所有的数据（状态）的变化都是当前状态和 Action 共同的作用结果。 对于使用者（一般都是指 view）来说，不用关心数据是怎样变化，只需要在 view 层面等待 store 通知自己数据发生变化，然后把数据渲染成页面即可。</p>
+<p>这里没有提到 Redux 的另一个比较重要也比较难理解的 Middleware。因为如果在这里说的的话，文章不知道要写多长，而长文我现在也驾驭不住，所以干脆就不写了，后面我会再补一篇理解 Middleware 的文章。</p>
+<h2>开个脑洞</h2>
+<p>其实我对 Redux 的这种实现状态的方式并不太喜欢，相对来说 <a href="https://github.com/jakesgordon/javascript-state-machine">javascript-state-machine</a> 看起来更舒服一些，不知道和 Redux 结合有什么效果。可能画面太美，我不敢想😄。</p>
+<blockquote>
+<p>原文 @<a href="./blog-issue-20.html">github</a></p>
+<p>作者 @<a href="https://github.com/zwhu">zwhu</a></p>
+</blockquote></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-21.html">较新一篇：Absolute 和 Relative</a><a href="./blog-issue-19.html">较早一篇：正则表达式中的运算符优先级和代数定律</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

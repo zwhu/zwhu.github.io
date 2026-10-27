@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="经常遇到「既然GET请求可以做POST请求的事情，为什么还要区分GET和POST而不只使用一个请求？」的问题。作为在实际中被使用最广的两个请求方法，这个问题其实挺难回答的，但万物总有其根由，今天就追根究底。"><title>GET请求和POST请求的区别 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>GET请求和POST请求的区别</h1><div class="meta"><time datetime="2015-11-19">2015-11-19</time> · 记录 · <a href="https://github.com/zwhu/blog/issues/12">原 issue #12 ↗</a></div><div class="prose"><h1>GET请求和POST请求的区别</h1>
+<p>经常遇到「既然GET请求可以做POST请求的事情，为什么还要区分GET和POST而不只使用一个请求？」的问题。作为在实际中被使用最广的两个请求方法，这个问题其实挺难回答的，但万物总有其根由，今天就追根究底。</p>
+<p>查看RFC规范再加上之前查过的一些二手文章，整理了如下的观点:<br>
+0. GET 被强制服务器支持</p>
+<ol>
+<li>浏览器对URL的长度有限制，所以GET请求不能代替POST请求发送大量数据</li>
+<li>GET请求发送数据更小</li>
+<li>GET请求是安全的</li>
+<li>GET请求是幂等的</li>
+<li>POST请求不能被缓存</li>
+<li>POST请求相对GET请求是「安全」的</li>
+</ol>
+<h3>GET被强制服务器支持</h3>
+<blockquote>
+<p>All general-purpose servers MUST support the methods GET and HEAD. All other methods are OPTIONAL.</p>
+</blockquote>
+<p>GET 通常用于请求服务器发送某个资源。在HTTP/1.1中，要求服务器实现此方法；POST请求方法起初是用来向服务器输入数据的。在HTTP/1.1中，POST方法是可选被实现的，没有明确规定要求服务器实现。</p>
+<h3>浏览器对URL的长度有限制，所以GET请求不能代替POST请求发送大量数据</h3>
+<blockquote>
+<p>RFC 2616 (Hypertext Transfer Protocol — HTTP/1.1) states in section 3.2.1 that there is no limit to the length of an URI (URI is the official term for what most people call a URL)</p>
+</blockquote>
+<p>RFC 2616 中明确对 uri 的长度并没有限制。不过虽然在RFC中并没有对uri的长度进行限制，但是各大浏览器厂家在实现的时候限制了URL的长度，可查到的是IE对长度限制为<a href="https://support.microsoft.com/en-us/kb/208427">2083</a>；而chrome遇到长度很长的URL时，会直接<a href="https://code.google.com/p/chromium/issues/detail?id=69227">崩溃</a>。</p>
+<p>所以这条结论算是正确的。</p>
+<h3>GET请求发送数据更小</h3>
+<p>只能通过写代码验证了：下面第一个文件是服务器代码，作用是在客户端发送GET和POST请求的时候返回200状态码。第二个文件是客户端HTML文件，点击两个button，分别发送GET请求和POST请求。</p>
+<div><pre><span>import</span> <span>koa</span> <span>from</span> <span>'koa'</span>
+<span>import</span> <span>fs</span> <span>from</span> <span>'mz/fs'</span>
+
+
+<span>const</span> <span>app</span> <span>=</span> <span>koa</span><span>(</span><span>)</span>
+
+<span>app</span><span>.</span><span>use</span><span>(</span><span>function</span><span>*</span> <span>(</span><span>next</span><span>)</span> <span>{</span>
+  <span>if</span><span>(</span><span>this</span><span>.</span><span>path</span> <span>==</span> <span>'/test'</span><span>)</span>
+    <span>return</span> <span>this</span><span>.</span><span>status</span> <span>=</span> <span>200</span>
+
+  <span>yield</span> <span>next</span>
+<span>}</span><span>)</span>
+
+<span>app</span><span>.</span><span>use</span><span>(</span><span>function</span><span>*</span> <span>(</span><span>next</span><span>)</span> <span>{</span>
+  <span>this</span><span>.</span><span>type</span> <span>=</span> <span>'html'</span>
+  <span>this</span><span>.</span><span>body</span> <span>=</span> <span>yield</span> <span>fs</span><span>.</span><span>readFile</span><span>(</span><span>'./index.html'</span><span>)</span>
+  <span>yield</span> <span>next</span>
+<span>}</span><span>)</span>
+
+<span>app</span><span>.</span><span>listen</span><span>(</span><span>8080</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>'koa server port: 8080'</span><span>)</span></pre></div>
+<div><pre><span>&lt;!DOCTYPE html<span>&gt;</span></span>
+<span>&lt;</span><span>html</span> <span>lang</span>="<span>en</span>"<span>&gt;</span>
+<span>&lt;</span><span>head</span><span>&gt;</span>
+  <span>&lt;</span><span>meta</span> <span>charset</span>="<span>UTF-8</span>"<span>&gt;</span>
+  <span>&lt;</span><span>title</span><span>&gt;</span>Title<span>&lt;/</span><span>title</span><span>&gt;</span>
+<span>&lt;/</span><span>head</span><span>&gt;</span>
+<span>&lt;</span><span>body</span><span>&gt;</span>
+<span>&lt;</span><span>button</span> <span>id</span>="<span>get</span>"<span>&gt;</span>GET<span>&lt;/</span><span>button</span><span>&gt;</span>
+<span>&lt;</span><span>button</span> <span>id</span>="<span>post</span>"<span>&gt;</span>POST<span>&lt;/</span><span>button</span><span>&gt;</span>
+<span>&lt;/</span><span>body</span><span>&gt;</span>
+<span>&lt;</span><span>script</span><span>&gt;</span>
+  <span>function</span> <span>http</span><span>(</span><span>type</span><span>)</span> <span>{</span>
+    <span>return</span> <span>function</span> <span>(</span><span>url</span><span>)</span> <span>{</span>
+      <span>var</span> <span>req</span> <span>=</span> <span>new</span> <span>XMLHttpRequest</span><span>(</span><span>)</span>
+      <span>req</span><span>.</span><span>open</span><span>(</span><span>type</span><span>,</span> <span>url</span><span>)</span>
+
+      <span>req</span><span>.</span><span>send</span><span>(</span><span>)</span>
+    <span>}</span>
+  <span>}</span>
+
+  <span>var</span> <span>getDom</span> <span>=</span> <span>document</span><span>.</span><span>getElementById</span><span>(</span><span>'get'</span><span>)</span>
+    <span>,</span> <span>postDom</span> <span>=</span> <span>document</span><span>.</span><span>getElementById</span><span>(</span><span>'post'</span><span>)</span>
+    <span>,</span> <span>get</span> <span>=</span> <span>http</span><span>(</span><span>'GET'</span><span>)</span>
+    <span>,</span> <span>post</span> <span>=</span> <span>http</span><span>(</span><span>'POST'</span><span>)</span>
+
+
+  <span>getDom</span><span>.</span><span>addEventListener</span><span>(</span><span>'click'</span><span>,</span> <span>function</span> <span>(</span><span>)</span> <span>{</span>
+    <span>get</span><span>(</span><span>'/test'</span><span>)</span>
+  <span>}</span><span>)</span>
+
+  <span>postDom</span><span>.</span><span>addEventListener</span><span>(</span><span>'click'</span><span>,</span> <span>function</span> <span>(</span><span>)</span> <span>{</span>
+    <span>post</span><span>(</span><span>'/test'</span><span>)</span>
+  <span>}</span><span>)</span>
+
+
+<span>&lt;/</span><span>script</span><span>&gt;</span>
+<span>&lt;/</span><span>html</span><span>&gt;</span></pre></div>
+<p><a href="https://camo.githubusercontent.com/f1e7e9e448ee277447fd1ea888a851a3eaec81c6668495c857a947ea1282e5d6/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f6765742d686561646572732e706e67"><span class="missing-image">原图暂不可用：get-headers（查看原图）</span></a><br>
+<a href="https://camo.githubusercontent.com/9e8a38f6cc1de5af08a230cee4bd591f815396276dbf5aa3f8f671bc55aa8497/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f706f73742d686561646572732e706e67"><span class="missing-image">原图暂不可用：post-headers（查看原图）</span></a></p>
+<p>从上两张图可以看到POST请求的headers要比GET请求多了两个属性。所以这条结论其实也算是对的，不过从请求发送时间来看的话，其实两者并没有差别。</p>
+<p><a href="https://camo.githubusercontent.com/0c8f51abe7fb5fa2af164bc862e9f83878af53382c97310114ca6596e3303815/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f6765742d73656e642d74696d652e706e67"><span class="missing-image">原图暂不可用：get-send-time.png（查看原图）</span></a><br>
+<a href="https://camo.githubusercontent.com/58587e5617e7c837b266ef86e37d8640a0ed385cf32a9a672a5532fef0227508/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f706f73742d73656e642d74696d652e706e67"><span class="missing-image">原图暂不可用：post-send-time（查看原图）</span></a></p>
+<h3>GET请求是安全的</h3>
+<blockquote>
+<p>Of the request methods defined by this specification, the GET, HEAD,<br>
+OPTIONS, and TRACE methods are defined to be safe.</p>
+</blockquote>
+<h3>GET请求是幂等的</h3>
+<blockquote>
+<p>A request method is considered "idempotent" if the intended effect on<br>
+the server of multiple identical requests with that method is the<br>
+same as the effect for a single such request.  Of the request methods<br>
+defined by this specification, PUT, DELETE, and safe request methods<br>
+are idempotent.</p>
+</blockquote>
+<p>从上面可以看到GET请求是安全的，在幂等性中说PUT和DELETE以及安全method都是幂等的，所以GET自然也被包括了。</p>
+<h3>POST请求不能被缓存</h3>
+<p>我们在实际使用过程中对HTTP请求的优化大多数都放在GET请求上，比如对没有数据变化的请求（网站中常用的静态文件）做缓存，在潜意识中认为只有GET请求才可以被缓存，所以从来也不会考虑POST请求的缓存优化，然而在RFC中提到GET和POST以及HEAD都是可以被缓存的。不过不要惊讶，之前不知道POST可以被缓存是因为标准也很无奈，浏览器的实现总是比标准厉害。</p>
+<blockquote>
+<p>In general, safe methods thatdo not depend on a current or authoritative response are defined as cacheable; this specification defines GET, HEAD, and POST as cacheable, although the overwhelming majority of cache implementations only support GET and HEAD.</p>
+</blockquote>
+<h3>POST请求相对GET请求是「安全」的</h3>
+<p>这一点很多人都会质疑，被抓包之后的POST请求和GET请求是一样裸露的，所以更安全的说法是不对的。我这里所有的「安全」是相对的，因为GET请求有时候会直接反应在浏览器的地址栏，而现在的浏览器大多会记住曾经输入过的URL。试想如果你曾经在别人电脑上填过一个很私密的表单，那么你的这份记录很可能被连没什么电脑常识的人都一览无遗。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-13.html">较新一篇：NPM install 疑问</a><a href="./blog-issue-11.html">较早一篇：在 codewars 升阶了，撒花</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

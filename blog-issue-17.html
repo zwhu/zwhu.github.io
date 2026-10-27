@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Node.js中最常用的恐怕就是 require， exports 以及 module.exports 了，那么 exports 和 module.exports 这两者有什么区别，在什么情况下使用 expor…"><title>Node.js 中 module.exports 和 exports 的区别 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>Node.js 中 module.exports 和 exports 的区别</h1><div class="meta"><time datetime="2015-12-16">2015-12-16</time> · 记录 · 学习 · 思考 · <a href="https://github.com/zwhu/blog/issues/17">原 issue #17 ↗</a></div><div class="prose"><p>Node.js中最常用的恐怕就是 require， exports 以及 module.exports 了，那么 exports 和 module.exports 这两者有什么区别，在什么情况下使用 exports，又在什么时候使用 module.exports。</p>
+<p>先举个官网的例子:</p>
+<div><pre><span>// circle.js</span>
+<span>var</span> <span>PI</span> <span>=</span> <span>Math</span><span>.</span><span>PI</span><span>;</span>
+
+<span>exports</span><span>.</span><span>area</span> <span>=</span> <span>function</span> <span>(</span><span>r</span><span>)</span> <span>{</span>
+  <span>return</span> <span>PI</span> <span>*</span> <span>r</span> <span>*</span> <span>r</span><span>;</span>
+<span>}</span><span>;</span>
+
+<span>exports</span><span>.</span><span>circumference</span> <span>=</span> <span>function</span> <span>(</span><span>r</span><span>)</span> <span>{</span>
+  <span>return</span> <span>2</span> <span>*</span> <span>PI</span> <span>*</span> <span>r</span><span>;</span>
+<span>}</span><span>;</span></pre></div>
+<p>在 circle.js 中写的源字符串是上面贴出的代码，然而实际 Node.js 在加载的时候会在原字符串上外面拼出一个闭包，拼出之后的代码如下（有想了解为什么会拼出这个代码的朋友，<a href="./blog-issue-16.html">请看我之前一篇文章</a>）：</p>
+<div><pre><span>(</span><span>function</span><span>(</span><span>exports</span><span>,</span> <span>require</span><span>,</span> <span>module</span><span>,</span> <span>__dirname</span><span>,</span> <span>__filename</span><span>)</span> <span>{</span>
+    <span>// circle.js</span>
+    <span>var</span> <span>PI</span> <span>=</span> <span>Math</span><span>.</span><span>PI</span><span>;</span>
+
+    <span>exports</span><span>.</span><span>area</span> <span>=</span> <span>function</span> <span>(</span><span>r</span><span>)</span> <span>{</span>
+      <span>return</span> <span>PI</span> <span>*</span> <span>r</span> <span>*</span> <span>r</span><span>;</span>
+    <span>}</span><span>;</span>
+
+    <span>exports</span><span>.</span><span>circumference</span> <span>=</span> <span>function</span> <span>(</span><span>r</span><span>)</span> <span>{</span>
+      <span>return</span> <span>2</span> <span>*</span> <span>PI</span> <span>*</span> <span>r</span><span>;</span>
+    <span>}</span><span>;</span>
+<span>}</span><span>)</span></pre></div>
+<p>Node.js 调用这段代码的为：</p>
+<div><pre><span>function</span> <span>Module</span><span>(</span><span>id</span><span>,</span> <span>parent</span><span>)</span> <span>{</span>
+  <span>this</span><span>.</span><span>id</span> <span>=</span> <span>id</span><span>;</span>
+  <span>this</span><span>.</span><span>exports</span> <span>=</span> <span>{</span><span>}</span><span>;</span>
+  <span>this</span><span>.</span><span>parent</span> <span>=</span> <span>parent</span><span>;</span>
+  <span>if</span> <span>(</span><span>parent</span> <span>&amp;&amp;</span> <span>parent</span><span>.</span><span>children</span><span>)</span> <span>{</span>
+    <span>parent</span><span>.</span><span>children</span><span>.</span><span>push</span><span>(</span><span>this</span><span>)</span><span>;</span>
+  <span>}</span>
+
+  <span>this</span><span>.</span><span>filename</span> <span>=</span> <span>null</span><span>;</span>
+  <span>this</span><span>.</span><span>loaded</span> <span>=</span> <span>false</span><span>;</span>
+  <span>this</span><span>.</span><span>children</span> <span>=</span> <span>[</span><span>]</span><span>;</span>
+<span>}</span>
+
+
+<span>Module</span><span>.</span><span>prototype</span><span>.</span><span>_compile</span> <span>=</span> <span>function</span><span>(</span><span>content</span><span>,</span> <span>filename</span><span>)</span> <span>{</span>
+  <span>var</span> <span>self</span> <span>=</span> <span>this</span><span>;</span>
+
+  <span>function</span> <span>require</span><span>(</span><span>path</span><span>)</span> <span>{</span>
+    <span>return</span> <span>self</span><span>.</span><span>require</span><span>(</span><span>path</span><span>)</span><span>;</span>
+  <span>}</span>
+
+  <span>var</span> <span>dirname</span> <span>=</span> <span>path</span><span>.</span><span>dirname</span><span>(</span><span>filename</span><span>)</span><span>;</span>
+
+  <span>var</span> <span>args</span> <span>=</span> <span>[</span><span>self</span><span>.</span><span>exports</span><span>,</span> <span>require</span><span>,</span> <span>self</span><span>,</span> <span>filename</span><span>,</span> <span>dirname</span><span>]</span><span>;</span>
+  <span>return</span> <span>compiledWrapper</span><span>.</span><span>apply</span><span>(</span><span>self</span><span>.</span><span>exports</span><span>,</span> <span>args</span><span>)</span><span>;</span>
+<span>}</span><span>;</span></pre></div>
+<p>从上面这段代码可以看到 exports 是 module 的一个属性，exports 值为 {}。在拼接之后的代码中，给这个函数传入的 exports 是 module.exports， 也就是说 exports 和 modules.exports 引用的是同一个对象。如果我们给 exports 增加属性，那么因为 modules.exports 也会增加相同的属性，此时 modules.exports === exports。然而如果对 exports 赋值的话，那么就会造成 modules.exports 和 exports 不指向同一个对象，此时再对 exports 做任何动作都跟 modules.exports 没有任何关系了，用一段代码模拟就是:</p>
+<div><pre><span>var</span> <span>module</span> <span>=</span> <span>{</span> <span>exports</span>: <span>{</span><span>}</span><span>}</span><span>;</span>
+<span>var</span> <span>exports</span> <span>=</span> <span>module</span><span>.</span><span>exports</span><span>;</span>
+<span>exports</span><span>.</span><span>a</span> <span>=</span> <span>1</span><span>;</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>module</span><span>.</span><span>exports</span><span>)</span><span>;</span> <span>// {a: 1}</span>
+
+<span>exports</span> <span>=</span> <span>{</span><span>b</span>:<span>2</span><span>}</span><span>;</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>module</span><span>.</span><span>exports</span><span>)</span><span>;</span> <span>// {a: 1}</span></pre></div>
+<p>所以从上面的代码可以看出，如果我们想在模块文件中提供其他模块可以访问的接口，最好写成<br>
+exports["key"] = value 或者 module.exports = {key: value} 的形式。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-18.html">较新一篇：发布 package 到 npm</a><a href="./blog-issue-16.html">较早一篇：Node.js 中的循环依赖</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

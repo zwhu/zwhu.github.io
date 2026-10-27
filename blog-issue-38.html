@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Changelog 的二级标题是分支名，每个分支都是有自己的目标的（例如修复 bug，增加功能点等等），所以可以在分支下面附上一些简短的介绍分支功能（不建议很长，和之后要写的内容重叠）。summary 都是非必…"><title>组件 Changelog 标准 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>组件 Changelog 标准</h1><div class="meta"><time datetime="2017-11-16">2017-11-16</time> ·  · <a href="https://github.com/zwhu/blog/issues/38">原 issue #38 ↗</a></div><div class="prose"><h1>Changelog</h1>
+<h2>Branch-Name (0.0.2)</h2>
+<p>branch summary</p>
+<h3>Container Name (input)</h3>
+<p>summary</p>
+<ul>
+<li>[type](Taone-id): summary</li>
+<li>[feat](T1999999): add validate mode
+<ul>
+<li>[feat]: add number validate</li>
+<li>[feat]: add price validate</li>
+<li>[fix]: fix some bugs</li>
+<li>[fix](T 200000): fix that some bugs bug</li>
+</ul>
+</li>
+</ul>
+<h3>Container Name (select)</h3>
+<p>summary</p>
+<ul>
+<li>[feat](T20001): add combobox mode</li>
+<li>[fix](T200002): fix bug
+<ul>
+<li>[fix](T200009): fix T200002 bug bug</li>
+</ul>
+</li>
+<li>[fix](T200003): fix other bug</li>
+</ul>
+<hr>
+<h3>详细介绍</h3>
+<p>Changelog 的二级标题是分支名，每个分支都是有自己的目标的（例如修复 bug，增加功能点等等），所以可以在分支下面附上一些简短的介绍分支功能（不建议很长，和之后要写的内容重叠）。summary 都是非必填但是推荐填写的。</p>
+<p>Changelog 的三级标题是组件名称，Container 仓库的以组件为维度。</p>
+<p>列表：<br>
+[功能类型](Aone 的 id)：此次修改所做的事情的简短介绍。</p>
+<p>列表的第一层级是独立事件，第二层级是第一层级的关联事件，深度为 2 层。</p>
+<h3>注意点</h3>
+<p>每次组件的提交都应该去更改 Changelog，这是对 Changelog 的持续维护。</p>
+<p>一个组件有多个新功能点，分多次提交，那么每次提交都应该去修改 Changelog，标注此次更新内容。</p>
+<p>一个组件只有一个新功能点，但是第一次提交的时候，以为自己的提交已经完成所有功能，但是实际情况是没有完成，那么就可以去更新 Changelog 为</p>
+<div><pre><span>### <span>Container Name (input)</span></span>
+
+-<span>[</span>feat<span>]</span>: 增加 xxx 功能点
+	* <span>[</span>feat<span>]</span>: 上一次代码完成的功能有哪些 ....
+	* <span>[</span>feat<span>]</span>: 本次代码完成的功能有哪些....</pre></div>
+<p>Tips：<br>
+虽然原则是应该是最小化提交。每次 commit 都只做一件事，但是如果真的在一次 commit 里面做了多件事，改了多个 cotainer 的代码， 也是同样可以在 changelog 中修改多个 container 的内容。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-39.html">较新一篇：Jest + Power-Assert 配置</a><a href="./blog-issue-37.html">较早一篇：前端的数据结构与算法（1）-- dfs</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

@@ -1,0 +1,8 @@
+.lesson-react-token-accumulation{margin:0;background:var(--code);font-family:inherit;color:var(--muted);}
+.lesson-react-token-accumulation header{display:flex;align-items:center;gap:12px;padding:14px 24px;background:var(--code);position:sticky;top:0;z-index:2;border-bottom:1px solid var(--line);}
+.lesson-react-token-accumulation button,.lesson-react-token-accumulation a{font:inherit;border:1px solid var(--line);border-radius:4px;padding:8px 16px;background:var(--code);color:var(--muted);cursor:pointer;text-decoration:none;}
+.lesson-react-token-accumulation span{font-size:14px;}
+.lesson-react-token-accumulation [data-lesson-main]{max-width:1500px;margin:20px auto;background:var(--code);box-shadow:none;}
+.lesson-react-token-accumulation svg{display:block;width:100%;height:auto;}
+.lesson-react-token-accumulation text{font-family:inherit;}
+.lesson-react-token-accumulation .num{font-variant-numeric:tabular-nums;}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="有两个月没有去 codewars 刷过题，最近总收到 codewars 的邮件说 codewars 已经支持 es6 了，下午登录 codewars 发现还差几分就可以升到 3 阶，于是花了一下午的时间做了最后…"><title>在 codewars 升阶了，撒花 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>在 codewars 升阶了，撒花</h1><div class="meta"><time datetime="2015-11-15">2015-11-15</time> · 日志 · 算法 · <a href="https://github.com/zwhu/blog/issues/11">原 issue #11 ↗</a></div><div class="prose"><p>有两个月没有去 codewars 刷过题，最近总收到 codewars 的邮件说 codewars 已经支持 es6 了，下午登录 codewars 发现还差几分就可以升到 3 阶，于是花了一下午的时间做了最后一道 4 阶题，顺利升了阶，撒花！🎉🎉</p>
+<p>下面就是我的最后一道四阶题：</p>
+<blockquote>
+<p>Description:</p>
+<p>You have to create a function that takes a positive integer number and returns the next bigger number formed by the same digits:</p>
+</blockquote>
+<div><pre><code>nextBigger(12)==21
+nextBigger(513)==531
+nextBigger(2017)==2071
+</code></pre></div>
+<blockquote>
+<p>If no bigger number can be composed using those digits, return -1:</p>
+</blockquote>
+<div><pre><code>nextBigger(9)==-1
+nextBigger(111)==-1
+nextBigger(531)==-1
+</code></pre></div>
+<p>我的解法如下:</p>
+<div><pre><span>var</span> <span>exch</span> <span>=</span> <span>(</span><span>a</span><span>,</span> <span>k</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>return</span> <span>[</span><span>a</span><span>[</span><span>k</span><span>]</span><span>,</span> ...<span>a</span><span>.</span><span>slice</span><span>(</span><span>0</span><span>,</span><span>k</span><span>)</span><span>,</span>...<span>a</span><span>.</span><span>slice</span><span>(</span><span>k</span><span>+</span><span>1</span><span>)</span><span>]</span>
+<span>}</span>
+
+<span>var</span> <span>nextBigger</span> <span>=</span> <span>(</span><span>n</span><span>)</span> <span>=&gt;</span> <span>{</span>
+ <span>if</span><span>(</span><span>n</span> <span>&lt;</span> <span>11</span><span>)</span> <span>return</span> <span>-</span><span>1</span>
+ <span>var</span> <span>a</span> <span>=</span> <span>Array</span><span>.</span><span>from</span><span>(</span><span>`<span><span>${</span><span>n</span><span>}</span></span>`</span><span>)</span><span>.</span><span>map</span><span>(</span><span>v</span><span>=&gt;</span><span>v</span><span>|</span><span>0</span><span>)</span>
+   <span>,</span> <span>i</span> <span>=</span> <span>a</span><span>.</span><span>length</span>
+
+ <span>while</span><span>(</span><span>--</span><span>i</span><span>)</span> <span>{</span>
+   <span>if</span><span>(</span><span>a</span><span>[</span><span>i</span><span>]</span> <span>&gt;</span> <span>a</span><span>[</span><span>i</span><span>-</span><span>1</span><span>]</span><span>)</span> <span>{</span>
+    <span>var</span> <span>c</span> <span>=</span> <span>a</span><span>.</span><span>slice</span><span>(</span><span>i</span><span>-</span><span>1</span><span>)</span><span>.</span><span>sort</span><span>(</span><span>(</span><span>a</span><span>,</span><span>b</span><span>)</span> <span>=&gt;</span> <span>(</span><span>a</span><span>|</span><span>0</span><span>)</span> <span>&gt;</span> <span>(</span><span>b</span><span>|</span><span>0</span><span>)</span><span>)</span>
+      <span>,</span> <span>k</span> <span>=</span> <span>c</span><span>.</span><span>indexOf</span><span>(</span><span>a</span><span>[</span><span>i</span><span>]</span><span>)</span>
+    <span>for</span><span>(</span><span>var</span> <span>j</span> <span>=</span> <span>1</span><span>;</span> <span>j</span> <span>&lt;</span> <span>c</span><span>.</span><span>length</span><span>;</span> <span>j</span><span>++</span><span>)</span> <span>{</span>
+      <span>if</span><span>(</span><span>c</span><span>[</span><span>j</span><span>]</span> <span>&gt;</span> <span>a</span><span>[</span><span>i</span><span>-</span><span>1</span><span>]</span> <span>&amp;&amp;</span> <span>c</span><span>[</span><span>j</span><span>]</span> <span>&lt;</span> <span>c</span><span>[</span><span>k</span><span>]</span><span>)</span>
+        <span>k</span> <span>=</span> <span>j</span>
+    <span>}</span>
+
+     <span>return</span> <span>Number</span><span>(</span><span>[</span>...<span>a</span><span>.</span><span>slice</span><span>(</span><span>0</span><span>,</span> <span>i</span><span>-</span><span>1</span><span>)</span><span>,</span> ...<span>exch</span><span>(</span><span>c</span><span>,</span> <span>k</span><span>)</span><span>]</span><span>.</span><span>join</span><span>(</span><span>''</span><span>)</span><span>)</span>
+   <span>}</span>
+ <span>}</span>
+  <span>return</span> <span>-</span><span>1</span>
+<span>}</span></pre></div></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-12.html">较新一篇：GET请求和POST请求的区别</a><a href="./blog-issue-10.html">较早一篇：koa 利用 node-fetch 写个自己的代理</a></nav></article><section class="historical-comments" aria-labelledby="history-title"><h2 id="history-title">历史评论</h2><p class="comments-status">以下为原 issue 的评论存档；新评论可在下方发表。</p><article class="historical-comment" id="issuecomment-158824909"><div class="meta">kujian · <time datetime="2015-11-23T01:14:19Z">2015-11-23</time> · <a href="https://github.com/zwhu/blog/issues/11#issuecomment-158824909">原评论 ↗</a></div><div class="prose"><p>看不懂，这些都是es6的写法吗？</p></div></article><article class="historical-comment" id="issuecomment-158827728"><div class="meta">zwhu · <time datetime="2015-11-23T01:51:48Z">2015-11-23</time> · <a href="https://github.com/zwhu/blog/issues/11#issuecomment-158827728">原评论 ↗</a></div><div class="prose"><p><a href="https://github.com/kujian">@kujian</a><br>
+es6的写法，可以放到chrome控制台直接运行的</p></div></article></section><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

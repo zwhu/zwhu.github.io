@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="在公司的项目中用了 koa 向前端（还是我）提供数据接口和渲染页面。有一些操作是和 Java 端交互，所以需要写一些代理转发请求，从网上找了一些koa的代理库，要不就是bug横生；要不就是功能不完全，只能代理 …"><title>koa 利用 node-fetch 写个自己的代理 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>koa 利用 node-fetch 写个自己的代理</h1><div class="meta"><time datetime="2015-11-14">2015-11-14</time> · 记录 · <a href="https://github.com/zwhu/blog/issues/10">原 issue #10 ↗</a></div><div class="prose"><p>在公司的项目中用了 <code>koa</code> 向前端（还是我）提供数据接口和渲染页面。有一些操作是和 Java 端交互，所以需要写一些代理转发请求，从网上找了一些koa的代理库，要不就是bug横生；要不就是功能不完全，只能代理 get 请求，于是用 <code>node-fetch</code> 写了个简单的 proxy ，代码挺简单的，写篇博文记录下。</p>
+<p>用到了 fetch api，可以看  <a href="https://github.com/bitinn/node-fetch">node-fetch</a></p>
+<div><pre><span>// proxy.js</span>
+<span>import</span> <span>fetch</span> <span>from</span> <span>'node-fetch'</span>
+
+<span>export</span> <span>default</span> <span>(</span>...<span>args</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>return</span> <span>fetch</span><span>.</span><span>apply</span><span>(</span><span>null</span><span>,</span> <span>args</span><span>)</span><span>.</span><span>then</span><span>(</span><span>function</span> <span>(</span><span>res</span><span>)</span> <span>{</span>
+    <span>return</span> <span>res</span><span>.</span><span>text</span><span>(</span><span>)</span>
+  <span>}</span><span>)</span>
+<span>}</span>
+<span>}</span>
+
+<span>// 没错，就是这么简单，稍微把fetch封装下就可以了</span>
+
+
+<span>// app.js</span>
+<span>import</span> <span>koa</span> <span>from</span> <span>'koa'</span>
+<span>import</span> <span>proxy</span> <span>from</span> <span>'./proxy'</span>
+
+<span>const</span> <span>app</span>         <span>=</span> <span>koa</span><span>(</span><span>)</span>
+<span>const</span> <span>proxyServer</span> <span>=</span> <span>koa</span><span>(</span><span>)</span>
+
+<span>app</span><span>.</span><span>use</span><span>(</span><span>function</span><span>*</span> <span>(</span><span>next</span><span>)</span> <span>{</span>
+  <span>if</span> <span>(</span><span>'/users'</span> <span>===</span> <span>this</span><span>.</span><span>path</span> <span>&amp;&amp;</span> <span>'GET'</span> <span>===</span> <span>this</span><span>.</span><span>method</span><span>)</span>
+    <span>this</span><span>.</span><span>body</span> <span>=</span> <span>yield</span> <span>proxy</span><span>(</span><span>'http://localhost:8087/users'</span><span>)</span>
+  <span>if</span> <span>(</span><span>'/user'</span> <span>===</span> <span>this</span><span>.</span><span>path</span><span>)</span>
+    <span>this</span><span>.</span><span>body</span> <span>=</span> <span>yield</span> <span>proxy</span><span>(</span><span>'http://localhost:8087/user'</span><span>,</span> <span>{</span>
+      <span>method</span>: <span>'POST'</span><span>,</span>
+      <span>headers</span>: <span>{</span>
+        <span>'Accept'</span>: <span>'application/json'</span><span>,</span>
+        <span>'Content-Type'</span>: <span>'application/json'</span>
+      <span>}</span><span>,</span>
+      <span>body</span>: <span>JSON</span><span>.</span><span>stringify</span><span>(</span><span>{</span>
+        <span>name</span>: <span>'Hubot'</span><span>,</span>
+        <span>login</span>: <span>'hubot'</span><span>,</span>
+      <span>}</span><span>)</span>
+    <span>}</span><span>)</span>
+  <span>yield</span> <span>next</span>
+<span>}</span><span>)</span>
+
+<span>proxyServer</span><span>.</span><span>use</span><span>(</span><span>function</span><span>*</span> <span>(</span><span>next</span><span>)</span> <span>{</span>
+  <span>if</span> <span>(</span><span>'/users'</span> <span>===</span> <span>this</span><span>.</span><span>path</span> <span>&amp;&amp;</span> <span>'GET'</span> <span>===</span> <span>this</span><span>.</span><span>method</span><span>)</span>
+    <span>this</span><span>.</span><span>body</span> <span>=</span> <span>{</span>
+      <span>'test'</span>: <span>1</span>
+    <span>}</span>
+  <span>if</span> <span>(</span><span>'/user'</span> <span>===</span> <span>this</span><span>.</span><span>path</span> <span>&amp;&amp;</span> <span>'POST'</span> <span>===</span> <span>this</span><span>.</span><span>method</span><span>)</span> <span>{</span>
+    <span>this</span><span>.</span><span>body</span><span>=</span> <span>{</span>
+      <span>'data'</span> : <span>`yes, it's right`</span>
+    <span>}</span>
+  <span>}</span>
+  <span>yield</span> <span>next</span>
+<span>}</span><span>)</span>
+
+<span>app</span><span>.</span><span>listen</span><span>(</span><span>8086</span><span>)</span>
+<span>proxyServer</span><span>.</span><span>listen</span><span>(</span><span>8087</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>'server start 8086'</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>'server start 8087'</span><span>)</span></pre></div>
+<p>上面 <code>app.js</code> 中创建了两个 server，8086端口为代理 server, 8087端口为被代理的 server，访问 <code>localhost:8086/users</code> 会返回 {"test": 1}，说明get请求代理成功，同理访问 <code>localhost:8086/user</code>，会返回<br>
+{ "data": "yes, it's right"}，说明成功代理了post请求并返回了被代理server的结果。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-11.html">较新一篇：在 codewars 升阶了，撒花</a><a href="./blog-issue-9.html">较早一篇：ES6 生成range数组和random数组</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

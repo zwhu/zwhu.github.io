@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="今天在看 ES7 新增的部分 Api 的时候刚好看到 padStart 的这个方法，好像还挺实用的，而且也想在正式开始工作之前先找找写代码的感觉，于是顺手（其实还是花了不少时间的）就实现了这个 polyfill…"><title>padStart 的 polyfill · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>padStart 的 polyfill</h1><div class="meta"><time datetime="2017-02-06">2017-02-06</time> · 思考 · 算法 · <a href="https://github.com/zwhu/blog/issues/33">原 issue #33 ↗</a></div><div class="prose"><p>🤔</p>
+<p>今天在看 ES7 新增的部分 Api 的时候刚好看到 padStart 的这个方法，好像还挺实用的，而且也想在正式开始工作之前先找找写代码的感觉，于是顺手（其实还是花了不少时间的）就实现了这个 polyfill。</p>
+<p>相关的 API 用法在 MDN 上有说明。 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart">链接</a> 下面是具体实现</p>
+<div><pre><span>if</span><span>(</span><span>!</span><span>String</span><span>.</span><span>prototype</span><span>.</span><span>padStart</span><span>)</span>
+    <span>String</span><span>.</span><span>prototype</span><span>.</span><span>padStart</span> <span>=</span> 
+       <span>// 为了方便表示这里 fillString 用了ES6 的默认参数，不影响理解</span>
+        <span>function</span> <span>(</span><span>maxLength</span><span>,</span> <span>fillString</span><span>=</span><span>' '</span><span>)</span> <span>{</span>
+            <span>if</span><span>(</span><span>Object</span><span>.</span><span>prototype</span><span>.</span><span>toString</span><span>.</span><span>call</span><span>(</span><span>fillString</span><span>)</span> <span>!==</span> <span>"[object String]"</span><span>)</span> <span>throw</span> <span>new</span> <span>TypeError</span><span>(</span><span>'fillString must be String'</span><span>)</span>
+            <span>let</span> <span>str</span> <span>=</span> <span>this</span>
+            <span>// 返回 String(str) 这里是为了使返回的值是字符串字面量，在控制台中更符合直觉</span>
+            <span>if</span><span>(</span><span>str</span><span>.</span><span>length</span> <span>&gt;=</span> <span>maxLength</span><span>)</span> <span>return</span> <span>String</span><span>(</span><span>str</span><span>)</span>
+
+            <span>let</span> <span>fillLength</span> <span>=</span> <span>maxLength</span> <span>-</span> <span>str</span><span>.</span><span>length</span><span>,</span> 
+ 				<span>times</span> <span>=</span> <span>Math</span><span>.</span><span>ceil</span><span>(</span><span>fillLength</span> <span>/</span> <span>fillString</span><span>.</span><span>length</span><span>)</span>
+           
+           <span>// 这个算法叫啥？</span>
+           <span>// SICP 的中文版第 30页 有用到同种算法计算乘幂计算</span>
+            <span>while</span><span>(</span><span>times</span> <span>&gt;&gt;=</span> <span>1</span><span>)</span> <span>{</span> 
+                <span>fillString</span> <span>+=</span> <span>fillString</span>
+                    <span>if</span><span>(</span><span>times</span> <span>===</span> <span>1</span><span>)</span><span>{</span>
+                       <span>fillString</span> <span>+=</span> <span>fillString</span>
+                    <span>}</span>     
+            <span>}</span>
+            <span>return</span> <span>fillString</span><span>.</span><span>slice</span><span>(</span><span>0</span><span>,</span> <span>fillLength</span><span>)</span> <span>+</span> <span>str</span>  
+        <span>}</span></pre></div>
+<div><pre><span>// padStart  对于我来说最常用的地方就在于时间或者数字格式补全了</span>
+
+<span>'5'</span><span>.</span><span>padStart</span><span>(</span><span>2</span><span>,</span> <span>'0'</span><span>)</span> <span>// '05'</span>
+<span>'15'</span><span>.</span><span>padStart</span><span>(</span><span>2</span><span>,</span> <span>'0'</span><span>)</span> <span>// '15'</span></pre></div>
+<p>ps:<br>
+写完之后突然发现这个好像就是之前 npm 的  <code>left-pad</code> 删库事件；隐约记得好多人都重写过这个库。anyway， 练手的目的算是达到了。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-34.html">较新一篇：在 Node.js 中用 pipe 处理数组的思考与实现</a><a href="./blog-issue-32.html">较早一篇：『理解 unix 进程』读书笔记</a></nav></article><section class="historical-comments" aria-labelledby="history-title"><h2 id="history-title">历史评论</h2><p class="comments-status">以下为原 issue 的评论存档；新评论可在下方发表。</p><article class="historical-comment" id="issuecomment-279273319"><div class="meta">yutingzhao1991 · <time datetime="2017-02-13T01:21:09Z">2017-02-13</time> · <a href="https://github.com/zwhu/blog/issues/33#issuecomment-279273319">原评论 ↗</a></div><div class="prose"><p>npm 上有一个包 <a href="https://www.npmjs.com/package/left-pad">https://www.npmjs.com/package/left-pad</a> 。我记得之前还出过一次事故，这个包下线了还是怎么着把react搞挂了。</p></div></article></section><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

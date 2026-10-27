@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="TL;DR 本文是对 Promise 一些概念点的归纳和对 Promise 在解决什么问题的思考。 并不会介绍 Promise 的 Api。"><title>Promise--一诺千金 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>Promise--一诺千金</h1><div class="meta"><time datetime="2016-05-24">2016-05-24</time> · 记录 · 思考 · 读书笔记 · <a href="https://github.com/zwhu/blog/issues/25">原 issue #25 ↗</a></div><div class="prose"><p><a href="https://cloud.githubusercontent.com/assets/2899806/15476427/67d2e0f4-2141-11e6-93af-6fdc23c3f67c.png"><img src="./assets/blog-issues/2c2f705c36b871ff.png" alt="image" loading="lazy"></a></p>
+<blockquote>
+<p>TL;DR<br>
+本文是对 <code>Promise</code> 一些概念点的归纳和对 <code>Promise</code> 在解决什么问题的思考。<br>
+并不会介绍 <code>Promise</code> 的 Api。</p>
+</blockquote>
+<p>一直想写一篇关于 <code>Promise</code>  的文章，一直没有动笔，觉得自己对 <code>Promise</code> 是一知半解，连记录想法的勇气都没有。前几天刚好在看 <code>Dr. Axel Rauschmayer</code> 的『 Exploring ES6 』 这本书的时候，看到关于 <code>Promise</code> 的章节，仔细读了一遍，动手实现了简易版的 <code>Promise</code> 一遍，印证其它的资料又回味了一遍，这才敢开始动手写这篇文章。</p>
+<h2>要知道 <code>Promise</code> 哪些知识点</h2>
+<div><pre><span>const</span> <span>p</span> <span>=</span> <span>new</span> <span>Promise</span><span>(</span>
+    <span>function</span> <span>(</span><span>resolve</span><span>,</span> <span>reject</span><span>)</span> <span>{</span> <span>// (A)</span>
+        <span>···</span>
+        <span>if</span> <span>(</span><span>···</span><span>)</span> <span>{</span>
+            <span>resolve</span><span>(</span><span>value</span><span>)</span><span>;</span> <span>// success</span>
+        <span>}</span> <span>else</span> <span>{</span>
+            <span>reject</span><span>(</span><span>reason</span><span>)</span><span>;</span> <span>// failure</span>
+        <span>}</span>
+    <span>}</span><span>)</span></pre></div>
+<ol>
+<li>A 行的函数被称为 <code>executor</code></li>
+<li>当实例化一个 <code>Promise</code> 的时候，<code>executor</code> 总是「立即执行」的</li>
+<li><code>Promises</code> 总是异步执行的。在 then 的消耗 <code>Promise</code> value 时候，会把 then 的参数放到任务队列中，等待执行。</li>
+<li>当 <code>Promise</code> 中的状态进入稳定态（settled）的时候，<code>Promise</code> 的值便不会再发生变化，这就是 <code>Promise</code> 的名称由来：承诺。</li>
+</ol>
+<div><pre><span>// executor 立即执行的验证</span>
+<span>new</span> <span>Promise</span><span>(</span> <span>(</span><span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>console</span><span>.</span><span>log</span><span>(</span><span>1</span><span>)</span>
+  <span>setTimeout</span><span>(</span><span>(</span><span>)</span> <span>=&gt;</span> <span>console</span><span>.</span><span>log</span><span>(</span><span>3</span><span>)</span><span>,</span> <span>1000</span><span>)</span>
+<span>}</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>2</span><span>)</span>
+<span>// ------&gt; 1</span>
+<span>// ------&gt; 2</span>
+<span>// ------&gt; 3</span>
+
+<span>// then 的参数是异步调用的验证</span>
+<span>new</span> <span>Promise</span><span>(</span> <span>(</span><span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>res</span><span>(</span><span>2</span><span>)</span>
+<span>}</span><span>)</span><span>.</span><span>then</span><span>(</span><span>v</span><span>=&gt;</span> <span>console</span><span>.</span><span>log</span><span>(</span><span>v</span><span>)</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>1</span><span>)</span>
+<span>// ------&gt; 1</span>
+<span>// ------&gt; 2</span>
+
+
+<span>// 当在 executor 中通过调用 res 使状态稳定之后，不管调用多少次 res，值都不会再发生变化</span>
+<span>new</span> <span>Promise</span><span>(</span> <span>(</span><span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>res</span><span>(</span><span>1</span><span>)</span>
+  <span>res</span><span>(</span><span>2</span><span>)</span>
+<span>}</span><span>)</span><span>.</span><span>then</span><span>(</span><span>v</span><span>=&gt;</span> <span>console</span><span>.</span><span>log</span><span>(</span><span>v</span><span>)</span><span>)</span>
+<span>// ------&gt; 1</span></pre></div>
+<h2><code>Promise</code> -- 一诺千金</h2>
+<p><code>Promise</code> 的优点是什么？我看了很多文章在介绍 <code>Promise</code> 的时候都会提到回调噩梦（<code>Callback Hell</code>）。然而我觉得 <code>Promise</code> 并没有简单的解决回调噩梦的问题，写 then 往往比写 callback 更恶心。</p>
+<p>在我看来，<code>Promise</code> 提供了控制反转的机会。</p>
+<p>假设有下面这样一个函数，10 秒后调用传入的 fn。这是一个你的同事提供给你的独立文件。</p>
+<div><pre><code>// foo.js
+function foo(fn) {
+  setTimeout(fn, 1000*10)
+}
+
+module.exports = foo
+</code></pre></div>
+<p>你在写一个 10 秒之后打印 log 的业务:</p>
+<div><pre><code>var foo = require('foo')
+
+foo(()=&gt; console.log('hello,world!!'))
+</code></pre></div>
+<p>然而很不幸，你的同事离职，他的代码被交给一个很笨的新同事维护，新同事维护这个代码的时候，不小心复制了一行代码:</p>
+<div><pre><span>// foo.js</span>
+<span>function</span> <span>foo</span><span>(</span><span>fn</span><span>)</span> <span>{</span>
+  <span>setTimeout</span><span>(</span><span>fn</span><span>,</span> <span>1000</span><span>*</span><span>10</span><span>)</span>
+  <span>setTimeout</span><span>(</span><span>fn</span><span>,</span> <span>1000</span><span>*</span><span>10</span><span>)</span>
+<span>}</span>
+
+<span>module</span><span>.</span><span>exports</span> <span>=</span> <span>foo</span></pre></div>
+<p>这时每次调用 foo 的时候，都会写两遍日志，不到 1 天服务器的硬盘就被撑爆了，用户就不能访问网页了，接着用户就流失了，公司倒闭了，你就被失业了，想想都是很可怕的事情。这些都是因为你把你的函数交给你的同事调用并且无条件信任他。</p>
+<p>然而 <code>Promise</code> 会怎样做？</p>
+<div><pre><span>// foo.js</span>
+<span>function</span> <span>foo</span><span>(</span><span>)</span> <span>{</span>
+  <span>return</span> <span>new</span> <span>Promise</span><span>(</span><span>(</span><span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+    <span>setTimeout</span><span>(</span><span>res</span><span>,</span> <span>1000</span><span>*</span><span>2</span><span>)</span>
+  <span>}</span><span>)</span>
+<span>}</span>
+
+<span>module</span><span>.</span><span>exports</span> <span>=</span> <span>foo</span>
+
+<span>// main.js</span>
+
+<span>var</span> <span>foo</span> <span>=</span> <span>require</span><span>(</span><span>'foo'</span><span>)</span>
+
+<span>foo</span><span>(</span><span>)</span><span>.</span><span>then</span><span>(</span><span>(</span><span>)</span><span>=&gt;</span> <span>console</span><span>.</span><span>log</span><span>(</span><span>'hello,world!!'</span><span>)</span><span>)</span></pre></div>
+<p>那个笨同事又干了同样的蠢事，这次他复制了三行:</p>
+<div><pre><span>// foo.js</span>
+<span>function</span> <span>foo</span><span>(</span><span>)</span> <span>{</span>
+  <span>return</span> <span>new</span> <span>Promise</span><span>(</span><span>(</span><span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+    <span>setTimeout</span><span>(</span><span>res</span><span>,</span> <span>1000</span><span>*</span><span>10</span><span>)</span>
+    <span>setTimeout</span><span>(</span><span>res</span><span>,</span> <span>1000</span><span>*</span><span>10</span><span>)</span>
+    <span>setTimeout</span><span>(</span><span>res</span><span>,</span> <span>1000</span><span>*</span><span>10</span><span>)</span>
+  <span>}</span><span>)</span>
+<span>}</span>
+
+<span>module</span><span>.</span><span>exports</span> <span>=</span> <span>foo</span></pre></div>
+<p>然而这次让我失业的行为并没有得逞，因为当 <code>Promise</code> 的状态稳定之后，值就不会再改变，不管调用多少次 reslove 方法都是同样的效果。Callback 会把你做的事情的权限交出去，你不再对你的函数有控制权，而 Promise 是在等状态稳定之后才会再去执行你自己的函数，你对此函数拥有控制权。</p>
+<p>不过说到底，都没有绝对的信任，也说不定有人会把 <code>Promise</code> 的 then 实现 hack  了，而这种恶意做法的成本要比他不小心多复制一行代码的成本要高得多。</p>
+<hr>
+<h5>引用:</h5>
+<p><a href="http://exploringjs.com/es6/ch_promises.html">Exploring ES6 </a></p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-26.html">较新一篇：被 babel 翻译后的 ES6 Module</a><a href="./blog-issue-24.html">较早一篇：当我谈缓存的时候，我谈些什么</a></nav></article><section class="historical-comments" aria-labelledby="history-title"><h2 id="history-title">历史评论</h2><p class="comments-status">以下为原 issue 的评论存档；新评论可在下方发表。</p><article class="historical-comment" id="issuecomment-221879354"><div class="meta">holoto · <time datetime="2016-05-26T14:01:59Z">2016-05-26</time> · <a href="https://github.com/zwhu/blog/issues/25#issuecomment-221879354">原评论 ↗</a></div><div class="prose"><h1>老师您好!我有个问题</h1>
+<h2>代码在chrome50.0.2661.102  osx10.11.5下运行</h2>
+<p><code>new Promise( (res) =&gt; {</code><br>
+<code>console.log(2)</code><br>
+<code>setTimeout(() =&gt; console.log(3), 1000)</code><br>
+<code>});</code><br>
+<code>console.log(1)</code></p>
+<h2>输出</h2>
+<p><code>2016-05-26 21:56:02.660 VM760:2 2</code></p>
+<p><code>2016-05-26 21:56:02.661 VM760:4 1</code></p>
+<p><code>undefined</code></p>
+<p><code>2016-05-26 21:56:03.662 VM760:3 3</code></p></div></article><article class="historical-comment" id="issuecomment-221920503"><div class="meta">zwhu · <time datetime="2016-05-26T16:19:05Z">2016-05-27</time> · <a href="https://github.com/zwhu/blog/issues/25#issuecomment-221920503">原评论 ↗</a></div><div class="prose"><p><a href="https://github.com/holoto">@holoto</a> 我不是老师 - -</p>
+<p>你的运行结果是对的，那里是我写错了 - -，但是结论是正确的。哈哈。</p></div></article></section><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

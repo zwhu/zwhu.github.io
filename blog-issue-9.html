@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="创建数组除了字面量和 new Array() 外，还可以通过 Array(n) 创建，n 为数组的长度。 Array(n) 生成了长度为 n 的空数组，注意，和数组中元素赋值为 undefined 是有区别的；…"><title>ES6 生成range数组和random数组 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>ES6 生成range数组和random数组</h1><div class="meta"><time datetime="2015-10-31">2015-10-31</time> · 学习 · 思考 · 算法 · <a href="https://github.com/zwhu/blog/issues/9">原 issue #9 ↗</a></div><div class="prose"><p>创建数组除了字面量和 <code>new Array()</code> 外，还可以通过 <code>Array(n)</code> 创建，n 为数组的长度。 <code>Array(n)</code> 生成了长度为 n 的空数组，注意，和数组中元素赋值为 undefined 是有区别的；chrome 中查看空数组为<code>[undefined * n]</code>，而赋值为 undefined 的数组为 <code>[undefined, undefined, ..... , undefined]</code>。</p>
+<p><code>range：</code></p>
+<div><pre><span>let</span> <span>rangeArray</span> <span>=</span> <span>(</span><span>start</span><span>,</span> <span>end</span><span>)</span> <span>=&gt;</span> <span>Array</span><span>(</span><span>end</span> <span>-</span> <span>start</span> <span>+</span> <span>1</span><span>)</span><span>.</span><span>fill</span><span>(</span><span>0</span><span>)</span><span>.</span><span>map</span><span>(</span><span>(</span><span>v</span><span>,</span> <span>i</span><span>)</span> <span>=&gt;</span> <span>i</span> <span>+</span> <span>start</span><span>)</span>
+
+<span>rangeArray</span><span>(</span><span>0</span><span>,</span><span>10</span><span>)</span> <span>// return [0,1,2,3,4,5,6,7,8,9,10]</span></pre></div>
+<p>由于<code>map</code>不能对数组中未赋值的元素进行遍历，所以可以通过 ES6 的新方法 <code>fill</code> 对数组进行填充，把数组中的所有数转为0（转成什么都无所谓），然后通过 <code>map</code> 方法将数组中所有0都转成对应的数字。</p>
+<p>ES5 没有 <code>fill</code> 方法也可以通过 <code>Array.apply(null, {length: end - start + 1}).map((v, i) =&gt; i + start)</code> 搞定。说起来比第一种方法速度可能更快。</p>
+<p><code>random：</code></p>
+<div><pre><span>let</span> <span>randomArray</span> <span>=</span> <span>(</span><span>start</span><span>,</span> <span>end</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>let</span> <span>range</span> <span>=</span> <span>rangeArray</span><span>(</span><span>start</span><span>,</span> <span>end</span><span>)</span>
+    <span>,</span> <span>random</span> <span>=</span> <span>[</span><span>]</span>
+  <span>while</span> <span>(</span><span>range</span><span>.</span><span>length</span><span>)</span> <span>{</span>
+    <span>let</span> <span>i</span> <span>=</span> <span>Math</span><span>.</span><span>random</span><span>(</span><span>)</span> <span>*</span> <span>range</span><span>.</span><span>length</span> <span>|</span> <span>0</span>
+    <span>random</span><span>.</span><span>push</span><span>(</span><span>range</span><span>[</span><span>i</span><span>]</span><span>)</span>
+    <span>range</span><span>.</span><span>splice</span><span>(</span><span>i</span><span>,</span> <span>1</span><span>)</span>
+  <span>}</span>
+  <span>return</span> <span>random</span>
+<span>}</span>
+
+<span>// test</span>
+<span>let</span> <span>random</span> <span>=</span> <span>randomArray</span><span>(</span><span>1</span><span>,</span> <span>50</span><span>)</span>
+
+<span>console</span><span>.</span><span>log</span><span>(</span><span>random</span><span>.</span><span>length</span> <span>===</span> <span>50</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>Math</span><span>.</span><span>min</span><span>.</span><span>apply</span><span>(</span><span>Math</span><span>,</span> <span>random</span><span>)</span> <span>===</span> <span>1</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>Math</span><span>.</span><span>max</span><span>.</span><span>apply</span><span>(</span><span>Math</span><span>,</span> <span>random</span><span>)</span> <span>===</span> <span>50</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>random</span><span>.</span><span>sort</span><span>(</span><span>(</span><span>a</span><span>,</span> <span>b</span><span>)</span> <span>=&gt;</span> <span>a</span> <span>-</span> <span>b</span><span>)</span><span>.</span><span>every</span><span>(</span><span>(</span><span>v</span><span>,</span> <span>i</span><span>,</span> <span>a</span><span>)</span> <span>=&gt;</span> <span>v</span> <span>===</span> <span>a</span><span>[</span><span>i</span> <span>-</span> <span>1</span><span>]</span> <span>||</span> <span>0</span> <span>+</span> <span>1</span><span>)</span><span>)</span></pre></div>
+<p>具体原理就是：生成一个 range 数组，然后随机 range 数组的长度，得到下标 i，取出 range 中下标为 i 的元素放入新数组 random 中, 删除 range 数组这个元素，接着循环，直到 range 数组被删完。</p>
+<p>最近在看「算法」，所以厚着脸皮分析下<code>时间复杂度</code>吧，不对的地方欢迎指出：生成一个 range 数组，2n 次循环，循环 range 数组 n 次，所以加起来就是 3n 次，所需时间为线性级别的，时间复杂度为 O(n)，所以看起来还是挺快的。</p>
+<p>作为对比，分析一种以前经常用到的方法：</p>
+<div><pre><span>let</span> <span>randomArray</span> <span>=</span> <span>(</span><span>start</span><span>,</span> <span>end</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>let</span> <span>o</span> <span>=</span> <span>{</span><span>}</span>
+    <span>,</span> <span>length</span> <span>=</span> <span>end</span> <span>-</span> <span>start</span> <span>+</span> <span>1</span>
+    <span>,</span> <span>random</span> <span>=</span> <span>[</span><span>]</span>
+  <span>while</span> <span>(</span><span>random</span><span>.</span><span>length</span> <span>&lt;</span> <span>length</span><span>)</span> <span>{</span>
+    <span>let</span> <span>i</span> <span>=</span> <span>(</span><span>Math</span><span>.</span><span>random</span><span>(</span><span>)</span> <span>*</span> <span>length</span> <span>+</span> <span>1</span><span>)</span> <span>|</span> <span>0</span>
+    <span>if</span> <span>(</span><span>o</span><span>[</span><span>i</span><span>]</span><span>)</span> <span>continue</span>
+    <span>else</span> <span>{</span>
+      <span>o</span><span>[</span><span>i</span><span>]</span> <span>=</span> <span>true</span>
+      <span>random</span><span>.</span><span>push</span><span>(</span><span>i</span><span>)</span>
+    <span>}</span>
+
+  <span>}</span>
+  <span>return</span> <span>random</span>
+<span>}</span>
+
+<span>// test</span>
+<span>let</span> <span>random</span> <span>=</span> <span>randomArray</span><span>(</span><span>1</span><span>,</span> <span>50</span><span>)</span>
+
+<span>console</span><span>.</span><span>log</span><span>(</span><span>random</span><span>.</span><span>length</span> <span>===</span> <span>50</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>Math</span><span>.</span><span>min</span><span>.</span><span>apply</span><span>(</span><span>Math</span><span>,</span> <span>random</span><span>)</span> <span>===</span> <span>1</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>Math</span><span>.</span><span>max</span><span>.</span><span>apply</span><span>(</span><span>Math</span><span>,</span> <span>random</span><span>)</span> <span>===</span> <span>50</span><span>)</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>random</span><span>.</span><span>sort</span><span>(</span><span>(</span><span>a</span><span>,</span> <span>b</span><span>)</span> <span>=&gt;</span> <span>a</span> <span>-</span> <span>b</span><span>)</span><span>.</span><span>every</span><span>(</span><span>(</span><span>v</span><span>,</span> <span>i</span><span>,</span> <span>a</span><span>)</span> <span>=&gt;</span> <span>v</span> <span>===</span> <span>a</span><span>[</span><span>i</span> <span>-</span> <span>1</span><span>]</span> <span>||</span> <span>0</span> <span>+</span> <span>1</span><span>)</span><span>)</span></pre></div>
+<p>从上面代码可以看到在最好的情况下（不会出现 random 结果重复的情况），所需的时间复杂度为 O(n)，最坏的情况下（每次都重复的话...循环到无数次），这样就只能算期望了，数学不好就不瞎算了。</p>
+<p>自己对上面的分析之后认为在输入数特别大的情况下，前一种方法会把后一种方法碾压成渣，然而实际情况是反被轰成了渣滓，原因是忽略了splice方法，splice 是对数组的元素进行移动操作，会耗费了大量时间。</p>
+<div><pre><span>let</span> <span>a</span> <span>=</span> <span>[</span><span>]</span><span>,</span> <span>b</span> <span>=</span> <span>[</span><span>]</span>
+<span>console</span><span>.</span><span>time</span><span>(</span><span>'�push'</span><span>)</span>
+<span>for</span> <span>(</span><span>let</span> <span>i</span> <span>=</span> <span>0</span><span>;</span> <span>i</span> <span>&lt;</span> <span>1e5</span><span>;</span> <span>i</span><span>++</span><span>)</span> <span>{</span>
+  <span>a</span><span>.</span><span>push</span><span>(</span><span>i</span><span>)</span>
+<span>}</span>
+<span>console</span><span>.</span><span>timeEnd</span><span>(</span><span>'push'</span><span>)</span>  <span>// ==&gt; 3ms </span>
+<span>console</span><span>.</span><span>time</span><span>(</span><span>'splice'</span><span>)</span>
+<span>for</span> <span>(</span><span>let</span> <span>i</span> <span>=</span> <span>0</span><span>;</span> <span>i</span> <span>&lt;</span> <span>1e5</span><span>;</span> <span>i</span><span>++</span><span>)</span> <span>{</span>
+  <span>b</span><span>.</span><span>splice</span><span>(</span><span>i</span><span>,</span> <span>1</span><span>,</span> <span>i</span><span>)</span>
+<span>}</span>
+<span>console</span><span>.</span><span>timeEnd</span><span>(</span><span>'splice'</span><span>)</span> <span>// ==&gt; 21ms</span></pre></div>
+<p>从上面可以看出splice花费的时间�远远超过push 。</p>
+<p>写着写着就好像与标题相差了万八千里.... 不过具体写了什么就没所谓了，权当记录。</p>
+<p>======= 2015-11-4 更新 ======</p>
+<div><pre><span>let</span> <span>randomArray1</span> <span>=</span> <span>(</span><span>start</span><span>,</span> <span>end</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>let</span> <span>range</span> <span>=</span> <span>rangeArray</span><span>(</span><span>start</span><span>,</span> <span>end</span><span>)</span>
+    <span>,</span> <span>random</span> <span>=</span> <span>[</span><span>]</span>
+    <span>,</span> <span>N</span> <span>=</span> <span>range</span><span>.</span><span>length</span>
+
+
+  <span>while</span> <span>(</span><span>N</span><span>--</span><span>)</span> <span>{</span>
+    <span>let</span> <span>i</span> <span>=</span> <span>Math</span><span>.</span><span>random</span><span>(</span><span>)</span> <span>*</span> <span>(</span><span>N</span> <span>+</span> <span>1</span><span>)</span> <span>|</span> <span>0</span>
+    <span>random</span><span>.</span><span>push</span><span>(</span><span>range</span><span>[</span><span>i</span><span>]</span><span>)</span>
+    <span>range</span><span>[</span><span>i</span><span>]</span> <span>=</span> <span>range</span><span>[</span><span>N</span><span>]</span>
+    <span>//range.splice(i, 1)</span>
+  <span>}</span>
+  <span>return</span> <span>random</span>
+<span>}</span></pre></div>
+<p>避免使用 splice 方法，算法没什么变化,实现写法改了一点点,速度大大提升，测试结果如下:</p>
+<div><pre><span>console</span><span>.</span><span>time</span><span>(</span><span>'random1'</span><span>)</span>
+<span>let</span> <span>random1</span> <span>=</span> <span>randomArray1</span><span>(</span><span>1</span><span>,</span> <span>1e5</span><span>)</span>
+<span>console</span><span>.</span><span>timeEnd</span><span>(</span><span>'random1'</span><span>)</span>
+<span>console</span><span>.</span><span>time</span><span>(</span><span>'random2'</span><span>)</span>
+<span>let</span> <span>random2</span> <span>=</span> <span>randomArray2</span><span>(</span><span>1</span><span>,</span> <span>1e5</span><span>)</span>
+<span>console</span><span>.</span><span>timeEnd</span><span>(</span><span>'random2'</span><span>)</span>
+
+random1: <span>12</span><span>ms</span>
+random2: <span>79</span><span>ms</span></pre></div>
+<p>可以看到在我的电脑下，对1万条数据的处理速度提升了接近6倍。和之前的分析结果还算是相符的。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-10.html">较新一篇：koa 利用 node-fetch 写个自己的代理</a><a href="./blog-issue-8.html">较早一篇：JSX 生成dl dd dt</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

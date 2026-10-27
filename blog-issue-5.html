@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="知乎上有人问「比一个人吃火锅更寂寞的是什么？」我想回答「一个人写前后端，却要装成一个团队。」"><title>一个人的团队（一） · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>一个人的团队（一）</h1><div class="meta"><time datetime="2015-09-24">2015-09-24</time> ·  · <a href="https://github.com/zwhu/blog/issues/5">原 issue #5 ↗</a></div><div class="prose"><h1>一个人的团队（一）</h1>
+<p>作者 @<a href="https://github.com/zwhu">zwhu</a></p>
+<p>原文章 @<a href="./blog-issue-5.html">github</a></p>
+<p>知乎上有人问「比一个人吃火锅更寂寞的是什么？」我想回答「一个人写前后端，却要装成一个团队。」</p>
+<p>我们在前期开发的过程中，更多是一个人单打独斗，因为是自己一个人，可以把代码写的很随意，也不用注意什么工程化的东西；但作为一个有追求的程序员，不能为未来的自己挖坑，坚决走前端工程化的路线。</p>
+<blockquote>
+<p>虽然我是一个人，但我是一个团队。</p>
+</blockquote>
+<p>所以这是我自己在开发过程中总结的一些知识，慢慢会写成一个系列吧。「单页应用」作为系列的第一篇。</p>
+<h2>单页应用</h2>
+<h3>定义</h3>
+<p>对于单页应用我的定义是：在浏览器地址栏输入地址之后，服务器获取到HTML文档，之后所有页面的呈现都在这份HTML文档之上进行。</p>
+<h3>为什么是单页应用</h3>
+<p>因为这是流行啊。<del>即使我司对性能啥的完全没有任何要求，我还是强行用了单页应用，自己不努力，没人帮我学。具体有什么好处还是坏处，如果自己没写过单页应用，即使别人说一大堆好处坏处你也还是不懂。（这是吐槽，不用理会）</del></p>
+<h3>从头开始实现 SPA</h3>
+<p>在浏览器地址栏输入地址之后，会从服务器端下载HTML文档并开始渲染。（<a href="http://fex.baidu.com/blog/2014/05/what-happen/">这个谁能看懂，谁看吧，反正我看不懂</a>）在渲染的过程中，解析 script 标签，外部引入的话，就发起请求获取 JavaScript 文件。<br>
+页面渲染完成，之后所有网站的内容都会在这个页面上呈现，所有的操作也只会在这个页面进行。</p>
+<p>假设我们在浏览器输入 <a href="http://xxxx.com">http://xxxx.com</a> 的时候，服务端会返回 index.html 文档如下:</p>
+<div><pre>  <span>&lt;!DOCTYPE html<span>&gt;</span></span>
+    <span>&lt;</span><span>html</span><span>&gt;</span>
+      <span>&lt;</span><span>head</span><span>&gt;</span>
+        <span>&lt;</span><span>meta</span> <span>charset</span>="<span>UTF-8</span>"<span>&gt;</span>
+        <span>&lt;</span><span>title</span><span>&gt;</span>demo<span>&lt;/</span><span>title</span><span>&gt;</span>
+      <span>&lt;/</span><span>head</span><span>&gt;</span>
+      <span>&lt;</span><span>body</span><span>&gt;</span>
+        <span>&lt;</span><span>div</span> <span>id</span>="<span>app</span>"<span>&gt;</span>
+           <span>&lt;</span><span>nav</span> <span>id</span>="<span>nav</span>"<span>&gt;</span><span>&lt;/</span><span>nav</span><span>&gt;</span>
+           <span>&lt;</span><span>div</span> <span>id</span>="<span>container</span>"<span>&gt;</span><span>&lt;/</span><span>div</span><span>&gt;</span>
+        <span>&lt;/</span><span>div</span><span>&gt;</span>
+        <span>&lt;</span><span>script</span> <span>src</span>="<span>/jquery.js</span>"<span>&gt;</span><span>&lt;/</span><span>script</span><span>&gt;</span>
+        <span>&lt;</span><span>script</span> <span>src</span>="<span>/app.js</span>"<span>&gt;</span><span>&lt;/</span><span>script</span><span>&gt;</span>
+      <span>&lt;/</span><span>body</span><span>&gt;</span>
+    <span>&lt;/</span><span>html</span><span>&gt;</span></pre></div>
+<p>这里插一句为什么把 script 标签放到最后？浏览器在渲染的时候会被 script 标签阻塞，影响页面的首次渲染。可能会因为 JavaScript 文件过大，等待加载时间过长（如果是外部引入），页面一直是空白。</p>
+<p>我们在构建单页面应用时，大部分的内容通过 JavaScript 生成。在 app.js 中，我们会生成一个导航:</p>
+<div><pre><span>var</span> <span>$nav</span> <span>=</span> <span>$</span><span>(</span><span>'#nav'</span><span>)</span>
+
+<span>var</span> <span>sLi</span> <span>=</span> <span>[</span><span>'home'</span><span>,</span><span>'about'</span><span>,</span><span>'article'</span><span>,</span><span>'history'</span><span>]</span><span>.</span><span>reduce</span><span>(</span><span>function</span><span>(</span><span>pre</span><span>,</span> <span>n</span><span>)</span> <span>{</span>
+    <span>return</span> <span>pre</span> <span>+</span> <span>'&lt;li&gt;&lt;a href="/'</span> <span>+</span> <span>n</span> <span>+</span> <span>'"&gt;'</span> <span>+</span> <span>n</span> <span>+</span> <span>'&lt;/a&gt;&lt;/li&gt;'</span><span>;</span>
+<span>}</span><span>,</span> <span>''</span><span>)</span><span>;</span>
+
+<span>var</span> <span>sUl</span> <span>=</span> <span>'&lt;ul&gt;'</span> <span>+</span> <span>sLi</span> <span>+</span> <span>'&lt;/ul&gt;'</span><span>;</span>
+
+<span>$nav</span><span>.</span><span>html</span><span>(</span><span>sUl</span><span>)</span><span>;</span></pre></div>
+<p>生成如下图的导航条<br>
+<a href="https://camo.githubusercontent.com/6924775f213bdf75867770a7a9c71480a51aa8dff02e3b2e7b6d1953c2e800e3/687474703a2f2f7365676d656e746661756c742e636f6d2f696d672f625670325a78"><img src="./assets/blog-issues/0422a651e039f74f.jpg" alt="导航" loading="lazy"></a></p>
+<p>之后我们想根据导航生成不同的页面内容：</p>
+<div><pre><code>var $container = $('#container')
+
+$('#nav ul li').on('click', function() {
+  $container.html('这是' + $(this).find('a').text() + '区域哦')
+  return false;
+})
+</code></pre></div>
+<p><a href="https://camo.githubusercontent.com/5b22621c6c28a642d44636ba05067dbab5fc5d067b8f3ccfd31c8f83dfb5e66d/687474703a2f2f7365676d656e746661756c742e636f6d2f696d672f625670323064"><img src="./assets/blog-issues/7204b60d927a55cc.jpg" alt="图片描述" loading="lazy"></a></p>
+<p>然而现实中，我们的页面多数是根据后端返回的数据来渲染，例如我们的后端提供了一个接口 <code>/api/home</code>， 通过这个接口可以获得数据 <code>["今", "天", "天", "气", "不", "错", "啊"]</code>，当我们进入 home 页面的时候页面上会结合通过 api 接口获取来的数据展示新的页面：</p>
+<div><pre><code>$('#nav ul li').on('click', function() {
+  var route = $(this).find('a').text()
+  if('home' === route) {
+    $.get('/api/home', function(data) {
+      $container.html(data.join('') + '!')
+    })
+  } else {
+    $container.html('这是' + route + '区域哦')
+  }
+  return false;
+})
+</code></pre></div>
+<p><a href="https://camo.githubusercontent.com/63d836026cf3e5c2de70d143bf17710918cfd62fabd00348dfd2cc3c2de4bae2/687474703a2f2f7365676d656e746661756c742e636f6d2f696d672f625670323163"><img src="./assets/blog-issues/2f1e821c6efb0bc3.jpg" alt="图片描述" loading="lazy"></a></p>
+<h3>单页应用的重点 ---- 路由</h3>
+<p>这是我刚接触单页应用时候比较头疼的地方。</p>
+<blockquote>
+<p>没有路由，我就不知道你在哪儿。 --- by 我要某上头条君</p>
+</blockquote>
+<p>通过 Ajax 可以获取服务器的数据然后再渲染到页面上，这个方法虽然交互很友好，不需要重新刷新页面就可以看到新的内容；但是有一点不好，那就是当点击导航后，浏览器地址栏的链接不会有变化，用户完全不知道现在在哪个页面。</p>
+<p>不过这里有个知识点是需要大家理解的，当我们在浏览器地址栏输入地址或者通过其他页面的外链跳转到这个页面时，整个页面都会刷新一遍，从服务器获取 HTML 文档渲染。在 JavaScript 中，可以通过 location.href 修改地址，但是这个方法和浏览器输入地址的效果是相同的，那有没有办法只修改浏览器的地址栏，而不刷新整个页面呢？</p>
+<p>还好我们有 HTML5 的 History Api 来解决这个问题，当然低版本的IE浏览器也可以通过 location.hash 的方法实现，hash 来解决的方法不在这里深究了。毕竟低版本浏览器已经没必要支持了。</p>
+<div><pre><span>$</span><span>(</span><span>'#nav ul li'</span><span>)</span><span>.</span><span>on</span><span>(</span><span>'click'</span><span>,</span> <span>function</span><span>(</span><span>)</span> <span>{</span>
+  <span>var</span> <span>route</span> <span>=</span> <span>$</span><span>(</span><span>this</span><span>)</span><span>.</span><span>find</span><span>(</span><span>'a'</span><span>)</span><span>.</span><span>text</span><span>(</span><span>)</span>
+  <span>history</span><span>.</span><span>pushState</span><span>(</span><span>{</span> <span>title</span>: <span>route</span> <span>}</span><span>,</span> <span>route</span><span>,</span> <span>route</span><span>)</span>
+  <span>show</span><span>(</span><span>)</span>
+  <span>return</span> <span>false</span><span>;</span>
+<span>}</span><span>)</span>
+
+<span>function</span> <span>show</span><span>(</span><span>)</span> <span>{</span>
+  <span>var</span> <span>route</span> <span>=</span> <span>window</span><span>.</span><span>location</span><span>.</span><span>pathname</span>
+  <span>if</span><span>(</span><span>'/home'</span> <span>===</span> <span>route</span><span>)</span> <span>{</span>
+    <span>$</span><span>.</span><span>get</span><span>(</span><span>'/api/home'</span><span>,</span> <span>function</span><span>(</span><span>data</span><span>)</span> <span>{</span>
+      <span>$container</span><span>.</span><span>html</span><span>(</span><span>data</span><span>.</span><span>join</span><span>(</span><span>''</span><span>)</span> <span>+</span> <span>'!'</span><span>)</span>
+    <span>}</span><span>)</span>
+  <span>}</span> <span>else</span> <span>{</span>
+    <span>$container</span><span>.</span><span>html</span><span>(</span><span>'这是'</span> <span>+</span> <span>route</span> <span>+</span> <span>'区域哦'</span><span>)</span>
+  <span>}</span>
+<span>}</span></pre></div>
+<p>在点击导航之后，会将当前的路由体现在浏览器的地址中。不过，浏览器地址变化之后，点击前进后退，页面并不会有什么变化。我们可以通过对 window 对象绑定 popstate 方法来解决</p>
+<div><pre>    <span>window</span><span>.</span><span>addEventListener</span><span>(</span><span>"popstate"</span><span>,</span> <span>show</span><span>)</span><span>;</span></pre></div>
+<p>传统的网站，用户通常输入具体 url 来进入相关页面，例如：我们进入 GitHub 自己的主页是输入的是 <code>github.com/user</code>；但是单页面应用，我们的页面都是在一个空的 html文档中通过 JavaScript 生成的页面，所以服务器不能通过url来返回具体的页面（其实是可以的，<code>同构</code>，不在这里展开），那么应该怎么做呢？</p>
+<p>对于服务器来说，不用管那么多，当用户输入 url 之后，只要 url 符合一定的规则(例如：请求头的 accept 是 'text/html' 或者所有非 /api/ 开头的 url 等)，都返回默认的 index.html。JavaScript 可以通过当前的路由来渲染：</p>
+<div><pre><code> function show() {
+  var route = window.location.pathname
+  if('/home' === route) {
+    $.get('/api/home', function(data) {
+      $container.html(data.join('') + '!')
+    })
+  } else if('/' !== route) {
+    $container.html('这是' + route + '区域哦')
+  }
+}
+
+// 初始化的时候就调用
+show()
+</code></pre></div>
+<h2>结尾</h2>
+<p>到此为止，单页面的应用就算介绍完了。理解了单页面应用的原理，对于最近流行的 <code>Angular</code>， <code>React</code>， <code>Vue</code> 之类库或框架的才算刚刚开始。</p>
+<p>如果觉得本文对你有帮助的话，就点个推荐呗。</p>
+<h2>预告</h2>
+<p>下一篇我会介绍 一个人的团队（二）--- 神兵利器之 webpack 和 webpack-dev-server</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-6.html">较新一篇：JavaScript 中使用 new Function 执行字符串拼接表达式</a><a href="./blog-issue-4.html">较早一篇：正则表达式巧用 Unicode 匹配特殊字符</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

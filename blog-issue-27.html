@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="TLDR; 在远程主机中运行命令的 shell 语法:"><title>ssh 执行远程主机命令的自动化 bash 脚本 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>ssh 执行远程主机命令的自动化 bash 脚本</h1><div class="meta"><time datetime="2016-09-27">2016-09-27</time> · 记录 · <a href="https://github.com/zwhu/blog/issues/27">原 issue #27 ↗</a></div><div class="prose"><blockquote>
+<p>TLDR;<br>
+在远程主机中运行命令的 shell 语法:</p>
+<div><pre>$: ssh user@host <span><span>"</span>commands<span>"</span></span></pre></div>
+</blockquote>
+<p>最近的一个项目中，我们前端需要自己发布静态资源到远程目标服务器上，中间需要经过一个跳板机（为什么不用公司内部的 GitLab 方式发布，原因很多，这里就不表述了）。前端如果手动发布的话需要经过以下步骤：</p>
+<ol>
+<li>把所有静态资源压缩成一个 tgz 包</li>
+<li>把压缩包 scp 到跳板机</li>
+<li>ssh 到跳板机</li>
+<li>把压缩包从跳板机 scp 到静态资源的目标主机</li>
+<li>ssh 到目标主机</li>
+<li>解压缩压缩包到指定目录</li>
+<li>执行 py 脚本，发布到 cdn</li>
+</ol>
+<p>从上面的步骤可以看出如果手动发布一个服务器，大概需要经过7个步骤，每次发布都需要至少 4-5 分钟时间等待（我们有 12 台需要发布的机器，每次发布都需要 4（从第 3 步开始重复 12 次） * 12 分钟），而且如果网络不太好的话，等待的时间就更长了；更不要说手动发布的时候会经常忘了步骤且更容易出错了，每次发布都好像回到了原始时代。</p>
+<p>万幸的是 ssh 本身支持在远程主机中运行命令的，语法就是</p>
+<div><pre>$: ssh user@host <span><span>"</span>command1; command2; command3; ....<span>"</span></span></pre></div>
+<p>此处的 command 应该用 <code>""</code> 包起来，避免 <code>;</code> 被本地主机当做定界符处理。 ok，知道 ssh 的用法，我们写个 bash 处理一下上面 7 个步骤:</p>
+<div><pre><span><span>#</span> 打压缩包并上传到跳板机的指定目录</span>
+<span>function</span> <span>compress()</span> {
+    tar -zcvf sc.tgz -C build <span>.</span> <span>&amp;&amp;</span> scp -r sc.tgz root@xxx.xxx.xxx.xxx:<span>~</span>/oss_download/demo/
+}
+
+<span><span>#</span> 通过 ssh 登录跳板机执行 3 - 7 步</span>
+<span><span>#</span> 注意在跳板机跳登录到目标服务器的时候需要 ssh -tt ,可以在远程机器上 ssh 到其他的远程主机并执行。详细的解释通过 man ssh 查看</span>
+<span><span>#</span> mkidr -p 是如果目标机器不存在这个目录，就先创建这个目录，保证 cd 或者 tar 的时候不会因为目标目录不存在而引起报错</span>
+
+<span>function</span> <span>send()</span> {
+    ssh root@xxx.xxx.xxx.xxx <span><span>"</span>scp -r oss_download/demo/sc.tgz alibaba@<span>${1}</span>:~/ossdowload/data/demo/ ; ssh -tt alibaba@<span>${1}</span> 'mkdir -p ossdowload; cd ossdowload; mkdir -p data/demo/sc/<span>${version}</span>; tar -zvxf data/demo/sc.tgz  -C data/demo/sc/<span>${version}</span>  &amp;&amp; rm -rf data/demo/sc.tgz &amp;&amp;  ./ceph_tmp.py'<span>"</span></span>
+}
+
+<span><span>#</span> 执行 compress 和 send 函数</span>
+<span>function</span> <span>deploy()</span> {
+    compress
+    send <span>${1}</span>
+}
+
+<span><span>#</span> 发送到目标服务器</span>
+deploy yyy.yyy.yyy.yy
+</pre></div>
+<p>这是发布到一个远程主机的命令的脚本，是不是很简单？之后如果想发布到多个远程主机，只要通过简单的 while 语句就可以搞定；到这里就算结束了，大多数时候前端只需要掌握简单的 bash 语法，就可以通过自动化脚本节省了大量的时间去泡妹子，好开心。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-28.html">较新一篇：MIT-Scheme 安装入门</a><a href="./blog-issue-26.html">较早一篇：被 babel 翻译后的 ES6 Module</a></nav></article><section class="historical-comments" aria-labelledby="history-title"><h2 id="history-title">历史评论</h2><p class="comments-status">以下为原 issue 的评论存档；新评论可在下方发表。</p><article class="historical-comment" id="issuecomment-364864720"><div class="meta">scutuyu · <time datetime="2018-02-12T09:10:29Z">2018-02-12</time> · <a href="https://github.com/zwhu/blog/issues/27#issuecomment-364864720">原评论 ↗</a></div><div class="prose"><p>“就可以通过自动化脚本节省了大量的时间去泡妹子，好开心。”   6666</p></div></article></section><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

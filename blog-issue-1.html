@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="把自己对这MVVM设计模式的理解整理并记录，仅作自己以后查询之用。"><title>利用 ES6 的字符串模板和 JQuery 简单理解 MVVM · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>利用 ES6 的字符串模板和 JQuery 简单理解 MVVM</h1><div class="meta"><time datetime="2015-08-29">2015-08-29</time> ·  · <a href="https://github.com/zwhu/blog/issues/1">原 issue #1 ↗</a></div><div class="prose"><p>把自己对这MVVM设计模式的理解整理并记录，仅作自己以后查询之用。</p>
+<p>先说前端为什么需要 MVVM 或者 FLUX。在我看来，是为了保证不那么优秀的前端er在团队中写出不那么垃圾的代码，即使确实十分垃圾，也不会污染到团队中其他同事的代码，其它的设计模式应该也具有这种作用。</p>
+<h2>通过代码对比理解MVVM</h2>
+<p>MVVM 是 Model-View-ViewModel （双向数据绑定）的简写。不管是 MVVM 或者是 FLUX， 都强调的是视图和数据的分离。MVVM 是将视图和数据分离之后，通过 ViewModel 将数据和视图进行绑定。</p>
+<p>View 一般是指模板，例如 Handlerbars ,或者 ES6 的字符串模板,写法如下:</p>
+<div><pre><span>let</span> <span>message</span> <span>=</span> <span>'hello,world!!'</span>
+<span>let</span> <span>demo</span> <span>=</span> <span>`</span>
+<span>&lt;div id="demo"&gt;</span>
+<span>    &lt;p&gt;<span><span>${</span><span>message</span><span>}</span></span>&lt;/p&gt;</span>
+<span>&lt;/div&gt;</span>
+<span>`</span></pre></div>
+<p>然后通过 jQuery 插入 body 中</p>
+<div><pre>  <span>$</span><span>(</span><span>'body'</span><span>)</span><span>.</span><span>html</span><span>(</span><span>demo</span><span>)</span></pre></div>
+<p>对于 demo 便是 <code>View</code>，message 是此 View 指定的 Model。由于在这个例子中并没有交互，仅仅只是为了说明视图和模型, 所以并没有 VM 部分。</p>
+<p>下面的例子是一个完整的用 JQuery 实现的 MVVM 模式写法</p>
+<div><pre><span>//------ Model</span>
+<span>let</span> <span>model</span> <span>=</span> <span>{</span>
+  <span>value</span>: <span>1</span><span>,</span>
+  <span>fns</span>: <span>[</span><span>]</span><span>,</span>
+  <span>set</span>: <span>function</span><span>(</span><span>v</span><span>)</span> <span>{</span>
+    <span>this</span><span>.</span><span>value</span> <span>=</span> <span>v</span>
+    <span>this</span><span>.</span><span>fns</span><span>.</span><span>forEach</span><span>(</span><span>fn</span> <span>=&gt;</span> <span>fn</span><span>.</span><span>call</span><span>(</span><span>this</span><span>,</span> <span>this</span><span>.</span><span>value</span><span>)</span><span>)</span>
+  <span>}</span><span>,</span>
+  <span>on</span>: <span>function</span><span>(</span><span>fn</span><span>)</span> <span>{</span>
+    <span>this</span><span>.</span><span>fns</span><span>.</span><span>push</span><span>(</span><span>fn</span><span>)</span>
+  <span>}</span>
+<span>}</span><span>;</span>
+
+
+<span>//------ View</span>
+<span>let</span> <span>demo</span> <span>=</span> <span>`</span>
+<span>&lt;div&gt;</span>
+<span>&lt;p&gt;<span><span>${</span><span>model</span><span>.</span><span>value</span><span>}</span></span>&lt;/p&gt;</span>
+<span>&lt;input value='<span><span>${</span><span>model</span><span>.</span><span>value</span><span>}</span></span>' /&gt;</span>
+<span>&lt;button id="button1"&gt;+1&lt;/button&gt;</span>
+<span>&lt;/div&gt;</span>
+<span>`</span>
+
+<span>$</span><span>(</span><span>'body'</span><span>)</span><span>.</span><span>html</span><span>(</span><span>demo</span><span>)</span>
+
+<span>//------ ViewModel</span>
+
+<span>$</span><span>(</span><span>'input'</span><span>)</span><span>.</span><span>on</span><span>(</span><span>'keyup'</span><span>,</span> <span>function</span><span>(</span><span>)</span> <span>{</span>
+    <span>model</span><span>.</span><span>set</span><span>(</span><span>$</span><span>(</span><span>this</span><span>)</span><span>.</span><span>val</span><span>(</span><span>)</span><span>|</span><span>0</span><span>)</span>
+<span>}</span><span>)</span>
+
+
+<span>$</span><span>(</span><span>'button#button1'</span><span>)</span><span>.</span><span>on</span><span>(</span><span>'click'</span><span>,</span> <span>function</span><span>(</span><span>)</span> <span>{</span>
+    <span>model</span><span>.</span><span>set</span><span>(</span><span>model</span><span>.</span><span>value</span> <span>+</span> <span>1</span><span>)</span>
+<span>}</span><span>)</span>
+
+
+<span>model</span><span>.</span><span>on</span><span>(</span><span>function</span><span>(</span><span>value</span><span>)</span> <span>{</span>
+  <span>$</span><span>(</span><span>'p'</span><span>)</span><span>.</span><span>html</span><span>(</span><span>value</span><span>)</span>
+  <span>$</span><span>(</span><span>'input'</span><span>)</span><span>.</span><span>val</span><span>(</span><span>value</span><span>)</span>
+<span>}</span><span>)</span></pre></div>
+<p>在这个例子中， input输入的内容会实时显示在p标签中，而button被点击之后，也会对p标签的值和input标签的值都做+1处理；如果我们按照通常的 jQuery 来处理的话应该怎么做?</p>
+<div><pre><span>$</span><span>(</span><span>'input'</span><span>)</span><span>.</span><span>on</span><span>(</span><span>'keyup'</span><span>,</span> <span>function</span><span>(</span><span>)</span> <span>{</span>
+  <span>let</span> <span>value</span> <span>=</span> <span>$</span><span>(</span><span>this</span><span>)</span><span>.</span><span>val</span><span>(</span><span>)</span><span>|</span><span>0</span><span>;</span>
+  <span>$</span><span>(</span><span>'p'</span><span>)</span><span>.</span><span>html</span><span>(</span><span>value</span><span>)</span>
+  <span>$</span><span>(</span><span>'input'</span><span>)</span><span>.</span><span>val</span><span>(</span><span>value</span><span>)</span>
+<span>}</span><span>)</span>
+
+<span>$</span><span>(</span><span>'button'</span><span>)</span><span>.</span><span>on</span><span>(</span><span>'click'</span><span>,</span> <span>function</span><span>(</span><span>)</span> <span>{</span>
+    <span>let</span> <span>value</span> <span>=</span> <span>$</span><span>(</span><span>'input'</span><span>)</span><span>.</span><span>val</span><span>(</span><span>)</span><span>|</span><span>0</span> <span>+</span> <span>1</span><span>;</span>
+    <span>$</span><span>(</span><span>'p'</span><span>)</span><span>.</span><span>html</span><span>(</span><span>value</span><span>)</span>
+    <span>$</span><span>(</span><span>'input'</span><span>)</span><span>.</span><span>val</span><span>(</span><span>value</span><span>)</span>
+<span>}</span><span>)</span></pre></div>
+<p>从这两段代码来看，并没有太大区别，甚至下面一段代码看起来更短。然而下面一段代码将 视图和模型的处理写到了一起，试想一下，当我们想再增加一个 -1 的button 呢？对于 MVVM的模式，只要再写</p>
+<div><pre><span>&lt;</span><span>button</span> <span>id</span><span>=</span><span>'button2'</span><span>&gt;</span>-1<span>&lt;/</span><span>button</span><span>&gt;</span>
+<span>$</span><span>(</span><span>'button#button2'</span><span>)</span><span>.</span><span>on</span><span>(</span><span>'click'</span><span>,</span> <span>function</span><span>(</span><span>)</span> <span>{</span>
+    <span>model</span><span>.</span><span>set</span><span>(</span><span>model</span><span>.</span><span>value</span> <span>-</span> <span>1</span><span>)</span>
+<span>}</span><span>)</span></pre></div>
+<p>即可。</p>
+<p>而对于传统的方式，还需要先取得当前input值或p的值，然后再进行-1操作，最后还需要将input和p的innerHTML都修改一次。<br>
+随着DOM的增加，处理难度的差距越来越大，越来越不容易理解，修改一次，如履薄冰。</p>
+<p>通过这个小例子可以看出 MVVM 相对传统的写法的最大的优势：</p>
+<ol>
+<li>视图和模型的分离，视图可以独立模型进行开发；只需约定模型的结构即可。</li>
+<li>双向数据绑定，视图和模型可以通过VM互相改变。</li>
+<li>基于约定俗成的模式，可以将烂代码控制在最小范围内，也很难写出烂代码。</li>
+</ol>
+<p>ps: 按照我的理解 Angular 中对于基础的VM进行了封装，所以在模板中绑定数据之后，数据更新，会自动更新视图。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-2.html">较新一篇：利用 Canvas 将白色背景的 JPEG 图片转成透明的 PNG 图片</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

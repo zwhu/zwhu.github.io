@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="jsx 中允许使用 map 方法动态生成子组件，如下所示"><title>JSX 生成dl dd dt · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>JSX 生成dl dd dt</h1><div class="meta"><time datetime="2015-10-29">2015-10-29</time> · 记录 · <a href="https://github.com/zwhu/blog/issues/8">原 issue #8 ↗</a></div><div class="prose"><p>jsx 中允许使用 map 方法动态生成子组件，如下所示</p>
+<div><pre>  render: <span>function</span><span>(</span><span>)</span> <span>{</span>
+    <span>var</span> <span>results</span> <span>=</span> <span>this</span><span>.</span><span>props</span><span>.</span><span>results</span><span>;</span>
+    <span>return</span> <span>(</span>
+      <span>&lt;</span><span>ol</span><span>&gt;</span>
+        <span>{</span><span>results</span><span>.</span><span>map</span><span>(</span><span>function</span><span>(</span><span>result</span><span>)</span> <span>{</span>
+          <span>return</span> <span>&lt;</span><span>li</span> <span>key</span><span>=</span><span>{</span><span>result</span><span>.</span><span>id</span><span>}</span><span>&gt;</span><span>{</span><span>result</span><span>.</span><span>text</span><span>}</span><span>&lt;/</span><span>li</span><span>&gt;</span><span>;</span>
+        <span>}</span><span>)</span><span>}</span>
+      <span>&lt;/</span><span>ol</span><span>&gt;</span>
+    <span>)</span><span>;</span>
+  <span>}</span></pre></div>
+<p><code>{...}</code>包裹的语句块中实际返回的是一个子组件的集合，<code>[&lt;li&gt;...&lt;/li&gt;,....,&lt;li&gt;..&lt;/li&gt;]</code>，之后会被<code>babel</code>转换成</p>
+<div><pre>  <span>React</span><span>.</span><span>createElement</span><span>(</span><span>'ol'</span><span>,</span> <span>{</span><span>}</span><span>,</span> <span>results</span><span>.</span><span>map</span><span>(</span><span>function</span><span>(</span><span>result</span><span>)</span> <span>{</span>
+          <span>return</span> <span>React</span><span>.</span><span>createElement</span><span>(</span><span>'li'</span><span>,</span> <span>{</span><span>key</span>: <span>result</span><span>.</span><span>id</span><span>}</span><span>,</span><span>result</span><span>.</span><span>text</span><span>)</span>
+        <span>}</span><span>)</span>
+ <span>)</span></pre></div>
+<p>这样就可以动态生成子组件，但是没法解决生成dl组件的问题啊：</p>
+<div><pre>  <span>render</span>: <span>function</span><span>(</span><span>)</span> <span>{</span>
+    <span>var</span> <span>results</span> <span>=</span> <span>this</span><span>.</span><span>props</span><span>.</span><span>results</span><span>;</span>
+    <span>return</span> <span>(</span>
+      <span>&lt;</span><span>dl</span><span>&gt;</span>
+        <span>{</span><span>results</span><span>.</span><span>map</span><span>(</span><span>function</span><span>(</span><span>result</span><span>)</span> <span>{</span>
+          <span>return</span> <span>(</span><span>&lt;</span><span>dd</span><span>&gt;</span><span>{</span><span>result</span><span>.</span><span>text</span><span>}</span><span>&lt;/</span><span>dd</span><span>&gt;</span><span>&lt;</span><span>dt</span><span>&gt;</span><span>{</span><span>result</span><span>.</span>content<span>}</span><span>&lt;</span><span>/</span><span>d</span><span>t</span><span>&gt;</span><span>)</span>
+        <span>}</span><span>)</span><span>}</span>
+      <span>&lt;</span><span>/</span><span>d</span><span>l</span><span>&gt;</span>
+    <span>)</span><span>;</span>
+  <span>}</span></pre></div>
+<p>一个return语句中只允许返回一个子节点，so，这种方法是行不通的。但是jsx允许返回组件的集合,例如<code>[&lt;div&gt;&lt;/div&gt;,&lt;div&gt;&lt;/div&gt;]</code>，所以我们可以在map中返回一个数组。</p>
+<div><pre>  render: <span>function</span><span>(</span><span>)</span> <span>{</span>
+    <span>var</span> <span>results</span> <span>=</span> <span>this</span><span>.</span><span>props</span><span>.</span><span>results</span><span>;</span>
+    <span>return</span> <span>(</span>
+      <span>&lt;</span><span>dl</span><span>&gt;</span>
+        <span>{</span><span>results</span><span>.</span><span>map</span><span>(</span><span>function</span><span>(</span><span>result</span><span>)</span> <span>{</span>
+          <span>return</span> <span>(</span><span>[</span><span>&lt;</span><span>dd</span><span>&gt;</span><span>{</span><span>result</span><span>.</span><span>text</span><span>}</span><span>&lt;/</span><span>dd</span><span>&gt;</span><span>,</span><span>&lt;</span><span>dt</span><span>&gt;</span><span>{</span><span>result</span><span>.</span><span>content</span><span>}</span><span>&lt;/</span><span>dt</span><span>&gt;</span><span>]</span><span>)</span>
+        <span>}</span><span>)</span><span>}</span>
+      <span>&lt;/</span><span>dl</span><span>&gt;</span>
+    <span>)</span><span>;</span>
+  <span>}</span></pre></div></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-9.html">较新一篇：ES6 生成range数组和random数组</a><a href="./blog-issue-7.html">较早一篇：记一次用 NodeJs 实现模拟登录的思路</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

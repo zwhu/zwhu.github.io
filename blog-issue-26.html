@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="写这篇文章的起因是源于和同事的一次讨论， 同事的周报上说在写 React 组件的时候, A 组件 Import 了 B 组件， 同时在 B 组件中也 Import 了A 组件，此情况就形成了循环依赖，在 A 组…"><title>被 babel 翻译后的 ES6 Module · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>被 babel 翻译后的 ES6 Module</h1><div class="meta"><time datetime="2016-05-29">2016-05-29</time> ·  · <a href="https://github.com/zwhu/blog/issues/26">原 issue #26 ↗</a></div><div class="prose"><p>写这篇文章的起因是源于和同事的一次讨论， 同事的周报上说在写 React 组件的时候, A 组件 Import 了 B 组件， 同时在 B 组件中也 Import 了A 组件，此情况就形成了循环依赖，在 A 组件中引入的 B 组件为 <code>undefined</code>。但是在我之前的印象中（ <a href="./blog-issue-16.html">#16</a>） ，此时的 B 组件应该为空对象 <code>{}</code> 。</p>
+<p>一言不合，看看 babel 把  ES6 的 Module 翻译成什么：</p>
+<div><pre><span>// =================</span>
+<span>// a.js</span>
+<span>// =================</span>
+<span>import</span> <span>b</span> <span>from</span> <span>'./b'</span>
+
+<span>function</span> <span>foo</span><span>(</span><span>)</span> <span>{</span>
+    <span>b</span><span>.</span><span>bar</span><span>(</span><span>)</span><span>;</span>
+<span>}</span>
+
+
+<span>export</span> <span>default</span> <span>foo</span>
+
+<span>// =================</span>
+<span>// b.js</span>
+<span>// =================</span>
+<span>import</span> <span>a</span> <span>from</span> <span>'./a'</span>
+
+<span>console</span><span>.</span><span>log</span><span>(</span><span>a</span><span>)</span></pre></div>
+<p>上面一段代码，如果是 <code>node</code> 的写法，在读取 <code>a.js</code>  的时候就被 <code>cache</code> 为一个空对象了，此时在 <code>b 中读取</code>a<code>一定会是一个空对象，但是通过</code>babel-cli<code>把</code>a.js<code>和</code>b.js<code>翻译成</code>ES5` 之后再看看：</p>
+<div><pre>babel a.js <span>&gt;</span> a.bundle.js
+babel b.js <span>&gt;</span> b.bundle.js
+</pre></div>
+<div><pre><span>// =================</span>
+<span>// a.bundle.js</span>
+<span>// 把 require './b' 改成 './b.bundle'</span>
+<span>// =================</span>
+<span>'use strict'</span><span>;</span>
+
+<span>Object</span><span>.</span><span>defineProperty</span><span>(</span><span>exports</span><span>,</span> <span>"__esModule"</span><span>,</span> <span>{</span>
+    <span>value</span>: <span>true</span>
+<span>}</span><span>)</span><span>;</span>
+
+<span>var</span> <span>_b</span> <span>=</span> <span>require</span><span>(</span><span>'./b.bundle'</span><span>)</span><span>;</span>
+
+<span>var</span> <span>_b2</span> <span>=</span> <span>_interopRequireDefault</span><span>(</span><span>_b</span><span>)</span><span>;</span>
+
+<span>function</span> <span>_interopRequireDefault</span><span>(</span><span>obj</span><span>)</span> <span>{</span> <span>return</span> <span>obj</span> <span>&amp;&amp;</span> <span>obj</span><span>.</span><span>__esModule</span> ? <span>obj</span> : <span>{</span> <span>default</span>: <span>obj</span> <span>}</span><span>;</span> <span>}</span>
+
+<span>function</span> <span>foo</span><span>(</span><span>)</span> <span>{</span>
+    <span>_b2</span><span>.</span><span>default</span><span>.</span><span>bar</span><span>(</span><span>)</span><span>;</span>
+<span>}</span>
+
+<span>exports</span><span>.</span><span>default</span> <span>=</span> <span>foo</span><span>;</span>
+
+
+
+<span>// =================</span>
+<span>// b.bundle.js</span>
+<span>// 把 require './a' 改成 './a.bundle'</span>
+<span>// =================</span>
+<span>'use strict'</span><span>;</span>
+
+<span>var</span> <span>_a</span> <span>=</span> <span>require</span><span>(</span><span>'./a.bundle'</span><span>)</span><span>;</span>
+
+<span>var</span> <span>_a2</span> <span>=</span> <span>_interopRequireDefault</span><span>(</span><span>_a</span><span>)</span><span>;</span>
+
+<span>function</span> <span>_interopRequireDefault</span><span>(</span><span>obj</span><span>)</span> <span>{</span> <span>return</span> <span>obj</span> <span>&amp;&amp;</span> <span>obj</span><span>.</span><span>__esModule</span> ? <span>obj</span> : <span>{</span> <span>default</span>: <span>obj</span> <span>}</span><span>;</span> <span>}</span>
+
+<span>console</span><span>.</span><span>log</span><span>(</span><span>_a2</span><span>.</span><span>default</span><span>)</span><span>;</span></pre></div>
+<p>从上面两段代码可以看到 babel 把 <code>export default foo</code> 转成  <code>exports.default = foo</code> ， 在 <code>b.bundle.js</code> 中根据 <a href="./blog-issue-16.html">#16</a> 中分析的可以知道 <code>_a</code> 的值为 <code>{}</code>，所以此时 <code>_a2.default</code> 的值为 <code>_a.default</code>,  _a 为 <code>{}</code>， 那么 <code>{}.default</code> 是 <code>undefined</code>。</p>
+<p>其实如果按照 ES6 的标准，ES6 module 的出现就天然的解决了循环依赖的问题，babel 对 ES6 的module 的支持还是有些问题的，只是简单的翻译成 common.js 的方式。😄</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-27.html">较新一篇：ssh 执行远程主机命令的自动化 bash 脚本</a><a href="./blog-issue-25.html">较早一篇：Promise--一诺千金</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

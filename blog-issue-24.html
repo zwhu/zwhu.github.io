@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="前面大段的内容都是基本概念的介绍，建议没时间的同学直接拖到最下面看。"><title>当我谈缓存的时候，我谈些什么 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>当我谈缓存的时候，我谈些什么</h1><div class="meta"><time datetime="2016-03-12">2016-03-12</time> · 记录 · 思考 · 读书笔记 · <a href="https://github.com/zwhu/blog/issues/24">原 issue #24 ↗</a></div><div class="prose"><blockquote>
+<p>TL;DR</p>
+<p>前面大段的内容都是基本概念的介绍，建议没时间的同学直接拖到最下面看。</p>
+</blockquote>
+<p>Web 缓存是可以自动保存常见文档副本的 <strong>HTTP 设备</strong>。对，当谈到缓存的时候，就是指那些设备，如浏览器，代理缓存服务器等。</p>
+<blockquote>
+<p>通过网络获取内容既缓慢，成本又高：大的响应需要在客户端和服务器之间进行多次往返通信，这拖延了浏览器可以使用和处理内容的时间，同时也增加了访问者的数据成本。因此，缓存和重用以前获取的资源的能力成为优化性能很关键的一个方面。</p>
+</blockquote>
+<p>使用缓存有下列的优点：</p>
+<ul>
+<li>缓存<strong>减少了冗余的数据传输</strong>，节省了你的网络费用。</li>
+<li>缓存<strong>缓解了网络瓶颈的问题</strong>，不需要更多的带宽就能够更快的加载页面。</li>
+<li>缓存<strong>降低了对原始服务器的要求</strong>，服务器可以更快的响应，避免过载的出现。</li>
+<li>缓存<strong>降低了距离时延</strong>，因为从较远的地方加载页面会更慢一些。</li>
+</ul>
+<h2>冗余的数据传输</h2>
+<p>有很多小网站没有对文档做缓存处理，这样客户端每次访问相同的文档（例如 jQuery.js）的时候，都要从服务器下载相同的文档到本地客户端，造成大量的冗余数据传输。</p>
+<h2>带宽瓶颈</h2>
+<p>缓存会缓解有限广域网络带宽的瓶颈问题。很多网络会为本地客户端提供的带宽比为远程服务器提供的带宽更宽。如果客户端可以从一个快速局域网的缓存中获得一份副本，自然可以提高性能。</p>
+<h2>瞬间拥塞</h2>
+<p>12306 的春运，微博的春晚红包等都会遇到这种情况。12306 放票的时间段，会有大量的用户去抢票，出现瞬间拥塞。瞬间拥塞可能会使网络和 web 服务器发生崩溃。 DDOS 也是相同情况。</p>
+<h2>距离时延</h2>
+<p>假设淘宝的主服务器都放在杭州的一台服务器上。而在美国的客户端打开了淘宝，需要下载淘宝的首页；再假设数据的传输都是以光速的速度传输。杭州到华盛顿的距离大概有14，000公里，这样光速自身传输就需要大概90ms的时间（算上请求和返回的时间），如果淘宝页面上只有20个图片，这样单连接的情况下，就大概需要（打开连接请求 90ms + GET web 页面的90ms + GET 所有图片的 90 * 20 = 1800 ms）1980ms 的时延。注意，这个只是时延。也就是说这个距离下 20 张图片就会比客户端在本地的请求延迟大概 2s 的时间。</p>
+<h2>命中和未命中的</h2>
+<ul>
+<li>缓存命中（cache hit） 缓存的设备（可以是代理缓存服务器，也可以是本机）中有可以使用的副本。</li>
+<li>缓存未命中（cache miss）缓存的设备中没有可以使用的副本，这个请求就会被转发给原始服务器。</li>
+</ul>
+<h2>保持副本的新鲜</h2>
+<p>服务器上的文本内容随时可能发生变化，如：淘宝首页的一个文件中需要增加记录用户点击日志的功能，所以需要修改某个js文件，以增加对应的功能。对于这种情况，缓存就要不时的对其进行检测，看看它们保存的副本是否仍是服务器上最新的副本。对于这种检测，就被称为<strong>新鲜度检测</strong>，这些新鲜度检测就被称为 <strong>HTTP 再验证</strong>。</p>
+<h3>再验证</h3>
+<p>为了有效的进行再验证，HTTP 定义了一些特殊的请求，不用从服务器上获取整个对象，就可以快速检测出内容是否是最新的。最常用的是 If-Modified-Since 首部（后面的内容会提一下 ETag 和 If-None-Match）。当这个首部被加入到 GET 请求中去，就可以告诉服务器：只有缓存了对象的副本之后，又对其进行了修改的情况下，才发送此对象。</p>
+<p>对于服务器接收到 GET If-Modified-Since 请求时大概会发生以下三种情况：</p>
+<ul>
+<li>
+<p><strong>再验证命中</strong></p>
+<p>如果服务器对象未被修改，服务器回想客户端发送一个小的 HTTP 304 Not Modified 响应。</p>
+</li>
+<li>
+<p><strong>再验证未命中</strong></p>
+<p>如果服务器对象与已缓存副本不同，服务器向客户端发送一条普通的、带有完整内容的 HTTP 200 OK 的响应。</p>
+</li>
+<li>
+<p><strong>对象被删除</strong></p>
+<p>如果服务器对象已经被删除了，服务器就会回送一个 404 Not Found 响应，缓存也会将其副本删除。</p>
+</li>
+</ul>
+<p>If-Modified-Since 是 HTTP 请求首部，可以与 Last-Modified 服务器响应首部配合工作。原始服务器会将最后的修改日期附加到所提供的文档上去。当缓存要对已缓存文档进行再验证时，就会包含一个 If-Modified-Since 首部，其中携带有最后修改已缓存副本的日期。</p>
+<div><pre><span>&lt;!-- test.html 最后一次修改时间: 2016-3-12 20:03 --&gt;</span>
+
+<span>&lt;!Doctype html<span>&gt;</span></span>
+<span>&lt;</span><span>html</span><span>&gt;</span>
+<span>&lt;</span><span>head</span><span>&gt;</span>
+  <span>&lt;</span><span>title</span><span>&gt;</span>hello<span>&lt;/</span><span>title</span><span>&gt;</span>
+<span>&lt;/</span><span>head</span><span>&gt;</span>
+<span>&lt;</span><span>body</span><span>&gt;</span>
+  <span>&lt;</span><span>div</span><span>&gt;</span>no cache<span>&lt;/</span><span>div</span><span>&gt;</span>
+<span>&lt;/</span><span>body</span><span>&gt;</span>
+<span>&lt;/</span><span>html</span><span>&gt;</span></pre></div>
+<div><pre><span>// demo1.js </span>
+
+<span>'use strict'</span>
+<span>const</span> <span>http</span> <span>=</span> <span>require</span><span>(</span><span>'http'</span><span>)</span>
+<span>const</span> <span>fs</span> <span>=</span> <span>require</span><span>(</span><span>'fs'</span><span>)</span>
+
+<span>const</span> <span>onRequest</span> <span>=</span> <span>(</span><span>req</span><span>,</span> <span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>const</span> <span>filepath</span> <span>=</span> <span>'./test.html'</span>
+  <span>,</span> <span>file</span> <span>=</span> <span>fs</span><span>.</span><span>readFileSync</span><span>(</span><span>filepath</span><span>)</span>
+  <span>,</span> <span>stats</span> <span>=</span> <span>fs</span><span>.</span><span>statSync</span><span>(</span><span>filepath</span><span>)</span>
+  <span>,</span> <span>mtime</span> <span>=</span> <span>stats</span><span>.</span><span>mtime</span>
+  <span>,</span> <span>reqMtimeString</span> <span>=</span> <span>req</span><span>.</span><span>headers</span><span>[</span><span>"if-modified-since"</span><span>]</span>
+
+  <span>let</span> <span>status</span> <span>=</span> <span>200</span>
+
+  <span>if</span><span>(</span><span>reqMtimeString</span><span>)</span> <span>{</span>
+    <span>const</span> <span>reqMtime</span> <span>=</span> <span>new</span> <span>Date</span><span>(</span><span>reqMtimeString</span><span>)</span>
+    <span>if</span><span>(</span><span>reqMtime</span><span>.</span><span>getTime</span><span>(</span><span>)</span> <span>===</span> <span>mtime</span><span>.</span><span>getTime</span><span>(</span><span>)</span><span>)</span> <span>status</span>  <span>=</span> <span>304</span>
+  <span>}</span>
+
+  <span>res</span><span>.</span><span>writeHead</span><span>(</span><span>status</span><span>,</span> <span>{</span><span>'Content-Type'</span>: <span>'text/html'</span><span>,</span> <span>'Last-Modified'</span>: <span>mtime</span><span>}</span><span>)</span>
+  <span>if</span><span>(</span><span>200</span> <span>===</span> <span>status</span><span>)</span> <span>res</span><span>.</span><span>write</span><span>(</span><span>file</span><span>)</span>
+  <span>res</span><span>.</span><span>end</span><span>(</span><span>)</span>
+<span>}</span>
+
+<span>http</span><span>.</span><span>createServer</span><span>(</span><span>onRequest</span><span>)</span><span>.</span><span>listen</span><span>(</span><span>'8000'</span><span>,</span> <span>(</span><span>)</span> <span>=&gt;</span> <span>console</span><span>.</span><span>log</span><span>(</span><span>'server start:8000'</span><span>)</span><span>)</span></pre></div>
+<p>上面是用 Node.js 写了一个简易的服务器，检测 test.html 是否有变化，如果最后一次修改的时间和客户端的时间不同的话，就返回新鲜的文档。</p>
+<p>通过 <code>node demo.js</code> 运行服务器。打开浏览器的开发者工具（记得把 disable cache 的选项勾掉），可以看到此时HTTP请求的 header 为:</p>
+<div><pre><code>General
+
+Request URL:http://localhost:8000/
+Request Method:GET
+Status Code:200 OK
+Remote Address:[::1]:8000
+
+
+Response Headers
+
+HTTP/1.1 200 OK
+Content-Type: text/html
+...
+Last-Modified: Sat Mar 12 2016 20:03:58 GMT+0800 (CST)
+
+
+Request Headers
+
+GET / HTTP/1.1
+Host: localhost:8000
+...
+If-Modified-Since: Sat Mar 12 2016 20:03:58 GMT+0800 (CST)
+
+</code></pre></div>
+<p>此时的返回的状态码为 200， 服务器设置了 <strong>Last-Modified</strong> 首部之后，浏览器端会加上 <strong>If-Modified-Since</strong> 的头部。之后再刷新浏览器，查看开发者工具，发现一般头（即 General）的 status code 变成 304 Not Modified，即上述的<strong>再验证命中</strong>。</p>
+<p>再修改 test.html 的内容：</p>
+<div><pre><span>&lt;!-- test.html 最后一次修改时间: 2016-3-12 20:26 --&gt;</span>
+
+<span>&lt;!Doctype html<span>&gt;</span></span>
+<span>&lt;</span><span>html</span><span>&gt;</span>
+<span>&lt;</span><span>head</span><span>&gt;</span>
+  <span>&lt;</span><span>title</span><span>&gt;</span>hello<span>&lt;/</span><span>title</span><span>&gt;</span>
+<span>&lt;/</span><span>head</span><span>&gt;</span>
+<span>&lt;</span><span>body</span><span>&gt;</span>
+  <span>&lt;</span><span>div</span><span>&gt;</span>change cache<span>&lt;/</span><span>div</span><span>&gt;</span>
+<span>&lt;/</span><span>body</span><span>&gt;</span>
+<span>&lt;/</span><span>html</span><span>&gt;</span></pre></div>
+<p>刷新浏览器，此时的 header 如下:</p>
+<div><pre><code>General
+
+Request URL:http://localhost:8000/
+Request Method:GET
+Status Code:200 OK
+Remote Address:[::1]:8000
+
+
+Response Headers
+
+HTTP/1.1 200 OK
+Content-Type: text/html
+...
+Last-Modified: Sat Mar 12 2016 20:26:36 GMT+0800 (CST)
+
+
+Request Headers
+
+GET / HTTP/1.1
+Host: localhost:8000
+...
+If-Modified-Since: Sat Mar 12 2016 20:03:58 GMT+0800 (CST)
+</code></pre></div>
+<p>可以看到一般头的 status code 又变成了 200，且响应头的 Last-Modified 变成最后一次修改时间，即上述的<strong>再验证未命中</strong>，服务器会返回修改后的文件。</p>
+<p><strong>对象被删除</strong>的情况就不再写代码验证了。</p>
+<h3>文档过期</h3>
+<p>服务器也可以通过添加一个 HTTP Cache-Control 首部和 Expires 首部让缓存可以在缓存文档未过期的情况下随意使用这些文档副本。</p>
+<p>HTTP/1.0 的 Expires 首部或 HTTP/1.1 的 Cache-Control: max-age 响应首部来指定过期日期。Expires 使用的是绝对日期，绝对日期依赖于计算机时钟的正确设置，如果计算机时钟不正确，会造成缓存的过期日期不正确，可能就达不到缓存的初衷，所以在 HTTP/1.1 就增加了  Cache-Control: max-age 来替代 Expires 。</p>
+<p>max-age 响应首部表示的是从服务器将文档传来之时起，可以认为此文档处于新鲜状态的秒数，还有一个s-maxage的首部，其行为与 max-age 类似，仅适用于共享缓存。</p>
+<p>服务器可以请求缓存不要缓存文档（Cache-Control: no-store），或者将最大使用期设置为零(Cache-Control: max-age=0)，从而在每次访问的时候都进行刷新。</p>
+<p>下面是一段 Nodejs 实现的 max-age 代码:</p>
+<div><pre><span>// demo2.js</span>
+<span>'use strict'</span>
+<span>const</span> <span>http</span> <span>=</span> <span>require</span><span>(</span><span>'http'</span><span>)</span>
+<span>const</span> <span>fs</span> <span>=</span> <span>require</span><span>(</span><span>'fs'</span><span>)</span>
+
+<span>const</span> <span>onRequest</span> <span>=</span> <span>(</span><span>req</span><span>,</span> <span>res</span><span>)</span> <span>=&gt;</span> <span>{</span>
+  <span>if</span><span>(</span><span>'/req.js'</span> <span>===</span> <span>req</span><span>.</span><span>url</span><span>)</span> <span>{</span>
+    <span>let</span> <span>filepath</span> <span>=</span> <span>'./req.js'</span>
+    <span>,</span> <span>file</span> <span>=</span> <span>fs</span><span>.</span><span>readFileSync</span><span>(</span><span>filepath</span><span>)</span>
+
+    <span>res</span><span>.</span><span>writeHead</span><span>(</span><span>200</span><span>,</span> <span>{</span><span>'Content-Type'</span>: <span>'text/javascript'</span><span>,</span> <span>'Cache-Control'</span>: <span>'max-age=60'</span><span>}</span><span>)</span>
+    <span>res</span><span>.</span><span>write</span><span>(</span><span>file</span><span>)</span>
+    <span>res</span><span>.</span><span>end</span><span>(</span><span>)</span>
+  <span>}</span> <span>else</span> <span>{</span>
+    <span>let</span> <span>filepath</span> <span>=</span> <span>'./test2.html'</span>
+    <span>,</span> <span>file</span> <span>=</span> <span>fs</span><span>.</span><span>readFileSync</span><span>(</span><span>filepath</span><span>)</span>
+
+    <span>res</span><span>.</span><span>writeHead</span><span>(</span><span>200</span><span>,</span> <span>{</span><span>'Content-Type'</span>: <span>'text/html'</span><span>}</span><span>)</span>
+    <span>res</span><span>.</span><span>write</span><span>(</span><span>file</span><span>)</span>
+    <span>res</span><span>.</span><span>end</span><span>(</span><span>)</span>
+  <span>}</span>
+<span>}</span>
+
+<span>http</span><span>.</span><span>createServer</span><span>(</span><span>onRequest</span><span>)</span><span>.</span><span>listen</span><span>(</span><span>'8000'</span><span>,</span> <span>(</span><span>)</span> <span>=&gt;</span> <span>console</span><span>.</span><span>log</span><span>(</span><span>'server start:8000'</span><span>)</span><span>)</span></pre></div>
+<div><pre><span>// req.js</span>
+<span>'use strict'</span>
+<span>console</span><span>.</span><span>log</span><span>(</span><span>123</span><span>)</span></pre></div>
+<div><pre><span>&lt;!-- test2.html --&gt;</span>
+<span>&lt;!Doctype html<span>&gt;</span></span>
+<span>&lt;</span><span>html</span><span>&gt;</span>
+<span>&lt;</span><span>head</span><span>&gt;</span>
+  <span>&lt;</span><span>title</span><span>&gt;</span>hello<span>&lt;/</span><span>title</span><span>&gt;</span>
+<span>&lt;/</span><span>head</span><span>&gt;</span>
+<span>&lt;</span><span>body</span><span>&gt;</span>
+  <span>&lt;</span><span>div</span><span>&gt;</span>no cache<span>&lt;/</span><span>div</span><span>&gt;</span>
+<span>&lt;</span><span>script</span> <span>src</span>='<span>/req.js</span>'<span>&gt;</span><span>&lt;/</span><span>script</span><span>&gt;</span>
+<span>&lt;/</span><span>body</span><span>&gt;</span>
+
+<span>&lt;/</span><span>html</span><span>&gt;</span></pre></div>
+<p>打开浏览器，先打开开发者工具，再输入地址之后，按回车可以看到下图，req.js 没有被缓存。</p>
+<p><a href="https://camo.githubusercontent.com/8896eef4fe6533c0846219479f382d07609358ad488f7f53263ff1e615989776/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f6e6f2d63616368652e706e67"><span class="missing-image">原图暂不可用：no-cahce（查看原图）</span></a></p>
+<p>重新再浏览器输入地址回车（手动刷新和 cmd+r 属于强制刷新，会清除缓存），可以看到下图 req.js 已经被缓存了（from cache）：</p>
+<p><a href="https://camo.githubusercontent.com/840b7aaaa07e3789aa728de5b64ae3a55a8acbb2784a889e24a7a485c54d3e95/687474703a2f2f37786a626a342e636f6d312e7a302e676c622e636c6f7564646e2e636f6d2f63616368652e706e67"><span class="missing-image">原图暂不可用：cache（查看原图）</span></a></p>
+<p>由于在服务器上设置的缓存失效时间是 60s，所以 60s 之后再看，此时的缓存已经失效，又会像第一幅图一样， req.js 没有 from cache。</p>
+<h3>Etag 和 If-None-Match</h3>
+<p>HTTP 允许用户对 Etag 的<strong>版本标识符</strong>进行比较。在服务器端设置 Etag 首部之后，客户端会对应的生成 If-None-Match 首部。服务器端可以通过 If-None-Match 首部和对应的文档内容的hash值或者其它指纹信息进行校验，来决定是否返回新鲜的文档。</p>
+<h2>最优的缓存策略</h2>
+<p>由于使用 Etag，服务器端每次都要对文档内容 hash 来确定是否返回新鲜的文档，还是会浪费大量的服务器资源，所以 Etag 的缓存策略不建议使用。</p>
+<p>所以结合 Google 给出的最优缓存策略，总结如下：</p>
+<ul>
+<li>HTML 被标记成no-cache，这意味着浏览器在每次请求时都会重新验证文档，如果内容更改，会获取最新版本。同时，在 HTML 标记中，我们在 CSS 和 JavaScript 资源的网址中嵌入指纹码：如果这些文件的内容更改，网页的 HTML 也会随之更改，并将下载 HTML 响应的新副本。</li>
+<li>允许浏览器和中继缓存（例如 CDN）缓存 CSS，过期时间设置为 1 年。注意，我们可以放心地使用 1 年的’远期过期’，因为我们在文件名中嵌入了文件指纹码：如果 CSS 更新，网址也会随之更改。</li>
+<li>JavaScript 过期时间也设置为 1 年，但是被标记为 private，也许是因为包含了 CDN 不应缓存的一些用户私人数据。</li>
+<li>缓存图片过期时间尽量设置超长。</li>
+</ul>
+<p>上面第一条所说的指纹码一般是指文档内容的 hash 值，这个可以通过 gulp，webpack 等打包工具在生成文件的时候就生出 hash 值，附在文件名后面，例如：jquery.min.js，根据文档生成的 hash 值为 1iuiqe981823，文件名可以自动生成为: jquery.min.1iuiqe981823.js。这样既可以保证在文档没有变化是可以从缓存中读取，又可以保证文档在有变化可以及时更新。</p>
+<h2>最后</h2>
+<p>本文大部分内容都是直接引用『HTTP 权威指南』，最后一部分的最优策略是参考 Google Developers 的文档。有些许内容是理解之后给出的代码实现或验证。</p>
+<blockquote>
+<p><a href="./blog-issue-24.html">原文</a></p>
+</blockquote></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-25.html">较新一篇：Promise--一诺千金</a><a href="./blog-issue-23.html">较早一篇：学「编译原理」能干嘛</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

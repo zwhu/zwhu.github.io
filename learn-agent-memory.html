@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="以 TencentDB-Agent-Memory 为例，跟随一个约束走过对话回流、记忆提炼、权限管理与新会话召回。"><title>Agent 记忆流程讲解 · 交互式学习 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="stylesheet" href="./assets/learning/agent-memory.css"><link rel="stylesheet" href="./learning.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head>
+<body class="learning-page"><a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html" aria-current="page">交互式学习</a><a href="./index.html#about">关于</a></nav></header>
+<main id="main" class="learning-main"><article class="learning-article"><div class="lesson-heading"><a class="back" href="./learning.html">← 交互式学习</a><h1>Agent 记忆流程讲解</h1><p class="meta">记忆系统 · 流程与自测 · 整理于 2026-10-27</p><p class="lesson-summary">以 TencentDB-Agent-Memory 为例，跟随一个约束走过对话回流、记忆提炼、权限管理与新会话召回。</p></div>
+<div class="learning-content lesson-agent-memory"><div id="am-walkthrough">
+  <div class="viz-row">
+    <span class="viz-badge">示例 · 已接入并启用记忆</span>
+    <span id="am-count" class="text-small tabular-nums">1 / 6</span>
+  </div>
+  <h3 id="am-heading">首次会话：告诉 Agent 一个约束</h3>
+  <div class="am-flow" role="group" aria-label="当前步骤的数据流">
+    <div class="am-node"><span id="am-from-label" class="text-small text-muted">输入</span><div id="am-from">“旧鉴权还被移动端使用，先别重构。”</div></div>
+    <span class="am-arrow" aria-hidden="true">→</span>
+    <div class="am-node"><span class="text-small text-muted">处理位置</span><div id="am-processor">Agent → MemoryProxy → 上游模型</div></div>
+    <span class="am-arrow" aria-hidden="true">→</span>
+    <div class="am-node"><span id="am-to-label" class="text-small text-muted">产物</span><div id="am-to">当前会话中的回答</div></div>
+  </div>
+  <div id="am-detail" class="text-small" aria-live="polite">Proxy 位于 Agent 与模型之间，承担接入、身份处理和上下文注入。</div>
+  <hr>
+  <div class="viz-controls">
+    <button id="am-prev" type="button" class="btn" disabled>上一步</button>
+    <button id="am-next" type="button" class="btn btn-primary">下一步：对话回流</button>
+  </div>
+  <div class="viz-controls am-followups" aria-label="继续学习">
+    <button type="button" class="btn btn-ghost" data-topic="modules" aria-expanded="false">继续学：四个模块</button>
+    <button type="button" class="btn btn-ghost" data-topic="code" aria-expanded="false">继续学：跟读源码</button>
+    <button type="button" class="btn btn-ghost" data-topic="quiz" aria-expanded="false">考考我</button>
+  </div>
+  <section class="memory-panels" aria-label="深入学习">
+  <div data-learning-panel="modules" hidden><h3>四个模块，各负责什么？</h3><dl>
+  <dt>MemoryProxy</dt><dd>位于 Agent 与模型之间，处理接入、身份、上下文注入与对话回流。</dd>
+  <dt>MemoryCore</dt><dd>保存对话和记忆，通过异步管线提炼不同粒度的记忆，并管理绑定与权限校验。</dd>
+  <dt>MemoryKnowledge</dt><dd>处理 Wiki、代码图谱等知识内容，为按需取用提供支持。</dd>
+  <dt>MemoryPanel</dt><dd>提供资产与 Agent 的管理入口；分享给团队和绑定给 Agent 是两个独立动作。</dd></dl></div>
+  <div data-learning-panel="code" hidden><h3>跟读源码：从注入入口开始</h3><p>在 TencentDB-Agent-Memory 仓库中，从 <code>MemoryProxy/src/injection/injectors/tdai-profile-memory-injector.ts</code> 开始，跟踪 L3 内容与 L2 目录如何注入模型上下文。</p><ol><li>先看输入：当前身份、Agent 绑定和可用记忆。</li><li>再看输出：L3 内容与 L2 目录；区分目录和全文。</li><li>跟踪按需查询：L2 全文、L1 细节和知识内容何时被取用。</li><li>回到一轮结束的入口，确认对话如何回流至 Core。</li></ol><p class="text-muted">这里是原笔记的阅读路线；实现细节以你持有的源码版本为准。</p></div>
+  <div data-learning-panel="quiz" hidden><h3>自测：谁来提炼记忆？</h3><p>用户说“旧鉴权暂时不能重构”。一轮结束后，哪个模块负责保存对话并异步提炼可复用约束？</p><div class="viz-controls"><button type="button" data-memory-answer="proxy">MemoryProxy</button><button type="button" data-memory-answer="core">MemoryCore</button><button type="button" data-memory-answer="panel">MemoryPanel</button></div><p id="memory-quiz-feedback" role="status"></p></div>
+  </section><div id="am-status" class="text-small" role="status"></div>
+</div>
+
+
+</div>
+<section class="lesson-related" aria-labelledby="related-title"><h2 id="related-title">继续学习</h2><a href="./learn-llm-study.html">大模型是怎样学会与回答的？ →</a><a href="./learn-aime-paper.html">AIME：交互式中文论文解读 →</a><a href="./learn-react-token-accumulation.html">ReAct token 如何累积 →</a><a class="back" href="./learning.html">← 全部交互式学习</a></section></article>
+<section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section></main><footer class="site-footer"><span>zwhu / Tech &amp; Notes</span><a href="./learning.html">交互式学习 →</a></footer>
+<script src="./assets/learning/agent-memory.js"></script><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></body></html>

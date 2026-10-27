@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="把读题、初始化、需求分析、实现和验收整理成五步流程，配有可展开、可复制的完整提示词。"><title>AI 编程笔试操作手册 · 交互式学习 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="stylesheet" href="./assets/learning/ai-coding-playbook.css"><link rel="stylesheet" href="./learning.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head>
+<body class="learning-page"><a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html" aria-current="page">交互式学习</a><a href="./index.html#about">关于</a></nav></header>
+<main id="main" class="learning-main"><article class="learning-article"><div class="lesson-heading"><a class="back" href="./learning.html">← 交互式学习</a><h1>AI 编程笔试操作手册</h1><p class="meta">AI 编程 · 操作手册 · 整理于 2026-10-27</p><p class="lesson-summary">把读题、初始化、需求分析、实现和验收整理成五步流程，配有可展开、可复制的完整提示词。</p></div>
+<div class="learning-content lesson-ai-coding-playbook">
+<header><div class="eyebrow">MANUS PREP / PERSONAL PLAYBOOK</div><h2>AI 编程笔试<span>从读题到可靠交付。</span></h2><p class="intro">五个步骤，五份提示词。先准备协作入口，再让工程初始化与需求分析并行；带着明确的验收标准进入实现。</p><div class="meta"><span class="pill">4.5 小时测试场景</span><span class="pill">每 5 分钟进度检查</span><span class="pill">离线可用 · 一键复制</span></div></header>
+<div class="toolbar"><nav aria-label="步骤导航"><a href="#read">① 读题</a><a href="#init">② 初始化</a><a href="#analyze">③ 需求分析</a><a href="#build">④ Goal 实现</a><a href="#accept">⑤ 验收</a></nav><div class="tools"><button class="quiet" id="expand">展开全部</button><button class="quiet" id="print">打印 / 存为 PDF</button></div></div>
+<div data-lesson-main><section class="map" aria-label="整体执行顺序"><h2>先看这条操作路径</h2><div class="flow"><div class="flowbox"><small>无需仓库</small><strong>① 快速读题</strong><small>交付物 · 技术简报</small></div><div class="flowbox"><small>工程会话 A</small><strong>② 阶段 A：基础就绪</strong><div class="split"><div>会话 A 继续<br><b>② 阶段 B</b><br>目录 / 依赖 / 检查</div><div>另开会话 B<br><b>③ 需求分析</b><br>验收 / 设计 / 计划</div></div></div><div class="flowbox"><small>核心需求与基础汇合后</small><strong>④ Goal 实现</strong><small>按行为实现与验证</small></div><div class="flowbox"><small>实现交接后</small><strong>⑤ 执行验收</strong><small>对照原题检查交付</small></div></div><p class="map-note">② 阶段 B 与 ③ 同时推进。第一阶段只准备让两边能开工的入口；5 分钟是汇报检查点，不是完成时限。</p></section>
+<div class="howto"><div><h3>怎么用</h3><p>从 ① 开始复制，替换方括号中的输入。② 整份发送一次，分两阶段执行。③ 起直接读取项目内文档，不必每次重贴原题。</p></div><div><h3>怎么交接</h3><p>初始化会话 A 管配置与依赖，分析会话 B 管需求与设计。④ 由 A 实现；⑤ 由 B 验收。切换时重新读文件，保持每份文件只有一个写入方。</p></div></div>
+<section class="step" id="read" aria-labelledby="title-read">
+    <div class="step-side"><span class="number">01</span><h2 id="title-read">快速读题</h2><span class="chat">任意分析会话</span></div>
+    <div class="step-card"><div class="step-body"><span class="label">无需仓库</span><p class="action">粘贴完整题目和考试规则，先拿到一份能启动工程准备的技术简报。此时不需要 repo，也不调用 grill-me。</p><div class="ready"><b>进入下一步：</b>知道要交付什么、用什么技术、哪些依赖现在就要准备，即可进入第 ② 步。</div><p class="output">产出 / 技术启动简报</p></div>
+    <div class="prompt"><div class="promptbar"><span class="prompt-title">提示词 01 · 可直接复制</span><button class="copy" data-copy="prompt-read" aria-label="复制快速读题提示词">复制提示词</button></div><details open><summary>展开 / 收起提示词</summary><pre id="prompt-read">现在开始一场 4.5 小时的 AI 辅助编程测试。请先快速读题，给出足够启动工程初始化的技术判断。
+
+题目与规则：
+[粘贴完整题目、附件内容或可访问路径]
+
+补充约束：
+[指定技术栈、运行环境、交付格式；没有则写“无”]
+
+这一轮只做快速判断，不展开完整需求访谈，不创建项目、不安装依赖。
+请输出一份简短的「技术启动简报」：
+1. 交付物：前端、后端、全栈、客户端或其他；列出必须交付的内容和运行方式。
+2. 技术方案：选择一套适合题目的技术栈，给出简短理由。题目指定优先，其次复用可用模板；无约束的 Web 工程可采用 TypeScript、React、Node.js，按需使用 pnpm workspace。
+3. 架构草图：核心模块、主要数据流、存储及外部服务；只确定初始化需要知道的边界。
+4. 依赖清单：分为“现在必需”和“业务明确后再装”，覆盖运行、类型、测试和构建；不要为可能用到的能力提前装全套库。
+5. 风险与待定项：哪些歧义会改变技术路线，哪些可以用可撤销的默认值继续。
+
+区分题目事实与推断。只询问会阻止初始化的重要问题，其余写明假设。
+结果控制在一页左右，最后给出可直接交给初始化会话的简报，不继续写业务代码。</pre></details></div></div></section><section class="step" id="init" aria-labelledby="title-init">
+    <div class="step-side"><span class="number">02</span><h2 id="title-init">初始化项目</h2><span class="chat">工程会话 A</span></div>
+    <div class="step-card"><div class="step-body"><span class="label">一份提示词 · 两个阶段</span><p class="action">在目标空目录中打开编程 Agent；目录尚不存在时，在可创建它的父目录启动。一次发送下面整份提示词，附原题与第 ① 步简报。</p><div class="ready"><b>进入下一步：</b>看到“阶段 A 基础就绪”后，立即在同一项目目录另开会话 B，发送第 ③ 步提示词。会话 A 继续阶段 B，不必等待完整初始化。</div><p class="output">产出 / Git、Skills、Agent 文档 → 目录、依赖、检查命令</p><p class="hint">阶段 A 的“基础就绪”不等于整个工程初始化完成。Skills 安装若受阻，先按第 ③ 步的普通分析要求推进，并保留缺口。</p></div>
+    <div class="prompt"><div class="promptbar"><span class="prompt-title">提示词 02 · 可直接复制</span><button class="copy" data-copy="prompt-init" aria-label="复制初始化项目提示词">复制提示词</button></div><details ><summary>展开 / 收起提示词</summary><pre id="prompt-init">请在指定目录初始化工程，按以下两个阶段连续执行。
+
+目标：构建一个能够持续承载并放大人机协作能力的工程仓库，将工程经验沉淀为可复用的知识，将质量要求落实为可执行的约束，将开发结果转化为可验证的反馈，使长程任务能够跨会话、跨 Agent 持续推进，并让每次迭代都为后续开发积累更可靠的基础。
+
+输入：
+- 项目目录：[绝对路径]
+- 题目与规则：[粘贴原题或提供可访问路径]
+- 技术启动简报：[粘贴第 ① 步结果]
+- 已验证模板：[路径；没有则写“无”]
+
+阶段 A：先建立协作入口
+1. 先做 60 秒环境预检：目标目录与 /tmp 可写性、github.com/codeload.github.com/registry 可达性、pnpm/node 版本；单次探测超时 5 秒不重试，结论写入 HANDOFF 顶部“环境事实”段供后续决策。再检查题目、已有规则并复用；目录缺就创建；非 Git 仓库在项目根执行 git init，已有仓库沿用并用 git status 确认，避免嵌套仓库。
+2. 创建最小工程入口与 docs/，将原题和规则保存到 docs/task.md，将技术启动简报保存到 docs/technical-brief.md。不要先搭业务页面或演示接口。
+3. 安装项目级 Skills（走 codeload tarball，不走 git clone）：从 https://codeload.github.com/mattpocock/skills/tar.gz/refs/heads/main 下载解包，按当前 Agent 的实际扫描约定安装（Codex 用 .agents/skills/，Claude Code 用 .claude/skills/，其他按其官方说明），不要默认拷到普通 skills/。安装后记录来源版本（commit 或 tag），并以“文件存在 + 原生入口可发现 + 实际可调用”三步分别确认，缺一不算就绪。优先 grilling、handoff、research，再按需 tdd、diagnosing-bugs、code-review、prototype。大包失败重试一次仍失败就记“Skill 未就绪”继续，不阻塞。
+4. 写入简短 AGENTS.md、README.md 和 docs/agent-roles/ 下的需求规划、功能实现、测试验证三份角色说明。角色说明用于会话分工，不代表已自动创建多个 Agent。AGENTS.md 放长期规则与文档入口；阶段状态写入 docs/工程初始化-HANDOFF.md。
+5. 将交接规则写入 AGENTS.md：每个会话只维护当前任务指定的 docs/&lt;任务名&gt;-HANDOFF.md（保存到仓库内 docs/ 而非系统临时目录，持续更新同一文件，不覆盖其他任务的交接）。跨会话、接近上下文压缩前和关键节点，用 handoff skill 更新目标、关键决定、未验证、阻塞和下一步；已沉淀到 spec/ADR/commit 的内容只引用不复述。交接时明确当前任务及其直接依赖任务的 HANDOFF 路径；恢复时先读 AGENTS.md 与这些指定交接，再核对实际状态，不按修改时间猜测当前任务，也不默认读取全部交接。不要把交接保存完全依赖于压缩通知。
+
+上述入口可用后，立即在进度消息中报告“阶段 A 基础就绪”，给出项目路径、grilling 调用入口与文档位置，提示我启动需求分析会话。随后继续阶段 B，不等待我回复。
+若 Skills 受阻，明确写“Skills 尚未就绪”，说明影响；继续其他工作，不把未验证能力标成可用。
+
+阶段 B：补齐可开始业务开发的工程基础
+1. 按技术简报建立实际需要的目录。全栈可采用 apps/web、apps/api；有真实共享内容时才建共享包。前端不导入后端实现，外部输入仍需运行时校验。题目是单端或客户端时采用对应结构，不强套 monorepo。
+2. 一次核对必要的运行、类型、测试、构建依赖，固定兼容的包管理器版本并生成锁文件。安装前核实当前版本的依赖构建审批机制，只批准已核实必要的构建脚本。复用兼容缓存及现有 registry，不修改全局配置；安装中保持依赖清单稳定，分析会话提出的新增依赖集中处理。已知兼容组合先核对版本再套用：vitest@^2 对应 apps/web 锁 vite@^5（避免 vite@6 与 vitest 内部 vite5 冲突）；pnpm ≤ 10 用 onlyBuiltDependencies，pnpm ≥ 11 用 allowBuilds，按实际版本声明构建允许清单；TS 拆 tsconfig.json 与 tsconfig.build.json（build rootDir 严格为 src），typecheck 用前者；vite 配置用 import from 'vitest/config'，不用三斜杠引用。版本不匹配时查对应版本官方说明，不照抄旧写法。
+3. 配置 .editorconfig、.gitignore、.env.example、严格 tsconfig、ESLint、Prettier、Husky 与 lint-staged。已有等效方案沿用。Git 初始化在 hooks 之前；权限受限则记录，不反复重试。忽略规则覆盖各子包产物、依赖、覆盖率与缓存；类型感知 lint 只覆盖对应 TS 项目。非 JS/TS 技术栈使用等效工具。
+4. 前后端都有真实测试框架：Vite 前端优先 Vitest + React Testing Library + jest-dom，其他 React 工程按兼容性采用 Jest；组件使用 jsdom。Node 后端采用 Jest 或 Vitest 的 Node 环境，其他语言使用对应框架。配置发现规则、模块转换、路径别名、setup 与测试类型；不写空测试或恒真断言。无用例时明确记录“暂无用例”，检查配置加载与发现能力，不当作测试通过。前端 E2E 安装 @playwright/test 并写最小 playwright.config.ts，提供 pnpm test:e2e 命令；浏览器安装（playwright install）延后到第一次写 E2E 用例时按需执行，装不下来就记“E2E 浏览器未就绪”并继续，不预先写用例、不阻塞初始化。
+5. 提供真实根命令：lint / lint:fix、format:check / format、typecheck、test、各端测试、test:watch、dev、build、check。check 聚合静态检查与现有单元测试；check:full 随业务加入构建、集成与 E2E，并写明实际范围。未就绪命令标记待接入，不用 echo 或空成功脚本占位。自动检查不使用 watch，失败返回非零。
+6. 根据技术简报已确认的技术栈和实际目录，按下面分层清单建立 AGENTS.md；只为实际存在的端和模块创建子目录规则，以下 apps/web、apps/api 为路径示例。只写具体可执行、有踩坑证据的规则，不写方向性原则；已有兼容方案优先。框架用法和源码位置以实际工程为准；业务计算、归一化、存储精度与幂等要求，由需求分析确认后再补入适用规则。按 Agent 需要提供 CLAUDE.md 入口，共用同一规则来源。README 写清安装、环境配置、开发入口、适用的种子数据与运行步骤，使“从空目录到跑起来”可被另一台机器复现。
+
+根 AGENTS.md：
+- 架构总览、目录职责、文档路由、命令策略、修改顺序。
+- 迭代流程：明确预期→设计测试→实现→验证→更新计划，先打通最小核心流程再覆盖异常。
+- 测试规则：前后端单元/组件/API 集成测试；每条必交业务行为至少一条 E2E 用例，断言 DOM 与数据状态而非视觉；首次写 E2E 用例前执行 playwright install 安装浏览器，装不下来记“E2E 浏览器未就绪”并降级为组件级测试（L1 验收端到端仍标记未完成，不等价替代）；按需启动服务与构建，不要等待常驻 dev 进程自行退出，结束清理临时服务；自动验收优先非 watch 模式。
+- 检查节奏：每次修改先跑相关检查；共享配置或契约变化扩大验证范围；同一代码状态复用结果，完整验收中只构建一次，E2E 复用对应产物；需要人工看页面时提供地址与简短操作路径。
+- 交接规则：沿用阶段 A 的任务归属规则，关键节点、跨会话或接近压缩前，只更新当前任务指定的 HANDOFF；恢复时读取当前任务及直接依赖任务的指定交接并核对实际状态。初始化、需求分析、功能实现、验收分别维护 docs/工程初始化-HANDOFF.md、docs/需求分析-HANDOFF.md、docs/功能实现-HANDOFF.md、docs/验收-HANDOFF.md；交接时明确文件路径。负责实现或验收的会话在 docs/verification.md 记录需求编号、证据、实际检查命令及结果、未验证项；每 5 分钟报告进展与剩余风险，附一行“自我审计”列本轮默认决定与范围裁剪；复杂逻辑用 tdd skill，疑难失败用 diagnosing-bugs，不为变绿降断言。
+- ESLint 架构约束：至少 1–2 条，前端禁 import 后端源文件、业务模块禁 import 其他模块内部文件。
+
+前端目录下的 AGENTS.md（如 apps/web/AGENTS.md，仅在项目包含前端时创建）：
+- UI 规范（规则源在此，首次搭页面与每次改动后对照自检，并同步更新 docs/ui-checklist.md，每条规则一行附“通过/未通过 + 证据位置”，不写整体结论）：
+  - 组件与色板：React Web 工程优先用 shadcn/ui 现成组件（Select/Button/Input/Dialog 等）与 Radix UI Colors（遵循其使用规范）；其他技术栈使用已选定的兼容组件库与色板。Web 底层可用语义化 HTML，但不自绘下拉箭头、不自造颜色；本次口径（如币种/文本归一化）从 docs/口径-checklist.md 取。
+  - 排版：字号不超过 3–4 种且不小于 12px，层级靠字重、颜色、间距区分；金额列使用 tabular-nums。
+  - 文案：贴合受众，不口语化、不造词、不加冗余解释，不使用中点“·”作分隔符。
+  - 布局：光学对齐；嵌套容器使用同心圆圆角；边框一律 0.5px；慎用圆角与阴影，禁用卡片左侧色条。
+  - 交互与动画：减少需用户判断的选择，必须出现时放在用户正要做选择的位置；按信息优先级组织元素；动画能省则省，需要时统一 ease-out 250ms。
+- 组件与库优先级（适用于 React；其他框架采用兼容方案）：shadcn/ui 默认 Nova 风格，图标 Lucide；动画按需 Motion、简单过渡用 CSS；可调整分栏用 react-resizable-panels、普通布局用 Grid/Flex；拖拽用 dnd-kit；共享客户端状态用 Zustand、局部状态用 React，不存储可推导数据；只装当前需要的库和组件。
+- 业务计算与数据归一化的职责按 docs/technical-design.md 和 docs/口径-checklist.md 中已确认的规则划分；存在前后端协作时保持契约一致，展示层格式化与权威业务计算分别明确，不预设金额、日期或币种规则。
+
+后端目录下的 AGENTS.md（如 apps/api/AGENTS.md，仅在项目包含后端时创建）：
+- 使用所选框架兼容的边界输入校验方式，统一错误响应格式；核心业务规则可独立测试，记录其实际源码位置。写操作的幂等要求、业务数据的单位与精度等，依据已确认的需求和技术设计补充。
+
+并行分工：
+- 你负责基础目录、配置、package.json、锁文件、AGENTS.md、README 与工程初始化交接。
+- 需求会话负责 requirements.md、technical-design.md、execution-plan.md 和需求分析交接。只读取这些文件，接收其中的依赖补充，不覆盖它们。
+- 安装等待时继续不冲突的文档和配置工作。不因业务细节未定停止通用基础建设，不提前决定尚未明确的数据模型或业务接口。
+
+范围与验证：
+- 本轮不实现业务，不为展示完整而创建健康接口或 demo；默认不启动前后端服务、不构建、不跑 E2E、不下载浏览器。配置问题确需运行验证时说明原因，做最小检查并清理临时进程。
+- 调试只跑受影响检查；相同代码状态复用已通过结果，不逐项跑完再重复跑聚合检查。单项配置变动只跑对应 lint/typecheck/test，聚合 pnpm check 最多在阶段 B 末尾跑一次。文档变更只做相关检查；依赖与安装配置未变化，不重复安装。
+- 开始记录时间，每 5 分钟报告实际进展、主要耗时、阻塞和下一步；这是检查点，不是截止时间，也不等待确认。
+- 必需依赖、配置、静态检查和已有测试通过，Skills 发现状态明确、文档可交接后报告结果。存在影响使用的缺口就写“初始化未完成”及其影响，不能以文件已生成替代验证。结束时更新 docs/工程初始化-HANDOFF.md，报告可用命令、检查结果、待验证项与实际耗时，然后交接。</pre></details></div></div></section><section class="step" id="analyze" aria-labelledby="title-analyze">
+    <div class="step-side"><span class="number">03</span><h2 id="title-analyze">详细分析需求</h2><span class="chat">需求会话 B · 同一项目目录</span></div>
+    <div class="step-card"><div class="step-body"><span class="label">与 ② 阶段 B 并行</span><p class="action">收到基础就绪消息后，在同一个项目目录新开分析会话，按初始化给出的原生入口选择 grilling，再发送下面的提示词。回答真正影响范围或架构的问题。</p><div class="ready"><b>进入下一步：</b>核心验收标准、第一条完整业务流程和实现计划清楚；所需工程基础已就绪，即可启动第 ④ 步。非关键细节继续按需细化。</div><p class="output">产出 / 需求文档、技术设计、执行计划</p><p class="hint">会话 B 使用同一目录，直接读取共享文档。依赖增补写入技术设计，由会话 A 统一安装；两边分别维护自己的 HANDOFF。</p></div>
+    <div class="prompt"><div class="promptbar"><span class="prompt-title">提示词 03 · 可直接复制</span><button class="copy" data-copy="prompt-analyze" aria-label="复制详细分析需求提示词">复制提示词</button></div><details ><summary>展开 / 收起提示词</summary><pre id="prompt-analyze">请使用本项目已安装的 grilling，按需求规划角色分析本次题目，为业务实现形成可执行依据。
+
+先读取 AGENTS.md、docs/task.md、docs/technical-brief.md、需求规划角色说明和 docs/工程初始化-HANDOFF.md。工程初始化正在另一个会话推进，不等待它全部完成。
+先检查 grilling 及其依赖能否实际调用；不能调用则明确缺口，不声称已使用。若安装受阻，可先按以下要求分析，记录 Skill 尚未调用，不让工具准备阻塞读题。
+
+本次为限时测试，请限制访谈范围：
+- 先提炼已经确定的要求，不逐条向我重复确认。
+- 每轮最多 3 个问题，只问会改变数据模型、核心算法或交付范围的；一次性发出后等待我回复再推进。
+- 会改变数据模型、核心算法或交付范围的问题必须等我回复，不得以“推荐答案 + 待确认”的方式自行落盘；暂停的仅是依赖该答案的设计与实现，其他独立分支继续推进。
+- 从题目或代码能回答的自己查证。核心流程明确后先产出可执行版本，避免无限访谈。
+
+产出以下三份简洁文档：
+1. docs/requirements.md：目标、范围、角色与核心流程；以 R1、R2… 编号列出必须交付的要求，给出可观察的验收条件，并区分事实、假设和待确认项。覆盖适用的正常、边界、异常及权限行为，不扩张题目。本次业务口径（如筛选/聚合口径、数据归一化规则、关键截图清单）落到 docs/口径-checklist.md，供实现与验收对账。
+2. docs/technical-design.md：技术选型与约束、模块和数据流、核心数据模型与 API/交互契约、持久化与错误处理、必要的 UI 规范。每个核心模块回答两个问题——这个模块的接口为什么是这几个方法（去掉一个会怎样）？这个边界画错时返工代价是什么？基于现有技术简报和工程配置补齐设计；列出剩余依赖及用途，不自行安装。
+3. docs/execution-plan.md：按完整业务行为拆分实现顺序，先打通最小核心流程；每项关联需求编号、输入、产出、验收条件、允许修改的范围、前置契约及该任务的 HANDOFF 路径。明确哪些可并行、哪些必须先后执行，列出实现前必须解决的阻塞和可后补事项。
+
+测试设计从需求独立推导：用具体输入、动作和预期结果描述用例；按风险分配单元、组件、接口和少量关键 E2E。优先边界值、无效输入、状态转换，以及题目涉及的重复提交、并发或权限，不为覆盖率堆砌无关测试。遇到核心算法或 UI 方向真的拿不准时，用 prototype skill 做丢弃式验证再定稿，不把不确定性带进实现。
+
+文件归属：你只写上述三份文档、docs/口径-checklist.md 与 docs/需求分析-HANDOFF.md，不修改工程配置、package.json、锁文件、AGENTS.md 或 README。原型若需要在 docs/prototypes/ 建独立子目录隔离，验收前清理。新增依赖与结构调整在技术设计中列成「工程补充清单」，交给工程会话统一处理。
+
+核心验收与第一条业务流程明确时主动报告“需求已可开工”，列出仍会影响实现的决定。每 5 分钟汇报一次；关键节点和压缩上下文前更新需求分析交接。完成后交接，不直接写业务代码。</pre></details></div></div></section><section class="step" id="build" aria-labelledby="title-build">
+    <div class="step-side"><span class="number">04</span><h2 id="title-build">用 Goal 推进实现</h2><span class="chat">工程会话 A · 接管业务实现</span></div>
+    <div class="step-card"><div class="step-body"><span class="label">核心需求与基础汇合</span><p class="action">确认会话 B 已交接，基础配置文件不再被其他会话修改。在支持 Goal 的 Codex 中，将下面整段作为 /goal 命令发送；补上截止时间。</p><div class="ready"><b>进入下一步：</b>必交需求有对应实现与验证证据，交付物可复现运行，进入第 ⑤ 步独立验收。</div><p class="output">产出 / 可运行项目、测试与交付证据</p><p class="hint">仅在支持 Goal 的 Codex 环境中使用 <span class="inline">/goal</span>；不支持时去掉此前缀，按普通任务发送正文。Goal 完成仍需验收。<a href="https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex" target="_blank" rel="noopener noreferrer">官方用法 ↗</a></p></div>
+    <div class="prompt"><div class="promptbar"><span class="prompt-title">提示词 04 · 可直接复制</span><button class="copy" data-copy="prompt-build" aria-label="复制用 Goal 推进实现提示词">复制提示词</button></div><details ><summary>展开 / 收起提示词</summary><pre id="prompt-build">/goal 按 docs/task.md 交付。考试截止：[填写日期、时间及时区]。
+
+先读根 AGENTS.md 与本任务涉及目录的 AGENTS.md，再读直接依赖的 docs/工程初始化-HANDOFF.md、docs/需求分析-HANDOFF.md，以及本任务的 docs/功能实现-HANDOFF.md（已有时）。按其中定义的迭代流程、测试规则、UI 规范、交接节奏执行；若 requirements.md 与原题冲突以原题为准并修正文档。核对当前代码、检查状态与工程补充清单，仅补齐影响本任务的依赖或配置；发现其他会话仍在改写同一文件先协调归属。
+
+本次任务参数：
+- 以 requirements.md 的必交需求为验收基准；围绕剩余时间优先完成全部必交项，不自行把必交项降为可选，不增加题外功能。
+- 核心算法用 tdd skill 推进，疑难失败用 diagnosing-bugs，核心算法或 UI 方向真拿不准时用 prototype 做丢弃式验证再定稿。
+- 项目包含前端时，读取实际前端目录的 AGENTS.md 中的 UI 规则，首次搭页面与每次改动后同步更新 docs/ui-checklist.md（逐条“通过/未通过 + 证据位置”，不写整体结论）；本次业务口径从 docs/口径-checklist.md 取。
+
+本轮 Goal 以“实现完成，可交付验收”为终点：
+- 必交行为已实现，docs/verification.md 已记录 R1…Rn 对照表、相关检查与 E2E 结果；未验证项如实记录。存在影响必交行为的缺口时报告阻塞，不宣称实现完成。
+- README 的安装、配置与运行步骤已更新，适用的依赖锁文件、环境变量样例及种子数据已就绪。
+- 当前工程规则与执行计划已同步；更新本任务的 docs/功能实现-HANDOFF.md，列明验证证据、实际问题及处理结果、残余风险和验收入口。
+完整六维交付条件由第 ⑤ 步核验；本轮不以验收 HANDOFF、冷启动演示或最终 lessons.md 为结束前提，不提前编写验收结论。
+
+遇到外部阻塞如实记录影响并继续不受影响的工作；未验证不写成通过。最后给出实现证据位置、本任务 HANDOFF 路径、复现步骤、交付文件与残余风险，交接给第 ⑤ 步执行最终验收。</pre></details></div></div></section><section class="step" id="accept" aria-labelledby="title-accept">
+    <div class="step-side"><span class="number">05</span><h2 id="title-accept">执行验收</h2><span class="chat">会话 B 切换为测试验证角色</span></div>
+    <div class="step-card"><div class="step-body"><span class="label">从原题核对交付</span><p class="action">实现会话交接后，让会话 B 重新读取当前文件并执行验收。此时由它独占必要的修复写入；不要与实现会话同时改同一份代码。</p><div class="ready"><b>进入下一步：</b>所有必交项有可信证据；未通过项修复并复验。按题目要求整理提交内容，由你检查并提交。</div><p class="output">产出 / 逐项验收结论、问题修复、提交清单</p></div>
+    <div class="prompt"><div class="promptbar"><span class="prompt-title">提示词 05 · 可直接复制</span><button class="copy" data-copy="prompt-accept" aria-label="复制执行验收提示词">复制提示词</button></div><details ><summary>展开 / 收起提示词</summary><pre id="prompt-accept">现在执行最终验收。请切换到测试验证角色，重新读取当前仓库，不依赖此前聊天中的旧状态。
+
+以 docs/task.md 原题和考试规则为最高依据，读取 AGENTS.md、docs/requirements.md、docs/technical-design.md、docs/execution-plan.md、docs/verification.md、直接依赖的 docs/功能实现-HANDOFF.md 与本任务的 docs/验收-HANDOFF.md（已有时），核对实际提交内容。本会话只维护验收任务的 HANDOFF。
+
+按分层验证推进，各层只在本层边界内判断，复用已有可信证据，缺失/过期/受影响部分补跑：
+- L1 功能正确性（AI 自动）：pnpm check 聚合与 E2E 必交路径的输出完整有效；单元/组件/API 集成/E2E 证据与对应代码状态写入 docs/verification.md。E2E 未就绪时端到端一项标记未完成，不以组件测试替代。
+- L2 规则合规性（AI 自检按清单）：核对本项目适用的 docs/ui-checklist.md 与 docs/口径-checklist.md，规则源在根与实际相关子目录的 AGENTS.md，不与检查表双写；逐条勾选“通过/未通过 + 证据位置”，未通过直接修。遇到 requirements.md 与原题冲突以原题为准，并在 verification.md 记录冲突。
+- L3 质量抽查（用户决定）：README 启动后截取需求关键页面（具体清单来自 docs/口径-checklist.md）附在 docs/验收-HANDOFF.md 顶部，等用户看截图反馈再定稿；不自评 UI 整体感。
+- L4 协作能力演示（证明 Agent 可接手）：另开一个无状态会话，只提供仓库，要求它通过 AGENTS.md 的文档路由与执行计划定位当前任务指定的 HANDOFF，按需读取直接依赖任务的交接，不按修改时间猜测；产出三行“我要接着做什么 / 当前阻塞 / 第一步执行什么”，粘回 docs/handoff-smoke-test.md 作为证据。
+
+1. 建立逐项验收表：每个必交要求对应实际实现、验证方法、证据与结论。检查已有需求文档是否遗漏原题要求，不能只验收实现者自己列出的项目。
+2. 审查关键实现与测试：正确性、边界和错误处理、模块边界、必要的安全与数据一致性、UI 状态及交互。按任务需要调用已安装 code-review，并依据其要求指定真实可解析的审查基线；没有有效 Git 基线时明确限制，直接审阅实际交付文件，不伪造 diff 审查结果。
+3. 补齐关键验证缺口，预期来自题目或独立规则。对同一代码状态已有可信结果不机械重跑；结果缺失、过期或有疑点时执行对应检查。完整检查避免重复构建，E2E 使用与当前源码匹配的产物。
+4. 按 README 实际启动并走通核心使用流程，确认环境变量、持久化及题目要求的交付方式。管理服务就绪和进程清理；若需供我查看，明确访问地址、操作步骤与保留的进程。环境受限时写“未验证”及具体原因，不能写成通过。
+5. 直接修复当前范围内的确定缺陷并执行相关回归；发现会改变题意或范围的重大问题先报告。与实现会话保持单一写入方，不为验收通过而删除失败测试或削弱要求。
+6. 更新 docs/verification.md 与 docs/验收-HANDOFF.md。确认 Git 状态、忽略规则、提交文件及 README；不要提交密钥、依赖目录或无关临时产物，构建产物是否提交以题目为准。
+7. 产出 docs/lessons.md：每条含现象（引用 HANDOFF 某段或某次检查输出）、触发条件、本次处理结果，并按优先级分类——能用回归测试防止的已补测试、能用配置或脚本约束的已落自动检查、需要判断的长期经验已写入项目规则或 Skill、一次性排查记录留在 HANDOFF；允许无新模式，但需说明本次所有问题都被旧规则覆盖的证据，不凑数。
+
+完成上述工作后，核验完整六维交付条件；任一维度未通过或未验证，不能宣称完整交付：
+- 考题完成 → docs/verification.md 的 R1…Rn 对照表 + E2E 必交路径全绿（E2E 浏览器未就绪时端到端标记未完成，不以组件测试等价替代）。
+- 工程可复现 → README 从空目录到运行的完整步骤，含锁文件、环境变量样例、适用的种子数据与运行入口。
+- 质量可持续 → verification.md 中最后一次 pnpm check 的输出及对应代码状态记录，改动后未重跑的项目视为过期。
+- Agent 可接手 → 根与相关子目录的 AGENTS.md 指向当前规则，执行计划明确任务对应的 HANDOFF 路径。
+- 协作可扩展 → execution-plan.md 的任务依赖与改动范围表 + 工程/需求/实现/验收 HANDOFF 的实际交接痕迹。
+- 经验可积累 → lessons.md 每条有现象、处理结果（已补回归 / 已自动化 / 已写入规则 / 一次性记录），能自动化防住的优先自动化。
+
+最终只报告：必交要求通过情况、实际验证证据、未通过/未验证项、我复现的最短步骤、按考试规则应提交的文件或操作。不能在仍有必交项未完成时宣称全部通过。未经我明确指示，不向考试平台提交或对外发布。</pre></details></div></div></section>
+<section class="handoff"><h2>文档放在哪里</h2><table class="routes"><tbody>
+<tr><td>AGENTS.md / 相关子目录的 AGENTS.md / README.md</td><td>长期工程规则按根与实际目录分层 / 安装与运行入口</td></tr>
+<tr><td>docs/task.md<br>docs/technical-brief.md</td><td>原题与考试规则 / 读题阶段的技术启动简报</td></tr>
+<tr><td>docs/requirements.md<br>docs/technical-design.md<br>docs/execution-plan.md<br>docs/口径-checklist.md</td><td>需求与验收编号 / 技术设计与依赖补充 / 按行为拆分的执行计划 / 本次业务口径与关键截图清单</td></tr>
+<tr><td>docs/agent-roles/</td><td>需求规划、功能实现、测试验证的职责说明</td></tr>
+<tr><td>docs/verification.md<br>docs/ui-checklist.md<br>docs/handoff-smoke-test.md<br>docs/lessons.md</td><td>L1 验证证据与未验证项 / L2 UI 规则逐条勾选 / L4 新 agent 冷启动演示 / 本次新发现的 AI 失败模式与处理结果</td></tr>
+<tr><td>docs/&lt;任务名&gt;-HANDOFF.md</td><td>当前状态、决定、阻塞与下一步；同一任务更新同一份</td></tr>
+</tbody></table><p class="hint">长期规则与阶段状态分开维护；文档写到能接着做就够，不为填满结构制造无效内容。</p></section></div>
+<footer class="footer">个人操作手册 · 依据当前工程初始化提示词整理 · 2026-10-23<br>实际操作以考试规则为准。Skills 从 <a href="https://github.com/mattpocock/skills" target="_blank" rel="noopener noreferrer">Matt Pocock</a> 上游获取；安装及调用方式在执行时核对。</footer><div id="toast" role="status" aria-live="polite"></div>
+</div>
+<section class="lesson-related" aria-labelledby="related-title"><h2 id="related-title">继续学习</h2><a href="./learn-llm-study.html">大模型是怎样学会与回答的？ →</a><a href="./learn-aime-paper.html">AIME：交互式中文论文解读 →</a><a href="./learn-react-token-accumulation.html">ReAct token 如何累积 →</a><a class="back" href="./learning.html">← 全部交互式学习</a></section></article>
+<section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section></main><footer class="site-footer"><span>zwhu / Tech &amp; Notes</span><a href="./learning.html">交互式学习 →</a></footer>
+<script src="./assets/learning/ai-coding-playbook.js"></script><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></body></html>

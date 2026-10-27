@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="逐步走过阈值检查、切点选择、摘要与上下文重建，对比标准压缩、超大单轮和再次压缩。"><title>Pi 上下文压缩流程 · 交互式学习 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="stylesheet" href="./assets/learning/pi-compaction.css"><link rel="stylesheet" href="./learning.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head>
+<body class="learning-page"><a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html" aria-current="page">交互式学习</a><a href="./index.html#about">关于</a></nav></header>
+<main id="main" class="learning-main"><article class="learning-article"><div class="lesson-heading"><a class="back" href="./learning.html">← 交互式学习</a><h1>Pi 上下文压缩流程</h1><p class="meta">上下文 · 分步讲解 · 整理于 2026-10-27</p><p class="lesson-summary">逐步走过阈值检查、切点选择、摘要与上下文重建，对比标准压缩、超大单轮和再次压缩。</p></div>
+<div class="learning-content lesson-pi-compaction"><div id="pi-compaction-explainer">
+  
+
+  <div class="viz-controls pc-controls" aria-label="压缩场景">
+    <button type="button" class="btn btn-primary" data-scenario="normal" aria-pressed="true">标准压缩</button>
+    <button type="button" class="btn" data-scenario="split" aria-pressed="false">超大单轮</button>
+    <button type="button" class="btn" data-scenario="repeat" aria-pressed="false">再次压缩</button>
+  </div>
+
+  <p class="diagram-hint">点击场景并按“下一步”推进；窄屏可左右滑动流程图。</p><div class="pc-flow-wrap" tabindex="0" role="region" aria-label="压缩流程图，可横向滚动">
+    <svg class="pc-flow" viewBox="0 0 1000 168" role="img" aria-labelledby="pc-flow-title pc-flow-desc">
+      <title id="pc-flow-title">Pi 上下文压缩流程</title>
+      <desc id="pc-flow-desc">从 token 阈值检查，经切分、序列化、模型总结、写入压缩记录，最终重建上下文。</desc>
+      <defs>
+        <marker id="pc-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted-foreground)"></path>
+        </marker>
+      </defs>
+      <g id="pc-arrows"></g>
+      <g id="pc-nodes"></g>
+    </svg>
+  </div>
+
+  <div class="viz-controls" aria-label="流程步进">
+    <button type="button" class="btn" id="pc-prev"><i data-lucide="arrow-left" aria-hidden="true"></i>上一步</button>
+    <span class="viz-badge" id="pc-step-count">1 / 6</span>
+    <button type="button" class="btn btn-primary" id="pc-next">下一步<i data-lucide="arrow-right" aria-hidden="true"></i></button>
+  </div>
+  <div class="pc-step-detail" id="pc-step-detail" aria-live="polite"></div>
+
+  <div class="viz-grid">
+    <div class="card viz-stat">
+      <div class="text-muted">当前上下文</div>
+      <div class="viz-stat-value" id="pc-current">118,400 tokens</div>
+      <div id="pc-threshold-status">超过阈值 6,784</div>
+    </div>
+    <div class="card viz-stat">
+      <div class="text-muted">触发阈值</div>
+      <div class="viz-stat-value" id="pc-threshold">111,616 tokens</div>
+      <div><code>128k − 16,384</code></div>
+    </div>
+    <div class="card viz-stat">
+      <div class="text-muted">近期原文保留</div>
+      <div class="viz-stat-value" id="pc-kept-value">≈ 20,000 tokens</div>
+      <div>从最新消息向前累计</div>
+    </div>
+  </div>
+
+  <div class="pc-context-bar" role="img" aria-label="压缩前后的上下文组成" id="pc-context-bar">
+    <div class="pc-segment pc-old" id="pc-old"><span>旧历史 98.4k</span></div>
+    <div class="pc-segment pc-kept" id="pc-kept"><span>近期原文 20k</span></div>
+    <div class="pc-segment pc-reserve" id="pc-reserve"><span>预留 16.4k</span></div>
+  </div>
+  <div class="pc-legend text-small text-muted">
+    <span class="pc-legend-item"><span class="pc-swatch pc-old"></span>被摘要的旧内容</span>
+    <span class="pc-legend-item"><span class="pc-swatch pc-summary"></span>LLM 结构化摘要</span>
+    <span class="pc-legend-item"><span class="pc-swatch pc-kept"></span>原样保留的近期内容</span>
+    <span class="pc-legend-item"><span class="pc-swatch pc-reserve"></span>输出预留</span>
+  </div>
+
+  <h2>输入与输出示例</h2>
+  <div class="pc-example-grid">
+    <section class="card" aria-labelledby="pc-input-title">
+      <h3 id="pc-input-title">进入摘要模型的输入</h3>
+      <pre id="pc-example-input"><code>[Previous summary]
+用户正在重构支付模块……
+
+[User]
+把重试逻辑迁移到 PaymentRetryPolicy。
+
+[Assistant tool calls]
+read(path="src/payment/service.ts")
+edit(path="src/payment/retry-policy.ts", ...)
+
+[Tool result]
+测试失败：timeout 分支仍调用旧实现……</code></pre>
+    </section>
+    <section class="card" aria-labelledby="pc-output-title">
+      <h3 id="pc-output-title">生成并持久化的输出</h3>
+      <pre id="pc-example-output"><code>## Goal
+重构支付重试逻辑并保持行为兼容。
+
+## Progress
+### Done
+- [x] 新建 PaymentRetryPolicy
+### In Progress
+- [ ] 迁移 timeout 分支
+
+## Key Decisions
+- 策略对象不负责记录 usage。
+
+## Next Steps
+1. 修改 service.ts
+2. 运行 payment 测试
+
+&lt;read-files&gt;src/payment/service.ts&lt;/read-files&gt;
+&lt;modified-files&gt;src/payment/retry-policy.ts&lt;/modified-files&gt;</code></pre>
+    </section>
+  </div>
+
+  <h2>SessionEntry 如何变化</h2>
+  <div class="pc-entry-tree" aria-label="压缩记录示意">
+    <div class="pc-entry-row" id="pc-entry-row"></div>
+    <div class="pc-session-context" id="pc-session-context"></div>
+  </div>
+  <div class="pc-callout">
+    <strong>原始记录不会被删除。</strong>
+    <span id="pc-persistence-note">新增的 <code>CompactionEntry</code> 只决定下一次构造模型上下文时，哪些历史由摘要替代。</span>
+  </div>
+
+  <h2>关键代码位置</h2>
+  <div class="table-responsive">
+    <table class="table table-sm">
+      <thead>
+        <tr><th>阶段</th><th>函数 / 类型</th><th>位置</th><th>职责</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Token 计算与触发</td>
+          <td class="pc-function"><code>estimateContextTokens</code><br><code>shouldCompact</code></td>
+          <td><a href="https://github.com/earendil-works/pi/blob/main/packages/coding-agent/src/core/compaction/compaction.ts">core/compaction/compaction.ts</a></td>
+          <td>优先使用最近一次有效 assistant usage；尾部消息按约 <code>字符数 / 4</code> 估算，并判断是否越过阈值。</td>
+        </tr>
+        <tr>
+          <td>寻找切点</td>
+          <td class="pc-function"><code>findCutPoint</code><br><code>findTurnStartIndex</code></td>
+          <td><a href="https://github.com/earendil-works/pi/blob/main/packages/coding-agent/src/core/compaction/compaction.ts">core/compaction/compaction.ts</a></td>
+          <td>从后向前保留近期 token；不以 <code>toolResult</code> 作为切点，并识别单轮被拆分的情况。</td>
+        </tr>
+        <tr>
+          <td>准备与生成</td>
+          <td class="pc-function"><code>prepareCompaction</code><br><code>compact</code></td>
+          <td><a href="https://github.com/earendil-works/pi/blob/main/packages/coding-agent/src/core/compaction/compaction.ts">core/compaction/compaction.ts</a></td>
+          <td>整理待摘要消息、上次摘要、文件操作；调用模型并合并 split-turn 摘要。</td>
+        </tr>
+        <tr>
+          <td>消息序列化</td>
+          <td class="pc-function"><code>serializeConversation</code></td>
+          <td><a href="https://github.com/earendil-works/pi/blob/main/packages/coding-agent/src/core/compaction/utils.ts">core/compaction/utils.ts</a></td>
+          <td>将消息转成带角色标签的纯文本；工具结果在摘要输入中最多保留约 2,000 字符。</td>
+        </tr>
+        <tr>
+          <td>记录与恢复</td>
+          <td class="pc-function"><code>CompactionEntry</code><br><code>buildSessionContext</code></td>
+          <td><a href="https://github.com/earendil-works/pi/blob/main/packages/coding-agent/src/core/session-manager.ts">core/session-manager.ts</a></td>
+          <td>保存 <code>summary</code>、<code>firstKeptEntryId</code>、<code>tokensBefore</code>，恢复为“摘要 + 近期原文”。</td>
+        </tr>
+        <tr>
+          <td>本项目持久化约束</td>
+          <td class="pc-function"><code>pi_session_entries</code></td>
+          <td><code>docs/architecture.md §7.3 / §8.2 / §8.3 / M3</code></td>
+          <td>Pi SessionEntry 作为 append-only 原始事实写入 PostgreSQL；投影可重建，不能修改或删除原始历史。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-small text-muted pc-footnote">仓库当前只有架构文档，尚无已安装依赖或锁文件；函数位置依据 Pi 上游源码梳理。接入锁定版本后，应以 <code>node_modules</code> 中对应版本为最终依据。</p>
+
+  
+</div>
+</div>
+<section class="lesson-related" aria-labelledby="related-title"><h2 id="related-title">继续学习</h2><a href="./learn-llm-study.html">大模型是怎样学会与回答的？ →</a><a href="./learn-aime-paper.html">AIME：交互式中文论文解读 →</a><a href="./learn-react-token-accumulation.html">ReAct token 如何累积 →</a><a class="back" href="./learning.html">← 全部交互式学习</a></section></article>
+<section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section></main><footer class="site-footer"><span>zwhu / Tech &amp; Notes</span><a href="./learning.html">交互式学习 →</a></footer>
+<script src="./assets/learning/pi-compaction.js"></script><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></body></html>

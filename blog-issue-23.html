@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="昨天被问到「你学编译原理有什么用，对你现在的工作有什么帮助吗？」"><title>学「编译原理」能干嘛 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>学「编译原理」能干嘛</h1><div class="meta"><time datetime="2016-03-11">2016-03-11</time> · 随笔 · 思考 · <a href="https://github.com/zwhu/blog/issues/23">原 issue #23 ↗</a></div><div class="prose"><p>昨天被问到「你学编译原理有什么用，对你现在的工作有什么帮助吗？」</p>
+<p>我当时脑袋不太好，没有很好地回答出来，只说了一些关于 JavaScript 的变量提升方面的东西。直到今天下午我读 w3c 的 rfc2612 规范的时候，我才意识到学习编译原理对我的帮助和影响。</p>
+<p>在 rfc2612 规范中定义了一系列的 Catch-Control 的指令如下:</p>
+<div><pre>    Cache-Control   = <span><span>"</span>Cache-Control<span>"</span></span> <span><span>"</span>:<span>"</span></span> 1#cache-directive
+    cache-directive = cache-request-directive
+         <span>|</span> cache-response-directive
+    cache-request-directive =
+           <span><span>"</span>no-cache<span>"</span></span>                          <span>;</span> Section 14.9.1
+         <span>|</span> <span><span>"</span>no-store<span>"</span></span>                          <span>;</span> Section 14.9.2
+         <span>|</span> <span><span>"</span>max-age<span>"</span></span> <span><span>"</span>=<span>"</span></span> delta-seconds         <span>;</span> Section 14.9.3, 14.9.4
+         <span>|</span> <span><span>"</span>max-stale<span>"</span></span> [ <span><span>"</span>=<span>"</span></span> delta-seconds ]   <span>;</span> Section 14.9.3
+         <span>|</span> <span><span>"</span>min-fresh<span>"</span></span> <span><span>"</span>=<span>"</span></span> delta-seconds       <span>;</span> Section 14.9.3
+         <span>|</span> <span><span>"</span>no-transform<span>"</span></span>                      <span>;</span> Section 14.9.5
+         <span>|</span> <span><span>"</span>only-if-cached<span>"</span></span>                    <span>;</span> Section 14.9.4
+         <span>|</span> cache-extension                     <span>;</span> Section 14.9.6
+     cache-response-directive =
+           <span><span>"</span>public<span>"</span></span>                               <span>;</span> Section 14.9.1
+         <span>|</span> <span><span>"</span>private<span>"</span></span> [ <span><span>"</span>=<span>"</span></span> <span>&lt;</span><span><span>"</span>&gt; 1#field-name &lt;<span>"</span></span><span>&gt;</span> ] <span>;</span> Section 14.9.1
+         <span>|</span> <span><span>"</span>no-cache<span>"</span></span> [ <span><span>"</span>=<span>"</span></span> <span>&lt;</span><span><span>"</span>&gt; 1#field-name &lt;<span>"</span></span><span>&gt;</span> ]<span>;</span> Section 14.9.1
+         <span>|</span> <span><span>"</span>no-store<span>"</span></span>                             <span>;</span> Section 14.9.2
+         <span>|</span> <span><span>"</span>no-transform<span>"</span></span>                         <span>;</span> Section 14.9.5
+         <span>|</span> <span><span>"</span>must-revalidate<span>"</span></span>                      <span>;</span> Section 14.9.4
+         <span>|</span> <span><span>"</span>proxy-revalidate<span>"</span></span>                     <span>;</span> Section 14.9.4
+         <span>|</span> <span><span>"</span>max-age<span>"</span></span> <span><span>"</span>=<span>"</span></span> delta-seconds            <span>;</span> Section 14.9.3
+         <span>|</span> <span><span>"</span>s-maxage<span>"</span></span> <span><span>"</span>=<span>"</span></span> delta-seconds           <span>;</span> Section 14.9.3
+         <span>|</span> cache-extension                        <span>;</span> Section 14.9.6
+    cache-extension = token [ <span><span>"</span>=<span>"</span></span> ( token <span>|</span> quoted-string ) ]
+</pre></div>
+<p>看到上面一段内容，我脑海里自然地就知道这是 cache-control 的 <code>DSL</code>，定义了 cache-control 的写法。</p>
+<p>讲道理，学「编译原理」或者「算法」这种基础学科，也许对目前的工作确实没有什么明显的帮助，但是它终究会在你无意识的情形下，润物细无声的影响你。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-24.html">较新一篇：当我谈缓存的时候，我谈些什么</a><a href="./blog-issue-22.html">较早一篇：Javascript 中的惰性加载</a></nav></article><section class="historical-comments" aria-labelledby="history-title"><h2 id="history-title">历史评论</h2><p class="comments-status">以下为原 issue 的评论存档；新评论可在下方发表。</p><article class="historical-comment" id="issuecomment-195864870"><div class="meta">limichange · <time datetime="2016-03-13T04:08:44Z">2016-03-13</time> · <a href="https://github.com/zwhu/blog/issues/23#issuecomment-195864870">原评论 ↗</a></div><div class="prose"><p>原理和基础这些都是下层建筑，这些知识的作用往往都是做支撑，是沉淀。</p></div></article><article class="historical-comment" id="issuecomment-195962513"><div class="meta">zwhu · <time datetime="2016-03-13T14:13:09Z">2016-03-13</time> · <a href="https://github.com/zwhu/blog/issues/23#issuecomment-195962513">原评论 ↗</a></div><div class="prose"><p><a href="https://github.com/limichange">@limichange</a> 对</p></div></article></section><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

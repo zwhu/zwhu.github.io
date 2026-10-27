@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="首先声明，本文所有的代码都是在 ES6 下面运行，ES5需要修改之后才能运行，但是本文没有涉及到太多的ES6新特性，而且由于v8对u修饰符不支持，最后的实现也基本是用ES5的知识写的代码。"><title>正则表达式巧用 Unicode 匹配特殊字符 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>正则表达式巧用 Unicode 匹配特殊字符</h1><div class="meta"><time datetime="2015-09-15">2015-09-15</time> ·  · <a href="https://github.com/zwhu/blog/issues/4">原 issue #4 ↗</a></div><div class="prose"><h1>正则表达式巧用 Unicode 匹配特殊字符</h1>
+<p>作者 @<a href="https://github.com/zwhu">zwhu</a></p>
+<p>原文章 @<a href="./blog-issue-4.html">github</a></p>
+<p>首先声明，本文所有的代码都是在 ES6 下面运行，ES5需要修改之后才能运行，但是本文没有涉及到太多的ES6新特性，而且由于v8对u修饰符不支持，最后的实现也基本是用ES5的知识写的代码。</p>
+<p>最初我只是想记录下正则表达式用unicode的方式来匹配特殊字符，写着写着发现 v8 对 u 修饰符的不支持，又转而去研究怎么转换字符串到utf-16的格式，在研究怎么转换的过程中发现ES5的正则对 unicode 编码单元 &gt; 0x10000 的字符串不支持，再转而去实现了一遍对大于 0x10000 的字符串的转换，特此记录。</p>
+<p>之前有遇到过一个实用正则表达式匹配特殊字符的需求，例如一段文本 <code>'ab*cd$你好我也好]\nseg$me*ntfault\nhello,world'</code>，用户可以选择用 * 或者 $ 来分割字符串。</p>
+<p>在javascript中，<code>$</code> 和 <code>*</code> 都是预定义的特殊字符，不能直接写在正则表达式中，而需要转义，写成 <code>/\$/</code>或者<code>/\*/</code>。<br>
+我们需要根据用户的选择来写正则表达式，封装成一个函数就是:</p>
+<div><pre><span>function</span> <span>reg</span><span>(</span><span>input</span><span>)</span> <span>{</span>
+    <span>return</span> <span>new</span> <span>RegExp</span><span>(</span><span>`\\<span><span>${</span><span>input</span><span>}</span></span>`</span><span>)</span>
+<span>}</span></pre></div>
+<p>这种写法初看上去很美好，将字符都转义之后遇到一些特殊的字符可以匹配，然而现实是残酷的：当用户输入的是<code>n</code>或者<code>t</code>这一类的字符的话，返回的正则表达式为<code>/\n/</code>或者<code>/\t/</code>,匹配的就是所有的制表符，这就违背了用户的初衷。</p>
+<p>通常有一种写法就是把所有需要转义的特殊字符都列出来，然后再逐一匹配，这种写法很耗费精力，而且可能因为没有统计到的特殊字符而出现漏匹配的情况。</p>
+<p>这个时候unicode就隆重登场了，在 <code>JavaScript</code> 中，我们也可以用unicode来表示一个字符，例如 'a' 可以写成'\u{61}'， '你' 也可以写成 '\u{4f60}'。</p>
+<p>关于unicode的介绍大家可以看 <a href="http://www.ruanyifeng.com/blog/2014/12/unicode.html">Unicode与JavaScript详解</a></p>
+<p><code>ES5</code>中提供了 <code>charCodeAt()</code> 方法来返回指定索引处字符的 Unicode 数值，但是 Unicode 编码单元 &gt; 0x10000 的除外，<code>ES2015</code> 中又增加了一个新的方法 <code>codePointAt()</code> 可以返回大于 0x10000 字符串的数值。返回的数值是十进制的，此时我们还需要通过<code>toString(16)</code>转成16进制。<br>
+封装之后的函数如下</p>
+<div><pre><span>function</span> <span>toUnicode</span><span>(</span><span>s</span><span>)</span> <span>{</span>
+    <span>return</span> <span>`\\u{<span><span>${</span><span>s</span><span>.</span><span>codePointAt</span><span>(</span><span>)</span><span>.</span><span>toString</span><span>(</span><span>16</span><span>)</span><span>}</span></span>}`</span>
+<span>}</span>
+
+<span>toUnicode</span><span>(</span><span>'$'</span><span>)</span> <span>-</span><span>&gt;</span> <span>'\u{24}'</span></pre></div>
+<p>重新封装reg函数为</p>
+<div><pre><span>function</span> <span>reg</span><span>(</span><span>input</span><span>)</span> <span>{</span>
+    <span>return</span> <span>new</span> <span>RegExp</span><span>(</span><span>`<span><span>${</span><span>toUnicode</span><span>(</span><span>input</span><span>)</span><span>}</span></span>`</span><span>,</span> <span>'u'</span><span>)</span>
+<span>}</span></pre></div>
+<p>其实写到这里，我希望是对的，但是很不幸，V8 不支持 RegExp 的 u 修饰符。V8支持的话，写到这里就应该结束了，没关系，这里只是提供一种用unicode的方式来转义特殊字符的思想。</p>
+<p>虽然v8不支持u修饰符，作为一个有追求的码农，当然不能止步于此，我们也可以使用其他方法继续把这个完善</p>
+<div><pre><span>function</span> <span>toUnicode</span><span>(</span><span>s</span><span>)</span> <span>{</span>
+  <span>var</span> <span>a</span> <span>=</span> <span>`\\u<span><span>${</span><span>utf</span><span>(</span><span>s</span><span>.</span><span>charCodeAt</span><span>(</span><span>0</span><span>)</span><span>.</span><span>toString</span><span>(</span><span>16</span><span>)</span><span>)</span><span>}</span></span>`</span>
+  <span>if</span><span>(</span><span>s</span><span>.</span><span>charCodeAt</span><span>(</span><span>1</span><span>)</span><span>)</span>
+    <span>a</span> <span>=</span> <span>`<span><span>${</span><span>a</span><span>}</span></span>\\u<span><span>${</span><span>utf</span><span>(</span><span>s</span><span>.</span><span>charCodeAt</span><span>(</span><span>1</span><span>)</span><span>.</span><span>toString</span><span>(</span><span>16</span><span>)</span><span>)</span><span>}</span></span>`</span> 
+  <span>return</span> <span>a</span>      
+<span>}</span>
+
+<span>function</span> <span>utf</span><span>(</span><span>s</span><span>)</span> <span>{</span>
+    <span>return</span> <span>Array</span><span>.</span><span>from</span><span>(</span><span>'00'</span><span>)</span><span>.</span><span>concat</span><span>(</span><span>Array</span><span>.</span><span>from</span><span>(</span><span>s</span><span>)</span><span>)</span><span>.</span><span>slice</span><span>(</span><span>-</span><span>4</span><span>)</span><span>.</span><span>join</span><span>(</span><span>''</span><span>)</span>
+<span>}</span>
+
+<span>// 这里用var而没有用let声明，是因为这些代码直接复制到 chrome 的控制台下就可以看到执行结果</span>
+<span>// 测试一下</span>
+<span>// toUnicode('a')   --&gt; "\u0061"</span>
+<span>// toUnitcode('𠮷')  --&gt; "\ud842\udfb7"</span>
+
+<span>function</span> <span>reg</span><span>(</span><span>input</span><span>)</span> <span>{</span>
+    <span>return</span> <span>new</span> <span>RegExp</span><span>(</span><span>`<span><span>${</span><span>toUnicode</span><span>(</span><span>input</span><span>)</span><span>}</span></span>`</span><span>)</span>
+<span>}</span>
+<span>// 再测试一下</span>
+<span>reg</span><span>(</span><span>'$'</span><span>)</span><span>.</span><span>test</span><span>(</span><span>'$'</span><span>)</span> <span>--</span><span>&gt;</span> <span>true</span></pre></div></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-5.html">较新一篇：一个人的团队（一）</a><a href="./blog-issue-3.html">较早一篇：JavaScript String 转到 UTF-16 编码</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>

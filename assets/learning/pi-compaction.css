@@ -1,0 +1,46 @@
+.lesson-pi-compaction #pi-compaction-explainer{
+      color:var(--foreground);
+      width:100%;
+    }
+.lesson-pi-compaction #pi-compaction-explainer .pc-controls{ margin-bottom:18px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow-wrap{ margin:8px 0 16px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow{ width:100%; height:auto; display:block; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow text{ fill:var(--foreground); font-family:inherit; font-weight:400; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .muted-label{ fill:var(--muted-foreground); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-node{ fill:color-mix(in srgb, var(--muted) 55%, transparent); stroke:var(--border); stroke-width:1.2; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-node.active{ fill:color-mix(in srgb, var(--viz-series-1) 18%, var(--card)); stroke:var(--viz-series-1); stroke-width:2; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-arrow{ stroke:var(--muted-foreground); stroke-width:1.4; fill:none; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-arrow.active{ stroke:var(--viz-series-1); stroke-width:2; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-step-detail{ min-height:62px; margin:8px 0 18px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-step-detail strong{ font-weight:500; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-context-bar{ display:flex; min-height:46px; margin:10px 0 6px; overflow:hidden; border-radius:4px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-segment{ display:flex; align-items:center; justify-content:center; padding:6px; text-align:center; transition:width 280ms ease; min-width:0; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-segment span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-old{ background:var(--code); color:var(--foreground); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-summary{ background:var(--code); color:var(--foreground); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-kept{ background:var(--code); color:var(--foreground); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-reserve{ background:color-mix(in srgb, var(--muted) 72%, transparent); color:var(--muted-foreground); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-legend{ display:flex; flex-wrap:wrap; gap:12px; margin-bottom:18px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-legend-item{ display:inline-flex; align-items:center; gap:6px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-swatch{ width:11px; height:11px; border-radius:4px; display:inline-block; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-example-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:10px 0 20px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-example-grid .card{ min-width:0; }
+.lesson-pi-compaction #pi-compaction-explainer pre{ white-space:pre-wrap; overflow-wrap:anywhere; margin:8px 0 0; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry-tree{ margin:12px 0 20px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry-row{ display:grid; grid-template-columns:repeat(10, minmax(46px, 1fr)); gap:4px; align-items:stretch; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry{ padding:8px 4px; text-align:center; background:color-mix(in srgb, var(--muted) 58%, transparent); border-radius:4px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry.compacted{ opacity:.48; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry.kept{ background:var(--code); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry.compaction{ background:var(--code); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-session-context{ margin-top:8px; padding:10px 0; color:var(--foreground); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-session-context code{ display:inline-block; margin:3px 3px 3px 0; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-callout{ border-left:3px solid var(--viz-series-1); padding-left:12px; margin:12px 0 20px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-function{ white-space:nowrap; }
+.lesson-pi-compaction #pi-compaction-explainer a{ color:var(--foreground); text-decoration:underline; text-decoration-color:var(--muted-foreground); text-underline-offset:2px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-footnote{ margin-top:10px; }
+@media (max-width: 620px){.lesson-pi-compaction #pi-compaction-explainer .pc-example-grid{ grid-template-columns:1fr; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry-row{ grid-template-columns:repeat(5, minmax(46px, 1fr)); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .node-sub{ display:none; }
+}
+@media (prefers-reduced-motion: reduce){.lesson-pi-compaction #pi-compaction-explainer .pc-segment{ transition:none; }
+}
