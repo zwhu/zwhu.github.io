@@ -2,6 +2,7 @@
   const container = document.querySelector('.giscus');
   const status = document.querySelector('.comments-status');
   const config = window.BLOG_COMMENTS;
+  if (config && config.enabled === false) return;
   if (!container || !config || !['repo', 'repoId', 'category', 'categoryId'].every(key => typeof config[key] === 'string' && config[key].trim())) return;
   const script = document.createElement('script');
   script.src = 'https://giscus.app/client.js';
