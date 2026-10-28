@@ -7,7 +7,7 @@
   const script = document.createElement('script');
   script.src = 'https://giscus.app/client.js';
   // giscus 在独立 iframe 内加载主题，需将站内相对路径解析为完整 URL。
-  const theme = new URL('./giscus-theme.css', document.currentScript.src).href;
+  const theme = new URL('./giscus-theme.css?v=2', document.currentScript.src).href;
   const options = {
     repo: config.repo, 'repo-id': config.repoId,
     category: config.category, 'category-id': config.categoryId,
