@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="330" height="694" viewBox="0 0 330 694" role="img" aria-labelledby="title" data-graph-type="flowchart">
+<title id="title">Vue：重复编译怎样丢失导入</title>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif}</style>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#77746e"/></marker></defs>
+<rect width="330" height="694" fill="#faf8f3" data-graph-role="background"/>
+<text x="24" y="32" font-size="15" font-weight="500" text-anchor="start" fill="#292825">Vue：重复编译怎样丢失导入</text>
+<text x="24" y="57" font-size="11" font-weight="400" text-anchor="start" fill="#77746e">简化的触发链；关注最终编译行为</text>
+<rect id="n0" data-node-id="n0" data-graph-role="node" data-graph-bounds="24,90,306,170" x="24" y="90" width="282" height="80" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="165.0" y="127.0" font-size="14" font-weight="500" text-anchor="middle" fill="#292825">首次分析模板</text>
+<text x="165.0" y="146.0" font-size="11" font-weight="400" text-anchor="middle" fill="#77746e">识别只在模板中使用的导入</text>
+<rect id="n1" data-node-id="n1" data-graph-role="node" data-graph-bounds="24,210,306,290" x="24" y="210" width="282" height="80" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="165.0" y="247.0" font-size="14" font-weight="500" text-anchor="middle" fill="#292825">模板被转换</text>
+<text x="165.0" y="266.0" font-size="11" font-weight="400" text-anchor="middle" fill="#77746e">模板 AST 的状态发生变化</text>
+<path id="e1" data-edge-id="e1" data-source="n0" data-target="n1" data-graph-role="edge" d="M165.0 170 L165.0 210" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect id="n2" data-node-id="n2" data-graph-role="node" data-graph-bounds="24,330,306,410" x="24" y="330" width="282" height="80" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="165.0" y="367.0" font-size="14" font-weight="500" text-anchor="middle" fill="#292825">分析缓存失效</text>
+<text x="165.0" y="386.0" font-size="11" font-weight="400" text-anchor="middle" fill="#77746e">先前的分析结果不再可用</text>
+<path id="e2" data-edge-id="e2" data-source="n1" data-target="n2" data-graph-role="edge" d="M165.0 290 L165.0 330" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect id="n3" data-node-id="n3" data-graph-role="node" data-graph-bounds="24,450,306,530" x="24" y="450" width="282" height="80" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="165.0" y="487.0" font-size="14" font-weight="500" text-anchor="middle" fill="#292825">再次分析已转换模板</text>
+<text x="165.0" y="506.0" font-size="11" font-weight="400" text-anchor="middle" fill="#77746e">可能漏掉模板使用的导入</text>
+<path id="e3" data-edge-id="e3" data-source="n2" data-target="n3" data-graph-role="edge" d="M165.0 410 L165.0 450" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect id="n4" data-node-id="n4" data-graph-role="node" data-graph-bounds="24,570,306,650" x="24" y="570" width="282" height="80" rx="4" fill="#faf8f3" stroke="#a64335"/>
+<text x="165.0" y="607.0" font-size="14" font-weight="500" text-anchor="middle" fill="#a64335">修复应保持的行为</text>
+<text x="165.0" y="626.0" font-size="11" font-weight="400" text-anchor="middle" fill="#77746e">重复编译后，导入与输出仍正确</text>
+<path id="e4" data-edge-id="e4" data-source="n3" data-target="n4" data-graph-role="edge" d="M165.0 530 L165.0 570" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+</svg>

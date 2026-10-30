@@ -16,6 +16,8 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[1]
 DATA = json.loads((ROOT / 'content/blog-issues.json').read_text())
 ISSUES = sorted(DATA['issues'], key=lambda i: i['created_at'], reverse=True)
+ORIGINALS_PATH = ROOT / 'content/original-articles.json'
+ORIGINALS = json.loads(ORIGINALS_PATH.read_text()) if ORIGINALS_PATH.exists() else []
 NUMBERS = {i['number'] for i in ISSUES}
 E = html.escape
 
@@ -132,7 +134,8 @@ def excerpt(issue):
 
 
 HEADER = '<a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header>'
-FOOTER = '<footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer></body></html>\n'
+ANALYTICS = """<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics -->"""
+FOOTER = '<footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer>' + ANALYTICS + '</body></html>\n'
 
 
 def page_head(title, description):
@@ -140,6 +143,8 @@ def page_head(title, description):
 
 
 def listing(issue):
+    if 'path' in issue:
+        return f'''<article class="post"><div class="post-top"><h3><a href="./{E(issue['path'], quote=True)}">{E(issue['title'])} <span class="post-arrow" aria-hidden="true">↗</span></a></h3><time datetime="{E(issue['date'])}">{E(issue['date'])}</time></div><p>{E(issue['excerpt'])}</p><span class="tags">{E(' · '.join(issue['labels']))}</span></article>\n'''
     return f'''<article class="post"><div class="post-top"><h3><a href="./{filename(issue)}">{E(issue['title'].strip())} <span class="post-arrow" aria-hidden="true">↗</span></a></h3><time datetime="{date(issue['created_at'])}">{date(issue['created_at'])}</time></div><p>{E(excerpt(issue))}</p><span class="tags">{E(' · '.join(issue['labels']) or '技术笔记')}</span></article>\n'''
 
 
@@ -160,15 +165,20 @@ for index, issue in enumerate(ISSUES):
         for comment in issue['comments']:
             content += f'<article class="historical-comment" id="issuecomment-{comment["id"]}"><div class="meta">{E(comment["author"])} · <time datetime="{comment["created_at"]}">{date(comment["created_at"])}</time> · <a href="{E(comment["html_url"])}">原评论 ↗</a></div><div class="prose">{body(comment["body_html"], issue["html_url"])}</div></article>'
         content += '</section>'
-    content += '<section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=4" defer></script></main>' + FOOTER
+    content += '<section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=5" defer></script></main>' + FOOTER
     (ROOT / filename(issue)).write_text(content)
 
+def published(item):
+    return item['date'] if 'path' in item else date(item['created_at'])
+
+
+ARTICLES = sorted(ISSUES + ORIGINALS, key=published, reverse=True)
 archive = page_head('文章归档', '技术文章、实践与随笔。')
 archive += '<main id="main"><section class="intro"><h1>文章归档</h1><p>开发实践、学习笔记与随笔。保留写下这些文字时的思考。</p></section>'
-archive += f'<p class="archive-note">共 {len(ISSUES)} 篇，按发表时间倒序排列。</p>'
-for year in sorted({date(i['created_at'])[:4] for i in ISSUES}, reverse=True):
+archive += f'<p class="archive-note">共 {len(ARTICLES)} 篇，按发表时间倒序排列。</p>'
+for year in sorted({published(i)[:4] for i in ARTICLES}, reverse=True):
     archive += f'<section aria-labelledby="year-{year}"><div class="section-heading"><h2 id="year-{year}">{year}</h2></div>'
-    archive += ''.join(listing(i) for i in ISSUES if date(i['created_at']).startswith(year)) + '</section>'
+    archive += ''.join(listing(i) for i in ARTICLES if published(i).startswith(year)) + '</section>'
 archive += '<p class="archive-note"><a href="./index.html#writing">← 返回首页</a></p></main>' + FOOTER
 (ROOT / 'writing.html').write_text(archive)
 
@@ -176,7 +186,7 @@ index_path = ROOT / 'index.html'
 index_html = index_path.read_text()
 start = index_html.index('<section id="writing"')
 end = index_html.index('<section class="home-translations"', start)
-writing = f'<section id="writing" aria-labelledby="writing-title"><div class="section-heading"><h2 id="writing-title"><span class="section-index" aria-hidden="true">01</span>思考与实践</h2><a href="./writing.html">全部 {len(ISSUES)} 篇 →</a></div>\n'
-writing += ''.join(listing(i) for i in ISSUES[:6]) + '</section>'
+writing = f'<section id="writing" aria-labelledby="writing-title"><div class="section-heading"><h2 id="writing-title"><span class="section-index" aria-hidden="true">01</span>思考与实践</h2><a href="./writing.html">全部 {len(ARTICLES)} 篇 →</a></div>\n'
+writing += ''.join(listing(i) for i in ARTICLES[:6]) + '</section>'
 index_path.write_text(index_html[:start] + writing + index_html[end:])
-print(f'Rendered {len(ISSUES)} articles, archive and home index.')
+print(f'Rendered {len(ISSUES)} migrated articles; indexed {len(ORIGINALS)} original articles, archive and home index.')

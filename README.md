@@ -6,7 +6,7 @@
 
 此目录是正式维护工程。GitHub Pages 从 `main` 分支根目录自动发布，提交并推送后网站会更新。
 
-原生 HTML / CSS / JavaScript 的个人技术博客，无构建依赖。暖白底、无衬线正文、少量朱砂红强调，采用紧凑的文章列表，支持行内代码和可横向滚动的代码块。目前收录 46 篇从 GitHub Issues 迁入的文章，以及两篇全文对照译文。
+原生 HTML / CSS / JavaScript 的个人技术博客，无构建依赖。暖白底、无衬线正文、少量朱砂红强调，采用紧凑的文章列表，支持行内代码和可横向滚动的代码块。目前收录 46 篇从 GitHub Issues 迁入的文章、一篇新增原创文章，以及两篇全文对照译文。
 
 ## 预览
 
@@ -22,7 +22,27 @@
 - `translations.html`：翻译留档专栏目录。
 - `claude-code-review.html`、`engineers-new-problems.html`：两篇英中对照译文，原文出处、正文与插图保持完整。工作区原始文件未修改。
 - 各文章 HTML：标题、日期、正文；新增文章时复制一篇并同步首页目录。
+- `content/original-articles.json`：新增原创文章的标题、日期、路径、摘要与标签；目录生成脚本会一并收录，正文维护在对应 HTML 中。
+- `ub-mode-bench.html`：ub-mode 评测文章；图表数据见 `content/ub-mode-bench-data.json`，图与移动端版本在 `assets/ub-mode-bench/`。维护脚本 `scripts/render-ub-mode-figures.py` 使用 matplotlib 生成静态 SVG，站点运行不依赖 Python 或绘图库。
 - `style.css`：共用颜色、字体与布局；`translation.css`：对照阅读样式；`archive.css`：专栏与评论样式。使用系统字体。
+
+## 访问统计
+
+全站接入 [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/)，在 Cloudflare 控制台查看浏览量、访问来源和热门页面。网站仍由 GitHub Pages 托管，无需修改 DNS 或增加服务端。
+
+新增页面与维护生成模板时的统计代码约定见 [AGENTS.md](./AGENTS.md)。嵌入代码中的 token 是公开的站点统计标识，不是账户 API 密钥。
+
+发布后，在已配置的 `zwhu.github.io` 域名下访问首页和文章页，等待几分钟后检查统计面板。本地预览不能用于确认正式域名的数据上报；浏览器拦截或网络异常可能导致漏计，国内效果需在实际网络下验证。
+
+## 长文章快速导航
+
+长文可复用原生 HTML/CSS/JavaScript 导航，无第三方依赖。样式在 `archive.css`，当前章节高亮在 `article-toc.js`；接入模板与交互约定见 [导航复用说明](./content/article-toc-guide.md)，示例为 `ub-mode-bench.html`。
+
+## 项目 Skill
+
+[doc-lint](./.agents/skills/doc-lint/SKILL.md) 用于中文文档润色、精简冗余和表达检查，保留技术含义、限定条件与引用。可通过 `$doc-lint` 调用。
+
+ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-comparison/`，不加入 `content/original-articles.json`，因此首页和文章归档只展示正式文章。
 
 ## GitHub 评论
 

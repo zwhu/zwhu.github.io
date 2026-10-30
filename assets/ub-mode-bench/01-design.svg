@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="704" height="476" viewBox="0 0 704 476" role="img" aria-labelledby="title" data-graph-type="flowchart">
+<title id="title">同一个任务，加不加 ub-mode</title>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif}</style>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#77746e"/></marker></defs>
+<rect width="704" height="476" fill="#faf8f3" data-graph-role="background"/>
+<text x="24" y="32" font-size="19" font-weight="500" text-anchor="start" fill="#292825">同一个任务，加不加 ub-mode</text>
+<text x="24" y="57" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">同模型比较 · 独立运行 · 共同验收</text>
+<rect id="start" data-node-id="start" data-graph-role="node" data-graph-bounds="200,88,504,152" x="200" y="88" width="304" height="64" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="116.0" font-size="16" font-weight="500" text-anchor="middle" fill="#292825">同一份修复起点</text>
+<text x="352.0" y="138.0" font-size="13" font-weight="400" text-anchor="middle" fill="#77746e">源码＋问题描述＋测试命令</text>
+<rect id="a" data-node-id="a" data-graph-role="node" data-graph-bounds="30,214,308,294" x="30" y="214" width="278" height="80" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="169.0" y="250.0" font-size="16" font-weight="500" text-anchor="middle" fill="#292825">普通组 A</text>
+<text x="169.0" y="272.0" font-size="13" font-weight="400" text-anchor="middle" fill="#77746e">无额外 Skill</text>
+<rect id="c" data-node-id="c" data-graph-role="node" data-graph-bounds="396,214,674,294" x="396" y="214" width="278" height="80" rx="4" fill="#faf8f3" stroke="#a64335"/>
+<text x="535.0" y="250.0" font-size="16" font-weight="500" text-anchor="middle" fill="#a64335">ub-mode C</text>
+<text x="535.0" y="272.0" font-size="13" font-weight="400" text-anchor="middle" fill="#77746e">规范＋配套质量工具</text>
+<rect id="eval" data-node-id="eval" data-graph-role="node" data-graph-bounds="200,350,504,414" x="200" y="350" width="304" height="64" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="378.0" font-size="16" font-weight="500" text-anchor="middle" fill="#292825">共同的外部验收</text>
+<text x="352.0" y="400.0" font-size="13" font-weight="400" text-anchor="middle" fill="#77746e">行为测试＋质量指标</text>
+<path id="sa" data-edge-id="sa" data-source="start" data-target="a" data-graph-role="edge" d="M250 152 L250 182 L169 182 L169 214" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<path id="sc" data-edge-id="sc" data-source="start" data-target="c" data-graph-role="edge" d="M454 152 L454 182 L535 182 L535 214" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<path id="ae" data-edge-id="ae" data-source="a" data-target="eval" data-graph-role="edge" d="M169 294 L169 322 L250 322 L250 350" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<path id="ce" data-edge-id="ce" data-source="c" data-target="eval" data-graph-role="edge" d="M535 294 L535 322 L454 322 L454 350" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<text x="24" y="454" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">第一轮：3 任务 × 3 模型 × 2 组 × 3 次 = 54　　第二轮：1 任务 × 3 模型 × 2 组 × 3 次 = 18</text>
+</svg>

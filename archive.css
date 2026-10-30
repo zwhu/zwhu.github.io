@@ -10,6 +10,26 @@
 .issue-page .prose blockquote{margin:20px 0;padding-left:16px;border-left:2px solid var(--line);color:var(--muted)}
 .table-scroll{max-width:100%;overflow-x:auto;margin:20px 0}
 .table-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.article-figure{margin:24px 0}
+.article-figure picture,.article-figure img{display:block;width:100%}
+.article-figure img{height:auto}
+.article-figure figcaption{margin-top:9px;font-size:11px;line-height:1.8;color:var(--muted)}
+.issue-page .prose table caption{caption-side:top;text-align:left;padding:0 0 8px;font-size:11px;color:var(--muted)}
+.article-references{padding-left:22px;font-size:13px}
+.article-references li{margin-bottom:8px;scroll-margin-top:22px}
+
+/* 原创长文目录：保持正文宽度，窄屏仅在导航内部横向滚动。 */
+.article-toc{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:16px;margin:24px 0;padding:8px 0;background:var(--bg);border-block:1px solid var(--line);font-size:12px;line-height:1.8}
+.article-toc-label{flex-shrink:0;color:var(--muted);font-size:11px}
+.article-toc-links{position:relative;display:flex;align-items:center;gap:20px;min-width:0;overflow-x:auto;scrollbar-width:none;padding:5px}
+.article-toc-links::-webkit-scrollbar{display:none}
+.article-toc .article-toc-links a{display:block;flex-shrink:0;padding:3px 0;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:1px solid transparent}
+.article-toc .article-toc-links a:hover,.article-toc .article-toc-links a[aria-current="location"]{color:var(--accent);border-bottom-color:var(--accent)}
+.article-toc a:focus-visible{outline-offset:2px}
+.article-with-toc [id]{scroll-margin-top:76px}
+.article-with-toc :is(h2,h3)[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+@media(max-width:560px){.article-toc{gap:10px;font-size:11px}.article-toc-label{font-size:10px}.article-toc-links{gap:12px}}
+@media print{.article-toc{display:none}}
 .issue-page .prose table{border-collapse:collapse;width:100%;font-size:13px}
 .issue-page .prose th,.issue-page .prose td{border:1px solid var(--line);padding:9px 12px;text-align:left;min-width:120px;vertical-align:top}
 .issue-page .prose th{background:var(--code);font-weight:600}

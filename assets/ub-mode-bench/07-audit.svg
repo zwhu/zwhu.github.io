@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="704" height="742" viewBox="0 0 704 742" role="img" aria-labelledby="title" data-graph-type="flowchart">
+<title id="title">评测本身，也需要被检验</title>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif}</style>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#77746e"/></marker></defs>
+<rect width="704" height="742" fill="#faf8f3" data-graph-role="background"/>
+<text x="24" y="32" font-size="19" font-weight="500" text-anchor="start" fill="#292825">评测本身，也需要被检验</text>
+<rect id="f0n0" data-node-id="f0n0" data-graph-role="node" data-graph-bounds="130,85,574,151" x="130" y="85" width="444" height="66" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="114.0" font-size="16" font-weight="500" text-anchor="middle" fill="#292825">依赖包带着现成修复</text>
+<text x="352.0" y="136.0" font-size="13" font-weight="400" text-anchor="middle" fill="#77746e">断网环境仍存在参考实现</text>
+<rect id="f0n1" data-node-id="f0n1" data-graph-role="node" data-graph-bounds="130,185,574,251" x="130" y="185" width="444" height="66" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="214.0" font-size="16" font-weight="500" text-anchor="middle" fill="#292825">排除受影响结果</text>
+<text x="352.0" y="236.0" font-size="13" font-weight="400" text-anchor="middle" fill="#77746e">36 次正式结果＋6 次试跑作废</text>
+<path id="f0e1" data-edge-id="f0e1" data-source="f0n0" data-target="f0n1" data-graph-role="edge" d="M352.0 151 L352.0 185" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect id="f0n2" data-node-id="f0n2" data-graph-role="node" data-graph-bounds="130,285,574,351" x="130" y="285" width="444" height="66" rx="4" fill="#faf8f3" stroke="#a64335"/>
+<text x="352.0" y="314.0" font-size="16" font-weight="500" text-anchor="middle" fill="#a64335">锁定修复前依赖，重跑</text>
+<text x="352.0" y="336.0" font-size="13" font-weight="400" text-anchor="middle" fill="#77746e">最终只统计干净的正式结果</text>
+<path id="f0e2" data-edge-id="f0e2" data-source="f0n1" data-target="f0n2" data-graph-role="edge" d="M352.0 251 L352.0 285" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<path d="M24 396 H680" stroke="#e6e2da" data-graph-role="decoration"/>
+<rect id="f1n0" data-node-id="f1n0" data-graph-role="node" data-graph-bounds="130,440,574,506" x="130" y="440" width="444" height="66" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="469.0" font-size="16" font-weight="500" text-anchor="middle" fill="#292825">隐藏断言限定内部实现</text>
+<text x="352.0" y="491.0" font-size="13" font-weight="400" text-anchor="middle" fill="#77746e">复制 AST 的合法修复被判失败</text>
+<rect id="f1n1" data-node-id="f1n1" data-graph-role="node" data-graph-bounds="130,540,574,606" x="130" y="540" width="444" height="66" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="569.0" font-size="16" font-weight="500" text-anchor="middle" fill="#292825">保留原始记录，统一复核</text>
+<text x="352.0" y="591.0" font-size="13" font-weight="400" text-anchor="middle" fill="#77746e">对全部 18 份修复重新检查行为</text>
+<path id="f1e1" data-edge-id="f1e1" data-source="f1n0" data-target="f1n1" data-graph-role="edge" d="M352.0 506 L352.0 540" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect id="f1n2" data-node-id="f1n2" data-graph-role="node" data-graph-bounds="130,640,574,706" x="130" y="640" width="444" height="66" rx="4" fill="#faf8f3" stroke="#a64335"/>
+<text x="352.0" y="669.0" font-size="16" font-weight="500" text-anchor="middle" fill="#a64335">只导入生产源码核验</text>
+<text x="352.0" y="691.0" font-size="13" font-weight="400" text-anchor="middle" fill="#77746e">恢复原版测试，并加入新输入</text>
+<path id="f1e2" data-edge-id="f1e2" data-source="f1n1" data-target="f1n2" data-graph-role="edge" d="M352.0 606 L352.0 640" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+</svg>

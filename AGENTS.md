@@ -9,4 +9,5 @@
 - 站内使用相对链接；文章文件名是评论标识的一部分，应保持稳定且唯一。
 - 共用样式见 style.css；译文见 translation.css；专栏及评论见 archive.css。
 - giscus 使用 comments-config.js 中的公开标识，不在源码中保存密钥。
+- 全站使用 Cloudflare Web Analytics；新增、复制或修改 HTML 页面时，须在 `</body>` 前保留现有统计代码，每页恰好一份，沿用现有公开站点 token，不写入账户 API 密钥。修改文章生成逻辑时，同步维护 scripts/render-blog-issues.py 中的 `ANALYTICS` 和 `FOOTER`，确保重新生成后仍保留统计。
 - 修改后检查链接、移动端排版与相关阅读按钮；保留无关修改。

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="260" viewBox="0 0 260 260" fill="none" role="img" aria-labelledby="title desc">
+<title id="title">纸飞机</title><desc id="desc">一架朱砂红细线勾勒的小纸飞机，带着轻淡的弧形飞行轨迹，轻轻起伏滑翔。</desc>
+<style>
+.plane{animation:glide 6s ease-in-out infinite;transform-origin:130px 130px}
+.flight-trail{animation:trail-drift 12s linear infinite}
+@keyframes glide{0%,100%{transform:translate(-9px,5px) rotate(-5deg)}50%{transform:translate(9px,-6px) rotate(3deg)}}
+@keyframes trail-drift{to{stroke-dashoffset:-32}}
+@media(prefers-reduced-motion:reduce){.plane,.flight-trail{animation:none}}
+</style>
+<g class="plane">
+  <path class="flight-trail" d="M28 181C44 195 75 183 71 164C67 144 37 150 45 166C55 187 90 171 118 144" stroke="#a64335" stroke-width=".85" stroke-dasharray="2.5 5.5" stroke-linecap="round" opacity=".32"/>
+  <g stroke="#a64335" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M105 123 157 105 139 155 129 134Z" fill="#faf8f3"/>
+    <path d="M157 105 129 134 139 155" fill="#f0ede6"/>
+    <path d="M129 134 129 145 134 142" fill="#faf8f3"/>
+  </g>
+</g>
+</svg>

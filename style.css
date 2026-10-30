@@ -43,3 +43,15 @@
   .home-page .post h3{font-size:16px}
   .home-page .about .section-heading>a{font-size:11px}
 }
+
+/* 首页纸飞机：右侧轻量装饰，不占用文字及文章列表的布局高度。 */
+.home-page .intro{position:relative;padding-right:280px}
+.home-page .intro-plane{position:absolute;right:0;top:50%;width:260px;height:auto;pointer-events:none;transform:translateY(-50%);user-select:none}
+@media(min-width:561px) and (max-width:700px){
+  .home-page .intro{padding-right:220px}
+  .home-page .intro-plane{width:200px;height:auto}
+}
+@media(max-width:560px){
+  .home-page .intro{padding-right:0}
+  .home-page .intro-plane{display:none}
+}

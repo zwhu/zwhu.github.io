@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="330" height="670" viewBox="0 0 330 670" role="img" aria-labelledby="title" data-graph-type="flowchart">
+<title id="title">我更重视的工程反馈闭环</title>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif}</style>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#77746e"/></marker></defs>
+<rect width="330" height="670" fill="#faf8f3" data-graph-role="background"/>
+<text x="24" y="32" font-size="15" font-weight="500" text-anchor="start" fill="#292825">我更重视的工程反馈闭环</text>
+<text x="24" y="57" font-size="11" font-weight="400" text-anchor="start" fill="#77746e">作者的工作流选择；未作为实验第三组</text>
+<rect id="n0" data-node-id="n0" data-graph-role="node" data-graph-bounds="74,90,306,174" x="74" y="90" width="232" height="84" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="190.0" y="129.0" font-size="14" font-weight="500" text-anchor="middle" fill="#292825">LLM 修改代码</text>
+<text x="190.0" y="148.0" font-size="11" font-weight="400" text-anchor="middle" fill="#77746e">实现需求或修复问题</text>
+<rect id="n1" data-node-id="n1" data-graph-role="node" data-graph-bounds="74,230,306,314" x="74" y="230" width="232" height="84" rx="4" fill="#faf8f3" stroke="#a64335"/>
+<text x="190.0" y="269.0" font-size="14" font-weight="500" text-anchor="middle" fill="#a64335">独立门禁执行检查</text>
+<text x="190.0" y="288.0" font-size="11" font-weight="400" text-anchor="middle" fill="#77746e">lint / 类型检查 / 测试 / CI</text>
+<path id="e1" data-edge-id="e1" data-source="n0" data-target="n1" data-graph-role="edge" d="M190.0 174 L190.0 230" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect id="n2" data-node-id="n2" data-graph-role="node" data-graph-bounds="74,370,306,454" x="74" y="370" width="232" height="84" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="190.0" y="409.0" font-size="14" font-weight="500" text-anchor="middle" fill="#292825">读取实际检查结果</text>
+<text x="190.0" y="428.0" font-size="11" font-weight="400" text-anchor="middle" fill="#77746e">退出状态＋报告＋行为证据</text>
+<path id="e2" data-edge-id="e2" data-source="n1" data-target="n2" data-graph-role="edge" d="M190.0 314 L190.0 370" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<rect id="n3" data-node-id="n3" data-graph-role="node" data-graph-bounds="74,510,306,594" x="74" y="510" width="232" height="84" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="190.0" y="549.0" font-size="14" font-weight="500" text-anchor="middle" fill="#292825">进入审查与交付</text>
+<text x="190.0" y="568.0" font-size="11" font-weight="400" text-anchor="middle" fill="#77746e">检查通过，保留必要的人工判断</text>
+<path id="e3" data-edge-id="e3" data-source="n2" data-target="n3" data-graph-role="edge" d="M190.0 454 L190.0 510" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<path id="feedback" data-edge-id="feedback" data-source="n1" data-target="n0" data-graph-role="edge" d="M74 272.0 L22 272.0 L22 132.0 L74 132.0" fill="none" stroke="#77746e" stroke-width="1.25" marker-end="url(#arrow)"/>
+<text x="32" y="188" font-size="10" font-weight="400" text-anchor="start" fill="#77746e">未通过</text>
+<text x="24" y="642" font-size="11" font-weight="400" text-anchor="start" fill="#77746e">返回具体诊断继续修复；交付依据来自实际执行。</text>
+</svg>

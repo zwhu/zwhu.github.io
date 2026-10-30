@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从 54 次小任务到 18 次 Vue 真实修复，记录 ub-mode 带来的收益、成本和评测中的问题，以及我为什么更重视 lint、测试等 LLM 外部的工程门禁。">
+  <title>评测 Bob 大叔的 ub-mode：我为什么更重视工程门禁 · zwhu</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../archive.css">
+  <link rel="icon" href="../../favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+</head>
+<body class="issue-page">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header">
+  <a class="brand" href="../../index.html">zwhu<span>.</span></a>
+  <nav aria-label="主导航"><a href="../../index.html#writing">思考</a><a href="../../translations.html">翻译留档</a><a href="../../learning.html">交互式学习</a><a href="../../index.html#about">关于</a></nav>
+</header>
+<main id="main">
+<article class="article article-with-toc">
+  <a class="back" href="../../writing.html">← 所有文章</a>
+  <h1>评测 Bob 大叔的 ub-mode：我为什么更重视工程门禁</h1>
+  <div class="meta"><time datetime="2026-10-30">2026-10-30</time> · Agent 评测 · 工程实践 · <a href="https://github.com/zwhu/ub-mode-bench/tree/7ce00ee20ac71931be715abd234f55157f06b066">评测仓库 ↗</a></div>
+  <div class="prose">
+    <p>这次刚好在 X 上看到 Bob 大叔发布了他的 <a href="#ref-skill">ub-mode</a>，于是就拿这个 Skill 做了一次评测，看看效果怎么样，值不值得用它改进我自己的工作流。</p>
+    <p>我的选择也先放在前面：这次之后，<strong>我不会在自己的工作流中使用这套模式。我更愿意把工程投入放在 lint、测试等 LLM 外部的门禁能力上。下面是这次实验的结果，以及它如何影响了这个选择。</strong></p>
+
+    <nav class="article-toc" aria-label="文章快速导航">
+      <span class="article-toc-label">本文导航</span>
+      <div class="article-toc-links">
+        <a href="#why" aria-current="location">ub-mode</a>
+        <a href="#design">实验设计</a>
+        <a href="#results">测试结果</a>
+        <a href="#workflow">我的选择</a>
+        <a href="#sources">资料</a>
+      </div>
+    </nav>
+
+    <h2 id="why" tabindex="-1">1. ub-mode 是什么</h2>
+    <p>ub-mode 是 Bob 大叔为编码 Agent 编写的 Skill，包含工程规范和工作流程。它分为三个阶段：先完成功能，再整理代码，最后遵守日常实践要求。<a href="#ref-skill">[1]</a></p>
+    <p>具体要求包括先写失败测试、修复根因、小步修改、用测试保护重构、记录过程和小步提交。它还要求用质量工具检查代码复杂度、测试覆盖和重复代码等问题。</p>
+    <p>Skill 规定 Agent 的工作方式，lint、测试等工程门禁执行检查、提供交付依据。我想比较的是：同一个 Agent 使用 ub-mode 和配套工具后，修复效果是否改善，耗时和代码改动如何变化。</p>
+
+    <h2 id="design" tabindex="-1">2. 怎么测</h2>
+    <h3 id="comparison">2.1 对照方式</h3>
+    <p>实验在 10 月 29 日进行，分成普通组 A 和 ub-mode 组 C。A 组拿到修复前源码、问题描述和测试命令，不加载额外 Skill；C 组拿到相同任务，额外加载 ub-mode，并提供配套质量工具。修复结束后，两组接受相同的外部验收与评分。<a href="#ref-small">[2]</a></p>
+    <figure class="article-figure">
+      <picture><source media="(max-width:560px)" srcset="../../assets/ub-mode-bench/01-design-mobile.svg" width="330" height="554"><img src="../../assets/ub-mode-bench/01-design.svg" width="704" height="476" alt="同一任务分别交给无额外 Skill 的普通组与加载 ub-mode 和三个工具的实验组，修复后接受共同验收。小任务 54 次与 Vue 18 次分开统计。"></picture>
+      <figcaption>图 1｜比较的是 ub-mode 与可用工具的组合效果。两轮使用各自的任务与验收，不合并成一个总通过率。</figcaption>
+    </figure>
+    <p>使用 GPT-6.1-Sol、GPT-5.6-Luna、DeepSeek-V4.1-Flash 三个模型，每个任务、模型和做法都独立重做三次。报告中的 seed 只是重复编号，没有设置模型服务的随机数种子。</p>
+    <p>只比较同一模型的 A/C 结果。GPT 和 DeepSeek 的模型运行环境（harness）、推理配置与工具模式不同，因此不作跨模型排名。A/C 测的是 Skill 与可用工具的组合效果，不能分辨各条规范或各个工具的贡献。</p>
+    <p>观察四类结果：公开与隐藏验收是否通过、模型与工具阶段耗时、业务源码改动规模，以及复杂度、测试覆盖和重复代码等自动指标。耗时不含修复后的外部评分；源码改动统计新增行＋删除行，不含测试和日志，不是净增行数。</p>
+
+    <h3 id="small">2.2 小实验：三个真实 bug，54 次修复</h3>
+    <p>先选了三个 TypeScript 项目的真实 bug：ufo 移除 URL 前缀后对多余斜杠的处理，defu 合并默认配置时的原型污染，以及 pathe 丢失 UNC 网络共享根的问题。任务要求解决目标问题，同时保留相关边界行为。</p>
+    <p>3 个任务 × 3 个模型 × 2 种做法 × 3 次重复，共 54 次正式修复。每组每模型有 9 次运行，A/C 各 27 次。先前的试跑没有混入正式结果。</p>
+
+    <h3 id="vue">2.3 大实验：Vue 编译问题，18 次修复</h3>
+    <p>接着换成 Vue core 的 <a href="https://github.com/vuejs/core/pull/15136">PR #15136</a>。重复编译单文件组件时，如果模板已经转换、分析缓存又已失效，重新分析组件就可能丢掉仅在模板中使用的导入。<a href="#ref-vue">[3]</a></p>
+    <figure class="article-figure">
+      <picture><source media="(max-width:560px)" srcset="../../assets/ub-mode-bench/03-vue-bug-mobile.svg" width="330" height="694"><img src="../../assets/ub-mode-bench/03-vue-bug.svg" width="704" height="614" loading="lazy" alt="首次分析能识别模板使用的导入；模板转换且分析缓存失效后，再次分析已转换的模板可能漏掉这些导入。修复应保持重复编译后的导入与编译输出正确。"></picture>
+      <figcaption>图 2｜Vue 问题的触发链。验收关注重复编译的结果，不限定必须如何保存或复制 AST。</figcaption>
+    </figure>
+    <p>官方参考修复涉及四个编译模块、134 行业务源码改动。1 个任务 × 3 个模型 × 2 种做法 × 3 次重复，另做 18 次正式修复，A/C 各 9 次，与小实验分开统计。</p>
+
+    <h3 id="audit">2.4 隔离与独立验收</h3>
+    <p>每次运行使用独立环境，移除 Git 历史等线索；任务工具在隔离容器内执行，隐藏验收只供评分侧使用。运行时隔离限制了查找参考答案的路径，但不能证明模型在训练时没见过这些开源修复。</p>
+    <p>前期安装的 ufo、defu 发布包已经包含目标修复，六次正式运行确实读取过发布实现。两个受影响任务的 36 次正式结果和 6 次试跑被排除，锁定修复前依赖后重跑；另一个任务的 18 次有效结果保留。本文只使用最终干净的 54 次小实验结果。<a href="#ref-small">[2]</a></p>
+    <p>Vue 的原始隐藏验收曾将 Luna 的一份修复判为失败：该修复复制 AST、保留原 AST，测试却要求输入 AST 必须被标记为 transformed。这条断言限定了内部实现，超出了重复编译后导入和输出正确的业务要求。</p>
+    <p>保留原始失败记录，对全部 18 份修复统一复核业务行为；再从干净旧版本恢复原版测试和配置，只导入模型的生产源码，丢弃模型改过的测试和辅助文件，并加入修复完成后生成新标识符的客户端与 SSR 用例。</p>
+    <figure class="article-figure">
+      <picture><source media="(max-width:560px)" srcset="../../assets/ub-mode-bench/07-audit-mobile.svg" width="330" height="820"><img src="../../assets/ub-mode-bench/07-audit.svg" width="704" height="742" loading="lazy" alt="两条评测修正流程：依赖包含答案时，排除受影响结果并锁定旧依赖重跑；隐藏断言限定实现时，保留原记录并用干净测试、新输入统一复核生产源码。"></picture>
+      <figcaption>图 3｜两次修正分别解决输入泄漏和验收误判。既审查 Agent，也审查评测环境与判定标准。</figcaption>
+    </figure>
+
+    <h2 id="results" tabindex="-1">3. 测试结果</h2>
+    <h3 id="small-results">3.1 小实验：两组全部通过，耗时和改动增加</h3>
+    <p><strong>普通组和 ub-mode 组各 27 次，公开测试、隐藏验收都全部通过。</strong>27 指修复运行次数，不是测试用例条数。普通组已全部通过，本轮没有观察到 ub-mode 的成功率增益。<a href="#ref-small">[2]</a></p>
+    <figure class="article-figure">
+      <picture><source media="(max-width:560px)" srcset="../../assets/ub-mode-bench/02-small-cost-mobile.svg" width="330" height="620"><img src="../../assets/ub-mode-bench/02-small-cost.svg" width="704" height="590" loading="lazy" alt="三个模型使用 ub-mode 后，平均耗时和业务源码改动均增加。图中灰点为普通方式，朱砂红点为 ub-mode，每组每模型有 9 次运行。"></picture>
+      <figcaption>图 4｜小任务成本对照。点表示均值，每组每模型 n=9；连接线只帮助比较 A/C 的变化方向。</figcaption>
+    </figure>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="小实验平均耗时与源码改动（可横向滚动）">
+      <table><caption>普通方式 → ub-mode；每组每模型 9 次</caption><thead><tr><th scope="col">模型</th><th scope="col">平均耗时／分钟</th><th scope="col">平均源码改动／行</th></tr></thead><tbody>
+        <tr><th scope="row">Sol</th><td>1.74 → 3.97</td><td>3.78 → 16.22</td></tr>
+        <tr><th scope="row">Luna</th><td>1.59 → 6.94</td><td>3.44 → 19.67</td></tr>
+        <tr><th scope="row">DeepSeek</th><td>3.57 → 9.59</td><td>16.11 → 28.22</td></tr>
+      </tbody></table>
+    </div>
+    <p>三个模型的 ub-mode 组每次平均多花约 2.23～6.02 分钟，也改了更多业务源码。额外改动可能来自必要的代码整理，也会扩大审查范围。改动行数只描述规模，不能直接说明代码更差。</p>
+
+    <h3 id="vue-results">3.2 大实验：独立业务验收全部通过，耗时与改动增加</h3>
+    <p>Vue 的最终独立业务验收中，<strong>普通组和 ub-mode 组各 9/9 通过</strong>。下面用未修复版本和官方修复作对照，验证新增用例确实能识别目标问题。<a href="#ref-vue">[3]</a></p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Vue 独立业务验收结果（可横向滚动）">
+      <table><caption>仅导入生产源码，恢复原版测试与固定配置</caption><thead><tr><th scope="col">被验收的代码</th><th scope="col">原有 469 项测试</th><th scope="col">新增 2 条行为用例</th></tr></thead><tbody>
+        <tr><th scope="row">未修复旧版本</th><td>全部通过</td><td>全部失败</td></tr>
+        <tr><th scope="row">官方参考修复</th><td>全部通过</td><td>全部通过</td></tr>
+        <tr><th scope="row">18 份模型修复</th><td>每份均通过</td><td>每份均通过</td></tr>
+      </tbody></table>
+    </div>
+    <figure class="article-figure">
+      <picture><source media="(max-width:560px)" srcset="../../assets/ub-mode-bench/04-vue-cost-mobile.svg" width="330" height="620"><img src="../../assets/ub-mode-bench/04-vue-cost.svg" width="704" height="590" loading="lazy" alt="Vue 修复中，三个模型的 ub-mode 组平均耗时和源码改动均增加。大点表示均值，小空心点展示每组三次运行，组内波动明显。"></picture>
+      <figcaption>图 5｜Vue 成本对照。大点是均值，小空心点是逐次结果，每组 n=3；这些独立运行没有时间先后趋势的含义。</figcaption>
+    </figure>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Vue 平均耗时与源码改动（可横向滚动）">
+      <table><caption>普通方式 → ub-mode；每组每模型 3 次</caption><thead><tr><th scope="col">模型</th><th scope="col">平均耗时／分钟</th><th scope="col">平均源码改动／行</th></tr></thead><tbody>
+        <tr><th scope="row">Sol</th><td>9.24 → 19.49</td><td>97.33 → 214.67</td></tr>
+        <tr><th scope="row">Luna</th><td>7.72 → 11.51</td><td>90.33 → 161.33</td></tr>
+        <tr><th scope="row">DeepSeek</th><td>14.75 → 24.17</td><td>117.00 → 168.67</td></tr>
+      </tbody></table>
+    </div>
+    <p>三个模型的 ub-mode 组平均多花 3.79～10.26 分钟，源码改动增加约 44%～121%。组内波动明显：Luna 的 ub-mode 组三次分别改了 27、234、223 行。均值不能代表每次运行都会得到相近结果。</p>
+
+    <h3 id="quality">3.3 风险指标有所改善</h3>
+    <p>两轮里，三个模型各自的 CRAP 平均风险分都有改善。<strong>CRAP 结合函数复杂度和测试覆盖计算，数值越低通常越好。</strong>它反映复杂代码缺少测试保护的风险，不是实际 bug 数，也不能换算成未来出故障的概率。</p>
+    <figure class="article-figure">
+      <picture><source media="(max-width:560px)" srcset="../../assets/ub-mode-bench/05-crap-mobile.svg" width="330" height="620"><img src="../../assets/ub-mode-bench/05-crap.svg" width="704" height="590" loading="lazy" alt="小任务和 Vue 两轮中，各模型 ub-mode 组 CRAP 平均风险分均较低。越低通常越好；Vue DeepSeek 的 ub-mode 组只有两次有效测量，其他组为三次。"></picture>
+      <figcaption>图 6｜CRAP 平均风险分，越低通常越好。两轮分开绘制、横轴范围不同；统计各次改动文件中的函数，A/C 的扫描对象可能不同。</figcaption>
+    </figure>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Vue CRAP 风险指标（可横向滚动）">
+      <table><caption>Vue：普通方式 → ub-mode；越低通常越好</caption><thead><tr><th scope="col">模型</th><th scope="col">平均风险分</th><th scope="col">文件内最高风险分的均值</th></tr></thead><tbody>
+        <tr><th scope="row">Sol</th><td>12.08 → 11.26</td><td>46.67 → 56.00</td></tr>
+        <tr><th scope="row">Luna</th><td>23.84 → 11.65</td><td>186.90 → 42.00</td></tr>
+        <tr><th scope="row">DeepSeek</th><td>16.30 → 15.56</td><td>123.78 → 157.68</td></tr>
+      </tbody></table>
+    </div>
+    <p>先计算每次改动文件内函数的平均风险分，再对各次运行取平均。A/C 可能改动不同文件，某个原有大型函数是否纳入扫描会影响结果。Vue 的最高风险分并未一致改善，DeepSeek 的 ub-mode 组还缺一次有效测量，其余各组为三次。这是风险指标改善的信号，对整体可维护性的判断仍需要更多证据。</p>
+    <p>两轮实验中，A/C 检出的重复代码对都为零，这项指标没有分出差别。</p>
+    <p>过程审计确认 C 组读过完整 Skill，但这不意味着每条规范都被执行。从提交记录中，无法确认 Agent 是否稳定遵守“首个提交是失败测试”，也无法判断未提交的编辑是否先写了测试。</p>
+
+    <h2 id="workflow" tabindex="-1">4. 这些结果如何影响我的工作流</h2>
+    <p>这轮四个任务中，两种方式最终都通过目标验收。ub-mode 的 CRAP 平均风险分有所改善，但两轮实验中，三个模型的 ub-mode 组平均耗时都更长、业务源码改动都更多。对我而言，这些收益还不足以说服我在自己的工作流中使用这套模式。</p>
+    <figure class="article-figure">
+      <picture><source media="(max-width:560px)" srcset="../../assets/ub-mode-bench/08-gates-mobile.svg" width="330" height="670"><img src="../../assets/ub-mode-bench/08-gates.svg" width="704" height="590" loading="lazy" alt="作者主张的工作流：LLM 修改代码，独立门禁执行 lint、类型检查和测试；失败时返回具体诊断继续修复，通过后进入审查与交付。这个流程没有作为实验第三组测试。"></picture>
+      <figcaption>图 7｜我更愿意投入的工程反馈闭环。这是我的工作流选择，本轮 A/C 没有专门比较不同门禁方案。</figcaption>
+    </figure>
+    <p>我会优先搭好 lint、类型检查、测试和 CI 等 LLM 外部的门禁。将静态规范写进 lint 和类型检查，把业务行为和边界条件写成测试；修复后在独立流程中运行检查，保留输出与退出状态。Agent 可以调用工具，根据具体诊断继续修复；能否交付由实际检查结果和必要的人工审查决定。</p>
+
+    <h3 id="sources" tabindex="-1">资料与复现入口</h3>
+    <ol class="article-references">
+      <li id="ref-skill"><a href="https://github.com/unclebob/ub-mode/blob/57a8bdd/SKILL.md">ub-mode 固定版规则</a>，本轮使用版本 <code>57a8bdd</code>。</li>
+      <li id="ref-small"><a href="https://github.com/zwhu/ub-mode-bench/blob/7ce00ee20ac71931be715abd234f55157f06b066/reports/overnight-2026-10-29.md">小任务完整报告与 54 次逐次结果</a>。</li>
+      <li id="ref-vue"><a href="https://github.com/zwhu/ub-mode-bench/blob/7ce00ee20ac71931be715abd234f55157f06b066/reports/vue-2026-10-29-detailed.md">Vue 详细报告与 18 次逐次结果</a>。</li>
+      <li><a href="https://github.com/zwhu/ub-mode-bench/blob/7ce00ee20ac71931be715abd234f55157f06b066/scripts/audit_vue_source_only.py">Vue 生产源码独立复核脚本</a>与<a href="https://github.com/zwhu/ub-mode-bench/blob/7ce00ee20ac71931be715abd234f55157f06b066/README.md">运行说明</a>。</li>
+      <li><a href="../../content/ub-mode-bench-data.json">本文图表使用的公开逐次数据</a>，从上述固定版本报告整理；Vue 表中数值已四舍五入。</li>
+    </ol>
+  </div>
+  <nav class="article-bottom" aria-label="文章导航">
+    <a href="../../writing.html">← 返回文章列表</a>
+    <a href="../../blog-issue-46.html">相关阅读：如何设计 Agent 评测集：以 shadcn/ui lint 为例 →</a>
+    <a href="../../learn-ai-coding-playbook.html">相关阅读：AI 编程笔试操作手册 →</a>
+  </nav>
+</article>
+<section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section>
+<script src="../../comments-config.js?v=2"></script><script src="../../comments.js?v=5" defer></script>
+<script src="../../article-toc.js" defer></script>
+</main>
+<footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --></body>
+</html>

@@ -6,8 +6,11 @@
   if (!container || !config || !['repo', 'repoId', 'category', 'categoryId'].every(key => typeof config[key] === 'string' && config[key].trim())) return;
   const script = document.createElement('script');
   script.src = 'https://giscus.app/client.js';
-  // giscus 在独立 iframe 内加载主题，需将站内相对路径解析为完整 URL。
-  const theme = new URL('./giscus-theme.css?v=2', document.currentScript.src).href;
+  // giscus 在远端 HTTPS iframe 中加载主题，无法读取本地预览的 HTTP/回环地址。
+  // 本地使用已发布的主题；正式站点仍相对脚本地址解析，兼容项目子目录。
+  const scriptUrl = new URL(document.currentScript.src);
+  const localPreview = scriptUrl.protocol !== 'https:' || ['localhost', '127.0.0.1', '[::1]'].includes(scriptUrl.hostname);
+  const theme = new URL('./giscus-theme.css?v=2', localPreview ? 'https://zwhu.github.io/' : scriptUrl).href;
   const options = {
     repo: config.repo, 'repo-id': config.repoId,
     category: config.category, 'category-id': config.categoryId,

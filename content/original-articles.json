@@ -1,0 +1,9 @@
+[
+  {
+    "title": "评测 Bob 大叔的 ub-mode：我为什么更重视工程门禁",
+    "path": "ub-mode-bench.html",
+    "date": "2026-10-30",
+    "excerpt": "从小任务到 Vue 真实修复，观察 ub-mode 的收益与成本，记录评测中的问题，以及我为什么更重视 lint、测试等 LLM 外部的工程门禁。",
+    "labels": ["Agent 评测", "工程实践"]
+  }
+]
