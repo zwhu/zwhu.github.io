@@ -2,6 +2,7 @@
 
 /* Issue 迁入文章：复用正文样式，长代码和表格仅在各自区域滚动。 */
 .issue-page .prose,.issue-page .article h1,.issue-page .post h3{overflow-wrap:anywhere}
+.issue-page .prose{font-size:14px}
 .issue-page .prose a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 .issue-page .prose img{max-width:100%;height:auto}
 .issue-page .prose pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;overflow-wrap:normal}
@@ -45,3 +46,10 @@
 .home-learning{padding-top:34px}
 .site-header>nav{flex-wrap:wrap;row-gap:4px}
 @media(max-width:560px){.site-header{flex-wrap:wrap;gap:12px}.site-header>nav{gap:16px;font-size:12px}}
+
+/* 宽屏文章：扩大阅读区域与留白，正文字号保持 14px。 */
+@media screen and (min-width:1600px){
+  .issue-page>:is(.site-header,main,footer){max-width:clamp(880px,48vw,1040px);padding-inline:40px}
+  .issue-page .prose p{margin-bottom:16px}
+  .issue-page .prose h2{margin-top:38px;margin-bottom:16px}
+}
