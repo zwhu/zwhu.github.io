@@ -94,6 +94,14 @@ class SearchMetadataTests(unittest.TestCase):
         self.assertEqual(article['headline'], '</script> & 引用')
         self.assertEqual(result, SEO['update_page'](result, site, record, site['url'] + 'test.html'))
 
+    def test_site_verification_is_published_once_on_homepage(self):
+        config = json.loads((ROOT / 'content/seo.json').read_text())['site']
+        for path in ROOT.glob('*.html'):
+            parsed = Metadata(path.read_text())
+            for name, value in config.get('verification', {}).items():
+                found = [a['content'] for a in parsed.tags if a.get('name') == name]
+                self.assertEqual(found, [value] if path.name == 'index.html' else [])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -36,6 +36,8 @@
 
 发布后，在 Google Search Console 和 Bing Webmaster Tools 验证站点，提交 `https://zwhu.github.io/sitemap.xml`，再用 URL 检查确认首页与代表文章的抓取、规范地址和收录情况。站长平台的账户验证尚未完成；本地检查不代表已经收录。
 
+首页的公开所有权验证标记维护在 `content/seo.json` 的 `site.verification` 中；验证成功后仍应保留。它们用于证明站点所有权，不是账户 API 密钥。
+
 ## 访问统计
 
 全站接入 [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/)，在 Cloudflare 控制台查看浏览量、访问来源和热门页面。网站仍由 GitHub Pages 托管，无需修改 DNS 或增加服务端。

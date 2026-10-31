@@ -138,6 +138,8 @@ def update_page(source, site, record, canonical):
         meta('twitter:title', info.title.strip()),
         meta('twitter:description', description)
     ]
+    if canonical == site['url']:
+        tags.extend(meta(name, value) for name, value in site.get('verification', {}).items())
     structured = json.dumps(schema(site, info, record, canonical, description), ensure_ascii=False, separators=(',', ':'))
     # JSON inside a script element must never terminate the HTML script early.
     structured = structured.replace('<', '\\u003c').replace('>', '\\u003e').replace('&', '\\u0026')
