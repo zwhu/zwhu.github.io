@@ -26,6 +26,16 @@
 - `ub-mode-bench.html`：ub-mode 评测文章；图表数据见 `content/ub-mode-bench-data.json`，图与移动端版本在 `assets/ub-mode-bench/`。维护脚本 `scripts/render-ub-mode-figures.py` 使用 matplotlib 生成静态 SVG，站点运行不依赖 Python 或绘图库。
 - `style.css`：共用颜色、字体与布局；`translation.css`：对照阅读样式；`archive.css`：专栏与评论样式。使用系统字体。
 
+## 搜索引擎收录
+
+正式域名、作者及摘要覆盖项集中在 `content/seo.json`。运行 `python3 scripts/update-seo.py` 更新全站 canonical、摘要、Open Graph／Twitter 分享信息、JSON-LD、`sitemap.xml` 和 `robots.txt`；运行 `python3 scripts/update-seo.py --check` 检查生成结果是否同步，`python3 scripts/test-seo.py` 验证规范地址、摘要、收录范围、发表日期与译文归属。`scripts/render-blog-issues.py` 重新生成文章后会自动更新 SEO，无需在 GitHub Pages 增加构建流程。
+
+首页规范地址为 `https://zwhu.github.io/`；其他页面保持已有 `.html` 文件名。文章结构化数据保留真实发表时间，译文标明原作者及英文来源，不把迁移、评论或样式修改伪装成正文更新。未维护可靠更新时间前不生成 `dateModified` 和 sitemap `lastmod`。
+
+`content/doc-lint-comparison/` 中的对照页保留 `noindex, follow`，不加入 sitemap；robots.txt 允许抓取，以便搜索引擎读取 noindex。新增正式页面后重新运行 SEO 脚本；迁移域名时修改统一配置并重新生成，原站跳转需要另外配置。
+
+发布后，在 Google Search Console 和 Bing Webmaster Tools 验证站点，提交 `https://zwhu.github.io/sitemap.xml`，再用 URL 检查确认首页与代表文章的抓取、规范地址和收录情况。站长平台的账户验证尚未完成；本地检查不代表已经收录。
+
 ## 访问统计
 
 全站接入 [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/)，在 Cloudflare 控制台查看浏览量、访问来源和热门页面。网站仍由 GitHub Pages 托管，无需修改 DNS 或增加服务端。

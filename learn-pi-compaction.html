@@ -1,5 +1,21 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="逐步走过阈值检查、切点选择、摘要与上下文重建，对比标准压缩、超大单轮和再次压缩。"><title>Pi 上下文压缩流程 · 交互式学习 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="stylesheet" href="./assets/learning/pi-compaction.css"><link rel="stylesheet" href="./learning.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pi 上下文压缩流程 · 交互式学习 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="stylesheet" href="./assets/learning/pi-compaction.css"><link rel="stylesheet" href="./learning.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<!-- SEO:start -->
+<meta name="description" content="逐步走过阈值检查、切点选择、摘要与上下文重建，对比标准压缩、超大单轮和再次压缩。">
+<link rel="canonical" href="https://zwhu.github.io/learn-pi-compaction.html">
+<meta name="author" content="zwhu">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="zwhu 的技术博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="Pi 上下文压缩流程 · 交互式学习 · zwhuPi 上下文压缩流程">
+<meta property="og:description" content="逐步走过阈值检查、切点选择、摘要与上下文重建，对比标准压缩、超大单轮和再次压缩。">
+<meta property="og:url" content="https://zwhu.github.io/learn-pi-compaction.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pi 上下文压缩流程 · 交互式学习 · zwhuPi 上下文压缩流程">
+<meta name="twitter:description" content="逐步走过阈值检查、切点选择、摘要与上下文重建，对比标准压缩、超大单轮和再次压缩。">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://zwhu.github.io/#website","url":"https://zwhu.github.io/","name":"zwhu 的技术博客","inLanguage":"zh-CN","publisher":{"@id":"https://zwhu.github.io/#author"}},{"@type":"Person","@id":"https://zwhu.github.io/#author","name":"zwhu","url":"https://zwhu.github.io/#about","sameAs":["https://github.com/zwhu"]},{"@type":"WebPage","@id":"https://zwhu.github.io/learn-pi-compaction.html#webpage","url":"https://zwhu.github.io/learn-pi-compaction.html","name":"Pi 上下文压缩流程 · 交互式学习 · zwhuPi 上下文压缩流程","description":"逐步走过阈值检查、切点选择、摘要与上下文重建，对比标准压缩、超大单轮和再次压缩。","inLanguage":"zh-CN","isPartOf":{"@id":"https://zwhu.github.io/#website"},"mainEntity":{"@id":"https://zwhu.github.io/learn-pi-compaction.html#article"}},{"@type":"BlogPosting","@id":"https://zwhu.github.io/learn-pi-compaction.html#article","url":"https://zwhu.github.io/learn-pi-compaction.html","headline":"Pi 上下文压缩流程","description":"逐步走过阈值检查、切点选择、摘要与上下文重建，对比标准压缩、超大单轮和再次压缩。","inLanguage":"zh-CN","mainEntityOfPage":{"@id":"https://zwhu.github.io/learn-pi-compaction.html#webpage"},"author":{"@id":"https://zwhu.github.io/#author"},"publisher":{"@id":"https://zwhu.github.io/#author"},"datePublished":"2026-10-27"}]}</script>
+<!-- SEO:end -->
+</head>
 <body class="learning-page"><a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html" aria-current="page">交互式学习</a><a href="./index.html#about">关于</a></nav></header>
 <main id="main" class="learning-main"><article class="learning-article"><div class="lesson-heading"><a class="back" href="./learning.html">← 交互式学习</a><h1>Pi 上下文压缩流程</h1><p class="meta">上下文 · 分步讲解 · 整理于 2026-10-27</p><p class="lesson-summary">逐步走过阈值检查、切点选择、摘要与上下文重建，对比标准压缩、超大单轮和再次压缩。</p></div>
 <div class="learning-content lesson-pi-compaction"><div id="pi-compaction-explainer">

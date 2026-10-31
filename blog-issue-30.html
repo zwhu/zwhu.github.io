@@ -1,5 +1,21 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="现在有100块钱人民币，将 100 块钱换成零钱（最小币值 1 元），一共有多少方式？"><title>100块钱换零钱，最多有多少种方式的 JavaScript 版本实现 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>100块钱换零钱，最多有多少种方式的 JavaScript 版本实现 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<!-- SEO:start -->
+<meta name="description" content="现在有100块钱人民币，将 100 块钱换成零钱（最小币值 1 元），一共有多少方式？">
+<link rel="canonical" href="https://zwhu.github.io/blog-issue-30.html">
+<meta name="author" content="zwhu">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="zwhu 的技术博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="100块钱换零钱，最多有多少种方式的 JavaScript 版本实现 · zwhu">
+<meta property="og:description" content="现在有100块钱人民币，将 100 块钱换成零钱（最小币值 1 元），一共有多少方式？">
+<meta property="og:url" content="https://zwhu.github.io/blog-issue-30.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="100块钱换零钱，最多有多少种方式的 JavaScript 版本实现 · zwhu">
+<meta name="twitter:description" content="现在有100块钱人民币，将 100 块钱换成零钱（最小币值 1 元），一共有多少方式？">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://zwhu.github.io/#website","url":"https://zwhu.github.io/","name":"zwhu 的技术博客","inLanguage":"zh-CN","publisher":{"@id":"https://zwhu.github.io/#author"}},{"@type":"Person","@id":"https://zwhu.github.io/#author","name":"zwhu","url":"https://zwhu.github.io/#about","sameAs":["https://github.com/zwhu"]},{"@type":"WebPage","@id":"https://zwhu.github.io/blog-issue-30.html#webpage","url":"https://zwhu.github.io/blog-issue-30.html","name":"100块钱换零钱，最多有多少种方式的 JavaScript 版本实现 · zwhu","description":"现在有100块钱人民币，将 100 块钱换成零钱（最小币值 1 元），一共有多少方式？","inLanguage":"zh-CN","isPartOf":{"@id":"https://zwhu.github.io/#website"},"mainEntity":{"@id":"https://zwhu.github.io/blog-issue-30.html#article"}},{"@type":"BlogPosting","@id":"https://zwhu.github.io/blog-issue-30.html#article","url":"https://zwhu.github.io/blog-issue-30.html","headline":"100块钱换零钱，最多有多少种方式的 JavaScript 版本实现","description":"现在有100块钱人民币，将 100 块钱换成零钱（最小币值 1 元），一共有多少方式？","inLanguage":"zh-CN","mainEntityOfPage":{"@id":"https://zwhu.github.io/blog-issue-30.html#webpage"},"author":{"@id":"https://zwhu.github.io/#author"},"publisher":{"@id":"https://zwhu.github.io/#author"},"datePublished":"2016-12-11T10:06:48Z","isBasedOn":"https://github.com/zwhu/blog/issues/30"}]}</script>
+<!-- SEO:end -->
+</head><body class="issue-page">
 <a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>100块钱换零钱，最多有多少种方式的 JavaScript 版本实现</h1><div class="meta"><time datetime="2016-12-11">2016-12-11</time> · 思考 · 读书笔记 · 算法 · <a href="https://github.com/zwhu/blog/issues/30">原 issue #30 ↗</a></div><div class="prose"><p>现在有100块钱人民币，将 100 块钱换成零钱（最小币值 1 元），一共有多少方式？</p>
 <p>总的不同方式的数目等于：</p>
 <ul>

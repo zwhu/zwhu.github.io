@@ -5,7 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Claude Code 团队如何做代码审查 · 全文对照翻译</title>
 <link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./translation.css">
-<link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head>
+<link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<!-- SEO:start -->
+<meta name="description" content="Addy Osmani 关于 Claude Code 团队代码审查实践的全文中英对照翻译，介绍自动化检查与人工审查的分工，保留原文插图。">
+<link rel="canonical" href="https://zwhu.github.io/claude-code-review.html">
+<meta name="author" content="Addy Osmani">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="zwhu 的技术博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="Claude Code 团队如何做代码审查 · 全文对照翻译">
+<meta property="og:description" content="Addy Osmani 关于 Claude Code 团队代码审查实践的全文中英对照翻译，介绍自动化检查与人工审查的分工，保留原文插图。">
+<meta property="og:url" content="https://zwhu.github.io/claude-code-review.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Claude Code 团队如何做代码审查 · 全文对照翻译">
+<meta name="twitter:description" content="Addy Osmani 关于 Claude Code 团队代码审查实践的全文中英对照翻译，介绍自动化检查与人工审查的分工，保留原文插图。">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://zwhu.github.io/#website","url":"https://zwhu.github.io/","name":"zwhu 的技术博客","inLanguage":"zh-CN","publisher":{"@id":"https://zwhu.github.io/#author"}},{"@type":"Person","@id":"https://zwhu.github.io/#author","name":"zwhu","url":"https://zwhu.github.io/#about","sameAs":["https://github.com/zwhu"]},{"@type":"WebPage","@id":"https://zwhu.github.io/claude-code-review.html#webpage","url":"https://zwhu.github.io/claude-code-review.html","name":"Claude Code 团队如何做代码审查 · 全文对照翻译","description":"Addy Osmani 关于 Claude Code 团队代码审查实践的全文中英对照翻译，介绍自动化检查与人工审查的分工，保留原文插图。","inLanguage":"zh-CN","isPartOf":{"@id":"https://zwhu.github.io/#website"},"mainEntity":{"@id":"https://zwhu.github.io/claude-code-review.html#article"}},{"@type":"BlogPosting","@id":"https://zwhu.github.io/claude-code-review.html#article","url":"https://zwhu.github.io/claude-code-review.html","headline":"Claude Code 团队如何做代码审查","description":"Addy Osmani 关于 Claude Code 团队代码审查实践的全文中英对照翻译，介绍自动化检查与人工审查的分工，保留原文插图。","inLanguage":["zh-CN","en"],"mainEntityOfPage":{"@id":"https://zwhu.github.io/claude-code-review.html#webpage"},"author":{"@type":"Person","name":"Addy Osmani","url":"https://x.com/addyosmani"},"publisher":{"@id":"https://zwhu.github.io/#author"},"datePublished":"2026-10-27","translationOfWork":{"@type":"Article","name":"How the Claude Code team does code review","url":"https://x.com/addyosmani/status/2114604912520921136","inLanguage":"en","datePublished":"2026-10-26"}}]}</script>
+<!-- SEO:end -->
+</head>
 <body class="translation-page"><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header>
 <section class="translation-header">
 <div class="eyebrow">翻译留档 / 英中对照</div>

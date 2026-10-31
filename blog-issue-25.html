@@ -1,5 +1,21 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="TL;DR 本文是对 Promise 一些概念点的归纳和对 Promise 在解决什么问题的思考。 并不会介绍 Promise 的 Api。"><title>Promise--一诺千金 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Promise--一诺千金 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<!-- SEO:start -->
+<meta name="description" content="TL;DR 本文是对 Promise 一些概念点的归纳和对 Promise 在解决什么问题的思考。 并不会介绍 Promise 的 Api。">
+<link rel="canonical" href="https://zwhu.github.io/blog-issue-25.html">
+<meta name="author" content="zwhu">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="zwhu 的技术博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="Promise--一诺千金 · zwhu">
+<meta property="og:description" content="TL;DR 本文是对 Promise 一些概念点的归纳和对 Promise 在解决什么问题的思考。 并不会介绍 Promise 的 Api。">
+<meta property="og:url" content="https://zwhu.github.io/blog-issue-25.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Promise--一诺千金 · zwhu">
+<meta name="twitter:description" content="TL;DR 本文是对 Promise 一些概念点的归纳和对 Promise 在解决什么问题的思考。 并不会介绍 Promise 的 Api。">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://zwhu.github.io/#website","url":"https://zwhu.github.io/","name":"zwhu 的技术博客","inLanguage":"zh-CN","publisher":{"@id":"https://zwhu.github.io/#author"}},{"@type":"Person","@id":"https://zwhu.github.io/#author","name":"zwhu","url":"https://zwhu.github.io/#about","sameAs":["https://github.com/zwhu"]},{"@type":"WebPage","@id":"https://zwhu.github.io/blog-issue-25.html#webpage","url":"https://zwhu.github.io/blog-issue-25.html","name":"Promise--一诺千金 · zwhu","description":"TL;DR 本文是对 Promise 一些概念点的归纳和对 Promise 在解决什么问题的思考。 并不会介绍 Promise 的 Api。","inLanguage":"zh-CN","isPartOf":{"@id":"https://zwhu.github.io/#website"},"mainEntity":{"@id":"https://zwhu.github.io/blog-issue-25.html#article"}},{"@type":"BlogPosting","@id":"https://zwhu.github.io/blog-issue-25.html#article","url":"https://zwhu.github.io/blog-issue-25.html","headline":"Promise--一诺千金","description":"TL;DR 本文是对 Promise 一些概念点的归纳和对 Promise 在解决什么问题的思考。 并不会介绍 Promise 的 Api。","inLanguage":"zh-CN","mainEntityOfPage":{"@id":"https://zwhu.github.io/blog-issue-25.html#webpage"},"author":{"@id":"https://zwhu.github.io/#author"},"publisher":{"@id":"https://zwhu.github.io/#author"},"datePublished":"2016-05-23T17:20:09Z","isBasedOn":"https://github.com/zwhu/blog/issues/25"}]}</script>
+<!-- SEO:end -->
+</head><body class="issue-page">
 <a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>Promise--一诺千金</h1><div class="meta"><time datetime="2016-05-24">2016-05-24</time> · 记录 · 思考 · 读书笔记 · <a href="https://github.com/zwhu/blog/issues/25">原 issue #25 ↗</a></div><div class="prose"><p><a href="https://cloud.githubusercontent.com/assets/2899806/15476427/67d2e0f4-2141-11e6-93af-6fdc23c3f67c.png"><img src="./assets/blog-issues/2c2f705c36b871ff.png" alt="image" loading="lazy"></a></p>
 <blockquote>
 <p>TL;DR<br>

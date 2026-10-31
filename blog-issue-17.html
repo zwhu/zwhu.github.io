@@ -1,5 +1,21 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Node.js中最常用的恐怕就是 require， exports 以及 module.exports 了，那么 exports 和 module.exports 这两者有什么区别，在什么情况下使用 expor…"><title>Node.js 中 module.exports 和 exports 的区别 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Node.js 中 module.exports 和 exports 的区别 · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<!-- SEO:start -->
+<meta name="description" content="Node.js中最常用的恐怕就是 require， exports 以及 module.exports 了，那么 exports 和 module.exports 这两者有什么区别，在什么情况下使用 expor…">
+<link rel="canonical" href="https://zwhu.github.io/blog-issue-17.html">
+<meta name="author" content="zwhu">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="zwhu 的技术博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="Node.js 中 module.exports 和 exports 的区别 · zwhu">
+<meta property="og:description" content="Node.js中最常用的恐怕就是 require， exports 以及 module.exports 了，那么 exports 和 module.exports 这两者有什么区别，在什么情况下使用 expor…">
+<meta property="og:url" content="https://zwhu.github.io/blog-issue-17.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js 中 module.exports 和 exports 的区别 · zwhu">
+<meta name="twitter:description" content="Node.js中最常用的恐怕就是 require， exports 以及 module.exports 了，那么 exports 和 module.exports 这两者有什么区别，在什么情况下使用 expor…">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://zwhu.github.io/#website","url":"https://zwhu.github.io/","name":"zwhu 的技术博客","inLanguage":"zh-CN","publisher":{"@id":"https://zwhu.github.io/#author"}},{"@type":"Person","@id":"https://zwhu.github.io/#author","name":"zwhu","url":"https://zwhu.github.io/#about","sameAs":["https://github.com/zwhu"]},{"@type":"WebPage","@id":"https://zwhu.github.io/blog-issue-17.html#webpage","url":"https://zwhu.github.io/blog-issue-17.html","name":"Node.js 中 module.exports 和 exports 的区别 · zwhu","description":"Node.js中最常用的恐怕就是 require， exports 以及 module.exports 了，那么 exports 和 module.exports 这两者有什么区别，在什么情况下使用 expor…","inLanguage":"zh-CN","isPartOf":{"@id":"https://zwhu.github.io/#website"},"mainEntity":{"@id":"https://zwhu.github.io/blog-issue-17.html#article"}},{"@type":"BlogPosting","@id":"https://zwhu.github.io/blog-issue-17.html#article","url":"https://zwhu.github.io/blog-issue-17.html","headline":"Node.js 中 module.exports 和 exports 的区别","description":"Node.js中最常用的恐怕就是 require， exports 以及 module.exports 了，那么 exports 和 module.exports 这两者有什么区别，在什么情况下使用 expor…","inLanguage":"zh-CN","mainEntityOfPage":{"@id":"https://zwhu.github.io/blog-issue-17.html#webpage"},"author":{"@id":"https://zwhu.github.io/#author"},"publisher":{"@id":"https://zwhu.github.io/#author"},"datePublished":"2015-12-16T15:11:38Z","isBasedOn":"https://github.com/zwhu/blog/issues/17"}]}</script>
+<!-- SEO:end -->
+</head><body class="issue-page">
 <a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>Node.js 中 module.exports 和 exports 的区别</h1><div class="meta"><time datetime="2015-12-16">2015-12-16</time> · 记录 · 学习 · 思考 · <a href="https://github.com/zwhu/blog/issues/17">原 issue #17 ↗</a></div><div class="prose"><p>Node.js中最常用的恐怕就是 require， exports 以及 module.exports 了，那么 exports 和 module.exports 这两者有什么区别，在什么情况下使用 exports，又在什么时候使用 module.exports。</p>
 <p>先举个官网的例子:</p>
 <div><pre><span>// circle.js</span>

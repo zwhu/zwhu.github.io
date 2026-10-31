@@ -1,5 +1,21 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="代码笔记。"><title>vdom(2.5) - diff · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png"></head><body class="issue-page">
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>vdom(2.5) - diff · zwhu</title><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<!-- SEO:start -->
+<meta name="description" content="虚拟 DOM diff 实现笔记：对比新旧虚拟节点，复用真实 DOM，更新属性与子节点。">
+<link rel="canonical" href="https://zwhu.github.io/blog-issue-42.html">
+<meta name="author" content="zwhu">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="zwhu 的技术博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="vdom(2.5) - diff · zwhu">
+<meta property="og:description" content="虚拟 DOM diff 实现笔记：对比新旧虚拟节点，复用真实 DOM，更新属性与子节点。">
+<meta property="og:url" content="https://zwhu.github.io/blog-issue-42.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vdom(2.5) - diff · zwhu">
+<meta name="twitter:description" content="虚拟 DOM diff 实现笔记：对比新旧虚拟节点，复用真实 DOM，更新属性与子节点。">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://zwhu.github.io/#website","url":"https://zwhu.github.io/","name":"zwhu 的技术博客","inLanguage":"zh-CN","publisher":{"@id":"https://zwhu.github.io/#author"}},{"@type":"Person","@id":"https://zwhu.github.io/#author","name":"zwhu","url":"https://zwhu.github.io/#about","sameAs":["https://github.com/zwhu"]},{"@type":"WebPage","@id":"https://zwhu.github.io/blog-issue-42.html#webpage","url":"https://zwhu.github.io/blog-issue-42.html","name":"vdom(2.5) - diff · zwhu","description":"虚拟 DOM diff 实现笔记：对比新旧虚拟节点，复用真实 DOM，更新属性与子节点。","inLanguage":"zh-CN","isPartOf":{"@id":"https://zwhu.github.io/#website"},"mainEntity":{"@id":"https://zwhu.github.io/blog-issue-42.html#article"}},{"@type":"BlogPosting","@id":"https://zwhu.github.io/blog-issue-42.html#article","url":"https://zwhu.github.io/blog-issue-42.html","headline":"vdom(2.5) - diff","description":"虚拟 DOM diff 实现笔记：对比新旧虚拟节点，复用真实 DOM，更新属性与子节点。","inLanguage":"zh-CN","mainEntityOfPage":{"@id":"https://zwhu.github.io/blog-issue-42.html#webpage"},"author":{"@id":"https://zwhu.github.io/#author"},"publisher":{"@id":"https://zwhu.github.io/#author"},"datePublished":"2018-04-14T15:36:10Z","isBasedOn":"https://github.com/zwhu/blog/issues/42"}]}</script>
+<!-- SEO:end -->
+</head><body class="issue-page">
 <a class="skip-link" href="#main">跳到正文</a><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>vdom(2.5) - diff</h1><div class="meta"><time datetime="2018-04-14">2018-04-14</time> · 学习 · <a href="https://github.com/zwhu/blog/issues/42">原 issue #42 ↗</a></div><div class="prose"><div><pre>    <span>&lt;</span><span>button</span> <span>id</span>="<span>update</span>"<span>&gt;</span>update<span>&lt;/</span><span>button</span><span>&gt;</span>
     <span>&lt;</span><span>div</span> <span>id</span>="<span>root</span>"<span>&gt;</span><span>&lt;/</span><span>div</span><span>&gt;</span></pre></div>
 <div><pre>        <span>let</span> <span>vdom1</span> <span>=</span> <span>{</span>

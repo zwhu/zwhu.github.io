@@ -7,6 +7,8 @@ No generator or GitHub access is required to serve the resulting HTML files.
 import html
 import json
 import re
+import subprocess
+import sys
 from datetime import datetime
 from html.parser import HTMLParser
 from pathlib import Path
@@ -189,4 +191,5 @@ end = index_html.index('<section class="home-translations"', start)
 writing = f'<section id="writing" aria-labelledby="writing-title"><div class="section-heading"><h2 id="writing-title"><span class="section-index" aria-hidden="true">01</span>思考与实践</h2><a href="./writing.html">全部 {len(ARTICLES)} 篇 →</a></div>\n'
 writing += ''.join(listing(i) for i in ARTICLES[:6]) + '</section>'
 index_path.write_text(index_html[:start] + writing + index_html[end:])
+subprocess.run([sys.executable, str(ROOT / 'scripts/update-seo.py')], check=True)
 print(f'Rendered {len(ISSUES)} migrated articles; indexed {len(ORIGINALS)} original articles, archive and home index.')
