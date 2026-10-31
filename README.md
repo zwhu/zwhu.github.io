@@ -34,7 +34,7 @@
 
 `content/doc-lint-comparison/` 中的对照页保留 `noindex, follow`，不加入 sitemap；robots.txt 允许抓取，以便搜索引擎读取 noindex。新增正式页面后重新运行 SEO 脚本；迁移域名时修改统一配置并重新生成，原站跳转需要另外配置。
 
-发布后，在 Google Search Console 和 Bing Webmaster Tools 验证站点，提交 `https://zwhu.github.io/sitemap.xml`，再用 URL 检查确认首页与代表文章的抓取、规范地址和收录情况。站长平台的账户验证尚未完成；本地检查不代表已经收录。
+发布后，在 Google Search Console 和 Bing Webmaster Tools 验证站点，提交 `https://zwhu.github.io/sitemap.xml`，再用 URL 检查确认首页与代表文章的抓取、规范地址和收录情况。站长平台的验证与抓取结果需在平台内确认；本地检查不代表已经收录。
 
 首页的公开所有权验证标记维护在 `content/seo.json` 的 `site.verification` 中；验证成功后仍应保留。它们用于证明站点所有权，不是账户 API 密钥。
 
