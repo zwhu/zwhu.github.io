@@ -1,0 +1,91 @@
+/* Super-agent's editorial layout: a single reading column, occasional wide art, and quiet marginal notes. */
+.superagent-editorial main{max-width:1040px;padding-inline:40px}
+.superagent-editorial .article{padding-top:28px}
+.superagent-editorial .editorial-hero{display:grid;grid-template-columns:1.04fr 1fr;gap:18px;align-items:center;margin:27px 0 36px;padding-bottom:32px;border-bottom:1px solid var(--line)}
+.superagent-editorial .editorial-kicker{font:10px/1.6 ui-monospace,SFMono-Regular,monospace;letter-spacing:1.8px;color:var(--accent);margin:0 0 18px}
+.superagent-editorial .article h1{font-size:39px;line-height:1.32;letter-spacing:-1.2px;margin:0 0 16px;max-width:490px;font-weight:600}
+.superagent-editorial .editorial-subtitle{font-size:16px;color:var(--muted);line-height:1.65;margin:0 0 23px}
+.superagent-editorial .editorial-standfirst{font-size:15px;line-height:1.95;max-width:420px}
+.superagent-editorial .editorial-hero img{width:100%;height:auto}
+.superagent-editorial .meta{font-size:11px;margin:18px 0 0}
+.superagent-editorial .prose{font-size:15px;line-height:1.9}
+.superagent-editorial .editorial-intro{max-width:650px;margin-bottom:38px}
+.superagent-editorial .editorial-intro p{margin-bottom:16px}
+.superagent-editorial .source-note{font-size:12px;line-height:1.8;color:var(--muted);padding-top:14px;border-top:1px solid var(--line)}
+.superagent-editorial .article-toc{margin:0 0 34px}
+.superagent-editorial .reading-section{display:grid;grid-template-columns:minmax(0,650px) minmax(140px,1fr);column-gap:48px;align-items:start;margin:0 0 48px}
+.superagent-editorial .reading-section>h2,.superagent-editorial .reading-section>h3,.superagent-editorial .reading-section>p,.superagent-editorial .reading-section>blockquote,.superagent-editorial .reading-section>.table-scroll,.superagent-editorial .reading-section>ul,.superagent-editorial .reading-section>.architecture-explorer{grid-column:1}
+.superagent-editorial .reading-section h2{font-size:22px;line-height:1.55;letter-spacing:-.3px;margin:8px 0 24px;padding-top:24px;border-top:1px solid var(--line);display:flex;gap:18px}
+.superagent-editorial .section-index{font:12px/2.8 ui-monospace,SFMono-Regular,monospace;color:var(--accent);font-weight:400;letter-spacing:1px}
+.superagent-editorial .reading-section h3{font-size:17px;font-weight:600;margin:29px 0 12px}
+.superagent-editorial .reading-section p{margin:0 0 16px}
+.superagent-editorial .reading-section>.article-figure{grid-column:1;margin:19px 0 24px}
+.superagent-editorial .reading-section>.wide-figure{grid-column:1/-1;margin:22px 0 30px}
+.superagent-editorial .article-figure img{display:block;width:100%;height:auto}
+.superagent-editorial .original-figure img{max-width:850px;margin-inline:auto}
+.superagent-editorial .compact-figure img{max-width:600px}
+.superagent-editorial .article-figure figcaption{font-size:11px;line-height:1.85;margin-top:10px;color:var(--muted);max-width:700px}
+.superagent-editorial .margin-note{grid-column:2;margin:0;border-top:1px solid var(--line);padding-top:13px;font-size:12px;line-height:1.85;color:var(--muted)}
+.superagent-editorial .margin-note h3{font-size:12px;margin:0 0 9px;color:var(--text);font-weight:500}
+.superagent-editorial .margin-note p{margin:0 0 10px}
+.superagent-editorial .reading-section blockquote{margin:13px 0 18px;padding-left:16px;border-left:2px solid var(--accent);font-size:14px;line-height:1.85;color:var(--text)}
+.superagent-editorial .prose table{font-size:12px;line-height:1.7}
+.superagent-editorial .prose th,.superagent-editorial .prose td{min-width:96px;padding:10px 11px;border:0;border-bottom:1px solid var(--line)}
+.superagent-editorial .prose th{border-top:1px solid var(--line);background:transparent;font-weight:600}
+.superagent-editorial .prose strong{font-weight:600}
+.superagent-editorial .reading-section>.editorial-quote{grid-column:1/-1;font-size:25px;line-height:1.6;font-weight:500;letter-spacing:-.4px;max-width:800px;padding:20px 0;border:0;border-block:1px solid var(--line);margin:24px 0 30px;color:var(--text)}
+.superagent-editorial .article-bottom{max-width:650px;margin-top:0}
+.superagent-editorial .route-demo{grid-column:1/-1;border-block:1px solid var(--line);margin:16px 0 28px;padding:22px 0}
+.route-demo .route-question{font-size:18px;line-height:1.65;font-weight:500;margin:0 0 15px}
+.route-controls{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:18px}
+.route-controls button{font:inherit;font-size:12px;line-height:1.6;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:3px;padding:8px 12px;cursor:pointer}
+.route-controls button[aria-pressed=true]{border-color:var(--accent);color:var(--accent)}
+.route-controls button:hover{border-color:var(--accent)}
+.route-controls button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.route-message{font-size:14px;padding:15px 0;border-top:1px solid var(--line)}
+.route-visual{max-width:700px;margin:5px auto}
+.route-visual svg{display:block;width:100%;height:auto}
+.route-visual .route-line{fill:none;stroke:var(--line);stroke-width:1.5}
+.route-demo[data-route=direct] .direct-line,.route-demo[data-route=router] .router-line{stroke:var(--accent);stroke-width:2.5}
+.route-visual .node{fill:var(--bg);stroke:var(--line);stroke-width:1.2}
+.route-visual text{font-family:inherit;fill:var(--text);font-size:14px}
+.route-visual .node-detail{fill:var(--muted);font-size:12px}
+.route-visual .route-label{fill:var(--muted);font-size:11px}
+.route-demo .route-explanation{font-size:13px;line-height:1.8;max-width:680px;margin:14px 0 10px}
+.route-demo .route-verdict{font-size:13px;color:var(--accent);margin:5px 0 12px}
+.route-demo .route-provenance{font-size:11px;line-height:1.75;color:var(--muted);max-width:700px;margin:0}
+.route-static{margin-top:16px;font-size:12px}
+.route-static summary{font-size:12px;color:var(--accent);cursor:pointer}
+.route-static table{margin-top:12px}
+@media(max-width:900px){
+ .superagent-editorial main{max-width:760px;padding-inline:28px}
+ .superagent-editorial .article h1{font-size:34px}
+ .superagent-editorial .reading-section{display:block}
+ .superagent-editorial .margin-note{margin:3px 0 23px;padding-left:14px;border-left:1px solid var(--line);border-top:0;max-width:650px}
+ .superagent-editorial .editorial-hero{gap:4px}
+ .superagent-editorial .editorial-standfirst{font-size:14px}
+}
+@media(max-width:560px){
+ .superagent-editorial main{padding-inline:22px}
+ .superagent-editorial .editorial-hero{display:block;margin:24px 0;padding-bottom:22px}
+ .superagent-editorial .article h1{font-size:32px;letter-spacing:-.7px;line-height:1.38}
+ .superagent-editorial .editorial-subtitle{font-size:14px;margin-bottom:20px}
+ .superagent-editorial .editorial-standfirst{font-size:15px;max-width:none}
+ .superagent-editorial .editorial-hero img{margin-top:12px}
+ .superagent-editorial .editorial-kicker{margin-bottom:14px}
+ .superagent-editorial .prose{font-size:15px;line-height:1.9}
+ .superagent-editorial .reading-section h2{font-size:21px;gap:11px}
+ .superagent-editorial .route-demo .route-question{font-size:17px}
+ .route-controls{gap:7px}
+ .route-controls button{flex:1;padding:9px 6px;font-size:11px;min-width:90px}
+ .superagent-editorial .reading-section{margin-bottom:34px}
+ .superagent-editorial .reading-section>.editorial-quote{font-size:21px}
+}
+@media print{
+ .superagent-editorial .reading-section{display:block}
+ .superagent-editorial .editorial-hero{display:block}
+ .route-controls,.route-visual,.route-explanation,.route-verdict{display:none}
+ .route-static{display:block}
+ .superagent-editorial .article-figure{break-inside:avoid}
+ .superagent-editorial .margin-note{break-inside:avoid;margin-bottom:16px}
+}

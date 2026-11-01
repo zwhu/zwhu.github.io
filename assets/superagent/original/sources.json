@@ -1,0 +1,90 @@
+[
+  {
+    "original_figure": 3,
+    "file": "fig03.jpg",
+    "caption": "整体系统架构：双层分工、事件驱动、交互、执行环境与 Watchdog",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "45db88c6961ddbe6c5802c8d46e126bc8849d855a5850262a2fdbb71297997d3"
+  },
+  {
+    "original_figure": 4,
+    "file": "fig04.jpg",
+    "caption": "双层架构：Router 统一路由与交互，Worker 隔离上下文并发执行",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "3ff5e5580f7f5f13bb1b93a033f347c9ee6cf0187a31d7724d70cff6bfe89c6d"
+  },
+  {
+    "original_figure": 5,
+    "file": "fig05.jpg",
+    "caption": "两级过滤：程序层先筛除噪音，语义层再判断是否行动",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "1644faad9c700f9564c74646be9104f638c22660bc47a4a80aee025731acb469"
+  },
+  {
+    "original_figure": 6,
+    "file": "fig06.jpg",
+    "caption": "Thread 示例：IM 话题与 GitHub PR 中的连续事件",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "560f94c0523aeb41bc7d061aa28058a1854a4c50f04bea36866b2abcafff0e7a"
+  },
+  {
+    "original_figure": 7,
+    "file": "fig07.jpg",
+    "caption": "订阅与直通：初始事件由 Router 分派，后续事件直达已订阅 Worker",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "b11917132b931861a4a2684dd81281db31a19690a2ba5b5b4d331e2289509fae"
+  },
+  {
+    "original_figure": 8,
+    "file": "fig08.jpg",
+    "caption": "链式召回：沿对象的摘要与 ID 逐跳展开上下文",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "a36fe9ab25501342393c86c93e09cc55c59233c7aa4a1c4cf22c981a74417921"
+  },
+  {
+    "original_figure": 10,
+    "file": "fig10.jpg",
+    "caption": "异步 ReAct Loop：后台工具运行时仍可接收新消息",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "d342ee5e91f5cf192f723e18c54cc9c2805395e7a987a14bafe92f8cf9be9e85"
+  },
+  {
+    "original_figure": 11,
+    "file": "fig11.jpg",
+    "caption": "计算、状态与环境分离：云端 Loop、持久状态与端侧 daemon",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "42ab7d577dc42d8e952a89d038c96567c9dd0bccea1b7be7b5f7198ab85ffce0"
+  },
+  {
+    "original_figure": 12,
+    "file": "fig12.png",
+    "caption": "调度实验：工作请求的累计到达与四种方案的累计完成曲线",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "6fe42fe704b5a19f884b4a5624d4daf09e0deeab4e894b1ce8fdfaa08346c970"
+  },
+  {
+    "original_figure": 13,
+    "file": "fig13.png",
+    "caption": "作者调度结果表：任务完成时间与缓存读取用量",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "250d7391a2a75018d67a424e02af15290d5b5c080f30690bc655b49754db96a7"
+  },
+  {
+    "original_figure": 14,
+    "file": "fig14.png",
+    "caption": "Router 批处理：到达速率、批量大小、请求耗时与分摊推理时间",
+    "source_article": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+    "archived_at": "2026-10-31",
+    "sha256": "729241fc13b1e8afdc808a20b26c083616aabd3238072209afa8d3ea1a31ab81"
+  }
+]

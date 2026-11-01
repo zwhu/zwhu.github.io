@@ -15,6 +15,20 @@
 .article-figure picture,.article-figure img{display:block;width:100%}
 .article-figure img{height:auto}
 .article-figure figcaption{margin-top:9px;font-size:11px;line-height:1.8;color:var(--muted)}
+.architecture-explorer{margin:24px 0;border-block:1px solid var(--line);padding:12px 0}
+.architecture-explorer summary{cursor:pointer;font-size:12px;color:var(--accent)}
+.architecture-explorer summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.architecture-explorer>p{font-size:12px;color:var(--muted);margin:12px 0}
+.architecture-frame iframe{display:block;width:100%;height:clamp(400px,65vh,680px);border:1px solid var(--line);border-radius:4px}
+@media print{.architecture-explorer{display:none}}
+@media print{
+  .issue-page.superagent-page .site-header,.issue-page.superagent-page .skip-link,.issue-page.superagent-page .back,.issue-page.superagent-page .article-bottom,.issue-page.superagent-page .comments,.issue-page.superagent-page footer{display:none}
+  .superagent-page .article{padding:0}
+  .superagent-page .article h1{margin-top:0}
+  .superagent-page .article-figure{break-inside:avoid}
+  .superagent-page .prose h2,.superagent-page .prose h3{break-after:avoid}
+  .superagent-page .prose p{orphans:3;widows:3}
+}
 .issue-page .prose table caption{caption-side:top;text-align:left;padding:0 0 8px;font-size:11px;color:var(--muted)}
 .article-references{padding-left:22px;font-size:13px}
 .article-references li{margin-bottom:8px;scroll-margin-top:22px}

@@ -10,10 +10,14 @@
     "author": {
       "name": "zwhu",
       "url": "https://zwhu.github.io/#about",
-      "sameAs": ["https://github.com/zwhu"]
+      "sameAs": [
+        "https://github.com/zwhu"
+      ]
     }
   },
-  "noindexDirectories": ["content/doc-lint-comparison"],
+  "noindexDirectories": [
+    "content/doc-lint-comparison"
+  ],
   "pages": {
     "index.html": {
       "description": "zwhu 的个人技术博客，记录前端工程、Agent 评测与 AI 编程实践，收录技术译文和交互式学习笔记。"
@@ -48,7 +52,10 @@
     "claude-code-review.html": {
       "description": "Addy Osmani 关于 Claude Code 团队代码审查实践的全文中英对照翻译，介绍自动化检查与人工审查的分工，保留原文插图。",
       "datePublished": "2026-10-27",
-      "author": {"name": "Addy Osmani", "url": "https://x.com/addyosmani"},
+      "author": {
+        "name": "Addy Osmani",
+        "url": "https://x.com/addyosmani"
+      },
       "translationOfWork": {
         "@type": "Article",
         "name": "How the Claude Code team does code review",
@@ -60,7 +67,10 @@
     "engineers-new-problems.html": {
       "description": "Katelyn Lesse 关于多智能体系统工程问题的全文中英对照翻译，讨论 Agent 的上下文、协作与运行环境，保留原文和插图。",
       "datePublished": "2026-10-27",
-      "author": {"name": "Katelyn Lesse", "url": "https://www.katelynlesse.com/"},
+      "author": {
+        "name": "Katelyn Lesse",
+        "url": "https://www.katelynlesse.com/"
+      },
       "translationOfWork": {
         "@type": "Article",
         "name": "The new set of problems for engineers to solve",
@@ -68,6 +78,14 @@
         "inLanguage": "en",
         "datePublished": "2026-10-26"
       }
+    },
+    "superagent.html": {
+      "description": "从一次 CSV 修复的后续反馈，理解 Super-agent 如何分发消息、找回历史和恢复任务，再看持续运行与实验改善的代价。",
+      "datePublished": "2026-11-01"
+    },
+    "superagent-botmux.html": {
+      "description": "比较 botmux 与 Super-agent 的任务组织，复用已有接入和执行，先用真实任务验证续办质量与人工收益。",
+      "datePublished": "2026-11-01"
     }
   }
 }

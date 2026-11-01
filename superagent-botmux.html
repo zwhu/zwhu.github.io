@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>从 botmux 到持续任务协调：先验证续办收益 · zwhu</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./archive.css">
+  <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+
+
+<!-- SEO:start -->
+<meta name="description" content="比较 botmux 与 Super-agent 的任务组织，复用已有接入和执行，先用真实任务验证续办质量与人工收益。">
+<link rel="canonical" href="https://zwhu.github.io/superagent-botmux.html">
+<meta name="author" content="zwhu">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="zwhu 的技术博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="从 botmux 到持续任务协调：先验证续办收益 · zwhu">
+<meta property="og:description" content="比较 botmux 与 Super-agent 的任务组织，复用已有接入和执行，先用真实任务验证续办质量与人工收益。">
+<meta property="og:url" content="https://zwhu.github.io/superagent-botmux.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从 botmux 到持续任务协调：先验证续办收益 · zwhu">
+<meta name="twitter:description" content="比较 botmux 与 Super-agent 的任务组织，复用已有接入和执行，先用真实任务验证续办质量与人工收益。">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://zwhu.github.io/#website","url":"https://zwhu.github.io/","name":"zwhu 的技术博客","inLanguage":"zh-CN","publisher":{"@id":"https://zwhu.github.io/#author"}},{"@type":"Person","@id":"https://zwhu.github.io/#author","name":"zwhu","url":"https://zwhu.github.io/#about","sameAs":["https://github.com/zwhu"]},{"@type":"WebPage","@id":"https://zwhu.github.io/superagent-botmux.html#webpage","url":"https://zwhu.github.io/superagent-botmux.html","name":"从 botmux 到持续任务协调：先验证续办收益 · zwhu","description":"比较 botmux 与 Super-agent 的任务组织，复用已有接入和执行，先用真实任务验证续办质量与人工收益。","inLanguage":"zh-CN","isPartOf":{"@id":"https://zwhu.github.io/#website"},"mainEntity":{"@id":"https://zwhu.github.io/superagent-botmux.html#article"}},{"@type":"BlogPosting","@id":"https://zwhu.github.io/superagent-botmux.html#article","url":"https://zwhu.github.io/superagent-botmux.html","headline":"从 botmux 到持续任务协调：先验证续办收益","description":"比较 botmux 与 Super-agent 的任务组织，复用已有接入和执行，先用真实任务验证续办质量与人工收益。","inLanguage":"zh-CN","mainEntityOfPage":{"@id":"https://zwhu.github.io/superagent-botmux.html#webpage"},"author":{"@id":"https://zwhu.github.io/#author"},"publisher":{"@id":"https://zwhu.github.io/#author"},"datePublished":"2026-11-01"}]}</script>
+<!-- SEO:end -->
+</head>
+<body class="issue-page superagent-page">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header">
+  <a class="brand" href="./index.html">zwhu<span>.</span></a>
+  <nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav>
+</header>
+<main id="main"><article class="article article-with-toc"><a class="back" href="./writing.html">← 所有文章</a><h1>从 botmux 到持续任务协调：先验证续办收益</h1><div class="meta"><time datetime="2026-11-01">2026-11-01</time> · Agent 架构 · 源码研究</div><div class="prose"><p>Super-agent 给研发工具的启发，是把需求、执行、评审与结果关联为一项持续任务。对于已经使用 botmux 的团队，值得先验证的是：自动把后续事件送回原执行者，能否减少人工转发与追问。</p>
+<p>本文比较 botmux 公开版 v3.55.0 与 Super-agent 原型 <code>6337fc8</code>，不代表所有内部部署。以下是方案建议，尚未实施；公司规模、业务基线和实际收益没有提供。</p>
+<nav class="article-toc" aria-label="文章快速导航"><span class="article-toc-label">本文导航</span><div class="article-toc-links"><a href="#capabilities" aria-current="location">已有能力</a><a href="#pilot">试点范围</a><a href="#evaluation">效果验证</a><a href="#sources">资料</a></div></nav>
+<h2 id="capabilities" tabindex="-1">1. 复用已有能力，补任务关联</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="正文表格（可横向滚动）"><table>
+<thead>
+<tr>
+<th>工作</th>
+<th>botmux 公开实现</th>
+<th>Super-agent 公开实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>并行执行</td>
+<td>按会话锚点与 bot 找到独立 CLI/Worker</td>
+<td>Ticket 对应独立 Worker 会话与目录</td>
+</tr>
+<tr>
+<td>后续消息</td>
+<td>按话题或群的明确锚点路由</td>
+<td>Thread 与 Ticket 订阅，关联 PR 后直通</td>
+</tr>
+<tr>
+<td>协调</td>
+<td>bot 按编排技能派发与回报，也有 workflow</td>
+<td>主会话判断请求与任务的关系</td>
+</tr>
+<tr>
+<td>状态与恢复</td>
+<td>持久会话、进程监督、冷恢复等</td>
+<td>Ticket/Assignment、Effects/Outbox 与恢复路径</td>
+</tr>
+<tr>
+<td>人需要介入</td>
+<td>attention、@ 规则与决策看板</td>
+<td>结构化问题、结果与原讨论回复</td>
+</tr>
+</tbody>
+</table></div>
+<p>botmux 已有接入、执行和恢复功能。新增工程应集中在跨信道任务身份、后续事件关联和交付证据。话题锚点能确定会话，但一个业务任务可能跨多个话题、PR 与 CI，二者不是同一个标识。</p>
+<p>公司是否受协调问题制约，要先分清时间花在哪里：模型执行、环境等待、人的阅读操作，还是返工。任务协调不能补偿错误代码或不可用的测试环境。</p>
+<h2 id="pilot" tabindex="-1">2. 第一版限定一个仓库和任务类型</h2>
+<p>建议先选择 PR 评审跟进或 CI 修复。保存原请求、授权、Task ID、Thread/PR 关联、当前 Worker、等待原因与交付证据。已明确归属的事件直接投递，关联不明时才交给模型判断。</p>
+<p>先验证一条流程：请求 → 执行 → PR → 评审/CI 回到原 Worker → 提交验收证据。复用现有会话、消息和看板，不同时建设全公司记忆或扩大主动执行范围。</p>
+<p>多个任务改动同一文件，需要额外的重叠检查和协调。单机事务能保证记录完整，不能保证模型没有重复建任务，也不能保证两个 PR 的逻辑兼容。</p>
+<h2 id="evaluation" tabindex="-1">3. 用真实对照决定是否扩大</h2>
+<p>以团队当前最好用的 botmux 工作流作基线。两组使用相同模型、工具权限、Worker 上限和相近难度的任务，记录失败与额外审查。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="正文表格（可横向滚动）"><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>回答的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每个验收通过任务的人工主动操作分钟</td>
+<td>是否减少了转发、读消息与催办</td>
+</tr>
+<tr>
+<td>合格率、返工与回归</td>
+<td>自动续办是否降低质量</td>
+</tr>
+<tr>
+<td>错路由、重复任务、停止后继续</td>
+<td>任务关联与控制是否可靠</td>
+</tr>
+<tr>
+<td>总完成耗时及长尾</td>
+<td>是否缩短等待，还是把排队转移了</td>
+</tr>
+<tr>
+<td>增量模型、维护与基础设施费用</td>
+<td>收益是否值得投入</td>
+</tr>
+</tbody>
+</table></div>
+<p>作者的合成实验显示调度长尾缩短，没有测人工分钟和真实代码质量。五次运行的 p95 也不足以作为公司的稳定服务承诺。</p>
+<p>先量基线，再影子判断、回放故障与停止路径，最后做受控对照。是否扩大，应根据净人工操作、交付质量和实际增量费用决定。预算收益须使用真实参数，释放的时间也不自动等于现金节省。</p>
+<h2 id="sources" tabindex="-1">来源与状态</h2>
+<ul>
+<li><a href="./superagent.html">Super-agent 设计与实现文章</a>：分发、上下文、恢复、事务和冲突范围。</li>
+<li><a href="https://github.com/deepcoldy/botmux/tree/fdd7d8d9bacb471cd61e7b4f44bd84c382a2ec2f">botmux 固定版本</a>：会话锚点、接入、编排、恢复与看板的比较依据。</li>
+<li><a href="https://github.com/deepseek-ai/dsh-superagent-prototype/tree/6337fc823ce20251c8de8085948165c81aaa701e">Super-agent 固定原型</a>：单仓库任务与订阅模型。</li>
+</ul>
+<p>本篇是一份方向建议，不是已交付的任务协调系统，也不宣称公司已经取得收益。</p>
+</div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./superagent.html">相关阅读：Super-agent 的 Router 如何工作 →</a><a href="./learn-agent-memory.html">相关阅读：Agent 记忆 →</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=5" defer></script><script src="./article-toc.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --></body>
+</html>

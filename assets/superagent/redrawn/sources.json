@@ -1,0 +1,132 @@
+{
+  "sourceArticle": "https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg",
+  "description": "博客风格重绘；原文设计图，不是公开版本实现范围的新证据。",
+  "figures": [
+    {
+      "originalFigure": 4,
+      "title": "双层分工：统一交互，隔离执行",
+      "desktop": {
+        "file": "fig04.svg",
+        "width": 760,
+        "height": 300,
+        "nodes": 7,
+        "edges": 6
+      },
+      "mobile": {
+        "file": "fig04-mobile.svg",
+        "width": 360,
+        "height": 590,
+        "nodes": 7,
+        "edges": 6
+      }
+    },
+    {
+      "originalFigure": 7,
+      "title": "订阅与直通：初始判断，后续投递",
+      "desktop": {
+        "file": "fig07.svg",
+        "width": 760,
+        "height": 260,
+        "nodes": 3,
+        "edges": 3
+      },
+      "mobile": {
+        "file": "fig07-mobile.svg",
+        "width": 360,
+        "height": 472,
+        "nodes": 3,
+        "edges": 3
+      }
+    },
+    {
+      "originalFigure": 5,
+      "title": "两级过滤：先过规则，再读语义",
+      "desktop": {
+        "file": "fig05.svg",
+        "width": 820,
+        "height": 362,
+        "nodes": 6,
+        "edges": 5
+      },
+      "mobile": {
+        "file": "fig05-mobile.svg",
+        "width": 360,
+        "height": 760,
+        "nodes": 6,
+        "edges": 5
+      }
+    },
+    {
+      "originalFigure": 11,
+      "title": "计算、状态与执行环境分离",
+      "desktop": {
+        "file": "fig11.svg",
+        "width": 760,
+        "height": 302,
+        "nodes": 5,
+        "edges": 4
+      },
+      "mobile": {
+        "file": "fig11-mobile.svg",
+        "width": 360,
+        "height": 620,
+        "nodes": 5,
+        "edges": 4
+      }
+    },
+    {
+      "originalFigure": 3,
+      "title": "Super-agent 整体设计",
+      "desktop": {
+        "file": "fig03.svg",
+        "width": 820,
+        "height": 468,
+        "nodes": 9,
+        "edges": 11
+      },
+      "mobile": {
+        "file": "fig03-mobile.svg",
+        "width": 360,
+        "height": 972,
+        "nodes": 9,
+        "edges": 11
+      }
+    },
+    {
+      "originalFigure": 8,
+      "title": "Inline & Spill：沿引用逐跳召回",
+      "desktop": {
+        "file": "fig08.svg",
+        "width": 820,
+        "height": 432,
+        "nodes": 6,
+        "edges": 5
+      },
+      "mobile": {
+        "file": "fig08-mobile.svg",
+        "width": 360,
+        "height": 1084,
+        "nodes": 6,
+        "edges": 5
+      }
+    },
+    {
+      "originalFigure": 10,
+      "title": "同步与异步 ReAct Loop",
+      "desktop": {
+        "file": "fig10.svg",
+        "width": 820,
+        "height": 606,
+        "nodes": 13,
+        "edges": 14
+      },
+      "mobile": {
+        "file": "fig10-mobile.svg",
+        "width": 360,
+        "height": 960,
+        "nodes": 13,
+        "edges": 14
+      }
+    }
+  ]
+}

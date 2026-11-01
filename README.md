@@ -88,3 +88,19 @@ ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-co
 `learning.html` 收录六篇交互文档：首页与全站导航均提供入口。各篇使用稳定的 `learn-*.html` 文件名，正文与图表保留在页面中，交互脚本及原布局分别放在 `assets/learning/`，统一视觉放在 `learning.css`。目录元信息见 `content/interactive-learning.json`；修改文章信息时需同步目录与首页。
 
 保留场景切换、训练实验、闪卡、测验、SVG 动画与提示词复制。Agent 记忆页原先依赖聊天环境的继续学习按钮已改为站内模块说明、源码阅读路线与自测。大型图表在窄屏局部横向滚动。
+
+## Super-agent 文章与研究资产
+
+- `content/superagent.md` / `superagent.html`：整体架构、Router 分发、上下文、Worker 恢复、一致性、冲突、异步执行、存算分离、Watchdog 与实验范围。
+- `content/superagent-botmux.md` / `superagent-botmux.html`：与 botmux 的公开能力比较及待验证的方向。
+- `content/superagent-evidence.md` / `content/superagent-data.json`：原文结果和补充实验的来源、口径与限制。
+- `content/architecture-tool-selection.md`：三种工具对比。选择 architecture-canvas，聚焦是总览节点查看，不是层级下钻。
+- `assets/superagent/index.html`：可独立打开的交互画布；`scene.js` 是架构数据，正文静态图与完整图由同一生成脚本维护。
+- `assets/superagent/original/`：原文图 3–8、10–14，保留原图号和来源；主文展示七张关键架构图与两张实验图，Thread 示例和原结果表在实验附录。
+- `content/superagent-review-changes.md`：第二版与最初博客的主题对应，说明恢复的内容和原图位置。
+- 第三版按一次 CSV 修复串联消息归属、身份、上下文、恢复和实验。主题插画与收益/开销比较由 `scripts/render-superagent-editorial.cjs` 生成，局部编辑布局在 `assets/superagent/editorial.css`，三场景交互在 `assets/superagent/routes.js`。网页提供静态表格后备，完整架构图继续按需加载。
+- 第四版将正文七张旧架构图重绘成博客风格，桌面/手机 SVG 在 `assets/superagent/redrawn/`；运行 `node scripts/render-superagent-source-diagrams.cjs` 生成，同时检查两种布局的节点与关系对应。原图对照与来源保留。
+
+先执行 `node scripts/vendor/architecture-canvas/validate.cjs assets/superagent/scene.js`，再执行 `node scripts/render-superagent-diagrams.cjs`。生成过程只用 Node 标准库，GitHub Pages 仍直接提供静态文件；修改正文时同时维护 Markdown 与对应 HTML。
+
+这批文章经作者授权合并到 `main`，由 GitHub Pages 直接提供静态页面。正文与配套文章均使用站内章节导航，支持窄屏、键盘、当前章节提示和无脚本锚点跳转。图模板的 MIT 许可保存在 `scripts/vendor/architecture-canvas/LICENSE` 及资源目录内。
