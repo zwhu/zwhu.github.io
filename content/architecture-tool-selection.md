@@ -18,8 +18,8 @@
 
 - 交互图：[assets/superagent/index.html](../assets/superagent/index.html)。默认暖白主题与系统字体，移除远程字体请求；支持缩放、拖动、聚焦、清除与导出。
 - 静态图：正文使用 [architecture.svg](../assets/superagent/architecture.svg) 和 [consistency.svg](../assets/superagent/consistency.svg)，完整图为 [architecture-full.svg](../assets/superagent/architecture-full.svg)。原工具没有 SVG 导出，SVG 由本站脚本生成。
-- scene、MIT 许可和开发模板保存在仓库内。运行 `node scripts/vendor/architecture-canvas/validate.cjs assets/superagent/scene.js` 校验，再运行 `node scripts/render-superagent-diagrams.cjs` 生成。
-- 正文默认展示静态图，读者展开后才加载同源画布，并有独立打开入口。正文文字可独立阅读；Canvas 本身不是完整的读屏语义视图。
+- scene、MIT 许可和模块模板保存在仓库内。运行 `node scripts/vendor/architecture-canvas/validate.cjs assets/superagent/scene.js` 校验，再运行 `node scripts/render-superagent-diagrams.cjs` 生成。
+- 交互图直接嵌入正文并默认显示，接近视口时自动加载同源模块，无需点击展开或加载 iframe。模块和场景合并为一个请求；旧的独立地址作为兼容入口保留。正文文字可独立阅读；Canvas 本身不是完整的读屏语义视图。
 
 原校验器按等宽拉丁字符估算文字宽度，可能低估中文，必须补真实浏览器字体测量与视觉检查。三个工具均为 MIT，本站复制的模板保留版权和许可。
 

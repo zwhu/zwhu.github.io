@@ -16,10 +16,9 @@
 .article-figure img{height:auto}
 .article-figure figcaption{margin-top:9px;font-size:11px;line-height:1.8;color:var(--muted)}
 .architecture-explorer{margin:24px 0;border-block:1px solid var(--line);padding:12px 0}
-.architecture-explorer summary{cursor:pointer;font-size:12px;color:var(--accent)}
-.architecture-explorer summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.architecture-explorer h3{font-size:14px;margin:0;color:var(--text)}
 .architecture-explorer>p{font-size:12px;color:var(--muted);margin:12px 0}
-.architecture-frame iframe{display:block;width:100%;height:clamp(400px,65vh,680px);border:1px solid var(--line);border-radius:4px}
+.architecture-frame{display:block;width:100%;height:clamp(400px,65vh,680px);border:1px solid var(--line);border-radius:4px;overflow:hidden}
 @media print{.architecture-explorer{display:none}}
 @media print{
   .issue-page.superagent-page .site-header,.issue-page.superagent-page .skip-link,.issue-page.superagent-page .back,.issue-page.superagent-page .article-bottom,.issue-page.superagent-page .comments,.issue-page.superagent-page footer{display:none}

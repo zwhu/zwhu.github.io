@@ -62,7 +62,7 @@ Router 转交原始请求和简短路由背景，不临时编写修复方案。W
 | Assignment | 这项任务的一轮执行，包括启动、投递和报告 |
 
 <figure class="article-figure compact-figure"><a href="../assets/superagent/architecture-full.svg"><img src="../assets/superagent/architecture.svg" width="600" height="510" loading="lazy" alt="Intake 查讨论订阅，已有输入直达 Worker；未知候选由 Router 分派，任务关系持久保存。"></a><figcaption>公开原型的记录与投递路径。</figcaption></figure>
-<details class="architecture-explorer"><summary>探索完整架构：缩放、拖动与节点关系</summary><p>这张画布提供组件总览，点击节点查看相邻关系；聚焦不是层级下钻。</p><div class="architecture-frame" data-canvas-src="../assets/superagent/index.html"></div><p><a href="../assets/superagent/index.html">独立打开交互图</a></p></details>
+<section class="architecture-explorer" aria-label="交互架构图"><h3>探索完整架构</h3><p>拖动画布平移，使用底部按钮缩放；点击节点查看相邻关系。</p><div class="architecture-frame" data-architecture-canvas><p>交互图将在阅读到此处时自动加载。<a href="../assets/superagent/architecture-full.svg">查看完整静态图</a></p></div></section>
 
 新任务建立新 Ticket 和 Worker。旧任务重新开始，可以新建 Assignment，同时复用固定 ID `worker-<ticketId>` 的原 Worker。任务身份与执行轮次分开，才能解释“工作已经结束，为什么还能续办”。
 
