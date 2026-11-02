@@ -45,6 +45,45 @@
 .article-with-toc :is(h2,h3)[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
 @media(max-width:560px){.article-toc{gap:10px;font-size:11px}.article-toc-label{font-size:10px}.article-toc-links{gap:12px}}
 @media print{.article-toc{display:none}}
+
+/* 桌面长文刻度：宽点击区、按需预览；窄屏和无脚本沿用文字目录。 */
+.article-rail{display:none}
+.article-rail-label{font-size:10px;line-height:1.8;color:var(--muted);margin-bottom:12px}
+.article-rail-links{position:relative;display:flex;flex-direction:column;max-height:calc(100dvh - 150px);overflow-y:auto;scrollbar-width:none}
+.article-rail-links::-webkit-scrollbar{display:none}
+.article-rail-link{position:relative;display:block;flex-shrink:0;width:44px;height:40px;border-radius:4px}
+.article-rail-link::before{content:"";position:absolute;left:10px;top:19px;width:12px;height:2px;background:var(--muted);opacity:.45;transition:width .15s ease,background-color .15s ease,opacity .15s ease}
+.article-rail-link::after{content:"";position:absolute;left:10px;bottom:0;width:8px;height:1px;background:var(--line)}
+.article-rail-link:last-child::after{display:none}
+.article-rail-link:hover::before,.article-rail-link:focus-visible::before{width:22px;background:var(--accent);opacity:1}
+.article-rail-link[aria-current="location"]::before{width:28px;background:var(--accent);opacity:1}
+.article-rail-link:focus-visible{outline-offset:-2px}
+.article-rail-text{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.article-rail.article-rail-compact,.article-rail-compact .article-rail-link{width:24px}
+.article-rail-compact .article-rail-label{font-size:9px}
+.article-rail-compact .article-rail-link::before{left:4px;width:8px}
+.article-rail-compact .article-rail-link::after{left:4px;width:5px}
+.article-rail-compact .article-rail-link:hover::before,.article-rail-compact .article-rail-link:focus-visible::before{width:12px}
+.article-rail-compact .article-rail-link[aria-current="location"]::before{width:16px}
+.article-rail-preview{position:fixed;z-index:21;width:304px;max-width:calc(100vw - 32px);max-height:calc(100dvh - 24px);overflow-y:auto;padding:15px 17px;background:var(--bg);border:1px solid var(--line);border-radius:6px;color:var(--text);text-align:left;overflow-wrap:anywhere}
+.article-rail-preview[hidden]{display:none}
+.article-rail-preview-index{display:block;margin-bottom:7px;color:var(--muted);font:10px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.5px}
+.article-rail-preview-title{font-size:14px;font-weight:600;line-height:1.6}
+.article-rail-preview p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font-size:12px;line-height:1.85;color:var(--muted);margin:7px 0 0}
+.article-rail-preview p[hidden]{display:none}
+.article-preview-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:12px}
+.article-preview-actions[hidden]{display:none}
+.article-preview-actions a{color:var(--accent)}
+.article-preview-actions button{padding:4px 8px;border:1px solid var(--line);border-radius:4px;background:transparent;color:var(--muted);font:inherit;cursor:pointer}
+.article-preview-actions button:hover{border-color:var(--accent);color:var(--accent)}
+.article-preview-actions button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media screen and (min-width:700px) and (hover:hover) and (pointer:fine){
+  .article-toc.article-toc-enhanced{display:none}
+  .article-with-rail [id]{scroll-margin-top:32px}
+  .article-rail{position:fixed;top:50%;z-index:20;display:flex;flex-direction:column;align-items:center;gap:0;width:44px}
+}
+@media(prefers-reduced-motion:reduce){.article-rail-link::before{transition:none}}
+@media print{.article-rail-preview{display:none}}
 .issue-page .prose table{border-collapse:collapse;width:100%;font-size:13px}
 .issue-page .prose th,.issue-page .prose td{border:1px solid var(--line);padding:9px 12px;text-align:left;min-width:120px;vertical-align:top}
 .issue-page .prose th{background:var(--code);font-weight:600}
@@ -63,7 +102,7 @@
 
 /* 宽屏文章：扩大阅读区域与留白，正文字号保持 14px。 */
 @media screen and (min-width:1600px){
-  .issue-page>:is(.site-header,main,footer){max-width:clamp(880px,48vw,1040px);padding-inline:40px}
+  body.issue-page{--page-width:clamp(880px,48vw,1040px);--page-padding:40px}
   .issue-page .prose p{margin-bottom:16px}
   .issue-page .prose h2{margin-top:38px;margin-bottom:16px}
 }

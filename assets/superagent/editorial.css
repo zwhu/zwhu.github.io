@@ -1,5 +1,5 @@
 /* Super-agent's editorial layout: a single reading column, occasional wide art, and quiet marginal notes. */
-.superagent-editorial main{max-width:1040px;padding-inline:40px}
+.superagent-editorial{--page-width:1040px;--page-padding:40px}
 .superagent-editorial .article{padding-top:28px}
 .superagent-editorial .editorial-hero{display:grid;grid-template-columns:1.04fr 1fr;gap:18px;align-items:center;margin:27px 0 36px;padding-bottom:32px;border-bottom:1px solid var(--line)}
 .superagent-editorial .editorial-kicker{font:10px/1.6 ui-monospace,SFMono-Regular,monospace;letter-spacing:1.8px;color:var(--accent);margin:0 0 18px}
@@ -58,7 +58,7 @@
 .route-static summary{font-size:12px;color:var(--accent);cursor:pointer}
 .route-static table{margin-top:12px}
 @media(max-width:900px){
- .superagent-editorial main{max-width:760px;padding-inline:28px}
+ .superagent-editorial{--page-width:760px;--page-padding:28px}
  .superagent-editorial .article h1{font-size:34px}
  .superagent-editorial .reading-section{display:block}
  .superagent-editorial .margin-note{margin:3px 0 23px;padding-left:14px;border-left:1px solid var(--line);border-top:0;max-width:650px}
@@ -66,7 +66,7 @@
  .superagent-editorial .editorial-standfirst{font-size:14px}
 }
 @media(max-width:560px){
- .superagent-editorial main{padding-inline:22px}
+ .superagent-editorial{--page-padding:22px}
  .superagent-editorial .editorial-hero{display:block;margin:24px 0;padding-bottom:22px}
  .superagent-editorial .article h1{font-size:32px;letter-spacing:-.7px;line-height:1.38}
  .superagent-editorial .editorial-subtitle{font-size:14px;margin-bottom:20px}
