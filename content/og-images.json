@@ -36,6 +36,15 @@
       "subtitle": "我为什么更重视 lint、测试等工程门禁",
       "footer": "2026-10-30",
       "alt": "文章分享图：评测 Bob 大叔的 ub-mode，我为什么更重视工程门禁。"
+    },
+    {
+      "page": "blog-workflow.html",
+      "image": "assets/og/blog-workflow.png",
+      "kicker": "AI 写作 / 工程实践",
+      "title": "和 Agent 写博客",
+      "subtitle": "我的改稿意见怎么留下来",
+      "footer": "2026-11-03",
+      "alt": "文章分享图：和 Agent 写博客，我的改稿意见怎么留下来。"
     }
   ]
 }

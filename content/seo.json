@@ -88,6 +88,10 @@
     "superagent-botmux.html": {
       "description": "比较 botmux 与 Super-agent 的任务组织，复用已有接入和执行，先用真实任务验证续办质量与人工收益。",
       "datePublished": "2026-11-01"
+    },
+    "blog-workflow.html": {
+      "description": "我和 Agent 合写博客的九步流程：改稿意见怎么记录，原话、AI 推测和改稿评价怎么分开，以及为什么六处反馈还没有一条长期偏好。",
+      "datePublished": "2026-11-03"
     }
   }
 }
