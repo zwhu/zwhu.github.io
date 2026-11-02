@@ -24,6 +24,10 @@ jobs:
         run: python3 scripts/test-site-generation.py
       - name: Check learning style ownership
         run: python3 scripts/check-learning-styles.py
+      - name: Check loading budgets
+        run: python3 scripts/check-performance.py
+      - name: Check source diagram generation
+        run: node scripts/render-superagent-source-diagrams.cjs --check
       - name: Check generated SEO metadata
         run: python3 scripts/update-seo.py --check
       - name: Test SEO contracts

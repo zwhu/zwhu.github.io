@@ -14,12 +14,14 @@ from pathlib import Path
 from urllib.parse import urljoin, urlsplit
 
 from site_templates import Site, COMMENT_SCRIPTS, marked, issue_date as date, issue_excerpt as excerpt
+from image_assets import load_assets, image_html
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = json.loads((ROOT / 'content/blog-issues.json').read_text())
 ISSUES = sorted(DATA['issues'], key=lambda i: i['created_at'], reverse=True)
 NUMBERS = {i['number'] for i in ISSUES}
 E = html.escape
+IMAGE_ASSETS = load_assets(ROOT)
 
 
 def filename(issue):
@@ -78,7 +80,10 @@ class ArticleHTML(HTMLParser):
                 values.update(type='checkbox', disabled='disabled')
                 if 'checked' in attrs:
                     values['checked'] = 'checked'
-            self.out.append('<' + output + ''.join(f' {k}="{E(v, quote=True)}"' for k, v in values.items()) + '>')
+            if tag == 'img':
+                self.out.append(image_html(values, IMAGE_ASSETS))
+            else:
+                self.out.append('<' + output + ''.join(f' {k}="{E(v, quote=True)}"' for k, v in values.items()) + '>')
         if tag not in self.void:
             self.stack.append((tag, output))
 

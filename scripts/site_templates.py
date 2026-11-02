@@ -10,7 +10,7 @@ from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 E = html.escape
-COMMENT_SCRIPTS = '<script src="./comments-config.js?v=2"></script><script src="./comments.js?v=5" defer></script>'
+COMMENT_SCRIPTS = '<script src="./comments-config.js?v=2"></script><script src="./comments.js?v=6" defer></script>'
 
 
 def issue_date(value):
