@@ -26,6 +26,8 @@
 python3 scripts/render-site.py --check
 python3 scripts/test-site-generation.py
 python3 scripts/check-learning-styles.py
+python3 scripts/check-performance.py
+node scripts/render-superagent-source-diagrams.cjs --check
 python3 scripts/update-seo.py --check
 python3 scripts/test-seo.py
 node --test tests/comments.test.cjs

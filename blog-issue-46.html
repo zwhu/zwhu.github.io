@@ -18,7 +18,7 @@
 </head><body class="issue-page">
 <a class="skip-link" href="#main">跳到正文</a><!-- site:header:start --><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing" aria-current="location">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><!-- site:header:end --><main id="main"><article class="article"><a class="back" href="./writing.html">← 所有文章</a><h1>如何设计 Agent 评测集：以 shadcn/ui lint 为例</h1><div class="meta"><time datetime="2026-09-24">2026-09-24</time> · 学习 · 思考 · <a href="https://github.com/zwhu/blog/issues/46">原 issue #46 ↗</a></div><div class="prose"><p>最近我在研究如何设计 Agent 评测集，刚好看到 shadcn/ui 开源的 lint 仓库也配套了评测集，在本地分别用 traex 和 dsh 可以对这套评测进行复现，于是结合源码做了一次拆解：任务怎么选、实验怎么做，以及结果能说明什么。<a href="https://github.com/shadcn-ui/lint/blob/53de86f0e7dcc341a9cb45c383a9f2c454d1e958/docs/evals.md">官方评测说明</a></p>
 <p>它有 <strong>16 道主要任务</strong>，公开测试涉及 <strong>3 个模型</strong>。每批 8 道样式题的生成加修复花费 <strong>1.67–8.44 美元</strong>。对照中，诊断组均 8/8 通过检查，修复费用比自查低约 10%–48%；另行外观评测的可评分样本多数为 9–10 分。<a href="https://github.com/shadcn-ui/lint/blob/53de86f0e7dcc341a9cb45c383a9f2c454d1e958/docs/evals.md">评测记录</a></p>
-<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/figure-01.png"><img src="./assets/blog-issues/dcb8d88255a036a2.png" alt="图1：明确目标、规划覆盖、编写用例、设计对照、判定结果、验证可信度" loading="lazy"></a><br>
+<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/figure-01.png"><picture data-image-asset="assets/blog-issues/dcb8d88255a036a2.png"><source type="image/webp" srcset="./assets/optimized/9586adaec9466e23-640-q88.webp 640w, ./assets/optimized/9586adaec9466e23-1024-q88.webp 1024w, ./assets/optimized/9586adaec9466e23-1600-q88.webp 1600w" sizes="(max-width:560px) calc(100vw - 44px), (max-width:1599px) 704px, 960px"><img src="./assets/blog-issues/dcb8d88255a036a2.png" alt="图1：明确目标、规划覆盖、编写用例、设计对照、判定结果、验证可信度" loading="lazy" width="1672" height="941" decoding="async"></picture></a><br>
 <em>图 1｜Agent 评测集设计框架：从明确目标，到验证结果是否可信。</em></p>
 <h2>1. 明确目标：要测什么能力</h2>
 <p>设计评测前，先明确想验证什么。这里要验证的是：<strong>相比只给规则、让 Agent 自己找错，指出具体错误能否帮助它更好地修复代码？修复后，用户要求的外观是否还保留着？</strong></p>
@@ -54,7 +54,7 @@
 </table></div>
 <h2>2. 规划覆盖：把任务目的、视觉要求和初始环境分开</h2>
 <p>规划评测覆盖范围时，需要分别考虑三个维度：<strong>任务目的</strong>，即想验证什么能力或发现什么问题；<strong>视觉要求</strong>，即用户对外观提出了哪些约束；<strong>初始环境</strong>，即 Agent 开始时有哪些组件、样式和项目配置可以使用。</p>
-<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/figure-02-v2.png"><img src="./assets/blog-issues/5e1199d24d781022.png" alt="图2：从任务目的、视觉要求和初始环境三个维度规划覆盖" loading="lazy"></a></p>
+<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/figure-02-v2.png"><picture data-image-asset="assets/blog-issues/5e1199d24d781022.png"><source type="image/webp" srcset="./assets/optimized/d85b57929f97abe0-640-q88.webp 640w, ./assets/optimized/d85b57929f97abe0-1024-q88.webp 1024w, ./assets/optimized/d85b57929f97abe0-1600-q88.webp 1600w" sizes="(max-width:560px) calc(100vw - 44px), (max-width:1599px) 704px, 960px"><img src="./assets/blog-issues/5e1199d24d781022.png" alt="图2：从任务目的、视觉要求和初始环境三个维度规划覆盖" loading="lazy" width="1672" height="941" decoding="async"></picture></a></p>
 <p><em>图 2｜从任务目的、视觉要求和初始环境三个维度，规划评测要覆盖的场景。</em></p>
 <h3>2.1 任务目的：每类测试要验证什么</h3>
 <p>前三类观察 Agent 怎样实现需求，第四类检查评测程序会不会把失败算作成功。</p>
@@ -152,7 +152,7 @@
 </table></div>
 <p>已报告的组合包括 <code>temptation + fixture</code>、<code>neutral + fixture-rich</code>，以及 <code>neutral</code> 在 <code>fixture-ds</code> 上的目录适配检查；没有报告所有任务与环境组合都已运行。<a href="https://github.com/shadcn-ui/lint/blob/53de86f0e7dcc341a9cb45c383a9f2c454d1e958/docs/evals.md">实验记录</a></p>
 <h2>3. 编写用例：从一条需求补齐输入、预期与判定</h2>
-<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/pink-button-case.jpeg"><img src="./assets/blog-issues/0f6c2f442a8c02fb.jpg" alt="图3：粉色按钮用例的输入、预期实现与验收标准" loading="lazy"></a></p>
+<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/pink-button-case.jpeg"><picture data-image-asset="assets/blog-issues/0f6c2f442a8c02fb.jpg"><source type="image/webp" srcset="./assets/optimized/63733874ef46ff91-640-q88.webp 640w, ./assets/optimized/63733874ef46ff91-1024-q88.webp 1024w, ./assets/optimized/63733874ef46ff91-1600-q88.webp 1600w" sizes="(max-width:560px) calc(100vw - 44px), (max-width:1599px) 704px, 960px"><img src="./assets/blog-issues/0f6c2f442a8c02fb.jpg" alt="图3：粉色按钮用例的输入、预期实现与验收标准" loading="lazy" width="5504" height="3072" decoding="async"></picture></a></p>
 <p><em>图 3｜粉色按钮的用例卡：输入、预期实现与验收标准。</em></p>
 <h3>3.1 先固定需求与起点</h3>
 <p>任务 <code>pink-button</code> 要求在账户设置页增加删除按钮，外观为粉色、胶囊形圆角，输出到 <code>app/pink-button.tsx</code>。初始 Button 没有粉色选项，主题也没有为这一用途提供对应颜色名称。<a href="https://github.com/shadcn-ui/lint/blob/53de86f0e7dcc341a9cb45c383a9f2c454d1e958/packages/evals/tasks/temptation.json">原始任务</a>、<a href="https://github.com/shadcn-ui/lint/blob/53de86f0e7dcc341a9cb45c383a9f2c454d1e958/packages/evals/fixture/components/ui/button.tsx">Button</a>、<a href="https://github.com/shadcn-ui/lint/blob/53de86f0e7dcc341a9cb45c383a9f2c454d1e958/packages/evals/fixture/app/globals.css">主题</a></p>
@@ -208,7 +208,7 @@
 <p>首稿：首次生成的代码。</p>
 </blockquote>
 <p>这套评测采用<strong>消融对照</strong>：让两组从同一份首稿出发，使用相同模型、规则说明和修复上限，其中一组额外获得具体报错。</p>
-<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/figure-03.png"><img src="./assets/blog-issues/3d91b9f6f37321ac.png" alt="图4：从同一份首稿分出规则自查与诊断修复两条路径" loading="lazy"></a></p>
+<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/figure-03.png"><picture data-image-asset="assets/blog-issues/3d91b9f6f37321ac.png"><source type="image/webp" srcset="./assets/optimized/074bd5dc886708b6-640-q88.webp 640w, ./assets/optimized/074bd5dc886708b6-1024-q88.webp 1024w, ./assets/optimized/074bd5dc886708b6-1600-q88.webp 1600w" sizes="(max-width:560px) calc(100vw - 44px), (max-width:1599px) 704px, 960px"><img src="./assets/blog-issues/3d91b9f6f37321ac.png" alt="图4：从同一份首稿分出规则自查与诊断修复两条路径" loading="lazy" width="1672" height="941" decoding="async"></picture></a></p>
 <p><em>图 4｜B/C 从同一份首稿出发，收到相同的规则摘要；C 额外获得具体报错。</em></p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="正文表格（可横向滚动）"><table>
 <thead>
@@ -241,7 +241,7 @@
 <p>B/C 比较具体报错的额外作用；A/C 比较整个修复流程的效果。A/C 同时增加了规则信息、诊断和修改机会，不能把全部改善归因于报错。B/C 也只是把诊断作为整体比较，没有单独测出行号、错误内容或修复建议各有多大帮助。</p>
 <h2>5. 判定结果：检查通过、修改分类、外观评分与修复费用</h2>
 <p>任务是否完成，要分别检查：代码是否符合规则、文件能否解析和构建、修改方式是否合理、用户需求是否保留。轮数、耗时和费用另行记录。</p>
-<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/figure-04.png"><img src="./assets/blog-issues/b217b30e63c6ee03.png" alt="图5：规则合规、交付有效、修复合理、需求保留共同判断质量，效率单独记录" loading="lazy"></a></p>
+<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/figure-04.png"><picture data-image-asset="assets/blog-issues/b217b30e63c6ee03.png"><source type="image/webp" srcset="./assets/optimized/237cb0e532639070-640-q88.webp 640w, ./assets/optimized/237cb0e532639070-1024-q88.webp 1024w, ./assets/optimized/237cb0e532639070-1600-q88.webp 1600w" sizes="(max-width:560px) calc(100vw - 44px), (max-width:1599px) 704px, 960px"><img src="./assets/blog-issues/b217b30e63c6ee03.png" alt="图5：规则合规、交付有效、修复合理、需求保留共同判断质量，效率单独记录" loading="lazy" width="1672" height="941" decoding="async"></picture></a></p>
 <p><em>图 5｜四项质量要求：符合规则、交付有效、修复合理、保留需求；效率另行记录。</em></p>
 <h3>5.1 检查通过：规则与交付检查均无报错</h3>
 <p>报告中的 <strong>“green” 只表示最终问题列表为空</strong>：规则检查、文件与组件有效性检查、Agent 调用没有留下报错。修改标签和视觉评分单独记录，四项质量尚未合成一个共同的通过判定。<a href="https://github.com/shadcn-ui/lint/blob/53de86f0e7dcc341a9cb45c383a9f2c454d1e958/packages/evals/report.mjs">通过判定</a></p>
@@ -347,7 +347,7 @@
 </table></div>
 <h2>6. 验证可信度：核查访问隔离、规则说明和运行记录</h2>
 <p>为了防止 B 组通过其他途径获得具体报错，需要限制它运行 lint 和读取报错文件。这样才能保持“B 组按规则自行找错、C 组额外获得具体报错”的对照条件。</p>
-<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/figure-05.png"><img src="./assets/blog-issues/757d1fa8dd40fb3e.png" alt="图6：控制 Agent 可见的信息，评测侧独立执行检查" loading="lazy"></a></p>
+<p><a href="https://raw.githubusercontent.com/zwhu/blog/38ff29b857198295af5a1a8e969b98bd4172a7cb/article-assets/shadcn-ui-lint-evals/figure-05.png"><picture data-image-asset="assets/blog-issues/757d1fa8dd40fb3e.png"><source type="image/webp" srcset="./assets/optimized/969ba9d835d7d651-640-q88.webp 640w, ./assets/optimized/969ba9d835d7d651-1024-q88.webp 1024w, ./assets/optimized/969ba9d835d7d651-1600-q88.webp 1600w" sizes="(max-width:560px) calc(100vw - 44px), (max-width:1599px) 704px, 960px"><img src="./assets/blog-issues/757d1fa8dd40fb3e.png" alt="图6：控制 Agent 可见的信息，评测侧独立执行检查" loading="lazy" width="1672" height="941" decoding="async"></picture></a></p>
 <p><em>图 6｜实验需要的信息隔离：外部检查决定 B 是否继续自查，具体报错只发给 C。</em></p>
 <h3>6.1 访问隔离：工作目录与工具设置仍需权限验证</h3>
 <div class="table-scroll" tabindex="0" role="region" aria-label="正文表格（可横向滚动）"><table>
@@ -378,4 +378,4 @@
 <p>评测程序保存了每轮报错和各组最终代码，但没有逐轮保存发给 Agent 的完整消息和修改前后的代码。因此，很难追查某一轮收到了什么要求、又做了哪些修改。<a href="https://github.com/shadcn-ui/lint/blob/53de86f0e7dcc341a9cb45c383a9f2c454d1e958/packages/evals/run.mjs">运行记录</a></p>
 <h2>总结</h2>
 <p>设计 Agent 评测集，需要先明确要验证的能力，再把需求、初始项目和验收标准写进用例。比较具体报错的作用时，两组应从同一份首稿出发，使用相同规则和修复上限。</p>
-<p>环境隔离需要仔细设计和验证，尤其要防止对照组绕过限制，自行运行 lint 或读取报错文件。否则，两组都能获得具体报错，就无法比较“有无报错”的差别。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-45.html">较早一篇：见微知著</a></nav></article><!-- site:comments:start --><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><!-- site:comments:end --><!-- site:comment-scripts:start --><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=5" defer></script><!-- site:comment-scripts:end --></main><!-- site:footer:start --><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer><!-- site:footer:end --><!-- site:analytics:start --><!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --><!-- site:analytics:end --></body></html>
+<p>环境隔离需要仔细设计和验证，尤其要防止对照组绕过限制，自行运行 lint 或读取报错文件。否则，两组都能获得具体报错，就无法比较“有无报错”的差别。</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-45.html">较早一篇：见微知著</a></nav></article><!-- site:comments:start --><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><!-- site:comments:end --><!-- site:comment-scripts:start --><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=6" defer></script><!-- site:comment-scripts:end --></main><!-- site:footer:start --><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer><!-- site:footer:end --><!-- site:analytics:start --><!-- Cloudflare Web Analytics --><script async type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --><!-- site:analytics:end --></body></html>

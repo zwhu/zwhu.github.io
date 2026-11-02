@@ -1,0 +1,234 @@
+{
+  "baselineCommit": "a54ee081775bdafbdb60d937852ae0c52f81632d",
+  "date": "2026-11-02",
+  "profile": {
+    "viewport": [
+      375,
+      900
+    ],
+    "bandwidthBitsPerSecond": 1000000,
+    "responseDelayMs": 150,
+    "encoding": "gzip",
+    "cache": "no-store",
+    "cpuThrottle": false,
+    "thirdParty": "Cloudflare and giscus replaced by local stubs in the measurement server only"
+  },
+  "samples": {
+    "before": [
+      {
+        "page": "claude-code-review.html",
+        "run": 1,
+        "domReadyMs": 9546.1,
+        "firstContentfulPaintMs": 588,
+        "largestContentfulPaintMs": 964,
+        "htmlEncodedBytesWithProbe": 1129213,
+        "commentClientRequests": 1,
+        "layoutShift": 0
+      },
+      {
+        "page": "claude-code-review.html",
+        "run": 2,
+        "domReadyMs": 9458.8,
+        "firstContentfulPaintMs": 464,
+        "largestContentfulPaintMs": 888,
+        "htmlEncodedBytesWithProbe": 1129213,
+        "commentClientRequests": 1,
+        "layoutShift": 0
+      },
+      {
+        "page": "claude-code-review.html",
+        "run": 3,
+        "domReadyMs": 9480.4,
+        "firstContentfulPaintMs": 492,
+        "largestContentfulPaintMs": 904,
+        "htmlEncodedBytesWithProbe": 1129213,
+        "commentClientRequests": 1,
+        "layoutShift": 0
+      },
+      {
+        "page": "index.html",
+        "run": 1,
+        "domReadyMs": 428.5,
+        "firstContentfulPaintMs": 444,
+        "largestContentfulPaintMs": 444,
+        "htmlEncodedBytesWithProbe": 4746,
+        "commentClientRequests": 0,
+        "layoutShift": 0
+      },
+      {
+        "page": "index.html",
+        "run": 2,
+        "domReadyMs": 383.7,
+        "firstContentfulPaintMs": 384,
+        "largestContentfulPaintMs": 384,
+        "htmlEncodedBytesWithProbe": 4746,
+        "commentClientRequests": 0,
+        "layoutShift": 0
+      },
+      {
+        "page": "index.html",
+        "run": 3,
+        "domReadyMs": 370.8,
+        "firstContentfulPaintMs": 368,
+        "largestContentfulPaintMs": 368,
+        "htmlEncodedBytesWithProbe": 4746,
+        "commentClientRequests": 0,
+        "layoutShift": 0
+      },
+      {
+        "page": "engineers-new-problems.html",
+        "run": 1,
+        "domReadyMs": 1193.1,
+        "firstContentfulPaintMs": 484,
+        "largestContentfulPaintMs": 976,
+        "htmlEncodedBytesWithProbe": 94342,
+        "commentClientRequests": 1,
+        "layoutShift": 0
+      },
+      {
+        "page": "engineers-new-problems.html",
+        "run": 2,
+        "domReadyMs": 1139.1,
+        "firstContentfulPaintMs": 416,
+        "largestContentfulPaintMs": 924,
+        "htmlEncodedBytesWithProbe": 94342,
+        "commentClientRequests": 1,
+        "layoutShift": 0
+      },
+      {
+        "page": "engineers-new-problems.html",
+        "run": 3,
+        "domReadyMs": 1149.9,
+        "firstContentfulPaintMs": 432,
+        "largestContentfulPaintMs": 932,
+        "htmlEncodedBytesWithProbe": 94342,
+        "commentClientRequests": 1,
+        "layoutShift": 0
+      }
+    ],
+    "after": [
+      {
+        "page": "index.html",
+        "run": 1,
+        "domReadyMs": 372.6,
+        "firstContentfulPaintMs": 392,
+        "largestContentfulPaintMs": 392,
+        "htmlEncodedBytesWithProbe": 4753,
+        "commentClientRequests": 0,
+        "layoutShift": 0
+      },
+      {
+        "page": "index.html",
+        "run": 2,
+        "domReadyMs": 365.1,
+        "firstContentfulPaintMs": 380,
+        "largestContentfulPaintMs": 380,
+        "htmlEncodedBytesWithProbe": 4753,
+        "commentClientRequests": 0,
+        "layoutShift": 0
+      },
+      {
+        "page": "index.html",
+        "run": 3,
+        "domReadyMs": 374.4,
+        "firstContentfulPaintMs": 392,
+        "largestContentfulPaintMs": 392,
+        "htmlEncodedBytesWithProbe": 4753,
+        "commentClientRequests": 0,
+        "layoutShift": 0
+      },
+      {
+        "page": "engineers-new-problems.html",
+        "run": 1,
+        "domReadyMs": 552.5,
+        "firstContentfulPaintMs": 408,
+        "largestContentfulPaintMs": 408,
+        "htmlEncodedBytesWithProbe": 10240,
+        "commentClientRequests": 0,
+        "layoutShift": 0.04979594907407407
+      },
+      {
+        "page": "engineers-new-problems.html",
+        "run": 2,
+        "domReadyMs": 544.5,
+        "firstContentfulPaintMs": 408,
+        "largestContentfulPaintMs": 408,
+        "htmlEncodedBytesWithProbe": 10240,
+        "commentClientRequests": 0,
+        "layoutShift": 0.04979594907407407
+      },
+      {
+        "page": "engineers-new-problems.html",
+        "run": 3,
+        "domReadyMs": 538.5,
+        "firstContentfulPaintMs": 392,
+        "largestContentfulPaintMs": 392,
+        "htmlEncodedBytesWithProbe": 10240,
+        "commentClientRequests": 0,
+        "layoutShift": 0.04979594907407407
+      },
+      {
+        "page": "claude-code-review.html",
+        "run": 1,
+        "domReadyMs": 645.3,
+        "firstContentfulPaintMs": 436,
+        "largestContentfulPaintMs": 436,
+        "htmlEncodedBytesWithProbe": 26294,
+        "commentClientRequests": 0,
+        "layoutShift": 0.048764265046296294
+      },
+      {
+        "page": "claude-code-review.html",
+        "run": 2,
+        "domReadyMs": 599.3,
+        "firstContentfulPaintMs": 444,
+        "largestContentfulPaintMs": 444,
+        "htmlEncodedBytesWithProbe": 26294,
+        "commentClientRequests": 0,
+        "layoutShift": 0.048764265046296294
+      },
+      {
+        "page": "claude-code-review.html",
+        "run": 3,
+        "domReadyMs": 607.9,
+        "firstContentfulPaintMs": 408,
+        "largestContentfulPaintMs": 408,
+        "htmlEncodedBytesWithProbe": 26294,
+        "commentClientRequests": 0,
+        "layoutShift": 0.048764265046296294
+      }
+    ]
+  },
+  "staticHtml": {
+    "index.html": {
+      "before": {
+        "rawBytes": 11505,
+        "gzipBytes": 4187
+      },
+      "after": {
+        "rawBytes": 11511,
+        "gzipBytes": 4194
+      }
+    },
+    "claude-code-review.html": {
+      "before": {
+        "rawBytes": 1712726,
+        "gzipBytes": 1128454
+      },
+      "after": {
+        "rawBytes": 76234,
+        "gzipBytes": 25734
+      }
+    },
+    "engineers-new-problems.html": {
+      "before": {
+        "rawBytes": 140851,
+        "gzipBytes": 93701
+      },
+      "after": {
+        "rawBytes": 23283,
+        "gzipBytes": 9741
+      }
+    }
+  }
+}

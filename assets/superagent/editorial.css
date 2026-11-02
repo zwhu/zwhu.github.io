@@ -19,11 +19,11 @@
 .superagent-editorial .section-index{font:12px/2.8 ui-monospace,SFMono-Regular,monospace;color:var(--accent);font-weight:400;letter-spacing:1px}
 .superagent-editorial .reading-section h3{font-size:17px;font-weight:600;margin:29px 0 12px}
 .superagent-editorial .reading-section p{margin:0 0 16px}
-.superagent-editorial .reading-section>.article-figure{grid-column:1;margin:19px 0 24px}
-.superagent-editorial .reading-section>.wide-figure{grid-column:1/-1;margin:22px 0 30px}
-.superagent-editorial .article-figure img{display:block;width:100%;height:auto}
-.superagent-editorial .original-figure img{max-width:850px;margin-inline:auto}
-.superagent-editorial .compact-figure img{max-width:600px}
+.superagent-editorial .reading-section>.article-figure{grid-column:1;width:100%;max-width:650px;margin:19px 0 24px}
+.superagent-editorial .reading-section>.wide-figure{grid-column:1;margin:22px 0 30px}
+.superagent-editorial .article-figure img{display:block;width:100%;max-width:100%;height:auto}
+.superagent-editorial .original-figure img{margin-inline:auto}
+.superagent-editorial .reading-section>.compact-figure{max-width:560px}
 .superagent-editorial .article-figure figcaption{font-size:11px;line-height:1.85;margin-top:10px;color:var(--muted);max-width:700px}
 .superagent-editorial .margin-note{grid-column:2;margin:0;border-top:1px solid var(--line);padding-top:13px;font-size:12px;line-height:1.85;color:var(--muted)}
 .superagent-editorial .margin-note h3{font-size:12px;margin:0 0 9px;color:var(--text);font-weight:500}
@@ -35,7 +35,7 @@
 .superagent-editorial .prose strong{font-weight:600}
 .superagent-editorial .reading-section>.editorial-quote{grid-column:1/-1;font-size:25px;line-height:1.6;font-weight:500;letter-spacing:-.4px;max-width:800px;padding:20px 0;border:0;border-block:1px solid var(--line);margin:24px 0 30px;color:var(--text)}
 .superagent-editorial .article-bottom{max-width:650px;margin-top:0}
-.superagent-editorial .route-demo{grid-column:1/-1;border-block:1px solid var(--line);margin:16px 0 28px;padding:22px 0}
+.superagent-editorial .route-demo{grid-column:1;max-width:650px;border-block:1px solid var(--line);margin:16px 0 28px;padding:22px 0}
 .route-demo .route-question{font-size:18px;line-height:1.65;font-weight:500;margin:0 0 15px}
 .route-controls{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:18px}
 .route-controls button{font:inherit;font-size:12px;line-height:1.6;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:3px;padding:8px 12px;cursor:pointer}

@@ -61,7 +61,7 @@
 
 <span>$nav</span><span>.</span><span>html</span><span>(</span><span>sUl</span><span>)</span><span>;</span></pre></div>
 <p>生成如下图的导航条<br>
-<a href="https://camo.githubusercontent.com/6924775f213bdf75867770a7a9c71480a51aa8dff02e3b2e7b6d1953c2e800e3/687474703a2f2f7365676d656e746661756c742e636f6d2f696d672f625670325a78"><img src="./assets/blog-issues/0422a651e039f74f.jpg" alt="导航" loading="lazy"></a></p>
+<a href="https://camo.githubusercontent.com/6924775f213bdf75867770a7a9c71480a51aa8dff02e3b2e7b6d1953c2e800e3/687474703a2f2f7365676d656e746661756c742e636f6d2f696d672f625670325a78"><picture data-image-asset="assets/blog-issues/0422a651e039f74f.jpg"><source type="image/webp" srcset="./assets/optimized/7ce8f86168c8c598-640-q88.webp 640w, ./assets/optimized/7ce8f86168c8c598-1024-q88.webp 1024w, ./assets/optimized/7ce8f86168c8c598-1090-q88.webp 1090w" sizes="(max-width:560px) calc(100vw - 44px), (max-width:1599px) 704px, 960px"><img src="./assets/blog-issues/0422a651e039f74f.jpg" alt="导航" loading="lazy" width="1090" height="674" decoding="async"></picture></a></p>
 <p>之后我们想根据导航生成不同的页面内容：</p>
 <div><pre><code>var $container = $('#container')
 
@@ -70,7 +70,7 @@ $('#nav ul li').on('click', function() {
   return false;
 })
 </code></pre></div>
-<p><a href="https://camo.githubusercontent.com/5b22621c6c28a642d44636ba05067dbab5fc5d067b8f3ccfd31c8f83dfb5e66d/687474703a2f2f7365676d656e746661756c742e636f6d2f696d672f625670323064"><img src="./assets/blog-issues/7204b60d927a55cc.jpg" alt="图片描述" loading="lazy"></a></p>
+<p><a href="https://camo.githubusercontent.com/5b22621c6c28a642d44636ba05067dbab5fc5d067b8f3ccfd31c8f83dfb5e66d/687474703a2f2f7365676d656e746661756c742e636f6d2f696d672f625670323064"><picture data-image-asset="assets/blog-issues/7204b60d927a55cc.jpg"><source type="image/webp" srcset="./assets/optimized/5e1ca6d07fa12a36-640-q88.webp 640w, ./assets/optimized/5e1ca6d07fa12a36-704-q88.webp 704w" sizes="(max-width:560px) calc(100vw - 44px), (max-width:1599px) 704px, 960px"><img src="./assets/blog-issues/7204b60d927a55cc.jpg" alt="图片描述" loading="lazy" width="704" height="312" decoding="async"></picture></a></p>
 <p>然而现实中，我们的页面多数是根据后端返回的数据来渲染，例如我们的后端提供了一个接口 <code>/api/home</code>， 通过这个接口可以获得数据 <code>["今", "天", "天", "气", "不", "错", "啊"]</code>，当我们进入 home 页面的时候页面上会结合通过 api 接口获取来的数据展示新的页面：</p>
 <div><pre><code>$('#nav ul li').on('click', function() {
   var route = $(this).find('a').text()
@@ -84,7 +84,7 @@ $('#nav ul li').on('click', function() {
   return false;
 })
 </code></pre></div>
-<p><a href="https://camo.githubusercontent.com/63d836026cf3e5c2de70d143bf17710918cfd62fabd00348dfd2cc3c2de4bae2/687474703a2f2f7365676d656e746661756c742e636f6d2f696d672f625670323163"><img src="./assets/blog-issues/2f1e821c6efb0bc3.jpg" alt="图片描述" loading="lazy"></a></p>
+<p><a href="https://camo.githubusercontent.com/63d836026cf3e5c2de70d143bf17710918cfd62fabd00348dfd2cc3c2de4bae2/687474703a2f2f7365676d656e746661756c742e636f6d2f696d672f625670323163"><picture data-image-asset="assets/blog-issues/2f1e821c6efb0bc3.jpg"><source type="image/webp" srcset="./assets/optimized/0746476b90bcac0b-526-q88.webp 526w" sizes="(max-width:560px) calc(100vw - 44px), (max-width:1599px) 704px, 960px"><img src="./assets/blog-issues/2f1e821c6efb0bc3.jpg" alt="图片描述" loading="lazy" width="526" height="332" decoding="async"></picture></a></p>
 <h3>单页应用的重点 ---- 路由</h3>
 <p>这是我刚接触单页应用时候比较头疼的地方。</p>
 <blockquote>
@@ -132,4 +132,4 @@ show()
 <p>到此为止，单页面的应用就算介绍完了。理解了单页面应用的原理，对于最近流行的 <code>Angular</code>， <code>React</code>， <code>Vue</code> 之类库或框架的才算刚刚开始。</p>
 <p>如果觉得本文对你有帮助的话，就点个推荐呗。</p>
 <h2>预告</h2>
-<p>下一篇我会介绍 一个人的团队（二）--- 神兵利器之 webpack 和 webpack-dev-server</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-6.html">较新一篇：JavaScript 中使用 new Function 执行字符串拼接表达式</a><a href="./blog-issue-4.html">较早一篇：正则表达式巧用 Unicode 匹配特殊字符</a></nav></article><!-- site:comments:start --><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><!-- site:comments:end --><!-- site:comment-scripts:start --><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=5" defer></script><!-- site:comment-scripts:end --></main><!-- site:footer:start --><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer><!-- site:footer:end --><!-- site:analytics:start --><!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --><!-- site:analytics:end --></body></html>
+<p>下一篇我会介绍 一个人的团队（二）--- 神兵利器之 webpack 和 webpack-dev-server</p></div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./blog-issue-6.html">较新一篇：JavaScript 中使用 new Function 执行字符串拼接表达式</a><a href="./blog-issue-4.html">较早一篇：正则表达式巧用 Unicode 匹配特殊字符</a></nav></article><!-- site:comments:start --><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论加载中；也可通过上方原 issue 链接查看讨论。</p></section><!-- site:comments:end --><!-- site:comment-scripts:start --><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=6" defer></script><!-- site:comment-scripts:end --></main><!-- site:footer:start --><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer><!-- site:footer:end --><!-- site:analytics:start --><!-- Cloudflare Web Analytics --><script async type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --><!-- site:analytics:end --></body></html>

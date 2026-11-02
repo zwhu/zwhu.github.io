@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 // Source diagrams are redrawn with the site's typography and colors; archived originals remain unchanged.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const dir=path.resolve(__dirname,'../assets/superagent/redrawn');fs.mkdirSync(dir,{recursive:true});
-const c={bg:'#faf8f3',text:'#292825',muted:'#77746e',accent:'#a64335',line:'#d6d0c6',panel:'#f0ede6'};
+const dir=path.resolve(__dirname,'../assets/superagent/redrawn'),checking=process.argv.includes('--check');
+if(!checking)fs.mkdirSync(dir,{recursive:true});
+function write(file,content){const target=path.join(dir,file);if(checking)assert(fs.existsSync(target)&&fs.readFileSync(target,'utf8')===content,`${file} is stale; run node scripts/render-superagent-source-diagrams.cjs`);else fs.writeFileSync(target,content)}
+const c={bg:'#faf8f3',text:'#292825',muted:'#77746e',accent:'#a64335',line:'#e6e2da',panel:'#faf8f3'};
 const esc=s=>String(s).replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[x]));
 const figures=[];
 function scene(n,w,h,title){return {n,w,h,title,nodes:[],edges:[],labels:[],rules:[]}}
@@ -19,20 +21,20 @@ function render(s,mobile=false){
  for(const e of s.edges){const color=e.accent?'accent':'muted';body+=`<polyline points="${e.points}" fill="none" stroke="${c[color]}" stroke-width="${e.accent?2:1.3}"${e.dash?' stroke-dasharray="5 4"':''} marker-end="url(#arrow-${color})"${e.both?` marker-start="url(#arrow-${color})"`:''}/>`}
  for(const n of s.nodes){
   body+=`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="3" fill="${c.panel}" stroke="${n.accent?c.accent:c.line}" stroke-width="${n.accent?1.3:.8}"${n.dash?' stroke-dasharray="5 4"':''}/>`;
-  const titleLines=Array.isArray(n.title)?n.title:[n.title];const titleSize=mobile?17:18;
+  const titleLines=Array.isArray(n.title)?n.title:[n.title];const titleSize=mobile?16:17;
   const limit=`data-node="${n.id}" data-max-width="${n.w-30}"`;
-  titleLines.forEach((t,i)=>{body+=text(n.x+15,n.y+28+i*24,t,titleSize,n.accent?'accent':'text',600,limit)});
-  n.lines.forEach((t,i)=>{body+=text(n.x+15,n.y+28+titleLines.length*24+6+i*22,t,14,'muted',400,limit)});
+  titleLines.forEach((t,i)=>{body+=text(n.x+15,n.y+28+i*24,t,titleSize,n.accent?'accent':'text',500,limit)});
+  n.lines.forEach((t,i)=>{body+=text(n.x+15,n.y+28+titleLines.length*24+6+i*22,t,mobile?13:14,'muted',400,limit)});
  }
  for(const e of s.edges)if(e.label){
-  const lines=e.label.split('\n');lines.forEach((t,i)=>{body+=text(e.lx,e.ly+i*18,t,13,e.accent?'accent':'muted')});
+  const lines=e.label.split('\n');lines.forEach((t,i)=>{body+=text(e.lx,e.ly+i*18,t,13,e.accent?'accent':'muted',400,`paint-order="stroke" stroke="${c.bg}" stroke-width="4" stroke-linejoin="round"`)});
  }
  for(const l of s.labels)body+=text(l.x,l.y,l.text,l.size,l.color);
  const markers=['accent','muted'].map(k=>`<marker id="arrow-${k}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9" fill="none" stroke="${c[k]}" stroke-width="1.4"/></marker>`).join('');
  const name=`fig${String(s.n).padStart(2,'0')}${mobile?'-mobile':''}.svg`;
  const description=`据 DeepSeek Harness 原文图 ${s.n} 重绘。${s.nodes.map(n=>(Array.isArray(n.title)?n.title.join(' '):n.title)+': '+n.lines.join('，')).join('；')}。重排版不改变作者设计与公开原型的区别。`;
  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${s.w}" height="${s.h}" viewBox="0 0 ${s.w} ${s.h}" role="img" aria-labelledby="title desc"><title id="title">${esc(s.title)}</title><desc id="desc">${esc(description)}</desc><defs>${markers}</defs><rect width="${s.w}" height="${s.h}" fill="${c.bg}"/><g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei,sans-serif">${body}</g></svg>\n`;
- fs.writeFileSync(path.join(dir,name),svg);
+ write(name,svg);
  return {file:name,width:s.w,height:s.h,nodes:s.nodes.length,edges:s.edges.length};
 }
 function publish(a,b){
@@ -86,13 +88,13 @@ const by=new Map(b.nodes.map(n=>[n.id,n]));function connection(from,to,side=1,op
 edge(b,'trigger','filter','180,94 180,116');edge(b,'filter','router','180,196 180,218');edge(b,'router','channels','180,306 180,320');connection('router','w1',0);connection('router','wn',0);connection('filter','w1',1,{accent:true,dash:true});connection('router','db',1);connection('w1','db',0);connection('wn','db',0);edge(b,'wn','env','180,604 180,626');edge(b,'watchdog','db','180,830 180,808',{dash:true});label(b,18,952,'章节号沿用原文；不表示公开版已全实现。',12);publish(a,b);
 
 // 8. Preserve both object references and the particular read calls in the source figure.
-a=scene(8,820,432,'Inline & Spill：沿引用逐跳召回');b=scene(8,360,1084,a.title);
-node(a,'trigger',14,17,264,184,'Trigger #42 · Inline',['前 50 字与相邻消息','超出部分 Spill 截断','thread_id: #08','worker_id: #03'],true);
-node(a,'spill',353,17,262,84,'Trigger #42 剩余内容',['按需读取 Spill 部分']);node(a,'thread',353,154,262,161,'Thread #08',['近期事件摘要；更早历史 Spill','trigger_ids: [#39, #40]','worker_ids: [#02, #03]'],true);
-node(a,'t40',657,136,149,106,['Trigger #40','详情'],['同样遵循','Inline & Spill']);node(a,'worker',14,301,264,111,'Worker #03 状态',['任务进度与状态摘要','thread_id: #15']);node(a,'thread15',353,351,262,69,'Thread #15 详情',['关联 Pull Request']);
-edge(a,'trigger','spill','278,47 353,47',{dash:true,label:'read_trigger(#42)',lx:282,ly:12});edge(a,'trigger','thread','278,119 317,119 317,183 353,183',{accent:true,dash:true,label:'read_thread(#08)',lx:282,ly:144});edge(a,'thread','t40','615,232 637,232 637,178 659,178',{accent:true,dash:true});label(a,618,273,'read_trigger(#40)',12,'accent');edge(a,'thread','worker','399,315 399,332 278,332',{accent:true,dash:true,label:'read_worker(#03)',lx:17,ly:286});edge(a,'worker','thread15','278,385 353,385',{accent:true,dash:true,label:'read_thread(#15)',lx:282,ly:340});
-const mobileNodes=[['trigger','Trigger #42 · Inline',['前 50 字与相邻消息','超出部分 Spill 截断','thread_id: #08','worker_id: #03'],169],['spill','Trigger #42 剩余内容',['按需读取 Spill 部分'],80],['thread','Thread #08',['近期事件摘要；更早历史 Spill','trigger_ids: [#39, #40]','worker_ids: [#02, #03]'],138],['t40','Trigger #40 详情',['同样遵循 Inline & Spill'],80],['worker','Worker #03 状态',['任务进度与状态摘要','thread_id: #15'],105],['thread15','Thread #15 详情',['关联 Pull Request'],80]];
-y=14;for(const [id,title,lines,h] of mobileNodes){node(b,id,15,y,330,h,title,lines,['trigger','thread'].includes(id));y+=h+70}
+a=scene(8,760,600,'Inline & Spill：沿引用逐跳召回');b=scene(8,360,844,a.title);
+node(a,'trigger',14,22,300,168,'Trigger #42 · Inline',['前 50 字与相邻消息','超出部分 Spill 截断','thread_id: #08','worker_id: #03'],true);
+node(a,'spill',416,22,330,82,'Trigger #42 剩余内容',['按需读取 Spill 部分']);node(a,'thread',416,170,330,136,'Thread #08',['近期事件摘要；更早历史 Spill','trigger_ids: [#39, #40]','worker_ids: [#02, #03]'],true);
+node(a,'t40',416,364,330,78,'Trigger #40 详情',['同样遵循 Inline & Spill']);node(a,'worker',14,350,300,108,'Worker #03 状态',['任务进度与状态摘要','thread_id: #15']);node(a,'thread15',14,516,300,68,'Thread #15 详情',['关联 Pull Request']);
+edge(a,'trigger','spill','314,66 416,66',{dash:true,label:'read_trigger(#42)',lx:320,ly:16});edge(a,'trigger','thread','164,190 164,234 416,234',{accent:true,dash:true,label:'read_thread(#08)',lx:176,ly:220});edge(a,'thread','t40','580,306 580,364',{accent:true,dash:true,label:'read_trigger(#40)',lx:596,ly:342});edge(a,'thread','worker','416,274 360,274 360,404 314,404',{accent:true,dash:true,label:'read_worker(#03)',lx:20,ly:330});edge(a,'worker','thread15','164,458 164,516',{accent:true,dash:true,label:'read_thread(#15)',lx:180,ly:495});
+const mobileNodes=[['trigger','Trigger #42 · Inline',['前 50 字与相邻消息','超出部分 Spill 截断','thread_id: #08','worker_id: #03'],150],['spill','Trigger #42 剩余内容',['按需读取 Spill 部分'],68],['thread','Thread #08',['近期事件摘要；更早历史 Spill','trigger_ids: [#39, #40]','worker_ids: [#02, #03]'],122],['t40','Trigger #40 详情',['同样遵循 Inline & Spill'],68],['worker','Worker #03 状态',['任务进度与状态摘要','thread_id: #15'],90],['thread15','Thread #15 详情',['关联 Pull Request'],68]];
+y=14;for(const [id,title,lines,h] of mobileNodes){node(b,id,15,y,330,h,title,lines,['trigger','thread'].includes(id));y+=h+50}
 const mb=new Map(b.nodes.map(n=>[n.id,n]));const med=(from,to,call,side=false)=>{const f=mb.get(from),t=mb.get(to);edge(b,from,to,side?`345,${f.y+f.h/2} 355,${f.y+f.h/2} 355,${t.y+t.h/2} 345,${t.y+t.h/2}`:`180,${f.y+f.h} 180,${t.y}`,{accent:from!=='trigger'||to!=='spill',dash:true});label(b,22,t.y-25,call,14,from==='trigger'&&to==='spill'?'muted':'accent')};med('trigger','spill','read_trigger(#42)');med('trigger','thread','read_thread(#08)',true);med('thread','t40','read_trigger(#40)');med('thread','worker','read_worker(#03)',true);med('worker','thread15','read_thread(#15)');publish(a,b);
 
 // 10. Foreground timeline and the separate background job preserve the run()/start() distinction.
@@ -111,5 +113,5 @@ edge(b,'sync-msg','run','93,95 93,117');edge(b,'run','sync-tool','172,160 188,16
 node(b,'async-msg',15,418,330,49,'用户消息 1',[],true);node(b,'start',15,490,157,82,'LLM Call',['调用 start()'],true);node(b,'started',188,490,157,82,'立即返回',['Started 通知']);node(b,'msg2',15,616,157,76,'用户消息 2',[],true);node(b,'reply',188,616,157,76,'LLM Call',['即时回复'],true);node(b,'async-tool',15,738,330,69,'后台异步执行耗时工具',[],true);node(b,'inject',15,851,157,86,'新消息投递',['完成结果']);node(b,'deliver',188,851,157,86,'LLM Call',['交付任务结果'],true);
 edge(b,'async-msg','start','93,467 93,490');edge(b,'start','started','172,531 188,531');edge(b,'started','msg2','266,572 266,594 93,594 93,616');edge(b,'msg2','reply','172,654 188,654');edge(b,'start','async-tool','15,531 5,531 5,771 15,771',{accent:true});edge(b,'async-tool','started','345,771 355,771 355,531 345,531',{dash:true});edge(b,'async-tool','inject','93,807 93,851',{accent:true,dash:true});edge(b,'reply','inject','345,654 355,654 355,827 93,827 93,851');edge(b,'inject','deliver','172,894 188,894');publish(a,b);
 
-fs.writeFileSync(path.join(dir,'sources.json'),JSON.stringify({sourceArticle:'https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg',description:'博客风格重绘；原文设计图，不是公开版本实现范围的新证据。',figures},null,2)+'\n');
-console.log(`Generated ${figures.length} source diagrams, each with desktop and mobile layouts; matching nodes and relations checked.`);
+write('sources.json',JSON.stringify({sourceArticle:'https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg',description:'博客风格重绘；原文设计图，不是公开版本实现范围的新证据。',figures},null,2)+'\n');
+console.log(`${checking?'Checked':'Generated'} ${figures.length} source diagrams, each with desktop and mobile layouts; matching nodes and relations checked.`);

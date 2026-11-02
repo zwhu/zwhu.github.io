@@ -20,7 +20,7 @@
 
 - `index.html`：网站名、个人介绍、个人思考与翻译入口。
 - `translations.html`：翻译留档专栏目录。
-- `claude-code-review.html`、`engineers-new-problems.html`：两篇英中对照译文，原文出处、正文与插图保持完整。工作区原始文件未修改。
+- `claude-code-review.html`、`engineers-new-problems.html`：两篇英中对照译文，原文出处、正文与插图保持完整；图片原始字节归档在 `assets/translations/original/`，正文使用响应式派生资源。
 - 各文章 HTML：标题、日期、正文；新增文章时沿用同类页面外壳，登记对应元信息后运行公共生成。
 - `content/original-articles.json`：新增原创文章的标题、日期、路径、摘要与标签；目录生成脚本会一并收录，正文维护在对应 HTML 中。
 - `ub-mode-bench.html`：ub-mode 评测文章；图表数据见 `content/ub-mode-bench-data.json`，图与移动端版本在 `assets/ub-mode-bench/`。维护脚本 `scripts/render-ub-mode-figures.py` 使用 matplotlib 生成静态 SVG，站点运行不依赖 Python 或绘图库。
@@ -45,6 +45,10 @@
 全站接入 [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/)，在 Cloudflare 控制台查看浏览量、访问来源和热门页面。网站仍由 GitHub Pages 托管，无需修改 DNS 或增加服务端。
 
 新增页面与维护生成模板时的统计代码约定见 [AGENTS.md](./AGENTS.md)。嵌入代码中的 token 是公开的站点统计标识，不是账户 API 密钥。
+
+## 加载性能
+
+图片保留原始资源，正文通过 `picture` 选择响应式 WebP，原图作回退与完整图片入口；GIF 动画保留。统计脚本异步加载，评论在接近页尾时加载。资源、预算、受控测量与维护命令见[性能说明](./content/loading-performance.md)。`python3 scripts/check-performance.py` 和重绘图同步检查已接入 CI。
 
 发布后，在已配置的 `zwhu.github.io` 域名下访问首页和文章页，等待几分钟后检查统计面板。本地预览不能用于确认正式域名的数据上报；浏览器拦截或网络异常可能导致漏计，国内效果需在实际网络下验证。
 
@@ -91,7 +95,7 @@ ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-co
 
 保留场景切换、训练实验、闪卡、测验、SVG 动画与提示词复制。Agent 记忆页原先依赖聊天环境的继续学习按钮已改为站内模块说明、源码阅读路线与自测。大型图表在窄屏局部横向滚动。
 
-`.github/workflows/static-checks.yml` 在 PR 创建／更新、推送 `main` 和手动触发时，检查公共生成、学习页样式归属、SEO 同步以及生成／SEO／评论测试。`main` 已要求 PR 合并、分支保持最新且 GitHub Actions 的 `check` 成功，管理员也受约束；个人仓库不要求额外审批人。保护配置快照及远端验证见[CI 交接](./content/ci-handoff.md)。工作流只读源码，发布仍由 GitHub Pages 在合并后执行。
+`.github/workflows/static-checks.yml` 在 PR 创建／更新、推送 `main` 和手动触发时，检查公共生成、学习页样式归属、加载预算、重绘图同步、SEO 同步以及生成／SEO／评论测试。`main` 已要求 PR 合并、分支保持最新且 GitHub Actions 的 `check` 成功，管理员也受约束；个人仓库不要求额外审批人。保护配置快照及远端验证见[CI 交接](./content/ci-handoff.md)。工作流只读源码，发布仍由 GitHub Pages 在合并后执行。
 
 ## Super-agent 文章与研究资产
 

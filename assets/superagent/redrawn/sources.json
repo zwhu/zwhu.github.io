@@ -97,15 +97,15 @@
       "title": "Inline & Spill：沿引用逐跳召回",
       "desktop": {
         "file": "fig08.svg",
-        "width": 820,
-        "height": 432,
+        "width": 760,
+        "height": 600,
         "nodes": 6,
         "edges": 5
       },
       "mobile": {
         "file": "fig08-mobile.svg",
         "width": 360,
-        "height": 1084,
+        "height": 844,
         "nodes": 6,
         "edges": 5
       }
