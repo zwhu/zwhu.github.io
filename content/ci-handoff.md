@@ -23,14 +23,9 @@
 ## 本地检查
 
 ```sh
-python3 scripts/render-site.py --check
-python3 scripts/test-site-generation.py
-python3 scripts/check-learning-styles.py
-python3 scripts/check-performance.py
-node scripts/render-superagent-source-diagrams.cjs --check
-python3 scripts/update-seo.py --check
-python3 scripts/test-seo.py
-node --test tests/comments.test.cjs
+python3 scripts/verify.py
 ```
 
 修改导航、目录元信息或公共模板后先运行 `python3 scripts/render-site.py`；迁入文章正文改动先运行对应生成脚本。位置约定见[公共模板说明](./site-generation-guide.md)。
+
+工作流统一调用这个入口，作业名仍为 `check`，无需调整主分支保护。检查清单由程序维护，范围、依赖与失败处理见[验证流程](./verification-guide.md)。

@@ -26,7 +26,7 @@
 - `ub-mode-bench.html`：ub-mode 评测文章；图表数据见 `content/ub-mode-bench-data.json`，图与移动端版本在 `assets/ub-mode-bench/`。维护脚本 `scripts/render-ub-mode-figures.py` 使用 matplotlib 生成静态 SVG，站点运行不依赖 Python 或绘图库。
 - `style.css`：共用颜色、字体与布局；`translation.css`：对照阅读样式；`archive.css`：专栏与评论样式。使用系统字体。
 
-主导航、通用页脚、评论外壳、首页与目录列表、学习页相关阅读统一生成。维护位置与接入流程见[公共模板与目录生成](./content/site-generation-guide.md)：修改 `templates/` 或元信息后运行 `python3 scripts/render-site.py`，用 `python3 scripts/render-site.py --check` 检查同步。脚本自动更新 SEO，静态 HTML 一起提交；正文与译文来源页脚继续保留在各自页面中。
+主导航、通用页脚、评论外壳、首页与目录列表、学习页相关阅读统一生成。维护位置与接入流程见[公共模板与目录生成](./content/site-generation-guide.md)：修改 `templates/` 或元信息后运行 `python3 scripts/render-site.py`，再运行 `python3 scripts/verify.py` 检查。脚本自动更新 SEO，静态 HTML 一起提交；正文与译文来源页脚继续保留在各自页面中。
 
 ## 搜索引擎收录
 
@@ -44,7 +44,7 @@
 
 全站接入 [Cloudflare Web Analytics](https://www.cloudflare.com/web-analytics/)，在 Cloudflare 控制台查看浏览量、访问来源和热门页面。网站仍由 GitHub Pages 托管，无需修改 DNS 或增加服务端。
 
-新增页面与维护生成模板时的统计代码约定见 [AGENTS.md](./AGENTS.md)。嵌入代码中的 token 是公开的站点统计标识，不是账户 API 密钥。
+新增页面与维护生成模板时的统计代码约定见[生成说明](./content/site-generation-guide.md)。嵌入代码中的 token 是公开的站点统计标识，不是账户 API 密钥。
 
 ## 加载性能
 
@@ -59,6 +59,10 @@
 ## 项目 Skill
 
 [doc-lint](./.agents/skills/doc-lint/SKILL.md) 用于中文文档润色、精简冗余和表达检查，保留技术含义、限定条件与引用。可通过 `$doc-lint` 调用。
+
+写作前读取[个人偏好](./content/writing-preferences.md)。在对话中纠正文稿的表达时，AI 同步保存修改前后与用户说明的原因，处理方法见[反馈流程](./content/writing-feedback-guide.md)，实例保存在[修改记录](./content/writing-feedback-log.md)。
+
+从本次写作、配图和 PR 协作整理的完整过程见[博客发布流程](./content/blog-publishing-workflow.md)，其中区分用户原话、AI 的待确认分析与本篇要求。
 
 ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-comparison/`，不加入 `content/original-articles.json`，因此首页和文章归档只展示正式文章。
 
@@ -95,7 +99,7 @@ ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-co
 
 保留场景切换、训练实验、闪卡、测验、SVG 动画与提示词复制。Agent 记忆页原先依赖聊天环境的继续学习按钮已改为站内模块说明、源码阅读路线与自测。大型图表在窄屏局部横向滚动。
 
-`.github/workflows/static-checks.yml` 在 PR 创建／更新、推送 `main` 和手动触发时，检查公共生成、学习页样式归属、加载预算、重绘图同步、SEO 同步以及生成／SEO／评论测试。`main` 已要求 PR 合并、分支保持最新且 GitHub Actions 的 `check` 成功，管理员也受约束；个人仓库不要求额外审批人。保护配置快照及远端验证见[CI 交接](./content/ci-handoff.md)。工作流只读源码，发布仍由 GitHub Pages 在合并后执行。
+本地统一运行 `python3 scripts/verify.py`，检查范围与失败处理见[验证流程](./content/verification-guide.md)。`.github/workflows/static-checks.yml` 在 PR 创建／更新、推送 `main` 和手动触发时调用同一入口。`main` 已要求 PR 合并、分支保持最新且 GitHub Actions 的 `check` 成功，管理员也受约束；个人仓库不要求额外审批人。保护配置快照及远端验证见[CI 交接](./content/ci-handoff.md)。工作流只读源码，发布仍由 GitHub Pages 在合并后执行。
 
 ## Super-agent 文章与研究资产
 

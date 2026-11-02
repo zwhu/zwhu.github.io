@@ -25,12 +25,10 @@
 
 ```sh
 python3 scripts/render-site.py
-python3 scripts/render-site.py --check
-python3 scripts/update-seo.py --check
-python3 scripts/test-site-generation.py
+python3 scripts/verify.py
 ```
 
-第一条命令更新公共区块、首页三组列表、三类目录及学习页相关阅读，随后更新 SEO。`--check` 只检查、不写入；生成结果过期、页面未登记或区块标记不完整时返回非零，CI 执行同一检查。
+第一条命令更新公共区块、首页三组列表、三类目录及学习页相关阅读，随后更新 SEO。第二条执行本地与 CI 共用的[验证流程](./verification-guide.md)，包含生成同步、链接、样式、性能、SEO 与评论检查。生成脚本的 `--check` 模式只检查、不写入，生成结果过期、页面未登记或区块标记不完整时返回非零。
 
 迁入文章的正文发生变化时，先更新快照，再运行 `python3 scripts/render-blog-issues.py`。这个入口会继续调用公共生成与 SEO，不会恢复另一套导航、页脚或统计代码。无需访问 GitHub。
 
@@ -40,12 +38,16 @@ python3 scripts/test-site-generation.py
 
 修改分享卡片文案后，先运行 `render-og-images.py`，再运行 `update-seo.py`。只有登记的页面输出 `og:image` 与 `summary_large_image`，其他页面保持 `summary`。
 
+新增、删除页面或调整标题、摘要、作者信息时，核对 `content/seo.json` 并更新 SEO。保留真实发表日期，仅在有正文更新依据时填写 `dateModified`；首页公开所有权验证标记在 `site.verification` 中维护，验证成功后继续保留。`content/doc-lint-comparison/` 的快照保留 noindex，不加入 sitemap，robots.txt 允许抓取。这些同步约束由 verify 检查。
+
 ## 生成与手写内容的边界
 
 `<!-- site:<名称>:start -->` 与对应 `end` 包住生成区块。修改模板或元信息后重新生成，不手改区块内部，也不移动、复制或截断这些标记。标记外的正文保留；生成前先计算并验证所有页面，遇到无法确定的区块时停止，不猜测替换范围。
 
 全站主导航从页面所属目录确定当前栏目：目录自身使用 `aria-current="page"`，栏目中的文章使用 `aria-current="location"`。首页不固定高亮某个栏目。关闭 JavaScript 时仍有完整导航、列表和相关阅读。
 
-通用页脚按现有文章、学习页、译文目录三种实际用途生成。首页个人页脚、译文来源说明和课程内部说明保留作者维护。评论脚本版本统一在 `scripts/site_templates.py`，统计沿用 `templates/analytics.html` 的公开站点标识，每页一份；它不是账户密钥。
+通用页脚按现有文章、学习页、译文目录三种实际用途生成。首页个人页脚、译文来源说明和课程内部说明保留作者维护。评论脚本版本统一在 `scripts/site_templates.py`，giscus 的公开配置放在 `comments-config.js`。
+
+Cloudflare Web Analytics 统一由 `templates/analytics.html` 提供，在 `</body>` 前恰好一份并异步加载，沿用现有公开站点 token，不保存账户 API 密钥。修改迁入文章的生成逻辑时，同步维护 `scripts/render-blog-issues.py` 的 `ANALYTICS` 和 `FOOTER`，保证重新生成后统计仍然保留。verify 检查统计数量、异步属性、公开 token 与模板同步。
 
 生成后检查桌面与窄屏排版、导航和锚点、相关阅读、正文与原图、统计和评论入口。自动检查能发现目录与模板漂移，不能代替视觉和交互验收。
