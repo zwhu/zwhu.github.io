@@ -81,6 +81,21 @@
         "datePublished": "2026-10-26"
       }
     },
+    "agent-design-system.html": {
+      "description": "rico 关于为 Agent 搭建设计系统的全文中英对照翻译：primitives、语义 token、组件、区块，以及规则与 skill 的写法，保留原文代码与演示视频。",
+      "datePublished": "2026-11-03",
+      "author": {
+        "name": "rico",
+        "url": "https://x.com/_heyrico"
+      },
+      "translationOfWork": {
+        "@type": "Article",
+        "name": "Build the design system and skills your agent can follow",
+        "url": "https://x.com/_heyrico/status/2116953958279479760",
+        "inLanguage": "en",
+        "datePublished": "2026-11-01"
+      }
+    },
     "superagent.html": {
       "description": "从一次 CSV 修复的后续反馈，理解 Super-agent 如何分发消息、找回历史和恢复任务，再看持续运行与实验改善的代价。",
       "datePublished": "2026-11-01"

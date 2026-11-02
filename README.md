@@ -20,7 +20,7 @@
 
 - `index.html`：网站名、个人介绍、个人思考与翻译入口。
 - `translations.html`：翻译留档专栏目录。
-- `claude-code-review.html`、`engineers-new-problems.html`：两篇英中对照译文，原文出处、正文与插图保持完整；图片原始字节归档在 `assets/translations/original/`，正文使用响应式派生资源。
+- `claude-code-review.html`、`engineers-new-problems.html`、`agent-design-system.html`：三篇英中对照译文，原文出处、正文与插图保持完整；图片与演示视频的原始字节归档在 `assets/translations/original/`，无法访问 X 也能阅读，正文图片使用响应式派生资源。
 - 各文章 HTML：标题、日期、正文；新增文章时沿用同类页面外壳，登记对应元信息后运行公共生成。
 - `content/original-articles.json`：新增原创文章的标题、日期、路径、摘要与标签；目录生成脚本会一并收录，正文维护在对应 HTML 中。
 - `ub-mode-bench.html`：ub-mode 评测文章；图表数据见 `content/ub-mode-bench-data.json`，图与移动端版本在 `assets/ub-mode-bench/`。维护脚本 `scripts/render-ub-mode-figures.py` 使用 matplotlib 生成静态 SVG，站点运行不依赖 Python 或绘图库。
