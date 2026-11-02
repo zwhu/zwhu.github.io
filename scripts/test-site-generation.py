@@ -114,6 +114,27 @@ class SiteGenerationTests(unittest.TestCase):
         self.assertIn('全部 7 篇 →', output['index.html'])
         self.assertIn('07 篇', output['learning.html'])
 
+    def test_article_can_be_hidden_from_home_without_leaving_archive(self):
+        root = self.fixture()
+        manifest = root / 'content/original-articles.json'
+        data = json.loads(manifest.read_text())
+        for item in data:
+            item.pop('home', None)
+        manifest.write_text(json.dumps(data))
+        before = {path.name: source for path, source in Site(root).outputs().items()}
+        target = next(item for item in data if item['path'] == 'superagent-botmux.html')
+        target['home'] = False
+        manifest.write_text(json.dumps(data))
+        after = {path.name: source for path, source in Site(root).outputs().items()}
+        link = 'href="./superagent-botmux.html"'
+        self.assertIn(link, before['index.html'])
+        self.assertNotIn(link, after['index.html'])
+        home = re.search(r'<!-- site:home-writing:start -->(.*?)<!-- site:home-writing:end -->', after['index.html'], re.S).group(1)
+        self.assertEqual(home.count('<article class="post">'), 6)
+        self.assertEqual(after['writing.html'], before['writing.html'])
+        self.assertIn(link, after['writing.html'])
+        self.assertEqual(after['superagent-botmux.html'], before['superagent-botmux.html'])
+
     def test_reading_time_only_on_opted_in_articles(self):
         site = Site()
         output = {path.name: text for path, text in site.outputs().items()}

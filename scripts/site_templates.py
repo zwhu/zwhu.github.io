@@ -151,8 +151,9 @@ class Site:
         return ''.join(self.post(dict(path=i['file'], title=i['title'], excerpt=i['description'], labels=[i['tags']])) for i in self.lessons)
 
     def home_sections(self):
+        home_articles = [item for item in self.articles if item.get('home', True)]
         common = [
-            ('writing', 'id="writing"', '01', '思考与实践', 'writing.html', f'全部 {len(self.articles)} 篇 →', ''.join(self.post(i) for i in self.articles[:6])),
+            ('writing', 'id="writing"', '01', '思考与实践', 'writing.html', f'全部 {len(self.articles)} 篇 →', ''.join(self.post(i) for i in home_articles[:6])),
             ('translations', 'class="home-translations"', '02', '翻译留档', 'translations.html', '全部翻译 →', ''.join(self.post(i) for i in self.translations)),
             ('learning', 'class="home-learning"', '03', '交互式学习', 'learning.html', f'全部 {len(self.lessons)} 篇 →', self.lesson_posts()),
         ]
