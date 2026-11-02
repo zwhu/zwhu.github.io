@@ -31,7 +31,7 @@ export function mountArchitecture(host, { shareView = false } = {}) {
 <style>
 
   :host {
-    display: block; position: relative; height: 100%; overflow: hidden;
+    display: block; position: relative; height: clamp(400px,65vh,680px); overflow: hidden;
     color-scheme: light; contain: layout paint;
     --bg: #faf8f3; --chrome: rgba(250,248,243,.96);
     --chrome-border: #e6e2da; --ink: #292825; --ink-mut: #77746e;
