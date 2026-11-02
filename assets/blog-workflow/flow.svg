@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="704" height="744" viewBox="0 0 704 744" role="img" aria-labelledby="title desc" data-graph-type="flowchart">
+<title id="title">一篇文章的九步</title>
+<desc id="desc">三条泳道的流程图：我、Agent、GitHub。九步从定题到在线确认；我在第 03 步通读正文、第 05 步看整页，最后点合并。虚线是回头路：正文要改回 03，图要改回 04，CI 失败或冲突修好后回 05。</desc>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif}</style>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#77746e"/></marker></defs>
+<rect width="704" height="744" fill="#faf8f3" data-graph-role="background"/>
+<text x="24" y="32" font-size="19" font-weight="500" text-anchor="start" fill="#292825">一篇文章的九步</text>
+<text x="24" y="57" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">我审两次稿、点一次合并；其余由 Agent 执行，GitHub 把关和发布</text>
+<path d="M236 82V700" stroke="#e6e2da"/>
+<path d="M468 82V700" stroke="#e6e2da"/>
+<path d="M24 112H680" stroke="#e6e2da"/>
+<text x="120" y="102" font-size="14" font-weight="500" text-anchor="middle" fill="#a64335">我</text>
+<text x="352" y="102" font-size="14" font-weight="500" text-anchor="middle" fill="#292825">Agent</text>
+<text x="584" y="102" font-size="14" font-weight="500" text-anchor="middle" fill="#292825">GitHub</text>
+<rect id="n01" data-node-id="n01" data-graph-role="node" data-graph-bounds="36,124,436,168" x="36" y="124" width="400" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="236.0" y="143.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">01 定题、找资料</text>
+<text x="236.0" y="160.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">我定问题和例子，Agent 找资料、核对出处</text>
+<rect id="n02" data-node-id="n02" data-graph-role="node" data-graph-bounds="268,190,436,234" x="268" y="190" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="209.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">02 建独立工作区</text>
+<text x="352.0" y="226.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">读规范、偏好和原稿</text>
+<rect id="n03" data-node-id="n03" data-graph-role="node" data-graph-bounds="268,256,436,300" x="268" y="256" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="275.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">03 写正文</text>
+<text x="352.0" y="292.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">当轮改稿，记下意见</text>
+<rect id="n03r" data-node-id="n03r" data-graph-role="node" data-graph-bounds="36,256,204,300" x="36" y="256" width="168" height="44" rx="4" fill="#faf8f3" stroke="#a64335" stroke-width="1.6"/>
+<text x="120.0" y="275.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">通读正文</text>
+<text x="120.0" y="292.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">提修改意见</text>
+<rect id="n04" data-node-id="n04" data-graph-role="node" data-graph-bounds="268,322,436,366" x="268" y="322" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="341.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">04 排版与配图</text>
+<text x="352.0" y="358.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">沿用视觉规范</text>
+<rect id="n05" data-node-id="n05" data-graph-role="node" data-graph-bounds="268,388,436,432" x="268" y="388" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="407.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">05 生成与检查</text>
+<text x="352.0" y="424.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">verify.py 与预览</text>
+<rect id="n05r" data-node-id="n05r" data-graph-role="node" data-graph-bounds="36,388,204,432" x="36" y="388" width="168" height="44" rx="4" fill="#faf8f3" stroke="#a64335" stroke-width="1.6"/>
+<text x="120.0" y="407.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">看整页效果</text>
+<text x="120.0" y="424.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">桌面和手机</text>
+<rect id="n06" data-node-id="n06" data-graph-role="node" data-graph-bounds="268,454,436,498" x="268" y="454" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="473.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">06 提交本篇，开 PR</text>
+<text x="352.0" y="490.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">只暂存本篇的文件</text>
+<rect id="n07" data-node-id="n07" data-graph-role="node" data-graph-bounds="500,520,668,564" x="500" y="520" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="584.0" y="539.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">07 CI 检查</text>
+<text x="584.0" y="556.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">check 通过，分支最新</text>
+<rect id="n08m" data-node-id="n08m" data-graph-role="node" data-graph-bounds="36,586,204,630" x="36" y="586" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="120.0" y="605.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">点合并</text>
+<text x="120.0" y="622.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">或开启自动合并</text>
+<rect id="n08" data-node-id="n08" data-graph-role="node" data-graph-bounds="500,586,668,630" x="500" y="586" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="584.0" y="605.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">08 合并 main</text>
+<text x="584.0" y="622.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">Pages 自动发布</text>
+<rect id="n09" data-node-id="n09" data-graph-role="node" data-graph-bounds="268,652,436,696" x="268" y="652" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="352.0" y="671.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">09 在线确认</text>
+<text x="352.0" y="688.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">交付正式链接</text>
+<path id="e01" data-edge-id="e01" data-graph-role="edge" d="M352 168 L352 190" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path id="e02" data-edge-id="e02" data-graph-role="edge" d="M352 234 L352 256" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path id="e03a" data-edge-id="e03a" data-graph-role="edge" d="M268 271 L204 271" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="236" y="265" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">初稿</text>
+<path id="e03b" data-edge-id="e03b" data-graph-role="edge" d="M204 285 L268 285" fill="none" stroke="#77746e" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+<text x="236" y="301" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">意见</text>
+<path id="e04" data-edge-id="e04" data-graph-role="edge" d="M352 300 L352 322" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="360" y="315" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">定稿</text>
+<path id="e05" data-edge-id="e05" data-graph-role="edge" d="M352 366 L352 388" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path id="e06a" data-edge-id="e06a" data-graph-role="edge" d="M268 410 L204 410" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="236" y="404" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">预览</text>
+<path id="e06b" data-edge-id="e06b" data-graph-role="edge" d="M80 388 L80 300" fill="none" stroke="#77746e" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+<text x="88" y="348" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">正文要改</text>
+<path id="e06c" data-edge-id="e06c" data-graph-role="edge" d="M176 388 L176 344 L268 344" fill="none" stroke="#77746e" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+<text x="184" y="337" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">图要改</text>
+<path id="e07" data-edge-id="e07" data-graph-role="edge" d="M352 432 L352 454" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="360" y="447" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">通过</text>
+<path id="e08" data-edge-id="e08" data-graph-role="edge" d="M352 498 L352 542 L500 542" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path id="e09" data-edge-id="e09" data-graph-role="edge" d="M584 520 L584 410 L436 410" fill="none" stroke="#77746e" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+<text x="592" y="472" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">失败或冲突</text>
+<text x="592" y="489" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">修好回 05</text>
+<path id="e10" data-edge-id="e10" data-graph-role="edge" d="M584 564 L584 586" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="592" y="579" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">通过</text>
+<path id="e11" data-edge-id="e11" data-graph-role="edge" d="M204 608 L500 608" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path id="e12" data-edge-id="e12" data-graph-role="edge" d="M584 630 L584 674 L436 674" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<rect x="24" y="719" width="18" height="11" rx="2" fill="#faf8f3" stroke="#a64335" stroke-width="1.6"/>
+<text x="50" y="728" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">我审阅</text>
+<path d="M114 724H136" stroke="#77746e"/>
+<text x="144" y="728" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">往下走</text>
+<path d="M208 724H230" stroke="#77746e" stroke-dasharray="4 3"/>
+<text x="238" y="728" font-size="12" font-weight="400" text-anchor="start" fill="#77746e">回头改</text>
+</svg>
