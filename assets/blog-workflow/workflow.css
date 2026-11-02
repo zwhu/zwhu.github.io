@@ -1,0 +1,78 @@
+/* 博客协作工作流文章：流程步进、改稿卡片与判断题。关闭脚本时三处都按顺序完整展开。 */
+.workflow-article .prose blockquote{color:var(--text);border-left-color:var(--accent)}
+.workflow-article .prose h3{font-size:16px}
+.workflow-article .prose table{border-collapse:collapse;font-size:12px;line-height:1.7;width:100%}
+.workflow-article .prose th,.workflow-article .prose td{text-align:left;vertical-align:top;padding:9px 10px;border-bottom:1px solid var(--line);min-width:96px}
+.workflow-article .prose th{border-top:1px solid var(--line);font-weight:600}
+
+.flow,.feedback,.quiz{border-block:1px solid var(--line);margin:18px 0 28px;padding:20px 0}
+.widget-question{font-size:16px;font-weight:500;line-height:1.65;margin:0 0 14px}
+.widget-note{font-size:11px;color:var(--muted);margin:12px 0 0}
+.review-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:1px}
+.workflow-article button{font:inherit;font-size:12px;line-height:1.5;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:4px;padding:6px 10px;cursor:pointer}
+.workflow-article button:hover{border-color:var(--accent);color:var(--accent)}
+.workflow-article button:focus-visible,.flow-goto:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.workflow-article button[aria-selected=true]{border-color:var(--accent);color:var(--accent)}
+
+/* 流程 */
+.flow-steps{list-style:none;margin:0;padding:0}
+.flow-step{border-top:1px solid var(--line);padding:12px 0}
+.flow-step h3{font-size:14px;font-weight:600;margin:0 0 6px}
+.flow-no{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--accent);margin-right:10px}
+.flow-step[data-review] h3::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:8px;vertical-align:2px}
+.flow-step dl{margin:0;font-size:13px;line-height:1.75}
+.flow-step dl div{display:grid;grid-template-columns:64px 1fr;gap:10px;margin-top:4px}
+.flow-step dt{color:var(--muted);font-size:12px}
+.flow-step dd{margin:0}
+.flow-goto{color:var(--accent);font-family:ui-monospace,Menlo,monospace}
+.flow-rail{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin:0 0 16px}
+.flow-rail button{padding:8px 0 6px;display:flex;flex-direction:column;align-items:center;gap:2px;border-radius:3px;position:relative}
+.flow-rail .rail-no{font-family:ui-monospace,Menlo,monospace;font-size:11px}
+.flow-rail .rail-label{font-size:11px}
+.flow-rail button[data-review]::after{content:"";position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.flow-rail button.is-target{border-style:dashed;border-color:var(--accent)}
+.flow-ready .flow-step{display:none;border-top:0;padding:0}
+.flow-ready .flow-step.is-active{display:block}
+.flow-ready .flow-step h3{font-size:15px;margin-bottom:8px}
+.flow-pager{display:flex;justify-content:space-between;margin-top:14px}
+
+/* 改稿卡片 */
+.feedback-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 16px}
+.feedback-card{border-top:1px solid var(--line);padding:14px 0 6px}
+.feedback-card h3{font-size:15px;margin:0 0 2px}
+.card-place{font-size:11px;color:var(--muted);margin:0 0 10px!important}
+.feedback-card .quote{font-size:14px;margin:0 0 12px!important}
+.feedback-card .quote::before{content:"我说";font-size:11px;color:var(--accent);font-family:ui-monospace,Menlo,monospace;margin-right:8px}
+.version{display:grid;grid-template-columns:96px 1fr;gap:12px;border-top:1px dashed var(--line);padding:10px 0;font-size:13px;line-height:1.8}
+.version p{margin:0 0 6px!important}
+.who{font-size:11px;line-height:1.6;color:var(--muted);padding-top:2px}
+.who-me{color:var(--accent)}
+.who-orig+p{color:var(--muted)}
+.guess,.status{font-size:12px;line-height:1.8;color:var(--muted);margin:8px 0 0!important}
+.guess span{display:inline-block;font-size:11px;border:1px dashed var(--muted);border-radius:3px;padding:0 6px;margin-right:8px;line-height:1.6}
+.status{color:var(--text)}
+.cards-ready .feedback-card{display:none}
+.cards-ready .feedback-card.is-active{display:block;border-top:0;padding-top:0}
+
+/* 判断题 */
+.quiz ol{margin:0;padding-left:22px}
+.quiz li{margin:0 0 12px;font-size:14px}
+.quiz li>p{margin:0 0 6px!important}
+.quiz details{font-size:13px}
+.quiz summary{font-size:12px;color:var(--accent);cursor:pointer;width:max-content}
+.quiz details p{margin:6px 0 0!important}
+.quiz-choices{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 0}
+.quiz-choices button[aria-pressed=true]{border-color:var(--text);color:var(--text)}
+.quiz-result{font-size:13px;margin:8px 0 0!important}
+.quiz-result strong{color:var(--accent);font-weight:600}
+.quiz-ready details{display:none}
+.quiz-score{font-size:12px;color:var(--muted);margin:14px 0 0!important}
+
+@media(max-width:560px){
+  .flow-rail{grid-template-columns:repeat(5,1fr)}
+  .flow-step dl div{grid-template-columns:1fr;gap:0}
+  .version{grid-template-columns:1fr;gap:2px}
+  .feedback-tabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+  .feedback-tabs button{white-space:nowrap}
+}
+@media print{.flow-rail,.flow-pager,.feedback-tabs,.quiz-choices{display:none}.flow-ready .flow-step,.cards-ready .feedback-card,.quiz-ready details{display:block}}

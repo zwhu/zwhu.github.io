@@ -139,7 +139,7 @@ class SiteGenerationTests(unittest.TestCase):
         site = Site()
         output = {path.name: text for path, text in site.outputs().items()}
         opted = [i['path'] for i in site.articles if i.get('readingTime')]
-        self.assertEqual(sorted(opted), ['superagent-botmux.html', 'superagent.html', 'ub-mode-bench.html'])
+        self.assertEqual(sorted(opted), ['blog-workflow.html', 'superagent-botmux.html', 'superagent.html', 'ub-mode-bench.html'])
         for name in opted:
             label = site.reading_time(name)
             self.assertRegex(label, r'^阅读约 \d+ 分钟$')
