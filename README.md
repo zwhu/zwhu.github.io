@@ -62,7 +62,7 @@
 
 写作前读取[个人偏好](./content/writing-preferences.md)。在对话中纠正文稿的表达时，AI 同步保存修改前后与用户说明的原因，处理方法见[反馈流程](./content/writing-feedback-guide.md)，实例保存在[修改记录](./content/writing-feedback-log.md)。
 
-从本次写作、配图和 PR 协作整理的完整过程见[博客发布流程](./content/blog-publishing-workflow.md)，其中区分用户原话、AI 的待确认分析与本篇要求。
+从本次写作、配图和 PR 协作整理的完整过程见[博客发布流程](./content/blog-publishing-workflow.md)，其中区分用户原话、AI 分析与本篇要求，并说明反馈怎样整理成长期偏好。
 
 ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-comparison/`，不加入 `content/original-articles.json`，因此首页和文章归档只展示正式文章。
 

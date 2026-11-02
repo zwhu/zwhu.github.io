@@ -34,10 +34,10 @@
     "readingTime": true
   },
   {
-    "title": "我和 Agent 写博客的流程，以及它为什么管用",
+    "title": "我只看两次稿，文章是怎么上线的？",
     "path": "blog-workflow.html",
     "date": "2026-11-03",
-    "excerpt": "我和 Agent 合写博客的九步流程：我只在两处看稿，其余交给 Agent 和 GitHub；为什么这样分工管用，以及改稿意见、检查和发布的具体做法。",
+    "excerpt": "我只定题、看两次稿、点合并，其余交给 Agent 和 GitHub。和 Agent 合写博客的九步流程，五个让它管用的做法，以及每一步具体怎么做。",
     "labels": [
       "AI 写作",
       "工程实践"

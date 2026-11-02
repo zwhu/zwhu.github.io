@@ -1,4 +1,4 @@
-// 流程步进、改稿卡片与判断题。关闭脚本时，页面按顺序完整展示三处内容。
+// 流程步进与改稿卡片。关闭脚本时，页面按顺序完整展示两处内容。
 (() => {
   const tabs = (container, items, label, onSelect) => {
     const list = document.createElement('div');
@@ -96,45 +96,5 @@
       section.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
       buttons[cards.findIndex(card => card.classList.contains('is-active'))].focus({ preventScroll: true });
     });
-  });
-
-  document.querySelectorAll('[data-quiz]').forEach(quiz => {
-    const items = [...quiz.querySelectorAll('li[data-answer]')];
-    const labels = { yes: '能', part: '一部分', no: '不能' };
-    const answered = new Map();
-    const score = document.createElement('p');
-    score.className = 'quiz-score';
-    score.setAttribute('aria-live', 'polite');
-    quiz.append(score);
-    const update = () => {
-      const right = [...answered.values()].filter(Boolean).length;
-      score.textContent = answered.size ? `已答 ${answered.size} / ${items.length}，与记录规则一致 ${right} 题。` : `共 ${items.length} 题，选一个答案就会显示理由。`;
-    };
-    items.forEach((item, index) => {
-      const choices = document.createElement('div');
-      choices.className = 'quiz-choices';
-      choices.setAttribute('role', 'group');
-      choices.setAttribute('aria-label', `第 ${index + 1} 题的选项`);
-      const result = document.createElement('p');
-      result.className = 'quiz-result';
-      result.setAttribute('aria-live', 'polite');
-      Object.entries(labels).forEach(([value, text]) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = text;
-        button.setAttribute('aria-pressed', 'false');
-        button.addEventListener('click', () => {
-          choices.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
-          const right = value === item.dataset.answer;
-          answered.set(index, right);
-          result.innerHTML = (right ? '和记录规则一致。' : '记录规则的判断不同。') + item.querySelector('details p').innerHTML;
-          update();
-        });
-        choices.append(button);
-      });
-      item.querySelector('details').before(choices, result);
-    });
-    quiz.classList.add('quiz-ready');
-    update();
   });
 })();
