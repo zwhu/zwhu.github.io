@@ -32,7 +32,7 @@ function render(s,mobile=false){
  for(const l of s.labels)body+=text(l.x,l.y,l.text,l.size,l.color);
  const markers=['accent','muted'].map(k=>`<marker id="arrow-${k}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9" fill="none" stroke="${c[k]}" stroke-width="1.4"/></marker>`).join('');
  const name=`fig${String(s.n).padStart(2,'0')}${mobile?'-mobile':''}.svg`;
- const description=`据 DeepSeek Harness 原文图 ${s.n} 重绘。${s.nodes.map(n=>(Array.isArray(n.title)?n.title.join(' '):n.title)+': '+n.lines.join('，')).join('；')}。重排版不改变作者设计与公开原型的区别。`;
+ const description=`据 dsh 原文图 ${s.n} 重绘。${s.nodes.map(n=>(Array.isArray(n.title)?n.title.join(' '):n.title)+': '+n.lines.join('，')).join('；')}。`;
  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${s.w}" height="${s.h}" viewBox="0 0 ${s.w} ${s.h}" role="img" aria-labelledby="title desc"><title id="title">${esc(s.title)}</title><desc id="desc">${esc(description)}</desc><defs>${markers}</defs><rect width="${s.w}" height="${s.h}" fill="${c.bg}"/><g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei,sans-serif">${body}</g></svg>\n`;
  write(name,svg);
  return {file:name,width:s.w,height:s.h,nodes:s.nodes.length,edges:s.edges.length};
@@ -48,8 +48,8 @@ function publish(a,b){
 let a=scene(4,760,300,'双层分工：统一交互，隔离执行'),b=scene(4,360,590,a.title);
 ['IM','GitHub','邮件 / 日程'].forEach((t,i)=>{node(a,'c'+i,14,18+i*89,150,64,t);node(b,'c'+i,15,14+i*72,330,60,t)});
 node(a,'router',264,97,230,110,'Router 层',['共享上下文','路由与对外交互'],true);node(b,'router',15,252,330,106,'Router 层',['共享上下文，路由与对外交互'],true);
-for(let i=0;i<3;i++){node(a,'w'+i,574,18+i*89,172,76,'Worker '+(i+1),['隔离上下文']);node(b,'w'+i,15,385+i*65,330,58,'Worker '+(i+1),[],false);edge(a,'c'+i,'router',`164,${50+i*89} 210,${50+i*89} 210,152 264,152`,{both:true});edge(a,'router','w'+i,`494,152 534,152 534,${55+i*89} 574,${55+i*89}`,{both:true});edge(b,'c'+i,'router',`345,${44+i*72} 355,${44+i*72} 355,298 345,298`,{both:true});edge(b,'router','w'+i,`15,314 5,314 5,${414+i*65} 15,${414+i*65}`,{both:true})}
-label(b,35,575,'三个 Worker 各有独立上下文；数量为示意。',12);publish(a,b);
+for(let i=0;i<3;i++){node(a,'w'+i,574,18+i*89,172,76,'Worker '+(i+1),['隔离上下文']);node(b,'w'+i,15,385+i*65,330,58,'Worker '+(i+1)+' · 隔离上下文',[],false);edge(a,'c'+i,'router',`164,${50+i*89} 210,${50+i*89} 210,152 264,152`,{both:true});edge(a,'router','w'+i,`494,152 534,152 534,${55+i*89} 574,${55+i*89}`,{both:true});edge(b,'c'+i,'router',`345,${44+i*72} 355,${44+i*72} 355,298 345,298`,{both:true});edge(b,'router','w'+i,`15,314 5,314 5,${414+i*65} 15,${414+i*65}`,{both:true})}
+publish(a,b);
 
 // 7. The first event establishes a subscription; subsequent events follow the program path.
 a=scene(7,760,260,'订阅与直通：初始判断，后续投递');b=scene(7,360,472,a.title);
@@ -65,7 +65,7 @@ const triggerLines=[['“中午去食堂还是外卖？”'],['“新版本界�
 for(let i=0;i<3;i++){node(a,'t'+i,14,20+i*109,252,92,triggerTitles[i],triggerLines[i],i===2);node(b,'t'+i,15,15+i*95,330,82,triggerTitles[i],triggerLines[i],i===2)}
 node(a,'program',312,54,236,210,'程序层策略',['Fast Path','确定性规则准入','群组范围 / 来源白名单','拦截 Trigger 1','放行 Trigger 2、3'],true);node(a,'semantic',584,74,222,160,'语义层策略',['Slow Path','LLM 按提示词判断语义','静默 2，触发 3']);node(a,'result',584,278,222,66,'开始路由 Trigger 3',[],true);
 for(let i=0;i<3;i++)edge(a,'t'+i,'program',`266,${66+i*109} 287,${66+i*109} 287,${105+i*45} 312,${105+i*45}`,{accent:i===2});edge(a,'program','semantic','548,156 584,156',{accent:true,label:'候选',lx:549,ly:141});edge(a,'semantic','result','695,234 695,278',{accent:true});
-label(a,321,311,'规则挡住的事件不需要调用 LLM。',13);label(a,14,353,'保留原文的三条示例；判断是原文示意，未实测准确率。',12);
+
 node(b,'program',15,325,330,171,'程序层策略',['Fast Path · 确定性规则准入','群组范围 / 来源白名单','拦截 Trigger 1；放行 2、3'],true);node(b,'semantic',15,541,330,114,'语义层策略',['Slow Path · LLM 读语义','静默 Trigger 2，触发 Trigger 3']);node(b,'result',15,699,330,55,'开始路由 Trigger 3',[],true);
 for(let i=0;i<3;i++)edge(b,'t'+i,'program',`345,${56+i*95} 355,${56+i*95} 355,${358+i*35} 345,${358+i*35}`,{accent:i===2});edge(b,'program','semantic','180,496 180,541',{accent:true,label:'候选事件',lx:20,ly:522});edge(b,'semantic','result','180,655 180,699',{accent:true});publish(a,b);
 
@@ -85,7 +85,7 @@ edge(a,'trigger','filter','240,60 286,60');edge(a,'filter','router','504,60 554,
 const overviewNodes=[['trigger','[3] 环境事件',['群消息 / PR / CI'],80],['filter','[3] 两级过滤',['Fast / Slow Path'],80],['router','[2] Router 层',['共享上下文，全局路由与交互'],88],['channels','[4] 多信道交互',['IM / GitHub / 邮件'],80],['w1','[2] Worker 1',['隔离上下文'],80],['wn','[2] Worker N',['隔离上下文'],80],['env','[5] 执行环境',['轻量 daemon 原地接入'],80],['db','[5] Session 数据库',['持久化保存所有 Session 状态'],80],['watchdog','[6] Watchdog',['外部监控与自愈'],80]];
 let y=14;for(const [id,title,lines,h] of overviewNodes){node(b,id,18,y,324,h,title,lines,id==='router',id==='env');y+=102}
 const by=new Map(b.nodes.map(n=>[n.id,n]));function connection(from,to,side=1,opts={}){const f=by.get(from),t=by.get(to),x=side?351:9;edge(b,from,to,`${side?342:18},${f.y+f.h/2} ${x},${f.y+f.h/2} ${x},${t.y+t.h/2} ${side?342:18},${t.y+t.h/2}`,opts)}
-edge(b,'trigger','filter','180,94 180,116');edge(b,'filter','router','180,196 180,218');edge(b,'router','channels','180,306 180,320');connection('router','w1',0);connection('router','wn',0);connection('filter','w1',1,{accent:true,dash:true});connection('router','db',1);connection('w1','db',0);connection('wn','db',0);edge(b,'wn','env','180,604 180,626');edge(b,'watchdog','db','180,830 180,808',{dash:true});label(b,18,952,'章节号沿用原文；不表示公开版已全实现。',12);publish(a,b);
+edge(b,'trigger','filter','180,94 180,116');edge(b,'filter','router','180,196 180,218');edge(b,'router','channels','180,306 180,320');connection('router','w1',0);connection('router','wn',0);connection('filter','w1',1,{accent:true,dash:true});connection('router','db',1);connection('w1','db',0);connection('wn','db',0);edge(b,'wn','env','180,604 180,626');edge(b,'watchdog','db','180,830 180,808',{dash:true});publish(a,b);
 
 // 8. Preserve both object references and the particular read calls in the source figure.
 a=scene(8,760,600,'Inline & Spill：沿引用逐跳召回');b=scene(8,360,844,a.title);

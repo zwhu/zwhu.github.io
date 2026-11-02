@@ -8,17 +8,17 @@ Super-agent 的任务分发与持续协作
 
 Super-agent 想接管这段续办流程。**Router 判断任务关联，Worker 执行工作，程序保存任务与讨论的关系。** 聊天、PR 和一次执行可以结束，任务的身份仍然保留。
 
-本文以这次假设的 CSV 修复为线索，结合 DeepSeek Harness 团队原文与公开原型 `6337fc8`。案例用来解释路径，不是一次真实修复的实测记录。公开版经过整理，与作者内部实例及文章设计不完全一致；对应的实现范围会在相关机制旁说明。
+本文以这次假设的 CSV 修复为线索，结合 DeepSeek Harness（dsh）团队原文与公开原型 `6337fc8`。案例用来解释路径，不是一次真实修复的实测记录。公开版经过整理，与 dsh 内部实例及文章设计不完全一致；对应的实现范围会在相关机制旁说明。
 
-<figure class="article-figure cover-figure"><img src="../assets/superagent/continuity-cover.svg" width="640" height="440" alt="红线穿过话题、PR与日历，表达任务跨入口与时间延续。"><figcaption>编辑插画｜任务的线索，还在。本次绘制，表达主题，不描述算法或实验结果。</figcaption></figure>
+<figure class="article-figure cover-figure"><img src="../assets/superagent/continuity-cover.svg" width="640" height="440" alt="红线穿过话题、PR与日历，表达任务跨入口与时间延续。"></figure>
 
 ## 01 一件工作，几个入口
 
 在群聊提出请求，在 PR 里评审，用 CI 检查改动，隔几周再反馈回归：入口改变，任务可以延续。让多个独立会话各自理解整段历史，既费推理，也需要人反复搬运信息。
 
-作者把职责分成两层。Router 维持跨任务的高层关联和对外交互；每个 Worker 在独立上下文中调查、实现与验证。Worker 可以再用子 Agent 完成复杂任务，但对上层仍表现为一个执行者。
+dsh 把职责分成两层。Router 维持跨任务的高层关联和对外交互；每个 Worker 在独立上下文中调查、实现与验证。Worker 可以再用子 Agent 完成复杂任务，但对上层仍表现为一个执行者。
 
-<figure class="article-figure original-figure compact-figure redrawn-figure" id="original-figure-4"><a href="../assets/superagent/redrawn/fig04.svg" aria-label="打开重绘图 4 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig04-mobile.svg" width="360" height="590"><img src="../assets/superagent/redrawn/fig04.svg" width="760" height="300" loading="lazy" alt="双层分工：统一交互，隔离执行：Router 维持共享的高层关联，Worker 在各自上下文中执行。"></picture></a><figcaption>据原文图 4 重绘｜Router 维持共享的高层关联，Worker 在各自上下文中执行。 <a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">来源</a> · <a href="../assets/superagent/original/fig04.jpg">对照原图</a>。沿用博客字体与配色；作者设计与公开实现的范围仍按正文说明。</figcaption></figure>
+<figure class="article-figure original-figure compact-figure redrawn-figure" id="original-figure-4"><a href="../assets/superagent/redrawn/fig04.svg?v=3" aria-label="打开重绘图 4 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig04-mobile.svg?v=3" width="360" height="590"><img src="../assets/superagent/redrawn/fig04.svg?v=3" width="760" height="300" loading="lazy" alt="双层分工：统一交互，隔离执行：Router 维持共享的高层关联，Worker 在各自上下文中执行。"></picture></a><figcaption>图 4 · 双层分工（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig04.jpg">原图</a></figcaption></figure>
 
 CSV Worker 负责“这次 CSV 乱码修复”，不是所有带 CSV 字样的需求。先弄清这个边界，再看新消息会走哪里。
 
@@ -30,7 +30,7 @@ CSV Worker 负责“这次 CSV 乱码修复”，不是所有带 CSV 字样的�
 
 “增加 CSV 导入功能”是新目标，需要新 Ticket 和 Worker。仅仅主题相似不足以复用旧任务。同一话题也可能出现新目标：程序先按订阅送到原 Worker，Worker 发现超出范围后用 `handback` 交回 Router。
 
-<figure class="article-figure original-figure compact-figure redrawn-figure" id="original-figure-7"><a href="../assets/superagent/redrawn/fig07.svg" aria-label="打开重绘图 7 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig07-mobile.svg" width="360" height="472"><img src="../assets/superagent/redrawn/fig07.svg" width="760" height="260" loading="lazy" alt="订阅与直通：初始判断，后续投递：初始事件建立任务与订阅；已知讨论的补充可直通 Worker。"></picture></a><figcaption>据原文图 7 重绘｜初始事件建立任务与订阅；已知讨论的补充可直通 Worker。 <a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">来源</a> · <a href="../assets/superagent/original/fig07.jpg">对照原图</a>。沿用博客字体与配色；作者设计与公开实现的范围仍按正文说明。</figcaption></figure>
+<figure class="article-figure original-figure compact-figure redrawn-figure" id="original-figure-7"><a href="../assets/superagent/redrawn/fig07.svg?v=3" aria-label="打开重绘图 7 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig07-mobile.svg?v=3" width="360" height="472"><img src="../assets/superagent/redrawn/fig07.svg?v=3" width="760" height="260" loading="lazy" alt="订阅与直通：初始判断，后续投递：初始事件建立任务与订阅；已知讨论的补充可直通 Worker。"></picture></a><figcaption>图 7 · 订阅与直通（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig07.jpg">原图</a></figcaption></figure>
 
 订阅是多对多关系。一个任务可以关联群聊和 PR，一个讨论也可以被多个任务订阅。人类追问直通后，Router 仍可能收到 `follow_up` 通知；节省的是再次分派等开销，不能把 Router 的后续推理成本算成零。
 
@@ -38,7 +38,7 @@ CSV Worker 负责“这次 CSV 乱码修复”，不是所有带 CSV 字样的�
 
 真实环境里大多是闲聊、通知和背景资料。原文先用程序检查来源、范围和明确请求，再让模型判断需要理解语义的候选。公开版对应来源配置、策略准入和 Router 评估。过滤减少调用量，剩余候选的判断正确率仍需另测。
 
-<figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-5"><a href="../assets/superagent/redrawn/fig05.svg" aria-label="打开重绘图 5 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig05-mobile.svg" width="360" height="760"><img src="../assets/superagent/redrawn/fig05.svg" width="820" height="362" loading="lazy" alt="两级过滤：先过规则，再读语义：程序先筛选来源与范围，模型再判断候选的语义。"></picture></a><figcaption>据原文图 5 重绘｜程序先筛选来源与范围，模型再判断候选的语义。 <a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">来源</a> · <a href="../assets/superagent/original/fig05.jpg">对照原图</a>。沿用博客字体与配色；作者设计与公开实现的范围仍按正文说明。</figcaption></figure>
+<figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-5"><a href="../assets/superagent/redrawn/fig05.svg?v=3" aria-label="打开重绘图 5 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig05-mobile.svg?v=3" width="360" height="760"><img src="../assets/superagent/redrawn/fig05.svg?v=3" width="820" height="362" loading="lazy" alt="两级过滤：先过规则，再读语义：程序先筛选来源与范围，模型再判断候选的语义。"></picture></a><figcaption>图 5 · 两级过滤（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig05.jpg">原图</a></figcaption></figure>
 
 ### 谁写实施提示词
 
@@ -61,20 +61,20 @@ Router 转交原始请求和简短路由背景，不临时编写修复方案。W
 | Ticket | “修复 CSV 乱码”的目标、原请求、授权、输入与交付状态 |
 | Assignment | 这项任务的一轮执行，包括启动、投递和报告 |
 
-<figure class="article-figure compact-figure"><a href="../assets/superagent/architecture-full.svg"><img src="../assets/superagent/architecture.svg" width="600" height="510" loading="lazy" alt="Intake 查讨论订阅，已有输入直达 Worker；未知候选由 Router 分派，任务关系持久保存。"></a><figcaption>源码解读 A｜公开原型的记录与投递路径。本次绘制；完整图可点击查看。</figcaption></figure>
+<figure class="article-figure compact-figure"><a href="../assets/superagent/architecture-full.svg"><img src="../assets/superagent/architecture.svg" width="600" height="510" loading="lazy" alt="Intake 查讨论订阅，已有输入直达 Worker；未知候选由 Router 分派，任务关系持久保存。"></a><figcaption>公开原型的记录与投递路径。</figcaption></figure>
 <details class="architecture-explorer"><summary>探索完整架构：缩放、拖动与节点关系</summary><p>这张画布提供组件总览，点击节点查看相邻关系；聚焦不是层级下钻。</p><div class="architecture-frame" data-canvas-src="../assets/superagent/index.html"></div><p><a href="../assets/superagent/index.html">独立打开交互图</a></p></details>
 
 新任务建立新 Ticket 和 Worker。旧任务重新开始，可以新建 Assignment，同时复用固定 ID `worker-<ticketId>` 的原 Worker。任务身份与执行轮次分开，才能解释“工作已经结束，为什么还能续办”。
 
 ### 主会话不必一直装着全部历史
 
-作者把有限的模型窗口看作缓存。近期很可能用到的摘要和引用直接放进窗口，即 **Inline**；完整、低频或太长的内容留在窗口外，按需读取，即 **Spill**。
+dsh 把有限的模型窗口看作缓存。近期很可能用到的摘要和引用直接放进窗口，即 **Inline**；完整、低频或太长的内容留在窗口外，按需读取，即 **Spill**。
 
 当前反馈可以带原任务摘要和读取入口，Router 再沿引用展开：
 
 `反馈 → 所在讨论 → 相关任务 → 最近报告 / 另一个已绑定 PR`
 
-<figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-8"><a href="../assets/superagent/redrawn/fig08.svg" aria-label="打开重绘图 8 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig08-mobile.svg" width="360" height="1084"><img src="../assets/superagent/redrawn/fig08.svg" width="820" height="432" loading="lazy" alt="Inline &amp; Spill：沿引用逐跳召回：每次读取带下一跳的摘要和 ID，完整历史按需展开。"></picture></a><figcaption>据原文图 8 重绘｜每次读取带下一跳的摘要和 ID，完整历史按需展开。 <a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">来源</a> · <a href="../assets/superagent/original/fig08.jpg">对照原图</a>。沿用博客字体与配色；作者设计与公开实现的范围仍按正文说明。</figcaption></figure>
+<figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-8"><a href="../assets/superagent/redrawn/fig08.svg?v=3" aria-label="打开重绘图 8 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig08-mobile.svg?v=3" width="360" height="844"><img src="../assets/superagent/redrawn/fig08.svg?v=3" width="760" height="600" loading="lazy" alt="Inline &amp; Spill：沿引用逐跳召回：每次读取带下一跳的摘要和 ID，完整历史按需展开。"></picture></a><figcaption>图 8 · Inline & Spill（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig08.jpg">原图</a></figcaption></figure>
 
 原文称它为链式召回：每次读到的对象带下一跳摘要与 ID。公开原型的候选卡片提供相关 Ticket 的标题、状态、最近报告预览和读取入口，完整任务、事件及订阅保存在 SQLite，执行记录由 Harness 保存。
 
@@ -100,7 +100,7 @@ Router preset 使用 Harness 的会话压缩与工具结果裁剪；提示词要
 
 公开原型采用单机状态目录锁、SQLite 事务和持久 Effects 队列。接单时，把 Decision、Ticket、Assignment、订阅、待启动动作和确认消息写进同一事务；失败回滚。Worker 启动与对外发送在提交后执行，崩溃后可以继续派发队列。
 
-<figure class="article-figure compact-figure"><picture><source media="(max-width:560px)" srcset="../assets/superagent/consistency-mobile.svg" width="330" height="570"><img src="../assets/superagent/consistency.svg" width="600" height="483" loading="lazy" alt="先在事务中保存任务与动作意图，提交后执行外部动作；失败保留并重试。"></picture><figcaption>源码解读 B｜数据库记录与外部动作的分界。本次绘制；外部系统不属于 SQLite 事务。</figcaption></figure>
+<figure class="article-figure compact-figure"><picture><source media="(max-width:560px)" srcset="../assets/superagent/consistency-mobile.svg" width="330" height="570"><img src="../assets/superagent/consistency.svg" width="600" height="483" loading="lazy" alt="先在事务中保存任务与动作意图，提交后执行外部动作；失败保留并重试。"></picture><figcaption>数据库事务与外部动作。</figcaption></figure>
 
 事务不占用模型思考的整段时间。程序在每次工具调用时用短事务读当前状态、执行合法动作。投递前也重查 Ticket 和 Assignment，避免任务已停止或接管之后仍按旧判断动作。
 
@@ -120,17 +120,17 @@ Router preset 使用 Harness 的会话压缩与工具结果裁剪；提示词要
 
 ## 04 持续负责，还需要什么
 
-分发与恢复只解释了任务如何续办。作者的完整设计还包括后台交互、执行环境与外部巡检，让任务有机会跨过长命令、设备离线和系统故障。
+分发与恢复只解释了任务如何续办。dsh 的完整设计还包括后台交互、执行环境与外部巡检，让任务有机会跨过长命令、设备离线和系统故障。
 
-<figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-3"><a href="../assets/superagent/redrawn/fig03.svg" aria-label="打开重绘图 3 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig03-mobile.svg" width="360" height="972"><img src="../assets/superagent/redrawn/fig03.svg" width="820" height="468" loading="lazy" alt="Super-agent 整体设计：把任务分发、后台交互、持久状态与巡检放进同一幅总览。"></picture></a><figcaption>据原文图 3 重绘｜把任务分发、后台交互、持久状态与巡检放进同一幅总览。 <a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">来源</a> · <a href="../assets/superagent/original/fig03.jpg">对照原图</a>。沿用博客字体与配色；作者设计与公开实现的范围仍按正文说明。</figcaption></figure>
+<figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-3"><a href="../assets/superagent/redrawn/fig03.svg?v=3" aria-label="打开重绘图 3 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig03-mobile.svg?v=3" width="360" height="972"><img src="../assets/superagent/redrawn/fig03.svg?v=3" width="820" height="468" loading="lazy" alt="Super-agent 整体设计：把任务分发、后台交互、持久状态与巡检放进同一幅总览。"></picture></a><figcaption>图 3 · 整体设计（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig03.jpg">原图</a></figcaption></figure>
 
-图中的 [2]～[6] 对应原文章节。双层分工与跨信道关联支持连续性，Worker 和异步执行支持并发；事件策略提供主动性，状态/环境分离与 Watchdog 处理持久运行。原文“一个人通常只能跟进 3～5 个活跃 Session”属于作者观察，未提供样本或对照，不能当作人的容量常数。
+图中的 [2]～[6] 对应原文章节。双层分工与跨信道关联支持连续性，Worker 和异步执行支持并发；事件策略提供主动性，状态/环境分离与 Watchdog 处理持久运行。原文“一个人通常只能跟进 3～5 个活跃 Session”属于 dsh 的观察，未提供样本或对照，不能当作人的容量常数。
 
 ### 长命令运行时，还能接收新输入
 
-经典 ReAct Loop 等待工具完成再继续。作者改为先收到 Started 通知，工具后台运行，最终结果再作为事件进入会话；新输入在当前模型步骤结束后处理。
+经典 ReAct Loop 等待工具完成再继续。dsh 改为先收到 Started 通知，工具后台运行，最终结果再作为事件进入会话；新输入在当前模型步骤结束后处理。
 
-<figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-10"><a href="../assets/superagent/redrawn/fig10.svg" aria-label="打开重绘图 10 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig10-mobile.svg" width="360" height="960"><img src="../assets/superagent/redrawn/fig10.svg" width="820" height="606" loading="lazy" alt="同步与异步 ReAct Loop：工具在后台运行，新的用户输入不必等待工具完成。"></picture></a><figcaption>据原文图 10 重绘｜工具在后台运行，新的用户输入不必等待工具完成。 <a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">来源</a> · <a href="../assets/superagent/original/fig10.jpg">对照原图</a>。沿用博客字体与配色；作者设计与公开实现的范围仍按正文说明。</figcaption></figure>
+<figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-10"><a href="../assets/superagent/redrawn/fig10.svg?v=3" aria-label="打开重绘图 10 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig10-mobile.svg?v=3" width="360" height="960"><img src="../assets/superagent/redrawn/fig10.svg?v=3" width="820" height="606" loading="lazy" alt="同步与异步 ReAct Loop：工具在后台运行，新的用户输入不必等待工具完成。"></picture></a><figcaption>图 10 · 同步与异步 ReAct Loop（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig10.jpg">原图</a></figcaption></figure>
 
 公开原型通过 Harness 的后台工具和输入投递使用这条路径，默认前台命令等待上限为 5 秒。用户不必等长命令完成再补充，但仍要等模型步骤边界。
 
@@ -138,9 +138,9 @@ Router preset 使用 Harness 的会话压缩与工具结果裁剪；提示词要
 
 ### 在线的是 Loop，环境可能还在等待
 
-作者先把计算与持久状态分开，再把计算与执行环境分开：云端 Loop 访问独立数据库，通过轻量 daemon 在开发机或云端环境执行工具并取回结果。开发机上的未提交修改、内网依赖和工具链留在原地。
+dsh 先把计算与持久状态分开，再把计算与执行环境分开：云端 Loop 访问独立数据库，通过轻量 daemon 在开发机或云端环境执行工具并取回结果。开发机上的未提交修改、内网依赖和工具链留在原地。
 
-<figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-11"><a href="../assets/superagent/redrawn/fig11.svg" aria-label="打开重绘图 11 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig11-mobile.svg" width="360" height="620"><img src="../assets/superagent/redrawn/fig11.svg" width="760" height="302" loading="lazy" alt="计算、状态与执行环境分离：云端 Loop、持久状态和真实执行环境分离；环境仍可能离线。"></picture></a><figcaption>据原文图 11 重绘｜云端 Loop、持久状态和真实执行环境分离；环境仍可能离线。 <a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">来源</a> · <a href="../assets/superagent/original/fig11.jpg">对照原图</a>。沿用博客字体与配色；作者设计与公开实现的范围仍按正文说明。</figcaption></figure>
+<figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-11"><a href="../assets/superagent/redrawn/fig11.svg?v=3" aria-label="打开重绘图 11 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig11-mobile.svg?v=3" width="360" height="620"><img src="../assets/superagent/redrawn/fig11.svg?v=3" width="760" height="302" loading="lazy" alt="计算、状态与执行环境分离：云端 Loop、持久状态和真实执行环境分离；环境仍可能离线。"></picture></a><figcaption>图 11 · 计算、状态与执行环境分离（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig11.jpg">原图</a></figcaption></figure>
 
 公开原型主要使用本机 SQLite、目录锁和本地子进程，没有完整体现图中的云端无状态容器与端侧 daemon。即使云端 Loop 始终在线，依赖离线开发机的任务仍要等环境可用。接入私有代码与凭据也需要处理权限和隔离；原文将安全、上下文边界与跨实例协作列为开放问题。
 
@@ -152,21 +152,21 @@ Router preset 使用 Harness 的会话压缩与工具结果裁剪；提示词要
 
 ### 提前行动，先看结果是否有人用
 
-作者内部实例会在群聊讨论缺陷时，提前尝试复现并提交修复 PR。这是投机执行：用额外后台算力准备结果，有价值再交付，没价值就放弃。
+dsh 内部实例会在群聊讨论缺陷时，提前尝试复现并提交修复 PR。这是投机执行：用额外后台算力准备结果，有价值再交付，没价值就放弃。
 
 公开原型可先在 `observe` 模式记录本来会接受的候选，再在 `auto` 模式按策略实际执行。内部成功案例没有全部尝试的分母；扩大范围前，应统计采用率、重复工作、无效尝试和额外审查成本。提前完成可能减少等待，主动尝试更多本身不能证明收益。
 
 ## 05 看改善，也看代价
 
-作者先比较端到端调度，再测 Router 批处理。补充微实验则来自本次研究，三者的任务和指标不同。
+dsh 先比较端到端调度，再测 Router 批处理。补充微实验则来自本次研究，三者的任务和指标不同。
 
-<figure class="article-figure wide-figure tradeoff-figure"><picture><source media="(max-width:560px)" srcset="../assets/superagent/tradeoff-mobile.svg" width="410" height="605"><img src="../assets/superagent/tradeoff.svg" width="840" height="404" alt="与优先委派单会话比较，p95缩短约46%，缓存读取约为2.15倍。"></picture><figcaption>实验解读｜两个方向一起看。数据来自原文第 7.1 节，本次重绘；耗时与 token 各用自己的量尺。</figcaption></figure>
+<figure class="article-figure wide-figure tradeoff-figure"><picture><source media="(max-width:560px)" srcset="../assets/superagent/tradeoff-mobile.svg?v=3" width="410" height="503"><img src="../assets/superagent/tradeoff.svg?v=3" width="840" height="326" alt="与优先委派单会话比较，p95缩短约46%，缓存读取约为2.15倍。"></picture><figcaption>调度实验：耗时与缓存读取量。数据见 dsh 原文第 7.1 节。</figcaption></figure>
 
-### 作者调度实验：慢端改善，缓存读取增加
+### 原文调度实验：慢端改善，缓存读取增加
 
 原文第 7.1 节比较四种方案，每种运行 5 次。约 300 条消息中有约 20 条工作请求，编码被替换成只消耗时间的工具；消息间隔与工作时长缩为四分之一，模型耗时保持真实。测的是调度与协作，未测真实代码质量。
 
-<figure class="article-figure original-figure " id="original-figure-12"><a href="../assets/superagent/original/fig12.png" aria-label="查看原文图 12 的原尺寸图片"><img src="../assets/superagent/original/fig12.png" width="1009" height="822" loading="lazy" alt="工作请求的累计到达与完成曲线，展示这组负载的调度过程。"></a><figcaption>原文图 12｜工作请求的累计到达与完成曲线，展示这组负载的调度过程。 <a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">DeepSeek Harness 团队原文</a>，原图未修改；点击看原尺寸。</figcaption></figure>
+<figure class="article-figure original-figure " id="original-figure-12"><a href="../assets/superagent/original/fig12.png" aria-label="查看原文图 12 的原尺寸图片"><img src="../assets/superagent/original/fig12.png" width="1009" height="822" loading="lazy" alt="工作请求的累计到达与完成曲线，展示这组负载的调度过程。"></a><figcaption>原文图 12 · 工作请求的到达与完成。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a></figcaption></figure>
 
 | 方案 | p50 完成耗时 | p95 完成耗时 | 每次实验缓存读取 |
 | --- | ---: | ---: | ---: |
@@ -181,17 +181,17 @@ p50 是完成耗时中位数；p95 用来观察慢端。中性组 5 次都没有
 
 缓存读取包含所有 Session，但不是完整账单。只有 5 次运行，委派策略、过滤和架构也同时不同，不能将改善全归因于双层或当成稳定生产收益。完整价格、代码质量和人工时间仍需测量。
 
-### 作者批处理实验：积压可以摊薄开销
+### 原文批处理实验：积压可以摊薄开销
 
 原文第 7.2 节把需判断的 Trigger 从约 1 条/分钟提高到约 40 条/分钟。平均 batch 由 1 增至 2.8，单次请求从 2.5 秒增至 3.9 秒，单个决定分摊推理时间由 6.4 秒降至 1.6 秒。
 
-<figure class="article-figure original-figure wide-figure" id="original-figure-14"><a href="../assets/superagent/original/fig14.png" aria-label="查看原文图 14 的原尺寸图片"><img src="../assets/superagent/original/fig14.png" width="1080" height="370" loading="lazy" alt="积压使批量增大；指标口径不足以直接推算生产容量。"></a><figcaption>原文图 14｜积压使批量增大；指标口径不足以直接推算生产容量。 <a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">DeepSeek Harness 团队原文</a>，原图未修改；点击看原尺寸。</figcaption></figure>
+<figure class="article-figure original-figure wide-figure" id="original-figure-14"><a href="../assets/superagent/original/fig14.png" aria-label="查看原文图 14 的原尺寸图片"><img src="../assets/superagent/original/fig14.png" width="1080" height="370" loading="lazy" alt="积压使批量增大；指标口径不足以直接推算生产容量。"></a><figcaption>原文图 14 · Router 批处理。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a></figcaption></figure>
 
 批量增长快于请求耗时，支持积压合并可以摊薄开销。但图中的分摊值不能直接由前两个端点相除得到，完整定义与聚合口径未充分公开，不能据此外推稳定容量。
 
 ### 补充微实验：每条更省，整批等得更久
 
-本次研究另做 110 次 CLI 调用，观察固定批次的合成消息分类，并未复现作者常驻 Router。较复杂模板组的整轮墙钟耗时中位数：
+本次研究另做 110 次 CLI 调用，观察固定批次的合成消息分类，并未复现 dsh 的常驻 Router。较复杂模板组的整轮墙钟耗时中位数：
 
 | 模型 | 每批 1 条 | 每批 128 条 | 大批次每条分摊 |
 | --- | ---: | ---: | ---: |
@@ -210,9 +210,9 @@ Super-agent 值得学习的，是把任务的持续身份与讨论关联写进�
 
 ## 来源与延伸阅读
 
-- [DeepSeek Harness 团队原文](https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg)：作者的整体设计、内部实例与两组初步实验。
+- [DeepSeek Harness 团队原文](https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg)：dsh 的整体设计、内部实例与两组初步实验。
 - [公开原型固定版本](https://github.com/deepseek-ai/dsh-superagent-prototype/tree/6337fc823ce20251c8de8085948165c81aaa701e)：`prompts/dispatch.md`、`prompts/work.md`、`src/core/intake.ts`、`src/executor/dsh.ts`、`src/app/resources.ts`、`src/app/store.ts`、`src/app/effects.ts`。
 - [原型架构文档](https://github.com/deepseek-ai/dsh-superagent-prototype/blob/6337fc823ce20251c8de8085948165c81aaa701e/docs/007-architecture.md)与[部署文档](https://github.com/deepseek-ai/dsh-superagent-prototype/blob/6337fc823ce20251c8de8085948165c81aaa701e/docs/006-deployment.md)：工具、状态、恢复与巡检。
 - [实验附录与原图索引](superagent-evidence.md)、[架构图工具比较](architecture-tool-selection.md)、[botmux 配套文章](../superagent-botmux.html)。
 
-七张原文架构图按博客风格重绘，保留原编号与出处，并提供原图对照；实验原图保留。主题插画、源码解读图和交互示意为本次整理制作。图片的表达用途与证据身份在图注说明，公开版能力以固定源码为依据。
+架构图按 dsh 原文重绘，图号沿用原文；实验图保留原图。源码解读与路由示意依据公开原型，不代表实时运行结果。
