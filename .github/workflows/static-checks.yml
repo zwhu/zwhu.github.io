@@ -28,6 +28,8 @@ jobs:
         run: python3 scripts/check-performance.py
       - name: Check source diagram generation
         run: node scripts/render-superagent-source-diagrams.cjs --check
+      - name: Check share images
+        run: python3 scripts/render-og-images.py --check
       - name: Check generated SEO metadata
         run: python3 scripts/update-seo.py --check
       - name: Test SEO contracts

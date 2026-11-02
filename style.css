@@ -26,6 +26,8 @@
 .post h3 a:hover .post-arrow{color:var(--accent)}
 .home-page .post p{max-width:580px}
 .home-page .tags{word-spacing:3px;font-size:10px}
+.post-reading{margin-left:14px;font-size:11px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+.home-page .post-reading{font-size:10px}
 .home-page .about{padding-top:34px;padding-bottom:38px;scroll-margin-top:25px}
 .home-page .about h2{margin:0}
 .home-page .about>.section-heading{margin-bottom:18px}

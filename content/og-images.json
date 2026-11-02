@@ -1,0 +1,41 @@
+{
+  "_note": "分享卡片文案；由 scripts/render-og-images.py 渲染为 1200×630 PNG，update-seo.py 写入 og:image。",
+  "cards": [
+    {
+      "page": "index.html",
+      "image": "assets/og/home.png",
+      "kicker": "ZWHU / TECH & NOTES",
+      "title": "zwhu 的技术博客",
+      "subtitle": "读源码、做评测，记录 Agent 与 AI 编程在真实工程里的表现。",
+      "footer": "Agent 评测 · AI 编程 · 前端工程",
+      "alt": "zwhu 的技术博客：读源码、做评测，记录 Agent 与 AI 编程在真实工程里的表现。"
+    },
+    {
+      "page": "superagent.html",
+      "image": "assets/og/superagent.png",
+      "kicker": "AGENT 架构 / 源码研究",
+      "title": "PR 合并以后，谁接下一条反馈？",
+      "subtitle": "Super-agent 的任务分发与持续协作",
+      "footer": "2026-11-01",
+      "alt": "文章分享图：PR 合并以后，谁接下一条反馈？Super-agent 的任务分发与持续协作。"
+    },
+    {
+      "page": "superagent-botmux.html",
+      "image": "assets/og/superagent-botmux.png",
+      "kicker": "AGENT 架构 / 工程实践",
+      "title": "从 botmux 到持续任务协调",
+      "subtitle": "先验证续办收益",
+      "footer": "2026-11-01",
+      "alt": "文章分享图：从 botmux 到持续任务协调，先验证续办收益。"
+    },
+    {
+      "page": "ub-mode-bench.html",
+      "image": "assets/og/ub-mode-bench.png",
+      "kicker": "AGENT 评测 / 工程实践",
+      "title": "评测 Bob 大叔的 ub-mode",
+      "subtitle": "我为什么更重视 lint、测试等工程门禁",
+      "footer": "2026-10-30",
+      "alt": "文章分享图：评测 Bob 大叔的 ub-mode，我为什么更重视工程门禁。"
+    }
+  ]
+}

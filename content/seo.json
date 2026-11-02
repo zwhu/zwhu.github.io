@@ -3,6 +3,7 @@
     "url": "https://zwhu.github.io/",
     "name": "zwhu 的技术博客",
     "language": "zh-CN",
+    "twitter": "@zwhu__",
     "verification": {
       "google-site-verification": "U35XKsmuPYI3sOv4RAP2BcpmLOh3MGsgYfTLzcoy3GQ",
       "msvalidate.01": "80B61685E6E48431712B35FAE0516CE2"
@@ -11,7 +12,8 @@
       "name": "zwhu",
       "url": "https://zwhu.github.io/#about",
       "sameAs": [
-        "https://github.com/zwhu"
+        "https://github.com/zwhu",
+        "https://x.com/zwhu__"
       ]
     }
   },

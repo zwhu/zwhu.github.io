@@ -1,6 +1,7 @@
 """Shared static HTML and catalog rendering; no browser or build dependency."""
 import html
 import json
+import math
 import re
 from datetime import datetime
 from html.parser import HTMLParser
@@ -11,6 +12,8 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[1]
 E = html.escape
 COMMENT_SCRIPTS = '<script src="./comments-config.js?v=2"></script><script src="./comments.js?v=6" defer></script>'
+# Common Chinese reading estimates: about 400 CJK characters or 200 Latin words per minute.
+CJK_PER_MINUTE, WORDS_PER_MINUTE = 400, 200
 
 
 def issue_date(value):
@@ -41,6 +44,18 @@ def issue_excerpt(issue):
     text = next((p for p in parser.paragraphs if len(p) > 25 and not p.startswith(('作者', '原文章'))), '代码笔记。')
     text = ' '.join(text.split())
     return text[:105] + ('…' if len(text) > 105 else '')
+
+
+def reading_minutes(source):
+    """Estimate from the article body; figures, navigation and scripts are not counted."""
+    start, end = source.find('<div class="prose">'), source.find('</article>')
+    if start < 0 or end < start:
+        raise ValueError('reading time needs a .prose body inside the article')
+    body = re.sub(r'<(script|style|svg|figure|nav)\b.*?</\1>', ' ', source[start:end], flags=re.S | re.I)
+    text = html.unescape(re.sub(r'<[^>]+>', ' ', body))
+    cjk = len(re.findall(r'[\u3400-\u9fff]', text))
+    words = len(re.findall(r'[A-Za-z0-9][\w.+-]*', text))
+    return max(1, math.ceil(cjk / CJK_PER_MINUTE + words / WORDS_PER_MINUTE))
 
 
 def marked(name, content):
@@ -90,6 +105,9 @@ class Site:
             if Path(path).name != path or not path.endswith('.html'):
                 raise ValueError(f'Catalog path must be a root HTML file: {path}')
 
+    def reading_time(self, path):
+        return f'阅读约 {reading_minutes((self.root / path).read_text())} 分钟'
+
     def read(self, name):
         return json.loads((self.root / 'content' / name).read_text())
 
@@ -124,8 +142,9 @@ class Site:
 
     def post(self, item, arrow=True):
         date = f'<time datetime="{E(item["date"], quote=True)}">{E(item["date"])}</time>' if item.get('date') else ''
+        reading = f'<span class="post-reading">{self.reading_time(item["path"])}</span>' if item.get('readingTime') else ''
         return self.template('post', path=E(item['path'], quote=True), title=E(item['title']), date=date,
-                             excerpt=E(item['excerpt']), tags=E(' · '.join(item['labels'])),
+                             excerpt=E(item['excerpt']), tags=E(' · '.join(item['labels'])), reading=reading,
                              arrow=' <span class="post-arrow" aria-hidden="true">↗</span>' if arrow else '') + '\n'
 
     def lesson_posts(self):
@@ -181,6 +200,10 @@ class Site:
                 source = replace_block(source, 'home-' + name, content, patterns[name])
         if filename in ('writing.html', 'translations.html', 'learning.html'):
             source = replace_block(source, 'collection', self.collection(filename), r'<main(?:\s[^>]*)?>.*?</main>')
+        article = next((i for i in self.articles if i['path'] == filename), None)
+        if article and article.get('readingTime'):
+            # Only articles opted in through original-articles.json carry the marker.
+            source = replace_block(source, 'reading-time', ' · ' + self.reading_time(filename), r'(?!)')
         lesson = next((i for i in self.lessons if i['file'] == filename), None)
         if lesson:
             source = replace_block(source, 'related', self.related(lesson), r'<section class="lesson-related".*?</section>')
