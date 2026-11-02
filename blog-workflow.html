@@ -64,7 +64,7 @@
 
     <h2 id="overview" tabindex="-1">1. 九步流程，我只在两处看稿</h2>
     <p>一篇文章从定题到上线分九步，分给三方：我、Agent 和 GitHub。</p>
-    <figure class="article-figure workflow-figure"><picture><source media="(max-width:560px)" srcset="./assets/blog-workflow/flow-mobile.svg" width="330" height="660"><img src="./assets/blog-workflow/flow.svg" width="704" height="744" loading="lazy" alt="三条泳道的流程图：我在第 03 步通读正文、第 05 步看整页，最后点合并；其余步骤由 Agent 执行，GitHub 负责 CI 检查与发布。虚线回头路：正文要改回 03，图要改回 04，CI 失败或冲突修好后回 05。"></picture><figcaption>图 1｜一篇文章的九步。红框两处由我看稿，虚线是回头路。</figcaption></figure>
+    <figure class="article-figure workflow-figure"><img src="./assets/blog-workflow/flow.svg" width="704" height="744" loading="lazy" alt="三条泳道的流程图：我在第 03 步通读正文、第 05 步看整页，最后点合并；其余步骤由 Agent 执行，GitHub 负责 CI 检查与发布。虚线回头路：正文要改回 03，图要改回 04，CI 失败或冲突修好后回 05。"><figcaption>图 1｜一篇文章的九步。红框两处由我看稿，虚线是回头路。</figcaption></figure>
     <p>我定下要讲的问题和例子，在第 03 步通读正文，在第 05 步看生成后的整页，CI 通过后点合并。找资料、改文件、画图、生成页面、跑检查、开 PR、确认上线，都由 Agent 做。</p>
     <p>虚线是回头路。正文的问题留在第 03 步当轮改；图和排版的问题回第 04 步；CI 失败或与 main 冲突，修好后回第 05 步重新生成、检查。哪一步出问题就回哪一步，前面定好的部分不用重做。</p>
 
@@ -118,7 +118,7 @@
         <li class="flow-step" id="step-04" data-short="配图">
           <h3><span class="flow-no">04</span>排版与配图</h3>
           <dl>
-            <div><dt>谁来做</dt><dd>Agent 沿用博客的配色和字体画图，图放在正文列内，复杂图另做手机版。</dd></div>
+            <div><dt>谁来做</dt><dd>Agent 沿用博客的配色和字体画图，图放在正文列内，手机上沿用同一张图。</dd></div>
             <div><dt>用到</dt><dd>视觉规范、图源和 SVG 生成脚本。</dd></div>
             <div><dt>出问题时</dt><dd>“配图感觉很不和谐”“这个箭头很奇葩”这类意见，都回到这一步改图源。</dd></div>
           </dl>
@@ -283,7 +283,7 @@
       <thead><tr><th>意见</th><th>之后怎么做</th><th>放在哪里</th></tr></thead>
       <tbody>
         <tr><td>“配图感觉很不和谐”“宽度整体都超出太多”</td><td>沿用博客配色与字体，图放在正文列内，桌面和手机都实际预览。</td><td>视觉规范、文章 CSS 与图源</td></tr>
-        <tr><td>“这个箭头很奇葩”</td><td>重叠的线段和箭头连接点分开，检查方向、节点、文字和手机布局。</td><td>SVG 生成脚本</td></tr>
+        <tr><td>“这个箭头很奇葩”</td><td>重叠的线段和箭头连接点分开，检查方向、节点和文字。</td><td>SVG 生成脚本</td></tr>
         <tr><td>本地修好了，PR 还显示冲突</td><td>先核对 PR 实际用的分支和提交，再把修正推回那个分支。</td><td>PR 与 CI 状态</td></tr>
       </tbody>
     </table></div>

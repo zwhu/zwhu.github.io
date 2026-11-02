@@ -99,33 +99,4 @@ body = text(24,32,'记录与外部执行分开，失败可恢复',19,colors.text
   + text(24,432,'稳定 ID 防重复；generation 防旧回调清除新动作。',14,colors.muted)
   + text(24,459,'提交前重查当前任务 / 评估；业务判断错误仍可能建立重复任务。',13,colors.muted);
 svg('consistency',600,483,'事务与持久动作队列','事务内同时保存状态与动作意图，提交后执行外部操作，失败保留并重试。',body);
-body = text(16,29,'事件按任务关系分发',18,colors.text,600);
-const steps = [
-  ['intake','保存事件，查询讨论订阅'],
-  ['thread','已有订阅：直通原 Worker'],
-  ['router','新请求 / 关联不明：模型判断'],
-  ['worker','接收补充，调查、修改与验证'],
-  ['ticket','持久保存目标、授权与执行轮次'],
-  ['result','报告结果；问题交回 Router']
-];
-steps.forEach(([id,line],i)=>{
-  const y=60+i*112;body+=box(id,16,y,298,line);
-  if(i<steps.length-1)body+=arrow(`165,${y+76} 165,${y+105}`);
-});
-body+=text(16,755,'步骤展示两条分发路径，',13,colors.muted)+text(16,776,'已订阅消息可跳过 Router 判断。',13,colors.muted);
-svg('architecture-mobile',330,798,'Super-agent 分发关系（移动端）','已有订阅直通；需要判断的请求进入 Router。各节点说明见正文。',body);
-body = text(16,29,'事务保存，提交后执行',18,colors.text,600)
-  + `<rect x="16" y="57" width="298" height="146" rx="5" fill="none" stroke="${colors.line}"/>`
-  + text(32,85,'同一个 SQLite 事务',14,colors.accent,600)
-  + text(32,116,'Decision · Ticket · Assignment',14)
-  + text(32,145,'Thread 订阅',14)
-  + text(32,174,'Effects / Outbox：待执行动作',14)
-  + arrow('165,203 165,248','提交成功',180,234)
-  + box('executor',16,256,298,'创建 / 找回 Worker，投递输入')
-  + arrow('165,332 165,369')
-  + box('result',16,378,298,'PR / 飞书：不属于本地事务')
-  + text(16,494,'失败保留动作并重试；成功记录回执。',13,colors.muted)
-  + text(16,519,'稳定 ID 去重，generation 保护新动作。',13,colors.muted)
-  + text(16,544,'恢复时仍需核对远端真实状态。',13,colors.muted);
-svg('consistency-mobile',330,570,'事务与外部动作（移动端）','状态和动作意图一起提交，外部动作提交后执行，失败重试。',body);
 console.log(`${checking ? 'Checked' : 'Generated'} interactive module, HTML, full SVG and reading projection.`);
