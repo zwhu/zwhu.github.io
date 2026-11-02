@@ -4,7 +4,7 @@
 
 源码：https://github.com/zwhu/zwhu.github.io
 
-此目录是正式维护工程。GitHub Pages 从 `main` 分支根目录自动发布，提交并推送后网站会更新。
+此目录是正式维护工程。GitHub Pages 从 `main` 分支根目录自动发布；后续修改通过 PR，在必需检查通过后合并并发布。
 
 原生 HTML / CSS / JavaScript 的个人技术博客，无构建依赖。暖白底、无衬线正文、少量朱砂红强调，采用紧凑的文章列表，支持行内代码和可横向滚动的代码块。目前收录 46 篇从 GitHub Issues 迁入的文章、三篇新增原创文章，以及两篇全文对照译文。
 
@@ -91,7 +91,7 @@ ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-co
 
 保留场景切换、训练实验、闪卡、测验、SVG 动画与提示词复制。Agent 记忆页原先依赖聊天环境的继续学习按钮已改为站内模块说明、源码阅读路线与自测。大型图表在窄屏局部横向滚动。
 
-`.github/workflows/static-checks.yml` 在 PR 创建／更新、推送 `main` 和手动触发时，检查公共生成、学习页样式归属、SEO 同步以及生成／SEO／评论测试。工作流只读源码，不执行部署；如需阻止失败代码合并，还需在 GitHub 仓库规则中配置必需检查与主分支保护。
+`.github/workflows/static-checks.yml` 在 PR 创建／更新、推送 `main` 和手动触发时，检查公共生成、学习页样式归属、SEO 同步以及生成／SEO／评论测试。`main` 已要求 PR 合并、分支保持最新且 GitHub Actions 的 `check` 成功，管理员也受约束；个人仓库不要求额外审批人。保护配置快照及远端验证见[CI 交接](./content/ci-handoff.md)。工作流只读源码，发布仍由 GitHub Pages 在合并后执行。
 
 ## Super-agent 文章与研究资产
 

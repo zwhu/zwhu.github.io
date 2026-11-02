@@ -7,7 +7,7 @@
 - 课程颜色直接引用全站语义变量，移除旧主题变量别名。Pi 内嵌 SVG 的一处变量引用同步调整；正文、原图、来源、文件名、文章日期和评论标识保留。
 - 接入说明见 [学习页复用说明](./learning-styles-guide.md)。`AGENTS.md`、`VISUAL_STYLE.md` 和 `README.md` 已补上入口与归属要求。
 - `scripts/check-learning-styles.py` 自动检查根目录的 `learn-*.html`，覆盖课程作用域、公共文件归属、旧变量、空声明和样式加载顺序。
-- `.github/workflows/static-checks.yml` 已配置 PR、推送 `main` 和手动触发，执行样式归属、SEO 和现有测试；本轮只做本地提交，尚未推送或验证远端运行。
+- `.github/workflows/static-checks.yml` 已配置 PR、推送 `main` 和手动触发，执行样式归属、SEO 和现有测试；后续批次的远端启用与保护配置见[CI 交接](./ci-handoff.md)。
 
 ## 已验证
 
@@ -22,7 +22,7 @@
 
 ## 仍未完成
 
-1. **远端 CI 与合并门禁**：提交推送后确认首次 Actions 运行。要阻止失败代码合并，需将 `Static checks` 的 `check` 任务设为必需检查并限制直接推送；当前 GitHub Pages 从 `main` 发布，检查工作流本身不会阻止直接推送后的发布。
+1. **远端 CI 与合并门禁**：后续批次已完成首次远端运行并启用 `main` 保护，见[CI 交接](./ci-handoff.md)。
 2. **公共模板和导航生成**：后续批次已完成，见[公共模板交接](./site-generation-handoff.md)和[维护说明](./site-generation-guide.md)。
 3. **原文完整翻译**：根目录 `TODO.md` 仍记录 X 链接中文档的翻译任务；此前的阅读分析不能算完整翻译。该文件未纳入本轮提交。
 4. **性能优化**：按用户要求暂缓。尚无本轮加载性能基线或优化结果，不能承诺已达到 10 倍提升；待前述工作结束后再测量和确定目标。
