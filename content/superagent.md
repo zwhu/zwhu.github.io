@@ -22,21 +22,26 @@ dsh 把职责分成两层。Router 维持跨任务的高层关联和对外交互
 
 CSV Worker 负责“这次 CSV 乱码修复”，不是所有带 CSV 字样的需求。先弄清这个边界，再看新消息会走哪里。
 
-<section class="route-demo" data-route-demo data-route="direct" aria-label="三条消息的路由示意"><p class="route-question">又来了一条 CSV 消息，会交给谁？</p><div class="route-controls" aria-label="选择消息场景"><button type="button" data-route-case="followup" aria-pressed="true">同话题补充</button><button type="button" data-route-case="reference" aria-pressed="false">另一话题提 PR</button><button type="button" data-route-case="newtask" aria-pressed="false">提出新目标</button></div><div aria-live="polite" aria-atomic="true"><p class="route-message" data-route-field="message">在原话题 A：“还要兼容旧版 Excel。”</p><div class="route-visual"><svg viewBox="0 0 700 207" role="img" aria-label="已绑定消息直达原Worker，新目标或关联不明由Router判断"><path class="route-line direct-line" d="M202 65 H490"/><path class="route-line router-line" d="M202 88 H240 V155 H280 M420 155 H462 V88 H490"/><rect class="node" x="12" y="29" width="190" height="84" rx="3"/><rect class="node" x="490" y="29" width="198" height="84" rx="3"/><rect class="node" x="280" y="125" width="140" height="60" rx="3"/><text x="29" y="58">新输入</text><text class="node-detail" x="29" y="88">所在话题与明确引用</text><text x="507" y="58" data-route-field="worker">原 Worker</text><text class="node-detail" x="507" y="88" data-route-field="ticket">Ticket-42</text><text x="316" y="159">Router</text><text class="route-label" x="276" y="52">已有订阅：程序直通</text><text class="route-label" x="21" y="173">新目标或关联不明：模型判断</text></svg></div><p class="route-verdict" data-route-field="decision">同一任务，追加输入</p><p class="route-explanation" data-route-field="path">程序查到话题 A 的订阅，直接加入 Ticket-42 的输入，原 Worker 在后续步骤接收补充。</p></div><p class="route-provenance">依据公开源码的三种输入示意，未实时运行模型。跨话题的旧任务关联需要明确指向；意图不清时仍可能判断错误。</p><details class="route-static"><summary>同时查看三条消息的处理</summary><div class="table-scroll"><table><thead><tr><th>新消息</th><th>路径与结果</th></tr></thead><tbody><tr><td>原话题 A：“还要兼容旧版 Excel”</td><td>程序查订阅，投递给 Ticket-42 的原 Worker。</td></tr><tr><td>话题 B：“PR #123 还要兼容旧版 Excel”</td><td>明确引用帮助 Router attach 旧任务，建立新讨论订阅。</td></tr><tr><td>话题 B：“增加 CSV 导入功能”</td><td>新目标；Router accept 新 Ticket 和 Worker。</td></tr></tbody></table></div></details><noscript><p>上方展示第一条消息；展开表格可读全部三种路径。</p></noscript></section>
+<section class="route-demo" data-route-demo data-route="direct" aria-label="三条消息的路由示意"><p class="route-question">又来了一条 CSV 消息，会交给谁？</p><div class="route-controls" aria-label="选择消息场景"><button type="button" data-route-case="followup" aria-pressed="true">同话题补充</button><button type="button" data-route-case="reference" aria-pressed="false">另一话题提 PR</button><button type="button" data-route-case="newtask" aria-pressed="false">提出新任务</button></div><div aria-live="polite" aria-atomic="true"><p class="route-message" data-route-field="message">在原话题 A：“还要兼容旧版 Excel。”</p><div class="route-visual"><svg viewBox="0 0 700 207" role="img" aria-label="已绑定消息直达原Worker，新任务或关联不明由Router判断"><path class="route-line direct-line" d="M202 65 H490"/><path class="route-line router-line" d="M202 88 H240 V155 H280 M420 155 H462 V88 H490"/><rect class="node" x="12" y="29" width="190" height="84" rx="3"/><rect class="node" x="490" y="29" width="198" height="84" rx="3"/><rect class="node" x="280" y="125" width="140" height="60" rx="3"/><text x="29" y="58">新输入</text><text class="node-detail" x="29" y="88">所在话题与明确引用</text><text x="507" y="58" data-route-field="worker">原 Worker</text><text class="node-detail" x="507" y="88" data-route-field="ticket">Ticket-42</text><text x="316" y="159">Router</text><text class="route-label" x="276" y="52">已有订阅：程序直通</text><text class="route-label" x="21" y="173">新任务或关联不明：模型判断</text></svg></div><p class="route-verdict" data-route-field="decision">同一任务，追加输入</p><p class="route-explanation" data-route-field="path">程序查到话题 A 的订阅，直接加入 Ticket-42 的输入，原 Worker 在后续步骤接收补充。</p></div><p class="route-provenance">依据公开源码的三种输入示意，未实时运行模型。跨话题的旧任务关联需要明确指向；意图不清时仍可能判断错误。</p><details class="route-static"><summary>同时查看三条消息的处理</summary><div class="table-scroll"><table><thead><tr><th>新消息</th><th>路径与结果</th></tr></thead><tbody><tr><td>原话题 A：“还要兼容旧版 Excel”</td><td>程序查订阅，投递给 Ticket-42 的原 Worker。</td></tr><tr><td>话题 B：“PR #123 还要兼容旧版 Excel”</td><td>明确引用帮助 Router attach 旧任务，建立新讨论订阅。</td></tr><tr><td>话题 B：“增加 CSV 导入功能”</td><td>新任务；Router accept 新 Ticket 和 Worker。</td></tr></tbody></table></div></details><noscript><p>上方展示第一条消息；展开表格可读全部三种路径。</p></noscript></section>
 
 同话题的补充由程序查订阅，直接加入原任务的输入队列。原型的 `Intake.receive()` 查 `Thread.subscriptions`，Executor 再通过 Harness 的 `agent.steer()` 把消息送进 Worker。正在运行的 Worker 在后续模型步骤接收补充，不需要先结束当前工作。
 
 换一个话题时，“PR #123”这样的明确引用可以帮助 Router 找到原任务。它调用 `orchestrator_route` 选择 `accept / attach / stop / ignore`，宿主程序校验后执行。`attach` 建立新讨论与旧任务的关联，后续补充也能沿这条订阅找到执行者。
 
-“增加 CSV 导入功能”是新目标，需要新 Ticket 和 Worker。仅仅主题相似不足以复用旧任务。同一话题也可能出现新目标：程序先按订阅送到原 Worker，Worker 发现超出范围后用 `handback` 交回 Router。
+“增加 CSV 导入功能”是新任务，需要新建 Ticket 和 Worker。主题相似不足以复用旧任务。同一话题里也可能提出新任务：程序先按订阅送到原 Worker，Worker 发现超出本任务范围后用 `handback` 交回 Router。
 
 <figure class="article-figure original-figure compact-figure redrawn-figure" id="original-figure-7"><a href="../assets/superagent/redrawn/fig07.svg?v=3" aria-label="打开重绘图 7 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig07-mobile.svg?v=3" width="360" height="472"><img src="../assets/superagent/redrawn/fig07.svg?v=3" width="760" height="260" loading="lazy" alt="订阅与直通：初始判断，后续投递：初始事件建立任务与订阅；已知讨论的补充可直通 Worker。"></picture></a><figcaption>图 7 · 订阅与直通（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig07.jpg">原图</a></figcaption></figure>
 
-订阅是多对多关系。一个任务可以关联群聊和 PR，一个讨论也可以被多个任务订阅。人类追问直通后，Router 仍可能收到 `follow_up` 通知；节省的是再次分派等开销，不能把 Router 的后续推理成本算成零。
+订阅是多对多关系。一个任务可以关联群聊和 PR，一个讨论也可以被多个任务订阅。有人在原话题追问时，程序按订阅把消息直接送到 Worker，省去 Router 再次分派的开销。Router 仍会收到一条 `follow_up` 通知，说明消息已经送到哪些任务。它不再转发这条消息，但追问里可能有“先别做了”这样的要求，而停止任务由 Router 调用 `stop` 执行，所以它仍需要看到追问。读这条通知也要消耗推理成本。
 
 ### 消息先过准入，再判断归属
 
-真实环境里大多是闲聊、通知和背景资料。原文先用程序检查来源、范围和明确请求，再让模型判断需要理解语义的候选。公开版对应来源配置、策略准入和 Router 评估。过滤减少调用量，剩余候选的判断正确率仍需另测。
+现实环境中，系统从群聊和 PR 收到的消息大多是闲聊、通知、背景资料等与任务无关的内容。dsh 的策略是先用程序规则过滤，再让模型判断剩下的消息。整体策略如下：
+
+- **程序准入**：检查消息来自哪个来源和群组、是否在监听范围内、发送者是否在允许名单里、是否明确 @ 了 Agent。不符合规则的直接拦下，不调用模型。公开版对应来源配置和策略准入。
+- **语义判断**：通过准入的消息成为候选，交给 Router。模型按提示词判断它是新任务、关联旧任务，还是普通讨论可以忽略。
+
+程序过滤能减少模型调用；剩下的候选判断得准不准，还需要另外测试。
 
 <figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-5"><a href="../assets/superagent/redrawn/fig05.svg?v=3" aria-label="打开重绘图 5 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig05-mobile.svg?v=3" width="360" height="760"><img src="../assets/superagent/redrawn/fig05.svg?v=3" width="820" height="362" loading="lazy" alt="两级过滤：先过规则，再读语义：程序先筛选来源与范围，模型再判断候选的语义。"></picture></a><figcaption>图 5 · 两级过滤（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig05.jpg">原图</a></figcaption></figure>
 
@@ -48,11 +53,11 @@ Router 转交原始请求和简短路由背景，不临时编写修复方案。W
 >
 > Worker：读取原始请求与仓库规范；处理原范围的补充；其他请求交回 Router。
 
-常规分发依据任务记录，源码调查属于 Worker。主动观察的候选是例外：Router 可用有界只读工具检查具体范围是否符合接单规则。Router 在公开版仍保留 Bash 等工具，“不亲自实现”包含提示词约束，不能描述成完全的工具硬隔离。
+Router 平时只看任务记录来分发，不读代码；查源码、定位问题是 Worker 的事。例外是系统主动发现的候选，也就是没人明确提出请求、但可能符合接单规则的消息。这时 Router 可以用限定范围的只读工具查看相关讨论和仓库，判断它是否在接单规则覆盖的范围内。公开版的 Router 仍然有 Bash 等工具，“不读代码、不亲自实现”主要靠提示词约束，工具层面并没有禁止。
 
 ## 02 让任务的身份留得比会话更久
 
-为了让“旧版 Excel 还是打不开”回到同一项修复，系统需要保存几种不同的东西。它们不是四个 Agent，而是四类记录。
+为了让“旧版 Excel 还是打不开”这条消息能定位到之前已有的同一项修复，系统需要用到四类不同的记录：
 
 | 记录 | 在这次修复中是什么 |
 | --- | --- |
@@ -64,7 +69,7 @@ Router 转交原始请求和简短路由背景，不临时编写修复方案。W
 <figure class="article-figure compact-figure"><a href="../assets/superagent/architecture-full.svg"><img src="../assets/superagent/architecture.svg" width="600" height="510" loading="lazy" alt="Intake 查讨论订阅，已有输入直达 Worker；未知候选由 Router 分派，任务关系持久保存。"></a><figcaption>公开原型的记录与投递路径。</figcaption></figure>
 <section class="architecture-explorer" aria-label="交互架构图"><h3>探索完整架构</h3><p>拖动画布平移，使用底部按钮缩放；点击节点查看相邻关系。</p><div class="architecture-frame" data-architecture-canvas><p>交互图将在阅读到此处时自动加载。<a href="../assets/superagent/architecture-full.svg">查看完整静态图</a></p></div></section>
 
-新任务建立新 Ticket 和 Worker。旧任务重新开始，可以新建 Assignment，同时复用固定 ID `worker-<ticketId>` 的原 Worker。任务身份与执行轮次分开，才能解释“工作已经结束，为什么还能续办”。
+新任务会新建 Ticket 和 Worker。旧任务重新开始时，比如修复已经结束又有人追问，系统不新建 Ticket，只在原 Ticket 下新开一轮执行，即新的 Assignment。Worker 会话的 ID 由 Ticket ID 固定生成（`worker-<ticketId>`），所以接手的还是原来的 Worker。Ticket 记录这是哪项工作，Assignment 记录其中一轮执行。上一轮结束了，Ticket 还在，同一项工作就能接着做。
 
 ### 主会话不必一直装着全部历史
 
@@ -96,9 +101,13 @@ Router preset 使用 Harness 的会话压缩与工具结果裁剪；提示词要
 
 ## 03 程序可以保持一致，任务仍可能重复
 
-再看一个假设的故障窗口：系统答应接单，Worker 启动前进程退出。只在聊天里说“我会处理”不能帮助恢复；系统需要同时保存任务和待启动动作。
+再看一个假设的故障窗口：Router 决定接单，在群里回复了一句“收到，我来处理”，但 Worker 还没启动，进程就退出了。重启后，这句回复只留在聊天记录里，程序无从知道还有一个 Worker 等着启动。所以接单时，系统要把任务和“启动 Worker”这个待执行动作一起存下来，重启后才能接着做。
 
-公开原型采用单机状态目录锁、SQLite 事务和持久 Effects 队列。接单时，把 Decision、Ticket、Assignment、订阅、待启动动作和确认消息写进同一事务；失败回滚。Worker 启动与对外发送在提交后执行，崩溃后可以继续派发队列。
+dsh 公开原型用三样东西解决这个问题：
+
+- **状态目录锁**：同一份状态只允许一个进程打开，避免两个进程同时写。
+- **SQLite 事务**：接单时，Decision、Ticket、Assignment、订阅、“启动 Worker”动作和群里的确认消息，在同一个事务里一起写入；任何一步失败就全部回滚，不会出现回复了“收到”却没有任务的情况。
+- **持久 Effects 队列**：启动 Worker、发送消息这类对外动作，事务里只先记成队列项，提交后才真正执行。进程中途退出，重启后从队列里接着执行。
 
 <figure class="article-figure compact-figure"><picture><source media="(max-width:560px)" srcset="../assets/superagent/consistency-mobile.svg" width="330" height="570"><img src="../assets/superagent/consistency.svg" width="600" height="483" loading="lazy" alt="先在事务中保存任务与动作意图，提交后执行外部动作；失败保留并重试。"></picture><figcaption>数据库事务与外部动作。</figcaption></figure>
 
@@ -106,7 +115,7 @@ Router preset 使用 Harness 的会话压缩与工具结果裁剪；提示词要
 
 <aside class="margin-note"><h3>程序检查哪些旧状态</h3><p>Trigger ID 防重复接单；Effects 的序号与 generation 防旧回调覆盖新动作。</p><p>Eval ID 与策略版本防过期评估；投递前重查任务和执行记录。</p></aside>
 
-另一个窗口更难：外部消息已发出，本地还没存回执就退出。SQLite 和飞书、GitHub 没有共同事务，仍需稳定 ID、幂等、会话历史检查或渠道回查。Worker 自己执行的 Git 与 PR 操作也要在恢复时核对真实状态。这套机制不能保证所有操作严格只执行一次，也不是多个 Router 副本的分布式一致性协议。
+上面的办法解决的是“本地还没写完就退出”。还有一种故障更难处理：消息已经发到飞书或 GitHub，本地还没来得及记下“已发送”，进程就退出了。重启后，Effects 队列里这条发送动作仍是未完成，直接重试就会把消息再发一遍。SQLite 的事务管不到飞书和 GitHub，两边没法一起提交或回滚，只能在重试前想办法确认：给每条消息一个固定 ID，让重复发送只生效一次；或者先查会话历史、回查渠道，看消息是否已经发出。Worker 自己做的 Git 提交和 PR 操作也一样，恢复时要先核对仓库和 PR 的实际状态，再决定是否重做。所以这套机制不能保证每个操作严格只执行一次；它也只管单个进程，不是多个 Router 副本之间的分布式一致性协议。
 
 ### 两个 PR 改到同一个文件，会怎样
 
@@ -116,15 +125,13 @@ Router preset 使用 Harness 的会话压缩与工具结果裁剪；提示词要
 
 原文让同一讨论的订阅者收到共同事件，为发现彼此操作提供机会，少量跨任务协调经 Router 中转。若两个任务只订阅各自的 PR，修改同一个文件不会自动通知对方。公开版 `claimPull()` 校验同一 PR 至多属于一个活跃 Ticket，但不检查两个不同 PR 是否修复同一问题；未见通用的文件重叠仲裁、重复任务语义合并或保留 PR 选择机制。
 
-**任务记录一致，不代表任务归类正确。** 隔离、订阅和评审降低风险，合并前仍需要检查并行改动的关系。
-
 ## 04 持续负责，还需要什么
 
 分发与恢复只解释了任务如何续办。dsh 的完整设计还包括后台交互、执行环境与外部巡检，让任务有机会跨过长命令、设备离线和系统故障。
 
 <figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-3"><a href="../assets/superagent/redrawn/fig03.svg?v=3" aria-label="打开重绘图 3 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig03-mobile.svg?v=3" width="360" height="972"><img src="../assets/superagent/redrawn/fig03.svg?v=3" width="820" height="468" loading="lazy" alt="Super-agent 整体设计：把任务分发、后台交互、持久状态与巡检放进同一幅总览。"></picture></a><figcaption>图 3 · 整体设计（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig03.jpg">原图</a></figcaption></figure>
 
-图中的 [2]～[6] 对应原文章节。双层分工与跨信道关联支持连续性，Worker 和异步执行支持并发；事件策略提供主动性，状态/环境分离与 Watchdog 处理持久运行。原文“一个人通常只能跟进 3～5 个活跃 Session”属于 dsh 的观察，未提供样本或对照，不能当作人的容量常数。
+图中的 [2]～[6] 对应原文章节。双层分工与跨信道关联支持连续性，Worker 和异步执行支持并发；事件策略提供主动性，状态/环境分离与 Watchdog 处理持久运行。
 
 ### 长命令运行时，还能接收新输入
 
@@ -132,9 +139,9 @@ Router preset 使用 Harness 的会话压缩与工具结果裁剪；提示词要
 
 <figure class="article-figure original-figure wide-figure redrawn-figure" id="original-figure-10"><a href="../assets/superagent/redrawn/fig10.svg?v=3" aria-label="打开重绘图 10 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig10-mobile.svg?v=3" width="360" height="960"><img src="../assets/superagent/redrawn/fig10.svg?v=3" width="820" height="606" loading="lazy" alt="同步与异步 ReAct Loop：工具在后台运行，新的用户输入不必等待工具完成。"></picture></a><figcaption>图 10 · 同步与异步 ReAct Loop（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig10.jpg">原图</a></figcaption></figure>
 
-公开原型通过 Harness 的后台工具和输入投递使用这条路径，默认前台命令等待上限为 5 秒。用户不必等长命令完成再补充，但仍要等模型步骤边界。
+公开原型借助 Harness 实现这一点：长命令放到后台运行，新消息通过输入投递送进会话。Router 会话的前台命令和等待任务结果最多阻塞 5 秒，超时就先返回，不会一直占着会话。所以用户不必等长命令跑完才补充要求；但模型正在生成的这一步不会被打断，新消息要等这一步结束后才被读到。
 
-输出按信道组织：IM 给简短结论和需要人决定的事项，PR 与文档保存背景、改动和验证。原型设 IM 回复 100 词上限，普通进度留在内部，需要人行动的报告及时对外发送。消息减少是否节省了人工时间，仍需实测。
+输出按渠道分工：IM 里只发简短结论和需要人决定的事；背景、改动内容和验证结果写在 PR 与文档里。原型限制每条 IM 回复最多 100 词，普通进度不发到群里，只有需要人处理的事才立即通知。人工时间是否因此减少，原文的实验没有测量。
 
 ### 在线的是 Loop，环境可能还在等待
 
