@@ -7,7 +7,8 @@
     "labels": [
       "Agent 评测",
       "工程实践"
-    ]
+    ],
+    "readingTime": true
   },
   {
     "title": "PR 合并以后，谁接下一条反馈？",
@@ -17,7 +18,8 @@
     "labels": [
       "Agent 架构",
       "源码研究"
-    ]
+    ],
+    "readingTime": true
   },
   {
     "title": "从 botmux 到持续任务协调：先验证续办收益",
@@ -27,6 +29,7 @@
     "labels": [
       "Agent 架构",
       "工程实践"
-    ]
+    ],
+    "readingTime": true
   }
 ]

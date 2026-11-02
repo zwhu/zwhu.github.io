@@ -94,6 +94,22 @@ class SearchMetadataTests(unittest.TestCase):
         self.assertEqual(article['headline'], '</script> & 引用')
         self.assertEqual(result, SEO['update_page'](result, site, record, site['url'] + 'test.html'))
 
+    def test_share_images_are_large_cards_only_where_rendered(self):
+        cards = {c['page']: c for c in json.loads((ROOT / 'content/og-images.json').read_text())['cards']}
+        for path in ROOT.glob('*.html'):
+            with self.subTest(page=path.name):
+                parsed = Metadata(path.read_text())
+                images = [a['content'] for a in parsed.tags if a.get('property') == 'og:image']
+                card = [a['content'] for a in parsed.tags if a.get('name') == 'twitter:card']
+                if path.name in cards:
+                    url = 'https://zwhu.github.io/' + cards[path.name]['image']
+                    self.assertEqual(images, [url])
+                    self.assertEqual(card, ['summary_large_image'])
+                    self.assertTrue((ROOT / cards[path.name]['image']).exists())
+                else:
+                    self.assertEqual(images, [])
+                    self.assertEqual(card, ['summary'])
+
     def test_site_verification_is_published_once_on_homepage(self):
         config = json.loads((ROOT / 'content/seo.json').read_text())['site']
         for path in ROOT.glob('*.html'):

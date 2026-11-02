@@ -8,7 +8,8 @@
 | --- | --- |
 | 全站主导航文字、顺序、相对链接、站点标识 | `content/site-navigation.json` |
 | 公共 HTML 结构 | `templates/`：导航、通用页脚、评论、统计、列表条目、三类目录与相关阅读 |
-| 原创文章的标题、发表日期、目录摘要、标签 | `content/original-articles.json` |
+| 原创文章的标题、发表日期、目录摘要、标签；`readingTime: true` 时在目录和文章元信息显示阅读时长 | `content/original-articles.json` |
+| 分享卡片（1200×630 `og:image`）的文案与图片路径 | `content/og-images.json`；`python3 scripts/render-og-images.py` 用本机 Chrome 渲染 PNG，`--check` 只校验文件 |
 | 迁入文章的正文、日期、评论与图源快照 | `content/blog-issues.json`；由 `scripts/render-blog-issues.py` 生成正文 |
 | 学习页的目录标题、摘要、标签、顺序与相关阅读选择 | `content/interactive-learning.json`，`related` 引用已有课程 slug |
 | 译文的目录标题、摘要、顺序与标签 | `content/translations.json`；译文发表日期读取 `content/seo.json` |
@@ -32,6 +33,10 @@ python3 scripts/test-site-generation.py
 迁入文章的正文发生变化时，先更新快照，再运行 `python3 scripts/render-blog-issues.py`。这个入口会继续调用公共生成与 SEO，不会恢复另一套导航、页脚或统计代码。无需访问 GitHub。
 
 新增页面时沿用同类 HTML 的外壳，登记到对应元信息文件，再运行生成命令。文件名作为站内路径和评论标识保持稳定；学习页还须有同名课程 CSS。新课程的 `related` 只能引用已有课程，不可重复或指向自身。所有正式根目录 HTML 都须登记；`content/doc-lint-comparison/` 和独立图示不在此生成范围内。
+
+阅读时长按 `.prose` 正文估算（中文约 400 字／分钟、英文约 200 词／分钟，不计图、目录与脚本），写入目录条目和文章 `<!-- site:reading-time:* -->` 区块。新开启的文章须在 `.meta` 的日期后放一对空标记。
+
+修改分享卡片文案后，先运行 `render-og-images.py`，再运行 `update-seo.py`。只有登记的页面输出 `og:image` 与 `summary_large_image`，其他页面保持 `summary`。
 
 ## 生成与手写内容的边界
 

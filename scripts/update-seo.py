@@ -75,6 +75,9 @@ def metadata(root, config):
         records[article['path']] = {'datePublished': article['date']}
     for path, values in config['pages'].items():
         records.setdefault(path, {}).update(values)
+    # Share cards are rendered by scripts/render-og-images.py; only listed pages get one.
+    for card in json.loads((root / 'content/og-images.json').read_text())['cards']:
+        records.setdefault(card['page'], {})['image'] = {'url': urljoin(config['site']['url'], card['image']), 'alt': card['alt']}
     return records
 
 
@@ -108,6 +111,8 @@ def schema(site, info, record, canonical, description):
         if published:
             datetime.fromisoformat(published.replace('Z', '+00:00'))
             article['datePublished'] = published
+        if record.get('image'):
+            article['image'] = record['image']['url']
         for key in ['dateModified', 'isBasedOn', 'translationOfWork']:
             if record.get(key):
                 article[key] = record[key]
@@ -134,10 +139,22 @@ def update_page(source, site, record, canonical):
         meta('og:title', info.title.strip(), 'property'),
         meta('og:description', description, 'property'),
         meta('og:url', canonical, 'property'),
-        meta('twitter:card', 'summary'),
+        meta('twitter:card', 'summary_large_image' if record.get('image') else 'summary'),
         meta('twitter:title', info.title.strip()),
         meta('twitter:description', description)
     ]
+    if site.get('twitter'):
+        tags.append(meta('twitter:site', site['twitter']))
+    if record.get('image'):
+        image = record['image']
+        tags.extend([
+            meta('og:image', image['url'], 'property'),
+            meta('og:image:width', '1200', 'property'),
+            meta('og:image:height', '630', 'property'),
+            meta('og:image:alt', image['alt'], 'property'),
+            meta('twitter:image', image['url']),
+            meta('twitter:image:alt', image['alt'])
+        ])
     if canonical == site['url']:
         tags.extend(meta(name, value) for name, value in site.get('verification', {}).items())
     structured = json.dumps(schema(site, info, record, canonical, description), ensure_ascii=False, separators=(',', ':'))

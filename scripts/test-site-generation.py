@@ -114,6 +114,19 @@ class SiteGenerationTests(unittest.TestCase):
         self.assertIn('全部 7 篇 →', output['index.html'])
         self.assertIn('07 篇', output['learning.html'])
 
+    def test_reading_time_only_on_opted_in_articles(self):
+        site = Site()
+        output = {path.name: text for path, text in site.outputs().items()}
+        opted = [i['path'] for i in site.articles if i.get('readingTime')]
+        self.assertEqual(sorted(opted), ['superagent-botmux.html', 'superagent.html', 'ub-mode-bench.html'])
+        for name in opted:
+            label = site.reading_time(name)
+            self.assertRegex(label, r'^阅读约 \d+ 分钟$')
+            self.assertIn(f'<!-- site:reading-time:start --> · {label}<!-- site:reading-time:end -->', output[name])
+            self.assertIn(f'<span class="post-reading">{label}</span>', output['writing.html'])
+        self.assertEqual(output['writing.html'].count('class="post-reading"'), len(opted))
+        self.assertNotIn('site:reading-time', output['blog-issue-46.html'])
+
     def test_ambiguous_regions_and_unregistered_pages_are_rejected(self):
         site = Site()
         source = (ROOT / 'learn-agent-memory.html').read_text()
