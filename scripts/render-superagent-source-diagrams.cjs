@@ -16,6 +16,8 @@ function render(s,mobile=false){
  assert.equal(new Set(s.nodes.map(n=>n.id)).size,s.nodes.length);
  const ids=new Set(s.nodes.map(n=>n.id));assert(s.edges.every(e=>ids.has(e.from)&&ids.has(e.to)));
  assert(s.nodes.every(n=>n.x>=0&&n.y>=0&&n.x+n.w<=s.w&&n.y+n.h<=s.h));
+ const bidirectionalTips=s.edges.filter(e=>e.both).flatMap(e=>{const points=e.points.trim().split(/\s+/);return [points[0],points[points.length-1]]});
+ assert.equal(new Set(bidirectionalTips).size,bidirectionalTips.length,'Bidirectional edges must use distinct arrowhead ports');
  const text=(x,y,t,size,color,weight=400,extra='')=>`<text x="${x}" y="${y}" font-size="${size}" fill="${c[color]}" font-weight="${weight}" ${extra}>${esc(t)}</text>`;
  let body=s.rules.map(r=>`<line x1="${r.x1}" y1="${r.y1}" x2="${r.x2}" y2="${r.y2}" stroke="${c.line}"${r.dash?' stroke-dasharray="5 5"':''}/>`).join('');
  for(const e of s.edges){const color=e.accent?'accent':'muted';body+=`<polyline points="${e.points}" fill="none" stroke="${c[color]}" stroke-width="${e.accent?2:1.3}"${e.dash?' stroke-dasharray="5 4"':''} marker-end="url(#arrow-${color})"${e.both?` marker-start="url(#arrow-${color})"`:''}/>`}
@@ -48,7 +50,18 @@ function publish(a,b){
 let a=scene(4,760,300,'双层分工：统一交互，隔离执行'),b=scene(4,360,590,a.title);
 ['IM','GitHub','邮件 / 日程'].forEach((t,i)=>{node(a,'c'+i,14,18+i*89,150,64,t);node(b,'c'+i,15,14+i*72,330,60,t)});
 node(a,'router',264,97,230,110,'Router 层',['共享上下文','路由与对外交互'],true);node(b,'router',15,252,330,106,'Router 层',['共享上下文，路由与对外交互'],true);
-for(let i=0;i<3;i++){node(a,'w'+i,574,18+i*89,172,76,'Worker '+(i+1),['隔离上下文']);node(b,'w'+i,15,385+i*65,330,58,'Worker '+(i+1)+' · 隔离上下文',[],false);edge(a,'c'+i,'router',`164,${50+i*89} 210,${50+i*89} 210,152 264,152`,{both:true});edge(a,'router','w'+i,`494,152 534,152 534,${55+i*89} 574,${55+i*89}`,{both:true});edge(b,'c'+i,'router',`345,${44+i*72} 355,${44+i*72} 355,298 345,298`,{both:true});edge(b,'router','w'+i,`15,314 5,314 5,${414+i*65} 15,${414+i*65}`,{both:true})}
+// Each relation has its own Router port and corridor; shared trunks would stack arrowheads.
+const channelPorts=[116,139,184],workerPorts=[116,145,184];
+const mobileChannelRoutes=['345,44 355,44 355,280 345,280','15,116 5,116 5,292 15,292','180,218 180,252'];
+const mobileWorkerRoutes=['180,358 180,385','345,318 355,318 355,479 345,479','15,332 5,332 5,544 15,544'];
+for(let i=0;i<3;i++){
+ node(a,'w'+i,574,18+i*89,172,76,'Worker '+(i+1),['隔离上下文']);
+ node(b,'w'+i,15,385+i*65,330,58,'Worker '+(i+1)+' · 隔离上下文',[],false);
+ edge(a,'c'+i,'router',i===1?'164,139 264,139':`164,${50+i*89} 210,${50+i*89} 210,${channelPorts[i]} 264,${channelPorts[i]}`,{both:true});
+ edge(a,'router','w'+i,i===1?'494,145 574,145':`494,${workerPorts[i]} 534,${workerPorts[i]} 534,${56+i*89} 574,${56+i*89}`,{both:true});
+ edge(b,'c'+i,'router',mobileChannelRoutes[i],{both:true});
+ edge(b,'router','w'+i,mobileWorkerRoutes[i],{both:true});
+}
 publish(a,b);
 
 // 7. The first event establishes a subscription; subsequent events follow the program path.

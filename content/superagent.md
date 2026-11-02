@@ -14,11 +14,11 @@ Super-agent 想接管这段续办流程。**Router 判断任务关联，Worker �
 
 ## 01 一件工作，几个入口
 
-在群聊提出请求，在 PR 里评审，用 CI 检查改动，隔几周再反馈回归：入口改变，任务可以延续。让多个独立会话各自理解整段历史，既费推理，也需要人反复搬运信息。
+需求在群聊里提出，代码在 PR 里评审，后续问题又回到群聊。如果每次都由一个新 Agent 接手，人就得找出旧需求和 PR，重新解释之前做了什么。
 
 dsh 把职责分成两层。Router 维持跨任务的高层关联和对外交互；每个 Worker 在独立上下文中调查、实现与验证。Worker 可以再用子 Agent 完成复杂任务，但对上层仍表现为一个执行者。
 
-<figure class="article-figure original-figure compact-figure redrawn-figure" id="original-figure-4"><a href="../assets/superagent/redrawn/fig04.svg?v=3" aria-label="打开重绘图 4 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig04-mobile.svg?v=3" width="360" height="590"><img src="../assets/superagent/redrawn/fig04.svg?v=3" width="760" height="300" loading="lazy" alt="双层分工：统一交互，隔离执行：Router 维持共享的高层关联，Worker 在各自上下文中执行。"></picture></a><figcaption>图 4 · 双层分工（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig04.jpg">原图</a></figcaption></figure>
+<figure class="article-figure original-figure compact-figure redrawn-figure" id="original-figure-4"><a href="../assets/superagent/redrawn/fig04.svg?v=4" aria-label="打开重绘图 4 的完整图片"><picture><source media="(max-width:560px)" srcset="../assets/superagent/redrawn/fig04-mobile.svg?v=4" width="360" height="590"><img src="../assets/superagent/redrawn/fig04.svg?v=4" width="760" height="300" loading="lazy" alt="双层分工：统一交互，隔离执行：Router 维持共享的高层关联，Worker 在各自上下文中执行。"></picture></a><figcaption>图 4 · 双层分工（重绘）。<a href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg">dsh 原文</a> · <a href="../assets/superagent/original/fig04.jpg">原图</a></figcaption></figure>
 
 CSV Worker 负责“这次 CSV 乱码修复”，不是所有带 CSV 字样的需求。先弄清这个边界，再看新消息会走哪里。
 
