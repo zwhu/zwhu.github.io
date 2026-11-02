@@ -19,4 +19,16 @@
 /* Code samples and demo video inside paired cells. */
 .cell pre{background:var(--code);border:1px solid var(--line);border-radius:5px;padding:12px 14px;margin:0 0 12px;overflow-x:auto;line-height:1.6;overflow-wrap:normal}
 .cell pre code{background:none;padding:0;font-size:12px}
-.translation-page figure video{display:block;width:100%;max-width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:var(--code)}
+
+/* Demo videos stay a small preview in the column and play enlarged in a dialog. */
+.media-zoom{position:relative;display:block;max-width:360px;cursor:zoom-in}
+.media-zoom picture,.media-zoom img{display:block;width:100%}
+.translation-page figure .media-zoom img{height:auto}
+.media-play{position:absolute;left:8px;bottom:8px;padding:2px 8px;border-radius:3px;background:rgba(41,40,37,.72);color:var(--bg);font-size:11px;font-family:ui-monospace,Menlo,monospace;line-height:1.8}
+.media-zoom:hover .media-play,.media-zoom:focus-visible .media-play{background:var(--accent)}
+.media-dialog{width:min(1080px,calc(100vw - 32px));max-width:none;max-height:calc(100vh - 32px);padding:12px;border:1px solid var(--line);border-radius:5px;background:var(--bg);color:var(--text)}
+.media-dialog::backdrop{background:rgba(41,40,37,.6)}
+.media-dialog video{display:block;width:100%;height:auto;max-height:calc(100vh - 120px);border-radius:4px;background:var(--code)}
+.media-close{display:block;margin:0 0 10px auto}
+.media-caption{font-size:11px;color:var(--muted);margin:8px 0 0}
+@media(max-width:700px){.media-zoom{max-width:100%}.media-dialog{padding:8px}}

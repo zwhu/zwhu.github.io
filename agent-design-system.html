@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>搭建 Agent 能遵循的设计系统与 skill · 全文对照翻译</title>
-<link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./translation.css">
+<link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./translation.css?v=20261103">
 <link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png">
 
 <!-- SEO:start -->
@@ -326,14 +326,14 @@
 <p>I don't design blocks up front anymore. I design a few real screens first, notice which parts I keep rebuilding, and only then turn them into blocks. That way they come from the product instead of a template.</p>
 <p>Blocks also help keep the product focused. I've started to think of every screen as a stack of blocks. A header, a few stat cards, a chart, a list, a side panel. When I can name each part of a screen that way, the agent can build it the same way, one block at a time. And when a screen needs something none of my blocks can do, I take it as a sign to slow down and ask if it really belongs.</p>
 <p>Here's how one of my screens breaks down, block by block.</p>
-<figure><video controls muted loop playsinline preload="none" width="1080" height="720" poster="./assets/translations/original/024b028c105f8e44.jpg" aria-label="Screen broken down into blocks"><source src="./assets/translations/original/426ff29c29ad7f7d.mp4" type="video/mp4"><a href="./assets/translations/original/426ff29c29ad7f7d.mp4">Download video</a></video><figcaption>A full screen, taken apart. Each section is a block with its own name and states, and the screen is just those blocks put together.</figcaption></figure>
+<figure><a class="media-zoom" href="./assets/translations/original/426ff29c29ad7f7d.mp4" data-video aria-label="Play the demo video enlarged: screen broken down into blocks"><picture data-image-asset="assets/translations/original/024b028c105f8e44.jpg"><source type="image/webp" srcset="./assets/optimized/024b028c105f8e44-640-q88.webp 640w, ./assets/optimized/024b028c105f8e44-1024-q88.webp 1024w, ./assets/optimized/024b028c105f8e44-1080-q88.webp 1080w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/024b028c105f8e44.jpg" alt="Screen broken down into blocks, first frame of the demo video" width="1080" height="720" decoding="async" loading="lazy"></picture><span class="media-play" aria-hidden="true">▶ 0:19</span></a><figcaption>A full screen, taken apart. Each section is a block with its own name and states, and the screen is just those blocks put together.</figcaption></figure>
 </div><div class="cell cn">
 <h2>4. 定义区块（blocks）</h2>
 <p>区块是由组件拼成的一小块界面，比如一张运行卡片、一个审批面板、一行带状态和头像的任务。</p>
 <p>我不再提前设计区块了。我会先做几个真实页面，留意哪些部分一直在重做，然后才把它们提炼成区块。这样区块来自产品本身，而不是模板。</p>
 <p>区块也能让产品保持聚焦。我开始把每个页面看成一摞区块：一个页头、几张统计卡片、一张图表、一个列表、一个侧边面板。我能这样叫出页面每个部分的名字时，Agent 也能照同样的方式，一个区块一个区块地搭出来。如果某个页面需要的东西，现有区块都做不了，我会把它当作信号：先放慢，问问它是否真的该放在这里。</p>
 <p>下面是我的一个页面按区块拆开的样子。</p>
-<figure><video controls muted loop playsinline preload="none" width="1080" height="720" poster="./assets/translations/original/024b028c105f8e44.jpg" aria-label="页面按区块拆分的演示视频"><source src="./assets/translations/original/426ff29c29ad7f7d.mp4" type="video/mp4"><a href="./assets/translations/original/426ff29c29ad7f7d.mp4">下载视频</a></video><figcaption>一个完整页面被拆开。每个部分都是一个区块，有自己的名字和状态；页面只是把这些区块拼在一起。</figcaption><details class="img-trans"><summary>视频内容 · 中文说明</summary>
+<figure><a class="media-zoom" href="./assets/translations/original/426ff29c29ad7f7d.mp4" data-video aria-label="放大播放演示视频：页面按区块拆分"><picture data-image-asset="assets/translations/original/024b028c105f8e44.jpg"><source type="image/webp" srcset="./assets/optimized/024b028c105f8e44-640-q88.webp 640w, ./assets/optimized/024b028c105f8e44-1024-q88.webp 1024w, ./assets/optimized/024b028c105f8e44-1080-q88.webp 1080w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/024b028c105f8e44.jpg" alt="页面按区块拆分的演示视频首帧" width="1080" height="720" decoding="async" loading="lazy"></picture><span class="media-play" aria-hidden="true">▶ 0:19</span></a><figcaption>一个完整页面被拆开。每个部分都是一个区块，有自己的名字和状态；页面只是把这些区块拼在一起。</figcaption><details class="img-trans"><summary>视频内容 · 中文说明</summary>
 <p>视频约 19 秒，无声。先展示 Granola 应用的 Analytics「Activation report」完整页面，随后其他部分淡出，只留下左侧侧边栏。侧边栏中的部分逐个被拆到右侧画布，并标注区块名称：</p>
 <ul>
 <li>workspace switcher — 工作区切换器（Granola 名称、搜索与收起侧栏按钮）</li>
@@ -414,5 +414,6 @@ document.getElementById('print').addEventListener('click',()=>window.print());
 function progress(){const d=document.documentElement;document.querySelector('.progress').style.width=(d.scrollHeight>d.clientHeight?100*d.scrollTop/(d.scrollHeight-d.clientHeight):100)+'%';}
 addEventListener('scroll',progress,{passive:true});addEventListener('resize',progress);progress();
 </script>
+<script src="./translation-media.js?v=1" defer></script>
 <!-- site:analytics:start --><!-- Cloudflare Web Analytics --><script async type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --><!-- site:analytics:end --></body>
 </html>
