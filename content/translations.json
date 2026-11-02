@@ -1,5 +1,11 @@
 [
   {
+    "path": "agent-design-system.html",
+    "title": "搭建 Agent 能遵循的设计系统与 skill",
+    "excerpt": "从设计原语、语义 token、组件到区块，再用规则和 skill 写下“什么算好”，让 Agent 不必再猜。",
+    "labels": ["rico", "英中对照"]
+  },
+  {
     "path": "claude-code-review.html",
     "title": "Claude Code 团队如何做代码审查",
     "excerpt": "从自动化检查到人类判断，阅读 Claude Code 团队的代码审查实践。",

@@ -72,7 +72,7 @@ class SearchMetadataTests(unittest.TestCase):
             article = next(n for n in parsed.graphs[0]['@graph'] if n['@type'] == 'BlogPosting')
             self.assertEqual(article['datePublished'], issue['created_at'])
             self.assertNotIn('dateModified', article)
-        for name, author in [('claude-code-review.html', 'Addy Osmani'), ('engineers-new-problems.html', 'Katelyn Lesse')]:
+        for name, author in [('claude-code-review.html', 'Addy Osmani'), ('engineers-new-problems.html', 'Katelyn Lesse'), ('agent-design-system.html', 'rico')]:
             parsed = Metadata((ROOT / name).read_text())
             article = next(n for n in parsed.graphs[0]['@graph'] if n['@type'] == 'BlogPosting')
             self.assertEqual(article['author']['name'], author)

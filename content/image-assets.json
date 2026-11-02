@@ -427,6 +427,29 @@
         }
       ]
     },
+    "assets/translations/original/ab7ab20fb3b946a8.jpg": {
+      "width": 2400,
+      "height": 960,
+      "sha256": "ab7ab20fb3b946a8649e9c5c400e80fe3e6ddabc606f08311a80abe63b52c21d",
+      "bytes": 257456,
+      "variants": [
+        {
+          "path": "assets/optimized/ab7ab20fb3b946a8-640-q88.webp",
+          "width": 640,
+          "bytes": 20914
+        },
+        {
+          "path": "assets/optimized/ab7ab20fb3b946a8-1024-q88.webp",
+          "width": 1024,
+          "bytes": 40608
+        },
+        {
+          "path": "assets/optimized/ab7ab20fb3b946a8-1600-q88.webp",
+          "width": 1600,
+          "bytes": 72580
+        }
+      ]
+    },
     "assets/translations/original/b27577c75499a60b.jpg": {
       "width": 1370,
       "height": 584,
