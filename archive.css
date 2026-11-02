@@ -102,7 +102,7 @@
 
 /* 宽屏文章：扩大阅读区域与留白，正文字号保持 14px。 */
 @media screen and (min-width:1600px){
-  .issue-page>:is(.site-header,main,footer){max-width:clamp(880px,48vw,1040px);padding-inline:40px}
+  body.issue-page{--page-width:clamp(880px,48vw,1040px);--page-padding:40px}
   .issue-page .prose p{margin-bottom:16px}
   .issue-page .prose h2{margin-top:38px;margin-bottom:16px}
 }

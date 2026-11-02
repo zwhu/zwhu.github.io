@@ -1,5 +1,5 @@
 /* 学习页公共基础：阅读外壳、基础控件、可访问性；课程布局见 assets/learning/*.css。 */
-.learning-page .learning-main { max-width: 1080px; }
+.learning-page { --page-width: 1080px; }
 .lesson-heading { max-width: 704px; margin-top: 24px; margin-right: auto; margin-bottom: 32px; margin-left: auto; }
 .lesson-heading h1 {
   font-size: 29px;
