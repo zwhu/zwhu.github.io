@@ -55,11 +55,11 @@
 
 ## 修改后的检查
 
-运行 `python3 scripts/check-learning-styles.py` 检查样式归属、主题作用域、旧变量和加载顺序；这个检查不代替浏览器验收。
+运行 `python3 scripts/verify.py`，其中 `check-learning-styles.py` 检查样式归属、主题作用域、旧变量和加载顺序；这个检查不代替浏览器验收。
 
 检查脚本自动发现根目录的 `learn-*.html`，新增课程也会纳入检查；每篇须有同名课程 CSS，逗号分隔的每个选择器都要限定作用域。
 
-同一命令已接入 `.github/workflows/static-checks.yml`，在 PR 创建／更新、推送 `main` 及手动触发时，与公共生成、SEO 和评论检查一起运行。`main` 已启用 PR 与必需 `check` 门禁，要求分支保持最新，管理员也受约束；配置与验证见[CI 交接](./ci-handoff.md)。GitHub Pages 仍从 `main` 发布，通过检查的 PR 合并后更新网站。
+`.github/workflows/static-checks.yml` 调用同一 verify 入口，在 PR 创建／更新、推送 `main` 及手动触发时执行。`main` 已启用 PR 与必需 `check` 门禁，要求分支保持最新，管理员也受约束；配置与验证见[CI 交接](./ci-handoff.md)。GitHub Pages 仍从 `main` 发布，通过检查的 PR 合并后更新网站。
 
 - 在 375、560、700、1280px 检查六篇课程，关注换行、间距、局部滚动和文末相关阅读；响应式临界点附近也要检查。
 - 涉及纯样式归位时，对照改动前后的最终布局和计算样式。测量时排除过渡动画中间帧，演示本身的动画另行验证。
