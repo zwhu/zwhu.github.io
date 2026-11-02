@@ -1,4 +1,4 @@
-.lesson-aime-paper{ --ink:#11141a; --paper:#f4f1e9; --orange:#ff6b35; --muted:#62666f; --line:#d8d4c9; }
+/* Colours inherit the blog tokens mapped by learning.css. */
 .lesson-aime-paper *{ box-sizing:border-box; }
 .lesson-aime-paper{ scroll-behavior:smooth; }
 .lesson-aime-paper{ margin:0; background:var(--code); color:var(--ink); font-family:inherit; }
@@ -12,14 +12,7 @@
 .lesson-aime-paper .nav-links{ display:flex; gap:28px; margin:auto; color:var(--muted); font-size:13px; }
 .lesson-aime-paper .nav-links a:hover{ color:var(--orange); }
 .lesson-aime-paper .paper-link{ border:1px solid var(--ink); border-radius:4px; padding:9px 16px; font-size:12px; font-weight:700; }
-.lesson-aime-paper .hero{ min-height:calc(100vh - 72px); padding:7vw 7vw 6vw; display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:5vw; }
 .lesson-aime-paper .eyebrow,.lesson-aime-paper .section-index{ margin:0 0 24px; font-size:11px; font-weight:800; letter-spacing:.18em; color:var(--orange); }
-.lesson-aime-paper .hero h1{ margin:0; font-size:clamp(48px,6.2vw,94px); line-height:.98; letter-spacing:-.055em; font-weight:900; }
-.lesson-aime-paper .hero h1 span{ color:var(--orange); }
-.lesson-aime-paper .lede{ max-width:600px; margin:28px 0 34px; color:var(--muted); font-size:18px; line-height:1.8; }
-.lesson-aime-paper .hero-actions{ display:flex; gap:12px; flex-wrap:wrap; }
-.lesson-aime-paper .hero-actions a,.lesson-aime-paper .hero-actions button{ padding:14px 22px; border-radius:4px; border:1px solid var(--ink); background:transparent; font-weight:800; font-size:13px; }
-.lesson-aime-paper .hero-actions .primary{ background:var(--code); color:var(--text); }
 .lesson-aime-paper .hero-visual{ position:relative; min-height:560px; }
 .lesson-aime-paper .orbit{ position:absolute; border:1px solid var(--line); border-radius:4px; inset:10%; }
 .lesson-aime-paper .orbit-two{ inset:23%; border-style:dashed; animation:spin 26s linear infinite; }
@@ -35,9 +28,6 @@
 .lesson-aime-paper .sat-2{ top:9%; right:3%; }
 .lesson-aime-paper .sat-3{ bottom:3%; right:5%; }
 .lesson-aime-paper .sat-4{ bottom:7%; left:2%; }
-.lesson-aime-paper .quick-critique{ margin:0 7vw 5vw; padding:22px 28px; background:var(--code); border-left:5px solid var(--orange); display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:24px; box-shadow:none; }
-.lesson-aime-paper .quick-critique p{ margin:0; color:var(--muted); line-height:1.6; }
-.lesson-aime-paper .quick-critique a{ font-weight:800; color:var(--orange); white-space:nowrap; }
 .lesson-aime-paper .section{ padding:110px 7vw; }
 .lesson-aime-paper .section-heading{ max-width:730px; margin-bottom:58px; }
 .lesson-aime-paper .section-heading h2{ margin:0 0 18px; font-size:clamp(38px,5vw,70px); line-height:1.05; letter-spacing:-.045em; }
@@ -130,7 +120,6 @@
 .lesson-aime-paper footer p{ margin:auto; }
 .lesson-aime-paper footer a{ color:var(--ink); font-weight:800; }
 @media (max-width:900px){.lesson-aime-paper .nav-links{ display:none; }
-.lesson-aime-paper .hero{ grid-template-columns:1fr; padding-top:70px; }
 .lesson-aime-paper .hero-visual{ min-height:500px; }
 .lesson-aime-paper .problem-grid,.lesson-aime-paper .architecture-shell,.lesson-aime-paper .critique-grid{ grid-template-columns:1fr; }
 .lesson-aime-paper .equation-grid{ grid-template-columns:1fr; }
@@ -140,12 +129,10 @@
 .lesson-aime-paper .thesis{ grid-template-columns:1fr; }
 .lesson-aime-paper .verdict-box{ grid-template-columns:1fr; }
 .lesson-aime-paper .rating{ border-left:0; padding-left:0; }
-.lesson-aime-paper .quick-critique{ grid-template-columns:1fr; }
 }
 @media (max-width:560px){.lesson-aime-paper .nav{ padding:0 20px; }
 .lesson-aime-paper .paper-link{ display:none; }
-.lesson-aime-paper .hero,.lesson-aime-paper .section{ padding-left:22px; padding-right:22px; }
-.lesson-aime-paper .hero h1{ font-size:48px; }
+.lesson-aime-paper .section{ padding-left:22px; padding-right:22px; }
 .lesson-aime-paper .hero-visual{ min-height:410px; }
 .lesson-aime-paper .satellite{ width:96px; height:96px; }
 .lesson-aime-paper .core{ width:150px; height:150px; }
@@ -159,7 +146,6 @@
 .lesson-aime-paper .workflow{ grid-template-columns:repeat(2,1fr); }
 .lesson-aime-paper .result-tabs{ flex-direction:column; }
 .lesson-aime-paper .bar-row{ grid-template-columns:90px 1fr 48px; }
-.lesson-aime-paper .quick-critique{ margin-left:22px; margin-right:22px; }
 .lesson-aime-paper .thesis p{ font-size:22px; }
 .lesson-aime-paper footer{ flex-direction:column; align-items:flex-start; }
 .lesson-aime-paper footer p{ margin:0; }

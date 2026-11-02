@@ -1,4 +1,36 @@
-/* Imported lesson interactions. */
+/* Both tab groups share selection, focus and panel labelling. */
+// Keyboard contract: https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
+
+function setupTabs(tablist, panel, render) {
+  const tabs = [...tablist.querySelectorAll('[role="tab"]')];
+  function select(index) {
+    tabs.forEach((tab, i) => {
+      const selected = i === index;
+      tab.classList.toggle('active', selected);
+      tab.setAttribute('aria-selected', String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+    });
+    panel.setAttribute('aria-labelledby', tabs[index].id);
+    render(index);
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => select(index));
+    tab.addEventListener('keydown', event => {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      let next;
+      if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+      else if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+      else if (event.key === 'Home') next = 0;
+      else if (event.key === 'End') next = tabs.length - 1;
+      else return;
+      event.preventDefault();
+      select(next);
+      tabs[next].focus();
+    });
+  });
+  select(Math.max(0, tabs.findIndex(tab => tab.getAttribute('aria-selected') === 'true')));
+  return select;
+}
 
 const mechanisms = [
   {num:'01',name:'动态规划器',en:'Dynamic Planner',problem:'静态计划在执行偏离、工具失败或环境变化后无法自我修正。',action:'每一轮同时更新全局任务树 Lₜ₊₁，并决定下一步可执行动作 gₜ₊₁。',output:'把“先计划、后等待”变成持续观察、持续重规划。'},
@@ -11,49 +43,27 @@ const results = [
   {aime:66.4,baseline:65.8,baseName:'OpenHands',unit:'解决率'},
   {aime:92.3,baseline:89.1,baseName:'Browser use',unit:'成功率'}
 ];
-const tabs = [...document.querySelectorAll('.mechanism-tabs button')];
 const detail = document.querySelector('.mechanism-detail');
-function setMechanism(index){
+const setMechanism = setupTabs(document.querySelector('.mechanism-tabs'), detail, index => {
   const item=mechanisms[index];
-  tabs.forEach((button,i)=>{button.classList.toggle('active',i===index);button.setAttribute('aria-selected',String(i===index));});
-
-  detail.setAttribute('aria-labelledby', 'aime-module-' + index);
-  tabs.forEach((button,i)=>button.tabIndex=i===index?0:-1);
   detail.querySelector('.detail-top p').textContent=item.en;
   detail.querySelector('h3').textContent=item.name;
   const dds=detail.querySelectorAll('dd'); dds[0].textContent=item.problem; dds[1].textContent=item.action; dds[2].textContent=item.output;
-}
-tabs.forEach((button,index)=>{
-  button.addEventListener('click',()=>setMechanism(index));
-  button.addEventListener('keydown',event=>{
-    let next;
-    if(event.key==='ArrowRight') next=(index+1)%tabs.length;
-    else if(event.key==='ArrowLeft') next=(index+tabs.length-1)%tabs.length;
-    else if(event.key==='Home') next=0;
-    else if(event.key==='End') next=tabs.length-1;
-    else return;
-    event.preventDefault();setMechanism(next);tabs[next].focus();
-  });
 });
-document.querySelectorAll('.satellite').forEach((button,index)=>button.addEventListener('click',()=>{setMechanism(index);document.querySelector('#architecture').scrollIntoView({behavior:'smooth'});}));
-const resultTabs=[...document.querySelectorAll('.result-tabs button')];
-function setResult(index){
-  const item=results[index],card=document.querySelector('.chart-card');
-  resultTabs.forEach((button,i)=>button.classList.toggle('active',i===index));
-
+document.querySelectorAll('.satellite').forEach((button, index) => button.addEventListener('click', () => {
+  setMechanism(index);
+  document.getElementById('aime-module-' + index).focus({preventScroll: true});
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelector('.architecture-shell').scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block: 'start'});
+}));
+const card = document.querySelector('.chart-card');
+setupTabs(document.querySelector('.result-tabs'), card, index => {
+  const item=results[index];
   card.querySelector('.score-main strong').textContent=item.aime;
   card.querySelector('.score-main small').textContent=item.unit;
   const rows=card.querySelectorAll('.bar-row');
   rows[0].querySelector('i').style.width=item.aime+'%'; rows[0].querySelector('b').textContent=item.aime+'%';
   rows[1].querySelector('label').textContent=item.baseName; rows[1].querySelector('i').style.width=item.baseline+'%'; rows[1].querySelector('b').textContent=item.baseline+'%';
   card.querySelector('.delta strong').textContent='+'+(item.aime-item.baseline).toFixed(1);
-}
-resultTabs.forEach((button,index)=>button.addEventListener('click',()=>setResult(index)));
-const reviewButton=document.querySelector('.hero-actions button'); let critique=null;
-reviewButton.addEventListener('click',()=>{
-  if(critique){critique.remove();critique=null;reviewButton.textContent='先看审稿视角';return;}
-  critique=document.createElement('aside');critique.className='quick-critique';critique.setAttribute('aria-live','polite');
-  critique.innerHTML='<strong>30 秒判断</strong><p>架构思想清晰、结果很强；但缺少消融、成本与复现细节，所以更适合作为一种有前景的系统设计，而不是已经被充分验证的通用最优解。</p><a href="#verdict">查看完整评价 →</a>';
-  document.querySelector('.hero').after(critique);reviewButton.textContent='收起审稿视角';
 });
 
