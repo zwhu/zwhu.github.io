@@ -2,5 +2,7 @@
 *.log
 .env
 .env.*
+__pycache__/
+*.pyc
 preview*.png
 translation-preview.png

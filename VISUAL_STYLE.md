@@ -18,6 +18,7 @@
 - [archive.css](./archive.css)：专栏补充样式、评论区和窄屏导航。
 - 首页与原创文章加载 `style.css`、`archive.css`；译文依次加载 `style.css`、`translation.css`、`archive.css`，保留覆盖顺序。
 - 优先复用已有类名和组件。共享视觉调整写入对应共用样式文件，避免在单篇文章中另建配色、字体或内联样式体系。
+- 公共 HTML 与目录结构维护在 `templates/`，元信息与生成入口见[公共模板说明](./content/site-generation-guide.md)；生成后的静态 HTML 保留现有阅读布局。
 - 本文数值记录当前基线，不应复制到每个页面。如果用户要求调整基线，同步更新共享 CSS 与本规范。
 
 ## 颜色

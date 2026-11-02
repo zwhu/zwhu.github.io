@@ -30,10 +30,7 @@
 </head>
 <body class="issue-page superagent-page">
 <a class="skip-link" href="#main">跳到正文</a>
-<header class="site-header">
-  <a class="brand" href="./index.html">zwhu<span>.</span></a>
-  <nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav>
-</header>
+<!-- site:header:start --><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing" aria-current="location">思考</a><a href="./translations.html">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./index.html#about">关于</a></nav></header><!-- site:header:end -->
 <main id="main"><article class="article article-with-toc"><a class="back" href="./writing.html">← 所有文章</a><h1>从 botmux 到持续任务协调：先验证续办收益</h1><div class="meta"><time datetime="2026-11-01">2026-11-01</time> · Agent 架构 · 源码研究</div><div class="prose"><p>Super-agent 给研发工具的启发，是把需求、执行、评审与结果关联为一项持续任务。对于已经使用 botmux 的团队，值得先验证的是：自动把后续事件送回原执行者，能否减少人工转发与追问。</p>
 <p>本文比较 botmux 公开版 v3.55.0 与 Super-agent 原型 <code>6337fc8</code>，不代表所有内部部署。以下是方案建议，尚未实施；公司规模、业务基线和实际收益没有提供。</p>
 <nav class="article-toc" aria-label="文章快速导航"><span class="article-toc-label">本文导航</span><div class="article-toc-links"><a href="#capabilities" aria-current="location">已有能力</a><a href="#pilot">试点范围</a><a href="#evaluation">效果验证</a><a href="#sources">资料</a></div></nav>
@@ -121,6 +118,6 @@
 <li><a href="https://github.com/deepseek-ai/dsh-superagent-prototype/tree/6337fc823ce20251c8de8085948165c81aaa701e">Super-agent 固定原型</a>：单仓库任务与订阅模型。</li>
 </ul>
 <p>本篇是一份方向建议，不是已交付的任务协调系统，也不宣称公司已经取得收益。</p>
-</div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./superagent.html">相关阅读：Super-agent 的 Router 如何工作 →</a><a href="./learn-agent-memory.html">相关阅读：Agent 记忆 →</a></nav></article><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=5" defer></script><script src="./article-toc.js" defer></script></main><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --></body>
+</div><nav class="article-bottom" aria-label="文章导航"><a href="./writing.html">← 返回文章列表</a><a href="./superagent.html">相关阅读：Super-agent 的 Router 如何工作 →</a><a href="./learn-agent-memory.html">相关阅读：Agent 记忆 →</a></nav></article><!-- site:comments:start --><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section><!-- site:comments:end --><!-- site:comment-scripts:start --><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=5" defer></script><!-- site:comment-scripts:end --><script src="./article-toc.js" defer></script></main><!-- site:footer:start --><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer><!-- site:footer:end -->
+<!-- site:analytics:start --><!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --><!-- site:analytics:end --></body>
 </html>

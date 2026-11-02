@@ -6,7 +6,7 @@
 
 此目录是正式维护工程。GitHub Pages 从 `main` 分支根目录自动发布，提交并推送后网站会更新。
 
-原生 HTML / CSS / JavaScript 的个人技术博客，无构建依赖。暖白底、无衬线正文、少量朱砂红强调，采用紧凑的文章列表，支持行内代码和可横向滚动的代码块。目前收录 46 篇从 GitHub Issues 迁入的文章、一篇新增原创文章，以及两篇全文对照译文。
+原生 HTML / CSS / JavaScript 的个人技术博客，无构建依赖。暖白底、无衬线正文、少量朱砂红强调，采用紧凑的文章列表，支持行内代码和可横向滚动的代码块。目前收录 46 篇从 GitHub Issues 迁入的文章、三篇新增原创文章，以及两篇全文对照译文。
 
 ## 预览
 
@@ -21,10 +21,12 @@
 - `index.html`：网站名、个人介绍、个人思考与翻译入口。
 - `translations.html`：翻译留档专栏目录。
 - `claude-code-review.html`、`engineers-new-problems.html`：两篇英中对照译文，原文出处、正文与插图保持完整。工作区原始文件未修改。
-- 各文章 HTML：标题、日期、正文；新增文章时复制一篇并同步首页目录。
+- 各文章 HTML：标题、日期、正文；新增文章时沿用同类页面外壳，登记对应元信息后运行公共生成。
 - `content/original-articles.json`：新增原创文章的标题、日期、路径、摘要与标签；目录生成脚本会一并收录，正文维护在对应 HTML 中。
 - `ub-mode-bench.html`：ub-mode 评测文章；图表数据见 `content/ub-mode-bench-data.json`，图与移动端版本在 `assets/ub-mode-bench/`。维护脚本 `scripts/render-ub-mode-figures.py` 使用 matplotlib 生成静态 SVG，站点运行不依赖 Python 或绘图库。
 - `style.css`：共用颜色、字体与布局；`translation.css`：对照阅读样式；`archive.css`：专栏与评论样式。使用系统字体。
+
+主导航、通用页脚、评论外壳、首页与目录列表、学习页相关阅读统一生成。维护位置与接入流程见[公共模板与目录生成](./content/site-generation-guide.md)：修改 `templates/` 或元信息后运行 `python3 scripts/render-site.py`，用 `python3 scripts/render-site.py --check` 检查同步。脚本自动更新 SEO，静态 HTML 一起提交；正文与译文来源页脚继续保留在各自页面中。
 
 ## 搜索引擎收录
 
@@ -85,11 +87,11 @@ ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-co
 
 ## 交互式学习专栏
 
-`learning.html` 收录六篇交互文档：首页与全站导航均提供入口。各篇使用稳定的 `learn-*.html` 文件名，正文与图表保留在页面中，课程布局、图示和交互脚本放在 `assets/learning/`，公共阅读外壳与基础控件放在 `learning.css`。样式归属与接入示例见[学习页复用说明](./content/learning-styles-guide.md)，运行 `python3 scripts/check-learning-styles.py` 检查归属、作用域、语义变量和加载顺序。目录元信息见 `content/interactive-learning.json`；修改文章信息时需同步目录与首页。
+`learning.html` 收录六篇交互文档：首页与全站导航均提供入口。各篇使用稳定的 `learn-*.html` 文件名，正文与图表保留在页面中，课程布局、图示和交互脚本放在 `assets/learning/`，公共阅读外壳与基础控件放在 `learning.css`。样式归属与接入示例见[学习页复用说明](./content/learning-styles-guide.md)，运行 `python3 scripts/check-learning-styles.py` 检查归属、作用域、语义变量和加载顺序。目录元信息见 `content/interactive-learning.json`，运行公共生成同步首页、目录和相关阅读。
 
 保留场景切换、训练实验、闪卡、测验、SVG 动画与提示词复制。Agent 记忆页原先依赖聊天环境的继续学习按钮已改为站内模块说明、源码阅读路线与自测。大型图表在窄屏局部横向滚动。
 
-`.github/workflows/static-checks.yml` 在 PR 创建／更新、推送 `main` 和手动触发时，检查学习页样式归属、SEO 同步以及 SEO／评论测试。工作流只读源码，不执行部署；如需阻止失败代码合并，还需在 GitHub 仓库规则中配置必需检查与主分支保护。
+`.github/workflows/static-checks.yml` 在 PR 创建／更新、推送 `main` 和手动触发时，检查公共生成、学习页样式归属、SEO 同步以及生成／SEO／评论测试。工作流只读源码，不执行部署；如需阻止失败代码合并，还需在 GitHub 仓库规则中配置必需检查与主分支保护。
 
 ## Super-agent 文章与研究资产
 

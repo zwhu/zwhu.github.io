@@ -1,0 +1,14 @@
+[
+  {
+    "path": "claude-code-review.html",
+    "title": "Claude Code 团队如何做代码审查",
+    "excerpt": "从自动化检查到人类判断，阅读 Claude Code 团队的代码审查实践。",
+    "labels": ["Addy Osmani", "英中对照"]
+  },
+  {
+    "path": "engineers-new-problems.html",
+    "title": "工程师要解决的一组新问题",
+    "excerpt": "当智能体参与软件开发，工程师需要面对哪些新的系统与协作问题。",
+    "labels": ["Katelyn Lesse", "英中对照"]
+  }
+]

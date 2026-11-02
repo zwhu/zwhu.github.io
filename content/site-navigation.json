@@ -1,0 +1,10 @@
+{
+  "brand": "zwhu",
+  "footerLabel": "zwhu / Tech & Notes",
+  "links": [
+    {"section": "writing", "label": "思考", "href": "./index.html#writing"},
+    {"section": "translations", "label": "翻译留档", "href": "./translations.html"},
+    {"section": "learning", "label": "交互式学习", "href": "./learning.html"},
+    {"section": "about", "label": "关于", "href": "./index.html#about"}
+  ]
+}

@@ -18,6 +18,10 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
+      - name: Check shared HTML and catalogs
+        run: python3 scripts/render-site.py --check
+      - name: Test site generation contracts
+        run: python3 scripts/test-site-generation.py
       - name: Check learning style ownership
         run: python3 scripts/check-learning-styles.py
       - name: Check generated SEO metadata
