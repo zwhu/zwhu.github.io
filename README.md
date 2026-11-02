@@ -85,9 +85,11 @@ ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-co
 
 ## 交互式学习专栏
 
-`learning.html` 收录六篇交互文档：首页与全站导航均提供入口。各篇使用稳定的 `learn-*.html` 文件名，正文与图表保留在页面中，交互脚本及原布局分别放在 `assets/learning/`，统一视觉放在 `learning.css`。目录元信息见 `content/interactive-learning.json`；修改文章信息时需同步目录与首页。
+`learning.html` 收录六篇交互文档：首页与全站导航均提供入口。各篇使用稳定的 `learn-*.html` 文件名，正文与图表保留在页面中，课程布局、图示和交互脚本放在 `assets/learning/`，公共阅读外壳与基础控件放在 `learning.css`。样式归属与接入示例见[学习页复用说明](./content/learning-styles-guide.md)，运行 `python3 scripts/check-learning-styles.py` 检查归属、作用域、语义变量和加载顺序。目录元信息见 `content/interactive-learning.json`；修改文章信息时需同步目录与首页。
 
 保留场景切换、训练实验、闪卡、测验、SVG 动画与提示词复制。Agent 记忆页原先依赖聊天环境的继续学习按钮已改为站内模块说明、源码阅读路线与自测。大型图表在窄屏局部横向滚动。
+
+`.github/workflows/static-checks.yml` 在 PR 创建／更新、推送 `main` 和手动触发时，检查学习页样式归属、SEO 同步以及 SEO／评论测试。工作流只读源码，不执行部署；如需阻止失败代码合并，还需在 GitHub 仓库规则中配置必需检查与主分支保护。
 
 ## Super-agent 文章与研究资产
 

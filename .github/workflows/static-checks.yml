@@ -1,0 +1,28 @@
+name: Static checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Check learning style ownership
+        run: python3 scripts/check-learning-styles.py
+      - name: Check generated SEO metadata
+        run: python3 scripts/update-seo.py --check
+      - name: Test SEO contracts
+        run: python3 scripts/test-seo.py
+      - name: Test comment configuration
+        run: node --test tests/comments.test.cjs

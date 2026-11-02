@@ -1,8 +1,49 @@
-.lesson-agent-memory #am-walkthrough .am-flow{ display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr); gap:16px; align-items:center; margin:24px 0; }
-.lesson-agent-memory #am-walkthrough .am-node{ display:flex; flex-direction:column; gap:8px; overflow-wrap:anywhere; }
-.lesson-agent-memory #am-walkthrough .am-arrow{ color:var(--muted-foreground); }
-.lesson-agent-memory #am-walkthrough .am-followups{ margin-top:12px; }
-.lesson-agent-memory #am-walkthrough #am-detail{ min-height:3em; }
-@media(max-width:520px){.lesson-agent-memory #am-walkthrough .am-flow{ grid-template-columns:1fr; gap:12px; margin:16px 0; }
-.lesson-agent-memory #am-walkthrough .am-arrow{ transform:rotate(90deg); justify-self:center; }
+/* agent-memory：本课程布局、图示和状态；公共约定见 content/learning-styles-guide.md。 */
+.lesson-agent-memory #am-walkthrough .am-flow {
+  display: grid;
+  grid-template-columns: minmax(0px, 1fr) auto minmax(0px, 1fr) auto minmax(0px, 1fr);
+  gap: 16px;
+  align-items: center;
+  margin-top: 24px;
+  margin-right: 0px;
+  margin-bottom: 24px;
+  margin-left: 0px;
+}
+.lesson-agent-memory #am-walkthrough .am-node { display: flex; flex-direction: column; gap: 8px; overflow-wrap: anywhere; }
+.lesson-agent-memory #am-walkthrough .am-arrow { color: var(--muted); }
+.lesson-agent-memory #am-walkthrough .am-followups { margin-top: 12px; }
+.lesson-agent-memory #am-walkthrough #am-detail { min-height: 3em; }
+.lesson-agent-memory .viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 12px;
+  margin-right: 0px;
+  margin-bottom: 12px;
+  margin-left: 0px;
+  justify-content: space-between;
+}
+.lesson-agent-memory .am-node {
+  border: 1px solid var(--line);
+  padding-top: 16px;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  border-radius: 4px;
+}
+.lesson-agent-memory .memory-panels > div { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 12px; }
+.lesson-agent-memory .memory-panels dt { color: var(--accent); font-size: 13px; margin-top: 14px; }
+.lesson-agent-memory .memory-panels dd { margin-top: 5px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; font-size: 14px; }
+.lesson-agent-memory .memory-panels code { overflow-wrap: anywhere; }
+@media (max-width: 520px) {
+  .lesson-agent-memory #am-walkthrough .am-flow {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 16px;
+    margin-right: 0px;
+    margin-bottom: 16px;
+    margin-left: 0px;
+  }
+  .lesson-agent-memory #am-walkthrough .am-arrow { transform: rotate(90deg); justify-self: center; }
 }

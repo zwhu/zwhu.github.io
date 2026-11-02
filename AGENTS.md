@@ -8,6 +8,7 @@
 - 译文须保留原文出处、正文、插图与中英对照；未经要求不要删减。
 - 站内导航与资源使用相对链接；canonical、Open Graph、JSON-LD 和 sitemap 使用正式站点的绝对 HTTPS 地址。文章文件名是评论标识的一部分，应保持稳定且唯一。
 - 共用样式见 style.css；译文见 translation.css；专栏及评论见 archive.css。
+- 修改学习页前阅读 [复用说明](./content/learning-styles-guide.md)。公共阅读外壳与基础控件放在 `learning.css`，课程布局、图示和状态放在 `assets/learning/<主题>.css`；修改后运行 `python3 scripts/check-learning-styles.py` 并实际预览，避免课程补丁重新混入公共文件。
 - giscus 使用 comments-config.js 中的公开标识，不在源码中保存密钥。
 - 全站使用 Cloudflare Web Analytics；新增、复制或修改 HTML 页面时，须在 `</body>` 前保留现有统计代码，每页恰好一份，沿用现有公开站点 token，不写入账户 API 密钥。修改文章生成逻辑时，同步维护 scripts/render-blog-issues.py 中的 `ANALYTICS` 和 `FOOTER`，确保重新生成后仍保留统计。
 - SEO 配置见 content/seo.json；新增、删除页面或调整标题、摘要、作者信息后，运行 `python3 scripts/update-seo.py`，并用 `--check` 检查元数据与 sitemap 是否同步。文章生成脚本会自动执行此步骤；部署仍直接使用静态文件。

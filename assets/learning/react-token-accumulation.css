@@ -1,8 +1,56 @@
-.lesson-react-token-accumulation{margin:0;background:var(--code);font-family:inherit;color:var(--muted);}
-.lesson-react-token-accumulation header{display:flex;align-items:center;gap:12px;padding:14px 24px;background:var(--code);position:sticky;top:0;z-index:2;border-bottom:1px solid var(--line);}
-.lesson-react-token-accumulation button,.lesson-react-token-accumulation a{font:inherit;border:1px solid var(--line);border-radius:4px;padding:8px 16px;background:var(--code);color:var(--muted);cursor:pointer;text-decoration:none;}
-.lesson-react-token-accumulation span{font-size:14px;}
-.lesson-react-token-accumulation [data-lesson-main]{max-width:1500px;margin:20px auto;background:var(--code);box-shadow:none;}
-.lesson-react-token-accumulation svg{display:block;width:100%;height:auto;}
-.lesson-react-token-accumulation text{font-family:inherit;}
-.lesson-react-token-accumulation .num{font-variant-numeric:tabular-nums;}
+/* react-token-accumulation：本课程布局、图示和状态；公共约定见 content/learning-styles-guide.md。 */
+.lesson-react-token-accumulation { margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; font-family: inherit; }
+.lesson-react-token-accumulation header { align-items: center; top: 0px; z-index: 2; border-bottom: 1px solid var(--line); }
+.lesson-react-token-accumulation button {
+  font: inherit;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding-top: 8px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  background: var(--code);
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: none;
+}
+.lesson-react-token-accumulation span { font-size: 14px; }
+.lesson-react-token-accumulation [data-lesson-main] {
+  max-width: 1500px;
+  margin-top: 20px;
+  margin-right: auto;
+  margin-bottom: 20px;
+  margin-left: auto;
+  background: var(--code);
+  box-shadow: none;
+}
+.lesson-react-token-accumulation svg { display: block; width: 100%; height: auto; }
+.lesson-react-token-accumulation text { font-family: inherit; }
+.lesson-react-token-accumulation .num { font-variant-numeric: tabular-nums; }
+.lesson-react-token-accumulation .react-diagram {
+  overflow-x: auto;
+  margin-top: 16px;
+  margin-right: 0px;
+  margin-bottom: 16px;
+  margin-left: 0px;
+  background: transparent;
+  box-shadow: none;
+}
+.lesson-react-token-accumulation .react-diagram svg { min-width: 900px; width: 100%; height: auto; display: block; }
+.learning-content.lesson-react-token-accumulation header {
+  display: flex;
+  position: static;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 16px;
+  padding-left: 0px;
+  background: transparent;
+}
+.learning-content.lesson-react-token-accumulation header span { font-size: 12px; color: var(--muted); }
+.lesson-react-token-accumulation [data-lesson-main].react-diagram { overflow-x: auto; }
+@media print {
+  .lesson-react-token-accumulation .react-diagram svg { min-width: 0px; }
+  .lesson-react-token-accumulation .react-diagram { overflow: visible; }
+}

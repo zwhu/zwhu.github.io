@@ -1,46 +1,150 @@
-.lesson-pi-compaction #pi-compaction-explainer{
-      color:var(--foreground);
-      width:100%;
-    }
-.lesson-pi-compaction #pi-compaction-explainer .pc-controls{ margin-bottom:18px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-flow-wrap{ margin:8px 0 16px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-flow{ width:100%; height:auto; display:block; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-flow text{ fill:var(--foreground); font-family:inherit; font-weight:400; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-flow .muted-label{ fill:var(--muted-foreground); }
-.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-node{ fill:color-mix(in srgb, var(--muted) 55%, transparent); stroke:var(--border); stroke-width:1.2; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-node.active{ fill:color-mix(in srgb, var(--viz-series-1) 18%, var(--card)); stroke:var(--viz-series-1); stroke-width:2; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-arrow{ stroke:var(--muted-foreground); stroke-width:1.4; fill:none; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-arrow.active{ stroke:var(--viz-series-1); stroke-width:2; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-step-detail{ min-height:62px; margin:8px 0 18px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-step-detail strong{ font-weight:500; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-context-bar{ display:flex; min-height:46px; margin:10px 0 6px; overflow:hidden; border-radius:4px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-segment{ display:flex; align-items:center; justify-content:center; padding:6px; text-align:center; transition:width 280ms ease; min-width:0; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-segment span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-old{ background:var(--code); color:var(--foreground); }
-.lesson-pi-compaction #pi-compaction-explainer .pc-summary{ background:var(--code); color:var(--foreground); }
-.lesson-pi-compaction #pi-compaction-explainer .pc-kept{ background:var(--code); color:var(--foreground); }
-.lesson-pi-compaction #pi-compaction-explainer .pc-reserve{ background:color-mix(in srgb, var(--muted) 72%, transparent); color:var(--muted-foreground); }
-.lesson-pi-compaction #pi-compaction-explainer .pc-legend{ display:flex; flex-wrap:wrap; gap:12px; margin-bottom:18px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-legend-item{ display:inline-flex; align-items:center; gap:6px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-swatch{ width:11px; height:11px; border-radius:4px; display:inline-block; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-example-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:10px 0 20px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-example-grid .card{ min-width:0; }
-.lesson-pi-compaction #pi-compaction-explainer pre{ white-space:pre-wrap; overflow-wrap:anywhere; margin:8px 0 0; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-entry-tree{ margin:12px 0 20px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-entry-row{ display:grid; grid-template-columns:repeat(10, minmax(46px, 1fr)); gap:4px; align-items:stretch; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-entry{ padding:8px 4px; text-align:center; background:color-mix(in srgb, var(--muted) 58%, transparent); border-radius:4px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-entry.compacted{ opacity:.48; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-entry.kept{ background:var(--code); }
-.lesson-pi-compaction #pi-compaction-explainer .pc-entry.compaction{ background:var(--code); }
-.lesson-pi-compaction #pi-compaction-explainer .pc-session-context{ margin-top:8px; padding:10px 0; color:var(--foreground); }
-.lesson-pi-compaction #pi-compaction-explainer .pc-session-context code{ display:inline-block; margin:3px 3px 3px 0; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-callout{ border-left:3px solid var(--viz-series-1); padding-left:12px; margin:12px 0 20px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-function{ white-space:nowrap; }
-.lesson-pi-compaction #pi-compaction-explainer a{ color:var(--foreground); text-decoration:underline; text-decoration-color:var(--muted-foreground); text-underline-offset:2px; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-footnote{ margin-top:10px; }
-@media (max-width: 620px){.lesson-pi-compaction #pi-compaction-explainer .pc-example-grid{ grid-template-columns:1fr; }
-.lesson-pi-compaction #pi-compaction-explainer .pc-entry-row{ grid-template-columns:repeat(5, minmax(46px, 1fr)); }
-.lesson-pi-compaction #pi-compaction-explainer .pc-flow .node-sub{ display:none; }
+/* pi-compaction：本课程布局、图示和状态；公共约定见 content/learning-styles-guide.md。 */
+.lesson-pi-compaction #pi-compaction-explainer { color: var(--text); width: 100%; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-controls { margin-bottom: 18px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow-wrap { margin-top: 8px; margin-right: 0px; margin-bottom: 16px; margin-left: 0px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow { width: 100%; height: auto; display: block; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow text { fill: var(--text); font-family: inherit; font-weight: 400; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .muted-label { fill: var(--muted); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-node { stroke-width: 1.2; fill: var(--code); stroke: var(--line); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-node.active { stroke-width: 2; fill: rgb(234, 214, 206); stroke: var(--accent); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-arrow { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-flow .flow-arrow.active { stroke: var(--accent); stroke-width: 2; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-step-detail {
+  min-height: 62px;
+  margin-top: 8px;
+  margin-right: 0px;
+  margin-bottom: 18px;
+  margin-left: 0px;
 }
-@media (prefers-reduced-motion: reduce){.lesson-pi-compaction #pi-compaction-explainer .pc-segment{ transition:none; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-step-detail strong { font-weight: 500; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-context-bar {
+  display: flex;
+  min-height: 46px;
+  margin-top: 10px;
+  margin-right: 0px;
+  margin-bottom: 6px;
+  margin-left: 0px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.lesson-pi-compaction #pi-compaction-explainer .pc-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 6px;
+  padding-right: 6px;
+  padding-bottom: 6px;
+  padding-left: 6px;
+  text-align: center;
+  transition: width 280ms;
+  min-width: 0px;
+}
+.lesson-pi-compaction #pi-compaction-explainer .pc-segment span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-old { background: rgb(228, 222, 212); color: var(--text); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-summary { background: rgb(234, 214, 206); color: var(--text); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-kept { background: rgb(214, 203, 189); color: var(--text); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-reserve { background: var(--line); color: var(--text); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-swatch { width: 11px; height: 11px; border-radius: 4px; display: inline-block; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-example-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+  margin-right: 0px;
+  margin-bottom: 20px;
+  margin-left: 0px;
+}
+.lesson-pi-compaction #pi-compaction-explainer .pc-example-grid .card { min-width: 0px; }
+.lesson-pi-compaction #pi-compaction-explainer pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-top: 8px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+}
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry-tree { margin-top: 12px; margin-right: 0px; margin-bottom: 20px; margin-left: 0px; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry-row {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(46px, 1fr));
+  gap: 4px;
+  align-items: stretch;
+}
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry {
+  padding-top: 8px;
+  padding-right: 4px;
+  padding-bottom: 8px;
+  padding-left: 4px;
+  text-align: center;
+  border-radius: 4px;
+  background: var(--code);
+}
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry.compacted { opacity: 0.65; }
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry.kept { background: rgb(228, 222, 212); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-entry.compaction { background: rgb(234, 214, 206); }
+.lesson-pi-compaction #pi-compaction-explainer .pc-session-context {
+  margin-top: 8px;
+  padding-top: 10px;
+  padding-right: 0px;
+  padding-bottom: 10px;
+  padding-left: 0px;
+  color: var(--text);
+}
+.lesson-pi-compaction #pi-compaction-explainer .pc-session-context code {
+  display: inline-block;
+  margin-top: 3px;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  margin-left: 0px;
+}
+.lesson-pi-compaction #pi-compaction-explainer .pc-callout {
+  border-left: 3px solid var(--accent);
+  padding-left: 12px;
+  margin-top: 12px;
+  margin-right: 0px;
+  margin-bottom: 20px;
+  margin-left: 0px;
+}
+.lesson-pi-compaction #pi-compaction-explainer .pc-function { white-space: nowrap; }
+.lesson-pi-compaction #pi-compaction-explainer a {
+  color: var(--text);
+  text-decoration-line: underline;
+  text-decoration-thickness: initial;
+  text-decoration-style: initial;
+  text-decoration-color: var(--muted);
+  text-underline-offset: 2px;
+}
+.lesson-pi-compaction #pi-compaction-explainer .pc-footnote { margin-top: 10px; }
+.lesson-pi-compaction .viz-grid { display: grid; grid-template-columns: repeat(3, minmax(0px, 1fr)); gap: 12px; }
+.lesson-pi-compaction .card {
+  padding-top: 16px;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.lesson-pi-compaction .card h3 { margin-top: 0px; font-size: 14px; }
+.lesson-pi-compaction .viz-stat { font-size: 12px; }
+.lesson-pi-compaction .viz-stat-value { font: 500 20px / 1.8 ui-monospace, Menlo, monospace; color: var(--accent); }
+.lesson-pi-compaction .pc-flow-wrap, .lesson-pi-compaction .table-responsive { max-width: 100%; overflow-x: auto; }
+.lesson-pi-compaction .pc-flow { min-width: 820px; }
+@media (max-width: 620px) {
+  .lesson-pi-compaction #pi-compaction-explainer .pc-example-grid { grid-template-columns: 1fr; }
+  .lesson-pi-compaction #pi-compaction-explainer .pc-entry-row { grid-template-columns: repeat(5, minmax(46px, 1fr)); }
+  .lesson-pi-compaction #pi-compaction-explainer .pc-flow .node-sub { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lesson-pi-compaction #pi-compaction-explainer .pc-segment { transition: none; }
+}
+@media (max-width: 560px) {
+  .lesson-pi-compaction .viz-grid { grid-template-columns: 1fr; }
+}
+@media print {
+  .lesson-pi-compaction .pc-flow { min-width: 0px; }
+}
+@media (max-width: 560px) {
+  .lesson-pi-compaction section.card { padding: 20px 0; }
 }
