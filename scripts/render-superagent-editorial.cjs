@@ -19,7 +19,7 @@ assert(Math.abs((p95[0]-p95[1])/p95[0]-.45862)<.0001);
 assert(Math.abs(cache[1]/cache[0]-2.14695)<.0001);
 body=text(24,62,'慢端完成更快，缓存读取更多',27,ink,600);
 body+=`<line x1="24" y1="85" x2="816" y2="85" stroke="${line}"/><line x1="423" y1="107" x2="423" y2="289" stroke="${line}"/>`;
-body+=text(24,122,'p95 完成耗时',15,muted)+text(456,122,'缓存读取量',15,muted);
+body+=text(24,122,'p95 完成耗时',15,muted)+text(456,122,'缓存读取量（token）',15,muted);
 function bar(x,y,w,value,label,color){return text(x,y,label,13,muted)+`<rect x="${x}" y="${y+13}" width="${w}" height="17" fill="${color}"/>`+text(x+w+8,y+27,value,14,ink,500)}
 body+=bar(24,161,310,'29.0 分钟','单会话 · 优先委派',line)+bar(24,233,310*15.7/29,'15.7 分钟','Super-agent',accent);
 body+=bar(456,161,137,'1,082 万','单会话 · 优先委派',line)+bar(456,233,295,'2,323 万','Super-agent',accent);
@@ -29,7 +29,7 @@ fs.writeFileSync(path.join(dir,'tradeoff.svg'),shell(840,326,'调度改善与缓
 body=text(20,65,'慢端更快，缓存读取更多',23,ink,600);
 body+=`<line x1="20" y1="88" x2="390" y2="88" stroke="${line}"/>`+text(20,118,'p95 完成耗时',14,muted);
 body+=bar(20,151,250,'29.0 分钟','单会话 · 优先委派',line)+bar(20,213,250*15.7/29,'15.7 分钟','Super-agent',accent)+text(20,272,'约缩短 46%',15,accent,500);
-body+=`<line x1="20" y1="294" x2="390" y2="294" stroke="${line}"/>`+text(20,326,'缓存读取量',14,muted);
+body+=`<line x1="20" y1="294" x2="390" y2="294" stroke="${line}"/>`+text(20,326,'缓存读取量（token）',14,muted);
 body+=bar(20,359,116,'1,082 万','单会话 · 优先委派',line)+bar(20,421,250,'2,323 万','Super-agent',accent)+text(20,480,'约为 2.15 倍',15,accent,500);
 
 fs.writeFileSync(path.join(dir,'tradeoff-mobile.svg'),shell(410,503,'调度改善与缓存读取代价（移动端）','与优先委派单会话比较，p95缩短约46%，缓存读取约为2.15倍；每方案5次，未测代码质量与人工收益。',body));
