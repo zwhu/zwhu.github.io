@@ -1,4 +1,4 @@
-<!--
+/*
 Architecture Canvas adapted for zwhu.github.io.
 MIT License
 
@@ -21,71 +21,42 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
 
--->
-<!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{TITLE}}</title>
-
+// Generated scene is inserted by scripts/render-superagent-diagrams.cjs.
+export function mountArchitecture(host, { shareView = false } = {}) {
+  if (host.shadowRoot) return;
+  const root = host.attachShadow({ mode: 'open' });
+  root.innerHTML = `
 <style>
-  :root, html[data-theme="dark"] {
-    color-scheme: dark;
-    --bg: #0E1217;
-    --chrome: rgba(18, 23, 30, 0.82);
-    --chrome-border: #242C38;
-    --ink: #E7EAEE;
-    --ink-mut: #9AA4B2;
-    --ink-dim: #6E7A88;
-    --accent: #7DD3FC;
-    --hover: rgba(125,211,252,0.10);
-    --press: rgba(125,211,252,0.18);
-    --kbd-bg: rgba(255,255,255,0.03);
-    --bar-shadow: 0 8px 28px rgba(0,0,0,0.45);
-    --hint-faded: 0.28;
-  }
-  html[data-theme="light"] {
-    color-scheme: light;
-    --bg: #faf8f3;
-    --chrome: rgba(250, 248, 243, 0.96);
-    --chrome-border: #e6e2da;
-    --ink: #292825;
-    --ink-mut: #77746e;
-    --ink-dim: #77746e;
-    --accent: #a64335;
-    --hover: rgba(166,67,53,0.07);
-    --press: rgba(166,67,53,0.12);
-    --kbd-bg: rgba(15,23,42,0.06);
-    --bar-shadow: none;
-    /* Dimming light-on-light washes out far faster than dark-on-dark, so the
-       resting hint needs more of itself left to stay readable. */
-    --hint-faded: 0.75;
+
+  :host {
+    display: block; position: relative; height: 100%; overflow: hidden;
+    color-scheme: light; contain: layout paint;
+    --bg: #faf8f3; --chrome: rgba(250,248,243,.96);
+    --chrome-border: #e6e2da; --ink: #292825; --ink-mut: #77746e;
+    --ink-dim: #77746e; --accent: #a64335;
+    --hover: rgba(166,67,53,.07); --press: rgba(166,67,53,.12);
+    --kbd-bg: rgba(15,23,42,.06); --hint-faded: .75;
+    background: var(--bg); color: var(--ink);
+    font: 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
   }
   * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0; height: 100%; overflow: hidden;
-    background: var(--bg); color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  #stage { position: fixed; inset: 0; }
+  #stage { position: absolute; inset: 0; }
   #c { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
   #c.panning { cursor: grabbing; }
   #c.pointing { cursor: pointer; }
 
   /* ---- floating chrome ---- */
   .bar {
-    position: fixed; z-index: 10;
+    position: absolute; z-index: 10;
     display: flex; align-items: center; gap: 2px;
     padding: 5px;
     background: var(--chrome);
     border: 1px solid var(--chrome-border);
-    border-radius: 11px;
+    border-radius: 4px;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    box-shadow: var(--bar-shadow);
   }
   #toolbar { bottom: 18px; left: 50%; transform: translateX(-50%); }
   button {
@@ -93,7 +64,7 @@ SOFTWARE.
     color: var(--ink-mut);
     font: inherit; font-size: 11px; font-weight: 500;
     height: 28px; min-width: 28px; padding: 0 9px;
-    border-radius: 7px; cursor: pointer;
+    border-radius: 4px; cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center;
     transition: background 120ms ease, color 120ms ease;
   }
@@ -106,20 +77,9 @@ SOFTWARE.
     text-align: center; font-variant-numeric: tabular-nums; user-select: none;
   }
 
-  /* ---- title plate ---- */
-  #plate {
-    position: fixed; top: 16px; left: 18px; z-index: 10;
-    pointer-events: none; user-select: none;
-  }
-  #plate .k { font-size: 9.5px; letter-spacing: 2.2px; color: var(--accent); opacity: 0.75; font-weight: 700; }
-  #plate .n { font-size: 12px; color: var(--ink-dim); margin-top: 5px; }
-  #plate .n b { color: var(--ink-mut); font-weight: 500; }
-  #plate { transition: opacity 220ms ease; }
-  #plate.hidden { opacity: 0; }
-
   /* ---- hint ---- */
   #hint {
-    position: fixed; top: 18px; right: 18px; z-index: 10;
+    position: absolute; top: 18px; right: 18px; z-index: 10;
     font-size: 10.5px; color: var(--ink-dim); text-align: right;
     line-height: 1.75; pointer-events: none; user-select: none;
     transition: opacity 400ms ease;
@@ -133,10 +93,10 @@ SOFTWARE.
 
   /* ---- focus readout ---- */
   #readout {
-    position: fixed; bottom: 18px; left: 18px; z-index: 10;
+    position: absolute; bottom: 62px; left: 18px; z-index: 10;
     max-width: 320px; padding: 10px 13px;
     background: var(--chrome); border: 1px solid var(--chrome-border);
-    border-radius: 11px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-radius: 4px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
     opacity: 0; transform: translateY(6px); pointer-events: none;
     transition: opacity 160ms ease, transform 160ms ease;
   }
@@ -153,28 +113,15 @@ SOFTWARE.
 
   @media (max-width: 720px) {
     #hint { display: none; }
-    #plate .n { display: none; }
-    #readout { max-width: calc(100vw - 36px); bottom: 60px; }
+    #readout { max-width: calc(100% - 36px); bottom: 60px; }
     #toolbar { bottom: 12px; }
   }
-button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.article-return{position:fixed;top:12px;left:18px;z-index:11;font-size:12px;color:var(--ink-mut);text-decoration:none;background:var(--bg);padding:5px 0}
-#plate{top:48px}
-button[hidden]{display:none!important}
+button:focus-visible,canvas:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
 button{white-space:nowrap}
-@media(max-width:720px){#plate{display:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
-</head>
-<body>
 
-<div id="stage"><canvas id="c" aria-label="Super-agent 架构画布：缩放、拖动或点击节点查看关系。完整文字说明见文章。"></canvas></div>
-
-<a class="article-return" href="../../superagent.html">← 返回文章</a>
-<div id="plate">
-  <div class="k">{{KICKER}}</div>
-  <div class="n">{{SUB_HTML}}</div>
-</div>
+<div id="stage"><canvas id="c" tabindex="0" aria-label="Super-agent 架构画布：缩放、拖动或点击节点查看关系。完整文字说明见文章。"></canvas></div>
 
 <div id="hint">
   <div>拖动画布平移 · 双指缩放</div>
@@ -199,15 +146,12 @@ button{white-space:nowrap}
   <button id="bFit" title="适应画布（0）">适应</button>
   <button id="bOne" title="原始大小（1）">1:1</button>
   <div class="sep"></div>
-  <button hidden id="bTheme" title="Light theme (t)" aria-label="切换主题"></button>
-  <button id="bPng" title="导出 PNG">
+  <button id="bPng" title="导出 PNG" aria-label="导出 PNG">
     <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
   </button>
 </div>
+`;
 
-<script>
-(function () {
-  'use strict';
 
   // ==========================================================================
   // FIXED VISUAL LANGUAGE — palette and text styles shared by every diagram
@@ -260,10 +204,9 @@ button{white-space:nowrap}
   // Mapping a light value again returns it unchanged, so col() is idempotent.
   for (const v of Object.values(LIGHT)) LIGHT[v.toLowerCase()] = v;
 
-  let theme = 'light';
 
   function col(c) {
-    if (theme === 'dark' || !c) return c;
+    if (!c) return c;
     const k = String(c).toLowerCase();
     return k in LIGHT ? LIGHT[k] : (LIGHT[k] = darken(c));
   }
@@ -311,14 +254,13 @@ button{white-space:nowrap}
   // VIEW STATE
   // ==========================================================================
 
-  const canvas = document.getElementById('c');
+  const canvas = root.getElementById('c');
   // `ctx` is reassigned (not just mutated) during PNG export so the whole
   // render path can be reused against an offscreen surface — hence `let`.
   let ctx = canvas.getContext('2d');
-  const readout = document.getElementById('readout');
-  const zoomLabel = document.getElementById('zoomLabel');
-  const hint = document.getElementById('hint');
-  const plate = document.getElementById('plate');
+  const readout = root.getElementById('readout');
+  const zoomLabel = root.getElementById('zoomLabel');
+  const hint = root.getElementById('hint');
 
   const view = { k: 1, x: 0, y: 0 };   // world → screen: p * k + (x, y)
   let vw = 0, vh = 0, dpr = 1;
@@ -389,21 +331,13 @@ button{white-space:nowrap}
   // button and the readout agree.
   function syncZoom() {
     zoomLabel.textContent = Math.round(view.k * 100) + '%';
-    // The plate repeats the diagram's own title, so hide it whenever that
-    // title is actually on screen.
-    const titleOnScreen = worldVisible(160, 60, 620, 100);
-    plate.classList.toggle('hidden', titleOnScreen);
     writeHash();
-  }
-
-  function worldVisible(x, y, w, h) {
-    const x0 = x * view.k + view.x, y0 = y * view.k + view.y;
-    return x0 > -8 && y0 > -8 && x0 + w * view.k < vw + 8 && y0 + h * view.k < vh + 8;
   }
 
   // ---- shareable view state: #k,x,y --------------------------------------
   let hashTimer = 0;
   function writeHash() {
+    if (!shareView) return;
     clearTimeout(hashTimer);
     hashTimer = setTimeout(() => {
       const h = '#' + [view.k.toFixed(3), Math.round(view.x), Math.round(view.y)].join(',');
@@ -412,6 +346,7 @@ button{white-space:nowrap}
   }
 
   function readHash() {
+    if (!shareView) return false;
     const m = /^#([\d.]+),(-?\d+),(-?\d+)$/.exec(location.hash);
     if (!m) return false;
     const k = clamp(parseFloat(m[1]), MIN_K, MAX_K);
@@ -579,9 +514,7 @@ button{white-space:nowrap}
     if (spacing < 7) return;
     const alpha = clamp((spacing - 7) / 18, 0, 1);
     ctx.save();
-    ctx.fillStyle = theme === 'dark'
-      ? 'rgba(148,163,184,' + (0.13 * alpha).toFixed(4) + ')'
-      : 'rgba(15,23,42,' + (0.10 * alpha).toFixed(4) + ')';
+    ctx.fillStyle = 'rgba(15,23,42,' + (0.10 * alpha).toFixed(4) + ')';
     const ox = view.x % spacing, oy = view.y % spacing;
     const r = view.k > 1.4 ? 1.15 : 1;
     for (let x = ox; x < vw + spacing; x += spacing) {
@@ -767,6 +700,7 @@ button{white-space:nowrap}
   let pinchDist = 0, pinchK = 1;
 
   canvas.addEventListener('pointerdown', (e) => {
+    canvas.focus({ preventScroll: true });
     canvas.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, [e.clientX, e.clientY]);
     if (pointers.size === 2) {
@@ -859,6 +793,8 @@ button{white-space:nowrap}
     } else if (e.ctrlKey || e.metaKey) {
       return;
     } else {
+      // Leave normal article scrolling available until the reader focuses the diagram.
+      if (!shareView && root.activeElement !== canvas) return;
       e.preventDefault();
       const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? Math.max(vw, vh) : 1;
       const rawX = e.deltaX * unit, rawY = e.deltaY * unit;
@@ -899,13 +835,12 @@ button{white-space:nowrap}
   });
 
   // ---- keyboard
-  window.addEventListener('keydown', (e) => {
+  root.addEventListener('keydown', (e) => {
     if (e.metaKey || e.ctrlKey) return;
     const pan = e.shiftKey ? 220 : 70;
     switch (e.key) {
       case '0': fit(true); break;
       case '1': actualSize(); break;
-      case 't': case 'T': toggleTheme(); break;
       case '+': case '=': zoomAt(view.k * 1.3, vw / 2, vh / 2, true); break;
       case '-': case '_': zoomAt(view.k / 1.3, vw / 2, vh / 2, true); break;
       case 'Escape':
@@ -921,49 +856,12 @@ button{white-space:nowrap}
   });
 
   // ---- toolbar
-  document.getElementById('bIn').onclick  = () => zoomAt(view.k * 1.3, vw / 2, vh / 2, true);
-  document.getElementById('bOut').onclick = () => zoomAt(view.k / 1.3, vw / 2, vh / 2, true);
-  document.getElementById('bFit').onclick = () => fit(true);
-  document.getElementById('bOne').onclick = () => actualSize();
-  const pngButton = document.getElementById('bPng');
+  root.getElementById('bIn').onclick  = () => zoomAt(view.k * 1.3, vw / 2, vh / 2, true);
+  root.getElementById('bOut').onclick = () => zoomAt(view.k / 1.3, vw / 2, vh / 2, true);
+  root.getElementById('bFit').onclick = () => fit(true);
+  root.getElementById('bOne').onclick = () => actualSize();
+  const pngButton = root.getElementById('bPng');
   pngButton.onclick = exportPng;
-
-  // ---- theme switcher -----------------------------------------------------
-  const SUN = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/>' +
-    '<path d="M12 2.6v2.3M12 19.1v2.3M4.5 4.5l1.6 1.6M17.9 17.9l1.6 1.6' +
-    'M2.6 12h2.3M19.1 12h2.3M4.5 19.5l1.6-1.6M17.9 6.1l1.6-1.6"/></svg>';
-  const MOON = '<svg viewBox="0 0 24 24">' +
-    '<path d="M20.5 14.6A8.6 8.6 0 019.4 3.5a8.7 8.7 0 1011.1 11.1z"/></svg>';
-
-  const themeButton = document.getElementById('bTheme');
-
-  function setTheme(t, remember) {
-    t = "light";
-    theme = t;
-    document.documentElement.setAttribute('data-theme', t);
-    themeButton.innerHTML = t === 'dark' ? SUN : MOON;
-    themeButton.title = (t === 'dark' ? 'Light' : 'Dark') + ' theme (t)';
-    if (remember) { try { localStorage.setItem('ac-theme', t); } catch (e) {} }
-    schedule();
-  }
-  function toggleTheme() { setTheme(theme === 'dark' ? 'light' : 'dark', true); }
-  themeButton.onclick = toggleTheme;
-
-  // The <head> script already resolved this; adopt it rather than re-deciding.
-  setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark', false);
-
-  // Review hosts (artifact.cafe among them) embed the artifact in an iframe
-  // sandboxed without `allow-downloads`, which makes an <a download> click a
-  // silent no-op. Detect the frame and open the PNG in a new tab instead —
-  // `allow-popups-to-escape-sandbox` lets that through, and the viewer saves
-  // it from there. Opened standalone, the one-click download is unchanged.
-  let embedded = false;
-  try {
-    embedded = window.self !== window.top;
-  } catch (e) {
-    embedded = true;   // cross-origin parent — same sandbox story
-  }
-  if (embedded) pngButton.title = '在新窗口打开 PNG';
 
   // Renders the full diagram at 2× into an offscreen canvas, ignoring the
   // current pan/zoom and any focus state.
@@ -985,21 +883,13 @@ button{white-space:nowrap}
     }
 
     off.toBlob((blob) => {
+      if (!blob) return;
       const url = URL.createObjectURL(blob);
-      // The new tab keeps reading from the blob URL after this handler ends,
-      // so hold it longer than the download path needs.
-      let ttl = 4000;
-      if (!embedded || !window.open(url, '_blank')) {
-        // Standalone, or the popup was blocked too: the anchor is still the
-        // best shot, and it costs nothing when it fails.
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = '{{SLUG}}@2x.png';
-        a.click();
-      } else {
-        ttl = 60000;
-      }
-      setTimeout(() => URL.revokeObjectURL(url), ttl);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '{{SLUG}}@2x.png';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
     }, 'image/png');
   }
 
@@ -1007,23 +897,15 @@ button{white-space:nowrap}
   // BOOT
   // ==========================================================================
 
-  window.addEventListener('resize', resize);
   resize();
   if (!readHash()) fit(false);
   schedule();
-
-  // Canvas text is rasterised at draw time, so the first paint would use the
-  // fallback stack. Redraw once the webfont actually lands.
-  if (document.fonts) {
-    const faces = ["400 11px 'JetBrains Mono'", "600 13.5px 'JetBrains Mono'",
-                   "700 28px 'JetBrains Mono'", "italic 400 10.5px 'JetBrains Mono'"];
-    Promise.all(faces.map(f => document.fonts.load(f).catch(() => {})))
-      .then(() => schedule());
-    if (document.fonts.ready) document.fonts.ready.then(() => schedule());
-  }
-
+  // Observe the component rather than the whole browser viewport.
+  new ResizeObserver(() => {
+    if (!canvas.clientWidth || !canvas.clientHeight) return;
+    resize();
+    fit(false);
+  }).observe(host);
+  if (document.fonts) document.fonts.ready.then(schedule);
   setTimeout(() => hint.classList.add('faded'), 6000);
-})();
-</script>
-</body>
-</html>
+}

@@ -11,16 +11,32 @@ const data = vm.runInNewContext(scene + '\n({W,H,PLANES,BANDS,BOXES,EDGES,TEXTS,
 assert.equal(new Set(data.BOXES.map(b => b.id)).size, data.BOXES.length);
 const ids = new Set([...data.BOXES, ...data.BANDS].map(b => b.id));
 assert(data.EDGES.every(e => ids.has(e.from) && ids.has(e.to)));
-const template = fs.readFileSync(path.join(__dirname, 'vendor/architecture-canvas/template.html'), 'utf8');
+const template = fs.readFileSync(path.join(__dirname, 'vendor/architecture-canvas/template.js'), 'utf8');
 const analytics = fs.readFileSync(path.join(root, 'ub-mode-bench.html'), 'utf8').match(/<!-- Cloudflare Web Analytics -->[\s\S]*?<!-- End Cloudflare Web Analytics -->/)[0];
-const html = template.replace('{{TITLE}}', 'Super-agent 交互架构图 · zwhu')
-  .replace('{{KICKER}}', 'SUPER-AGENT · 公开原型 6337fc8')
-  .replace('{{SUB_HTML}}', '接收事件 → 判断归属 → 执行与续办')
+const moduleSource = template
   .replace('{{SLUG}}', 'superagent-architecture')
-  .replace('{{SCENE}}', () => scene)
-  .replace('</head>', '<link rel="icon" href="../../favicon.svg" type="image/svg+xml">\n<link rel="canonical" href="https://zwhu.github.io/assets/superagent/index.html">\n<meta name="robots" content="noindex, follow">\n</head>')
-  .replace('</body>', analytics + '\n</body>');
-fs.writeFileSync(path.join(dir, 'index.html'), html);
+  .replace('{{SCENE}}', () => scene);
+const checking = process.argv.includes('--check');
+function write(name, value) {
+  const target = path.join(dir, name);
+  if (checking) assert.equal(fs.readFileSync(target, 'utf8'), value, `${name} is stale`);
+  else fs.writeFileSync(target, value);
+}
+write('canvas.js', moduleSource);
+// Keep existing direct links working; the article mounts the same module inline.
+write('index.html', `<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Super-agent 交互架构图 · zwhu</title>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://zwhu.github.io/assets/superagent/index.html">
+<meta name="robots" content="noindex, follow">
+<style>body{margin:0;background:#faf8f3;color:#292825;font:12px/1.8 system-ui}a{display:block;padding:10px 18px;color:#77746e}#architecture{height:calc(100dvh - 42px)}</style>
+</head><body><a href="../../superagent.html">← 返回文章</a>
+<div id="architecture"></div>
+<script type="module">import { mountArchitecture } from './canvas.js';mountArchitecture(document.getElementById('architecture'), {shareView:true});</script>
+${analytics}
+</body></html>
+`);
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));
 const colors = {bg:'#faf8f3', text:'#292825', muted:'#77746e', accent:'#a64335', line:'#e6e2da', code:'#f0ede6'};
@@ -30,7 +46,7 @@ function text(x, y, value, size = 14, color = colors.text, weight = 400, anchor 
 }
 function svg(name, width, height, title, desc, body) {
   const value = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="title desc"><title id="title">${esc(title)}</title><desc id="desc">${esc(desc)}</desc><defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10" fill="${colors.muted}"/></marker></defs><g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei,sans-serif"><rect width="100%" height="100%" fill="${colors.bg}"/>${body}</g></svg>\n`;
-  fs.writeFileSync(path.join(dir, name + '.svg'), value);
+  write(name + '.svg', value);
 }
 let body = '';
 for (const band of data.BANDS) {
@@ -112,4 +128,4 @@ body = text(16,29,'事务保存，提交后执行',18,colors.text,600)
   + text(16,519,'稳定 ID 去重，generation 保护新动作。',13,colors.muted)
   + text(16,544,'恢复时仍需核对远端真实状态。',13,colors.muted);
 svg('consistency-mobile',330,570,'事务与外部动作（移动端）','状态和动作意图一起提交，外部动作提交后执行，失败重试。',body);
-console.log('Generated interactive HTML, full SVG and reading projection.');
+console.log(`${checking ? 'Checked' : 'Generated'} interactive module, HTML, full SVG and reading projection.`);
