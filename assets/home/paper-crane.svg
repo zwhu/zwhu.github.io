@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="300" viewBox="0 0 360 300" fill="none" role="img" aria-labelledby="title desc">
+<title id="title">纸鹤轻飞</title><desc id="desc">暖白纸鹤，朱砂红折痕，双翼缓慢扇动，轻轻上下起伏。</desc>
+<style>
+.paper{fill:#faf8f3;stroke:#a64335;stroke-width:1.15;stroke-linejoin:round}
+.fold{fill:none;stroke:#a64335;stroke-width:.75;opacity:.45}
+.shade{fill:#f0ede6;stroke:#a64335;stroke-width:1.15;stroke-linejoin:round}
+.crane{transform-origin:180px 156px;animation:float 4.8s ease-in-out infinite}
+.wing-back{transform-origin:187px 155px;animation:back 2.4s ease-in-out infinite}
+.wing-front{transform-origin:177px 155px;animation:front 2.4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(5px,3px) rotate(-3deg)}50%{transform:translate(-5px,-8px) rotate(1deg)}}
+@keyframes back{0%,100%{transform:rotate(0deg) scaleY(1)}50%{transform:rotate(-8deg) scaleY(.26)}}
+@keyframes front{0%,100%{transform:rotate(0deg) scaleY(.95)}50%{transform:rotate(8deg) scaleY(.22)}}
+@media(prefers-reduced-motion:reduce){.crane,.wing-back,.wing-front{animation:none}}
+</style>
+<g class="crane">
+  <!-- 远侧翼：三角纸面及其折脊。 -->
+  <g class="wing-back">
+    <path class="shade" d="M179 158 254 65 240 132 201 167Z"/>
+    <path class="fold" d="M188 157 254 65 215 143Z"/>
+  </g>
+  <!-- 长颈、折下的头与细长喙。 -->
+  <path class="paper" d="M176 164 153 149 137 113 120 121 94 119 123 107 146 101 169 141Z"/>
+  <path class="fold" d="M123 107 137 113 158 151 176 164M137 113 146 101"/>
+  <!-- 尾尖向后收拢，主体沿中央折线收成菱形。 -->
+  <path class="paper" d="M190 150 263 131 225 161 196 172Z"/>
+  <path class="fold" d="M263 131 204 162"/>
+  <path class="shade" d="M153 149 191 140 224 158 189 177Z"/>
+  <path class="fold" d="M153 149 190 160 224 158M190 160 189 177"/>
+  <!-- 近侧翼：不同明度的折面保持纸鹤轮廓清晰。 -->
+  <g class="wing-front">
+    <path class="paper" d="M188 160 112 60 125 133 166 170Z"/>
+    <path class="shade" d="M188 160 112 60 151 142Z"/>
+    <path class="fold" d="M125 133 151 142 166 170"/>
+  </g>
+</g>
+</svg>

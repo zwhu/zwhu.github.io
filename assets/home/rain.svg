@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="300" viewBox="0 0 360 300" fill="none" aria-hidden="true">
+<style>
+.drop{stroke:#7f8986;stroke-linecap:round;stroke-width:1.1;animation:rain var(--time) linear infinite;animation-delay:var(--delay);opacity:0}
+.ring{stroke:#7f8986;stroke-width:.65;transform-box:fill-box;transform-origin:center;animation:water var(--time) linear infinite;animation-delay:var(--delay);opacity:0}
+@keyframes rain{0%{transform:translate(0,0);opacity:0}8%{opacity:var(--opacity)}76%{opacity:var(--opacity)}84%,100%{transform:translate(-24px,var(--fall));opacity:0}}
+@keyframes water{0%,75%{opacity:0;transform:scale(.1)}80%{opacity:.26;transform:scale(.25)}100%{opacity:0;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.drop{animation:none;transform:translate(-12px,100px);opacity:.18}.ring{animation:none;transform:scale(.7);opacity:.15}}
+</style>
+<defs><clipPath id="rain-0"><rect width="360" height="268"/></clipPath></defs>
+<g style="--time:1.58s;--delay:-0.23s;--fall:226px;--opacity:0.37">
+<g clip-path="url(#rain-0)"><path class="drop" d="M290 42l-3.3 15"/></g>
+<ellipse class="ring" cx="266" cy="268" rx="14" ry="3.36" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-1"><rect width="360" height="267"/></clipPath></defs>
+<g style="--time:1.6s;--delay:-0.96s;--fall:224px;--opacity:0.52">
+<g clip-path="url(#rain-1)"><path class="drop" d="M295 43l-3.08 14"/></g>
+<ellipse class="ring" cx="271" cy="267" rx="19" ry="4.56" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-2"><rect width="360" height="249"/></clipPath></defs>
+<g style="--time:1.32s;--delay:-0.28s;--fall:185px;--opacity:0.52">
+<g clip-path="url(#rain-2)"><path class="drop" d="M122 64l-1.98 9"/></g>
+<ellipse class="ring" cx="98" cy="249" rx="12" ry="2.88" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-3"><rect width="360" height="269"/></clipPath></defs>
+<g style="--time:1.6s;--delay:-1.28s;--fall:196px;--opacity:0.39">
+<g clip-path="url(#rain-3)"><path class="drop" d="M86 73l-2.64 12"/></g>
+<ellipse class="ring" cx="62" cy="269" rx="9" ry="2.16" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-4"><rect width="360" height="231"/></clipPath></defs>
+<g style="--time:1.81s;--delay:-0.2s;--fall:195px;--opacity:0.48">
+<g clip-path="url(#rain-4)"><path class="drop" d="M308 36l-2.86 13"/></g>
+<ellipse class="ring" cx="284" cy="231" rx="11" ry="2.64" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-5"><rect width="360" height="265"/></clipPath></defs>
+<g style="--time:1.18s;--delay:-0.82s;--fall:217px;--opacity:0.38">
+<g clip-path="url(#rain-5)"><path class="drop" d="M324 48l-3.3 15"/></g>
+<ellipse class="ring" cx="300" cy="265" rx="11" ry="2.64" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-6"><rect width="360" height="251"/></clipPath></defs>
+<g style="--time:1.39s;--delay:-0.83s;--fall:233px;--opacity:0.49">
+<g clip-path="url(#rain-6)"><path class="drop" d="M307 18l-3.52 16"/></g>
+<ellipse class="ring" cx="283" cy="251" rx="15" ry="3.6" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-7"><rect width="360" height="267"/></clipPath></defs>
+<g style="--time:1.82s;--delay:-1.78s;--fall:256px;--opacity:0.54">
+<g clip-path="url(#rain-7)"><path class="drop" d="M325 11l-1.76 8"/></g>
+<ellipse class="ring" cx="301" cy="267" rx="14" ry="3.36" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-8"><rect width="360" height="269"/></clipPath></defs>
+<g style="--time:1.14s;--delay:-0.27s;--fall:212px;--opacity:0.46">
+<g clip-path="url(#rain-8)"><path class="drop" d="M233 57l-2.42 11"/></g>
+<ellipse class="ring" cx="209" cy="269" rx="17" ry="4.08" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-9"><rect width="360" height="227"/></clipPath></defs>
+<g style="--time:1.71s;--delay:-0.74s;--fall:197px;--opacity:0.5">
+<g clip-path="url(#rain-9)"><path class="drop" d="M304 30l-2.86 13"/></g>
+<ellipse class="ring" cx="280" cy="227" rx="12" ry="2.88" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-10"><rect width="360" height="250"/></clipPath></defs>
+<g style="--time:1.67s;--delay:-0.17s;--fall:237px;--opacity:0.51">
+<g clip-path="url(#rain-10)"><path class="drop" d="M266 13l-2.2 10"/></g>
+<ellipse class="ring" cx="242" cy="250" rx="11" ry="2.64" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-11"><rect width="360" height="228"/></clipPath></defs>
+<g style="--time:1.27s;--delay:-0.44s;--fall:185px;--opacity:0.54">
+<g clip-path="url(#rain-11)"><path class="drop" d="M87 43l-2.86 13"/></g>
+<ellipse class="ring" cx="63" cy="228" rx="9" ry="2.16" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-12"><rect width="360" height="249"/></clipPath></defs>
+<g style="--time:1.32s;--delay:-0.6s;--fall:183px;--opacity:0.55">
+<g clip-path="url(#rain-12)"><path class="drop" d="M311 66l-2.2 10"/></g>
+<ellipse class="ring" cx="287" cy="249" rx="16" ry="3.84" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-13"><rect width="360" height="255"/></clipPath></defs>
+<g style="--time:1.34s;--delay:-0.25s;--fall:226px;--opacity:0.56">
+<g clip-path="url(#rain-13)"><path class="drop" d="M170 29l-3.3 15"/></g>
+<ellipse class="ring" cx="146" cy="255" rx="18" ry="4.32" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-14"><rect width="360" height="247"/></clipPath></defs>
+<g style="--time:1.24s;--delay:-0.01s;--fall:205px;--opacity:0.38">
+<g clip-path="url(#rain-14)"><path class="drop" d="M51 42l-1.98 9"/></g>
+<ellipse class="ring" cx="27" cy="247" rx="18" ry="4.32" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-15"><rect width="360" height="260"/></clipPath></defs>
+<g style="--time:1.17s;--delay:-1.09s;--fall:206px;--opacity:0.6">
+<g clip-path="url(#rain-15)"><path class="drop" d="M107 54l-3.3 15"/></g>
+<ellipse class="ring" cx="83" cy="260" rx="19" ry="4.56" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-16"><rect width="360" height="240"/></clipPath></defs>
+<g style="--time:1.45s;--delay:-0.71s;--fall:217px;--opacity:0.46">
+<g clip-path="url(#rain-16)"><path class="drop" d="M191 23l-3.3 15"/></g>
+<ellipse class="ring" cx="167" cy="240" rx="19" ry="4.56" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-17"><rect width="360" height="254"/></clipPath></defs>
+<g style="--time:1.54s;--delay:-0.07s;--fall:226px;--opacity:0.46">
+<g clip-path="url(#rain-17)"><path class="drop" d="M275 28l-2.42 11"/></g>
+<ellipse class="ring" cx="251" cy="254" rx="17" ry="4.08" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-18"><rect width="360" height="272"/></clipPath></defs>
+<g style="--time:1.47s;--delay:-0.04s;--fall:237px;--opacity:0.37">
+<g clip-path="url(#rain-18)"><path class="drop" d="M275 35l-2.42 11"/></g>
+<ellipse class="ring" cx="251" cy="272" rx="9" ry="2.16" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-19"><rect width="360" height="252"/></clipPath></defs>
+<g style="--time:1.24s;--delay:-0.54s;--fall:210px;--opacity:0.62">
+<g clip-path="url(#rain-19)"><path class="drop" d="M115 42l-1.98 9"/></g>
+<ellipse class="ring" cx="91" cy="252" rx="17" ry="4.08" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-20"><rect width="360" height="252"/></clipPath></defs>
+<g style="--time:1.52s;--delay:-1.37s;--fall:239px;--opacity:0.58">
+<g clip-path="url(#rain-20)"><path class="drop" d="M180 13l-2.86 13"/></g>
+<ellipse class="ring" cx="156" cy="252" rx="18" ry="4.32" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-21"><rect width="360" height="249"/></clipPath></defs>
+<g style="--time:1.64s;--delay:-0.92s;--fall:197px;--opacity:0.37">
+<g clip-path="url(#rain-21)"><path class="drop" d="M333 52l-3.74 17"/></g>
+<ellipse class="ring" cx="309" cy="249" rx="11" ry="2.64" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-22"><rect width="360" height="230"/></clipPath></defs>
+<g style="--time:1.48s;--delay:-1.17s;--fall:218px;--opacity:0.47">
+<g clip-path="url(#rain-22)"><path class="drop" d="M63 12l-2.86 13"/></g>
+<ellipse class="ring" cx="39" cy="230" rx="10" ry="2.4" vector-effect="non-scaling-stroke"/>
+</g>
+<defs><clipPath id="rain-23"><rect width="360" height="245"/></clipPath></defs>
+<g style="--time:1.8s;--delay:-1.24s;--fall:213px;--opacity:0.51">
+<g clip-path="url(#rain-23)"><path class="drop" d="M228 32l-2.42 11"/></g>
+<ellipse class="ring" cx="204" cy="245" rx="18" ry="4.32" vector-effect="non-scaling-stroke"/>
+</g>
+</svg>
