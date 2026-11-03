@@ -130,7 +130,7 @@
 
 用户要求 `blog-workflow.html` 补上符合主题的题图和流程图，并按 Super-agent 的开篇研究排版。
 
-- 开篇沿用 Super-agent 的主次：kicker、两行问题标题、副标题、导语与发布信息在左，题图在右；标题桌面 34px、560px 以下 27px，700px 以下题图移到文字下方。样式在 `assets/blog-workflow/workflow.css` 的 `.workflow-hero`。
+- 开篇沿用 Super-agent 的主次：kicker、两行问题标题、副标题、导语与发布信息在左，题图在右；标题桌面 34px、560px 以下 27px，700px 以下题图移到文字下方。样式在 `assets/blog-workflow/workflow.css` 的 `.workflow-hero`。kicker 是 10px 等宽、强调色的栏目标签，不加边框。文章专属的 `workflow.css`、`workflow.js` 改动后，同步提高页面引用里的 `?v=` 版本号，避免读者拿到缓存的旧样式。
 
 - 题图 `assets/blog-workflow/cover.svg` 沿用 Super-agent 主题插画的纸片、折角与朱砂红线：红笔改过的初稿、修改记录卡、`verify.py` 清单与发布后的网页。它是概念插画，放在开篇右栏、随栏宽缩放，不表示真实数据。
 - 图 1 由 `scripts/render-blog-workflow-figures.py` 生成：704px 宽、三条泳道（我／Agent／GitHub），手机端按栏宽缩小同一张图。我审阅的节点用朱砂红边框，回头路用虚线。改流程时先改 `content/blog-publishing-workflow.md`，再改脚本并重新生成。
