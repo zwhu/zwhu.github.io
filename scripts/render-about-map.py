@@ -2,9 +2,13 @@
 """Render the about-page ability map from content/about-map.json into about.html.
 
 Cells come from a power (weighted Voronoi) diagram whose areas follow `area`;
-each convex cell is inset and drawn with rounded corners. On wide screens the
-top-left `hole` is left for the whoami terminal, and cells wrap around it;
-the terminal also prints the selected cell (about-map.js).
+each cell is inset by half the
+gap and drawn with rounded corners, so neighbours keep parallel edges and even
+paths between them. On wide screens the top-left `hole` is left for the whoami
+terminal and the contour cell is a lawn beside it, bounded below by one arc
+(`lawn`); the other cells fill the space under the arc, so their tops follow
+it. The terminal also prints the selected cell (about-map.js). The lawn's
+contours come from a height field that peaks under its label.
 Standard library only.
 --check fails when the generated block in about.html is out of date.
 """
@@ -25,10 +29,11 @@ E = html.escape
 SYMBOL = {'dark': '●', 'mid': '◑', 'light': '○', 'contour': '◎'}
 # Wide wraps the terminal on the 864px about-page column; medium stacks the terminal above a
 # landscape map for tablets; narrow is portrait for phones. Narrow gaps and small corner trims keep neighbouring polygon edges aligned.
-LAYOUTS = {'wide': dict(w=864, h=560, gap=4, radius=24, swap=False, hole=(340, 360), shore=(340, 720, 360)),
-           'medium': dict(w=704, h=420, gap=4, radius=20, swap=False),
-           'narrow': dict(w=331, h=560, gap=3, radius=14, swap=True)}
-RINGS = 10
+# On wide, `lawn` is the Bézier under the lawn, traced from the user's sketch: it leaves the terminal's lower right corner,
+# so the stones' tops run on from the terminal's bottom, then climbs to the top edge.
+LAYOUTS = {'wide': dict(w=864, h=560, gap=7, radius=20, swap=False, hole=(340, 360), lawn=((340, 360), (580, 280), (775, 200), (785, 0)), rings=7),
+           'medium': dict(w=704, h=420, gap=6, radius=16, swap=False, rings=6),
+           'narrow': dict(w=331, h=560, gap=5, radius=12, swap=True, rings=5)}
 
 
 def area(poly):
@@ -72,14 +77,8 @@ def cells(sites, weights, w, h, shift=0):
     return polys
 
 
-def shore_polygon(start, right, bottom):
-    # The introduction has a flat lower edge, then the contour field sweeps upward.
-    return [(0, 0)] + [(start + (right - start) * math.cos(i * math.pi / 64),
-                       bottom * math.sin(i * math.pi / 64)) for i in range(33)] + [(0, bottom)]
-
-
 def subtract(poly, hole):
-    """Keep the boundary outside a convex hole, including the reversed shoreline."""
+    """Keep the boundary of a convex cell outside a convex hole."""
     segments = []
 
     def boundary(source, cutter, keep_inside):
@@ -120,27 +119,61 @@ def subtract(poly, hole):
     return max(loops, key=area) if loops else []
 
 
-def layout(items, w, h, gap, swap, hole=None, shore=None):
+def arc(hole, lawn, offset=0.0, step=10):
+    """The lawn's lower edge: a cubic Bézier through `lawn`, from the terminal's right side to the top edge.
+    `offset` moves it along the normal, positive towards the stones."""
+    (x0, y0), (x1, y1), (x2, y2), (x3, y3) = lawn
+    bezier = lambda t, a, b, c, d: (1 - t) ** 3 * a + 3 * (1 - t) ** 2 * t * b + 3 * (1 - t) * t * t * c + t ** 3 * d
+    fine = [(bezier(t, x0, x1, x2, x3), bezier(t, y0, y1, y2, y3)) for t in (k / 600 for k in range(601))]
+    points, walked = [fine[0]], 0.0
+    for p, q in zip(fine, fine[1:]):
+        walked += math.dist(p, q)
+        if walked >= step:
+            points.append(q)
+            walked = 0.0
+    points[-1] = fine[-1]
+    out = []
+    for i, (x, y) in enumerate(points):
+        (px, py), (qx, qy) = points[max(i - 1, 0)], points[min(i + 1, len(points) - 1)]
+        length = math.hypot(qx - px, qy - py)
+        out.append((x - offset * (qy - py) / length, y + offset * (qx - px) / length))
+    return out
+
+
+def lawn_shapes(w, gap, hole, lawn):
+    """The lawn cell, and the region the stones must keep out of: terminal and lawn together, half a gap wider."""
+    half = gap / 2
+    cell = [(hole[0], -gap), (lawn[-1][0] + gap, -gap)] + arc(hole, lawn, -half)[::-1]
+    for normal, bound in (((-1, 0), -hole[0] - half), ((0, -1), -half), ((1, 0), w - half)):
+        cell = clip(cell, normal, bound)
+    edge = [pt for pt in arc(hole, lawn, half)[::-1] if pt[0] > hole[0] + half]
+    keep_out = [(-gap, -gap), (edge[0][0], -gap)] + edge + [(hole[0] + half, hole[1] + half), (-gap, hole[1] + half)]
+    region = area([(lawn[0][0], 0)] + arc(hole, lawn)[::-1]) + hole[0] * hole[1]
+    return cell, keep_out, region
+
+
+def layout(items, w, h, gap, swap, keep_out=None, reserved=0, pinned_left=None):
+    """Power-diagram cells whose areas follow `area`; with `keep_out`, cells fill only the space outside it."""
     total = sum(item['area'] for item in items)
-    targets = [item['area'] / total * (w * h - (area(shore_polygon(*shore)) if shore else 0)) for item in items]
+    targets = [item['area'] / total * (w * h - reserved) for item in items]
     anchors = [((item['y'], item['x']) if swap else (item['x'], item['y'])) for item in items]
     anchors = [(0.04 * w + 0.92 * x * w, 0.04 * h + 0.92 * y * h) for x, y in anchors]
+
     def outside(pt):
-        if not shore:
+        # Sites inside the terminal or the lawn move just past its nearest inner edge, or their cells vanish.
+        if not keep_out or not inside(keep_out, pt):
             return pt
-        start, right, bottom = shore
-        x, y = pt
-        distance = math.hypot(max(0, x - start) / (right - start), y / bottom)
-        if distance < 1.03:
-            return (x if x < start else start + (x - start) * 1.03 / distance, y * 1.03 / distance)
-        return pt
+        inner = [(p, r) for p, r in zip(keep_out, keep_out[1:] + keep_out[:1]) if min(p[0], r[0], p[1], r[1]) > -1]
+        q = min((nearest(p, r, pt) for p, r in inner), key=lambda c: math.dist(c, pt))
+        d = math.dist(q, pt) or 1e-9
+        return (q[0] + (q[0] - pt[0]) / d * 12, q[1] + (q[1] - pt[1]) / d * 12)
 
     anchors = [outside(pt) for pt in anchors]
     sites, weights = list(anchors), [0.0] * len(items)
 
     def diagram(shift=0):
         polys = cells(sites, weights, w, h, shift)
-        return [subtract(poly, shore_polygon(shore[0] + shift, shore[1] + shift, shore[2] + shift)) if shore and poly else poly for poly in polys]
+        return [subtract(poly, keep_out) if keep_out and poly else poly for poly in polys]
 
     for step in range(500):
         for i, poly in enumerate(diagram()):
@@ -150,42 +183,58 @@ def layout(items, w, h, gap, swap, hole=None, shore=None):
             radius = math.sqrt(max(weights[i], 0)) + 0.5 * (math.sqrt(targets[i] / math.pi) - math.sqrt(area(poly) / math.pi))
             weights[i] = max(radius, 0) ** 2
             cx, cy = centroid(poly)
-            pull = 0.28 if shore and anchors[i][0] < hole[0] + 40 else (0.08 if step < 350 else 0.0)
+            pull = 0.28 if pinned_left and anchors[i][0] < pinned_left else (0.08 if step < 350 else 0.0)
             x = 0.6 * cx + 0.4 * sites[i][0] + pull * (anchors[i][0] - cx)
             y = 0.6 * cy + 0.4 * sites[i][1] + pull * (anchors[i][1] - cy)
             sites[i] = outside((x, y))
         # A site must stay outside every neighbour's power circle, or its cell disappears.
         for i, si in enumerate(sites):
-            nearest = min(math.dist(si, sj) for j, sj in enumerate(sites) if j != i)
-            weights[i] = min(weights[i], (0.9 * nearest) ** 2)
+            nearest_site = min(math.dist(si, sj) for j, sj in enumerate(sites) if j != i)
+            weights[i] = min(weights[i], (0.9 * nearest_site) ** 2)
     return diagram(gap / 2)
 
 
 def rounded(poly, radius):
-    poly = list(poly)
-    changed = True
-    while changed and len(poly) > 3:
-        changed = False
-        for i, v in enumerate(poly):
-            p, q = poly[i - 1], poly[(i + 1) % len(poly)]
-            u, t = (v[0] - p[0], v[1] - p[1]), (q[0] - v[0], q[1] - v[1])
-            cosine = (u[0] * t[0] + u[1] * t[1]) / (math.hypot(*u) * math.hypot(*t) or 1)
-            if cosine > math.cos(math.radians(10)):
-                poly.pop(i)
-                changed = True
+    """Round the corners. Vertices that barely turn, like the samples along the lawn's arc, are drawn straight
+    through, and each rounding is measured along the outline, so corners on the arc round as fully as elsewhere."""
+    poly = [p for p, q in zip(poly, poly[1:] + poly[:1]) if math.dist(p, q) > 1e-6]
+    n = len(poly)
+
+    def bend(i):
+        p, v, q = poly[i - 1], poly[i], poly[(i + 1) % n]
+        u, t = (v[0] - p[0], v[1] - p[1]), (q[0] - v[0], q[1] - v[1])
+        return (u[0] * t[0] + u[1] * t[1]) / (math.hypot(*u) * math.hypot(*t) or 1)
+
+    corners = [i for i in range(n) if bend(i) <= math.cos(math.radians(10))]
+    fmt = lambda pt: f'{pt[0]:.1f} {pt[1]:.1f}'
+    if not corners:
+        return 'M' + 'L'.join(map(fmt, poly)) + 'Z'
+    walked = [0.0]
+    for i in range(n):
+        walked.append(walked[-1] + math.dist(poly[i], poly[(i + 1) % n]))
+    total = walked[-1]
+
+    def at(d):
+        d %= total
+        i = next(i for i in range(n) if walked[i + 1] >= d)
+        p, q = poly[i], poly[(i + 1) % n]
+        t = (d - walked[i]) / (walked[i + 1] - walked[i] or 1)
+        return p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1])
+
+    m = len(corners)
+    span = [((walked[corners[(k + 1) % m]] - walked[corners[k]]) % total) or total for k in range(m)]
+    reach = [(min(radius, 0.4 * span[k - 1]), min(radius, 0.4 * span[k])) for k in range(m)]
+    parts = []
+    for k, i in enumerate(corners):
+        start = walked[i]
+        parts.append(('M' if not k else 'L') + fmt(at(start - reach[k][0])) + 'Q' + fmt(poly[i]) + ' ' + fmt(at(start + reach[k][1])))
+        for j in range(1, n):
+            ahead = (walked[(i + j) % n] - start) % total
+            if ahead >= span[k] - reach[(k + 1) % m][0]:
                 break
-    n, parts = len(poly), []
-    for i, v in enumerate(poly):
-        p, q = poly[i - 1], poly[(i + 1) % n]
-        ra, rb = min(radius, 0.4 * math.dist(v, p)), min(radius, 0.4 * math.dist(v, q))
-        a = (v[0] + (p[0] - v[0]) * ra / math.dist(v, p), v[1] + (p[1] - v[1]) * ra / math.dist(v, p))
-        b = (v[0] + (q[0] - v[0]) * rb / math.dist(v, q), v[1] + (q[1] - v[1]) * rb / math.dist(v, q))
-        parts.append(('M' if not i else 'L') + f'{a[0]:.1f} {a[1]:.1f}Q{v[0]:.1f} {v[1]:.1f} {b[0]:.1f} {b[1]:.1f}')
+            if ahead > reach[k][1]:
+                parts.append('L' + fmt(poly[(i + j) % n]))
     return ''.join(parts) + 'Z'
-
-
-def scaled(poly, centre, k):
-    return [(centre[0] + (x - centre[0]) * k, centre[1] + (y - centre[1]) * k) for x, y in poly]
 
 
 def inside(poly, point):
@@ -196,13 +245,14 @@ def inside(poly, point):
     return hit
 
 
+def nearest(p, q, point):
+    dx, dy = q[0] - p[0], q[1] - p[1]
+    t = max(0, min(1, ((point[0] - p[0]) * dx + (point[1] - p[1]) * dy) / (dx * dx + dy * dy or 1)))
+    return p[0] + t * dx, p[1] + t * dy
+
+
 def edge_distance(poly, point):
-    best = math.inf
-    for p, q in zip(poly, poly[1:] + poly[:1]):
-        dx, dy = q[0] - p[0], q[1] - p[1]
-        t = max(0, min(1, ((point[0] - p[0]) * dx + (point[1] - p[1]) * dy) / (dx * dx + dy * dy or 1)))
-        best = min(best, math.dist(point, (p[0] + t * dx, p[1] + t * dy)))
-    return best
+    return min(math.dist(point, nearest(p, q, point)) for p, q in zip(poly, poly[1:] + poly[:1]))
 
 
 def anchor(poly):
@@ -242,37 +292,132 @@ def label(item, poly, centre, scale):
     return f'<text class="mark" x="{x:.1f}" y="{y + 4:.1f}" font-size="12">{SYMBOL[item["tone"]]}</text>'
 
 
-def svg(items, name, w, h, gap, radius, swap, hole=None, shore=None):
+def height(poly, peak, scale, point):
+    """0 on the cell edge, 1 at the peak. Near the peak the lines follow the label's ellipse, near the edge the cell's
+    outline; a slight ripple keeps them from looking machined."""
+    if not inside(poly, point):
+        return 0.0
+    edge = edge_distance(poly, point)
+    x, y = point[0] - peak[0], point[1] - peak[1]
+    ripple = 1 + 0.12 * math.sin(x / 47 + 1.3) * math.cos(y / 37 - 0.4) + 0.06 * math.sin((x - 2 * y) / 61)
+    return edge / (edge + math.hypot(x / scale[0], y / scale[1]) * ripple + 1e-9)
+
+
+def isolines(grid, origin, step, level):
+    """Marching squares over a sampled height field, chained into closed loops."""
+    x0, y0 = origin
+    point = lambda i, j: (x0 + i * step, y0 + j * step)
+    links = {}
+    for j in range(len(grid) - 1):
+        for i in range(len(grid[0]) - 1):
+            corners = [(i, j), (i + 1, j), (i + 1, j + 1), (i, j + 1)]
+            values = [grid[b][a] for a, b in corners]
+            hits = []
+            for k in range(4):
+                a, b = corners[k], corners[(k + 1) % 4]
+                ga, gb = values[k], values[(k + 1) % 4]
+                if (ga >= level) != (gb >= level):
+                    t, pa, pb = (level - ga) / (gb - ga), point(*a), point(*b)
+                    hits.append((tuple(sorted((a, b))), (pa[0] + t * (pb[0] - pa[0]), pa[1] + t * (pb[1] - pa[1]))))
+            for (ka, pa), (kb, pb) in zip(hits[::2], hits[1::2]):
+                links.setdefault(ka, [pa, []])[1].append(kb)
+                links.setdefault(kb, [pb, []])[1].append(ka)
+    loops, seen = [], set()
+    for key in links:
+        if key in seen:
+            continue
+        loop, prev, cur = [], None, key
+        while cur not in seen:
+            seen.add(cur)
+            loop.append(links[cur][0])
+            following = [k for k in links[cur][1] if k != prev and k not in seen]
+            if not following:
+                break
+            prev, cur = cur, following[0]
+        if len(loop) > 8 and cur in links[key][1] + [key]:
+            loops.append(loop)
+    return loops
+
+
+def simplified(points, tolerance):
+    """Ramer-Douglas-Peucker: drop points that sit within tolerance of the chord between their neighbours."""
+    if len(points) < 3:
+        return points
+    (ax, ay), (bx, by) = points[0], points[-1]
+    length = math.hypot(bx - ax, by - ay) or 1e-9
+    offsets = [abs((bx - ax) * (ay - y) - (ax - x) * (by - ay)) / length for x, y in points[1:-1]]
+    far = max(range(len(offsets)), key=offsets.__getitem__)
+    if offsets[far] <= tolerance:
+        return [points[0], points[-1]]
+    return simplified(points[:far + 2], tolerance)[:-1] + simplified(points[far + 1:], tolerance)
+
+
+def smooth(loop, passes=3, tolerance=0.3):
+    """Chaikin corner cutting, so the marching-squares steps disappear, then drop the points a curve this smooth
+    no longer needs; otherwise the lines alone would blow the page's size budget."""
+    for _ in range(passes):
+        loop = [pt for p, q in zip(loop, loop[1:] + loop[:1])
+                for pt in ((0.75 * p[0] + 0.25 * q[0], 0.75 * p[1] + 0.25 * q[1]), (0.25 * p[0] + 0.75 * q[0], 0.25 * p[1] + 0.75 * q[1]))]
+    half = len(loop) // 2
+    loop = simplified(loop[:half + 1], tolerance)[:-1] + simplified(loop[half:] + loop[:1], tolerance)[:-1]
+    return 'M' + 'L'.join(f'{x:.1f} {y:.1f}' for x, y in loop) + 'Z'
+
+
+def blurred(grid, radius, passes=3):
+    """Repeated box blur, close to a Gaussian; it irons out the creases where the nearest edge switches."""
+    for _ in range(passes):
+        for _ in range(2):
+            grid = [[sum(row[max(0, i - radius):i + radius + 1]) / len(row[max(0, i - radius):i + radius + 1]) for i in range(len(row))]
+                    for row in grid]
+            grid = [list(column) for column in zip(*grid)]
+    return grid
+
+
+def contours(poly, peak, count, clear, base=0.14, step=2.5):
+    """Evenly spaced levels from just inside the edge up to the label box, which stays clear."""
+    scale = (clear[0] / clear[1], 1.0)
+    xs, ys = [p[0] for p in poly], [p[1] for p in poly]
+    # A margin of zeros around the cell keeps every line closed after blurring.
+    origin = (min(xs) - 8 * step, min(ys) - 8 * step)
+    grid = [[height(poly, peak, scale, (origin[0] + i * step, origin[1] + j * step))
+             for i in range(int((max(xs) - origin[0]) / step) + 9)] for j in range(int((max(ys) - origin[1]) / step) + 9)]
+    grid = blurred(grid, 2)
+    # Sample the label corners on the blurred grid, so the innermost line clears the text.
+    at = lambda x, y: grid[round((y - origin[1]) / step)][round((x - origin[0]) / step)]
+    top = min(at(peak[0] + dx * clear[0] / 2, peak[1] + dy * clear[1] / 2) for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)))
+    levels = [top * (base + (1 - base) * k / (count - 1)) for k in range(count)]
+    return ''.join(f'<path class="ring" d="{smooth(loop)}"/>' for level in levels for loop in isolines(grid, origin, step, level))
+
+
+def svg(items, name, w, h, gap, radius, swap, rings, hole=None, lawn=None):
     out = [f'<svg class="ability-map ability-map-{name}" viewBox="0 0 {w} {h}" width="{w}" height="{h}" '
            f'role="group" aria-label="能力与兴趣圈，面积越大投入越多">']
-    drawing_items = [item for item in items if not shore or item['tone'] != 'contour']
-    if shore:
-        item = next(item for item in items if item['tone'] == 'contour')
-        field = [(shore[0] + gap / 2, 0)] + shore_polygon(shore[0] + gap / 2, shore[1] - gap / 2, shore[2] - gap / 2)[1:-1]
-        outline = lambda points: rounded(points, 18)
-        cx, cy = centroid(field)
-        focus = (cx, cy)
-        # Leave a quiet central area for the two-line label; seven widely spaced contours surround it.
-        rings = ''.join(f'<path class="ring" d="{outline(scaled(field, focus, 0.94 - i * 0.06))}"/>' for i in range(7))
-        out.append(f'<g class="cell tone-contour contour-field" tabindex="0" role="button" aria-pressed="true" '
-                   f'aria-label="{E(item["name"])}" data-name="{E(item["name"])}" data-detail="{E(item["detail"])}">'
-                   f'<path class="shape" d="{outline(field)}"/>{rings}'
-                   f'<text x="{cx:.1f}" y="{cy - 2:.1f}" font-size="17">{E(item["name"])}</text>'
-                   f'<text class="sub" x="{cx:.1f}" y="{cy + 18:.1f}" font-size="11">{E(item["sub"])}</text></g>')
-    for index, (item, poly) in enumerate(zip(drawing_items, layout(drawing_items, w, h, gap, swap, hole, shore))):
+    if lawn:
+        cell, keep_out, region = lawn_shapes(w, gap, hole, lawn)
+        stones = [item for item in items if item['tone'] != 'contour']
+        placed = iter(layout(stones, w, h, gap, swap, keep_out, region, hole[0] + 40))
+        polys = [cell if item['tone'] == 'contour' else next(placed) for item in items]
+    else:
+        polys = layout(items, w, h, gap, swap)
+    for index, (item, poly) in enumerate(zip(items, polys)):
         if not poly or area(poly) < 1:
             raise ValueError(f"Empty ability cell: {name} / {item['name']}")
         centre = anchor(poly)
         shapes = [f'<path class="shape" d="{rounded(poly, radius)}"/>']
         if item['tone'] == 'contour':
-            # Keep contours concentric with the label, with fewer lines and an open centre.
-            focus = centre
-            shapes += [f'<path class="ring" d="{rounded(scaled(poly, focus, k / RINGS), radius)}"/>'
-                       for k in range(RINGS - 1, 3, -1)]
-        out.append(f'<g class="cell tone-{item["tone"]}" tabindex="0" role="button" aria-pressed="{str(not shore and not index).lower()}" '
+            # The lawn's peak sits under its label, so the title reads as the summit.
+            # Smaller lawns show only the name, so the summit stays open around it.
+            text = label(item if hole else {**item, 'sub': None}, poly, centre, 17 / 13 if hole else 1)
+            size = 17 if hole else 13
+            clear = (max(text_width(item['name'], size), text_width(item.get('sub', ''), 11)) + 24, size + 34) if hole else \
+                    (text_width(item['name'], size) + 28, size + 22)
+            # The wide lawn's outer line runs close to the top edge, so the lawn reaches up beside the terminal.
+            shapes.append(contours(poly, centre, rings, clear, 0.05 if hole else 0.14))
+        else:
+            text = label(item, poly, centre, 1 if name == 'wide' else 0.95)
+        out.append(f'<g class="cell tone-{item["tone"]}" tabindex="0" role="button" aria-pressed="{str(not index).lower()}" '
                    f'aria-label="{E(item["name"])}" data-name="{E(item["name"])}" data-detail="{E(item["detail"])}">'
-                   f'{"".join(shapes)}'
-                   f'{label(item, poly, centre, 1 if name == "wide" else 0.95)}</g>')
+                   f'{"".join(shapes)}{text}</g>')
     return ''.join(out) + '</svg>'
 
 

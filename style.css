@@ -86,7 +86,7 @@
 /* 关于页放宽到 864px 正文，给能力圈留出横向空间；页头、正文、页脚一起放宽，保持对齐。 */
 .about-page{--page-width:920px}
 /* 终端占地图左上角的空位，尺寸与 render-about-map.py 的 hole 一致。 */
-.about-board .whoami{position:absolute;left:0;top:0;width:calc(340 / 864 * 100% - 2px);height:calc(360 / 560 * 100% - 2px);margin:0;background:var(--code);border:1px solid var(--line);border-radius:24px;padding:20px 22px;overflow:hidden;line-height:1.55;z-index:1}
+.about-board .whoami{position:absolute;left:0;top:0;width:calc(340 / 864 * 100% - 3.5px);height:calc(360 / 560 * 100% - 3.5px);margin:0;background:var(--code);border:1px solid var(--line);border-radius:24px;padding:20px 22px;overflow:hidden;line-height:1.55;z-index:1}
 .whoami .map-name{color:var(--accent)}
 .whoami .map-readout{width:100%;white-space:pre-wrap;color:var(--muted)}
 .ability-map{display:block;width:100%;height:auto}
@@ -100,17 +100,20 @@
 .ability-map .shape{fill:var(--line);transition:opacity .15s}
 .ability-map .tone-dark .shape{fill:var(--text)}
 .ability-map .tone-mid .shape{fill:var(--muted)}
-.ability-map .tone-contour .shape{fill:var(--bg);stroke:var(--muted);stroke-width:1}
+.ability-map .tone-contour .shape{fill:var(--bg)}
 .ability-map .ring{fill:none;stroke:var(--muted);stroke-width:.6;opacity:.55}
 .ability-map text{fill:var(--text);text-anchor:middle;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;pointer-events:none}
 .ability-map .tone-dark text,.ability-map .tone-mid text{fill:var(--bg)}
 .ability-map .tone-contour text{paint-order:stroke;stroke:var(--bg);stroke-width:4px}
-.ability-map .contour-field .shape{stroke:var(--line);stroke-width:1}
 .ability-map text.sub{font-family:ui-monospace,Menlo,monospace;opacity:.75}
 .ability-map .cell:hover .shape{opacity:.86}
 .ability-map .cell[aria-pressed="true"] .shape,.ability-map .cell:focus-visible .shape{stroke:var(--accent);stroke-width:2}
-.ability-map .contour-field[aria-pressed="true"] .shape{stroke:var(--muted);stroke-width:1}
-.ability-map .contour-field:focus-visible .shape{stroke:var(--accent);stroke-width:2}
+.ability-map .tone-contour[aria-pressed="true"] .shape{stroke:none}
+.ability-map .tone-contour:focus-visible .shape{stroke:var(--accent);stroke-width:2}
+/* 鼠标在地图上时，《创造亚当》里上帝的手代替光标，食指指尖对准光标；图裁自公有领域壁画。 */
+.map-hand{position:fixed;left:0;top:0;width:120px;height:71px;pointer-events:none;z-index:20;opacity:0;transition:opacity .15s ease-out}
+.map-hand.is-visible{opacity:1}
+.ability-map.has-hand,.ability-map.has-hand .cell{cursor:none}
 .map-legend{display:flex;flex-wrap:wrap;gap:4px 18px;margin:12px 0 0;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted)}
 .map-legend i{font-style:normal;margin-right:5px}
 .map-legend .map-hint{margin-left:auto}
@@ -133,4 +136,4 @@
   .ability-map-narrow{display:block}
   .map-legend .map-hint{margin-left:0;flex-basis:100%}
 }
-@media(prefers-reduced-motion:reduce){.whoami .line,.whoami .cursor{animation:none}.ability-map .shape{transition:none}}
+@media(prefers-reduced-motion:reduce){.whoami .line,.whoami .cursor{animation:none}.ability-map .shape,.map-hand{transition:none}}

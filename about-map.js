@@ -29,4 +29,27 @@
     cell.addEventListener('pointerenter', () => canHover.matches && show(cell));
     cell.addEventListener('pointerleave', () => canHover.matches && restore());
   });
+
+  // Over the map, a hand from Michelangelo's Creation of Adam replaces the mouse cursor; its fingertip is the pointer.
+  // The image is created on the first mouse move, so touch screens never download it.
+  let hand;
+  board.querySelectorAll('.ability-map').forEach(map => {
+    map.addEventListener('pointermove', event => {
+      if (event.pointerType !== 'mouse' || !canHover.matches) return;
+      if (!hand) {
+        hand = new Image(120, 71);
+        hand.className = 'map-hand';
+        hand.src = './assets/about/creation-of-adam-hand.webp';
+        hand.alt = '';
+        document.body.append(hand);
+      }
+      hand.style.transform = `translate(${event.clientX - 116}px, ${event.clientY - 32}px)`;
+      hand.classList.add('is-visible');
+      map.classList.add('has-hand');
+    });
+    map.addEventListener('pointerleave', () => {
+      hand?.classList.remove('is-visible');
+      map.classList.remove('has-hand');
+    });
+  });
 })();
