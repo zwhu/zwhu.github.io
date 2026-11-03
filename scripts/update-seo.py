@@ -95,6 +95,9 @@ def schema(site, info, record, canonical, description):
         'name': info.title.strip(), 'description': description,
         'inLanguage': language, 'isPartOf': {'@id': website['@id']}
     }
+    if canonical == site['author']['url']:
+        # The author's own page describes that person rather than listing articles.
+        page.update({'@type': 'ProfilePage', 'mainEntity': {'@id': author['@id']}})
     graph = [website, author, page]
     if info.article:
         article = {

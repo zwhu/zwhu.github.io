@@ -14,6 +14,9 @@ E = html.escape
 COMMENT_SCRIPTS = '<script src="./comments-config.js?v=2"></script><script src="./comments.js?v=6" defer></script>'
 # Common Chinese reading estimates: about 400 CJK characters or 200 Latin words per minute.
 CJK_PER_MINUTE, WORDS_PER_MINUTE = 400, 200
+COLLECTIONS = ('writing.html', 'translations.html', 'learning.html')
+# Standalone pages share the header and footer but carry no comments.
+STANDALONE = COLLECTIONS + ('about.html',)
 
 
 def issue_date(value):
@@ -96,7 +99,7 @@ class Site:
         self.sections = {item['path']: 'writing' for item in self.articles}
         self.sections.update({item['path']: 'translations' for item in self.translations})
         self.sections.update({item['file']: 'learning' for item in self.lessons})
-        self.sections.update({'writing.html': 'writing', 'translations.html': 'translations', 'learning.html': 'learning'})
+        self.sections.update({'writing.html': 'writing', 'translations.html': 'translations', 'learning.html': 'learning', 'about.html': 'about'})
         self.templates = {path.stem: Template(path.read_text().strip()) for path in (self.root / 'templates').glob('*.html')}
         paths = [item['path'] for item in self.articles + self.translations] + [item['file'] for item in self.lessons]
         if len(paths) != len(set(paths)) or len(self.lesson_by_slug) != len(self.lessons):
@@ -190,7 +193,7 @@ class Site:
                 raise ValueError(f'{filename}: site footer missing')
             source = replace_block(source, 'footer', self.footer(filename), re.escape(footers[-1][0]))
         source = replace_block(source, 'analytics', self.analytics(), r'<!-- Cloudflare Web Analytics -->.*?<!-- End Cloudflare Web Analytics -->')
-        if filename in self.sections and filename not in ('writing.html', 'translations.html', 'learning.html'):
+        if filename in self.sections and filename not in STANDALONE:
             source = replace_block(source, 'comments', self.comments(filename), r'<section id="comments".*?</section>')
             source = replace_block(source, 'comment-scripts', COMMENT_SCRIPTS, r'<script src="\./comments-config\.js[^\"]*"[^>]*>\s*</script>\s*<script src="\./comments\.js[^\"]*"[^>]*>\s*</script>')
         if filename == 'index.html':
@@ -199,7 +202,7 @@ class Site:
                         'learning': r'<section class="home-learning".*?</section>'}
             for name, content in self.home_sections().items():
                 source = replace_block(source, 'home-' + name, content, patterns[name])
-        if filename in ('writing.html', 'translations.html', 'learning.html'):
+        if filename in COLLECTIONS:
             source = replace_block(source, 'collection', self.collection(filename), r'<main(?:\s[^>]*)?>.*?</main>')
         article = next((i for i in self.articles if i['path'] == filename), None)
         if article and article.get('readingTime'):

@@ -1,0 +1,159 @@
+{
+  "note": "关于页能力圈。area 是相对面积；x、y 是大致位置（0–1），窄屏布局把两者对调。桌面左上角留给 whoami 终端，位置避开 x<0.38 且 y<0.64 的区域。颜色从左到右由深到浅：dark 主线放左侧和下方，mid 常用居中偏右，light 延伸靠最右，contour 正在深入紧挨终端。内容只取自简历与已发表文章。",
+  "cells": [
+    {
+      "name": "Code Agent",
+      "sub": "Multi-Agent · Hooks · Skill",
+      "tone": "contour",
+      "area": 21,
+      "x": 0.56,
+      "y": 0.3,
+      "detail": "基于 pi-core 写 Multi-Agent 系统和“PRD → TRD → TDD”的研发流程，20 多位同事在用。现在主要在做这件事。"
+    },
+    {
+      "name": "前端架构",
+      "sub": "动态表单 · 低代码 · 微前端",
+      "tone": "dark",
+      "area": 23,
+      "x": 0.54,
+      "y": 0.8,
+      "detail": "一直在做字段多、联动多的业务前端：淘宝天猫商品发布、政务低代码、采购报价单。"
+    },
+    {
+      "name": "工程化",
+      "sub": "20 → 5 个仓库",
+      "tone": "dark",
+      "area": 12,
+      "x": 0.08,
+      "y": 0.84,
+      "detail": "菜鸟驿站收敛存量仓库，统一 React、Vue 和组件库；在阿里做过 oly-cli 研发交付工具集。"
+    },
+    {
+      "name": "复杂表单",
+      "sub": "60+ 字段 · 50+ 联动",
+      "tone": "dark",
+      "area": 10,
+      "x": 0.26,
+      "y": 0.88,
+      "detail": "采购平台单个品类 60 多个字段、50 多条联动规则；商品发布 SDK 用 Guard 阻断联动死循环。"
+    },
+    {
+      "name": "低代码",
+      "sub": "编辑态 → 运行态",
+      "tone": "dark",
+      "area": 8,
+      "x": 0.4,
+      "y": 0.94,
+      "detail": "阿里云政务低代码：联动配置面板、Request 面板，以及编辑态到运行态的 Schema 转换。"
+    },
+    {
+      "name": "性能优化",
+      "sub": "LCP −30%",
+      "tone": "mid",
+      "area": 8,
+      "x": 0.76,
+      "y": 0.62,
+      "detail": "采购平台 LCP 治理：先建看板和基线，再沿核心访问链路分前端、工作台、后端接口三层排查。"
+    },
+    {
+      "name": "全栈",
+      "sub": "Java · Node.js",
+      "tone": "mid",
+      "area": 7,
+      "x": 0.74,
+      "y": 0.88,
+      "detail": "最早四年写全栈：Java 加 jQuery，后来是 Node.js 和 fibjs。"
+    },
+    {
+      "name": "质量与效能",
+      "sub": "E2E · 监控 · 灰度",
+      "tone": "mid",
+      "area": 6,
+      "x": 0.74,
+      "y": 0.38,
+      "detail": "用 JEV 建 E2E 测试；参与商品发布系统的监控、告警、灰度和切流。"
+    },
+    {
+      "name": "Agent 评测",
+      "tone": "mid",
+      "area": 5,
+      "x": 0.76,
+      "y": 0.16,
+      "detail": "给 Agent 和 Skill 建评测集，例如评测 ub-mode 时更看重工程门禁。"
+    },
+    {
+      "name": "上下文压缩",
+      "tone": "mid",
+      "area": 3.2,
+      "x": 0.82,
+      "y": 0.04,
+      "detail": "读 ReAct Loop、工具调用、Hooks 和上下文压缩的实现，写成了交互式学习页。"
+    },
+    {
+      "name": "TDD",
+      "tone": "mid",
+      "area": 2.6,
+      "x": 0.7,
+      "y": 0.04,
+      "detail": "Agent 按 TDD 生成代码：先写测试，再让实现通过，关键步骤由人评审。"
+    },
+    {
+      "name": "微前端",
+      "tone": "mid",
+      "area": 3.6,
+      "x": 0.84,
+      "y": 0.48,
+      "detail": "政务事项中心用微前端交付给不同省市，各地差异写进配置。"
+    },
+    {
+      "name": "AST 分析",
+      "tone": "mid",
+      "area": 2.6,
+      "x": 0.84,
+      "y": 0.74,
+      "detail": "用 AST 统计页面里标准组件的引用覆盖率，看迁移走到哪一步。"
+    },
+    {
+      "name": "团队管理",
+      "sub": "最多 15 人",
+      "tone": "light",
+      "area": 5,
+      "x": 0.95,
+      "y": 0.3,
+      "detail": "在菜鸟带驿站前端团队，最多 15 人。"
+    },
+    {
+      "name": "技术写作",
+      "sub": "这个博客",
+      "tone": "light",
+      "area": 5,
+      "x": 0.95,
+      "y": 0.6,
+      "detail": "在这里写 Agent 实践和评测，也留档翻译过的文章。"
+    },
+    {
+      "name": "Agent 记忆",
+      "tone": "light",
+      "area": 3,
+      "x": 0.95,
+      "y": 0.06,
+      "detail": "在看 Agent 记忆怎么设计，做成了交互式学习页。"
+    },
+    {
+      "name": "多端渲染",
+      "tone": "light",
+      "area": 3,
+      "x": 0.96,
+      "y": 0.84,
+      "detail": "一套 Schema 渲染到 App、H5 和 PC。"
+    },
+    {
+      "name": "数据可视化",
+      "tone": "light",
+      "area": 2.6,
+      "x": 0.92,
+      "y": 0.98,
+      "detail": "早年用 D3.js 和 Raphael.js 画图表。"
+    }
+  ]
+}
