@@ -6,14 +6,14 @@
 
 | 文件 | 职责 |
 | --- | --- |
-| `style.css`、`archive.css` | 全站颜色、导航、基础文章布局和评论 |
-| `learning.css` | 学习页标题、来源、目录、相关阅读、基础控件、代码和表格，以及焦点、隐藏状态、减少动态效果和打印约定 |
-| `assets/learning/<主题>.css` | 本课程的内容布局、图示、实验、测验状态和响应式变化 |
-| `assets/learning/<主题>.js` | 本课程已有交互行为 |
+| `docs/style.css`、`docs/archive.css` | 全站颜色、导航、基础文章布局和评论 |
+| `docs/learning.css` | 学习页标题、来源、目录、相关阅读、基础控件、代码和表格，以及焦点、隐藏状态、减少动态效果和打印约定 |
+| `docs/assets/learning/<主题>.css` | 本课程的内容布局、图示、实验、测验状态和响应式变化 |
+| `docs/assets/learning/<主题>.js` | 本课程已有交互行为 |
 
 课程专用选择器放回课程文件，便于同时找到布局、状态和窄屏规则。公共文件只维护实际复用的基础，不再集中追加某篇课程的补丁。
 
-页面外壳的宽度和左右边距复用 `style.css` 的 `--page-width` / `--page-padding`。`learning.css` 在 `.learning-page` 上设置 1080px 宽度，使页头、正文外壳与页脚保持对齐；标题、相关阅读和评论继续保留原有的内部阅读宽度。课程样式不单独修改外壳宽度。
+页面外壳的宽度和左右边距复用 `docs/style.css` 的 `--page-width` / `--page-padding`。`docs/learning.css` 在 `.learning-page` 上设置 1080px 宽度，使页头、正文外壳与页脚保持对齐；标题、相关阅读和评论继续保留原有的内部阅读宽度。课程样式不单独修改外壳宽度。
 
 现有课程的参考范围：
 
@@ -57,7 +57,7 @@
 
 运行 `python3 scripts/verify.py`，其中 `check-learning-styles.py` 检查样式归属、主题作用域、旧变量和加载顺序；这个检查不代替浏览器验收。
 
-检查脚本自动发现根目录的 `learn-*.html`，新增课程也会纳入检查；每篇须有同名课程 CSS，逗号分隔的每个选择器都要限定作用域。
+检查脚本自动发现 `docs/` 根目录的 `learn-*.html`，新增课程也会纳入检查；每篇须有同名课程 CSS，逗号分隔的每个选择器都要限定作用域。
 
 `.github/workflows/static-checks.yml` 调用同一 verify 入口，在 PR 创建／更新、推送 `main` 及手动触发时执行。`main` 已启用 PR 与必需 `check` 门禁，要求分支保持最新，管理员也受约束；配置与验证见[CI 交接](./ci-handoff.md)。GitHub Pages 仍从 `main` 发布，通过检查的 PR 合并后更新网站。
 

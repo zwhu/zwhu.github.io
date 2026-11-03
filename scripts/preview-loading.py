@@ -8,7 +8,10 @@ parser=argparse.ArgumentParser(description='Local 1 Mbps / 150 ms loading compar
 parser.add_argument('--before',type=Path,required=True,help='Directory containing the pre-change site snapshot')
 parser.add_argument('--port',type=int,default=8772)
 args=parser.parse_args()
-ROOT=Path(__file__).resolve().parents[1];BEFORE=args.before.resolve()
+from site_paths import SITE_ROOT as ROOT
+BEFORE=args.before.resolve()
+if (BEFORE / 'docs/index.html').is_file():
+ BEFORE = BEFORE / 'docs'
 RATE=125000;LATENCY=.15;lock=threading.Lock();next_slot=0
 PROBE='''<script>(()=>{let lcp=0,cls=0;for(const type of ['largest-contentful-paint','layout-shift'])try{new PerformanceObserver(list=>{for(const e of list.getEntries()){if(type==='largest-contentful-paint')lcp=e.startTime;else if(!e.hadRecentInput)cls+=e.value}}).observe({type,buffered:true})}catch{}addEventListener('DOMContentLoaded',()=>setTimeout(()=>{const n=performance.getEntriesByType('navigation')[0],o=document.createElement('output');o.id='loading-measurement';o.hidden=true;o.textContent=JSON.stringify({profile:'1Mbps,150ms TTFB,gzip,no-store,third-party stubs',ttfb:n.responseStart,htmlEnd:n.responseEnd,domReady:n.domContentLoadedEventEnd,htmlEncoded:n.encodedBodySize,htmlDecoded:n.decodedBodySize,paint:performance.getEntriesByType('paint').map(e=>({name:e.name,time:e.startTime})),lcp,cls,resources:performance.getEntriesByType('resource').map(e=>({name:e.name,duration:e.duration,size:e.transferSize,encoded:e.encodedBodySize}))});document.body.append(o)},1000),{once:true})})();</script>'''
 class Preview(BaseHTTPRequestHandler):

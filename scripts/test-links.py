@@ -16,7 +16,8 @@ class LinkTests(unittest.TestCase):
         root = Path(directory.name)
         (root / 'content').mkdir()
         (root / 'content/seo.json').write_text(json.dumps({'site': {'url': 'https://example.com/'}}))
-        (root / 'index.html').write_text(source)
+        (root / 'docs').mkdir()
+        (root / 'docs/index.html').write_text(source)
         return root
 
     def test_nested_pages_encoded_anchors_and_responsive_resources(self):
@@ -26,10 +27,10 @@ class LinkTests(unittest.TestCase):
 <a href="#top:~:text=hello">定位</a><a name="top"></a>
 <source srcset="./small.webp 640w, ./large.webp 1024w"/>
 <svg><path id="shape"/><use href="#shape"/></svg>''')
-        (root / 'nested').mkdir()
-        (root / 'nested/index.html').write_text('<h1 id="章节">章节</h1><a href="../index.html#top">返回</a>')
+        (root / 'docs/nested').mkdir()
+        (root / 'docs/nested/index.html').write_text('<h1 id="章节">章节</h1><a href="../index.html#top">返回</a>')
         for name in ('small.webp', 'large.webp'):
-            (root / name).write_bytes(b'fixture')
+            (root / 'docs' / name).write_bytes(b'fixture')
         self.assertEqual(CHECK(root), [])
 
     def test_reports_missing_targets_anchors_and_srcset_variants(self):
@@ -43,8 +44,8 @@ class LinkTests(unittest.TestCase):
 
     def test_checks_links_inside_reachable_nested_html(self):
         root = self.fixture('<a href="./nested/page.html">打开</a>')
-        (root / 'nested').mkdir()
-        (root / 'nested/page.html').write_text('<script src="./missing.js"></script>')
+        (root / 'docs/nested').mkdir()
+        (root / 'docs/nested/page.html').write_text('<script src="./missing.js"></script>')
         self.assertTrue(any('nested/page.html:1' in e and 'missing.js' in e for e in CHECK(root)))
 
     def test_rejects_site_absolute_urls_and_paths_outside_site(self):

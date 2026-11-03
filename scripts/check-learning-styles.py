@@ -5,7 +5,7 @@ import sys
 from html.parser import HTMLParser
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+from site_paths import SITE_ROOT as ROOT
 LESSONS = tuple(sorted(path.stem.removeprefix('learn-') for path in ROOT.glob('learn-*.html')))
 LEGACY = re.compile(
     r'--(?:paper|ink|card|border|foreground|muted-foreground|background|'

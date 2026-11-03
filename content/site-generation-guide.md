@@ -2,6 +2,10 @@
 
 全站仍直接提供静态 HTML，不增加运行时请求或 GitHub Pages 构建步骤。维护时用 Python 3.9+ 标准库更新公共区块，生成后的 HTML 一起提交。
 
+站点根目录是 `docs/`；GitHub Pages 发布 `main /docs`，页面 URL 不含 `/docs`。维护脚本在仓库根目录运行，读取根目录的 `content/` 与 `templates/`，把页面和资源写入 `docs/`。元信息中的页面、图片路径仍相对于站点根目录填写，不加 `docs/` 前缀。
+
+`content/` 中原有公开笔记、数据与文稿对照页由 `render-site.py` 同步到 `docs/content/`；只编辑源文件，副本一起提交。`--check` 会检查副本同步。
+
 ## 什么放在哪里
 
 | 内容 | 维护位置 |
@@ -10,7 +14,7 @@
 | 公共 HTML 结构 | `templates/`：导航、通用页脚、评论、统计、列表条目、三类目录与相关阅读 |
 | 原创文章的标题、发表日期、目录摘要、标签；`readingTime: true` 时在目录和文章元信息显示阅读时长 | `content/original-articles.json` |
 | 分享卡片（1200×630 `og:image`）的文案与图片路径 | `content/og-images.json`；`python3 scripts/render-og-images.py` 用本机 Chrome 渲染 PNG，`--check` 只校验文件 |
-| 关于页能力圈的格子、面积、深浅与说明 | `content/about-map.json`；`python3 scripts/render-about-map.py` 写入 `about.html` 的 `about-map` 区块，`--check` 只检查 |
+| 关于页能力圈的格子、面积、深浅与说明 | `content/about-map.json`；`python3 scripts/render-about-map.py` 写入 `docs/about.html` 的 `about-map` 区块，`--check` 只检查 |
 | 迁入文章的正文、日期、评论与图源快照 | `content/blog-issues.json`；由 `scripts/render-blog-issues.py` 生成正文 |
 | 学习页的目录标题、摘要、标签、顺序与相关阅读选择 | `content/interactive-learning.json`，`related` 引用已有课程 slug |
 | 译文的目录标题、摘要、顺序与标签 | `content/translations.json`；译文发表日期读取 `content/seo.json` |
@@ -33,7 +37,7 @@ python3 scripts/verify.py
 
 迁入文章的正文发生变化时，先更新快照，再运行 `python3 scripts/render-blog-issues.py`。这个入口会继续调用公共生成与 SEO，不会恢复另一套导航、页脚或统计代码。无需访问 GitHub。
 
-新增页面时沿用同类 HTML 的外壳，登记到对应元信息文件，再运行生成命令。文件名作为站内路径和评论标识保持稳定；学习页还须有同名课程 CSS。新课程的 `related` 只能引用已有课程，不可重复或指向自身。所有正式根目录 HTML 都须登记；`content/doc-lint-comparison/` 和独立图示不在此生成范围内。
+新增页面时沿用同类 HTML 的外壳，登记到对应元信息文件，再运行生成命令。文件名作为站内路径和评论标识保持稳定；学习页还须有同名课程 CSS。新课程的 `related` 只能引用已有课程，不可重复或指向自身。所有正式 `docs/` 根目录 HTML 都须登记；`content/doc-lint-comparison/` 和独立图示不在此生成范围内。
 
 阅读时长按 `.prose` 正文估算（中文约 400 字／分钟、英文约 200 词／分钟，不计图、目录与脚本），写入目录条目和文章 `<!-- site:reading-time:* -->` 区块。新开启的文章须在 `.meta` 的日期后放一对空标记。
 
@@ -47,7 +51,7 @@ python3 scripts/verify.py
 
 全站主导航从页面所属目录确定当前栏目：目录自身使用 `aria-current="page"`，栏目中的文章使用 `aria-current="location"`。首页不固定高亮某个栏目。关闭 JavaScript 时仍有完整导航、列表和相关阅读。
 
-通用页脚按现有文章、学习页、译文目录三种实际用途生成。首页个人页脚、译文来源说明和课程内部说明保留作者维护。评论脚本版本统一在 `scripts/site_templates.py`，giscus 的公开配置放在 `comments-config.js`。
+通用页脚按现有文章、学习页、译文目录三种实际用途生成。首页个人页脚、译文来源说明和课程内部说明保留作者维护。评论脚本版本统一在 `scripts/site_templates.py`，giscus 的公开配置放在 `docs/comments-config.js`。
 
 Cloudflare Web Analytics 统一由 `templates/analytics.html` 提供，在 `</body>` 前恰好一份并异步加载，沿用现有公开站点 token，不保存账户 API 密钥。修改迁入文章的生成逻辑时，同步维护 `scripts/render-blog-issues.py` 的 `ANALYTICS` 和 `FOOTER`，保证重新生成后统计仍然保留。verify 检查统计数量、异步属性、公开 token 与模板同步。
 

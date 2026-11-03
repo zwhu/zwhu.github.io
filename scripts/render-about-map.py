@@ -20,8 +20,8 @@ import re
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-PAGE = ROOT / 'about.html'
+from site_paths import ROOT, SITE_ROOT
+PAGE = SITE_ROOT / 'about.html'
 BLOCK = re.compile(r'<!-- about-map:start -->.*?<!-- about-map:end -->', re.S)
 NAME = re.compile(r'(<span class="map-name">).*?(</span>)')
 READOUT = re.compile(r'(<span class="line map-readout"[^>]*>).*?(</span>)')
@@ -442,7 +442,7 @@ def main():
     page = PAGE.read_text()
     w, h, (hw, hh), gap = (LAYOUTS['wide'][key] for key in ('w', 'h', 'hole', 'gap'))
     hole_css = f'width:calc({hw} / {w} * 100% - {gap / 2:g}px);height:calc({hh} / {h} * 100% - {gap / 2:g}px)'
-    if hole_css not in (ROOT / 'style.css').read_text():
+    if hole_css not in (SITE_ROOT / 'style.css').read_text():
         print(f'style.css .about-board .whoami must use {hole_css}', file=sys.stderr)
         return 1
     if not (BLOCK.search(page) and NAME.search(page) and READOUT.search(page)):

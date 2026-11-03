@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Editorial images carry a theme or a measured comparison, not an implied algorithm.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),dir=path.join(root,'assets/superagent');
+const root=path.resolve(__dirname,'..'),dir=path.join(root, 'docs/assets/superagent');
 const bg='#faf8f3',ink='#292825',muted='#77746e',accent='#a64335',line='#d6d0c6',paper='#f0ede6';
 const text=(x,y,t,size=15,color=ink,weight=400,extra='')=>`<text x="${x}" y="${y}" font-size="${size}" fill="${color}" font-weight="${weight}" ${extra}>${t}</text>`;
 const shell=(w,h,title,desc,body)=>`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-labelledby="title desc"><title id="title">${title}</title><desc id="desc">${desc}</desc><rect width="${w}" height="${h}" fill="${bg}"/><g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Microsoft YaHei,sans-serif">${body}</g></svg>\n`;

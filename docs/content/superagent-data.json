@@ -1,0 +1,263 @@
+{
+  "source_article": {
+    "source": "Article figure 13, manual exact transcription; 5 runs per arm",
+    "rows": [
+      {
+        "id": "superagent",
+        "name": "Super-agent",
+        "p50_min": 12.4,
+        "p95_min": 15.7,
+        "cache_read_million": 23.23
+      },
+      {
+        "id": "no_passthrough",
+        "name": "去掉直通",
+        "p50_min": 12.6,
+        "p95_min": 15.5,
+        "cache_read_million": 31.77
+      },
+      {
+        "id": "neutral",
+        "name": "单 Session：中性提示",
+        "p50_min": 20.4,
+        "p95_min": 29.5,
+        "cache_read_million": 6.05
+      },
+      {
+        "id": "delegate",
+        "name": "单 Session：优先委派",
+        "p50_min": 13.8,
+        "p95_min": 29.0,
+        "cache_read_million": 10.82
+      }
+    ],
+    "derived": {
+      "neutral": {
+        "p50_min_reduction": 0.392156862745098,
+        "p95_min_reduction": 0.46779661016949153,
+        "cache_read_ratio": 3.8396694214876037
+      },
+      "delegate": {
+        "p50_min_reduction": 0.10144927536231886,
+        "p95_min_reduction": 0.45862068965517244,
+        "cache_read_ratio": 2.146950092421442
+      },
+      "removing_passthrough_increase": 0.3676280671545415,
+      "enabling_passthrough_reduction": 0.26880705067673905
+    }
+  },
+  "supplementary_hard": {
+    "per_model": {
+      "DeepSeek-V4-Flash": {
+        "table": [
+          {
+            "B": 1,
+            "calls": 6,
+            "T_median_s": 5.62,
+            "T_min_s": 4.24,
+            "T_max_s": 7.14,
+            "per_decision_s": 5.619,
+            "speedup_vs_B1": 1.0,
+            "input_tokens_median": 18909,
+            "output_tokens_median": 198,
+            "reasoning_tokens_median": 183,
+            "accuracy": 1.0,
+            "decisions": 6,
+            "errors": {},
+            "unparsed_calls": 0
+          },
+          {
+            "B": 4,
+            "calls": 4,
+            "T_median_s": 8.95,
+            "T_min_s": 6.03,
+            "T_max_s": 15.65,
+            "per_decision_s": 2.237,
+            "speedup_vs_B1": 2.5,
+            "input_tokens_median": 19045,
+            "output_tokens_median": 707,
+            "reasoning_tokens_median": 656,
+            "accuracy": 1.0,
+            "decisions": 16,
+            "errors": {},
+            "unparsed_calls": 0
+          },
+          {
+            "B": 16,
+            "calls": 3,
+            "T_median_s": 17.09,
+            "T_min_s": 12.95,
+            "T_max_s": 17.15,
+            "per_decision_s": 1.068,
+            "speedup_vs_B1": 5.3,
+            "input_tokens_median": 19582,
+            "output_tokens_median": 1801,
+            "reasoning_tokens_median": 1607,
+            "accuracy": 1.0,
+            "decisions": 48,
+            "errors": {},
+            "unparsed_calls": 0
+          },
+          {
+            "B": 32,
+            "calls": 3,
+            "T_median_s": 23.42,
+            "T_min_s": 18.04,
+            "T_max_s": 24.92,
+            "per_decision_s": 0.732,
+            "speedup_vs_B1": 7.7,
+            "input_tokens_median": 20337,
+            "output_tokens_median": 2961,
+            "reasoning_tokens_median": 2585,
+            "accuracy": 1.0,
+            "decisions": 96,
+            "errors": {},
+            "unparsed_calls": 0
+          },
+          {
+            "B": 64,
+            "calls": 2,
+            "T_median_s": 37.33,
+            "T_min_s": 34.58,
+            "T_max_s": 40.07,
+            "per_decision_s": 0.583,
+            "speedup_vs_B1": 9.6,
+            "input_tokens_median": 21833,
+            "output_tokens_median": 5345,
+            "reasoning_tokens_median": 4600,
+            "accuracy": 1.0,
+            "decisions": 128,
+            "errors": {},
+            "unparsed_calls": 0
+          },
+          {
+            "B": 128,
+            "calls": 2,
+            "T_median_s": 65.17,
+            "T_min_s": 59.91,
+            "T_max_s": 70.43,
+            "per_decision_s": 0.509,
+            "speedup_vs_B1": 11.0,
+            "input_tokens_median": 24727,
+            "output_tokens_median": 9960,
+            "reasoning_tokens_median": 8465,
+            "accuracy": 1.0,
+            "decisions": 256,
+            "errors": {},
+            "unparsed_calls": 0
+          }
+        ],
+        "fit_T_eq_a_plus_bB": {
+          "a_s": 7.67,
+          "b_s_per_trigger": 0.455
+        }
+      },
+      "Seed-2.1-Turbo": {
+        "table": [
+          {
+            "B": 1,
+            "calls": 6,
+            "T_median_s": 4.47,
+            "T_min_s": 3.41,
+            "T_max_s": 5.97,
+            "per_decision_s": 4.47,
+            "speedup_vs_B1": 1.0,
+            "input_tokens_median": 18657,
+            "output_tokens_median": 137,
+            "reasoning_tokens_median": 123,
+            "accuracy": 1.0,
+            "decisions": 6,
+            "errors": {},
+            "unparsed_calls": 0
+          },
+          {
+            "B": 4,
+            "calls": 4,
+            "T_median_s": 8.77,
+            "T_min_s": 5.56,
+            "T_max_s": 12.84,
+            "per_decision_s": 2.192,
+            "speedup_vs_B1": 2.0,
+            "input_tokens_median": 18806,
+            "output_tokens_median": 571,
+            "reasoning_tokens_median": 515,
+            "accuracy": 1.0,
+            "decisions": 16,
+            "errors": {},
+            "unparsed_calls": 0
+          },
+          {
+            "B": 16,
+            "calls": 3,
+            "T_median_s": 19.42,
+            "T_min_s": 11.97,
+            "T_max_s": 27.06,
+            "per_decision_s": 1.214,
+            "speedup_vs_B1": 3.7,
+            "input_tokens_median": 19394,
+            "output_tokens_median": 1861,
+            "reasoning_tokens_median": 1646,
+            "accuracy": 1.0,
+            "decisions": 48,
+            "errors": {},
+            "unparsed_calls": 0
+          },
+          {
+            "B": 32,
+            "calls": 3,
+            "T_median_s": 28.32,
+            "T_min_s": 24.17,
+            "T_max_s": 36.25,
+            "per_decision_s": 0.885,
+            "speedup_vs_B1": 5.1,
+            "input_tokens_median": 20214,
+            "output_tokens_median": 2961,
+            "reasoning_tokens_median": 2516,
+            "accuracy": 1.0,
+            "decisions": 96,
+            "errors": {},
+            "unparsed_calls": 0
+          },
+          {
+            "B": 64,
+            "calls": 2,
+            "T_median_s": 32.21,
+            "T_min_s": 19.61,
+            "T_max_s": 44.81,
+            "per_decision_s": 0.503,
+            "speedup_vs_B1": 8.9,
+            "input_tokens_median": 21838,
+            "output_tokens_median": 3320,
+            "reasoning_tokens_median": 2450,
+            "accuracy": 1.0,
+            "decisions": 128,
+            "errors": {},
+            "unparsed_calls": 0
+          },
+          {
+            "B": 128,
+            "calls": 2,
+            "T_median_s": 75.36,
+            "T_min_s": 73.55,
+            "T_max_s": 77.17,
+            "per_decision_s": 0.589,
+            "speedup_vs_B1": 7.6,
+            "input_tokens_median": 25004,
+            "output_tokens_median": 8887,
+            "reasoning_tokens_median": 7139,
+            "accuracy": 1.0,
+            "decisions": 256,
+            "errors": {},
+            "unparsed_calls": 0
+          }
+        ],
+        "fit_T_eq_a_plus_bB": {
+          "a_s": 7.0,
+          "b_s_per_trigger": 0.517
+        }
+      }
+    },
+    "notes": []
+  },
+  "limits": "Finite synthetic labels; historical raw responses unavailable; wall time includes CLI/harness; not author benchmark reproduction."
+}

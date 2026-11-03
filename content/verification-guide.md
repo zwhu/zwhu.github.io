@@ -14,7 +14,7 @@ verify 不更新页面、不生成图片、不请求网络。所有检查都会�
 
 | 规则 | 实现 |
 | --- | --- |
-| 公共区块与目录保持同步、页面登记、路径唯一、相关阅读有效、生成不覆盖手写正文 | `render-site.py --check`、`test-site-generation.py` |
+| 公共区块与目录保持同步、页面登记、路径唯一、相关阅读有效、生成不覆盖手写正文、公开 content 副本同步 | `render-site.py --check`、`test-site-generation.py` |
 | 站内导航与资源使用相对路径，目标文件、HTML 锚点和 srcset 资源存在 | `check-links.py`、`test-links.py` |
 | 学习页样式归属、主题作用域、变量与加载顺序 | `check-learning-styles.py` |
 | HTML 和图片预算、原图校验值、图片尺寸与响应式来源、统计恰好一份且异步 | `check-performance.py` |
@@ -23,7 +23,7 @@ verify 不更新页面、不生成图片、不请求网络。所有检查都会�
 | 评论按需加载、只初始化一次，主题地址和文章标识稳定 | `tests/comments.test.cjs` |
 | 检查失败、缺少执行程序时返回失败，后续检查仍执行 | `test-verify.py` |
 
-链接检查从根目录正式 HTML 出发，继续检查它们引用的本地 HTML；校验 `href`、`src`、`poster`、`xlink:href` 和 `srcset`。canonical 允许正式绝对地址，搜索元数据由 SEO 检查负责；外部链接不联网探测，CSS／JavaScript 中动态生成的地址不在静态链接检查范围内。
+链接检查从 `docs/` 根目录正式 HTML 出发，继续检查它们引用的本地 HTML；校验 `href`、`src`、`poster`、`xlink:href` 和 `srcset`。canonical 允许正式绝对地址，搜索元数据由 SEO 检查负责；外部链接不联网探测，CSS／JavaScript 中动态生成的地址不在静态链接检查范围内。
 
 正文配图的 SVG 由 `scripts/render-*` 生成后提交，verify 不重新生成比对。改图时先改脚本，再运行对应脚本重新生成，不直接手改 SVG。
 
@@ -50,7 +50,7 @@ verify 不更新页面、不生成图片、不请求网络。所有检查都会�
 node scripts/pr-screenshots.cjs --pr <编号> [--section <章节 id>]...
 ```
 
-- 默认截取相对 `origin/main` 有改动的根目录 HTML，也可用 `--page name.html` 指定；每页截首屏，`--section` 再截对应章节，从标题截到下一个同级标题。宽度默认 1280px 与 375px，可用 `--widths` 调整。
+- 默认截取相对 `origin/main` 有改动的 `docs/` 根目录 HTML，也可用 `--page name.html` 指定；每页截首屏，`--section` 再截对应章节，从标题截到下一个同级标题。宽度默认 1280px 与 375px，可用 `--widths` 调整。
 - 图片推到 `pr-screenshots` 分支的 `pr-<编号>/` 目录，不进 main，也不影响 Pages。PR 描述里的截图区块按提交号引用图片；同一 PR 再次运行时替换该区块，旧图仍可从历史提交打开。
 - 需要本机 Google Chrome（或设置 `CHROME=/path/to/chrome`）与已登录的 `gh`。不加 `--pr` 时只把截图存到临时目录，供本地查看。
 

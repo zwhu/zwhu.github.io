@@ -183,12 +183,14 @@ def noindex_page(source):
 
 
 def outputs(root):
+    from site_paths import site_root
+    publish = site_root(root)
     config = json.loads((root / 'content/seo.json').read_text())
     site = config['site']
     if urlsplit(site['url']).scheme != 'https' or not site['url'].endswith('/'):
         raise ValueError('Site URL must be an absolute HTTPS URL with a trailing slash')
     records = metadata(root, config)
-    pages = sorted(root.glob('*.html'))
+    pages = sorted(publish.glob('*.html'))
     changes = {}
     urls = []
     for path in pages:
@@ -196,7 +198,7 @@ def outputs(root):
         changes[path] = update_page(path.read_text(), site, records.get(path.name, {}), canonical)
         urls.append(canonical)
     for folder in config['noindexDirectories']:
-        for path in sorted((root / folder).rglob('*.html')):
+        for path in sorted((publish / folder).rglob('*.html')):
             changes[path] = noindex_page(path.read_text())
     # lastmod is omitted until a reliable editorial update date is maintained.
     namespace = 'http://www.sitemaps.org/schemas/sitemap/0.9'
@@ -206,9 +208,9 @@ def outputs(root):
         entry = ET.SubElement(sitemap, f'{{{namespace}}}url')
         ET.SubElement(entry, f'{{{namespace}}}loc').text = url
     ET.indent(sitemap, space='  ')
-    changes[root / 'sitemap.xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(sitemap, encoding='unicode') + '\n'
+    changes[publish / 'sitemap.xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(sitemap, encoding='unicode') + '\n'
     # Snapshots remain crawlable so crawlers can see their noindex directive.
-    changes[root / 'robots.txt'] = 'User-agent: *\nAllow: /\n\nSitemap: ' + urljoin(site['url'], 'sitemap.xml') + '\n'
+    changes[publish / 'robots.txt'] = 'User-agent: *\nAllow: /\n\nSitemap: ' + urljoin(site['url'], 'sitemap.xml') + '\n'
     return changes
 
 

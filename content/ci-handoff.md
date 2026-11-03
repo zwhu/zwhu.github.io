@@ -7,7 +7,7 @@
 - `36f4459` 推送后，首次 [Static checks](https://github.com/zwhu/zwhu.github.io/actions/runs/41413354095) 全部通过：公共生成同步、6 项生成测试、学习页样式归属、SEO 同步、6 项 SEO 测试、5 项评论测试。
 - `main` 必须通过 PR 合并；必需检查为 `check`，来源绑定 GitHub Actions（App ID `15368`），要求 PR 分支保持最新。
 - 管理员同样受合并要求约束；禁止强推和删除 `main`。个人仓库所需审批人数设为 0，保留本人提交 PR、通过检查后自行合并的能力。
-- GitHub Pages 保持从 `main` 根目录自动发布。静态检查工作流只读源码，不持有部署或管理权限。
+- GitHub Pages 从 `main /docs` 自动发布（目录迁移后切换）；公开页面 URL 保持不变。静态检查工作流只读源码，不持有部署或管理权限。
 
 保护配置已通过 API 写入并回读确认，快照为 [main-protection.json](../.github/main-protection.json)。该文件记录已应用的配置，不会因提交文件自动修改仓库设置；之后调整设置时先读取当前规则，保留新增约束，不直接覆盖成旧快照。
 

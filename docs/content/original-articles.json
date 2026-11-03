@@ -1,0 +1,47 @@
+[
+  {
+    "title": "评测 Bob 大叔的 ub-mode：我为什么更重视工程门禁",
+    "path": "ub-mode-bench.html",
+    "date": "2026-10-30",
+    "excerpt": "从小任务到 Vue 真实修复，观察 ub-mode 的收益与成本，记录评测中的问题，以及我为什么更重视 lint、测试等 LLM 外部的工程门禁。",
+    "labels": [
+      "Agent 评测",
+      "工程实践"
+    ],
+    "readingTime": true
+  },
+  {
+    "title": "PR 合并以后，谁接下一条反馈？",
+    "path": "superagent.html",
+    "date": "2026-11-01",
+    "excerpt": "从一次 CSV 修复的后续反馈，理解 Super-agent 如何分发消息、找回历史和恢复任务，再看持续运行与实验改善的代价。",
+    "labels": [
+      "Agent 架构",
+      "源码研究"
+    ],
+    "readingTime": true
+  },
+  {
+    "title": "从 botmux 到持续任务协调：先验证续办收益",
+    "path": "superagent-botmux.html",
+    "home": false,
+    "date": "2026-11-01",
+    "excerpt": "比较 botmux 与 Super-agent 的任务组织，复用已有接入和执行，先用真实任务验证续办质量与人工收益。",
+    "labels": [
+      "Agent 架构",
+      "工程实践"
+    ],
+    "readingTime": true
+  },
+  {
+    "title": "我只看两次稿，文章是怎么上线的？",
+    "path": "blog-workflow.html",
+    "date": "2026-11-03",
+    "excerpt": "我只定题、看两次稿、点合并，其余交给 Agent 和 GitHub。和 Agent 合写博客的九步流程，五个让它管用的做法，以及每一步具体怎么做。",
+    "labels": [
+      "AI 写作",
+      "工程实践"
+    ],
+    "readingTime": true
+  }
+]

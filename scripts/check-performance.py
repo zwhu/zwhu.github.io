@@ -7,6 +7,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 from image_assets import ROOT, dimensions, load_assets
+from site_paths import site_root
 
 
 class Page(HTMLParser):
@@ -35,6 +36,7 @@ class Page(HTMLParser):
 
 def check(root=ROOT):
     errors, assets = [], load_assets(root)
+    root = site_root(root)
     if not assets:
         errors.append('Image manifest is missing or empty; run scripts/optimize-images.py')
     for path in sorted(root.glob('*.html')):

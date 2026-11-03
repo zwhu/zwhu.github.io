@@ -6,7 +6,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
-ROOT = Path(__file__).resolve().parents[1]
+from site_paths import ROOT, site_root
 
 
 class Page(HTMLParser):
@@ -40,6 +40,9 @@ def check(root=ROOT):
     root = Path(root).resolve()
     site = json.loads((root / 'content/seo.json').read_text())['site']
     host = urlsplit(site['url']).hostname
+    root = site_root(root)
+    if not (root / 'index.html').is_file():
+        return ['docs/index.html is missing']
     pending = sorted(root.glob('*.html'))
     parsed, visited, errors = {}, set(), []
 

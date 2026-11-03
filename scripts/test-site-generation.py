@@ -10,6 +10,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 from site_templates import ROOT, Site
+from site_paths import SITE_ROOT, site_root
 
 
 class Header(HTMLParser):
@@ -47,8 +48,9 @@ class SiteGenerationTests(unittest.TestCase):
         (root / 'content').mkdir()
         for path in (ROOT / 'content').glob('*.json'):
             shutil.copy2(path, root / 'content' / path.name)
-        for path in ROOT.glob('*.html'):
-            shutil.copy2(path, root / path.name)
+        site_root(root).mkdir()
+        for path in SITE_ROOT.glob('*.html'):
+            shutil.copy2(path, site_root(root) / path.name)
         return root
 
     def test_committed_regions_are_current_and_repeatable(self):
@@ -96,7 +98,7 @@ class SiteGenerationTests(unittest.TestCase):
             self.assertNotIn(title, output[filename])
         for filename in ['index.html', 'learning.html']:
             self.assertIn('新目录摘要，验证两处同步。', output[filename])
-        for path in root.glob('learn-*.html'):
+        for path in site_root(root).glob('learn-*.html'):
             self.assertEqual(authored(output[path.name]), authored(path.read_text()))
 
     def test_new_lesson_is_added_to_catalogs_and_counts(self):
@@ -106,8 +108,8 @@ class SiteGenerationTests(unittest.TestCase):
         data.append(dict(slug='new-course', file='learn-new-course.html', title='新增课程',
                          description='从实际课程验证自动接入。', tags='测试', related=['llm-study']))
         manifest.write_text(json.dumps(data))
-        source = (root / 'learn-agent-memory.html').read_text()
-        (root / 'learn-new-course.html').write_text(source)
+        source = (site_root(root) / 'learn-agent-memory.html').read_text()
+        (site_root(root) / 'learn-new-course.html').write_text(source)
         output = {path.name: text for path, text in Site(root).outputs().items()}
         for filename in ['index.html', 'learning.html']:
             self.assertIn('href="./learn-new-course.html"', output[filename])
@@ -150,11 +152,11 @@ class SiteGenerationTests(unittest.TestCase):
 
     def test_ambiguous_regions_and_unregistered_pages_are_rejected(self):
         site = Site()
-        source = (ROOT / 'learn-agent-memory.html').read_text()
+        source = (SITE_ROOT / 'learn-agent-memory.html').read_text()
         with self.assertRaisesRegex(ValueError, 'header'):
             site.render(source + '<!-- site:header:start -->', 'learn-agent-memory.html')
         root = self.fixture()
-        (root / 'orphan.html').write_text(source)
+        (site_root(root) / 'orphan.html').write_text(source)
         with self.assertRaisesRegex(ValueError, 'unregistered'):
             Site(root).outputs()
 
