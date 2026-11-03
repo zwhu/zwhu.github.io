@@ -35,7 +35,7 @@
 <text x="120.0" y="424.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">桌面和手机</text>
 <rect id="n06" data-node-id="n06" data-graph-role="node" data-graph-bounds="268,454,436,498" x="268" y="454" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
 <text x="352.0" y="473.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">06 提交本篇，开 PR</text>
-<text x="352.0" y="490.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">只暂存本篇的文件</text>
+<text x="352.0" y="490.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">只提交本篇，附截图</text>
 <rect id="n07" data-node-id="n07" data-graph-role="node" data-graph-bounds="500,520,668,564" x="500" y="520" width="168" height="44" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
 <text x="584.0" y="539.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">07 CI 检查</text>
 <text x="584.0" y="556.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">check 通过，分支最新</text>

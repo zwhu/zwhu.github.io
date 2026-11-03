@@ -14,4 +14,4 @@
 | 学习页 | [学习页复用](./content/learning-styles-guide.md) |
 | 图片与加载性能 | [性能维护](./content/loading-performance.md) |
 
-修改后运行 `python3 scripts/verify.py`；检查范围与失败处理见[验证流程](./content/verification-guide.md)。涉及页面或样式时，另做浏览器预览并核对移动端与实际交互。
+修改后运行 `python3 scripts/verify.py`；检查范围与失败处理见[验证流程](./content/verification-guide.md)。涉及页面或样式时，另做浏览器预览并核对移动端与实际交互；开 PR 后运行 `node scripts/pr-screenshots.cjs --pr <编号>`，把桌面与手机截图附到 PR。
