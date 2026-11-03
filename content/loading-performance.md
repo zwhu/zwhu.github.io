@@ -18,7 +18,7 @@ Claude Code 页首屏最大内容绘制（观测窗口内 LCP）从 904ms 到 43
 
 ## 改了什么
 
-- 两篇译文原先共 14 个 Base64 图片引用，去重后 8 份原始图片按原字节存入 `assets/translations/original/`。HTML 不再携带图像二进制。Claude Code 页原文件约 1.71 MB，gzip 约 1.13 MB；现在 HTML 约 76 KB，gzip 约 26 KB。
+- 两篇译文原先共 14 个 Base64 图片引用，去重后 8 份原始图片按原字节存入 `docs/assets/translations/original/`。HTML 不再携带图像二进制。Claude Code 页原文件约 1.71 MB，gzip 约 1.13 MB；现在 HTML 约 76 KB，gzip 约 26 KB。
 - 24 份正文栅格资源统一登记到 `content/image-assets.json`。PNG／JPEG 使用 WebP 的多尺寸派生资源，原图仍作回退及完整图片入口；GIF 保留动画。评测集文章的 6 张大图合计从原始 12.22 MB，变为 1024px 档的约 443 KB（约 27.6 倍传输量差异，不当作时间倍数）。
 - 图片声明固有尺寸、延迟加载和异步解码。浏览器按 `srcset`／`sizes` 选择派生资源，关闭 JavaScript 也保留图片。原生延迟加载与尺寸预留的依据见 [web.dev](https://web.dev/articles/browser-level-image-lazy-loading)。
 - 统计脚本保留原 URL、公开 token 和每页一份，增加异步执行，避免第三方模块影响 DOM 就绪。评论客户端在评论区进入视口前 300px 才加载；缺少 IntersectionObserver 时保持直接加载。文章文件名与评论映射不变。
@@ -28,12 +28,12 @@ Claude Code 页首屏最大内容绘制（观测窗口内 LCP）从 904ms 到 43
 
 | 内容 | 位置／命令 |
 | --- | --- |
-| 原图及完整分辨率 | 原有 `assets/` 路径；译文提取原图在 `assets/translations/original/` |
-| WebP 派生资源 | `assets/optimized/`，由 `python3 scripts/optimize-images.py` 生成 |
+| 原图及完整分辨率 | 原有 `assets/` 路径；译文提取原图在 `docs/assets/translations/original/` |
+| WebP 派生资源 | `docs/assets/optimized/`，由 `python3 scripts/optimize-images.py` 生成 |
 | 原图校验值、尺寸与派生资源清单 | `content/image-assets.json`，随脚本生成，不手填校验值 |
 | 图片 HTML 与旧文章生成接入 | `scripts/image_assets.py`、`scripts/render-blog-issues.py` |
-| 统计与评论 | `templates/analytics.html`、`comments.js`；脚本引用由公共生成同步 |
-| 重绘图与布局 | `scripts/render-superagent-source-diagrams.cjs`、`assets/superagent/editorial.css` |
+| 统计与评论 | `templates/analytics.html`、`docs/comments.js`；脚本引用由公共生成同步 |
+| 重绘图与布局 | `scripts/render-superagent-source-diagrams.cjs`、`docs/assets/superagent/editorial.css` |
 
 图片生成只需 Python 标准库与 `cwebp`，编码器仅用于维护，网站和 CI 不依赖它。编码为 q88，提供不超过原尺寸的 640／1024／1600px 档；原图不覆盖。修改后运行完整文章及公共生成，图片生成、文章生成均验证了重复执行不产生漂移。
 

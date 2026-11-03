@@ -6,6 +6,7 @@ const fs = require('node:fs'), path = require('node:path'), os = require('node:o
 const { spawn, execFileSync } = require('node:child_process');
 
 const ROOT = path.resolve(__dirname, '..');
+const SITE_ROOT = path.join(ROOT, 'docs');
 const BRANCH = 'pr-screenshots', START = '<!-- pr-screenshots:start -->', END = '<!-- pr-screenshots:end -->';
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const MIME = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png',
@@ -33,13 +34,13 @@ function changedPages() {
   const base = git('merge-base', 'origin/main', 'HEAD');
   const tracked = git('diff', '--name-only', base, '--', '*.html').split('\n');
   const untracked = git('ls-files', '--others', '--exclude-standard', '--', '*.html').split('\n');
-  return [...new Set([...tracked, ...untracked])].filter(f => f && !f.includes('/'));
+  return [...new Set([...tracked, ...untracked])].filter(f => /^docs\/[^/]+\.html$/.test(f) && fs.existsSync(path.join(ROOT, f))).map(f => f.slice(5));
 }
 
 function serve() {
   const server = http.createServer((req, res) => {
-    const file = path.resolve(ROOT, '.' + decodeURIComponent(new URL(req.url, 'http://x').pathname).replace(/\/$/, '/index.html'));
-    if (!file.startsWith(ROOT + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); res.end(); return; }
+    const file = path.resolve(SITE_ROOT, '.' + decodeURIComponent(new URL(req.url, 'http://x').pathname).replace(/\/$/, '/index.html'));
+    if (!file.startsWith(SITE_ROOT + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); res.end(); return; }
     res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
     fs.createReadStream(file).pipe(res);
   });
@@ -167,7 +168,7 @@ function updateBody(pr, block) {
 async function main() {
   const opt = args();
   const pages = opt.pages.length ? opt.pages : changedPages();
-  if (!pages.length) throw new Error('No changed root HTML pages; pass --page name.html');
+  if (!pages.length) throw new Error('No changed docs HTML pages; pass --page name.html');
   fs.mkdirSync(opt.out, { recursive: true });
   const server = await serve(), profile = fs.mkdtempSync(path.join(os.tmpdir(), 'zwhu-pr-chrome-'));
   const { chrome, port } = await launchChrome(profile);

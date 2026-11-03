@@ -4,7 +4,7 @@ import json
 import struct
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+from site_paths import ROOT, SITE_ROOT, site_root
 ARTICLE_SIZES = '(max-width:560px) calc(100vw - 44px), (max-width:1599px) 704px, 960px'
 TRANSLATION_SIZES = '(max-width:700px) calc(100vw - 48px), 704px'
 

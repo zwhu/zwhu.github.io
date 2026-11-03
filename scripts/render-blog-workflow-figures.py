@@ -6,8 +6,8 @@ Figure 1 follows content/blog-publishing-workflow.md; figure 2 follows the check
 from html import escape
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'assets/blog-workflow'
+from site_paths import ROOT, SITE_ROOT
+OUT = SITE_ROOT / 'assets/blog-workflow'
 BG, TEXT, MUTED, RED, LINE = '#faf8f3', '#292825', '#77746e', '#a64335', '#e6e2da'
 MONO = 'ui-monospace,SFMono-Regular,Menlo,monospace'
 FONT = '-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif'

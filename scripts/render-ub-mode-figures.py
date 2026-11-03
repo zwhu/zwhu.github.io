@@ -15,8 +15,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
 
-ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'assets/ub-mode-bench'
+from site_paths import ROOT, SITE_ROOT
+OUT = SITE_ROOT / 'assets/ub-mode-bench'
 DATA = json.loads((ROOT / 'content/ub-mode-bench-data.json').read_text())
 BG, TEXT, MUTED, RED, LINE, CODE = '#faf8f3', '#292825', '#77746e', '#a64335', '#e6e2da', '#f0ede6'
 MODELS = ['GPT-6.1-Sol', 'GPT-5.6-Luna', 'DeepSeek-V4.1-Flash']

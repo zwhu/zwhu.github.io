@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Source diagrams are redrawn with the site's typography and colors; archived originals remain unchanged.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const dir=path.resolve(__dirname,'../assets/superagent/redrawn'),checking=process.argv.includes('--check');
+const dir=path.resolve(__dirname,'../docs/assets/superagent/redrawn'),checking=process.argv.includes('--check');
 if(!checking)fs.mkdirSync(dir,{recursive:true});
 function write(file,content){const target=path.join(dir,file);if(checking)assert(fs.existsSync(target)&&fs.readFileSync(target,'utf8')===content,`${file} is stale; run node scripts/render-superagent-source-diagrams.cjs`);else fs.writeFileSync(target,content)}
 const c={bg:'#faf8f3',text:'#292825',muted:'#77746e',accent:'#a64335',line:'#e6e2da',panel:'#faf8f3'};

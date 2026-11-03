@@ -3,7 +3,7 @@ const { readFileSync } = require('node:fs');
 const { test } = require('node:test');
 const vm = require('node:vm');
 
-const source = readFileSync(new URL('../comments.js', `file://${__filename}`), 'utf8');
+const source = readFileSync(new URL('../docs/comments.js', `file://${__filename}`), 'utf8');
 
 function mountComments(scriptUrl) {
   const attributes = {};

@@ -5,14 +5,14 @@ const path = require('node:path');
 const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
-const dir = path.join(root, 'assets/superagent');
+const dir = path.join(root, 'docs/assets/superagent');
 const scene = fs.readFileSync(path.join(dir, 'scene.js'), 'utf8');
 const data = vm.runInNewContext(scene + '\n({W,H,PLANES,BANDS,BOXES,EDGES,TEXTS,SWATCHES,CHIPS})');
 assert.equal(new Set(data.BOXES.map(b => b.id)).size, data.BOXES.length);
 const ids = new Set([...data.BOXES, ...data.BANDS].map(b => b.id));
 assert(data.EDGES.every(e => ids.has(e.from) && ids.has(e.to)));
 const template = fs.readFileSync(path.join(__dirname, 'vendor/architecture-canvas/template.js'), 'utf8');
-const analytics = fs.readFileSync(path.join(root, 'ub-mode-bench.html'), 'utf8').match(/<!-- Cloudflare Web Analytics -->[\s\S]*?<!-- End Cloudflare Web Analytics -->/)[0];
+const analytics = fs.readFileSync(path.join(root, 'docs/ub-mode-bench.html'), 'utf8').match(/<!-- Cloudflare Web Analytics -->[\s\S]*?<!-- End Cloudflare Web Analytics -->/)[0];
 const moduleSource = template
   .replace('{{SLUG}}', 'superagent-architecture')
   .replace('{{SCENE}}', () => scene);

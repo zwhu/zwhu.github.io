@@ -14,6 +14,7 @@ import tempfile
 from pathlib import Path
 
 from image_assets import ROOT, dimensions
+from site_paths import SITE_ROOT, site_root
 
 WIDTH, HEIGHT = 1200, 630
 CHROME = os.environ.get('CHROME', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
@@ -50,7 +51,7 @@ def render(card, output):
 def check(root=ROOT):
     errors = []
     for card in cards(root):
-        path = root / card['image']
+        path = site_root(root) / card['image']
         if not path.exists():
             errors.append(f'Missing share image: {card["image"]}')
         elif dimensions(path.read_bytes()) != (WIDTH, HEIGHT):
@@ -66,7 +67,7 @@ def main():
     args = parser.parse_args()
     if not args.check:
         for card in cards():
-            output = ROOT / card['image']
+            output = SITE_ROOT / card['image']
             output.parent.mkdir(parents=True, exist_ok=True)
             render(card, output)
     errors = check()

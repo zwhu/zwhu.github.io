@@ -9,7 +9,7 @@ from pathlib import Path
 from string import Template
 from zoneinfo import ZoneInfo
 
-ROOT = Path(__file__).resolve().parents[1]
+from site_paths import ROOT, site_root
 E = html.escape
 COMMENT_SCRIPTS = '<script src="./comments-config.js?v=2"></script><script src="./comments.js?v=6" defer></script>'
 # Common Chinese reading estimates: about 400 CJK characters or 200 Latin words per minute.
@@ -84,6 +84,7 @@ def replace_block(source, name, content, legacy_pattern):
 class Site:
     def __init__(self, root=ROOT):
         self.root = Path(root)
+        self.site_root = site_root(root)
         self.navigation = self.read('site-navigation.json')
         self.seo = self.read('seo.json')
         issues = self.read('blog-issues.json')['issues']
@@ -109,7 +110,7 @@ class Site:
                 raise ValueError(f'Catalog path must be a root HTML file: {path}')
 
     def reading_time(self, path):
-        return f'阅读约 {reading_minutes((self.root / path).read_text())} 分钟'
+        return f'阅读约 {reading_minutes((self.site_root / path).read_text())} 分钟'
 
     def read(self, name):
         return json.loads((self.root / 'content' / name).read_text())
@@ -215,11 +216,13 @@ class Site:
 
     def outputs(self):
         expected = set(self.sections) | {'index.html'}
-        actual = {p.name for p in self.root.glob('*.html')}
+        if list(self.root.glob('*.html')):
+            raise ValueError('Public HTML must live in docs/, not the repository root')
+        actual = {p.name for p in self.site_root.glob('*.html')}
         if expected != actual:
             raise ValueError(f'Catalog/page mismatch: missing pages {sorted(expected - actual)}, unregistered pages {sorted(actual - expected)}')
         result = {}
-        for path in sorted(self.root.glob('*.html')):
+        for path in sorted(self.site_root.glob('*.html')):
             try:
                 result[path] = self.render(path.read_text(), path.name)
             except (ValueError, KeyError) as error:

@@ -16,7 +16,7 @@ from urllib.parse import urljoin, urlsplit
 from site_templates import Site, COMMENT_SCRIPTS, marked, issue_date as date, issue_excerpt as excerpt
 from image_assets import load_assets, image_html
 
-ROOT = Path(__file__).resolve().parents[1]
+from site_paths import ROOT, SITE_ROOT
 DATA = json.loads((ROOT / 'content/blog-issues.json').read_text())
 ISSUES = sorted(DATA['issues'], key=lambda i: i['created_at'], reverse=True)
 NUMBERS = {i['number'] for i in ISSUES}
@@ -136,7 +136,7 @@ for index, issue in enumerate(ISSUES):
             content += f'<article class="historical-comment" id="issuecomment-{comment["id"]}"><div class="meta">{E(comment["author"])} · <time datetime="{comment["created_at"]}">{date(comment["created_at"])}</time> · <a href="{E(comment["html_url"])}">原评论 ↗</a></div><div class="prose">{body(comment["body_html"], issue["html_url"])}</div></article>'
         content += '</section>'
     content += marked('comments', SITE.comments(filename(issue))) + marked('comment-scripts', COMMENT_SCRIPTS) + '</main>' + FOOTER
-    (ROOT / filename(issue)).write_text(content)
+    (SITE_ROOT / filename(issue)).write_text(content)
 
 subprocess.run([sys.executable, str(ROOT / 'scripts/render-site.py')], check=True)
 print(f'Rendered {len(ISSUES)} migrated articles; synchronized all shared HTML and catalogs.')

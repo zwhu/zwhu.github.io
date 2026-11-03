@@ -1,6 +1,8 @@
 # zwhu 的个人技术博客
 
-中文技术博客，原生 HTML / CSS / JavaScript，直接部署到 GitHub Pages，无需构建工具。
+中文技术博客，原生 HTML / CSS / JavaScript，直接部署到 GitHub Pages，无需构建工具。站点文件在 `docs/`，Pages 发布 `main /docs`；`content/`、`templates/`、`scripts/` 和 `tests/` 在仓库根目录。
+
+`docs/content/` 是 `content/` 的生成副本，只编辑源文件后运行 `python3 scripts/render-site.py`。元信息中的 URL 路径不加 `docs/` 前缀。
 
 - 保留用户已有及无关修改，不在源码中保存密钥。
 - 保留技术含义、引用与真实发表日期；译文保留出处、正文、插图与中英对照，未经要求不删减。

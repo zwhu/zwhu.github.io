@@ -1,0 +1,115 @@
+{
+  "site": {
+    "url": "https://zwhu.github.io/",
+    "name": "zwhu 的技术博客",
+    "language": "zh-CN",
+    "twitter": "@zwhu__",
+    "verification": {
+      "google-site-verification": "U35XKsmuPYI3sOv4RAP2BcpmLOh3MGsgYfTLzcoy3GQ",
+      "msvalidate.01": "80B61685E6E48431712B35FAE0516CE2"
+    },
+    "author": {
+      "name": "zwhu",
+      "url": "https://zwhu.github.io/about.html",
+      "sameAs": [
+        "https://github.com/zwhu",
+        "https://x.com/zwhu__"
+      ]
+    }
+  },
+  "noindexDirectories": [
+    "content/doc-lint-comparison"
+  ],
+  "pages": {
+    "index.html": {
+      "description": "zwhu 的个人技术博客，记录前端工程、Agent 评测与 AI 编程实践，收录技术译文和交互式学习笔记。"
+    },
+    "writing.html": {
+      "description": "zwhu 的原创文章归档：Agent 评测、AI 编程、前端工程、JavaScript 与开发实践，按最初发表时间排列。"
+    },
+    "translations.html": {
+      "description": "技术文章中英对照译文，收录 Claude Code 代码审查与多智能体工程实践，保留原文出处、正文和插图。"
+    },
+    "about.html": {
+      "description": "胡正伟（zwhu），写了十多年代码的前端与全栈工程师，最爱 JavaScript 的所见即所得：做过商品发布 SDK、政务低代码编辑器和菜鸟驿站前端治理，现在通过 AI 探索更多可能。"
+    },
+    "learning.html": {
+      "description": "交互式学习笔记：大模型训练与推理、AIME、ReAct token 累积、Pi 上下文压缩、Agent 记忆和 AI 编程。"
+    },
+    "blog-issue-29.html": {
+      "description": "用 JavaScript 尾递归实现十进制整数转二进制字符串，展示余数累积、零值处理与转换结果校验。"
+    },
+    "blog-issue-39.html": {
+      "description": "记录 Jest 与 Power-Assert 的安装和配置，包括 Babel preset、package.json 测试命令及运行方式。"
+    },
+    "blog-issue-40.html": {
+      "description": "虚拟 DOM 实现笔记第一篇：用 JavaScript 表示节点、属性和子节点，递归生成 HTML 字符串。"
+    },
+    "blog-issue-41.html": {
+      "description": "虚拟 DOM 实现笔记第二篇：递归遍历虚拟节点，创建真实 DOM、设置属性并挂载文本与子节点。"
+    },
+    "blog-issue-42.html": {
+      "description": "虚拟 DOM diff 实现笔记：对比新旧虚拟节点，复用真实 DOM，更新属性与子节点。"
+    },
+    "blog-issue-43.html": {
+      "description": "虚拟 DOM 实现笔记第三篇：组织 h、render 与 patch，处理文本节点、属性更新和子节点修补。"
+    },
+    "claude-code-review.html": {
+      "description": "Addy Osmani 关于 Claude Code 团队代码审查实践的全文中英对照翻译，介绍自动化检查与人工审查的分工，保留原文插图。",
+      "datePublished": "2026-10-27",
+      "author": {
+        "name": "Addy Osmani",
+        "url": "https://x.com/addyosmani"
+      },
+      "translationOfWork": {
+        "@type": "Article",
+        "name": "How the Claude Code team does code review",
+        "url": "https://x.com/addyosmani/status/2114604912520921136",
+        "inLanguage": "en",
+        "datePublished": "2026-10-26"
+      }
+    },
+    "engineers-new-problems.html": {
+      "description": "Katelyn Lesse 关于多智能体系统工程问题的全文中英对照翻译，讨论 Agent 的上下文、协作与运行环境，保留原文和插图。",
+      "datePublished": "2026-10-27",
+      "author": {
+        "name": "Katelyn Lesse",
+        "url": "https://www.katelynlesse.com/"
+      },
+      "translationOfWork": {
+        "@type": "Article",
+        "name": "The new set of problems for engineers to solve",
+        "url": "https://x.com/katelyn_lesse/status/2114542280535318557",
+        "inLanguage": "en",
+        "datePublished": "2026-10-26"
+      }
+    },
+    "agent-design-system.html": {
+      "description": "rico 关于为 Agent 搭建设计系统的全文中英对照翻译：primitives、语义 token、组件、区块，以及规则与 skill 的写法，保留原文代码与演示视频。",
+      "datePublished": "2026-11-03",
+      "author": {
+        "name": "rico",
+        "url": "https://x.com/_heyrico"
+      },
+      "translationOfWork": {
+        "@type": "Article",
+        "name": "Build the design system and skills your agent can follow",
+        "url": "https://x.com/_heyrico/status/2116953958279479760",
+        "inLanguage": "en",
+        "datePublished": "2026-11-01"
+      }
+    },
+    "superagent.html": {
+      "description": "从一次 CSV 修复的后续反馈，理解 Super-agent 如何分发消息、找回历史和恢复任务，再看持续运行与实验改善的代价。",
+      "datePublished": "2026-11-01"
+    },
+    "superagent-botmux.html": {
+      "description": "比较 botmux 与 Super-agent 的任务组织，复用已有接入和执行，先用真实任务验证续办质量与人工收益。",
+      "datePublished": "2026-11-01"
+    },
+    "blog-workflow.html": {
+      "description": "我只定题、看两次稿、点合并，其余交给 Agent 和 GitHub。和 Agent 合写博客的九步流程，五个让它管用的做法，以及每一步具体怎么做。",
+      "datePublished": "2026-11-03"
+    }
+  }
+}

@@ -5,6 +5,7 @@ import subprocess
 import sys
 
 from site_templates import ROOT, Site
+from site_paths import SITE_ROOT, public_content
 
 
 def main():
@@ -16,13 +17,21 @@ def main():
     except (ValueError, KeyError) as error:
         print(f'Site generation failed: {error}', file=sys.stderr)
         return 1
+    content = public_content()
+    stale_content = [path for path, data in content.items() if not path.exists() or path.read_bytes() != data]
+    retired_content = [path for path in (SITE_ROOT / 'content').rglob('*') if path.is_file() and path not in content]
     changed = [path for path, source in outputs.items() if path.read_text() != source]
-    if args.check and changed:
-        print('Stale generated regions: ' + ', '.join(path.name for path in changed), file=sys.stderr)
+    if args.check and (changed or stale_content or retired_content):
+        print('Stale generated regions: ' + ', '.join(str(path.relative_to(ROOT)) for path in changed + stale_content + retired_content), file=sys.stderr)
         return 1
     for path in changed:
         path.write_text(outputs[path])
     if not args.check:
+        for path in retired_content:
+            path.unlink()
+        for path in stale_content:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(content[path])
         subprocess.run([sys.executable, str(ROOT / 'scripts/update-seo.py')], check=True)
     print(f'{"Checked" if args.check else "Rendered"} shared HTML and catalogs for {len(outputs)} pages ({len(changed)} changed).')
     return 0

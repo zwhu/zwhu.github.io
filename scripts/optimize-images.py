@@ -14,6 +14,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from image_assets import ROOT, TRANSLATION_SIZES, dimensions, image_html
+from site_paths import SITE_ROOT
 
 
 class Images(HTMLParser):
@@ -51,7 +52,7 @@ def main():
     if not encoder:
         raise SystemExit('cwebp is required to regenerate images; existing assets and CI need no encoder.')
     candidates, pages = set(), {}
-    for path in sorted(ROOT.glob('*.html')):
+    for path in sorted(SITE_ROOT.glob('*.html')):
         source = path.read_text()
         images = Images(source)
         for _, _, attrs, _, _ in images.images:
@@ -62,7 +63,7 @@ def main():
                 data = base64.b64decode(encoded, validate=True)
                 digest = hashlib.sha256(data).hexdigest()
                 relative = f'assets/translations/original/{digest[:16]}.{extension}'
-                target = ROOT / relative
+                target = SITE_ROOT / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 if target.exists() and target.read_bytes() != data:
                     raise ValueError(f'Original asset hash collision: {relative}')
@@ -74,10 +75,10 @@ def main():
         pages[path] = (source, images)
 
     assets = {}
-    output = ROOT / 'assets/optimized'
+    output = SITE_ROOT / 'assets/optimized'
     output.mkdir(parents=True, exist_ok=True)
     for relative in sorted(candidates):
-        original = ROOT / relative
+        original = SITE_ROOT / relative
         data = original.read_bytes()
         width, height = dimensions(data)
         digest = hashlib.sha256(data).hexdigest()
@@ -88,7 +89,7 @@ def main():
                 if not target.exists():
                     subprocess.run([encoder, '-quiet', '-q', '88', '-m', '6', '-sharp_yuv', '-metadata', 'none',
                                     '-resize', str(size), '0', str(original), '-o', str(target)], check=True)
-                image['variants'].append(dict(path=target.relative_to(ROOT).as_posix(), width=size, bytes=target.stat().st_size))
+                image['variants'].append(dict(path=target.relative_to(SITE_ROOT).as_posix(), width=size, bytes=target.stat().st_size))
         assets[relative] = image
     manifest = {'encoder': 'cwebp -q 88 -m 6 -sharp_yuv; no upscaling; originals retained', 'images': assets}
     (ROOT / 'content/image-assets.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
