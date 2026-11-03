@@ -31,7 +31,7 @@ SYMBOL = {'dark': '●', 'mid': '◑', 'light': '○', 'contour': '◎'}
 # landscape map for tablets; narrow is portrait for phones. Narrow gaps and small corner trims keep neighbouring polygon edges aligned.
 # On wide, `lawn` is the Bézier under the lawn, traced from the user's sketch: it leaves the terminal's lower right corner,
 # so the stones' tops run on from the terminal's bottom, then climbs to the top edge.
-LAYOUTS = {'wide': dict(w=864, h=560, gap=7, radius=20, swap=False, hole=(340, 360), lawn=((340, 360), (580, 280), (775, 200), (785, 0)), rings=7),
+LAYOUTS = {'wide': dict(w=864, h=560, gap=7, radius=20, swap=False, hole=(340, 360), lawn=((340, 360), (580, 280), (775, 200), (785, 0)), rings=11),
            'medium': dict(w=704, h=420, gap=6, radius=16, swap=False, rings=6),
            'narrow': dict(w=331, h=560, gap=5, radius=12, swap=True, rings=5)}
 
