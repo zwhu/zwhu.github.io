@@ -78,6 +78,13 @@ class SearchMetadataTests(unittest.TestCase):
             self.assertEqual(article['author']['name'], author)
             self.assertEqual(article['translationOfWork']['inLanguage'], 'en')
 
+    def test_author_page_is_profile_of_site_author(self):
+        site = json.loads((ROOT / 'content/seo.json').read_text())['site']
+        path = ROOT / site['author']['url'].removeprefix(site['url'])
+        page = next(n for n in Metadata(path.read_text()).graphs[0]['@graph'] if n['@id'].endswith('#webpage'))
+        self.assertEqual(page['@type'], 'ProfilePage')
+        self.assertEqual(page['mainEntity'], {'@id': site['url'] + '#author'})
+
     def test_generated_outputs_are_current_and_repeatable(self):
         for path, expected in self.expected.items():
             with self.subTest(path=path.name):

@@ -10,6 +10,7 @@
 | 公共 HTML 结构 | `templates/`：导航、通用页脚、评论、统计、列表条目、三类目录与相关阅读 |
 | 原创文章的标题、发表日期、目录摘要、标签；`readingTime: true` 时在目录和文章元信息显示阅读时长 | `content/original-articles.json` |
 | 分享卡片（1200×630 `og:image`）的文案与图片路径 | `content/og-images.json`；`python3 scripts/render-og-images.py` 用本机 Chrome 渲染 PNG，`--check` 只校验文件 |
+| 关于页能力圈的格子、面积、深浅与说明 | `content/about-map.json`；`python3 scripts/render-about-map.py` 写入 `about.html` 的 `about-map` 区块，`--check` 只检查 |
 | 迁入文章的正文、日期、评论与图源快照 | `content/blog-issues.json`；由 `scripts/render-blog-issues.py` 生成正文 |
 | 学习页的目录标题、摘要、标签、顺序与相关阅读选择 | `content/interactive-learning.json`，`related` 引用已有课程 slug |
 | 译文的目录标题、摘要、顺序与标签 | `content/translations.json`；译文发表日期读取 `content/seo.json` |

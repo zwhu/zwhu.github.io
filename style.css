@@ -57,3 +57,83 @@
   .home-page .intro{padding-right:0}
   .home-page .intro-plane{display:none}
 }
+
+/* 关于页：沿用首页介绍区和文章列表；终端块复用代码块的底色与细边框。 */
+.about-page .intro .eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:2px;color:var(--accent);margin:0 0 19px}
+.about-page .intro .intro-lead{color:var(--text);font-size:17px;margin-bottom:8px}
+.about-page .intro>p:not(.eyebrow):not(.intro-lead){font-size:13px;line-height:1.95}
+.about-page .section-heading h2{display:flex;align-items:baseline;gap:12px;font-weight:600}
+.about-page .section-heading .section-index{font-family:ui-monospace,Menlo,monospace;font-size:10px;font-weight:400;color:var(--accent)}
+.whoami{margin:0 0 8px;padding:18px 20px;background:var(--code);border:1px solid var(--line);border-radius:5px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;line-height:1.85;color:var(--text)}
+.whoami b{font-weight:400;color:var(--accent);margin-right:4px}
+.whoami i{font-style:normal;color:var(--muted);margin-right:10px}
+.whoami .line{display:inline-block;animation:whoami-line 250ms ease-out both}
+.whoami .line:nth-of-type(2){animation-delay:.15s}.whoami .line:nth-of-type(3){animation-delay:.45s}
+.whoami .line:nth-of-type(4){animation-delay:.6s}.whoami .line:nth-of-type(5){animation-delay:.7s}
+.whoami .line:nth-of-type(6){animation-delay:.8s}.whoami .line:nth-of-type(7){animation-delay:.9s}
+.whoami .line:nth-of-type(8){animation-delay:1s}.whoami .line:nth-of-type(9){animation-delay:1.3s}
+.whoami .line:nth-of-type(10){animation-delay:1.45s}.whoami .line:nth-of-type(11){animation-delay:1.75s}
+.whoami .line:nth-of-type(12){animation-delay:1.9s}.whoami .line:nth-of-type(13){animation-delay:2.2s}
+.whoami .cursor{display:inline-block;width:7px;height:13px;vertical-align:-2px;background:var(--accent);animation:whoami-blink 1s steps(1) infinite}
+@keyframes whoami-line{from{opacity:0;transform:translateY(3px)}}
+@keyframes whoami-blink{50%{opacity:0}}
+.about-block{padding-top:34px;scroll-margin-top:25px}
+/* 能力圈：参照 Kanso 的磁盘地图，左上角是 whoami 终端，能力格从右侧和下方围住它。
+   面积表示投入；深浅表示主线、常用、延伸，从左到右由深到浅；同心细线表示正在深入的方向。 */
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.about-board{margin:0 0 6px}
+.about-board-map{position:relative;container-type:inline-size;background:var(--bg);border-radius:24px;overflow:hidden}
+/* 关于页放宽到 864px 正文，给能力圈留出横向空间；页头、正文、页脚一起放宽，保持对齐。 */
+.about-page{--page-width:920px}
+/* 终端占地图左上角的空位，尺寸与 render-about-map.py 的 hole 一致。 */
+.about-board .whoami{position:absolute;left:0;top:0;width:calc(340 / 864 * 100% - 3.5px);height:calc(360 / 560 * 100% - 3.5px);margin:0;background:var(--code);border:1px solid var(--line);border-radius:24px;padding:20px 22px;overflow:hidden;line-height:1.55;z-index:1}
+.whoami .map-name{color:var(--accent)}
+.whoami .map-readout{width:100%;white-space:pre-wrap;color:var(--muted)}
+.ability-map{display:block;width:100%;height:auto}
+.ability-map-medium,.ability-map-narrow{display:none}
+@media(max-width:899px){
+  .about-board .whoami{position:static;width:auto;height:auto;margin-bottom:8px;border-radius:24px}
+  .ability-map-wide{display:none}
+  .ability-map-medium{display:block}
+}
+.ability-map .cell{cursor:pointer;outline:none}
+.ability-map .shape{fill:var(--line);transition:opacity .15s}
+.ability-map .tone-dark .shape{fill:var(--text)}
+.ability-map .tone-mid .shape{fill:var(--muted)}
+.ability-map .tone-contour .shape{fill:var(--bg)}
+.ability-map .ring{fill:none;stroke:var(--muted);stroke-width:.6;opacity:.55}
+.ability-map text{fill:var(--text);text-anchor:middle;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;pointer-events:none}
+.ability-map .tone-dark text,.ability-map .tone-mid text{fill:var(--bg)}
+.ability-map .tone-contour text{paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.ability-map text.sub{font-family:ui-monospace,Menlo,monospace;opacity:.75}
+.ability-map .cell:hover .shape{opacity:.86}
+.ability-map .cell[aria-pressed="true"] .shape,.ability-map .cell:focus-visible .shape{stroke:var(--accent);stroke-width:2}
+.ability-map .tone-contour[aria-pressed="true"] .shape{stroke:none}
+.ability-map .tone-contour:focus-visible .shape{stroke:var(--accent);stroke-width:2}
+/* 鼠标在地图上时，《创造亚当》里上帝的手代替光标，食指指尖对准光标；图裁自公有领域壁画。 */
+.map-hand{position:fixed;left:0;top:0;width:120px;height:71px;pointer-events:none;z-index:20;opacity:0;transition:opacity .15s ease-out}
+.map-hand.is-visible{opacity:1}
+.ability-map.has-hand,.ability-map.has-hand .cell{cursor:none}
+.map-legend{display:flex;flex-wrap:wrap;gap:4px 18px;margin:12px 0 0;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted)}
+.map-legend i{font-style:normal;margin-right:5px}
+.map-legend .map-hint{margin-left:auto}
+.project .project-figure{white-space:nowrap;color:var(--accent);font-family:ui-monospace,Menlo,monospace;font-size:11px}
+.project .tags{word-spacing:3px;color:var(--muted)}
+.project p{max-width:640px;margin:8px 0 0}
+.about-links{list-style:none;margin:0 0 40px;padding:0}
+.about-links li{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px}
+.about-links span{white-space:nowrap;font-size:11px;color:var(--accent);font-family:ui-monospace,Menlo,monospace}
+@media(max-width:560px){
+  .about-page .intro .eyebrow{font-size:9px;margin-bottom:16px}
+  .about-page .intro .intro-lead{font-size:15px}
+  .about-page .intro>p:not(.eyebrow):not(.intro-lead){font-size:12px}
+  .whoami{padding:14px;font-size:11px}
+  .project .project-figure{display:block;margin-top:5px}
+  .about-links li{display:block}
+  .about-links span{display:block;margin-top:3px}
+  .about-board .whoami{margin-bottom:5px;border-radius:20px;padding:14px 16px;font-size:11px}
+  .ability-map-medium{display:none}
+  .ability-map-narrow{display:block}
+  .map-legend .map-hint{margin-left:0;flex-basis:100%}
+}
+@media(prefers-reduced-motion:reduce){.whoami .line,.whoami .cursor{animation:none}.ability-map .shape,.map-hand{transition:none}}

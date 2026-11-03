@@ -18,6 +18,7 @@ def checks():
         ('Learning style ownership', [python, 'scripts/check-learning-styles.py']),
         ('Loading budgets and analytics', [python, 'scripts/check-performance.py']),
         ('Share images', [python, 'scripts/render-og-images.py', '--check']),
+        ('About ability map', [python, 'scripts/render-about-map.py', '--check']),
         ('SEO metadata', [python, 'scripts/update-seo.py', '--check']),
         ('SEO contracts', [python, 'scripts/test-seo.py']),
         ('Comment behavior', ['node', '--test', 'tests/comments.test.cjs']),

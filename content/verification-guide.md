@@ -18,7 +18,7 @@ verify 不更新页面、不生成图片、不请求网络。所有检查都会�
 | 站内导航与资源使用相对路径，目标文件、HTML 锚点和 srcset 资源存在 | `check-links.py`、`test-links.py` |
 | 学习页样式归属、主题作用域、变量与加载顺序 | `check-learning-styles.py` |
 | HTML 和图片预算、原图校验值、图片尺寸与响应式来源、统计恰好一份且异步 | `check-performance.py` |
-| 分享图片尺寸与预算 | `render-og-images.py --check` |
+| 关于页能力圈生成同步，分享图片尺寸与预算 | `render-about-map.py --check`、`render-og-images.py --check` |
 | canonical、分享元数据、JSON-LD、sitemap、robots 与配置同步；发表日期、译文归属、公开验证标记及快照 noindex | `update-seo.py --check`、`test-seo.py` |
 | 评论按需加载、只初始化一次，主题地址和文章标识稳定 | `tests/comments.test.cjs` |
 | 检查失败、缺少执行程序时返回失败，后续检查仍执行 | `test-verify.py` |
