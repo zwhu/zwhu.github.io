@@ -134,6 +134,7 @@
 
 - 题图 `assets/blog-workflow/cover.svg` 沿用 Super-agent 主题插画的纸片、折角与朱砂红线：红笔改过的初稿、修改记录卡、`verify.py` 清单与发布后的网页。它是概念插画，放在开篇右栏、随栏宽缩放，不表示真实数据。
 - 图 1 由 `scripts/render-blog-workflow-figures.py` 生成：704px 宽、三条泳道（我／Agent／GitHub），手机端按栏宽缩小同一张图。我审阅的节点用朱砂红边框，回头路用虚线。改流程时先改 `content/blog-publishing-workflow.md`，再改脚本并重新生成。
+- 图 2 `verify.svg` 由同一脚本生成：704px 宽，上方两个运行入口（本地、CI），中间是按组列出的检查清单，下方是通过与失败两个结果；通过节点用朱砂红边框。分组与项数在脚本的 `CHECK_GROUPS`，增删 `scripts/verify.py` 的检查时同步修改并重新生成。
 
 ## 移动端与交互
 

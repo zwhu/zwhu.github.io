@@ -94,7 +94,7 @@
     <p>每篇文章从最新的 main 建独立的 git worktree，只提交本篇的文件。早先在同一个工作区里并行改几件事，别处的导航改动混进了性能优化的 PR，只好另开 <a href="https://github.com/zwhu/zwhu.github.io/pull/5">#5</a> 把它移出去。写这篇的同时，Super-agent 那篇也在另一个工作区改稿，两篇各开各的 PR。</p>
 
     <h3 id="why-checks">一条命令检查</h3>
-    <p>改完以后，Agent 运行 <code>python3 scripts/verify.py</code>，一共 12 项检查。GitHub Actions 在每个 PR 上跑同一条命令；main 设了分支保护，检查不通过、分支落后于 main，都合不进去，管理员也不例外。写这篇时，这项检查在 GitHub 上已经跑了 40 次，全部通过。</p>
+    <p>改完以后，Agent 运行 <code>python3 scripts/verify.py</code>，一共 11 项检查。GitHub Actions 在每个 PR 上跑同一条命令；main 设了分支保护，检查不通过、分支落后于 main，都合不进去，管理员也不例外。写这篇时，这项检查在 GitHub 上已经跑了 40 次，全部通过。</p>
 
     <h3 id="why-feedback">反馈变成偏好</h3>
     <p>我纠正文字时，常常只说“不顺”“看不懂”，不解释原因。Agent 当轮改稿，记下我的原话和前后版本，再分析我真正想表达的是什么，整理成长期偏好。下一篇动笔前，它先读这份偏好，同样的意见我就不用再说一遍。</p>
@@ -268,7 +268,8 @@
     </table></div>
 
     <h2 id="verify" tabindex="-1">7. 一条命令检查，剩下的靠看</h2>
-    <p>改完以后，Agent 运行 <code>python3 scripts/verify.py</code>。本地和 CI 用同一个入口，一共 12 项检查：生成的区块是否过期、站内链接和锚点、学习页样式归属、加载预算与图片、分享图、SEO、评论，以及检查脚本自己的测试。任何一项失败都返回非零，CI 的 <code>check</code> 不通过，PR 就合不进 main。</p>
+    <p>改完以后，Agent 运行 <code>python3 scripts/verify.py</code>。本地和 CI 用同一个入口，一共 11 项只读检查，分成七组。所有检查都会跑完，任何一项失败都返回非零，CI 的 <code>check</code> 不通过，PR 就合不进 main。</p>
+    <figure class="article-figure workflow-figure"><img src="./assets/blog-workflow/verify.svg" width="704" height="640" loading="lazy" alt="verify.py 示意图：Agent 在本地第 05 步、GitHub Actions 在每个 PR 上运行同一条命令，共 11 项只读检查，分为生成区块（2 项）、站内链接（2 项）、学习页样式、加载预算、分享与 SEO（3 项）、评论和 verify 自测七组。全部通过可以合并；任一失败列出失败项，修好后重跑。"><figcaption>图 2｜verify.py 的 11 项检查。本地和 CI 跑的是同一份清单。</figcaption></figure>
     <div class="table-scroll" tabindex="0" role="region" aria-label="程序检查与人工审阅（可横向滚动）"><table>
       <thead><tr><th>程序能拦住</th><th>只能靠人看</th></tr></thead>
       <tbody>
@@ -291,11 +292,11 @@
 
     <h3 id="sources" tabindex="-1">资料</h3>
     <ul class="article-references">
-      <li><a href="./content/blog-publishing-workflow.md">博客写作与发布流程</a>：九步流程与各类问题的去处；图 1 由 <code>scripts/render-blog-workflow-figures.py</code> 生成。</li>
+      <li><a href="./content/blog-publishing-workflow.md">博客写作与发布流程</a>：九步流程与各类问题的去处；图 1、图 2 由 <code>scripts/render-blog-workflow-figures.py</code> 生成。</li>
       <li><a href="./content/writing-feedback-guide.md">对话中的写作反馈</a>：什么时候记录、同一轮怎么做、怎样整理成长期偏好。</li>
       <li><a href="./content/writing-feedback-log.md">文稿修改记录</a>：Super-agent 文章的六处反馈与这篇文章的改稿记录。</li>
       <li><a href="./content/writing-preferences.md">个人写作偏好</a>与 <a href="https://github.com/zwhu/zwhu.github.io/blob/main/.agents/skills/doc-lint/SKILL.md">doc-lint</a>。</li>
-      <li><a href="./content/verification-guide.md">验证流程</a>：12 项检查的范围与失败处理。</li>
+      <li><a href="./content/verification-guide.md">验证流程</a>：11 项检查的范围与失败处理。</li>
     </ul>
   </div>
   <nav class="article-bottom" aria-label="文章导航">

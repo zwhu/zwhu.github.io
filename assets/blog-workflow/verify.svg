@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="704" height="640" viewBox="0 0 704 640" role="img" aria-labelledby="title desc" data-graph-type="flowchart">
+<title id="title">一条命令，两处运行</title>
+<desc id="desc">verify.py 示意图：Agent 在本地第 05 步、GitHub Actions 在每个 PR 上运行同一条命令 python3 scripts/verify.py，共 11 项只读检查，分为生成区块、站内链接、学习页样式、加载预算、分享与 SEO、评论和 verify 自测七组。全部通过时 CI 的 check 变绿，可以合并；任一失败则列出失败项，修好后重跑。main 设了分支保护，管理员也不例外。</desc>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif}</style>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#77746e"/></marker></defs>
+<rect width="704" height="640" fill="#faf8f3" data-graph-role="background"/>
+<text x="24" y="32" font-size="19" font-weight="500" text-anchor="start" fill="#292825">一条命令，两处运行</text>
+<text x="24" y="57" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">本地和 CI 跑同一个 verify.py；任何一项失败，PR 都合不进 main</text>
+<rect id="run-local" data-node-id="run-local" data-graph-role="node" data-graph-bounds="56,86,316,138" x="56" y="86" width="260" height="52" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="186.0" y="109.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">Agent 本地运行</text>
+<text x="186.0" y="126.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">第 05 步，改完就跑</text>
+<rect id="run-ci" data-node-id="run-ci" data-graph-role="node" data-graph-bounds="388,86,648,138" x="388" y="86" width="260" height="52" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="518.0" y="109.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">GitHub Actions</text>
+<text x="518.0" y="126.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">每个 PR、每次推到 main</text>
+<path id="e-local" data-edge-id="e-local" data-graph-role="edge" d="M186 138 L186 170" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path id="e-ci" data-edge-id="e-ci" data-graph-role="edge" d="M518 138 L518 170" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<rect x="24" y="170" width="656" height="322" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="44" y="197" font-size="14" font-weight="500" text-anchor="start" fill="#292825" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">python3 scripts/verify.py</text>
+<text x="660" y="197" font-size="13" font-weight="400" text-anchor="end" fill="#a64335">11 项 · 只读 · 不联网</text>
+<path d="M24 212H680" stroke="#e6e2da"/>
+<text x="44" y="237" font-size="14" font-weight="500" text-anchor="start" fill="#292825">生成区块</text>
+<text x="164" y="237" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">导航、页脚、目录与源文件同步，不覆盖手写正文</text>
+<text x="660" y="237" font-size="13" font-weight="400" text-anchor="end" fill="#77746e">2 项</text>
+<path d="M24 252H680" stroke="#e6e2da"/>
+<text x="44" y="277" font-size="14" font-weight="500" text-anchor="start" fill="#292825">站内链接</text>
+<text x="164" y="277" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">链接、锚点和图片路径都能找到</text>
+<text x="660" y="277" font-size="13" font-weight="400" text-anchor="end" fill="#77746e">2 项</text>
+<path d="M24 292H680" stroke="#e6e2da"/>
+<text x="44" y="317" font-size="14" font-weight="500" text-anchor="start" fill="#292825">学习页样式</text>
+<text x="164" y="317" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">样式归属、主题作用域与加载顺序</text>
+<text x="660" y="317" font-size="13" font-weight="400" text-anchor="end" fill="#77746e">1 项</text>
+<path d="M24 332H680" stroke="#e6e2da"/>
+<text x="44" y="357" font-size="14" font-weight="500" text-anchor="start" fill="#292825">加载预算</text>
+<text x="164" y="357" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">HTML 与图片体积、响应式图片、统计脚本</text>
+<text x="660" y="357" font-size="13" font-weight="400" text-anchor="end" fill="#77746e">1 项</text>
+<path d="M24 372H680" stroke="#e6e2da"/>
+<text x="44" y="397" font-size="14" font-weight="500" text-anchor="start" fill="#292825">分享与 SEO</text>
+<text x="164" y="397" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">分享图、canonical、sitemap 与发表日期</text>
+<text x="660" y="397" font-size="13" font-weight="400" text-anchor="end" fill="#77746e">3 项</text>
+<path d="M24 412H680" stroke="#e6e2da"/>
+<text x="44" y="437" font-size="14" font-weight="500" text-anchor="start" fill="#292825">评论</text>
+<text x="164" y="437" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">giscus 按需加载，只初始化一次</text>
+<text x="660" y="437" font-size="13" font-weight="400" text-anchor="end" fill="#77746e">1 项</text>
+<path d="M24 452H680" stroke="#e6e2da"/>
+<text x="44" y="477" font-size="14" font-weight="500" text-anchor="start" fill="#292825">verify 自测</text>
+<text x="164" y="477" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">失败或缺依赖时返回非零，后续照跑</text>
+<text x="660" y="477" font-size="13" font-weight="400" text-anchor="end" fill="#77746e">1 项</text>
+<path id="e-pass" data-edge-id="e-pass" data-graph-role="edge" d="M186 492 L186 532" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path id="e-fail" data-edge-id="e-fail" data-graph-role="edge" d="M518 492 L518 532" fill="none" stroke="#77746e" stroke-width="1.3" marker-end="url(#arrow)"/>
+<rect id="pass" data-node-id="pass" data-graph-role="node" data-graph-bounds="56,532,316,584" x="56" y="532" width="260" height="52" rx="4" fill="#faf8f3" stroke="#a64335" stroke-width="1.6"/>
+<text x="186.0" y="555.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">全部通过</text>
+<text x="186.0" y="572.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">CI 的 check 变绿，可以合并</text>
+<rect id="fail" data-node-id="fail" data-graph-role="node" data-graph-bounds="388,532,648,584" x="388" y="532" width="260" height="52" rx="4" fill="#faf8f3" stroke="#e6e2da"/>
+<text x="518.0" y="555.0" font-size="15" font-weight="500" text-anchor="middle" fill="#292825">任一失败</text>
+<text x="518.0" y="572.0" font-size="12" font-weight="400" text-anchor="middle" fill="#77746e">列出失败项，修好后重跑</text>
+<text x="24" y="620" font-size="13" font-weight="400" text-anchor="start" fill="#77746e">main 设了分支保护：check 不通过或分支落后于 main，都合不进去，管理员也不例外。</text>
+</svg>

@@ -18,12 +18,14 @@ verify 不更新页面、不生成图片、不请求网络。所有检查都会�
 | 站内导航与资源使用相对路径，目标文件、HTML 锚点和 srcset 资源存在 | `check-links.py`、`test-links.py` |
 | 学习页样式归属、主题作用域、变量与加载顺序 | `check-learning-styles.py` |
 | HTML 和图片预算、原图校验值、图片尺寸与响应式来源、统计恰好一份且异步 | `check-performance.py` |
-| 正文重绘图生成同步、分享图片尺寸与预算 | `render-superagent-source-diagrams.cjs --check`、`render-og-images.py --check` |
+| 分享图片尺寸与预算 | `render-og-images.py --check` |
 | canonical、分享元数据、JSON-LD、sitemap、robots 与配置同步；发表日期、译文归属、公开验证标记及快照 noindex | `update-seo.py --check`、`test-seo.py` |
 | 评论按需加载、只初始化一次，主题地址和文章标识稳定 | `tests/comments.test.cjs` |
 | 检查失败、缺少执行程序时返回失败，后续检查仍执行 | `test-verify.py` |
 
 链接检查从根目录正式 HTML 出发，继续检查它们引用的本地 HTML；校验 `href`、`src`、`poster`、`xlink:href` 和 `srcset`。canonical 允许正式绝对地址，搜索元数据由 SEO 检查负责；外部链接不联网探测，CSS／JavaScript 中动态生成的地址不在静态链接检查范围内。
+
+正文配图的 SVG 由 `scripts/render-*` 生成后提交，verify 不重新生成比对。改图时先改脚本，再运行对应脚本重新生成，不直接手改 SVG。
 
 ## 失败后如何处理
 
