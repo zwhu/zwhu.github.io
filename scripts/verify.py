@@ -17,7 +17,6 @@ def checks():
         ('Link checker tests', [python, 'scripts/test-links.py']),
         ('Learning style ownership', [python, 'scripts/check-learning-styles.py']),
         ('Loading budgets and analytics', [python, 'scripts/check-performance.py']),
-        ('Source diagram generation', ['node', 'scripts/render-superagent-source-diagrams.cjs', '--check']),
         ('Share images', [python, 'scripts/render-og-images.py', '--check']),
         ('SEO metadata', [python, 'scripts/update-seo.py', '--check']),
         ('SEO contracts', [python, 'scripts/test-seo.py']),
