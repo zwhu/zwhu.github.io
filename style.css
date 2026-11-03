@@ -82,11 +82,11 @@
    面积表示投入；深浅表示主线、常用、延伸，从左到右由深到浅；同心细线表示正在深入的方向。 */
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .about-board{margin:0 0 6px}
-.about-board-map{position:relative;container-type:inline-size}
+.about-board-map{position:relative;container-type:inline-size;background:var(--bg);border-radius:24px;overflow:hidden}
 /* 关于页放宽到 864px 正文，给能力圈留出横向空间；页头、正文、页脚一起放宽，保持对齐。 */
 .about-page{--page-width:920px}
 /* 终端占地图左上角的空位，尺寸与 render-about-map.py 的 hole 一致。 */
-.about-board .whoami{position:absolute;left:0;top:0;width:calc(330 / 864 * 100% - 4px);height:calc(360 / 560 * 100% - 4px);margin:0;border:0;border-radius:28px;padding:20px 22px;overflow:hidden;line-height:1.55}
+.about-board .whoami{position:absolute;left:0;top:0;width:calc(340 / 864 * 100% - 2px);height:calc(360 / 560 * 100% - 2px);margin:0;background:var(--code);border:1px solid var(--line);border-radius:24px;padding:20px 22px;overflow:hidden;line-height:1.55;z-index:1}
 .whoami .map-name{color:var(--accent)}
 .whoami .map-readout{width:100%;white-space:pre-wrap;color:var(--muted)}
 .ability-map{display:block;width:100%;height:auto}
@@ -105,9 +105,12 @@
 .ability-map text{fill:var(--text);text-anchor:middle;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;pointer-events:none}
 .ability-map .tone-dark text,.ability-map .tone-mid text{fill:var(--bg)}
 .ability-map .tone-contour text{paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.ability-map .contour-field .shape{stroke:var(--line);stroke-width:1}
 .ability-map text.sub{font-family:ui-monospace,Menlo,monospace;opacity:.75}
 .ability-map .cell:hover .shape{opacity:.86}
 .ability-map .cell[aria-pressed="true"] .shape,.ability-map .cell:focus-visible .shape{stroke:var(--accent);stroke-width:2}
+.ability-map .contour-field[aria-pressed="true"] .shape{stroke:var(--muted);stroke-width:1}
+.ability-map .contour-field:focus-visible .shape{stroke:var(--accent);stroke-width:2}
 .map-legend{display:flex;flex-wrap:wrap;gap:4px 18px;margin:12px 0 0;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted)}
 .map-legend i{font-style:normal;margin-right:5px}
 .map-legend .map-hint{margin-left:auto}
