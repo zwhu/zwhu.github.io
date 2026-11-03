@@ -7,7 +7,7 @@
   <title>我只看两次稿，文章是怎么上线的？ · zwhu</title>
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./archive.css">
-  <link rel="stylesheet" href="./assets/blog-workflow/workflow.css">
+  <link rel="stylesheet" href="./assets/blog-workflow/workflow.css?v=2">
   <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
@@ -47,17 +47,18 @@
       <h1>我只看两次稿，<br>文章是怎么上线的？</h1>
       <p class="workflow-subtitle">和 Agent 合写博客：九步流程与五个做法</p>
       <p class="workflow-standfirst">11 月 2 日下午到 3 日凌晨，这个博客合并了 17 个 PR，有新文章、译文，也有多轮改稿。每篇文章里，我只定题、看两次稿、点合并，其余交给 Agent 和 GitHub。</p>
-      <div class="meta"><time datetime="2026-11-03">2026-11-03</time><!-- site:reading-time:start --> · 阅读约 6 分钟<!-- site:reading-time:end --> · AI 写作 · 工程实践</div>
+      <div class="meta"><time datetime="2026-11-03">2026-11-03</time><!-- site:reading-time:start --> · 阅读约 8 分钟<!-- site:reading-time:end --> · AI 写作 · 工程实践</div>
     </div>
     <figure class="article-figure cover-figure"><img src="./assets/blog-workflow/cover.svg" width="640" height="440" alt="红笔改过的初稿、记着 AI 分析和长期偏好的修改记录、verify.py 检查清单和发布后的网页，由一条红线串起。"></figure>
   </div>
   <div class="prose">
-    <p>这样分工能行，靠五个做法：<strong>只在两处看稿、规则写进文件、一篇文章一个 PR、一条命令检查、反馈变成偏好</strong>。前两节讲流程，以及这五个做法为什么管用；后面几节讲每一步具体怎么做，其中流程和改稿卡片两处可以点开操作。</p>
+    <p>这样分工能行，靠五个做法：<strong>只在两处看稿、规则写进文件、一篇文章一个 PR、一条命令检查、反馈变成偏好</strong>。第 1 节先交代这个博客的技术架构，以及它为什么需要这套做法；第 2、3 节讲流程和五个做法为什么管用；后面几节讲每一步具体怎么做，其中流程和改稿卡片两处可以点开操作。</p>
 
     <nav class="article-toc" aria-label="文章快速导航">
       <span class="article-toc-label">本文导航</span>
       <div class="article-toc-links">
-        <a href="#overview" aria-current="location">流程</a>
+        <a href="#background" aria-current="location">背景</a>
+        <a href="#overview">流程</a>
         <a href="#why">为什么管用</a>
         <a href="#flow">每一步</a>
         <a href="#feedback">改稿记录</a>
@@ -68,13 +69,19 @@
       </div>
     </nav>
 
-    <h2 id="overview" tabindex="-1">1. 九步流程，我只在两处看稿</h2>
+    <h2 id="background" tabindex="-1">1. 纯静态博客，自由也容易走样</h2>
+    <p>这个博客是一个纯静态站。页面用原生 HTML、CSS 和 JavaScript 写成，没有框架，也没有构建步骤，GitHub Pages 直接发布 main 分支的根目录。导航、页脚和文章目录由几个 Python 脚本从模板和 JSON 生成，生成后的 HTML 一起提交。访问统计和加载性能交给 Cloudflare Web Analytics，评论区用 giscus，评论存在 GitHub Discussions 里。</p>
+    <p>和 WordPress、Hexo 这类博客系统比，这样做有两个好处。一是快：页面只是静态文件，统计脚本异步加载，评论区快滚到眼前才加载，图片按屏幕宽度给 WebP。优化以后，最重的一篇译文在受控网络下 DOM 就绪时间缩短到原来的约 1/15。二是自由：每篇文章可以有自己的版式和交互，这篇里能点开的流程图和改稿卡片，就是文章自带的一份 CSS 和 JS。</p>
+    <p>代价是没有现成的主题替我约束样式。每一页都由 Agent 直接改 HTML 和 CSS，它改得快，也容易改偏：配图和页面风格不搭，我说“配图感觉很不和谐”；图比版心宽出一截；为手机单独画的配图，我看了只觉得“难看的不行”，最后全部删掉，手机端直接用桌面版。正文也一样，Agent 写得通顺，但新开一个会话，上次提过的意见它就不记得了。</p>
+    <p>所以我需要一套和 Agent 协作的办法：样式和写法有文件可查，每次改动的范围清楚，改坏了有检查拦住，我说过的意见下次还算数。下面先看这套办法落到一篇文章上是什么样子。</p>
+
+    <h2 id="overview" tabindex="-1">2. 九步流程，我只在两处看稿</h2>
     <p>一篇文章从定题到上线分九步，分给三方：我、Agent 和 GitHub。</p>
     <figure class="article-figure workflow-figure"><img src="./assets/blog-workflow/flow.svg" width="704" height="744" loading="lazy" alt="三条泳道的流程图：我在第 03 步通读正文、第 05 步看整页，最后点合并；其余步骤由 Agent 执行，GitHub 负责 CI 检查与发布。虚线回头路：正文要改回 03，图要改回 04，CI 失败或冲突修好后回 05。"><figcaption>图 1｜一篇文章的九步。红框两处由我看稿，虚线是回头路。</figcaption></figure>
     <p>我定下要讲的问题和例子，在第 03 步通读正文，在第 05 步看生成后的整页，CI 通过后点合并。找资料、改文件、画图、生成页面、跑检查、开 PR、确认上线，都由 Agent 做。</p>
     <p>虚线是回头路。正文的问题留在第 03 步当轮改；图和排版的问题回第 04 步；CI 失败或与 main 冲突，修好后回第 05 步重新生成、检查。哪一步出问题就回哪一步，前面定好的部分不用重做。</p>
 
-    <h2 id="why" tabindex="-1">2. 五个做法，为什么管用</h2>
+    <h2 id="why" tabindex="-1">3. 五个做法，为什么管用</h2>
     <p>和 Agent 合写，最常遇到五个麻烦：每一步都等我确认；新开的会话忘了上次的要求；几件事的改动混进同一个 PR；改坏了没人发现；同样的意见要说很多遍。下面五个做法，各自对着其中一个。</p>
 
     <h3 id="why-review">只在两处看稿</h3>
@@ -92,7 +99,7 @@
     <h3 id="why-feedback">反馈变成偏好</h3>
     <p>我纠正文字时，常常只说“不顺”“看不懂”，不解释原因。Agent 当轮改稿，记下我的原话和前后版本，再分析我真正想表达的是什么，整理成长期偏好。下一篇动笔前，它先读这份偏好，同样的意见我就不用再说一遍。</p>
 
-    <h2 id="flow" tabindex="-1">3. 每一步怎么做</h2>
+    <h2 id="flow" tabindex="-1">4. 每一步怎么做</h2>
     <p>从这一节开始讲具体做法。图 1 的九步，每一步由谁来做、用到哪些文件、出了问题回到哪里，都在下面。</p>
 
     <section class="flow" data-flow aria-label="九步写作与发布流程">
@@ -169,7 +176,7 @@
       <p class="widget-note"><span class="review-dot" aria-hidden="true"></span>标记的两步需要我审阅。</p>
     </section>
 
-    <h2 id="feedback" tabindex="-1">4. 一句“不顺”，Agent 记下什么</h2>
+    <h2 id="feedback" tabindex="-1">5. 一句“不顺”，Agent 记下什么</h2>
     <p>先看一个例子。写 <a href="./superagent.html">Super-agent 那篇文章</a>时，我指着第 01 节的开头说：“这句话非常不顺，太AI味，太读不懂了。”Agent 改了一版，我还是没用，自己写了一句：</p>
     <blockquote><p>需求是在群聊里提出的，而代码在 PR 里评审，需求后续的问题还是得回到群聊中讨论解决。</p></blockquote>
     <p>这句话随后进了正文。下一篇文章还会遇到同样的问题，所以 Agent 得从这次改稿里学到东西。只记住“而”和“还是得”两个词没用，下一篇照着套，读起来只会换一种方式不像我。它要看出我为什么这样写。</p>
@@ -234,7 +241,7 @@
       </article>
     </section>
 
-    <h2 id="preferences" tabindex="-1">5. 六处反馈，变成五条偏好</h2>
+    <h2 id="preferences" tabindex="-1">6. 六处反馈，变成五条偏好</h2>
     <p>六处反馈里，AI 把能用到下一篇的部分整理成长期偏好，写进<a href="./content/writing-preferences.md">个人写作偏好</a>文件。每条写明从哪些反馈来、适用到哪里；只针对这一篇的要求，比如 WF-01 的称谓，留在修改记录里，不往外推。</p>
     <div class="table-scroll" tabindex="0" role="region" aria-label="长期偏好（可横向滚动）"><table>
       <thead><tr><th>偏好</th><th>来自</th><th>写作时怎么用</th></tr></thead>
@@ -260,7 +267,7 @@
       </tbody>
     </table></div>
 
-    <h2 id="verify" tabindex="-1">6. 一条命令检查，剩下的靠看</h2>
+    <h2 id="verify" tabindex="-1">7. 一条命令检查，剩下的靠看</h2>
     <p>改完以后，Agent 运行 <code>python3 scripts/verify.py</code>。本地和 CI 用同一个入口，一共 12 项检查：生成的区块是否过期、站内链接和锚点、学习页样式归属、加载预算与图片、分享图、SEO、评论，以及检查脚本自己的测试。任何一项失败都返回非零，CI 的 <code>check</code> 不通过，PR 就合不进 main。</p>
     <div class="table-scroll" tabindex="0" role="region" aria-label="程序检查与人工审阅（可横向滚动）"><table>
       <thead><tr><th>程序能拦住</th><th>只能靠人看</th></tr></thead>
@@ -273,7 +280,7 @@
     </table></div>
     <p>右边一栏，文字按 doc-lint 逐段读，页面在桌面和手机上实际打开看。交付时 Agent 要说明做了哪些检查，不能把“静态检查通过”说成“页面没问题”。</p>
 
-    <h2 id="start" tabindex="-1">7. 想照着做，从这五件事开始</h2>
+    <h2 id="start" tabindex="-1">8. 想照着做，从这五件事开始</h2>
     <ol>
       <li><strong>只在两处看稿</strong>：定好看正文和看整页两个时间点，别的步骤不排队等你。</li>
       <li><strong>规则写进文件</strong>：在仓库根目录放一张表，写清什么任务读哪份规范。</li>
@@ -300,7 +307,7 @@
 <!-- site:comments:start --><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section><!-- site:comments:end -->
 <!-- site:comment-scripts:start --><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=6" defer></script><!-- site:comment-scripts:end -->
 <script src="./article-toc.js?v=2" defer></script>
-<script src="./assets/blog-workflow/workflow.js" defer></script>
+<script src="./assets/blog-workflow/workflow.js?v=2" defer></script>
 </main>
 <!-- site:footer:start --><footer><span>zwhu / Tech &amp; Notes</span><a href="#main">回到顶部 ↑</a></footer><!-- site:footer:end -->
 <!-- site:analytics:start --><!-- Cloudflare Web Analytics --><script async type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --><!-- site:analytics:end --></body>
