@@ -23,7 +23,7 @@
 - `claude-code-review.html`、`engineers-new-problems.html`、`agent-design-system.html`：三篇英中对照译文，原文出处、正文与插图保持完整；图片与演示视频的原始字节归档在 `assets/translations/original/`，无法访问 X 也能阅读，正文图片使用响应式派生资源。
 - 各文章 HTML：标题、日期、正文；新增文章时沿用同类页面外壳，登记对应元信息后运行公共生成。
 - `content/original-articles.json`：新增原创文章的标题、日期、路径、摘要与标签；目录生成脚本会一并收录，正文维护在对应 HTML 中。
-- `ub-mode-bench.html`：ub-mode 评测文章；图表数据见 `content/ub-mode-bench-data.json`，图与移动端版本在 `assets/ub-mode-bench/`。维护脚本 `scripts/render-ub-mode-figures.py` 使用 matplotlib 生成静态 SVG，站点运行不依赖 Python 或绘图库。
+- `ub-mode-bench.html`：ub-mode 评测文章；图表数据见 `content/ub-mode-bench-data.json`，图在 `assets/ub-mode-bench/`。维护脚本 `scripts/render-ub-mode-figures.py` 使用 matplotlib 生成静态 SVG，站点运行不依赖 Python 或绘图库。
 - `style.css`：共用颜色、字体与布局；`translation.css`：对照阅读样式；`archive.css`：专栏与评论样式。使用系统字体。
 
 主导航、通用页脚、评论外壳、首页与目录列表、学习页相关阅读统一生成。维护位置与接入流程见[公共模板与目录生成](./content/site-generation-guide.md)：修改 `templates/` 或元信息后运行 `python3 scripts/render-site.py`，再运行 `python3 scripts/verify.py` 检查。脚本自动更新 SEO，静态 HTML 一起提交；正文与译文来源页脚继续保留在各自页面中。
@@ -62,7 +62,7 @@
 
 写作前读取[个人偏好](./content/writing-preferences.md)。在对话中纠正文稿的表达时，AI 同步保存修改前后与用户说明的原因，处理方法见[反馈流程](./content/writing-feedback-guide.md)，实例保存在[修改记录](./content/writing-feedback-log.md)。
 
-从本次写作、配图和 PR 协作整理的完整过程见[博客发布流程](./content/blog-publishing-workflow.md)，其中区分用户原话、AI 的待确认分析与本篇要求。
+从本次写作、配图和 PR 协作整理的完整过程见[博客发布流程](./content/blog-publishing-workflow.md)，其中区分用户原话、AI 分析与本篇要求，并说明反馈怎样整理成长期偏好。
 
 ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-comparison/`，不加入 `content/original-articles.json`，因此首页和文章归档只展示正式文章。
 
@@ -111,7 +111,7 @@ ub-mode 文章的润色前后快照与对照记录保存在 `content/doc-lint-co
 - `assets/superagent/original/`：原文图 3–8、10–14，保留原图号和来源；主文展示七张关键架构图与两张实验图，Thread 示例和原结果表在实验附录。
 - `content/superagent-review-changes.md`：第二版与最初博客的主题对应，说明恢复的内容和原图位置。
 - 第三版按一次 CSV 修复串联消息归属、身份、上下文、恢复和实验。主题插画与收益/开销比较由 `scripts/render-superagent-editorial.cjs` 生成，局部编辑布局在 `assets/superagent/editorial.css`，三场景交互在 `assets/superagent/routes.js`。网页提供静态表格后备，完整架构图继续按需加载。
-- 第四版将正文七张旧架构图重绘成博客风格，桌面/手机 SVG 在 `assets/superagent/redrawn/`；运行 `node scripts/render-superagent-source-diagrams.cjs` 生成，同时检查两种布局的节点与关系对应。原图对照与来源保留。
+- 第四版将正文七张旧架构图重绘成博客风格，SVG 在 `assets/superagent/redrawn/`；运行 `node scripts/render-superagent-source-diagrams.cjs` 生成并检查节点与关系。手机端沿用同一张图。原图对照与来源保留。
 
 先执行 `node scripts/vendor/architecture-canvas/validate.cjs assets/superagent/scene.js`，再执行 `node scripts/render-superagent-diagrams.cjs`。生成过程只用 Node 标准库，GitHub Pages 仍直接提供静态文件；修改正文时同时维护 Markdown 与对应 HTML。
 

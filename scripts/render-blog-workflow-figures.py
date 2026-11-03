@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate the blog-workflow flowcharts (desktop swimlanes and a mobile single column).
+"""Regenerate the blog-workflow flowcharts (three swimlanes; mobile shows the same SVG).
 
 Steps, owners and loops follow content/blog-publishing-workflow.md. No dependencies.
 """
@@ -117,43 +117,5 @@ def desktop():
     s.write('flow.svg', '三条泳道的流程图：我、Agent、GitHub。九步从定题到在线确认；我在第 03 步通读正文、第 05 步看整页，最后点合并。虚线是回头路：正文要改回 03，图要改回 04，CI 失败或冲突修好后回 05。')
 
 
-def mobile():
-    s = Svg(330, 660)
-    s.text(16, 28, TITLE, 17, 500, TEXT)
-    s.text(16, 50, '红框两步由我审阅，虚线是回头路', 12)
-    x, w, h = 16, 220, 46
-    right = x + w
-    row = {i: 98 + (i - 1) * 62 for i in range(1, 10)}
-    nodes = [
-        ('m01', '01 定题、找资料', '我定问题，Agent 找资料'),
-        ('m02', '02 建独立工作区', 'Agent · 读规范和原稿'),
-        ('m03', '03 写正文，我通读', 'Agent 当轮改稿、记意见', True),
-        ('m04', '04 排版与配图', 'Agent · 沿用视觉规范'),
-        ('m05', '05 生成检查，我看整页', 'Agent 跑 verify.py、预览', True),
-        ('m06', '06 提交本篇，开 PR', 'Agent · 只暂存本篇文件'),
-        ('m07', '07 CI 检查', 'GitHub · check 通过'),
-        ('m08', '08 合并，Pages 发布', '我点合并，GitHub 发布'),
-        ('m09', '09 在线确认', 'Agent · 交付正式链接'),
-    ]
-    for i, (nid, title, sub, *review) in enumerate(nodes, 1):
-        s.node(nid, x, row[i] - h // 2, w, h, title, sub, bool(review), 14, 11)
-    c = x + w // 2
-    for i in range(1, 9):
-        s.edge(f'f{i:02d}', [(c, row[i] + h // 2), (c, row[i + 1] - h // 2)])
-    s.edge('b03', [(right, row[3] - 8), (254, row[3] - 8), (254, row[3] + 8), (right, row[3] + 8)], back=True)
-    s.text(260, row[3] + 4, '意见', 11)
-    s.edge('b04', [(right, row[5] - 8), (262, row[5] - 8), (262, row[4]), (right, row[4])], back=True)
-    s.text(268, row[4] + 35, '图', 11)
-    s.edge('b05', [(right, row[5] + 4), (296, row[5] + 4), (296, row[3] + 16), (right, row[3] + 16)], back=True)
-    s.text(302, row[4] - 2, '正', 11)
-    s.text(302, row[4] + 12, '文', 11)
-    s.edge('b07', [(right, row[7]), (262, row[7]), (262, row[5] + 16), (right, row[5] + 16)], back=True)
-    s.text(268, row[6] - 2, '失败', 11)
-    s.text(268, row[6] + 12, '冲突', 11)
-    legend(s, 16, 646, 11)
-    s.write('flow-mobile.svg', '单列流程图：九步从定题到在线确认，第 03、05 步由我审阅。右侧虚线是回头路：意见在 03 当轮改，正文要改回 03，图要改回 04，CI 失败或冲突回 05。')
-
-
 if __name__ == '__main__':
     desktop()
-    mobile()
