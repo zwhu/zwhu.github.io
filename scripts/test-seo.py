@@ -65,6 +65,13 @@ class SearchMetadataTests(unittest.TestCase):
         for p in (SITE_ROOT / 'content/doc-lint-comparison').glob('*.html'):
             self.assertTrue(any('noindex' in a.get('content', '') for a in Metadata(p.read_text()).tags if a.get('name') == 'robots'))
 
+    def test_text_sitemap_matches_xml_urls(self):
+        xml_urls = [e.text for e in ET.parse(SITE_ROOT / 'sitemap.xml').findall('.//{*}loc')]
+        text = (SITE_ROOT / 'sitemap.txt').read_text(encoding='utf-8')
+        self.assertEqual(text, '\n'.join(xml_urls) + '\n')
+        self.assertEqual(len(text.splitlines()), len(set(xml_urls)))
+        self.assertTrue(all(url.startswith('https://zwhu.github.io/') for url in text.splitlines()))
+
     def test_original_publication_and_translation_attribution(self):
         issues = json.loads((ROOT / 'content/blog-issues.json').read_text())['issues']
         for issue in issues:
