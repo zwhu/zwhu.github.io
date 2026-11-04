@@ -1,5 +1,14 @@
 # zwhu 的个人技术博客
 
+## 目标与愿景
+
+- 追求 Linear 网站与 Apple Notes 那样的简洁与完成度：目的清晰，架构、设计和实现简单。
+- 让布局本身解释界面。减少标语、辅助说明和次要标签；页面需要大量解释才能看懂时，先改进布局与命名。
+- 每个决策都应兼顾用户体验（UX）、开发者体验（DX）和 Agent 体验（AX），保留已有功能与行为。
+- 工作交流同样追求简洁：直接说结果、关键依据和需要决定的事，让每句话都有用。
+
+## 仓库维护
+
 中文技术博客，原生 HTML / CSS / JavaScript，直接部署到 GitHub Pages，无需构建工具。站点文件在 `docs/`，Pages 发布 `main /docs`；`content/`、`templates/`、`scripts/` 和 `tests/` 在仓库根目录。
 
 `docs/content/` 是 `content/` 的生成副本，只编辑源文件后运行 `python3 scripts/render-site.py`。元信息中的 URL 路径不加 `docs/` 前缀。
