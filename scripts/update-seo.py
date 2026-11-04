@@ -209,6 +209,8 @@ def outputs(root):
         ET.SubElement(entry, f'{{{namespace}}}loc').text = url
     ET.indent(sitemap, space='  ')
     changes[publish / 'sitemap.xml'] = '<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(sitemap, encoding='unicode') + '\n'
+    # Plain text is also a supported sitemap format; keep both URL lists identical.
+    changes[publish / 'sitemap.txt'] = '\n'.join(urls) + '\n'
     # Snapshots remain crawlable so crawlers can see their noindex directive.
     changes[publish / 'robots.txt'] = 'User-agent: *\nAllow: /\n\nSitemap: ' + urljoin(site['url'], 'sitemap.xml') + '\n'
     return changes
