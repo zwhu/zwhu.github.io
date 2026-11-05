@@ -1,0 +1,10 @@
+{
+  "scope": "Targeted keyboard gaps only; existing chapter/story, movement and performance evidence not rerun",
+  "environment": "Desktop Chrome headless, 1280x900, software WebGL; no real-device or performance acceptance",
+  "input": "Chrome CDP Input.dispatchKeyEvent; no clicks or production state-changing functions",
+  "checks": {},
+  "mainSHA256": "f01ec568147132e792f4156bab076c7dc98ba60dc30d758bc4e6256e4f083eb7",
+  "result": "failed",
+  "operation": "pause-menu-direction-navigation",
+  "error": "AssertionError [ERR_ASSERTION]: ArrowDown must select the next pause option\n+ actual - expected\n\n+ 'resume'\n- 'pause-manual'\n\n    at Module.runChecks (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/keyboard-scenarios.mjs:34:35)\n    at async file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/browser.mjs:58:5"
+}

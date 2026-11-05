@@ -1,0 +1,16 @@
+{
+  "result": "passed",
+  "browser": "Chrome headless / desktop 1280x900 / software WebGL",
+  "checks": {
+    "realThreeAndTransparentBounds": true,
+    "keyboardMovementAndNearby": true,
+    "deskCollision": true,
+    "dialogueStopsMovement": true,
+    "dialogueCloseRestores": true,
+    "pauseAndResume": true,
+    "blurHandlerClearsInput": true,
+    "secondComputerAndEnter": true,
+    "noUncaughtBrowserErrors": true
+  },
+  "scope": "Web prototype only; blur event handler checked synthetically; no real-device or performance acceptance"
+}

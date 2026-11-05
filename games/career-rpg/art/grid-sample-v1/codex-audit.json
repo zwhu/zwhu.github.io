@@ -1,0 +1,9 @@
+{
+  "result": "passed",
+  "pngCRC": true,
+  "decodedPixelsMatchSource": true,
+  "fourDirectionsNearest8x": true,
+  "outputHashes": true,
+  "visualReview": "direction, face, limbs and hard edges reviewed; author preference pending",
+  "scope": "grid samples only; no gameplay or production acceptance"
+}

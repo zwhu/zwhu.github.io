@@ -1,0 +1,933 @@
+{
+  "initialStorage": [],
+  "keys": [
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "office"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "office"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "office"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "office"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowLeft",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "office"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowLeft",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "office"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "office"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "office"
+    },
+    {
+      "type": "keydown",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "office"
+    },
+    {
+      "type": "keyup",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_open_forum_post",
+      "chapter": "office"
+    },
+    {
+      "type": "keydown",
+      "key": "Tab",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_open_forum_post",
+      "chapter": "office"
+    },
+    {
+      "type": "keyup",
+      "key": "Tab",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "office"
+    },
+    {
+      "type": "keydown",
+      "key": "Tab",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "office"
+    },
+    {
+      "type": "keyup",
+      "key": "Tab",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_open_forum_post",
+      "chapter": "office"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_open_forum_post",
+      "chapter": "office"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "open_forum_post",
+      "chapter": "office"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "open_forum_post",
+      "chapter": "office"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "read_feedback",
+      "chapter": "report"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "read_feedback",
+      "chapter": "report"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "incident"
+    },
+    {
+      "type": "keydown",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "incident"
+    },
+    {
+      "type": "keyup",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "incident"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowDown",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "incident"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowDown",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "incident"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowRight",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "incident"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowRight",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "incident"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "incident"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "incident"
+    },
+    {
+      "type": "keydown",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "incident"
+    },
+    {
+      "type": "keyup",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_cto_rallies_team",
+      "chapter": "incident"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_cto_rallies_team",
+      "chapter": "incident"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "cto_rallies_team",
+      "chapter": "incident"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "cto_rallies_team",
+      "chapter": "incident"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowDown",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowDown",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowLeft",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowLeft",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_confirm_feedback_reviewed",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_confirm_feedback_reviewed",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "confirm_feedback_reviewed",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "confirm_feedback_reviewed",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowDown",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowDown",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowRight",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowRight",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_confirm_recheck_visited",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_confirm_recheck_visited",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "confirm_recheck_visited",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "confirm_recheck_visited",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_confirm_impact_scope",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_confirm_impact_scope",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "confirm_impact_scope",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "confirm_impact_scope",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_resume_narrative",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_resume_narrative",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "resume_narrative",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "resume_narrative",
+      "chapter": "investigation"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "comfort_read",
+      "chapter": "restored"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "comfort_read",
+      "chapter": "restored"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_review_test_plan",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_review_test_plan",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "review_test_plan",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "review_test_plan",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_review_trap_comment",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "view_review_trap_comment",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "review_trap_comment",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "review_trap_comment",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "close-dialogue",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "Escape",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowDown",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowDown",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowRight",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowRight",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "ArrowUp",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "stage",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "e",
+      "repeat": false,
+      "trusted": true,
+      "focus": "write_manual_entry",
+      "chapter": "learning"
+    },
+    {
+      "type": "keydown",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "write_manual_entry",
+      "chapter": "learning"
+    },
+    {
+      "type": "keyup",
+      "key": "Enter",
+      "repeat": false,
+      "trusted": true,
+      "focus": "replay",
+      "chapter": "complete"
+    }
+  ],
+  "pointers": [],
+  "storageWrites": [
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"office\",\"flags\":[]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at start (http://127.0.0.1:61852/web/main.mjs:253:35)"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"report\",\"flags\":[\"report_read\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:103:171)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"incident\",\"flags\":[\"report_read\",\"incident_started\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:121:144)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"investigation\",\"flags\":[\"report_read\",\"incident_started\",\"incident_seen\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:103:171)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"investigation\",\"flags\":[\"report_read\",\"incident_started\",\"incident_seen\",\"feedback_reviewed\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:103:171)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"investigation\",\"flags\":[\"report_read\",\"incident_started\",\"incident_seen\",\"feedback_reviewed\",\"recheck_visited\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:103:171)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"investigation\",\"flags\":[\"report_read\",\"incident_started\",\"incident_seen\",\"feedback_reviewed\",\"recheck_visited\",\"impact_confirmed\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:103:171)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"restored\",\"flags\":[\"report_read\",\"incident_started\",\"incident_seen\",\"feedback_reviewed\",\"recheck_visited\",\"impact_confirmed\",\"outage_over\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:103:171)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"learning\",\"flags\":[\"report_read\",\"incident_started\",\"incident_seen\",\"feedback_reviewed\",\"recheck_visited\",\"impact_confirmed\",\"outage_over\",\"comfort_read\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:124:145)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"learning\",\"flags\":[\"report_read\",\"incident_started\",\"incident_seen\",\"feedback_reviewed\",\"recheck_visited\",\"impact_confirmed\",\"outage_over\",\"comfort_read\",\"test_reviewed\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:103:171)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"learning\",\"flags\":[\"report_read\",\"incident_started\",\"incident_seen\",\"feedback_reviewed\",\"recheck_visited\",\"impact_confirmed\",\"outage_over\",\"comfort_read\",\"test_reviewed\",\"comment_reviewed\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:103:171)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    },
+    {
+      "key": "career-rpg:nanjing:v1",
+      "value": "{\"schema\":1,\"chapter\":\"nanjing-first-release\",\"state\":\"complete\",\"flags\":[\"report_read\",\"incident_started\",\"incident_seen\",\"feedback_reviewed\",\"recheck_visited\",\"impact_confirmed\",\"outage_over\",\"comfort_read\",\"test_reviewed\",\"comment_reviewed\",\"manual_entry_written\"]}",
+      "stack": "Error\n    at Storage.setItem (<anonymous>:7:117)\n    at Object.save (http://127.0.0.1:61852/web/story.mjs:27:17)\n    at persist (http://127.0.0.1:61852/web/main.mjs:84:14)\n    at accept (http://127.0.0.1:61852/web/main.mjs:98:3)\n    at Object.run (http://127.0.0.1:61852/web/main.mjs:103:171)\n    at HTMLButtonElement.<anonymous> (http://127.0.0.1:61852/web/main.mjs:74:175)\n    at http://127.0.0.1:61852/web/main.mjs:277:114"
+    }
+  ],
+  "storageDeletes": []
+}

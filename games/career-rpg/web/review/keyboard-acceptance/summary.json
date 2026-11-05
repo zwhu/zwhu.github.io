@@ -1,0 +1,274 @@
+{
+  "status": "ready_for_review",
+  "scene": "nanjing-office",
+  "stage": "keyboard-acceptance",
+  "version": {
+    "art_files": 16,
+    "art_unchanged": true,
+    "main_version_matches_final_browser_checks": true,
+    "browser": "Google Chrome 156.0.8078.79",
+    "os": "26.6.2",
+    "rendering": "headless/software WebGL",
+    "viewport": "1280x900; narrow menu previews375/560/700; 375 DPR2 simulated",
+    "not_real_devices": true
+  },
+  "main_sha256": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7",
+  "changed_runtime_files": [
+    "games/career-rpg/web/main.mjs",
+    "games/career-rpg/web/index.html",
+    "games/career-rpg/web/style.css"
+  ],
+  "test_files": [
+    "games/career-rpg/web/tests/browser.mjs",
+    "games/career-rpg/web/tests/keyboard-scenarios.mjs"
+  ],
+  "fixes": [
+    "按实际行列方向导航所有选项，焦点可见，禁用项跳过",
+    "确认键按下/松开隔离；忽略重复事件；新键盘确认不被鼠标180ms双击保护吞掉",
+    "普通确认页返回原选项并保留坐姿/锚点；手册和重玩返回上一界面",
+    "必选剧情/存档可暂停后回原选项，期间手册/重玩禁用避免丢失决定",
+    "初始body不是有效焦点返回目标，回场景；真实标签失焦清键及返回焦点"
+  ],
+  "checks": {
+    "keyboard": {
+      "command": "node games/career-rpg/web/tests/browser.mjs --keyboard-acceptance --evidence=final",
+      "result": "passed",
+      "targeted_items": 16,
+      "input_stats": {
+        "verified_key_events": 242,
+        "trusted": true,
+        "pointer_inputs": 0,
+        "trusted_window_events": 16
+      },
+      "raw": "games/career-rpg/web/review/keyboard-acceptance/final-checks.json",
+      "fixture_scope": "LocalStorage legal checkpoints and isolated storage failure only; no chapter.advance, button.click, dispatchEvent or direct focus to drive acceptance."
+    },
+    "verify": {
+      "command": "python3 scripts/verify.py",
+      "exit_code": 0,
+      "groups": 13,
+      "rpg_offline_tests": 15,
+      "log": "games/career-rpg/web/review/keyboard-acceptance/verify.log"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "log": "games/career-rpg/web/review/keyboard-acceptance/diff-check.log"
+    },
+    "art": {
+      "files": 16,
+      "unchanged": true
+    },
+    "no_performance_or_full_chapter_rerun": true
+  },
+  "operations": [
+    {
+      "id": "pauseDirectionNavigation",
+      "keys": "↑↓←→",
+      "operation": "Pause options select visibly; all four directions; player stays still",
+      "result": "passed"
+    },
+    {
+      "id": "pauseManualReturn",
+      "keys": "↓ Enter Esc Esc",
+      "operation": "Manual returns to pause menu, then exploration",
+      "result": "passed"
+    },
+    {
+      "id": "tabHudAndManualFocus",
+      "keys": "M Esc Tab Shift+Tab Enter",
+      "operation": "Tab retained; HUD manual returns to its button; HUD focus cannot move player",
+      "result": "passed"
+    },
+    {
+      "id": "dialogueDirectionAndShortcuts",
+      "keys": "E Q ↑↓ Tab Shift+Tab",
+      "operation": "Nearby target Q and E retained; dialogue selects both available actions without moving",
+      "result": "passed"
+    },
+    {
+      "id": "confirmationPageBack",
+      "keys": "Enter held/repeat Esc",
+      "operation": "Held Enter only opens confirmation; Esc returns to original selected option",
+      "result": "passed"
+    },
+    {
+      "id": "enterReleaseBoundary",
+      "keys": "Enter held/repeat, release, new Enter",
+      "operation": "One confirmation records once; repeats cannot close the next interface or trigger behind it",
+      "result": "passed"
+    },
+    {
+      "id": "spaceReleaseBoundary",
+      "keys": "Space held/repeat, release, new Space",
+      "operation": "Space retained and release does not accidentally confirm next page",
+      "result": "passed"
+    },
+    {
+      "id": "requiredDialoguePauseAndDisabled",
+      "keys": "Esc ↑↓←→ Enter",
+      "operation": "Required report is preserved; disabled manual/replay skipped; resume restores original choice",
+      "result": "passed"
+    },
+    {
+      "id": "nativeDialogueFocusRestore",
+      "keys": "browser tab switch, Enter",
+      "operation": "Real trusted blur/visibility event pauses dialogue; returning restores resume then prior choice",
+      "result": "passed"
+    },
+    {
+      "id": "nativeBlurClearsHeldMovement",
+      "keys": "held →, tab switch, Enter",
+      "operation": "Actual focus loss clears held movement; returning has no position jump or residual input",
+      "result": "passed"
+    },
+    {
+      "id": "completionManualReplay",
+      "keys": "↑↓ Enter Esc M",
+      "operation": "Completion/manual/replay options navigate and cancel; confirming replay starts once without skipping introduction",
+      "result": "passed"
+    },
+    {
+      "id": "damagedSaveChoices",
+      "keys": "↑↓ Esc Enter",
+      "operation": "Damaged save options and safe pause return work; only-in-session retains original save",
+      "result": "passed"
+    },
+    {
+      "id": "explicitSaveReset",
+      "keys": "Enter",
+      "operation": "Explicit reset operates only on game save; unrelated storage retained",
+      "result": "passed"
+    },
+    {
+      "id": "storageFailureKeyboard",
+      "keys": "Enter retry Esc ↓ Enter",
+      "operation": "Write failure retry and continue-unsaved reached with keys; existing save preserved",
+      "result": "passed"
+    },
+    {
+      "id": "responsiveDirectionPreview",
+      "keys": "↑↓←→ at 375/560/700/1280 CSS px",
+      "operation": "Wrapped menu option navigation and visible selection; simulated narrow viewport, not real mobile device",
+      "result": "passed"
+    },
+    {
+      "id": "realKeyboardEventsOnly",
+      "keys": "CDP keyboard events",
+      "operation": "All observed key events trusted; zero pointer inputs; no clicks/state actions used by test",
+      "result": "passed"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "games/career-rpg/web/review/keyboard-acceptance/final-pause-selection.png",
+      "viewport": "1280x900",
+      "dpr": 1,
+      "review": "view_image已查看；选中项/文字可见；不代表完整新美术验收"
+    },
+    {
+      "path": "games/career-rpg/web/review/keyboard-acceptance/final-menu-375.png",
+      "viewport": "375x900 simulated desktop",
+      "dpr": 2,
+      "review": "view_image已查看；选中项/文字可见；不代表完整新美术验收"
+    },
+    {
+      "path": "games/career-rpg/web/review/keyboard-acceptance/final-menu-560.png",
+      "viewport": "560x900 simulated desktop",
+      "dpr": 1,
+      "review": "view_image已查看；选中项/文字可见；不代表完整新美术验收"
+    },
+    {
+      "path": "games/career-rpg/web/review/keyboard-acceptance/final-menu-700.png",
+      "viewport": "700x900 simulated desktop",
+      "dpr": 1,
+      "review": "view_image已查看；选中项/文字可见；不代表完整新美术验收"
+    },
+    {
+      "path": "games/career-rpg/web/review/keyboard-acceptance/final-menu-1280.png",
+      "viewport": "1280x900",
+      "dpr": 1,
+      "review": "view_image已查看；选中项/文字可见；不代表完整新美术验收"
+    },
+    {
+      "path": "games/career-rpg/web/review/keyboard-acceptance/final-bubble-1280.png",
+      "viewport": "1280x900",
+      "dpr": 1,
+      "review": "view_image已查看；选中项/文字可见；不代表完整新美术验收"
+    }
+  ],
+  "reused_evidence": [
+    {
+      "path": "games/career-rpg/web/review/chapter-checks.json",
+      "scope": "既有无变化剧情/存档条件证据，不充当最新键盘/视觉结论"
+    },
+    {
+      "path": "games/career-rpg/web/review/walk-cadence-check.json",
+      "scope": "仅既有步态记录，不证明卡顿解决，不重新测性能"
+    },
+    {
+      "path": "games/career-rpg/review/merge-2026-11-05/supervisor-check.json",
+      "scope": "已独立通过合并，非本轮键盘复验"
+    }
+  ],
+  "unchanged_logic_and_vendor": [
+    "games/career-rpg/design/chapter-01.json",
+    "games/career-rpg/web/actors.mjs",
+    "games/career-rpg/web/scene-config.mjs",
+    "games/career-rpg/web/story.mjs",
+    "games/career-rpg/web/vendor/LICENSE",
+    "games/career-rpg/web/vendor/three.core.min.js",
+    "games/career-rpg/web/vendor/three.module.min.js",
+    "games/career-rpg/web/world.mjs"
+  ],
+  "failures_and_fixes": {
+    "records": [
+      {
+        "evidence": "games/career-rpg/web/review/keyboard-acceptance/before-checks.json",
+        "result": "failed",
+        "operation": "pause-menu-direction-navigation",
+        "error": "AssertionError [ERR_ASSERTION]: ArrowDown must select the next pause option\n+ actual - expected\n\n+ 'resume'\n- 'pause-manual'\n\n    at Module.runChecks (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/keyboard-scenarios.mjs:34:35)\n    at async file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/browser.mjs:58:5",
+        "main_sha256": "f01ec568147132e792f4156bab076c7dc98ba60dc30d758bc4e6256e4f083eb7"
+      },
+      {
+        "evidence": "games/career-rpg/web/review/keyboard-acceptance/after-checks.json",
+        "result": "failed",
+        "operation": "dialogue-choices-and-enter-boundary",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'' !== 'stage'\n\n    at walk (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/browser.mjs:50:28)\n    at async Module.runChecks (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/keyboard-scenarios.mjs:76:60)\n    at async file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/browser.mjs:58:5",
+        "main_sha256": "21d2afcfc1daba79197242deb8caec7f81c83392651947a51a408076b4d668ef"
+      },
+      {
+        "evidence": "games/career-rpg/web/review/keyboard-acceptance/after-focus-checks.json",
+        "result": "failed",
+        "operation": "dialogue-choices-and-enter-boundary",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'read-recheck_visited'\n- 'view_review_trap_comment'\n\n    at file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/keyboard-scenarios.mjs:78:57\n    at async still (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/keyboard-scenarios.mjs:49:63)\n    at async Module.runChecks (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/keyboard-scenarios.mjs:78:5)\n    at async file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/browser.mjs:58:5",
+        "main_sha256": "ec509b518f42ba806260c3ce56bb7d0c0388a0938b24899a1a1dea42017cba1f"
+      },
+      {
+        "evidence": "games/career-rpg/web/review/keyboard-acceptance/after-layout-checks.json",
+        "result": "failed",
+        "operation": "write-failure-retry-and-continue",
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\ntrue !== false\n\n    at Module.runChecks (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/keyboard-scenarios.mjs:120:326)\n    at async file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/browser.mjs:58:5",
+        "main_sha256": "ec509b518f42ba806260c3ce56bb7d0c0388a0938b24899a1a1dea42017cba1f"
+      }
+    ],
+    "notes": [
+      "修前真实ArrowDown未切菜单，保留expected red证据",
+      "初始body焦点返回失败已修",
+      "多行对话首次断言错误，按实际行列修正测试，未改成另一种布局",
+      "写入失败确认一次未生效，单点复现后将180ms保护限定pointer；最终同版本含此项通过",
+      "沙箱Chrome exit null：按审批机制获准本机隔离Chrome；测试服务路径多斜杠403已修，仅测试工具问题，当前无权限阻塞"
+    ]
+  },
+  "unverified": [
+    "监督者尚未对本轮独立复验通过",
+    "桌面Safari、真实iOS Safari/Android Chrome及真机触控",
+    "真人完整连续无鼠标体验/录屏；本次是合法检查点的定点CDP键盘自验",
+    "最新坐姿/气泡等完整美术、作者经历表达与最终体验",
+    "至少3位未参与设计者试玩及真实阅读时长",
+    "真机性能、资源预算/生命周期、导出与正式发布对应验收",
+    "南京根因、排查代码/修复细节、原帖/原话、真实布局等史实缺口"
+  ],
+  "paused_issue": "走路卡顿仍未解决，用户仅暂停此性能排查；本次没有性能探针或测量",
+  "next": "停止，等监督者独立复验；既有20分钟监工授权保留，不修改调度；不自行扩场景或恢复旧全旅程goal"
+}

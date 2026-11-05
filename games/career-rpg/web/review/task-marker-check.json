@@ -1,0 +1,83 @@
+{
+  "result": "passed",
+  "fontCSSPixels": 30,
+  "strokeCSSPixels": 2,
+  "animationPeriodSeconds": 1.4,
+  "measuredVerticalRangeCSSPixels": 5.880645751953125,
+  "reduceMotionStops": true,
+  "name": "费翔🐘",
+  "samples": [
+    {
+      "top": 300.61846923828125,
+      "left": 349.65625,
+      "fontSize": "30px",
+      "stroke": "2px",
+      "animation": "task-float",
+      "duration": "1.4s"
+    },
+    {
+      "top": 298.4684753417969,
+      "left": 349.65625,
+      "fontSize": "30px",
+      "stroke": "2px",
+      "animation": "task-float",
+      "duration": "1.4s"
+    },
+    {
+      "top": 296.9017639160156,
+      "left": 349.65625,
+      "fontSize": "30px",
+      "stroke": "2px",
+      "animation": "task-float",
+      "duration": "1.4s"
+    },
+    {
+      "top": 296.71588134765625,
+      "left": 349.65625,
+      "fontSize": "30px",
+      "stroke": "2px",
+      "animation": "task-float",
+      "duration": "1.4s"
+    },
+    {
+      "top": 297.6742858886719,
+      "left": 349.65625,
+      "fontSize": "30px",
+      "stroke": "2px",
+      "animation": "task-float",
+      "duration": "1.4s"
+    },
+    {
+      "top": 299.656005859375,
+      "left": 349.65625,
+      "fontSize": "30px",
+      "stroke": "2px",
+      "animation": "task-float",
+      "duration": "1.4s"
+    },
+    {
+      "top": 301.63787841796875,
+      "left": 349.65625,
+      "fontSize": "30px",
+      "stroke": "2px",
+      "animation": "task-float",
+      "duration": "1.4s"
+    },
+    {
+      "top": 302.5965270996094,
+      "left": 349.65625,
+      "fontSize": "30px",
+      "stroke": "2px",
+      "animation": "task-float",
+      "duration": "1.4s"
+    },
+    {
+      "top": 302.410888671875,
+      "left": 349.65625,
+      "fontSize": "30px",
+      "stroke": "2px",
+      "animation": "task-float",
+      "duration": "1.4s"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "result": "measured_and_failed_existing_targets",
+  "resources": 15,
+  "raw_bytes": 5191167,
+  "gzip_bytes": 3864937,
+  "raw_limit": 2097152,
+  "gzip_limit": 524288,
+  "independent_method": "Read each manifest file, validate raw SHA256, independently gzip each file then sum. Reviewed main runtime await of image/JSON/atlases and local Three import.",
+  "next_scene_authorized": false
+}

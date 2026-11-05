@@ -1,0 +1,201 @@
+{
+  "status": "ready_for_review",
+  "scene": "nanjing-office",
+  "stage": "story-determinism",
+  "worker_result": "passed_scoped",
+  "supervisor_review": "passed_scoped_determinism",
+  "test": "identical semantic journeys replay equally across independent instances and stable saves",
+  "test_location": "web/tests/story.test.mjs:53",
+  "test_sha256": "9d1f99f7764210abfe2c84d6b1e7322c20c8d44f1c11eaa7cfbd989be642d0d3",
+  "production_hashes": {
+    "games/career-rpg/web/story.mjs": "6b13dad3a8ad77cb01465a1685694978cc1acad70527b1ac86a390252450e424",
+    "games/career-rpg/web/world.mjs": "f2c80bb039766af708fa0b9f7f324e1fffaa459c923882ec9aa46e2af87d650d",
+    "games/career-rpg/web/scene-config.mjs": "6a9277bd4da740a37cf1d1e06a9289112fd91798181c3d788c0593b2062373f2",
+    "games/career-rpg/web/actors.mjs": "f10a5eb44b2d600e7aceb05f64e78f34c9b179ad92b239934267349b4b5718a3",
+    "games/career-rpg/web/main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+    "games/career-rpg/web/index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "games/career-rpg/web/style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213",
+    "games/career-rpg/design/chapter-01.json": "bd44b33318ac4ca61d24c13452ff6da2f4b3ba3e72ab1f1cff4639d5073721e8"
+  },
+  "fixture_sha256": "bd44b33318ac4ca61d24c13452ff6da2f4b3ba3e72ab1f1cff4639d5073721e8",
+  "node_version": "v22.23.1",
+  "existing_coverage": "Existing tests covered two learning orders, duplicate confirmations and all15 legal snapshot restore values; no explicit two-independent-instance continuation comparison, so one metamorphic test added.",
+  "public_api": [
+    "createChapter",
+    "initial",
+    "advance",
+    "save",
+    "inspect",
+    "has",
+    "text"
+  ],
+  "relation": "Same current data and initial state plus same legal semantic event sequence: uninterrupted instance versus independent instance reconstructed after each save/inspect -> exactly equal JSON-serializable snapshot and manual projection at every step. Different learning orders compared semantically by flag set, not insertion order.",
+  "runs": [
+    {
+      "learning_order": [
+        "review_test_plan",
+        "review_trap_comment"
+      ],
+      "events": 15,
+      "accepted": 11,
+      "ignored": 4,
+      "restores": 16,
+      "restored_states": [
+        "office",
+        "report",
+        "incident",
+        "investigation",
+        "restored",
+        "learning",
+        "complete"
+      ],
+      "final_state": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "complete",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "recheck_visited",
+          "impact_confirmed",
+          "feedback_reviewed",
+          "outage_over",
+          "comfort_read",
+          "test_reviewed",
+          "comment_reviewed",
+          "manual_entry_written"
+        ]
+      },
+      "manual": {
+        "written": true,
+        "text_id": "learning-manual-1",
+        "text_sha256": "1148ecba9b39ebed2cddf8d07a1126c82f7639a770de85d742ed90da48540c59",
+        "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+      }
+    },
+    {
+      "learning_order": [
+        "review_trap_comment",
+        "review_test_plan"
+      ],
+      "events": 15,
+      "accepted": 11,
+      "ignored": 4,
+      "restores": 16,
+      "restored_states": [
+        "office",
+        "report",
+        "incident",
+        "investigation",
+        "restored",
+        "learning",
+        "complete"
+      ],
+      "final_state": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "complete",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "recheck_visited",
+          "impact_confirmed",
+          "feedback_reviewed",
+          "outage_over",
+          "comfort_read",
+          "comment_reviewed",
+          "test_reviewed",
+          "manual_entry_written"
+        ]
+      },
+      "manual": {
+        "written": true,
+        "text_id": "learning-manual-1",
+        "text_sha256": "1148ecba9b39ebed2cddf8d07a1126c82f7639a770de85d742ed90da48540c59",
+        "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+      }
+    }
+  ],
+  "trace": "trace.json",
+  "restore_scope": {
+    "operations": 32,
+    "states": [
+      "office",
+      "report",
+      "incident",
+      "investigation",
+      "restored",
+      "learning",
+      "complete"
+    ],
+    "mode": "Before each of15 events and once after final event per order: public save to in-memory keyed storage, new independent createChapter over cloned current data, inspect valid snapshot, continue same event sequence.",
+    "assertions": "Exact within-order JSON equality, expected accept/ignore, old-event invariance, final complete and persisted manual flag/text; cross-order semantic final equality.",
+    "not_claimed": "This replay does not enumerate every investigation permutation or every15 legal configuration; existing separate restore test covers those declared values without full continuation."
+  },
+  "manual_scope": "No separate manual object exists in pure API. Compare persisted manual_entry_written flag and public text(learning-manual-1), matching main.manual source at line130. This is a game mechanism/staging text, not claimed historical author quotation or DOM acceptance.",
+  "checks": {
+    "targeted": {
+      "command": "STORY_DETERMINISM_EVIDENCE=\"$PWD/games/career-rpg/web/review/story-determinism/trace.json\" node --test --test-name-pattern=\"identical semantic journeys replay equally across independent instances and stable saves\" games/career-rpg/web/tests/story.test.mjs",
+      "exit_code": 0,
+      "new_tests": 1,
+      "passed": 1,
+      "evidence": "targeted-test.log"
+    },
+    "root_verify": {
+      "command": "python3 scripts/verify.py",
+      "runs": 1,
+      "exit_code": 0,
+      "groups": 13,
+      "game_rules": 16,
+      "evidence": "verify.log"
+    },
+    "production_unchanged": true,
+    "diff_check": "passed"
+  },
+  "failure_and_retest": {
+    "first_failure": "attempt-1-failure.log; attempt-1-failure.json",
+    "classification": "Test expectation mistake: actual public manual prose says 写清楚坑, not literal 注释. First sequence replay assertions matched before this unrelated word assertion failed.",
+    "fix": "Test expectation only changed to current public data text and confirmed 补测试. No source/data/story prose edits.",
+    "retest": "Both orders passed; no observed production mismatch; no business fix or expanded investigation."
+  },
+  "workflow": "workflow.json: user Node-only scope takes priority over skill prepare/utree bootstrap/report commands; no new dependency/tool, external config/credential or model change.",
+  "boundaries": [
+    "Bounded sampled replay evidence, not mathematical proof of all sequences/inputs/runtime environments",
+    "Successful in-memory stable storage only; quota/unavailable/corrupt storage evidence is separate existing scope",
+    "No DOM/manual rendering, UI restore animation, browser keyboard/performance, cross-GPU or real-device validation this task",
+    "Not a full-scene/art/author/real-tester acceptance; all other gates retain actual scope"
+  ],
+  "latest_supervisor_reused": [
+    "web/review/blog-isolation/supervisor-review.json",
+    "web/review/keyboard-acceptance/latest-supervisor-checks.json",
+    "web/review/keyboard-journey/summary.json",
+    "web/review/keyboard-journey/latest-supervisor-review.json"
+  ],
+  "resource_preference": "Existing supervisor question pending user answer; not asked again, no art/grid/quality/budget/waiting-standard change or candidate adoption.",
+  "budget": "failed_existing_targets",
+  "performance": "Walking stutter unresolved and user-paused; no frame/startup measurement",
+  "scene_accepted": false,
+  "next_scene_authorized": false,
+  "next": "Stop for independent supervisor STORY-05 review; resource preference remains pending.",
+  "gate_updates": [
+    "KEYBOARD-16",
+    "JOURNEY-23",
+    "ART-01",
+    "ART-07",
+    "PLAY-04",
+    "PLAY-05",
+    "STORY-01",
+    "STORY-03",
+    "STORY-04",
+    "STORY-05",
+    "STORY-06",
+    "ISOLATION"
+  ],
+  "trace_fields": {
+    "manualWritten": "flag BEFORE event; retained as recorded by test",
+    "manualAfter": "actual public manual projection AFTER event"
+  },
+  "independent_evidence": "supervisor-review.json"
+}

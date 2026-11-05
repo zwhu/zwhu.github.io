@@ -1,0 +1,638 @@
+{
+  "id": "nanjing-first-release",
+  "title": "南京：第一次上线",
+  "targetSeconds": [
+    120,
+    180
+  ],
+  "entry": "office",
+  "terminal": "complete",
+  "map": {
+    "width": 24,
+    "height": 16,
+    "spawn": [
+      3,
+      12
+    ],
+    "blockedTiles": [
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        8,
+        3
+      ],
+      [
+        11,
+        3
+      ],
+      [
+        12,
+        3
+      ],
+      [
+        13,
+        3
+      ],
+      [
+        20,
+        2
+      ],
+      [
+        21,
+        2
+      ],
+      [
+        16,
+        7
+      ],
+      [
+        17,
+        7
+      ],
+      [
+        16,
+        8
+      ],
+      [
+        17,
+        8
+      ],
+      [
+        2,
+        9
+      ],
+      [
+        10,
+        12
+      ],
+      [
+        11,
+        12
+      ],
+      [
+        5,
+        13
+      ],
+      [
+        6,
+        13
+      ],
+      [
+        21,
+        13
+      ]
+    ],
+    "objects": [
+      {
+        "id": "forum_pc",
+        "tile": [
+          8,
+          3
+        ],
+        "interactionTile": [
+          8,
+          4
+        ],
+        "required": true,
+        "description": "主线：工位电脑，打开论坛读用户无法登录的反馈，触发 report。"
+      },
+      {
+        "id": "login_demo",
+        "tile": [
+          7,
+          3
+        ],
+        "interactionTile": [
+          7,
+          4
+        ],
+        "required": true,
+        "description": "主线：同一排工位上的登录页演示，用于 incident 中看见登录框故障，不展示真实报错。"
+      },
+      {
+        "id": "test_notes",
+        "tile": [
+          12,
+          3
+        ],
+        "interactionTile": [
+          12,
+          4
+        ],
+        "required": true,
+        "description": "主线：learning 中确认补测试的便签与用例清单。"
+      },
+      {
+        "id": "trap_note",
+        "tile": [
+          13,
+          3
+        ],
+        "interactionTile": [
+          13,
+          4
+        ],
+        "required": true,
+        "description": "主线：learning 中查看坑点注释，只呈现注释的存在与用途，不写真实代码。"
+      },
+      {
+        "id": "manual_shelf",
+        "tile": [
+          20,
+          2
+        ],
+        "interactionTile": [
+          20,
+          3
+        ],
+        "required": true,
+        "description": "主线：工作手册书架，learning 末尾写入记录，complete 时回看新增条目。"
+      },
+      {
+        "id": "whiteboard",
+        "tile": [
+          3,
+          2
+        ],
+        "interactionTile": [
+          3,
+          3
+        ],
+        "required": false,
+        "description": "可选观察：上线前检查项白板，补充团队氛围，不阻塞主线。"
+      },
+      {
+        "id": "water_cooler",
+        "tile": [
+          2,
+          9
+        ],
+        "interactionTile": [
+          3,
+          9
+        ],
+        "required": false,
+        "description": "可选观察：饮水机与纸杯，提示办公室日常，不阻塞主线。"
+      },
+      {
+        "id": "sofa",
+        "tile": [
+          5,
+          13
+        ],
+        "interactionTile": [
+          6,
+          12
+        ],
+        "required": false,
+        "description": "可选观察：休息区沙发，restored 前后可看，呼应同事让作者先吃饭。"
+      },
+      {
+        "id": "plant",
+        "tile": [
+          21,
+          13
+        ],
+        "interactionTile": [
+          21,
+          12
+        ],
+        "required": false,
+        "description": "可选观察：窗边绿植，给房间一点生活痕迹，不阻塞主线。"
+      }
+    ]
+  },
+  "actors": [
+    {
+      "id": "player",
+      "name": "我",
+      "tile": [
+        3,
+        12
+      ],
+      "collision": "actor_placeholder",
+      "note": "演员占位不计入 blockedTiles。运行时角色格被占用时，沿最近可走相邻格避让，离开后回到原位；玩家与演员不互相卡死。"
+    },
+    {
+      "id": "cto",
+      "name": "CTO",
+      "tile": [
+        14,
+        7
+      ],
+      "collision": "actor_placeholder",
+      "note": "演员占位不计入 blockedTiles。incident 时从 [14, 7] 走到玩家附近的可走格，调查段停在 [15, 5] 一带。"
+    },
+    {
+      "id": "colleague",
+      "name": "同事",
+      "tile": [
+        12,
+        10
+      ],
+      "collision": "actor_placeholder",
+      "note": "演员占位不计入 blockedTiles。investigation 时靠近 [13, 9]，restored 安慰后留在休息区方向。"
+    }
+  ],
+  "states": [
+    {
+      "id": "office",
+      "goal": "走进南京办公室，找到自己的工位并打开论坛。",
+      "playerAction": "四向走动；靠近电脑按交互键，或触控点交互按钮。",
+      "feedback": "靠近工位时显示“查看论坛”提示；白板、饮水机、沙发、绿植显示可选观察提示，不阻挡主线。",
+      "checkpoint": true
+    },
+    {
+      "id": "report",
+      "goal": "读论坛反馈，确认有真实用户无法登录。",
+      "playerAction": "阅读论坛面板，确认反馈内容后关闭面板。",
+      "feedback": "论坛面板只显示用户描述与时间线占位，不显示编造日志；确认后进入 incident。",
+      "checkpoint": true
+    },
+    {
+      "id": "incident",
+      "goal": "看见登录框故障，经历短暂的呆住，等 CTO 过来。",
+      "playerAction": "靠近登录演示触发短演出；可按继续键跳过停顿。",
+      "feedback": "画面短暂停住，输入被锁；CTO 走入画面后恢复控制，不强制长等待。",
+      "checkpoint": false
+    },
+    {
+      "id": "investigation",
+      "goal": "和 CTO、同事一起确认影响范围与参与排查。",
+      "playerAction": "与 CTO 对话，查看论坛反馈与登录现象；不做技术谜题。",
+      "feedback": "对话只推进“收反馈、看现象、同步进展”，不给出真实根因或突破线索。",
+      "checkpoint": true
+    },
+    {
+      "id": "restored",
+      "goal": "通过叙事转场确认登录恢复，读同事的安慰。",
+      "playerAction": "阅读转场卡与安慰对白，可跳过文字。",
+      "feedback": "用“两小时后”转场卡交代时间，不模拟真实等待；恢复不作为玩家点按钮修好的结果。",
+      "checkpoint": true
+    },
+    {
+      "id": "learning",
+      "goal": "确认补测试、查看坑点注释，把经验写进工作手册。",
+      "playerAction": "依次查看测试便签、坑点注释，再走到书架写手册。",
+      "feedback": "手册新增一条记录；不要求玩家编写真实代码，也不显示经验值或评分。",
+      "checkpoint": true
+    },
+    {
+      "id": "complete",
+      "goal": "回看工作手册新增记录，结束本章或重玩。",
+      "playerAction": "打开手册查看记录，选择结束或重玩。",
+      "feedback": "显示章节完成；可回到最近检查点重看，不倒退完成标记。",
+      "checkpoint": true
+    }
+  ],
+  "transitions": [
+    {
+      "from": "office",
+      "event": "read_forum_report",
+      "to": "report",
+      "requires": [],
+      "effects": [
+        "flag.forum_read"
+      ]
+    },
+    {
+      "from": "report",
+      "event": "confirm_login_impact",
+      "to": "incident",
+      "requires": [
+        "flag.forum_read"
+      ],
+      "effects": [
+        "flag.incident_seen"
+      ]
+    },
+    {
+      "from": "incident",
+      "event": "cto_joins_investigation",
+      "to": "investigation",
+      "requires": [
+        "flag.incident_seen"
+      ],
+      "effects": [
+        "flag.investigation_started"
+      ]
+    },
+    {
+      "from": "investigation",
+      "event": "service_restored_transition",
+      "to": "restored",
+      "requires": [
+        "flag.investigation_started"
+      ],
+      "effects": [
+        "flag.service_restored"
+      ]
+    },
+    {
+      "from": "restored",
+      "event": "read_team_support",
+      "to": "learning",
+      "requires": [
+        "flag.service_restored"
+      ],
+      "effects": [
+        "flag.learning_started"
+      ]
+    },
+    {
+      "from": "learning",
+      "event": "write_manual_entry",
+      "to": "complete",
+      "requires": [
+        "flag.learning_started"
+      ],
+      "effects": [
+        "flag.chapter_complete"
+      ]
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "office_whiteboard_optional",
+      "state": "office",
+      "speaker": "narrator",
+      "text": "白板上还留着上线前的检查项，几个名字被红笔圈过。",
+      "basis": "staging"
+    },
+    {
+      "id": "office_plant_optional",
+      "state": "office",
+      "speaker": "narrator",
+      "text": "窗边的绿植有点蔫，大概是这几天没人顾得上浇水。",
+      "basis": "staging"
+    },
+    {
+      "id": "report_forum_post",
+      "state": "report",
+      "speaker": "player",
+      "text": "论坛里有人说登录不上，换浏览器、重新输密码都没用。",
+      "basis": "fact_paraphrase"
+    },
+    {
+      "id": "report_real_users",
+      "state": "report",
+      "speaker": "narrator",
+      "text": "这不是演示环境。第一次有真实用户在线上被挡在门外。",
+      "basis": "staging"
+    },
+    {
+      "id": "incident_freeze",
+      "state": "incident",
+      "speaker": "narrator",
+      "text": "我盯着登录框，脑子空了一下，手还搭在鼠标上。",
+      "basis": "staging"
+    },
+    {
+      "id": "incident_cto_arrives",
+      "state": "incident",
+      "speaker": "cto",
+      "text": "先别一个人扛。把用户反馈和看到的现象摆到一起，我们一起查。",
+      "basis": "staging"
+    },
+    {
+      "id": "investigation_scope",
+      "state": "investigation",
+      "speaker": "player",
+      "text": "我先确认是单个账号，还是登录入口整体受影响。",
+      "basis": "staging"
+    },
+    {
+      "id": "investigation_divide",
+      "state": "investigation",
+      "speaker": "cto",
+      "text": "你收着用户反馈，我盯服务状态，有新情况就在群里同步。",
+      "basis": "staging"
+    },
+    {
+      "id": "investigation_colleague",
+      "state": "investigation",
+      "speaker": "colleague",
+      "text": "我也在。需要复现步骤的话，我来跟。",
+      "basis": "staging"
+    },
+    {
+      "id": "restored_two_hours",
+      "state": "restored",
+      "speaker": "narrator",
+      "text": "两个小时后，登录恢复。那两小时怎么过来的，我只记得群里消息一直没停。",
+      "basis": "fact_paraphrase"
+    },
+    {
+      "id": "restored_cto_comfort",
+      "state": "restored",
+      "speaker": "cto",
+      "text": "上线出问题不稀奇。把它变成以后不会再犯的经验，才算没白折腾。",
+      "basis": "staging"
+    },
+    {
+      "id": "restored_colleague_comfort",
+      "state": "restored",
+      "speaker": "colleague",
+      "text": "先吃饭吧，已经恢复了，别一直坐着。",
+      "basis": "staging"
+    },
+    {
+      "id": "learning_add_test",
+      "state": "learning",
+      "speaker": "player",
+      "text": "这次没覆盖到的登录路径，得补上测试。",
+      "basis": "fact_paraphrase"
+    },
+    {
+      "id": "learning_trap_comment",
+      "state": "learning",
+      "speaker": "narrator",
+      "text": "我在容易踩坑的地方写下注释，说明为什么不能想当然。",
+      "basis": "fact_paraphrase"
+    },
+    {
+      "id": "learning_manual",
+      "state": "learning",
+      "speaker": "player",
+      "text": "把处理过程记进工作手册，下次遇到类似情况有据可查。",
+      "basis": "fact_paraphrase"
+    },
+    {
+      "id": "complete_manual_entry",
+      "state": "complete",
+      "speaker": "narrator",
+      "text": "工作手册多了一条记录。南京的第一次上线，到这里告一段落。",
+      "basis": "staging"
+    }
+  ],
+  "assets": [
+    {
+      "id": "player_walk_sheet",
+      "kind": "sprite",
+      "size": [
+        64,
+        96
+      ],
+      "description": "主角四向行走图集，4 方向 × 4 帧，单帧 16×24，脚底锚点 (8,23)；黑发、朱砂红上衣、深色裤子，轮廓需与 NPC 区分。"
+    },
+    {
+      "id": "cto_walk_sheet",
+      "kind": "sprite",
+      "size": [
+        64,
+        96
+      ],
+      "description": "CTO 四向行走图集，4 方向 × 4 帧，单帧 16×24，脚底锚点 (8,23)；只用衣色与轮廓区分，不还原真人外貌。"
+    },
+    {
+      "id": "colleague_walk_sheet",
+      "kind": "sprite",
+      "size": [
+        64,
+        96
+      ],
+      "description": "同事四向行走图集，4 方向 × 4 帧，单帧 16×24，脚底锚点 (8,23)；与主角同比例，靠发型和衣色区分。"
+    },
+    {
+      "id": "office_tileset",
+      "kind": "tile",
+      "size": [
+        256,
+        256
+      ],
+      "description": "办公室日景地砖与墙面图块，16×16 网格，共 16×16 格；地砖、踢脚线、窗框、门框分块，禁止跨格渐变与柔焦。"
+    },
+    {
+      "id": "desk_workstation",
+      "kind": "sprite",
+      "size": [
+        32,
+        32
+      ],
+      "description": "工位桌与显示器，占 2×2 格，脚底贴齐格子底边，锚点 (16,31)；论坛电脑与登录演示共用结构，用屏幕贴图区分状态。"
+    },
+    {
+      "id": "shelf_manual",
+      "kind": "sprite",
+      "size": [
+        32,
+        32
+      ],
+      "description": "工作手册书架，占 2×2 格，锚点 (16,31)；手册本体另做 16×16 小图标用于 UI 与交互高亮。"
+    },
+    {
+      "id": "whiteboard",
+      "kind": "sprite",
+      "size": [
+        32,
+        32
+      ],
+      "description": "白板与检查项贴纸，占 2×2 格，锚点 (16,31)；检查项用色块与短横线表示，不烘焙长段中文。"
+    },
+    {
+      "id": "water_cooler",
+      "kind": "sprite",
+      "size": [
+        16,
+        24
+      ],
+      "description": "饮水机，占 1×2 格视觉高度，脚底锚点 (8,23)；低饱和灰蓝，保留可辨识的桶身轮廓。"
+    },
+    {
+      "id": "sofa",
+      "kind": "sprite",
+      "size": [
+        32,
+        16
+      ],
+      "description": "双人沙发，占 2×1 格，脚底锚点 (16,15)；休息区用，配合同事安慰的停留点。"
+    },
+    {
+      "id": "plant",
+      "kind": "sprite",
+      "size": [
+        16,
+        24
+      ],
+      "description": "窗边绿植，占 1×2 格视觉高度，脚底锚点 (8,23)；叶片只用三到四层色阶，避免细碎噪点。"
+    },
+    {
+      "id": "ui_dialogue",
+      "kind": "ui",
+      "size": [
+        320,
+        96
+      ],
+      "description": "对话九宫格底板，暖白 #faf8f3 细边框，墨色文字；说话人名牌与继续提示分开切图，中文由 DOM 渲染。"
+    },
+    {
+      "id": "ui_forum",
+      "kind": "ui",
+      "size": [
+        320,
+        192
+      ],
+      "description": "论坛面板九宫格，标题、楼层、用户反馈行分层；不画真实头像，不放伪造截图与日志。"
+    },
+    {
+      "id": "ui_manual",
+      "kind": "ui",
+      "size": [
+        320,
+        192
+      ],
+      "description": "工作手册面板九宫格，条目行可增删；新增记录只用一行高亮，不做经验值或评分条。"
+    },
+    {
+      "id": "transition_card",
+      "kind": "ui",
+      "size": [
+        320,
+        180
+      ],
+      "description": "“两小时后”叙事转场卡，暖白底、朱砂红细线，文字由 DOM 叠加；避免把时间做成倒计时。"
+    },
+    {
+      "id": "audio_room_ambience",
+      "kind": "audio",
+      "size": [
+        1,
+        1
+      ],
+      "description": "办公室日景环境循环，30 秒，低音量键盘与空调底噪；默认关闭，由玩家主动开启。"
+    },
+    {
+      "id": "audio_ui_click",
+      "kind": "audio",
+      "size": [
+        1,
+        1
+      ],
+      "description": "交互与翻页短音效，80 毫秒以内，单次触发；连续点击时合并播放，避免叠音。"
+    }
+  ],
+  "blockedHistoricalDetails": [
+    "登录故障的真实根因与触发条件。",
+    "具体报错、日志、代码与配置内容。",
+    "排查过程中的关键突破点和实际修复操作。",
+    "CTO、老板、同事的逐字原话与真实人数、姓名。",
+    "准确年份、日期与论坛原帖原文、真实用户信息。",
+    "南京办公室的真实平面、工位分布与陈设照片。",
+    "当晚回家学习 JavaScript 与本次事故之间的因果关系，现有事实只支持两者都发生过。",
+    "“登录框故障整整两小时”的起止时间与具体影响用户数。"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "time": "2026-11-04T21:12:03.154702+00:00",
+  "result": "passed_fallback_only",
+  "command": "node games/career-rpg/web/tests/browser.mjs --fallback --evidence=supervisor",
+  "cases": [
+    {
+      "id": "js-disabled-1280",
+      "status": "passed"
+    },
+    {
+      "id": "webgl-failed-1280",
+      "status": "passed"
+    },
+    {
+      "id": "resource-failed-1280",
+      "status": "passed"
+    },
+    {
+      "id": "context-lost-1280",
+      "status": "passed"
+    },
+    {
+      "id": "normal-smoke-1280",
+      "status": "passed"
+    },
+    {
+      "id": "js-disabled-375",
+      "status": "passed"
+    },
+    {
+      "id": "webgl-failed-375",
+      "status": "passed"
+    },
+    {
+      "id": "resource-failed-375",
+      "status": "passed"
+    },
+    {
+      "id": "context-lost-375",
+      "status": "passed"
+    },
+    {
+      "id": "normal-smoke-375",
+      "status": "passed"
+    }
+  ],
+  "hashes": {
+    "main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+    "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213",
+    "world.mjs": "f2c80bb039766af708fa0b9f7f324e1fffaa459c923882ec9aa46e2af87d650d",
+    "story.mjs": "6b13dad3a8ad77cb01465a1685694978cc1acad70527b1ac86a390252450e424",
+    "actors.mjs": "f10a5eb44b2d600e7aceb05f64e78f34c9b179ad92b239934267349b4b5718a3",
+    "scene-config.mjs": "6a9277bd4da740a37cf1d1e06a9289112fd91798181c3d788c0593b2062373f2"
+  },
+  "pointer_inputs": 0,
+  "visual_review": [
+    "context-lost-1280-failure.png",
+    "context-lost-375-failure.png",
+    "js-disabled-375-summary.png"
+  ],
+  "limits": [
+    "走路卡顿未解决，用户要求暂停",
+    "未验Safari/真机、作者与真人、整场景和正式发布",
+    "既有全键盘/旅程不重跑；新证据仅覆盖受影响烟测"
+  ],
+  "next_scene_authorized": false
+}

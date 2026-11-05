@@ -1,0 +1,30 @@
+{
+  "time": "2026-11-04T22:14:58.299516+00:00",
+  "result": "passed_continuous_keyboard_current_version",
+  "hashes": {
+    "main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+    "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+  },
+  "steps": 23,
+  "input": {
+    "trusted_key_events": 108,
+    "pointer_inputs": 0
+  },
+  "continuity": {
+    "fresh_profile": true,
+    "navigations": [
+      "http://127.0.0.1:54168/web/"
+    ],
+    "storage_writes": 12,
+    "manual_storage_changes": 0,
+    "checkpoint_seeding": 0,
+    "production_saves_only": true
+  },
+  "visual_review": [
+    "chapter-complete.png",
+    "player-seated.png"
+  ],
+  "visual_result": "当前1280同版本人物/场景保持南京成品风格，气泡与阅读提示可见；非完整艺术/真机/作者验收",
+  "next_scene_authorized": false
+}

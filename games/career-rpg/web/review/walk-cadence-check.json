@@ -1,0 +1,306 @@
+{
+  "result": "passed",
+  "poseHz": 4,
+  "stepsPerSecond": 2,
+  "sequence": [
+    "idle",
+    "stepA",
+    "idle",
+    "stepB"
+  ],
+  "movementSpeed": 54,
+  "stableScale": true,
+  "stableFootAnchor": true,
+  "releaseImmediatelyIdle": true,
+  "samples": [
+    {
+      "time": 759,
+      "walkTime": 0.049999999999999996,
+      "frame": 9,
+      "metrics": {
+        "frame": 9,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 84,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 1014.5999999046326,
+      "walkTime": 0.30000000000000004,
+      "frame": 10,
+      "metrics": {
+        "frame": 10,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 446,
+          "top": 1116,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 1266.6999998092651,
+      "walkTime": 0.5666000000000001,
+      "frame": 9,
+      "metrics": {
+        "frame": 9,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 84,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 1512.2999997138977,
+      "walkTime": 0.8000000000000004,
+      "frame": 11,
+      "metrics": {
+        "frame": 11,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 808,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 1749,
+      "walkTime": 1.0500000000000003,
+      "frame": 9,
+      "metrics": {
+        "frame": 9,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 84,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 1821.6999998092651,
+      "walkTime": 1.1166999999999998,
+      "frame": 9,
+      "metrics": {
+        "frame": 9,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 84,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 1893.0999999046326,
+      "walkTime": 1.1832999999999998,
+      "frame": 9,
+      "metrics": {
+        "frame": 9,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 84,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 1965.0999999046326,
+      "walkTime": 1.2665999999999995,
+      "frame": 10,
+      "metrics": {
+        "frame": 10,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 446,
+          "top": 1116,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 2037.0999999046326,
+      "walkTime": 1.3332999999999993,
+      "frame": 10,
+      "metrics": {
+        "frame": 10,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 446,
+          "top": 1116,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 2109.0999999046326,
+      "walkTime": 1.3998999999999995,
+      "frame": 10,
+      "metrics": {
+        "frame": 10,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 446,
+          "top": 1116,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 2181.3999996185303,
+      "walkTime": 1.4666999999999992,
+      "frame": 10,
+      "metrics": {
+        "frame": 10,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 446,
+          "top": 1116,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 2253.7999997138977,
+      "walkTime": 1.5499999999999996,
+      "frame": 9,
+      "metrics": {
+        "frame": 9,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 84,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 2326.0999999046326,
+      "walkTime": 1.6165999999999994,
+      "frame": 9,
+      "metrics": {
+        "frame": 9,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 84,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 2398.5,
+      "walkTime": 1.6998999999999995,
+      "frame": 9,
+      "metrics": {
+        "frame": 9,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 84,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 2470.699999809265,
+      "walkTime": 1.7665999999999993,
+      "frame": 11,
+      "metrics": {
+        "frame": 11,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 808,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    },
+    {
+      "time": 2543.2999997138977,
+      "walkTime": 1.833299999999999,
+      "frame": 11,
+      "metrics": {
+        "frame": 11,
+        "width": 28,
+        "height": 44,
+        "offset": 0.14285714285714285,
+        "reference": {
+          "left": 808,
+          "top": 1118,
+          "width": 196,
+          "height": 308,
+          "centerOffset": 1
+        }
+      }
+    }
+  ],
+  "scope": "Targeted Chrome rightward movement and screenshot sequence; no full chapter rerun"
+}

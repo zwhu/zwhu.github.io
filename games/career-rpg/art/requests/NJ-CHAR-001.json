@@ -1,0 +1,78 @@
+{
+  "id": "NJ-CHAR-001",
+  "scene": "nanjing-office",
+  "status": "superseded",
+  "purpose": "南京办公室主角四向静止生产样品；先核对基准造型与像素尺度，再制作动画、NPC 和办公室分层素材。",
+  "references": [
+    {
+      "path": "games/career-rpg/art/nanjing-art-direction-v1.png",
+      "absolute_path": "/Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/art/nanjing-art-direction-v1.png",
+      "sha256": "93e382bd5c0b8d9855d2e54c708fb18993e0d958cf35047f49e6373bf122b34b",
+      "role": "唯一指定视觉基准；必须作为 image_gen 的实际图像输入。重点参考右上角色栏的正面、侧面和背面，并核对办公室内红衣主角。",
+      "dimensions": {
+        "width": 1536,
+        "height": 1024
+      }
+    }
+  ],
+  "keep": [
+    "参考图红衣主角的同一造型：蓬松不对称黑发、暖肤色、脸部画法及明显的大头比例；不画眼镜，不还原真人。",
+    "敞开的朱砂红外套、浅色内衫、衣襟与袖口、深灰裤、浅色鞋和深色轮廓；侧面与背面也必须是同一套衣服。",
+    "参考图的俯视三分之四人物视角、头身比、手脚大小、站姿与深色描边。",
+    "暖白、墨色、朱砂红、低饱和暖肤色和深灰的配色关系；保持原有细节与辨识度。"
+  ],
+  "change": [
+    "只提取红衣主角并补齐正面、背面、左侧、右侧四个站立朝向；补齐方向属于设计，不当作已确认真人外貌。",
+    "修复混合像素颗粒、细腻纹理和渐变，使用同一逻辑像素网格与离散硬边色块。",
+    "四帧固定画布和脚底锚点，不保留概念板的文字、边框、背景、地面阴影或其他人物。",
+    "先给可审阅的较高分辨率样品，保留头发、脸部、衣襟和鞋的细节；不强压为 16×24 通用小人。实际生产尺寸须在南京实机比较后固定。"
+  ],
+  "prompt": "Use the supplied Nanjing concept board as an actual image reference. Produce ONLY the same red-jacket protagonist as a four-direction standing sprite sample for the Nanjing office game. The protagonist is in the upper-right character panel and also standing in the office. Preserve the distinctive tousled asymmetric black hair silhouette, warm skin, simplified facial drawing, large head-to-body proportion, open vermilion jacket with light inner shirt, visible jacket lapels and cuffs, dark gray trousers, light shoes with dark edges, dark pixel outline, and the reference's three-quarter top-down RPG character view. This is a fictional appearance based on the art direction, not a portrait of a real person. Do not redesign or simplify into a generic tiny pixel person. Show FRONT, BACK, LEFT SIDE, RIGHT SIDE in that exact order in one horizontal row of four equal cells. Each cell is a 64 by 96 logical-pixel canvas, nearest-neighbor enlarged 4x to 256 by 384 physical pixels. Total PNG is 1024 by 384. Keep the figure approximately 52 by 80 logical pixels, centered horizontally, with the soles at logical y=88 and center foot anchor x=32 in every cell. Leave transparent padding in every cell; no body part touches a cell edge. Use a uniform logical pixel grid, crisp hard edges, consistent dark outline and discrete colors. Preserve the reference's hair, face, clothes and shoe details while removing the original fine texture, gradients, fuzzy shadows and mixed pixel scales. Flat truly transparent background with no checkerboard, no labels, no lettering, no UI, no props, no shadow, no other characters. This is a first standing sample for visual review, not a claim that a production atlas or animation has passed acceptance. Do not include any scene outside the Nanjing office scope.",
+  "output": {
+    "path": "games/career-rpg/art/generated/NJ-CHAR-001/nanjing-protagonist-standing-v1.png",
+    "format": "PNG",
+    "width": 1024,
+    "height": 384,
+    "transparent_background": true,
+    "use": "四向静止样品，供原图比较及后续 Three.js 像素尺度试验；不作为已通过的正式图集。",
+    "layout": {
+      "columns": 4,
+      "rows": 1,
+      "directions": [
+        "front",
+        "back",
+        "left",
+        "right"
+      ],
+      "logical_frame_width": 64,
+      "logical_frame_height": 96,
+      "nearest_neighbor_scale": 4,
+      "physical_frame_width": 256,
+      "physical_frame_height": 384,
+      "logical_foot_anchor": [
+        32,
+        88
+      ],
+      "parameters_status": "sample_proposal_requires_visual_and_runtime_validation"
+    },
+    "return_metadata": [
+      "实际图像输入及参考校验值",
+      "image_gen 工具与生成时间",
+      "完整实际提示词",
+      "返回原图路径、实际尺寸和透明通道",
+      "尺寸、网格或透明度偏差及监督者视觉复核结果"
+    ],
+    "if_constraints_fail": "保留生成原图并记录实际偏差，交回修订；不能重绘成程序方块、默默改造型或宣称网格与透明度已通过。"
+  },
+  "superseded": {
+    "date": "2026-11-05",
+    "reason": "此前只读取目标旧交接，误判四向和南京素材未制作；用户指定合并源已有成品，本请求重复且基准已过期，禁止生成。",
+    "replacement_assets": [
+      "games/career-rpg/art/character-front-v1.png",
+      "games/career-rpg/art/character-four-directions-v1.png",
+      "games/career-rpg/web/art/player-walk-v1.png"
+    ],
+    "current_style_guide": "games/career-rpg/art/style-guide.md",
+    "action": "retain_request_for_traceability_do_not_generate"
+  }
+}

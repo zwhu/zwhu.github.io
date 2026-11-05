@@ -1,0 +1,11 @@
+Pixel-art concept board, imagegen. Small technology office in Nanjing, quiet daytime; the office is lived-in and calm, mature not cute, no one posing to camera.
+
+Composition: main scene occupies about two thirds of the board. The remaining third shows the same protagonist in four orthographic sample views (front, back, left, right) and one empty dialogue-box style with no text. Nanjing only; no other city.
+
+Scene: orthographic ground plane, three-quarter top-down pixel RPG view in the manner of a 384x256 low-resolution canvas scaled up by an integer nearest-neighbor factor. Coarse, clearly visible pixels; 16x16 floor tiles and characters drawn at 16x24 visual proportions. Flat blocked shapes, crisp hard edges, no anti-aliasing, no texture noise, no gradients, no soft shadows or glow, no perspective vanishing point. Continuous readable walking path between desks. Include computer workstations, one CTO colleague seated or standing at a desk, tall bookshelf, potted plants, a mug or cup, a few lived-in traces (ledger stacks, a jacket on a chair). Layout and appearance are fictional settings, not a real office or real person.
+
+Protagonist: black hair, cinnabar-red top, dark trousers, plain blocky sprite.
+
+Palette strictly these 12 colors: #faf8f3, #292825, #77746e, #a64335, #6b4a32, #a87c55, #8d8a83, #6f8f5a, #5d6e7a, #2f3a45, #e8dfc8, #e9c27a.
+
+Do not draw readable text, programming code, real incident causes, company logos, personal names or dates. UI areas stay blank so Chinese text can be placed later in DOM. Concept board only, not a production sprite sheet; exact pixel sizes not promised.

@@ -1,0 +1,14 @@
+{
+  "time": "2026-11-04T22:33:35.079653+00:00",
+  "result": "passed_scoped_determinism",
+  "command": "node --test --test-name-pattern='identical semantic journeys replay equally across independent instances and stable saves' games/career-rpg/web/tests/story.test.mjs",
+  "exit_code": 0,
+  "passed_test_count": 1,
+  "evidence_scope": "公开API两个独立实例、两种学习顺序、30事件、32稳定存档恢复；手册为持久flag及当前文字ID投影，非DOM/全排列/数学证明",
+  "hashes": {
+    "games/career-rpg/web/tests/story.test.mjs": "9d1f99f7764210abfe2c84d6b1e7322c20c8d44f1c11eaa7cfbd989be642d0d3",
+    "games/career-rpg/web/story.mjs": "6b13dad3a8ad77cb01465a1685694978cc1acad70527b1ac86a390252450e424",
+    "games/career-rpg/design/chapter-01.json": "bd44b33318ac4ca61d24c13452ff6da2f4b3ba3e72ab1f1cff4639d5073721e8"
+  },
+  "next_scene_authorized": false
+}

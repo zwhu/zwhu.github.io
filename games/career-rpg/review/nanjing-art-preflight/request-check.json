@@ -1,0 +1,20 @@
+{
+  "request": "NJ-CHAR-001",
+  "scene": "nanjing-office",
+  "result": "pass",
+  "checked": [
+    "JSON required fields",
+    "actual reference exists and absolute path matches",
+    "reference SHA-256 and 1536x1024 dimensions match",
+    "four equal frame sample dimensions agree",
+    "no returned production image exists"
+  ],
+  "not_verified": [
+    "actual image_gen reference input",
+    "production image",
+    "pixel grid",
+    "transparency",
+    "runtime"
+  ],
+  "reference_sha256": "93e382bd5c0b8d9855d2e54c708fb18993e0d958cf35047f49e6373bf122b34b"
+}

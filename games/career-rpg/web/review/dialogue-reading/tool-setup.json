@@ -1,0 +1,9 @@
+{
+  "action": "node browser.mjs --dialogue-reading --evidence=final",
+  "failure": "The automatic permission approval review did not finish before its deadline.",
+  "type": "approval_review_timeout_not_rejection",
+  "action_started": false,
+  "next": "No retry; historical timeout retained only",
+  "status": "resolved_by_supervisor_verification",
+  "evidence": "supervisor-summary.json"
+}

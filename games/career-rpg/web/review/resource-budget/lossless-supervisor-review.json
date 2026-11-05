@@ -1,0 +1,15 @@
+{
+  "result": "candidate_probe_still_fails_existing_targets",
+  "candidate_files_validated": 5,
+  "raw_if_adopted": 3622591,
+  "gzip_if_adopted": 2990922,
+  "production_hashes_unchanged": true,
+  "scope": "Independently verified candidate bytes/SHA256 and budget totals; pixel equivalence remains the existing libpng/dwebp decode evidence, no repeat encoding.",
+  "not_accepted": [
+    "budget",
+    "complete provenance equivalence",
+    "browser integration"
+  ],
+  "scene_accepted": false,
+  "next_scene_authorized": false
+}

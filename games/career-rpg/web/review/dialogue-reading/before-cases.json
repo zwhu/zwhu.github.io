@@ -1,0 +1,2270 @@
+[
+  {
+    "kind": "complete",
+    "width": 1280,
+    "observations": [
+      {
+        "key": "PageDown",
+        "scope": "default option focus",
+        "focus": "replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 27,
+        "clip": {
+          "top": 333.515625,
+          "bottom": 493.515625,
+          "left": 767.703125,
+          "right": 999.703125
+        },
+        "first": {
+          "top": 336.515625,
+          "bottom": 353.515625,
+          "left": 767.703125,
+          "right": 983.984375
+        },
+        "last": {
+          "top": 495.078125,
+          "bottom": 512.078125,
+          "left": 767.703125,
+          "right": 977.703125
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "PageUp",
+        "scope": "default option focus",
+        "focus": "replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 360.515625,
+          "bottom": 520.515625,
+          "left": 767.703125,
+          "right": 999.703125
+        },
+        "first": {
+          "top": 363.515625,
+          "bottom": 380.515625,
+          "left": 767.703125,
+          "right": 983.984375
+        },
+        "last": {
+          "top": 522.078125,
+          "bottom": 539.078125,
+          "left": 767.703125,
+          "right": 977.703125
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "End",
+        "scope": "default option focus",
+        "focus": "replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 27,
+        "clip": {
+          "top": 333.515625,
+          "bottom": 493.515625,
+          "left": 767.703125,
+          "right": 999.703125
+        },
+        "first": {
+          "top": 336.515625,
+          "bottom": 353.515625,
+          "left": 767.703125,
+          "right": 983.984375
+        },
+        "last": {
+          "top": 495.078125,
+          "bottom": 512.078125,
+          "left": 767.703125,
+          "right": 977.703125
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "Home",
+        "scope": "default option focus",
+        "focus": "replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 360.515625,
+          "bottom": 520.515625,
+          "left": 767.703125,
+          "right": 999.703125
+        },
+        "first": {
+          "top": 363.515625,
+          "bottom": 380.515625,
+          "left": 767.703125,
+          "right": 983.984375
+        },
+        "last": {
+          "top": 522.078125,
+          "bottom": 539.078125,
+          "left": 767.703125,
+          "right": 977.703125
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "PageDown",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 31,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 360.515625,
+          "bottom": 520.515625,
+          "left": 767.703125,
+          "right": 999.703125
+        },
+        "first": {
+          "top": 332.515625,
+          "bottom": 349.515625,
+          "left": 767.703125,
+          "right": 983.984375
+        },
+        "last": {
+          "top": 491.078125,
+          "bottom": 508.078125,
+          "left": 767.703125,
+          "right": 977.703125
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "PageDown",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 31,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 360.515625,
+          "bottom": 520.515625,
+          "left": 767.703125,
+          "right": 999.703125
+        },
+        "first": {
+          "top": 332.515625,
+          "bottom": 349.515625,
+          "left": 767.703125,
+          "right": 983.984375
+        },
+        "last": {
+          "top": 491.078125,
+          "bottom": 508.078125,
+          "left": 767.703125,
+          "right": 977.703125
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "PageUp",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 360.515625,
+          "bottom": 520.515625,
+          "left": 767.703125,
+          "right": 999.703125
+        },
+        "first": {
+          "top": 363.515625,
+          "bottom": 380.515625,
+          "left": 767.703125,
+          "right": 983.984375
+        },
+        "last": {
+          "top": 522.078125,
+          "bottom": 539.078125,
+          "left": 767.703125,
+          "right": 977.703125
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "End",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 31,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 360.515625,
+          "bottom": 520.515625,
+          "left": 767.703125,
+          "right": 999.703125
+        },
+        "first": {
+          "top": 332.515625,
+          "bottom": 349.515625,
+          "left": 767.703125,
+          "right": 983.984375
+        },
+        "last": {
+          "top": 491.078125,
+          "bottom": 508.078125,
+          "left": 767.703125,
+          "right": 977.703125
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      }
+    ],
+    "tabTrail": [
+      {
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 360.515625,
+          "bottom": 520.515625,
+          "left": 767.703125,
+          "right": 999.703125
+        },
+        "first": {
+          "top": 363.515625,
+          "bottom": 380.515625,
+          "left": 767.703125,
+          "right": 983.984375
+        },
+        "last": {
+          "top": 522.078125,
+          "bottom": 539.078125,
+          "left": 767.703125,
+          "right": 977.703125
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      }
+    ],
+    "result": "passed",
+    "initial": {
+      "focus": "replay",
+      "focusVisible": false,
+      "outline": "none",
+      "scrollTop": 0,
+      "scrollHeight": 192,
+      "clientHeight": 160,
+      "windowY": 0,
+      "clip": {
+        "top": 360.515625,
+        "bottom": 520.515625,
+        "left": 767.703125,
+        "right": 999.703125
+      },
+      "first": {
+        "top": 363.515625,
+        "bottom": 380.515625,
+        "left": 767.703125,
+        "right": 983.984375
+      },
+      "last": {
+        "top": 522.078125,
+        "bottom": 539.078125,
+        "left": 767.703125,
+        "right": 977.703125
+      },
+      "firstVisible": true,
+      "lastVisible": false,
+      "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+      "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+    },
+    "originalProse": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+    "bodyReachable": true,
+    "first": {
+      "focus": "dialogue",
+      "focusVisible": true,
+      "outline": "solid",
+      "scrollTop": 0,
+      "scrollHeight": 192,
+      "clientHeight": 160,
+      "windowY": 0,
+      "clip": {
+        "top": 360.515625,
+        "bottom": 520.515625,
+        "left": 767.703125,
+        "right": 999.703125
+      },
+      "first": {
+        "top": 363.515625,
+        "bottom": 380.515625,
+        "left": 767.703125,
+        "right": 983.984375
+      },
+      "last": {
+        "top": 522.078125,
+        "bottom": 539.078125,
+        "left": 767.703125,
+        "right": 977.703125
+      },
+      "firstVisible": true,
+      "lastVisible": false,
+      "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+      "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+    },
+    "last": {
+      "focus": "dialogue",
+      "focusVisible": true,
+      "outline": "solid",
+      "scrollTop": 31,
+      "scrollHeight": 192,
+      "clientHeight": 160,
+      "windowY": 0,
+      "clip": {
+        "top": 360.515625,
+        "bottom": 520.515625,
+        "left": 767.703125,
+        "right": 999.703125
+      },
+      "first": {
+        "top": 332.515625,
+        "bottom": 349.515625,
+        "left": 767.703125,
+        "right": 983.984375
+      },
+      "last": {
+        "top": 491.078125,
+        "bottom": 508.078125,
+        "left": 767.703125,
+        "right": 977.703125
+      },
+      "firstVisible": false,
+      "lastVisible": true,
+      "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+      "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+    },
+    "readable": true,
+    "pageStayed": true,
+    "returnAndConfirmNoMovement": true,
+    "keys": [
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keydown",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keydown",
+        "key": "End",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "End",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keydown",
+        "key": "Home",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "Home",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keydown",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Home",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Home",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "End",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "End",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keydown",
+        "key": "ArrowRight",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "ArrowRight",
+        "trusted": true,
+        "focus": "close-dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "close-dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "stage"
+      }
+    ],
+    "pointers": []
+  },
+  {
+    "kind": "complete",
+    "width": 375,
+    "observations": [
+      {
+        "key": "PageDown",
+        "scope": "default option focus",
+        "focus": "replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 185.1875,
+          "bottom": 332.6875,
+          "left": 98,
+          "right": 330
+        },
+        "first": {
+          "top": 175.6875,
+          "bottom": 192.6875,
+          "left": 98,
+          "right": 314.28125
+        },
+        "last": {
+          "top": 334.25,
+          "bottom": 351.25,
+          "left": 98,
+          "right": 308
+        },
+        "firstVisible": false,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "PageUp",
+        "scope": "default option focus",
+        "focus": "replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 185.1875,
+          "bottom": 332.6875,
+          "left": 98,
+          "right": 330
+        },
+        "first": {
+          "top": 175.6875,
+          "bottom": 192.6875,
+          "left": 98,
+          "right": 314.28125
+        },
+        "last": {
+          "top": 334.25,
+          "bottom": 351.25,
+          "left": 98,
+          "right": 308
+        },
+        "firstVisible": false,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "End",
+        "scope": "default option focus",
+        "focus": "replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 185.1875,
+          "bottom": 332.6875,
+          "left": 98,
+          "right": 330
+        },
+        "first": {
+          "top": 175.6875,
+          "bottom": 192.6875,
+          "left": 98,
+          "right": 314.28125
+        },
+        "last": {
+          "top": 334.25,
+          "bottom": 351.25,
+          "left": 98,
+          "right": 308
+        },
+        "firstVisible": false,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "Home",
+        "scope": "default option focus",
+        "focus": "replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 185.1875,
+          "bottom": 332.6875,
+          "left": 98,
+          "right": 330
+        },
+        "first": {
+          "top": 175.6875,
+          "bottom": 192.6875,
+          "left": 98,
+          "right": 314.28125
+        },
+        "last": {
+          "top": 334.25,
+          "bottom": 351.25,
+          "left": 98,
+          "right": 308
+        },
+        "firstVisible": false,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "PageDown",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 31,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 185.1875,
+          "bottom": 344.6875,
+          "left": 98,
+          "right": 330
+        },
+        "first": {
+          "top": 156.6875,
+          "bottom": 173.6875,
+          "left": 98,
+          "right": 314.28125
+        },
+        "last": {
+          "top": 315.25,
+          "bottom": 332.25,
+          "left": 98,
+          "right": 308
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "PageDown",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 31,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 185.1875,
+          "bottom": 344.6875,
+          "left": 98,
+          "right": 330
+        },
+        "first": {
+          "top": 156.6875,
+          "bottom": 173.6875,
+          "left": 98,
+          "right": 314.28125
+        },
+        "last": {
+          "top": 315.25,
+          "bottom": 332.25,
+          "left": 98,
+          "right": 308
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "PageUp",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 185.1875,
+          "bottom": 344.6875,
+          "left": 98,
+          "right": 330
+        },
+        "first": {
+          "top": 187.6875,
+          "bottom": 204.6875,
+          "left": 98,
+          "right": 314.28125
+        },
+        "last": {
+          "top": 346.25,
+          "bottom": 363.25,
+          "left": 98,
+          "right": 308
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      },
+      {
+        "key": "End",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 31,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 185.1875,
+          "bottom": 344.6875,
+          "left": 98,
+          "right": 330
+        },
+        "first": {
+          "top": 156.6875,
+          "bottom": 173.6875,
+          "left": 98,
+          "right": 314.28125
+        },
+        "last": {
+          "top": 315.25,
+          "bottom": 332.25,
+          "left": 98,
+          "right": 308
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      }
+    ],
+    "tabTrail": [
+      {
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 192,
+        "clientHeight": 160,
+        "windowY": 0,
+        "clip": {
+          "top": 185.1875,
+          "bottom": 344.6875,
+          "left": 98,
+          "right": 330
+        },
+        "first": {
+          "top": 187.6875,
+          "bottom": 204.6875,
+          "left": 98,
+          "right": 314.28125
+        },
+        "last": {
+          "top": 346.25,
+          "bottom": 363.25,
+          "left": 98,
+          "right": 308
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+        "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+      }
+    ],
+    "result": "passed",
+    "initial": {
+      "focus": "replay",
+      "focusVisible": false,
+      "outline": "none",
+      "scrollTop": 0,
+      "scrollHeight": 192,
+      "clientHeight": 160,
+      "windowY": 0,
+      "clip": {
+        "top": 185.1875,
+        "bottom": 332.6875,
+        "left": 98,
+        "right": 330
+      },
+      "first": {
+        "top": 175.6875,
+        "bottom": 192.6875,
+        "left": 98,
+        "right": 314.28125
+      },
+      "last": {
+        "top": 334.25,
+        "bottom": 351.25,
+        "left": 98,
+        "right": 308
+      },
+      "firstVisible": false,
+      "lastVisible": false,
+      "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+      "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+    },
+    "originalProse": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+    "bodyReachable": true,
+    "first": {
+      "focus": "dialogue",
+      "focusVisible": true,
+      "outline": "solid",
+      "scrollTop": 0,
+      "scrollHeight": 192,
+      "clientHeight": 160,
+      "windowY": 0,
+      "clip": {
+        "top": 185.1875,
+        "bottom": 344.6875,
+        "left": 98,
+        "right": 330
+      },
+      "first": {
+        "top": 187.6875,
+        "bottom": 204.6875,
+        "left": 98,
+        "right": 314.28125
+      },
+      "last": {
+        "top": 346.25,
+        "bottom": 363.25,
+        "left": 98,
+        "right": 308
+      },
+      "firstVisible": true,
+      "lastVisible": false,
+      "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+      "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+    },
+    "last": {
+      "focus": "dialogue",
+      "focusVisible": true,
+      "outline": "solid",
+      "scrollTop": 31,
+      "scrollHeight": 192,
+      "clientHeight": 160,
+      "windowY": 0,
+      "clip": {
+        "top": 185.1875,
+        "bottom": 344.6875,
+        "left": 98,
+        "right": 330
+      },
+      "first": {
+        "top": 156.6875,
+        "bottom": 173.6875,
+        "left": 98,
+        "right": 314.28125
+      },
+      "last": {
+        "top": 315.25,
+        "bottom": 332.25,
+        "left": 98,
+        "right": 308
+      },
+      "firstVisible": false,
+      "lastVisible": true,
+      "lastParagraph": "这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。",
+      "prose": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”本章到此结束。这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。"
+    },
+    "readable": true,
+    "pageStayed": true,
+    "returnAndConfirmNoMovement": true,
+    "keys": [
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keydown",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keydown",
+        "key": "End",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "End",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keydown",
+        "key": "Home",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "Home",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keydown",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Home",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Home",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "End",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "End",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keydown",
+        "key": "ArrowRight",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "ArrowRight",
+        "trusted": true,
+        "focus": "close-dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "close-dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "stage"
+      }
+    ],
+    "pointers": []
+  },
+  {
+    "kind": "long-system",
+    "width": 1280,
+    "observations": [
+      {
+        "key": "PageDown",
+        "scope": "default option focus",
+        "focus": "confirm-replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 556,
+        "clientHeight": 405,
+        "windowY": 27,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 405,
+          "right": 875
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 405,
+          "right": 805
+        },
+        "last": {
+          "top": 750.859375,
+          "bottom": 768.859375,
+          "left": 405,
+          "right": 805
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "PageUp",
+        "scope": "default option focus",
+        "focus": "confirm-replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 556,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 405,
+          "right": 875
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 405,
+          "right": 805
+        },
+        "last": {
+          "top": 750.859375,
+          "bottom": 768.859375,
+          "left": 405,
+          "right": 805
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "End",
+        "scope": "default option focus",
+        "focus": "confirm-replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 556,
+        "clientHeight": 405,
+        "windowY": 27,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 405,
+          "right": 875
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 405,
+          "right": 805
+        },
+        "last": {
+          "top": 750.859375,
+          "bottom": 768.859375,
+          "left": 405,
+          "right": 805
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "Home",
+        "scope": "default option focus",
+        "focus": "confirm-replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 556,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 405,
+          "right": 875
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 405,
+          "right": 805
+        },
+        "last": {
+          "top": 750.859375,
+          "bottom": 768.859375,
+          "left": 405,
+          "right": 805
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "PageDown",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 151,
+        "scrollHeight": 556,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 405,
+          "right": 875
+        },
+        "first": {
+          "top": 86.296875,
+          "bottom": 104.296875,
+          "left": 405,
+          "right": 805
+        },
+        "last": {
+          "top": 599.859375,
+          "bottom": 617.859375,
+          "left": 405,
+          "right": 805
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "PageDown",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 151,
+        "scrollHeight": 556,
+        "clientHeight": 405,
+        "windowY": 27,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 405,
+          "right": 875
+        },
+        "first": {
+          "top": 86.296875,
+          "bottom": 104.296875,
+          "left": 405,
+          "right": 805
+        },
+        "last": {
+          "top": 599.859375,
+          "bottom": 617.859375,
+          "left": 405,
+          "right": 805
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "PageUp",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 556,
+        "clientHeight": 405,
+        "windowY": 27,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 405,
+          "right": 875
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 405,
+          "right": 805
+        },
+        "last": {
+          "top": 750.859375,
+          "bottom": 768.859375,
+          "left": 405,
+          "right": 805
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "End",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 151,
+        "scrollHeight": 556,
+        "clientHeight": 405,
+        "windowY": 27,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 405,
+          "right": 875
+        },
+        "first": {
+          "top": 86.296875,
+          "bottom": 104.296875,
+          "left": 405,
+          "right": 805
+        },
+        "last": {
+          "top": 599.859375,
+          "bottom": 617.859375,
+          "left": 405,
+          "right": 805
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      }
+    ],
+    "tabTrail": [
+      {
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 556,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 405,
+          "right": 875
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 405,
+          "right": 805
+        },
+        "last": {
+          "top": 750.859375,
+          "bottom": 768.859375,
+          "left": 405,
+          "right": 805
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      }
+    ],
+    "result": "failed",
+    "initial": {
+      "focus": "confirm-replay",
+      "focusVisible": true,
+      "outline": "solid",
+      "scrollTop": 0,
+      "scrollHeight": 556,
+      "clientHeight": 405,
+      "windowY": 0,
+      "clip": {
+        "top": 232.296875,
+        "bottom": 637.296875,
+        "left": 405,
+        "right": 875
+      },
+      "first": {
+        "top": 237.296875,
+        "bottom": 255.296875,
+        "left": 405,
+        "right": 805
+      },
+      "last": {
+        "top": 750.859375,
+        "bottom": 768.859375,
+        "left": 405,
+        "right": 805
+      },
+      "firstVisible": true,
+      "lastVisible": false,
+      "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+      "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+    },
+    "originalProse": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。",
+    "bodyReachable": true,
+    "first": {
+      "focus": "dialogue",
+      "focusVisible": true,
+      "outline": "solid",
+      "scrollTop": 0,
+      "scrollHeight": 556,
+      "clientHeight": 405,
+      "windowY": 0,
+      "clip": {
+        "top": 232.296875,
+        "bottom": 637.296875,
+        "left": 405,
+        "right": 875
+      },
+      "first": {
+        "top": 237.296875,
+        "bottom": 255.296875,
+        "left": 405,
+        "right": 805
+      },
+      "last": {
+        "top": 750.859375,
+        "bottom": 768.859375,
+        "left": 405,
+        "right": 805
+      },
+      "firstVisible": true,
+      "lastVisible": false,
+      "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+      "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+    },
+    "last": {
+      "focus": "dialogue",
+      "focusVisible": true,
+      "outline": "solid",
+      "scrollTop": 151,
+      "scrollHeight": 556,
+      "clientHeight": 405,
+      "windowY": 27,
+      "clip": {
+        "top": 232.296875,
+        "bottom": 637.296875,
+        "left": 405,
+        "right": 875
+      },
+      "first": {
+        "top": 86.296875,
+        "bottom": 104.296875,
+        "left": 405,
+        "right": 805
+      },
+      "last": {
+        "top": 599.859375,
+        "bottom": 617.859375,
+        "left": 405,
+        "right": 805
+      },
+      "firstVisible": false,
+      "lastVisible": true,
+      "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+      "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+    },
+    "readable": true,
+    "pageStayed": false,
+    "returnAndConfirmNoMovement": true,
+    "keys": [
+      {
+        "type": "keydown",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "End",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "End",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "Home",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "Home",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Home",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Home",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "End",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "End",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "ArrowRight",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "ArrowRight",
+        "trusted": true,
+        "focus": "close-dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "close-dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "replay"
+      }
+    ],
+    "pointers": []
+  },
+  {
+    "kind": "long-system",
+    "width": 375,
+    "observations": [
+      {
+        "key": "PageDown",
+        "scope": "default option focus",
+        "focus": "confirm-replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 931,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 45,
+          "right": 330
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 45,
+          "right": 317
+        },
+        "last": {
+          "top": 1125.21875,
+          "bottom": 1143.21875,
+          "left": 45,
+          "right": 173
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "PageUp",
+        "scope": "default option focus",
+        "focus": "confirm-replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 931,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 45,
+          "right": 330
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 45,
+          "right": 317
+        },
+        "last": {
+          "top": 1125.21875,
+          "bottom": 1143.21875,
+          "left": 45,
+          "right": 173
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "End",
+        "scope": "default option focus",
+        "focus": "confirm-replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 931,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 45,
+          "right": 330
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 45,
+          "right": 317
+        },
+        "last": {
+          "top": 1125.21875,
+          "bottom": 1143.21875,
+          "left": 45,
+          "right": 173
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "Home",
+        "scope": "default option focus",
+        "focus": "confirm-replay",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 931,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 45,
+          "right": 330
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 45,
+          "right": 317
+        },
+        "last": {
+          "top": 1125.21875,
+          "bottom": 1143.21875,
+          "left": 45,
+          "right": 173
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "PageDown",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 365,
+        "scrollHeight": 931,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 45,
+          "right": 330
+        },
+        "first": {
+          "top": -127.703125,
+          "bottom": -109.703125,
+          "left": 45,
+          "right": 317
+        },
+        "last": {
+          "top": 760.21875,
+          "bottom": 778.21875,
+          "left": 45,
+          "right": 173
+        },
+        "firstVisible": false,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "PageDown",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 526,
+        "scrollHeight": 931,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 45,
+          "right": 330
+        },
+        "first": {
+          "top": -288.703125,
+          "bottom": -270.703125,
+          "left": 45,
+          "right": 317
+        },
+        "last": {
+          "top": 599.21875,
+          "bottom": 617.21875,
+          "left": 45,
+          "right": 173
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "PageUp",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 161,
+        "scrollHeight": 931,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 45,
+          "right": 330
+        },
+        "first": {
+          "top": 76.296875,
+          "bottom": 94.296875,
+          "left": 45,
+          "right": 317
+        },
+        "last": {
+          "top": 964.21875,
+          "bottom": 982.21875,
+          "left": 45,
+          "right": 173
+        },
+        "firstVisible": false,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      },
+      {
+        "key": "End",
+        "scope": "body focus",
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 526,
+        "scrollHeight": 931,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 45,
+          "right": 330
+        },
+        "first": {
+          "top": -288.703125,
+          "bottom": -270.703125,
+          "left": 45,
+          "right": 317
+        },
+        "last": {
+          "top": 599.21875,
+          "bottom": 617.21875,
+          "left": 45,
+          "right": 173
+        },
+        "firstVisible": false,
+        "lastVisible": true,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      }
+    ],
+    "tabTrail": [
+      {
+        "focus": "dialogue",
+        "focusVisible": true,
+        "outline": "solid",
+        "scrollTop": 0,
+        "scrollHeight": 931,
+        "clientHeight": 405,
+        "windowY": 0,
+        "clip": {
+          "top": 232.296875,
+          "bottom": 637.296875,
+          "left": 45,
+          "right": 330
+        },
+        "first": {
+          "top": 237.296875,
+          "bottom": 255.296875,
+          "left": 45,
+          "right": 317
+        },
+        "last": {
+          "top": 1125.21875,
+          "bottom": 1143.21875,
+          "left": 45,
+          "right": 173
+        },
+        "firstVisible": true,
+        "lastVisible": false,
+        "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+        "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+      }
+    ],
+    "result": "passed",
+    "initial": {
+      "focus": "confirm-replay",
+      "focusVisible": true,
+      "outline": "solid",
+      "scrollTop": 0,
+      "scrollHeight": 931,
+      "clientHeight": 405,
+      "windowY": 0,
+      "clip": {
+        "top": 232.296875,
+        "bottom": 637.296875,
+        "left": 45,
+        "right": 330
+      },
+      "first": {
+        "top": 237.296875,
+        "bottom": 255.296875,
+        "left": 45,
+        "right": 317
+      },
+      "last": {
+        "top": 1125.21875,
+        "bottom": 1143.21875,
+        "left": 45,
+        "right": 173
+      },
+      "firstVisible": true,
+      "lastVisible": false,
+      "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+      "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+    },
+    "originalProse": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。",
+    "bodyReachable": true,
+    "first": {
+      "focus": "dialogue",
+      "focusVisible": true,
+      "outline": "solid",
+      "scrollTop": 0,
+      "scrollHeight": 931,
+      "clientHeight": 405,
+      "windowY": 0,
+      "clip": {
+        "top": 232.296875,
+        "bottom": 637.296875,
+        "left": 45,
+        "right": 330
+      },
+      "first": {
+        "top": 237.296875,
+        "bottom": 255.296875,
+        "left": 45,
+        "right": 317
+      },
+      "last": {
+        "top": 1125.21875,
+        "bottom": 1143.21875,
+        "left": 45,
+        "right": 173
+      },
+      "firstVisible": true,
+      "lastVisible": false,
+      "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+      "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+    },
+    "last": {
+      "focus": "dialogue",
+      "focusVisible": true,
+      "outline": "solid",
+      "scrollTop": 526,
+      "scrollHeight": 931,
+      "clientHeight": 405,
+      "windowY": 0,
+      "clip": {
+        "top": 232.296875,
+        "bottom": 637.296875,
+        "left": 45,
+        "right": 330
+      },
+      "first": {
+        "top": -288.703125,
+        "bottom": -270.703125,
+        "left": 45,
+        "right": 317
+      },
+      "last": {
+        "top": 599.21875,
+        "bottom": 617.21875,
+        "left": 45,
+        "right": 173
+      },
+      "firstVisible": false,
+      "lastVisible": true,
+      "lastParagraph": "这会替换本章已保存的进度，其他站点数据不会被清除。",
+      "prose": "这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。这会替换本章已保存的进度，其他站点数据不会被清除。"
+    },
+    "readable": true,
+    "pageStayed": true,
+    "returnAndConfirmNoMovement": true,
+    "keys": [
+      {
+        "type": "keydown",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "replay"
+      },
+      {
+        "type": "keyup",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "End",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "End",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "Home",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "Home",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Home",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Home",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageDown",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "PageUp",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "End",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "End",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Tab",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keydown",
+        "key": "ArrowRight",
+        "trusted": true,
+        "focus": "confirm-replay"
+      },
+      {
+        "type": "keyup",
+        "key": "ArrowRight",
+        "trusted": true,
+        "focus": "close-dialogue"
+      },
+      {
+        "type": "keydown",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "close-dialogue"
+      },
+      {
+        "type": "keyup",
+        "key": "Enter",
+        "trusted": true,
+        "focus": "replay"
+      }
+    ],
+    "pointers": []
+  }
+]

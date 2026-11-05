@@ -1,0 +1,10 @@
+{
+  "scope": "Targeted keyboard gaps only; existing chapter/story, movement and performance evidence not rerun",
+  "environment": "Desktop Chrome headless, 1280x900, software WebGL; no real-device or performance acceptance",
+  "input": "Chrome CDP Input.dispatchKeyEvent; no clicks or production state-changing functions",
+  "checks": {
+    "pauseDirectionNavigation": true
+  },
+  "mainSHA256": "21d2afcfc1daba79197242deb8caec7f81c83392651947a51a408076b4d668ef",
+  "result": "passed"
+}

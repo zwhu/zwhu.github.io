@@ -1,0 +1,1157 @@
+{
+  "test": "identical semantic journeys replay equally across independent instances and stable saves",
+  "publicAPI": [
+    "createChapter",
+    "initial",
+    "advance",
+    "save",
+    "inspect",
+    "has",
+    "text"
+  ],
+  "fixtureSHA256": "bd44b33318ac4ca61d24c13452ff6da2f4b3ba3e72ab1f1cff4639d5073721e8",
+  "runs": [
+    {
+      "learningOrder": [
+        "review_test_plan",
+        "review_trap_comment"
+      ],
+      "initial": {
+        "snapshot": {
+          "schema": 1,
+          "chapter": "nanjing-first-release",
+          "state": "office",
+          "flags": []
+        },
+        "manual": {
+          "written": false,
+          "text": null
+        }
+      },
+      "trace": [
+        {
+          "step": 1,
+          "event": "open_forum_post",
+          "accepted": true,
+          "state": "report",
+          "flags": [
+            "report_read"
+          ],
+          "serializedSHA256": "92e64ad45b90757812553a23949b72e63437b3b65b726b7de942a13260594136",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 2,
+          "event": "read_feedback",
+          "accepted": true,
+          "state": "incident",
+          "flags": [
+            "report_read",
+            "incident_started"
+          ],
+          "serializedSHA256": "733b6406f1bd82e9150848a5531ae3f8c7d466d0bf4677124be07d4b06283fd5",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 3,
+          "event": "cto_rallies_team",
+          "accepted": true,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen"
+          ],
+          "serializedSHA256": "f2e8705fbb899d48529a2cb5a9f502dc9c51e6c5acef59e009d638e93bbb46b9",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 4,
+          "event": "confirm_recheck_visited",
+          "accepted": true,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited"
+          ],
+          "serializedSHA256": "91e31a76ef178c838ca20bdb1e968bbbcae12c9552b998b0d4005a195d39d91a",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 5,
+          "event": "confirm_recheck_visited",
+          "accepted": false,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited"
+          ],
+          "serializedSHA256": "91e31a76ef178c838ca20bdb1e968bbbcae12c9552b998b0d4005a195d39d91a",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 6,
+          "event": "confirm_impact_scope",
+          "accepted": true,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed"
+          ],
+          "serializedSHA256": "c5c36614130e9a0b1dfac8aa9bd437e99fe8f6834ad8d9528bbd9783c1bfe89a",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 7,
+          "event": "confirm_feedback_reviewed",
+          "accepted": true,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed"
+          ],
+          "serializedSHA256": "2d19dc0a8f7380c88f58dcef87e356779ac921b44f99748c1f0d9ccefb044d1d",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 8,
+          "event": "resume_narrative",
+          "accepted": true,
+          "state": "restored",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over"
+          ],
+          "serializedSHA256": "21f81ef12c5764b97ac2dec1134059e8e3386ba558dc8df3ac703874bac87b69",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 9,
+          "event": "comfort_read",
+          "accepted": true,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read"
+          ],
+          "serializedSHA256": "688af7d14744eca40c5e90bdd33c9d5e0210a44d06debabb91494d52895eeb8a",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 10,
+          "event": "review_test_plan",
+          "accepted": true,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed"
+          ],
+          "serializedSHA256": "5d39a2e8f9235c9a8da0b84cef2b8b1305980fa1eb69f3247418f85dcbc27ddb",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 11,
+          "event": "review_trap_comment",
+          "accepted": true,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed"
+          ],
+          "serializedSHA256": "c4883110d03ca6377f29c02a740de6a22c0a896ad749dcef29524a4ca666f54a",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 12,
+          "event": "review_test_plan",
+          "accepted": false,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed"
+          ],
+          "serializedSHA256": "c4883110d03ca6377f29c02a740de6a22c0a896ad749dcef29524a4ca666f54a",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 13,
+          "event": "write_manual_entry",
+          "accepted": true,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a2b6ee9b1e26438b1cce6730e1c9b43ecac26b1a3c35abda33c8a45abdfbf394",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": true,
+            "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+          }
+        },
+        {
+          "step": 14,
+          "event": "open_forum_post",
+          "accepted": false,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a2b6ee9b1e26438b1cce6730e1c9b43ecac26b1a3c35abda33c8a45abdfbf394",
+          "manualWritten": true,
+          "manualAfter": {
+            "written": true,
+            "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+          }
+        },
+        {
+          "step": 15,
+          "event": "write_manual_entry",
+          "accepted": false,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a2b6ee9b1e26438b1cce6730e1c9b43ecac26b1a3c35abda33c8a45abdfbf394",
+          "manualWritten": true,
+          "manualAfter": {
+            "written": true,
+            "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+          }
+        }
+      ],
+      "recoveries": [
+        {
+          "beforeStep": 1,
+          "state": "office",
+          "flags": [],
+          "serializedSHA256": "611539ddbc2cad739a66c63e05aef845b156cf35722e6d8cc0a6367c8425a9b6"
+        },
+        {
+          "beforeStep": 2,
+          "state": "report",
+          "flags": [
+            "report_read"
+          ],
+          "serializedSHA256": "92e64ad45b90757812553a23949b72e63437b3b65b726b7de942a13260594136"
+        },
+        {
+          "beforeStep": 3,
+          "state": "incident",
+          "flags": [
+            "report_read",
+            "incident_started"
+          ],
+          "serializedSHA256": "733b6406f1bd82e9150848a5531ae3f8c7d466d0bf4677124be07d4b06283fd5"
+        },
+        {
+          "beforeStep": 4,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen"
+          ],
+          "serializedSHA256": "f2e8705fbb899d48529a2cb5a9f502dc9c51e6c5acef59e009d638e93bbb46b9"
+        },
+        {
+          "beforeStep": 5,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited"
+          ],
+          "serializedSHA256": "91e31a76ef178c838ca20bdb1e968bbbcae12c9552b998b0d4005a195d39d91a"
+        },
+        {
+          "beforeStep": 6,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited"
+          ],
+          "serializedSHA256": "91e31a76ef178c838ca20bdb1e968bbbcae12c9552b998b0d4005a195d39d91a"
+        },
+        {
+          "beforeStep": 7,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed"
+          ],
+          "serializedSHA256": "c5c36614130e9a0b1dfac8aa9bd437e99fe8f6834ad8d9528bbd9783c1bfe89a"
+        },
+        {
+          "beforeStep": 8,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed"
+          ],
+          "serializedSHA256": "2d19dc0a8f7380c88f58dcef87e356779ac921b44f99748c1f0d9ccefb044d1d"
+        },
+        {
+          "beforeStep": 9,
+          "state": "restored",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over"
+          ],
+          "serializedSHA256": "21f81ef12c5764b97ac2dec1134059e8e3386ba558dc8df3ac703874bac87b69"
+        },
+        {
+          "beforeStep": 10,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read"
+          ],
+          "serializedSHA256": "688af7d14744eca40c5e90bdd33c9d5e0210a44d06debabb91494d52895eeb8a"
+        },
+        {
+          "beforeStep": 11,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed"
+          ],
+          "serializedSHA256": "5d39a2e8f9235c9a8da0b84cef2b8b1305980fa1eb69f3247418f85dcbc27ddb"
+        },
+        {
+          "beforeStep": 12,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed"
+          ],
+          "serializedSHA256": "c4883110d03ca6377f29c02a740de6a22c0a896ad749dcef29524a4ca666f54a"
+        },
+        {
+          "beforeStep": 13,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed"
+          ],
+          "serializedSHA256": "c4883110d03ca6377f29c02a740de6a22c0a896ad749dcef29524a4ca666f54a"
+        },
+        {
+          "beforeStep": 14,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a2b6ee9b1e26438b1cce6730e1c9b43ecac26b1a3c35abda33c8a45abdfbf394"
+        },
+        {
+          "beforeStep": 15,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a2b6ee9b1e26438b1cce6730e1c9b43ecac26b1a3c35abda33c8a45abdfbf394"
+        },
+        {
+          "beforeStep": 16,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a2b6ee9b1e26438b1cce6730e1c9b43ecac26b1a3c35abda33c8a45abdfbf394"
+        }
+      ],
+      "final": {
+        "snapshot": {
+          "schema": 1,
+          "chapter": "nanjing-first-release",
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "test_reviewed",
+            "comment_reviewed",
+            "manual_entry_written"
+          ]
+        },
+        "manual": {
+          "written": true,
+          "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+        }
+      }
+    },
+    {
+      "learningOrder": [
+        "review_trap_comment",
+        "review_test_plan"
+      ],
+      "initial": {
+        "snapshot": {
+          "schema": 1,
+          "chapter": "nanjing-first-release",
+          "state": "office",
+          "flags": []
+        },
+        "manual": {
+          "written": false,
+          "text": null
+        }
+      },
+      "trace": [
+        {
+          "step": 1,
+          "event": "open_forum_post",
+          "accepted": true,
+          "state": "report",
+          "flags": [
+            "report_read"
+          ],
+          "serializedSHA256": "92e64ad45b90757812553a23949b72e63437b3b65b726b7de942a13260594136",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 2,
+          "event": "read_feedback",
+          "accepted": true,
+          "state": "incident",
+          "flags": [
+            "report_read",
+            "incident_started"
+          ],
+          "serializedSHA256": "733b6406f1bd82e9150848a5531ae3f8c7d466d0bf4677124be07d4b06283fd5",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 3,
+          "event": "cto_rallies_team",
+          "accepted": true,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen"
+          ],
+          "serializedSHA256": "f2e8705fbb899d48529a2cb5a9f502dc9c51e6c5acef59e009d638e93bbb46b9",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 4,
+          "event": "confirm_recheck_visited",
+          "accepted": true,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited"
+          ],
+          "serializedSHA256": "91e31a76ef178c838ca20bdb1e968bbbcae12c9552b998b0d4005a195d39d91a",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 5,
+          "event": "confirm_recheck_visited",
+          "accepted": false,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited"
+          ],
+          "serializedSHA256": "91e31a76ef178c838ca20bdb1e968bbbcae12c9552b998b0d4005a195d39d91a",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 6,
+          "event": "confirm_impact_scope",
+          "accepted": true,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed"
+          ],
+          "serializedSHA256": "c5c36614130e9a0b1dfac8aa9bd437e99fe8f6834ad8d9528bbd9783c1bfe89a",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 7,
+          "event": "confirm_feedback_reviewed",
+          "accepted": true,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed"
+          ],
+          "serializedSHA256": "2d19dc0a8f7380c88f58dcef87e356779ac921b44f99748c1f0d9ccefb044d1d",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 8,
+          "event": "resume_narrative",
+          "accepted": true,
+          "state": "restored",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over"
+          ],
+          "serializedSHA256": "21f81ef12c5764b97ac2dec1134059e8e3386ba558dc8df3ac703874bac87b69",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 9,
+          "event": "comfort_read",
+          "accepted": true,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read"
+          ],
+          "serializedSHA256": "688af7d14744eca40c5e90bdd33c9d5e0210a44d06debabb91494d52895eeb8a",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 10,
+          "event": "review_trap_comment",
+          "accepted": true,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed"
+          ],
+          "serializedSHA256": "08f443d260fabbc263bbfb27579806142fdb046bda525cea1e9842d9326f18bc",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 11,
+          "event": "review_test_plan",
+          "accepted": true,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed"
+          ],
+          "serializedSHA256": "018fc93a1dcc6b3ee220ffac378eb5607e4ea9a55d3530e489067f49564037e5",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 12,
+          "event": "review_trap_comment",
+          "accepted": false,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed"
+          ],
+          "serializedSHA256": "018fc93a1dcc6b3ee220ffac378eb5607e4ea9a55d3530e489067f49564037e5",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": false,
+            "text": null
+          }
+        },
+        {
+          "step": 13,
+          "event": "write_manual_entry",
+          "accepted": true,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a44b110ce383c86a81e237e6fcd871eb0fd5449657c80d563c300d948a2246a8",
+          "manualWritten": false,
+          "manualAfter": {
+            "written": true,
+            "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+          }
+        },
+        {
+          "step": 14,
+          "event": "open_forum_post",
+          "accepted": false,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a44b110ce383c86a81e237e6fcd871eb0fd5449657c80d563c300d948a2246a8",
+          "manualWritten": true,
+          "manualAfter": {
+            "written": true,
+            "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+          }
+        },
+        {
+          "step": 15,
+          "event": "write_manual_entry",
+          "accepted": false,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a44b110ce383c86a81e237e6fcd871eb0fd5449657c80d563c300d948a2246a8",
+          "manualWritten": true,
+          "manualAfter": {
+            "written": true,
+            "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+          }
+        }
+      ],
+      "recoveries": [
+        {
+          "beforeStep": 1,
+          "state": "office",
+          "flags": [],
+          "serializedSHA256": "611539ddbc2cad739a66c63e05aef845b156cf35722e6d8cc0a6367c8425a9b6"
+        },
+        {
+          "beforeStep": 2,
+          "state": "report",
+          "flags": [
+            "report_read"
+          ],
+          "serializedSHA256": "92e64ad45b90757812553a23949b72e63437b3b65b726b7de942a13260594136"
+        },
+        {
+          "beforeStep": 3,
+          "state": "incident",
+          "flags": [
+            "report_read",
+            "incident_started"
+          ],
+          "serializedSHA256": "733b6406f1bd82e9150848a5531ae3f8c7d466d0bf4677124be07d4b06283fd5"
+        },
+        {
+          "beforeStep": 4,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen"
+          ],
+          "serializedSHA256": "f2e8705fbb899d48529a2cb5a9f502dc9c51e6c5acef59e009d638e93bbb46b9"
+        },
+        {
+          "beforeStep": 5,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited"
+          ],
+          "serializedSHA256": "91e31a76ef178c838ca20bdb1e968bbbcae12c9552b998b0d4005a195d39d91a"
+        },
+        {
+          "beforeStep": 6,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited"
+          ],
+          "serializedSHA256": "91e31a76ef178c838ca20bdb1e968bbbcae12c9552b998b0d4005a195d39d91a"
+        },
+        {
+          "beforeStep": 7,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed"
+          ],
+          "serializedSHA256": "c5c36614130e9a0b1dfac8aa9bd437e99fe8f6834ad8d9528bbd9783c1bfe89a"
+        },
+        {
+          "beforeStep": 8,
+          "state": "investigation",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed"
+          ],
+          "serializedSHA256": "2d19dc0a8f7380c88f58dcef87e356779ac921b44f99748c1f0d9ccefb044d1d"
+        },
+        {
+          "beforeStep": 9,
+          "state": "restored",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over"
+          ],
+          "serializedSHA256": "21f81ef12c5764b97ac2dec1134059e8e3386ba558dc8df3ac703874bac87b69"
+        },
+        {
+          "beforeStep": 10,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read"
+          ],
+          "serializedSHA256": "688af7d14744eca40c5e90bdd33c9d5e0210a44d06debabb91494d52895eeb8a"
+        },
+        {
+          "beforeStep": 11,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed"
+          ],
+          "serializedSHA256": "08f443d260fabbc263bbfb27579806142fdb046bda525cea1e9842d9326f18bc"
+        },
+        {
+          "beforeStep": 12,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed"
+          ],
+          "serializedSHA256": "018fc93a1dcc6b3ee220ffac378eb5607e4ea9a55d3530e489067f49564037e5"
+        },
+        {
+          "beforeStep": 13,
+          "state": "learning",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed"
+          ],
+          "serializedSHA256": "018fc93a1dcc6b3ee220ffac378eb5607e4ea9a55d3530e489067f49564037e5"
+        },
+        {
+          "beforeStep": 14,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a44b110ce383c86a81e237e6fcd871eb0fd5449657c80d563c300d948a2246a8"
+        },
+        {
+          "beforeStep": 15,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a44b110ce383c86a81e237e6fcd871eb0fd5449657c80d563c300d948a2246a8"
+        },
+        {
+          "beforeStep": 16,
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed",
+            "manual_entry_written"
+          ],
+          "serializedSHA256": "a44b110ce383c86a81e237e6fcd871eb0fd5449657c80d563c300d948a2246a8"
+        }
+      ],
+      "final": {
+        "snapshot": {
+          "schema": 1,
+          "chapter": "nanjing-first-release",
+          "state": "complete",
+          "flags": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed",
+            "feedback_reviewed",
+            "outage_over",
+            "comfort_read",
+            "comment_reviewed",
+            "test_reviewed",
+            "manual_entry_written"
+          ]
+        },
+        "manual": {
+          "written": true,
+          "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+        }
+      }
+    }
+  ]
+}

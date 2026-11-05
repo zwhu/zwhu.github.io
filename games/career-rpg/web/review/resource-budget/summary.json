@@ -1,0 +1,227 @@
+{
+  "status": "ready_for_review",
+  "scene": "nanjing-office",
+  "stage": "resource-budget",
+  "budget_result": "failed",
+  "scene_accepted": false,
+  "next_scene_authorized": false,
+  "method": "Static read-only closure accounting; no network or runtime performance measurement",
+  "command": "python3 games/career-rpg/scripts/resource-budget.py",
+  "manifest": "manifest.json",
+  "production_hashes": {
+    "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213",
+    "main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1"
+  },
+  "runtime_count": 15,
+  "first_interactive": {
+    "raw_bytes": 5191167,
+    "gzip_bytes": 3864937
+  },
+  "chapter_runtime": {
+    "raw_bytes": 5191167,
+    "gzip_bytes": 3864937
+  },
+  "minimum_distribution": {
+    "raw_bytes": 5192248,
+    "gzip_bytes": 3865599
+  },
+  "budgets": [
+    {
+      "id": "FIRST-GZIP",
+      "actual_bytes": 3864937,
+      "limit_bytes": 524288,
+      "delta_bytes": 3340649,
+      "over_by_bytes": 3340649,
+      "status": "failed"
+    },
+    {
+      "id": "CHAPTER-RAW",
+      "actual_bytes": 5191167,
+      "limit_bytes": 2097152,
+      "delta_bytes": 3094015,
+      "over_by_bytes": 3094015,
+      "status": "failed"
+    },
+    {
+      "id": "CHAPTER-WITH-LICENSE-RAW",
+      "actual_bytes": 5192248,
+      "limit_bytes": 2097152,
+      "delta_bytes": 3095096,
+      "over_by_bytes": 3095096,
+      "status": "failed"
+    },
+    {
+      "id": "HTML-RAW",
+      "actual_bytes": 3985,
+      "limit_bytes": 98304,
+      "delta_bytes": -94319,
+      "over_by_bytes": 0,
+      "status": "passed"
+    },
+    {
+      "id": "HTML-GZIP",
+      "actual_bytes": 1930,
+      "limit_bytes": 32768,
+      "delta_bytes": -30838,
+      "over_by_bytes": 0,
+      "status": "passed"
+    }
+  ],
+  "totals_by_extension": {
+    ".html": {
+      "raw_bytes": 3985,
+      "gzip_bytes": 1930
+    },
+    ".css": {
+      "raw_bytes": 6867,
+      "gzip_bytes": 2204
+    },
+    ".mjs": {
+      "raw_bytes": 42642,
+      "gzip_bytes": 15675
+    },
+    ".js": {
+      "raw_bytes": 720032,
+      "gzip_bytes": 179261
+    },
+    ".png": {
+      "raw_bytes": 4344104,
+      "gzip_bytes": 3650472
+    },
+    ".json": {
+      "raw_bytes": 73537,
+      "gzip_bytes": 15395
+    }
+  },
+  "largest_gzip_resources": [
+    {
+      "file": "games/career-rpg/web/art/office-room-v2.png",
+      "raw_bytes": 1518707,
+      "gzip_bytes": 1305066
+    },
+    {
+      "file": "games/career-rpg/web/art/typing-team-v1.png",
+      "raw_bytes": 898822,
+      "gzip_bytes": 750353
+    },
+    {
+      "file": "games/career-rpg/web/art/player-emotions-v1.png",
+      "raw_bytes": 786164,
+      "gzip_bytes": 620035
+    },
+    {
+      "file": "games/career-rpg/web/art/player-walk-v1.png",
+      "raw_bytes": 616093,
+      "gzip_bytes": 540727
+    },
+    {
+      "file": "games/career-rpg/web/art/npc-team-v1.png",
+      "raw_bytes": 524318,
+      "gzip_bytes": 434291
+    },
+    {
+      "file": "games/career-rpg/web/vendor/three.core.min.js",
+      "raw_bytes": 381124,
+      "gzip_bytes": 100467
+    },
+    {
+      "file": "games/career-rpg/web/vendor/three.module.min.js",
+      "raw_bytes": 338908,
+      "gzip_bytes": 78794
+    }
+  ],
+  "unresolved_dynamic_paths": [],
+  "production_unchanged": {
+    "status": "passed",
+    "hashes_checked": 27
+  },
+  "blog_isolation": {
+    "status": "unverified",
+    "static_samples": [
+      {
+        "file": "docs/index.html",
+        "sha256": "93eb43996765d734e1a96e522db4ed439af4849470309bcb8fce26a1a663e739",
+        "game_resource_references": []
+      },
+      {
+        "file": "docs/claude-code-review.html",
+        "sha256": "1e9be3c6ce5bc7113a07876a0332f00dbaca7a8977646b9be0cff56f2d7ae063",
+        "game_resource_references": []
+      }
+    ],
+    "references_evidence": "manifest.json blog_static_samples",
+    "gap": "No cold-cache network acceptance or full shared-script recursive audit"
+  },
+  "contribution_evidence": {
+    "images_raw_bytes": 4344104,
+    "images_gzip_bytes": 3650472,
+    "images_gzip_share": 0.9445100916263318,
+    "png_ancillary_raw_bytes": 114784,
+    "three_raw_bytes": 720032,
+    "three_gzip_bytes": 179261,
+    "first_reduction_fraction_required": 0.8643475947990873,
+    "runtime_without_any_three": {
+      "raw_bytes": 4471135,
+      "gzip_bytes": 3685676
+    }
+  },
+  "optimization_order": [
+    {
+      "order": 1,
+      "proposal": "Investigate lossless repacking of approved PNG pixel/alpha data and optional metadata first. Record actual savings before adoption; retain original files.",
+      "basis": "Images cost 3650472 gzip bytes. All ancillary chunks combined are 114784 raw bytes; color metadata is not automatically removable. Compare measured candidate savings with both recorded deficits before adoption.",
+      "constraint": "No work performed; exact appearance/color/alpha and strict production-grid/atlas gate must survive. No resizing/recoloring/quality reduction; no confirmed lossless route to the full budget yet."
+    },
+    {
+      "order": 2,
+      "proposal": "Evaluate a fixed local Three build limited to actually-used WebGL classes, retaining r180 and MIT; measure output and validate the existing game before adoption.",
+      "basis": "Vendor files cost 179261 gzip bytes. Remaining runtime without any vendor would still cost 3685676 gzip bytes and 4471135 raw bytes; compare to existing limits.",
+      "constraint": "No dependency download, replacement or second implementation this task. This proposal alone cannot solve either deficit."
+    },
+    {
+      "order": 3,
+      "proposal": "Only if needed, review real loading phases after production-grid/atlas decisions. Every current image and JSON is awaited; a required image cannot simply be excluded from the current first-load total.",
+      "basis": "Phase splitting could only change first-load cost after behavior changes are separately accepted; total chapter raw bytes do not fall. HTTP gzip/cache/preload cannot fix an already-gzipped static bundle limit.",
+      "constraint": "Any proposal needs independent usability, fallback and art checks and separate authorization; no budget changes or automatic implementation."
+    }
+  ],
+  "limitations": [
+    "gzip is an independent static encoding size, not observed network compression or timing",
+    "Ordinary-blog isolation is static sample evidence only",
+    "Strict production grid/atlas, real devices/people/author, other scene gates remain unverified",
+    "Walking stutter is unresolved and explicitly paused; no startup/frame/runtime performance measured"
+  ],
+  "not_rerun": [
+    "Supervisor-passed FALLBACK and root verify; production files unchanged",
+    "No cold-cache network list needed: all actual startup dynamic resource values resolved statically",
+    "No full chapter, startup/frame/interaction performance or scene expansion"
+  ],
+  "next": "Stop after reporting actual budget gaps; supervisor independent review. No budget changes or automatic optimization.",
+  "evidence_checks": {
+    "manifest_unique_and_totals": "passed",
+    "measured_production_hashes": "passed",
+    "git_diff_check": "passed",
+    "production_changes": "none",
+    "supervisor_fallback": "passed current-version 10 cases only",
+    "root_verify": "not rerun per task; no production changes"
+  },
+  "independent_review": "supervisor-review.json: measured_and_failed_existing_targets",
+  "lossless_probe": {
+    "status": "needs_design_decision",
+    "evidence": "lossless-feasibility.json",
+    "pixel_alpha_color": "five passed, full metadata equivalence not claimed",
+    "hypothetical_first_gzip_bytes": 2990922,
+    "hypothetical_chapter_raw_bytes": 3622591,
+    "budgets_still_failed": true,
+    "production_replaced": false
+  },
+  "design_options": {
+    "file": "design-options.md",
+    "status": "proposals_only",
+    "planning_permission_required": false,
+    "final_pixel_or_budget_or_startup_standard_decision": "author confirmation required",
+    "candidates_integrated": false
+  },
+  "lossless_independent_review": "lossless-supervisor-review.json: candidate_probe_still_fails_existing_targets"
+}

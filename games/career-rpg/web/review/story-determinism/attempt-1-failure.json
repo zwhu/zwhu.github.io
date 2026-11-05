@@ -1,0 +1,8 @@
+{
+  "type": "new-test-failed/test-expectation-error",
+  "test": "identical semantic journeys replay equally across independent instances and stable saves",
+  "failure": "assert.match(final.manual.text,/注释/)",
+  "actual": "工作手册原文为补测试、写清楚坑，未含注释二字",
+  "finding": "First trajectory pairwise replay/restoration comparisons passed before this unrelated literal expectation failed. Not a demonstrated production nondeterminism defect.",
+  "action": "Preserve failure; correct only expected manual contract to current public chapter data. No story/data/UI changes."
+}

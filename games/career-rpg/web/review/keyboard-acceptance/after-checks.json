@@ -1,0 +1,35 @@
+{
+  "scope": "Targeted keyboard gaps only; existing chapter/story, movement and performance evidence not rerun",
+  "environment": "Desktop Chrome headless, 1280x900, software WebGL; no real-device or performance acceptance",
+  "input": "Chrome CDP Input.dispatchKeyEvent; no clicks or production state-changing functions",
+  "checks": {
+    "pauseDirectionNavigation": true,
+    "pauseManualReturn": true,
+    "tabHudAndManualFocus": true
+  },
+  "mainSHA256": "21d2afcfc1daba79197242deb8caec7f81c83392651947a51a408076b4d668ef",
+  "fixtures": "LocalStorage legal checkpoints and isolated storage failure only; no chapter.advance, button.click, dispatchEvent or direct focus to drive acceptance.",
+  "operations": [
+    {
+      "id": "pauseDirectionNavigation",
+      "keys": "↑↓←→",
+      "operation": "Pause options select visibly; all four directions; player stays still",
+      "result": "passed"
+    },
+    {
+      "id": "pauseManualReturn",
+      "keys": "↓ Enter Esc Esc",
+      "operation": "Manual returns to pause menu, then exploration",
+      "result": "passed"
+    },
+    {
+      "id": "tabHudAndManualFocus",
+      "keys": "M Esc Tab Shift+Tab Enter",
+      "operation": "Tab retained; HUD manual returns to its button; HUD focus cannot move player",
+      "result": "passed"
+    }
+  ],
+  "result": "failed",
+  "operation": "dialogue-choices-and-enter-boundary",
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n'' !== 'stage'\n\n    at walk (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/browser.mjs:50:28)\n    at async Module.runChecks (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/keyboard-scenarios.mjs:76:60)\n    at async file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/browser.mjs:58:5"
+}

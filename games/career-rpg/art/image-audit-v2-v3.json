@@ -1,0 +1,18 @@
+{
+  "nanjing-art-direction-v2.png": {
+    "size": [
+      1536,
+      1024
+    ],
+    "paletteAudit": "not measured; Pillow unavailable",
+    "sha256": "dd63712c5a11f6c5aca6389cd045cfc3d5bd09bca76436352bdc461d48704e4c"
+  },
+  "nanjing-art-direction-v3.png": {
+    "size": [
+      1536,
+      1024
+    ],
+    "paletteAudit": "not measured; Pillow unavailable",
+    "sha256": "a415a21a3cc204cce8a4e0f9ca77547e0c568f45ab1307960b5b60e5fd1f97cb"
+  }
+}

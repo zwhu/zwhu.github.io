@@ -1,0 +1,21 @@
+{
+  "result": "passed",
+  "browser": "Chrome headless / desktop 1280x900 / software WebGL",
+  "checks": {
+    "realThreeAndTransparentBounds": true,
+    "refreshExactReport": true,
+    "refreshExactInvestigation": true,
+    "duplicateReadonlyNoSave": true,
+    "completeFirstLearningOrder": true,
+    "completeRefreshAndManual": true,
+    "secondLearningOrder": true,
+    "pauseAndResume": true,
+    "blurHandlerClearsInput": true,
+    "replay": true,
+    "damagedSavePreservedAndPlayable": true,
+    "explicitResetOnlyOwnSave": true,
+    "oldSaveSafePrompt": true,
+    "noUncaughtBrowserErrors": true
+  },
+  "scope": "Desktop chapter flow; blur handler synthetic; no reading-duration, real-device or performance acceptance"
+}

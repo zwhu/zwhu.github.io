@@ -1,0 +1,1319 @@
+{
+  "scope": "All current docs/**/*.html direct load references plus root shared JS/CSS literal scan; no claim of recursive execution or all-page browser coverage",
+  "pages": [
+    {
+      "file": "docs/about.html",
+      "sha256": "5e8e1d2d4fa1ca2468fd976ea159d79860b737fb8f01a4148000c3a2462f5c54",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./about-map.js",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/agent-design-system.html",
+      "sha256": "07313702a4459d677ac4a94bee22e8993d1488bb4cbae00ced988b3137b60698",
+      "direct_resource_references": [
+        "./style.css",
+        "./translation.css?v=20261103",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/optimized/ab7ab20fb3b946a8-640-q88.webp",
+        "./assets/optimized/ab7ab20fb3b946a8-1024-q88.webp",
+        "./assets/optimized/ab7ab20fb3b946a8-1600-q88.webp",
+        "./assets/translations/original/ab7ab20fb3b946a8.jpg",
+        "./assets/optimized/024b028c105f8e44-640-q88.webp",
+        "./assets/optimized/024b028c105f8e44-1024-q88.webp",
+        "./assets/optimized/024b028c105f8e44-1080-q88.webp",
+        "./assets/translations/original/024b028c105f8e44.jpg",
+        "./assets/optimized/024b028c105f8e44-640-q88.webp",
+        "./assets/optimized/024b028c105f8e44-1024-q88.webp",
+        "./assets/optimized/024b028c105f8e44-1080-q88.webp",
+        "./assets/translations/original/024b028c105f8e44.jpg",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "./translation-media.js?v=1",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/assets/superagent/index.html",
+      "sha256": "7c9d48aa2f3088633999b7581eeb13463c2b3f759f6b1f9ef088e898e5850001",
+      "direct_resource_references": [
+        "../../favicon.svg",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-1.html",
+      "sha256": "93d1f677260a1f155c278963be77c095424fc0365c4dc52e4cac195a78b2b391",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-10.html",
+      "sha256": "44cafa6a3cca82dbddd0f2d370ad2ca5ea68bc672db084a2ada61a4da954927f",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-11.html",
+      "sha256": "776ea4ccb49a8a0f962a235fd70427ba80f00a44aba26192a2865315ef308c28",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-12.html",
+      "sha256": "b052089177c732fdb7ef8f02f3796051eb24c1213a42dea3c0c6ef3a22dd8ed4",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-13.html",
+      "sha256": "1b59fc06dc54726967713f0aafcb0912333fa3275765ecf8d9e61213797a43b5",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-14.html",
+      "sha256": "5d522bce5566cd956ed906afdec806b7acee578cd76a85e65be4fbfecdd0e1bb",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-15.html",
+      "sha256": "c39aa22e413fd12e9c3d73067a33941e6b1997adc5d84201f98e311258684beb",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-16.html",
+      "sha256": "4b1a28bf23a65b4dfad7a00b59845d02a2f6d3a7bdddcb620ae2112ee6ce23b7",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-17.html",
+      "sha256": "ec10d577f1641544f8e77021c310dee179623c2022218c63cfbe6a946394f5c7",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-18.html",
+      "sha256": "0ad826b8b03ad162c7d62b5655415f37f4ae65440d97a0bd2ab82fefac3fa3bc",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-19.html",
+      "sha256": "9c14e22c5613403afb07a0840c9706ea7bb18d59a0bfe0f8958ad1bcfd2d3c35",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-2.html",
+      "sha256": "ff59e0ffb795d201111ec05eef4754ee92c29e6f4191b21f195ba3b330c21f59",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-20.html",
+      "sha256": "19584881a08d986a922b8f3e174d639bc10d85ee81d1f3ea6f1ccf735bfa55e0",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-21.html",
+      "sha256": "afc337f204d8c4d2942feefd1c87be73c4dd6e39b28161313e60ec656384f4d6",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-22.html",
+      "sha256": "58358b4158bdff34e1641e8d9b54d977d8fe0a0cbb3c7155c6b44bce60d0b8fd",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-23.html",
+      "sha256": "21e63b368ab65a576d691abf7a74ac53c388bf454f9bb641d28e6999d7e37a92",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-24.html",
+      "sha256": "c2a44f2761abb61dcb84776d4fbfc172b045c2a2ef22b03d67b4d7579e6be452",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-25.html",
+      "sha256": "536661bc7dbf671903f867765af254fa24d7e7d6f0b356f406d102edee522d04",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/optimized/9bac8388bc71670b-640-q88.webp",
+        "./assets/optimized/9bac8388bc71670b-671-q88.webp",
+        "./assets/blog-issues/2c2f705c36b871ff.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-26.html",
+      "sha256": "b80c2ec6eac78ed332e9a78194a703706cea88b54cf18c5c84327884b652bb5a",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-27.html",
+      "sha256": "e5f4f230ecc60d5756bc2dd720f4599b19827a785791bdccca9ef6f8bed7b65d",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-28.html",
+      "sha256": "eb98be27a9df21c1c22c53bb33d2e29c0773f19375ffe9c8da7a2c2564f033d1",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-29.html",
+      "sha256": "d9bc40b6c245d36c26844df34ddc6dbdad00b179dec534c401b623e0d089ccd3",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-3.html",
+      "sha256": "ea941888bc75f0659bee68ac836ee44409f708d7b08dd8d9e94eb6ce8106c0a6",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-30.html",
+      "sha256": "fc0f382a5167ac0a22e8bf4a29d2686da967953dcfa713dc8b85f9dd17bbebb0",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-31.html",
+      "sha256": "6d42fcd2b6dcbbaa33bd50c1be535e6094260689db69cfd10d2c6395a642a125",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-32.html",
+      "sha256": "7e1514c4e4613b3a0e0fa5f63f5f9e82446bf9c42d25de83d916a6d5e492aee6",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-33.html",
+      "sha256": "cf0db2c6fdf4956a086006fb14db306033486c1d2a026dc890b95f3362ef0b3d",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-34.html",
+      "sha256": "316196de36581eabf82347ffc88250b44f3e969d3ef94185146a2d192d176a80",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-35.html",
+      "sha256": "dcf6b707f1fa2b9029ed5c8c748b9e02de10aca2d4bb42125c9cf6cfabf0d7d1",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-36.html",
+      "sha256": "83498698f5d282d2143ab97aa0b09df59a3e88a05f07a880c562c7c75333ff33",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-37.html",
+      "sha256": "6b01a5a1ecc97fc0cb4b9f2ee25efbdd650398932eabc2d35e65786905d3c80f",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/optimized/086bbc3ff2aa297c-640-q88.webp",
+        "./assets/optimized/086bbc3ff2aa297c-1024-q88.webp",
+        "./assets/optimized/086bbc3ff2aa297c-1594-q88.webp",
+        "./assets/blog-issues/b50b0d19da75b728.png",
+        "./assets/blog-issues/6a4814b72f5912ae.gif",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-38.html",
+      "sha256": "53de0a586c31979330732a7f82e1ef3ebc685b9fb000975aac11d2e01ff3c196",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-39.html",
+      "sha256": "cb1aca63bb0ed2c92148b0a18d747ae4d2633cc0ef59770344cfaa5250e0cefe",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-4.html",
+      "sha256": "a19f51a4632d2ec8f3ff07811bbba7a26672fd994caf06588ca423cb7a438255",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-40.html",
+      "sha256": "6ef8c52663e57e8d62c2a6c82e4e83b249b256e70153f3eb11dc428ef983aa8a",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-41.html",
+      "sha256": "d91837e4cc853e9e0ce492db8fdab9ee6af61a49c5999e6717615f1de2086525",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/optimized/62ab6a50537ccfe5-640-q88.webp",
+        "./assets/optimized/62ab6a50537ccfe5-1024-q88.webp",
+        "./assets/optimized/62ab6a50537ccfe5-1600-q88.webp",
+        "./assets/blog-issues/9de7d3af335777c3.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-42.html",
+      "sha256": "7563dadaed21b54f5a7236ec3c638905aebcbb6de8317f6062e629ae75cb5199",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/blog-issues/50fd4016f468c858.gif",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-43.html",
+      "sha256": "bb8b1cb9ed34b22ffc690b0c4d09ff854e7c04e56a8657ece5adf28b008abce7",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-44.html",
+      "sha256": "f92c69a38fbc8c0cfe6f6ec78c3ae49d6e697ae521ba05e4fdd6b4bdcc3790a2",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-45.html",
+      "sha256": "e1d85ce73f4b283603e32ab9c0a2f550c29fee59edb5b234ce97a38295778788",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-46.html",
+      "sha256": "695eb7943668d7f96d11d97d935e9f3650b99f9dc87b0ad7eff33ef1563a1d05",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/optimized/9586adaec9466e23-640-q88.webp",
+        "./assets/optimized/9586adaec9466e23-1024-q88.webp",
+        "./assets/optimized/9586adaec9466e23-1600-q88.webp",
+        "./assets/blog-issues/dcb8d88255a036a2.png",
+        "./assets/optimized/d85b57929f97abe0-640-q88.webp",
+        "./assets/optimized/d85b57929f97abe0-1024-q88.webp",
+        "./assets/optimized/d85b57929f97abe0-1600-q88.webp",
+        "./assets/blog-issues/5e1199d24d781022.png",
+        "./assets/optimized/63733874ef46ff91-640-q88.webp",
+        "./assets/optimized/63733874ef46ff91-1024-q88.webp",
+        "./assets/optimized/63733874ef46ff91-1600-q88.webp",
+        "./assets/blog-issues/0f6c2f442a8c02fb.jpg",
+        "./assets/optimized/074bd5dc886708b6-640-q88.webp",
+        "./assets/optimized/074bd5dc886708b6-1024-q88.webp",
+        "./assets/optimized/074bd5dc886708b6-1600-q88.webp",
+        "./assets/blog-issues/3d91b9f6f37321ac.png",
+        "./assets/optimized/237cb0e532639070-640-q88.webp",
+        "./assets/optimized/237cb0e532639070-1024-q88.webp",
+        "./assets/optimized/237cb0e532639070-1600-q88.webp",
+        "./assets/blog-issues/b217b30e63c6ee03.png",
+        "./assets/optimized/969ba9d835d7d651-640-q88.webp",
+        "./assets/optimized/969ba9d835d7d651-1024-q88.webp",
+        "./assets/optimized/969ba9d835d7d651-1600-q88.webp",
+        "./assets/blog-issues/757d1fa8dd40fb3e.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-5.html",
+      "sha256": "41040a3b11e89e10ee8cf5762046780879521aa991ae89baf514a8d27c9b66ca",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/optimized/7ce8f86168c8c598-640-q88.webp",
+        "./assets/optimized/7ce8f86168c8c598-1024-q88.webp",
+        "./assets/optimized/7ce8f86168c8c598-1090-q88.webp",
+        "./assets/blog-issues/0422a651e039f74f.jpg",
+        "./assets/optimized/5e1ca6d07fa12a36-640-q88.webp",
+        "./assets/optimized/5e1ca6d07fa12a36-704-q88.webp",
+        "./assets/blog-issues/7204b60d927a55cc.jpg",
+        "./assets/optimized/0746476b90bcac0b-526-q88.webp",
+        "./assets/blog-issues/2f1e821c6efb0bc3.jpg",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-6.html",
+      "sha256": "04d11d45d59e878f9820d402cda3e2e5f89e9f87775ba49b9c7b13c7831ae49b",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-7.html",
+      "sha256": "84b836b56267c149c734727039b074266af3d85cf26844022d2f3c0b49acddf1",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-8.html",
+      "sha256": "29841605ec0968a1f12afd410cf49d765148318901080a5027f8bbc4abd7e4d9",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-issue-9.html",
+      "sha256": "ab14e420ee9f19801a3c5771b27db7558b6800d2d8b0bc485a93c57250406110",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/blog-workflow.html",
+      "sha256": "b368de45af6a0c3161488d942ac5e946cef336e80319c372c660190519fdfd56",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./assets/blog-workflow/workflow.css?v=2",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/blog-workflow/cover.svg",
+        "./assets/blog-workflow/flow.svg",
+        "./assets/blog-workflow/verify.svg",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "./article-toc.js?v=2",
+        "./assets/blog-workflow/workflow.js?v=2",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/claude-code-review.html",
+      "sha256": "1e9be3c6ce5bc7113a07876a0332f00dbaca7a8977646b9be0cff56f2d7ae063",
+      "direct_resource_references": [
+        "./style.css",
+        "./translation.css?v=20261103",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/optimized/c660894ee02b9500-640-q88.webp",
+        "./assets/optimized/c660894ee02b9500-1024-q88.webp",
+        "./assets/optimized/c660894ee02b9500-1600-q88.webp",
+        "./assets/translations/original/c660894ee02b9500.jpg",
+        "./assets/optimized/e227a5e5d0bdb5d1-640-q88.webp",
+        "./assets/optimized/e227a5e5d0bdb5d1-1024-q88.webp",
+        "./assets/optimized/e227a5e5d0bdb5d1-1370-q88.webp",
+        "./assets/translations/original/e227a5e5d0bdb5d1.jpg",
+        "./assets/optimized/3660ec25a6a870de-640-q88.webp",
+        "./assets/optimized/3660ec25a6a870de-1024-q88.webp",
+        "./assets/optimized/3660ec25a6a870de-1370-q88.webp",
+        "./assets/translations/original/3660ec25a6a870de.jpg",
+        "./assets/optimized/e227a5e5d0bdb5d1-640-q88.webp",
+        "./assets/optimized/e227a5e5d0bdb5d1-1024-q88.webp",
+        "./assets/optimized/e227a5e5d0bdb5d1-1370-q88.webp",
+        "./assets/translations/original/e227a5e5d0bdb5d1.jpg",
+        "./assets/optimized/3660ec25a6a870de-640-q88.webp",
+        "./assets/optimized/3660ec25a6a870de-1024-q88.webp",
+        "./assets/optimized/3660ec25a6a870de-1370-q88.webp",
+        "./assets/translations/original/3660ec25a6a870de.jpg",
+        "./assets/optimized/8bbed6f611dfb487-640-q88.webp",
+        "./assets/optimized/8bbed6f611dfb487-1024-q88.webp",
+        "./assets/optimized/8bbed6f611dfb487-1324-q88.webp",
+        "./assets/translations/original/8bbed6f611dfb487.jpg",
+        "./assets/optimized/8bbed6f611dfb487-640-q88.webp",
+        "./assets/optimized/8bbed6f611dfb487-1024-q88.webp",
+        "./assets/optimized/8bbed6f611dfb487-1324-q88.webp",
+        "./assets/translations/original/8bbed6f611dfb487.jpg",
+        "./assets/optimized/b27577c75499a60b-640-q88.webp",
+        "./assets/optimized/b27577c75499a60b-1024-q88.webp",
+        "./assets/optimized/b27577c75499a60b-1370-q88.webp",
+        "./assets/translations/original/b27577c75499a60b.jpg",
+        "./assets/optimized/73c160deb77f9e4a-640-q88.webp",
+        "./assets/optimized/73c160deb77f9e4a-1024-q88.webp",
+        "./assets/optimized/73c160deb77f9e4a-1370-q88.webp",
+        "./assets/translations/original/73c160deb77f9e4a.jpg",
+        "./assets/optimized/b27577c75499a60b-640-q88.webp",
+        "./assets/optimized/b27577c75499a60b-1024-q88.webp",
+        "./assets/optimized/b27577c75499a60b-1370-q88.webp",
+        "./assets/translations/original/b27577c75499a60b.jpg",
+        "./assets/optimized/73c160deb77f9e4a-640-q88.webp",
+        "./assets/optimized/73c160deb77f9e4a-1024-q88.webp",
+        "./assets/optimized/73c160deb77f9e4a-1370-q88.webp",
+        "./assets/translations/original/73c160deb77f9e4a.jpg",
+        "./assets/optimized/a5407026cc8ed24f-640-q88.webp",
+        "./assets/optimized/a5407026cc8ed24f-1024-q88.webp",
+        "./assets/optimized/a5407026cc8ed24f-1600-q88.webp",
+        "./assets/translations/original/a5407026cc8ed24f.jpg",
+        "./assets/optimized/a5407026cc8ed24f-640-q88.webp",
+        "./assets/optimized/a5407026cc8ed24f-1024-q88.webp",
+        "./assets/optimized/a5407026cc8ed24f-1600-q88.webp",
+        "./assets/translations/original/a5407026cc8ed24f.jpg",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/content/doc-lint-comparison/after.html",
+      "sha256": "31ca3084d27960a750e8b1eb2539c65aec1320aca2c8eaf01455b5671fa4ad4e",
+      "direct_resource_references": [
+        "../../style.css",
+        "../../archive.css",
+        "../../favicon.ico",
+        "../../favicon.svg",
+        "../../apple-touch-icon.png",
+        "../../assets/ub-mode-bench/01-design.svg",
+        "../../assets/ub-mode-bench/03-vue-bug.svg",
+        "../../assets/ub-mode-bench/07-audit.svg",
+        "../../assets/ub-mode-bench/02-small-cost.svg",
+        "../../assets/ub-mode-bench/04-vue-cost.svg",
+        "../../assets/ub-mode-bench/05-crap.svg",
+        "../../assets/ub-mode-bench/08-gates.svg",
+        "../../comments-config.js?v=2",
+        "../../comments.js?v=5",
+        "../../article-toc.js",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/content/doc-lint-comparison/before.html",
+      "sha256": "a4ed11a0bfa8468e6afc4c471ab122ada2e4384a832cb804f4df48eb87978359",
+      "direct_resource_references": [
+        "../../style.css",
+        "../../archive.css",
+        "../../favicon.ico",
+        "../../favicon.svg",
+        "../../apple-touch-icon.png",
+        "../../assets/ub-mode-bench/01-design.svg",
+        "../../assets/ub-mode-bench/03-vue-bug.svg",
+        "../../assets/ub-mode-bench/07-audit.svg",
+        "../../assets/ub-mode-bench/02-small-cost.svg",
+        "../../assets/ub-mode-bench/04-vue-cost.svg",
+        "../../assets/ub-mode-bench/05-crap.svg",
+        "../../assets/ub-mode-bench/08-gates.svg",
+        "../../comments-config.js?v=2",
+        "../../comments.js?v=5",
+        "../../article-toc.js",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/content/doc-lint-comparison/index.html",
+      "sha256": "ec69fefa37596aadf74e7759b4d5bd3c489c3778aabc5e7659da6727f503c5d2",
+      "direct_resource_references": [
+        "../../style.css",
+        "../../archive.css",
+        "../../favicon.ico",
+        "../../favicon.svg",
+        "../../apple-touch-icon.png",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/engineers-new-problems.html",
+      "sha256": "c08e40e01b49f9d3c66d37a8fbe87511a25085da552474f71140e7e100830572",
+      "direct_resource_references": [
+        "./style.css",
+        "./translation.css?v=20261103",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/optimized/816a06bb0d5fb7cc-640-q88.webp",
+        "./assets/optimized/816a06bb0d5fb7cc-1024-q88.webp",
+        "./assets/optimized/816a06bb0d5fb7cc-1600-q88.webp",
+        "./assets/translations/original/816a06bb0d5fb7cc.jpg",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/index.html",
+      "sha256": "93eb43996765d734e1a96e522db4ed439af4849470309bcb8fce26a1a663e739",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/home/paper-plane.svg?v=2",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/learn-agent-memory.html",
+      "sha256": "756e76db25bcffe4a8a87aec2f1b742a2dc7a9181bdfd3614a2004ab54274207",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./assets/learning/agent-memory.css",
+        "./learning.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/learning/agent-memory.js",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/learn-ai-coding-playbook.html",
+      "sha256": "c082018da26a75017d39ad57ba5ab6651b05fe29c4ae05f9a2453c2ecdd7431a",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./assets/learning/ai-coding-playbook.css",
+        "./learning.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/learning/ai-coding-playbook.js",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/learn-aime-paper.html",
+      "sha256": "797d47565655d59b17f14c9d645d1401fcb8e58ce70204171bea90031912a15a",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./assets/learning/aime-paper.css",
+        "./learning.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/learning/aime-paper.js",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/learn-llm-study.html",
+      "sha256": "529ee9e465a308408b9b8b7d7d6b781d5843efde29d1bde20682a7c131e8c34a",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./assets/learning/llm-study.css",
+        "./learning.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/learning/llm-study.js",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/learn-pi-compaction.html",
+      "sha256": "10c0aa8da43bdec13fdce4410a64554f8b8a7367b781cb416bdd1f91327ac4b6",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./assets/learning/pi-compaction.css",
+        "./learning.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/learning/pi-compaction.js",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/learn-react-token-accumulation.html",
+      "sha256": "46c4e39191b221929f725ee31c0c0b5cb398fb6113cb1c561f16cf89c00229ee",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./assets/learning/react-token-accumulation.css",
+        "./learning.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/learning/react-token-accumulation.js",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/learning.html",
+      "sha256": "1dd3e4d0a366c1694baac38f35f0d7f0c3ea28cf638fee08dae1c712caec8195",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/superagent-botmux.html",
+      "sha256": "061d7c839d5c8460d522e77856b3d7a66fd41f91c148729926f63a9c75f093f4",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "./article-toc.js?v=2",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/superagent.html",
+      "sha256": "d47f4bbffb7db99c462f669673d11afa494064289640798499ab04122b8c244c",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css?v=20261102",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/superagent/editorial.css?v=2",
+        "./assets/superagent/continuity-cover.svg",
+        "./assets/superagent/redrawn/fig03.svg?v=3",
+        "./assets/superagent/redrawn/fig04.svg?v=4",
+        "./assets/superagent/redrawn/fig07.svg?v=3",
+        "./assets/superagent/redrawn/fig05.svg?v=3",
+        "./assets/superagent/architecture.svg",
+        "./assets/superagent/redrawn/fig08.svg?v=3",
+        "./assets/superagent/consistency.svg",
+        "./assets/superagent/redrawn/fig10.svg?v=3",
+        "./assets/superagent/redrawn/fig11.svg?v=3",
+        "./assets/superagent/tradeoff.svg?v=3",
+        "./assets/optimized/6fe42fe704b5a19f-640-q88.webp",
+        "./assets/optimized/6fe42fe704b5a19f-1009-q88.webp",
+        "./assets/superagent/original/fig12.png",
+        "./assets/optimized/729241fc13b1e8af-640-q88.webp",
+        "./assets/optimized/729241fc13b1e8af-1024-q88.webp",
+        "./assets/optimized/729241fc13b1e8af-1080-q88.webp",
+        "./assets/superagent/original/fig14.png",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "./article-toc.js?v=2",
+        "./assets/superagent/routes.js",
+        "./assets/superagent/explorer.js?v=2",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/translations.html",
+      "sha256": "0cc78d8471686b3ddc0d1fd7e3041fd6de0d88a1423064ed2fcde41d0526f555",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/ub-mode-bench.html",
+      "sha256": "48509bf0284567631393cd6fbb621d72b362ea2c3747445e4a87e6bf2677a5bc",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "./assets/ub-mode-bench/01-design.svg",
+        "./assets/ub-mode-bench/03-vue-bug.svg",
+        "./assets/ub-mode-bench/07-audit.svg",
+        "./assets/ub-mode-bench/02-small-cost.svg",
+        "./assets/ub-mode-bench/04-vue-cost.svg",
+        "./assets/ub-mode-bench/05-crap.svg",
+        "./assets/ub-mode-bench/08-gates.svg",
+        "./comments-config.js?v=2",
+        "./comments.js?v=6",
+        "./article-toc.js?v=2",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    },
+    {
+      "file": "docs/writing.html",
+      "sha256": "8c829dee73391360667ef3676c2cf55054ef90499e551919b9ef53dfb73d1484",
+      "direct_resource_references": [
+        "./style.css",
+        "./archive.css",
+        "./favicon.ico",
+        "./favicon.svg",
+        "./apple-touch-icon.png",
+        "https://static.cloudflareinsights.com/beacon.min.js"
+      ],
+      "forbidden_resource_references": [],
+      "literal_occurrences_for_review": []
+    }
+  ],
+  "shared_files": [
+    {
+      "file": "docs/about-map.js",
+      "sha256": "39eb7ae02366c51541111c66a413a23960aebef246df56443dfcb88e60392191",
+      "game_literal_occurrences": []
+    },
+    {
+      "file": "docs/archive.css",
+      "sha256": "7fe6685fe687fd6d5ab4e91bf9776efe3f5438b8c4186f95d9e3c4255466a523",
+      "game_literal_occurrences": []
+    },
+    {
+      "file": "docs/article-toc.js",
+      "sha256": "abd86f921b3ae44f4ee51d9aeb2f37b404c627500432e6323dfdf09d3b36ed39",
+      "game_literal_occurrences": []
+    },
+    {
+      "file": "docs/comments-config.js",
+      "sha256": "c6c7abafaa3ac7250768a3d879efb36a89c346ef4c270191a0909e9a443e8ada",
+      "game_literal_occurrences": []
+    },
+    {
+      "file": "docs/comments.js",
+      "sha256": "72ed5c6cda818d07724914078961fb54b19c825a2151410c0a46163dff214dfa",
+      "game_literal_occurrences": []
+    },
+    {
+      "file": "docs/giscus-theme.css",
+      "sha256": "11f205a0be04368fb20f2f9f27f61bb31516fe833c2924bff826f36587d88f38",
+      "game_literal_occurrences": []
+    },
+    {
+      "file": "docs/learning.css",
+      "sha256": "61e634593fc262f699cec95ed8227b8ebca5b21174d6f73780e5018053b65455",
+      "game_literal_occurrences": []
+    },
+    {
+      "file": "docs/style.css",
+      "sha256": "30b45496d24fa40f569de44b5e9ed9065ab3ed084fc69866bb05170479aaa01e",
+      "game_literal_occurrences": []
+    },
+    {
+      "file": "docs/translation-media.js",
+      "sha256": "8180859f5efa9f0413399fde243d53760757c28d583c8c2297c1849d04a861b6",
+      "game_literal_occurrences": []
+    },
+    {
+      "file": "docs/translation.css",
+      "sha256": "20ac82e634d660ec14cff438669d073a161a168bf28bf69bc7ed9e48291906c8",
+      "game_literal_occurrences": []
+    }
+  ],
+  "direct_game_reference_count": 0
+}

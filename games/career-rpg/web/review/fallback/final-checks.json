@@ -1,0 +1,112 @@
+{
+  "status": "failed",
+  "scope": "FALLBACK faults and affected startup/focus/reading/return smoke only",
+  "environment": "Local isolated Chrome headless; 1280 and 375 simulated CSS widths, software WebGL; no real device/person/performance acceptance",
+  "url": "http://127.0.0.1:65466/games/career-rpg/web/",
+  "profile": "/var/folders/nv/g6m5_3nx1r9_v9dk3zh_5zw40000gn/T/career-web-chrome-iqRdkT",
+  "hashes": {
+    "main.mjs": "b54ba5f73b65b0938289d7af0882386aa879ff039f027896584216f35174df33",
+    "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213",
+    "world.mjs": "f2c80bb039766af708fa0b9f7f324e1fffaa459c923882ec9aa46e2af87d650d",
+    "story.mjs": "6b13dad3a8ad77cb01465a1685694978cc1acad70527b1ac86a390252450e424",
+    "actors.mjs": "f10a5eb44b2d600e7aceb05f64e78f34c9b179ad92b239934267349b4b5718a3",
+    "scene-config.mjs": "6a9277bd4da740a37cf1d1e06a9289112fd91798181c3d788c0593b2062373f2"
+  },
+  "cases": [
+    {
+      "id": "js-disabled-1280",
+      "fault": "js-disabled",
+      "width": 1280,
+      "status": "passed",
+      "screenshots": [
+        "js-disabled-1280-failure.png",
+        "js-disabled-1280-summary.png"
+      ],
+      "message": "游戏脚本尚未启动；若已关闭 JavaScript 或脚本无法加载，可继续阅读下方经历摘要，或回到博客。恢复脚本后可刷新本页重试。",
+      "summary": {
+        "top": 364.8125,
+        "bottom": 390,
+        "viewport": 900,
+        "focus": true,
+        "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+      },
+      "blog": {
+        "href": "http://127.0.0.1:65466/docs/index.html",
+        "status": 200,
+        "pathname": "/docs/index.html",
+        "title": "技术博客 · zwhu",
+        "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+      },
+      "retry": "browser/profile JavaScript restored; new navigation starts game; disabled JS retains summary and native return"
+    },
+    {
+      "id": "webgl-failed-1280",
+      "fault": "webgl-failed",
+      "width": 1280,
+      "status": "passed",
+      "screenshots": [
+        "webgl-failed-1280-failure.png",
+        "webgl-failed-1280-summary.png"
+      ],
+      "message": "办公室暂未打开：Error creating WebGL context. 请检查浏览器的图形支持、网络与本地 HTTP 服务后重试。",
+      "summary": {
+        "top": 673.703125,
+        "bottom": 698.890625,
+        "viewport": 900,
+        "focus": true,
+        "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+      },
+      "persistentRetry": "still readable with retry/summary/blog when graphics stay unavailable",
+      "retry": "keyboard Enter reload -> office dialogue, stable save preserved",
+      "blog": {
+        "href": "http://127.0.0.1:65466/docs/index.html",
+        "status": 200,
+        "pathname": "/docs/index.html",
+        "title": "技术博客 · zwhu",
+        "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+      }
+    },
+    {
+      "id": "resource-failed-1280",
+      "fault": "resource-failed",
+      "width": 1280,
+      "status": "failed",
+      "screenshots": [
+        "resource-failed-1280-failure.png",
+        "resource-failed-1280-summary.png"
+      ],
+      "message": "办公室暂未打开：无法加载素材 ./art/office-room-v2.png，请检查文件并刷新。 请检查浏览器的图形支持、网络与本地 HTTP 服务后重试。",
+      "summary": {
+        "top": 673.703125,
+        "bottom": 698.890625,
+        "viewport": 900,
+        "focus": true,
+        "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+      },
+      "failedResources": [
+        "http://127.0.0.1:65466/games/career-rpg/web/art/office-room-v2.png"
+      ],
+      "retry": "keyboard Enter reload -> office dialogue, stable save preserved"
+    }
+  ],
+  "limitations": [
+    "走路卡顿未解决，用户要求暂停",
+    "未验Safari/真机、作者与真人、整场景和正式发布",
+    "既有全键盘/旅程不重跑；新证据仅覆盖受影响烟测"
+  ],
+  "scene_accepted": false,
+  "next_scene_authorized": false,
+  "failure": {
+    "case": "resource-failed-1280",
+    "operation": "Tab to #close-dialogue",
+    "message": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'chapter-summary'\n- 'stage'\n\n    at leaveIntro (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/fallback.mjs:41:135)\n    at async Module.runFallback (file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/fallback.mjs:82:25)\n    at async file:///Users/bytedance/work/AI/zwhu.github.io/games/career-rpg/web/tests/browser.mjs:50:5",
+    "diagnostics": {
+      "readyState": "complete",
+      "hasFocus": true,
+      "active": "<section id=\"chapter-summary\" tabindex=\"0\" aria-labelledby=\"summary-title\"><h2 id=\"summary-title\">这一章的经历</h2><p>在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。</p></section>",
+      "focus": true,
+      "outline": "rgb(166, 67, 53) solid 2px"
+    }
+  }
+}

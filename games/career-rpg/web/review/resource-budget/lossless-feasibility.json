@@ -1,0 +1,563 @@
+{
+  "status": "needs_design_decision",
+  "scene": "nanjing-office",
+  "stage": "lossless-feasibility",
+  "run_directory": "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo",
+  "scene_accepted": false,
+  "next_scene_authorized": false,
+  "tools": {
+    "cwebp": {
+      "path": "/opt/homebrew/bin/cwebp",
+      "version": "1.4.0"
+    },
+    "dwebp": {
+      "path": "/opt/homebrew/bin/dwebp",
+      "version": "1.4.0"
+    },
+    "libpng": {
+      "path": "/opt/homebrew/opt/libpng/lib/libpng16.16.dylib",
+      "version": "1.6.57"
+    }
+  },
+  "encoder_mode": [
+    "-lossless",
+    "-exact",
+    "-q",
+    "100",
+    "-m",
+    "4",
+    "-metadata",
+    "all"
+  ],
+  "mode_explanation": "One mode per image, no near-lossless/quantization/crop/resize; q controls effort in lossless mode. exact preserves even RGB under fully transparent pixels.",
+  "bounds": "Five sequential encodes, 45 seconds maximum each; one dwebp decode per candidate (20 seconds), no parameter or tool sweep.",
+  "pixel_validation": "Existing libpng simplified read API -> RGBA8 (source 8-bit/no color tags), existing dwebp -> RGBA PAM. Compare every byte including transparent RGB, alpha separately, dimensions and color chunks. No homemade image encoder/decoder.",
+  "files": [
+    {
+      "source": "games/career-rpg/web/art/office-room-v2.png",
+      "original_raw_bytes": 1518707,
+      "original_gzip_bytes": 1305066,
+      "original_sha256": "3f72d04fc17c0e04fedd57557857c87fc91b966231a8facab8f0f28e4e17a7fe",
+      "encoder_command": [
+        "/opt/homebrew/bin/cwebp",
+        "-lossless",
+        "-exact",
+        "-q",
+        "100",
+        "-m",
+        "4",
+        "-metadata",
+        "all",
+        "-quiet",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/office-room-v2.source.png",
+        "-o",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/office-room-v2.lossless.webp"
+      ],
+      "encoder_exit": 0,
+      "decoder_command": [
+        "/opt/homebrew/bin/dwebp",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/office-room-v2.lossless.webp",
+        "-pam",
+        "-quiet",
+        "-o",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/office-room-v2.decoded.pam"
+      ],
+      "decoder_exit": 0,
+      "candidate": "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/office-room-v2.lossless.webp",
+      "candidate_raw_bytes": 1038234,
+      "candidate_gzip_bytes": 1038570,
+      "candidate_sha256": "4664cdb1182dff54bb5d211161655ba1374e483f5c40f7a1b2876eebc58e3cc7",
+      "reference_decode": {
+        "width": 1672,
+        "height": 941,
+        "original_format": 2,
+        "flags": 0,
+        "warning_or_error": 0,
+        "finish_warning_or_error": 0
+      },
+      "candidate_decode": {
+        "width": 1672,
+        "height": 941,
+        "depth": 4,
+        "maxval": 255
+      },
+      "dimensions_equal": true,
+      "rgba_equal": true,
+      "alpha_equal": true,
+      "reference_rgba_sha256": "752a6dc087282856528e8883151c9fc5158b7485f0674ea198771ca12b167ca1",
+      "candidate_rgba_sha256": "752a6dc087282856528e8883151c9fc5158b7485f0674ea198771ca12b167ca1",
+      "reference_alpha_sha256": "01d47491cbeb600913ad9b969c467a20eee08ef528805ef7ff455d14d0b926e6",
+      "candidate_alpha_sha256": "01d47491cbeb600913ad9b969c467a20eee08ef528805ef7ff455d14d0b926e6",
+      "differing_rgba_bytes": 0,
+      "original_png_chunks": [
+        {
+          "type": "IHDR",
+          "bytes": 13,
+          "sha256": "cc4bd9c7ff29b950c9494a0076ce3f932cc1551c4fe6f71ba25c809b2f712486"
+        },
+        {
+          "type": "caBX",
+          "bytes": 21881,
+          "sha256": "a116a9dbdf24c79cb697caf126f4b4270d19a06736f3d98339ae7dea008d26a4"
+        },
+        {
+          "type": "IDAT",
+          "bytes": 1496757,
+          "sha256": "f982f2167ec3301ae00ba5cec83d7c5295884988ea98321e963835c6a273d478"
+        },
+        {
+          "type": "IEND",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "candidate_webp_chunks": [
+        {
+          "type": "VP8L",
+          "bytes": 1038213,
+          "sha256": "f301c45d5a973d5443248dc182d0ce55d95698e057f2aeea4ae93b2a460d9402"
+        }
+      ],
+      "color_metadata_equivalent": true,
+      "color_interpretation": "No declared source ICC/gamma/chromaticity or candidate ICC; matching RGBA8/sRGB default interpretation under standard decoding. No browser/display-device comparison performed.",
+      "non_color_metadata": "Source caBX private/C2PA ancillary data is not copied by cwebp metadata=all (only ICC/EXIF/XMP supported). Original file and caBX hashes remain preserved; provenance metadata equivalence is not claimed.",
+      "verification": "passed_pixel_alpha_color"
+    },
+    {
+      "source": "games/career-rpg/web/art/player-walk-v1.png",
+      "original_raw_bytes": 616093,
+      "original_gzip_bytes": 540727,
+      "original_sha256": "0f72b54f7f757b21638087ce52d940588eafb30a3b8323d4bf3c7313b23591ff",
+      "encoder_command": [
+        "/opt/homebrew/bin/cwebp",
+        "-lossless",
+        "-exact",
+        "-q",
+        "100",
+        "-m",
+        "4",
+        "-metadata",
+        "all",
+        "-quiet",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/player-walk-v1.source.png",
+        "-o",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/player-walk-v1.lossless.webp"
+      ],
+      "encoder_exit": 0,
+      "decoder_command": [
+        "/opt/homebrew/bin/dwebp",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/player-walk-v1.lossless.webp",
+        "-pam",
+        "-quiet",
+        "-o",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/player-walk-v1.decoded.pam"
+      ],
+      "decoder_exit": 0,
+      "candidate": "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/player-walk-v1.lossless.webp",
+      "candidate_raw_bytes": 416414,
+      "candidate_gzip_bytes": 416562,
+      "candidate_sha256": "b948f6a7b389006235fd81ca2cf5234397ab749346280d0da34ca8be2171a4e0",
+      "reference_decode": {
+        "width": 1086,
+        "height": 1448,
+        "original_format": 3,
+        "flags": 0,
+        "warning_or_error": 0,
+        "finish_warning_or_error": 0
+      },
+      "candidate_decode": {
+        "width": 1086,
+        "height": 1448,
+        "depth": 4,
+        "maxval": 255
+      },
+      "dimensions_equal": true,
+      "rgba_equal": true,
+      "alpha_equal": true,
+      "reference_rgba_sha256": "f4d2a90db57662b1c73c7cd15f288312d7b12a677596006f6f5f2f3857674d18",
+      "candidate_rgba_sha256": "f4d2a90db57662b1c73c7cd15f288312d7b12a677596006f6f5f2f3857674d18",
+      "reference_alpha_sha256": "f07c88f14be8199da197b648fbbd657f3ea94b6b68eca30aa606c4bedda482b3",
+      "candidate_alpha_sha256": "f07c88f14be8199da197b648fbbd657f3ea94b6b68eca30aa606c4bedda482b3",
+      "differing_rgba_bytes": 0,
+      "original_png_chunks": [
+        {
+          "type": "IHDR",
+          "bytes": 13,
+          "sha256": "50fd2a45b040e130771aee5b6a9a6167772e7314b303d955e887b8b5c10fcfe8"
+        },
+        {
+          "type": "caBX",
+          "bytes": 23654,
+          "sha256": "4d1848be880bab14e32fd213525f202035853bb08f5d29952fd65098be6de3b4"
+        },
+        {
+          "type": "IDAT",
+          "bytes": 592370,
+          "sha256": "a8bffd9b047606137bacb636c22279ead2f9311d4d5e38aa7820c85d7e7e4ef6"
+        },
+        {
+          "type": "IEND",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "candidate_webp_chunks": [
+        {
+          "type": "VP8L",
+          "bytes": 416394,
+          "sha256": "2e5559920eee7e151c860d59e59b529f95f15939be78539cf40f4abcc16a2111"
+        }
+      ],
+      "color_metadata_equivalent": true,
+      "color_interpretation": "No declared source ICC/gamma/chromaticity or candidate ICC; matching RGBA8/sRGB default interpretation under standard decoding. No browser/display-device comparison performed.",
+      "non_color_metadata": "Source caBX private/C2PA ancillary data is not copied by cwebp metadata=all (only ICC/EXIF/XMP supported). Original file and caBX hashes remain preserved; provenance metadata equivalence is not claimed.",
+      "verification": "passed_pixel_alpha_color"
+    },
+    {
+      "source": "games/career-rpg/web/art/npc-team-v1.png",
+      "original_raw_bytes": 524318,
+      "original_gzip_bytes": 434291,
+      "original_sha256": "25a4188b1b181e00180c89d127926b8d2101fe2d961fafc83315962aacedb9b1",
+      "encoder_command": [
+        "/opt/homebrew/bin/cwebp",
+        "-lossless",
+        "-exact",
+        "-q",
+        "100",
+        "-m",
+        "4",
+        "-metadata",
+        "all",
+        "-quiet",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/npc-team-v1.source.png",
+        "-o",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/npc-team-v1.lossless.webp"
+      ],
+      "encoder_exit": 0,
+      "decoder_command": [
+        "/opt/homebrew/bin/dwebp",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/npc-team-v1.lossless.webp",
+        "-pam",
+        "-quiet",
+        "-o",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/npc-team-v1.decoded.pam"
+      ],
+      "decoder_exit": 0,
+      "candidate": "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/npc-team-v1.lossless.webp",
+      "candidate_raw_bytes": 320788,
+      "candidate_gzip_bytes": 320901,
+      "candidate_sha256": "e140b136931948b08c9b78c2e72d5940488fc238dd6c0cce1582704347870695",
+      "reference_decode": {
+        "width": 2172,
+        "height": 724,
+        "original_format": 3,
+        "flags": 0,
+        "warning_or_error": 0,
+        "finish_warning_or_error": 0
+      },
+      "candidate_decode": {
+        "width": 2172,
+        "height": 724,
+        "depth": 4,
+        "maxval": 255
+      },
+      "dimensions_equal": true,
+      "rgba_equal": true,
+      "alpha_equal": true,
+      "reference_rgba_sha256": "b38b84a0062edd257d5eeef430bc5544e1e613412a818b1b1518d318158ef423",
+      "candidate_rgba_sha256": "b38b84a0062edd257d5eeef430bc5544e1e613412a818b1b1518d318158ef423",
+      "reference_alpha_sha256": "d910d880c60d89973fed5e254cf5c9830ae66e29d8b1fe4c4f113c3c8bde5088",
+      "candidate_alpha_sha256": "d910d880c60d89973fed5e254cf5c9830ae66e29d8b1fe4c4f113c3c8bde5088",
+      "differing_rgba_bytes": 0,
+      "original_png_chunks": [
+        {
+          "type": "IHDR",
+          "bytes": 13,
+          "sha256": "5c7dc6a1c4b11c2547a74b90c6a99a83031d3dc4c5e4d377740c3ae80f90fecb"
+        },
+        {
+          "type": "caBX",
+          "bytes": 23654,
+          "sha256": "5c05926ac3b11bbdb9cf0b46f53ad0431e95a10a7f7e4e96e304a13a94a3c78f"
+        },
+        {
+          "type": "IDAT",
+          "bytes": 500595,
+          "sha256": "daf2136ed7a9716d921d51371a46dd8a8cce9e2c4b3c347739ef93470a1fbb30"
+        },
+        {
+          "type": "IEND",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "candidate_webp_chunks": [
+        {
+          "type": "VP8L",
+          "bytes": 320767,
+          "sha256": "97fe7399ba266c5b3fdd876e041ae9ca23b70c82b581f24229eefe5e7ddd9903"
+        }
+      ],
+      "color_metadata_equivalent": true,
+      "color_interpretation": "No declared source ICC/gamma/chromaticity or candidate ICC; matching RGBA8/sRGB default interpretation under standard decoding. No browser/display-device comparison performed.",
+      "non_color_metadata": "Source caBX private/C2PA ancillary data is not copied by cwebp metadata=all (only ICC/EXIF/XMP supported). Original file and caBX hashes remain preserved; provenance metadata equivalence is not claimed.",
+      "verification": "passed_pixel_alpha_color"
+    },
+    {
+      "source": "games/career-rpg/web/art/player-emotions-v1.png",
+      "original_raw_bytes": 786164,
+      "original_gzip_bytes": 620035,
+      "original_sha256": "65524bcdcc181753b4721e644b7f9f02e966ce433e3d7d157ca7fc373829d80f",
+      "encoder_command": [
+        "/opt/homebrew/bin/cwebp",
+        "-lossless",
+        "-exact",
+        "-q",
+        "100",
+        "-m",
+        "4",
+        "-metadata",
+        "all",
+        "-quiet",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/player-emotions-v1.source.png",
+        "-o",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/player-emotions-v1.lossless.webp"
+      ],
+      "encoder_exit": 0,
+      "decoder_command": [
+        "/opt/homebrew/bin/dwebp",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/player-emotions-v1.lossless.webp",
+        "-pam",
+        "-quiet",
+        "-o",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/player-emotions-v1.decoded.pam"
+      ],
+      "decoder_exit": 0,
+      "candidate": "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/player-emotions-v1.lossless.webp",
+      "candidate_raw_bytes": 444774,
+      "candidate_gzip_bytes": 444918,
+      "candidate_sha256": "983acdbc8df8e1aab191badb363e9e12878455f5d1ea7db01b7658b85aa5e8fc",
+      "reference_decode": {
+        "width": 2172,
+        "height": 724,
+        "original_format": 3,
+        "flags": 0,
+        "warning_or_error": 0,
+        "finish_warning_or_error": 0
+      },
+      "candidate_decode": {
+        "width": 2172,
+        "height": 724,
+        "depth": 4,
+        "maxval": 255
+      },
+      "dimensions_equal": true,
+      "rgba_equal": true,
+      "alpha_equal": true,
+      "reference_rgba_sha256": "63a8058155f50376c4aa710a47ebf7054a335b4ad0c232ff2199e3db998a0cd0",
+      "candidate_rgba_sha256": "63a8058155f50376c4aa710a47ebf7054a335b4ad0c232ff2199e3db998a0cd0",
+      "reference_alpha_sha256": "dc4c68f36bdce3fade8b54ee967db0f8e0434647bdf044b70a8664337a935571",
+      "candidate_alpha_sha256": "dc4c68f36bdce3fade8b54ee967db0f8e0434647bdf044b70a8664337a935571",
+      "differing_rgba_bytes": 0,
+      "original_png_chunks": [
+        {
+          "type": "IHDR",
+          "bytes": 13,
+          "sha256": "5c7dc6a1c4b11c2547a74b90c6a99a83031d3dc4c5e4d377740c3ae80f90fecb"
+        },
+        {
+          "type": "caBX",
+          "bytes": 21881,
+          "sha256": "6e17edba810d4dda84366217093ffb6e7b201343089daa4fb9e2bc62524f3598"
+        },
+        {
+          "type": "IDAT",
+          "bytes": 764214,
+          "sha256": "32755f7987f31610331b2f1e78ddf8f13a45b141d74c6c50a3342f3393b73997"
+        },
+        {
+          "type": "IEND",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "candidate_webp_chunks": [
+        {
+          "type": "VP8L",
+          "bytes": 444753,
+          "sha256": "577460a0a9024ebdcbf396e7e852c6ebce7c26530210f7b9229248a44e042c2a"
+        }
+      ],
+      "color_metadata_equivalent": true,
+      "color_interpretation": "No declared source ICC/gamma/chromaticity or candidate ICC; matching RGBA8/sRGB default interpretation under standard decoding. No browser/display-device comparison performed.",
+      "non_color_metadata": "Source caBX private/C2PA ancillary data is not copied by cwebp metadata=all (only ICC/EXIF/XMP supported). Original file and caBX hashes remain preserved; provenance metadata equivalence is not claimed.",
+      "verification": "passed_pixel_alpha_color"
+    },
+    {
+      "source": "games/career-rpg/web/art/typing-team-v1.png",
+      "original_raw_bytes": 898822,
+      "original_gzip_bytes": 750353,
+      "original_sha256": "a9ffc37e0a18e55062cb167bb3c090be2f0a2427caffacd394b6fe5567d57507",
+      "encoder_command": [
+        "/opt/homebrew/bin/cwebp",
+        "-lossless",
+        "-exact",
+        "-q",
+        "100",
+        "-m",
+        "4",
+        "-metadata",
+        "all",
+        "-quiet",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/typing-team-v1.source.png",
+        "-o",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/typing-team-v1.lossless.webp"
+      ],
+      "encoder_exit": 0,
+      "decoder_command": [
+        "/opt/homebrew/bin/dwebp",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/typing-team-v1.lossless.webp",
+        "-pam",
+        "-quiet",
+        "-o",
+        "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/typing-team-v1.decoded.pam"
+      ],
+      "decoder_exit": 0,
+      "candidate": "/private/tmp/traex-career-rpg-supervisor/lossless-probe/run-45tjk8qo/typing-team-v1.lossless.webp",
+      "candidate_raw_bytes": 555318,
+      "candidate_gzip_bytes": 555506,
+      "candidate_sha256": "3864f7cdc9d6f99381a46a102a274365e659c23bfe3522f384ad02a03e4e3bb0",
+      "reference_decode": {
+        "width": 1774,
+        "height": 887,
+        "original_format": 3,
+        "flags": 0,
+        "warning_or_error": 0,
+        "finish_warning_or_error": 0
+      },
+      "candidate_decode": {
+        "width": 1774,
+        "height": 887,
+        "depth": 4,
+        "maxval": 255
+      },
+      "dimensions_equal": true,
+      "rgba_equal": true,
+      "alpha_equal": true,
+      "reference_rgba_sha256": "e758741ff098537608d47097547978d08e424a4522be66d66bbff5c6dd102d92",
+      "candidate_rgba_sha256": "e758741ff098537608d47097547978d08e424a4522be66d66bbff5c6dd102d92",
+      "reference_alpha_sha256": "e4d46a3b101e752b1a84e637c9753b1588109c026474a605227e0ba491a576e9",
+      "candidate_alpha_sha256": "e4d46a3b101e752b1a84e637c9753b1588109c026474a605227e0ba491a576e9",
+      "differing_rgba_bytes": 0,
+      "original_png_chunks": [
+        {
+          "type": "IHDR",
+          "bytes": 13,
+          "sha256": "671396889d4700ee67f8a14f26e1e7fa4989b093560650b6240f4200259ae235"
+        },
+        {
+          "type": "caBX",
+          "bytes": 23654,
+          "sha256": "22986e557703b96fdf139adcd9a744f49cfe1a691426cbc481d36a807daa97ae"
+        },
+        {
+          "type": "IDAT",
+          "bytes": 875099,
+          "sha256": "6af6829c146fd8a043944f28bd6d703f28e3e666cb5276f3b0aa25eedafb4868"
+        },
+        {
+          "type": "IEND",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "candidate_webp_chunks": [
+        {
+          "type": "VP8L",
+          "bytes": 555298,
+          "sha256": "9bc71913f4b60f955b211debe021895a0b1ac366e72369575804f0ae01c38067"
+        }
+      ],
+      "color_metadata_equivalent": true,
+      "color_interpretation": "No declared source ICC/gamma/chromaticity or candidate ICC; matching RGBA8/sRGB default interpretation under standard decoding. No browser/display-device comparison performed.",
+      "non_color_metadata": "Source caBX private/C2PA ancillary data is not copied by cwebp metadata=all (only ICC/EXIF/XMP supported). Original file and caBX hashes remain preserved; provenance metadata equivalence is not claimed.",
+      "verification": "passed_pixel_alpha_color"
+    }
+  ],
+  "production_baseline": {
+    "games/career-rpg/web/index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "games/career-rpg/web/style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213",
+    "games/career-rpg/web/main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+    "games/career-rpg/web/world.mjs": "f2c80bb039766af708fa0b9f7f324e1fffaa459c923882ec9aa46e2af87d650d",
+    "games/career-rpg/web/story.mjs": "6b13dad3a8ad77cb01465a1685694978cc1acad70527b1ac86a390252450e424",
+    "games/career-rpg/web/scene-config.mjs": "6a9277bd4da740a37cf1d1e06a9289112fd91798181c3d788c0593b2062373f2",
+    "games/career-rpg/web/actors.mjs": "f10a5eb44b2d600e7aceb05f64e78f34c9b179ad92b239934267349b4b5718a3",
+    "games/career-rpg/web/vendor/three.module.min.js": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6",
+    "games/career-rpg/web/vendor/three.core.min.js": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de",
+    "games/career-rpg/web/art/office-room-v2.png": "3f72d04fc17c0e04fedd57557857c87fc91b966231a8facab8f0f28e4e17a7fe",
+    "games/career-rpg/design/chapter-01.json": "bd44b33318ac4ca61d24c13452ff6da2f4b3ba3e72ab1f1cff4639d5073721e8",
+    "games/career-rpg/web/art/player-walk-v1.png": "0f72b54f7f757b21638087ce52d940588eafb30a3b8323d4bf3c7313b23591ff",
+    "games/career-rpg/web/art/npc-team-v1.png": "25a4188b1b181e00180c89d127926b8d2101fe2d961fafc83315962aacedb9b1",
+    "games/career-rpg/web/art/player-emotions-v1.png": "65524bcdcc181753b4721e644b7f9f02e966ce433e3d7d157ca7fc373829d80f",
+    "games/career-rpg/web/art/typing-team-v1.png": "a9ffc37e0a18e55062cb167bb3c090be2f0a2427caffacd394b6fe5567d57507"
+  },
+  "hypothetical_candidate_totals": {
+    "first_gzip_bytes": 2990922,
+    "chapter_raw_bytes": 3622591,
+    "first_limit_bytes": 524288,
+    "chapter_limit_bytes": 2097152,
+    "first_passed_size_only": false,
+    "chapter_passed_size_only": false,
+    "first_delta_bytes": 2466634,
+    "chapter_delta_bytes": 1525439,
+    "includes_unchanged_nonimage_files": true,
+    "scope": "Hypothetical substitution of these five file payloads only. Production format/paths unchanged; no browser/decoder integration or script-byte changes validated. Not a scene/budget gate pass."
+  },
+  "all_pixel_alpha_color_verified": true,
+  "uncertainties": [
+    "caBX provenance information not preserved in candidate container; original source remains intact",
+    "WebP production path/format switch and browser color/decode integration unverified; not adopted",
+    "One fixed mature lossless mode only; no claim that all possible lossless encoders/modes have been exhausted",
+    "No author preference, strict grid/atlas, true-device or runtime performance acceptance; walking stutter remains paused"
+  ],
+  "decision_questions": [
+    "With budgets unchanged and no demonstrated pixel-preserving route in this bounded probe, may a separate Nanjing production-grid/resource-organization design review be proposed? This is not permission to resize/recolor/change visible pixels; any such change needs explicit author approval."
+  ],
+  "three_conclusion_reused": "Removing Three alone does not meet existing budgets, per supervisor-verified resource manifest.",
+  "production_unchanged": true,
+  "tool_inventory": {
+    "available_encoders": [
+      "cwebp 1.4.0 lossless WebP"
+    ],
+    "available_decoders": [
+      "dwebp 1.4.0",
+      "libpng 1.6.57 simplified RGBA8 read API"
+    ],
+    "other_available_not_tried": [
+      "webpmux 1.4.0",
+      "macOS sips"
+    ],
+    "not_available_on_PATH": [
+      "oxipng",
+      "optipng",
+      "pngcrush",
+      "pngcheck",
+      "ImageMagick",
+      "ffmpeg"
+    ],
+    "python_image_packages_not_available": [
+      "Pillow",
+      "cv2",
+      "imageio"
+    ]
+  },
+  "color_validation_scope": "All source PNGs: 8-bit truecolor RGB/RGBA, no PLTE/ICC/gamma/chromaticity tags; native libpng flags/warnings zero. Exact RGBA8 equality with native dwebp PAM plus no candidate ICC verifies the present untagged/sRGB-default interpretation. Not a device/display or future browser-format acceptance.",
+  "caBX_scope": "Only chunk type/length/hash were inspected, not metadata contents or provenance validity. Candidate does not carry caBX; identical original PNG copies remain in probe directory and production. Full metadata equivalence is unverified.",
+  "script": "/private/tmp/traex-career-rpg-supervisor/lossless-probe/probe-20261105-worker.py",
+  "script_sha256": "1c5a4d17d37bbcd5227c21a536f1c2f00a3f3ea60ed14fa1fb2a935c96504f7c",
+  "conditional_later_issue": "Only if a future viable format candidate is separately considered: define preservation/archive handling for caBX provenance and verify real browser format/color behavior before adoption.",
+  "next": "Stop. Supervisor arranges the minimum design question; no optimization, budget change, quality reduction or next scene is authorized.",
+  "budget_verdict": "failed_existing_targets_for_this_candidate; not proof that every possible lossless method is impossible",
+  "candidate_artifacts_temporary_only": true,
+  "production_format_and_paths_changed": false
+}

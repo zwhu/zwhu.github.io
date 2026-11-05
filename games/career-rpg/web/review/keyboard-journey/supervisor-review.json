@@ -1,0 +1,36 @@
+{
+  "time": "2026-11-04T19:52:33.369340+00:00",
+  "result": "passed_continuous_keyboard_progression_only",
+  "command": "node games/career-rpg/web/tests/browser.mjs --keyboard-journey",
+  "hashes": {
+    "main.mjs": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7",
+    "index.html": "64dd4bfaaef4522e533f75a6c1a565e0d4bf650b5972754e479985df136c72de",
+    "style.css": "2df9f0b9e1bbf66f52356e1808702ce89d11f80b94319bce651dcc2a69162e7d"
+  },
+  "steps": 23,
+  "input": {
+    "trusted_key_events": 108,
+    "pointer_inputs": 0
+  },
+  "continuity": {
+    "fresh_profile": true,
+    "navigations": [
+      "http://127.0.0.1:61852/web/"
+    ],
+    "storage_writes": 12,
+    "manual_storage_changes": 0,
+    "checkpoint_seeding": 0,
+    "production_saves_only": true
+  },
+  "visual_review": [
+    "player-seated.png",
+    "cto-bubble.png",
+    "player-tense.png",
+    "player-happy.png",
+    "chapter-complete.png"
+  ],
+  "visual_style": "与南京成品基准一致；未更换人物或场景风格",
+  "unresolved_review_item": "完成气泡正文溢出，键盘可读至末尾尚无证据；已退回定点核验，不以剧情complete替代阅读验收",
+  "other_paused": "走路卡顿性能排查",
+  "next_scene_authorized": false
+}

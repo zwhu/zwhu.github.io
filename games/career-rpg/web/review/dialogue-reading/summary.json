@@ -1,0 +1,143 @@
+{
+  "scene": "nanjing-office",
+  "stage": "dialogue-reading",
+  "status": "passed",
+  "accepted_by": "supervisor",
+  "scope": "仅完成气泡/长系统正文代表路径×1280/375；不代表全场景、窄屏整体/标题、移动端或真机通过",
+  "hashes": {
+    "main.mjs": "255f77acfbcc2aedbe636af92b833e3bfb521a4891acf936581e7495d96d2c47",
+    "index.html": "b932843f68895a68d1ec2af804fb9ee10019a4ffdd4dcb43a5d8d4ce6e11272a",
+    "style.css": "229902e2e1c94e42bf7e49a37c204e35beb6e8f2fc4dec8a79c6a19840d4843e"
+  },
+  "execution": "node games/career-rpg/web/tests/browser.mjs --dialogue-reading --evidence=supervisor",
+  "cases": [
+    {
+      "kind": "complete",
+      "viewport_width": 1280,
+      "status": "passed",
+      "body_reachable": true,
+      "prose_unchanged": true,
+      "first": {
+        "scrollTop": 0,
+        "clientHeight": 160,
+        "firstVisible": true,
+        "focusVisible": true
+      },
+      "last": {
+        "scrollTop": 9,
+        "scrollHeight": 169,
+        "clientHeight": 160,
+        "lastVisible": true,
+        "focusVisible": true
+      },
+      "page_and_scene_scroll_unchanged": true,
+      "return_confirmation_no_movement": true,
+      "all_key_events_trusted": true,
+      "pointer_inputs": 0
+    },
+    {
+      "kind": "complete",
+      "viewport_width": 375,
+      "status": "passed",
+      "body_reachable": true,
+      "prose_unchanged": true,
+      "first": {
+        "scrollTop": 0,
+        "clientHeight": 56,
+        "firstVisible": true,
+        "focusVisible": true
+      },
+      "last": {
+        "scrollTop": 112,
+        "scrollHeight": 169,
+        "clientHeight": 56,
+        "lastVisible": true,
+        "focusVisible": true
+      },
+      "page_and_scene_scroll_unchanged": true,
+      "return_confirmation_no_movement": true,
+      "all_key_events_trusted": true,
+      "pointer_inputs": 0
+    },
+    {
+      "kind": "long-system",
+      "viewport_width": 1280,
+      "status": "passed",
+      "body_reachable": true,
+      "prose_unchanged": true,
+      "first": {
+        "scrollTop": 0,
+        "clientHeight": 405,
+        "firstVisible": true,
+        "focusVisible": true
+      },
+      "last": {
+        "scrollTop": 151,
+        "scrollHeight": 556,
+        "clientHeight": 405,
+        "lastVisible": true,
+        "focusVisible": true
+      },
+      "page_and_scene_scroll_unchanged": true,
+      "return_confirmation_no_movement": true,
+      "all_key_events_trusted": true,
+      "pointer_inputs": 0
+    },
+    {
+      "kind": "long-system",
+      "viewport_width": 375,
+      "status": "passed",
+      "body_reachable": true,
+      "prose_unchanged": true,
+      "first": {
+        "scrollTop": 0,
+        "clientHeight": 405,
+        "firstVisible": true,
+        "focusVisible": true
+      },
+      "last": {
+        "scrollTop": 526,
+        "scrollHeight": 931,
+        "clientHeight": 405,
+        "lastVisible": true,
+        "focusVisible": true
+      },
+      "page_and_scene_scroll_unchanged": true,
+      "return_confirmation_no_movement": true,
+      "all_key_events_trusted": true,
+      "pointer_inputs": 0
+    }
+  ],
+  "key_sequence": "默认选项焦点→Shift+Tab正文→Home/PageDown/PageUp/End→Tab选项→方向选择→Enter返回；测试不调用focus或赋scrollTop",
+  "fixture": "Complete legal checkpoint on page load; long system case appends 12 copies of its existing paragraph only in isolated test DOM. No script focus/scroll assignments or story function calls.",
+  "evidence": [
+    "games/career-rpg/web/review/dialogue-reading/supervisor-summary.json",
+    "games/career-rpg/web/review/dialogue-reading/supervisor-cases.json",
+    "games/career-rpg/web/review/dialogue-reading/supervisor-review.json"
+  ],
+  "visual_review": [
+    "supervisor-complete-1280-last.png",
+    "supervisor-complete-375-first.png",
+    "supervisor-complete-375-last.png",
+    "supervisor-long-system-375-last.png"
+  ],
+  "checks": {
+    "supervisor_reading_cases": 4,
+    "root_verify": "supervisor-verify.log：13组通过，含15项游戏离线规则",
+    "diff_check": "passed",
+    "this_closeout": "只整理现有证据；未测试/改代码/绘图/重试审批"
+  },
+  "approval_timeout": {
+    "status": "superseded_by_supervisor_verification",
+    "record": "tool-setup.json",
+    "resolution": "监督者中止等待，使用已批准精确本地Chrome命令独立通过；本轮不重试或请求相同审批"
+  },
+  "limitations": [
+    "375仅正文阅读预览，不代表手机整体布局/真机通过",
+    "用户暂停的走路卡顿仍未解决",
+    "全场景/作者/真机未放行"
+  ],
+  "scene_accepted": false,
+  "next_scene_authorized": false,
+  "next": "停等监督者核对南京门禁；其他当期缺口只列清，不在本轮开启"
+}
