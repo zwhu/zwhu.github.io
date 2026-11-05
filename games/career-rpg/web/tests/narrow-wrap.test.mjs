@@ -68,8 +68,27 @@ const main = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
 const extras = [...main.matchAll(/'([^'\n]*[\u4e00-\u9fff][^'\n]*)'/g)].map(match => match[1]);
 slots.push({id: 'main:bubble', width: contentWidth, size: 14, texts: extras});
 
+const PROTECTED = ['Webpack', 'React', 'Babel', 'jQuery', 'CI/CD', 'nodejs', 'fibjs', 'NoSQL', 'Linux', 'Java', 'Git', 'Google', 'Alibaba', 'E2E', 'SQL'];
+
+function enumeratedWords(text) {
+  const words = [];
+  for (const group of text.matchAll(/（([^）]+)）/g)) {
+    if (!group[1].includes('、')) continue;
+    for (const part of group[1].split('、')) {
+      const word = part.trim();
+      if ([...word].length >= 2 && [...word].length <= 6) words.push(word);
+    }
+  }
+  return words;
+}
+
+function baseChars(line) {
+  return [...line].filter(ch => /[\u4e00-\u9fff]/u.test(ch) || /[A-Za-z0-9]/u.test(ch)).length;
+}
+
 function assertLines(text, lines, width, size) {
   assert.equal(lines.join(''), text, text);
+  assert.equal(lines.join('').replace(/\s+/gu, ''), text.replace(/\s+/gu, ''), text);
   const cursor = [];
   let at = 0;
   for (const line of lines) { cursor.push({start: at, end: at + line.length, line}); at += line.length; }
@@ -90,6 +109,25 @@ function assertLines(text, lines, width, size) {
     const tail = lines[i].trimEnd();
     const next = lines[i + 1].trimStart();
     assert.equal(/[A-Za-z][A-Za-z0-9]*\s+[^\sA-Za-z0-9]$/u.test(tail) && /^[^\sA-Za-z0-9（【《「]/u.test(next), false, `dangling ${tail} | ${next}`);
+  }
+  const han = measure(size)('字');
+  if (lines.length > 1 && width >= han * 3) {
+    const tail = lines.at(-1);
+    const hans = [...tail].filter(ch => /[\u4e00-\u9fff]/u.test(ch)).join('');
+    const wholeWord = enumeratedWords(text).includes(hans) || PROTECTED.includes(hans);
+    if (!wholeWord) assert.ok(baseChars(tail) === 0 || baseChars(tail) >= 3, `orphan ${JSON.stringify(tail)} in ${text}`);
+  }
+  for (const word of [...PROTECTED, ...enumeratedWords(text)]) {
+    let at = 0;
+    const spans = lines.map(line => { const start = at; at += line.length; return {start, end: at}; });
+    let from = 0;
+    while (from <= text.length) {
+      const index = text.indexOf(word, from);
+      if (index < 0) break;
+      const end = index + word.length;
+      assert.ok(spans.some(span => index >= span.start && end <= span.end), `${word} split ${JSON.stringify(lines)}`);
+      from = index + word.length;
+    }
   }
 }
 
@@ -128,7 +166,11 @@ test('skill names break around product words instead of through them', () => {
   const award = at('获得技能：对上线要有敬畏之心（灰度、观测、回滚）', contentWidth, 14);
   assert.deepEqual(award, ['获得技能：对上线要有敬畏之心', '（灰度、观测、回滚）']);
   const manual = at('去中间的排查电脑，分别看看补测清单和坑点注释；两项都看过后，到右侧书架写下这页手册。', contentWidth, 14);
-  assert.equal(manual.at(-1).endsWith('册。') && manual.at(-1) !== '册。', true, manual.join(' | '));
+  assert.equal(manual.at(-1).includes('写下这页手册。'), true, manual.join(' | '));
+  assert.ok(baseChars(manual.at(-1)) >= 3);
+  const name = at('对上线要有敬畏之心（灰度、观测、回滚）', skillWidth(5), 10);
+  assert.ok(name.some(line => line.endsWith('、')), name.join(' | '));
+  assert.equal(name.some(line => line.includes('观测') && !line.endsWith('观') && !line.startsWith('测')), true, name.join(' | '));
   for (const word of ['Webpack', 'React', 'Babel', 'jQuery', 'CI/CD', 'nodejs', 'NoSQL']) {
     assert.ok(at(`吃透 ${word} 插件`, skillWidth(5), 10).some(line => line.includes(word)));
   }

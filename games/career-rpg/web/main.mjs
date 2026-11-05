@@ -148,12 +148,10 @@ function paintNarrow(el,text){
   if(measureSlot(text,font)<=slot+1){el.textContent=text;return;}
   const lines=wrapNarrow(text,slot,sample=>measureSlot(sample,font));
   if(lines.length<=1||lines.join('')!==text){el.textContent=text;return;}
+  // Plain text plus breaks. No extra spans: a nowrap span changes how fullwidth punctuation sits.
   el.replaceChildren();
   for(let i=0;i<lines.length;i++){
-    const visible=lines[i].replace(/ +$/u,'');
-    const span=document.createElement('span');span.className='narrow-line';span.textContent=visible;el.append(span);
-    const gap=lines[i].slice(visible.length);
-    if(gap){const hold=document.createElement('span');hold.className='narrow-gap';hold.textContent=gap;el.append(hold);}
+    el.append(document.createTextNode(lines[i]));
     if(i<lines.length-1)el.append(document.createElement('br'));
   }
 }
