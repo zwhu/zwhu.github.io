@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges" role="img" aria-label="CI/CD ZÆKÕ">
-  <rect width="16" height="16" fill="#1c2430"/>
-  <rect x="2" y="3" width="4" height="4" fill="#f4e35a"/>
-  <rect x="10" y="3" width="4" height="4" fill="#8fd18f"/>
-  <rect x="6" y="9" width="4" height="4" fill="#e07a5f"/>
-  <rect x="6" y="5" width="4" height="1" fill="#fffaf0"/>
-  <rect x="7" y="6" width="1" height="3" fill="#fffaf0"/>
-  <rect x="8" y="7" width="1" height="2" fill="#fffaf0"/>
-</svg>

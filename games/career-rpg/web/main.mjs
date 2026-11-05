@@ -128,6 +128,12 @@ function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeake
   placeBubble();enabledOptions()[0]?.focus();updateUI();
 }
 function skillVisual(skill){return skill?.icon||sceneConfig.objects.find(item=>item.role===skill?.role)?.icon||'';}
+function placeSkillIcon(parent,src,alt){
+  if(!src)return;
+  const image=document.createElement('img');image.alt=alt||'';
+  image.addEventListener('error',()=>image.remove());
+  image.src=src;parent.append(image);
+}
 function renderSkillSlots(slots){
   let row=document.querySelector('#skill-slots');
   if(!slots){if(row)row.hidden=true;return;}
@@ -135,7 +141,7 @@ function renderSkillSlots(slots){
   row.hidden=false;row.replaceChildren();row.style.gridTemplateColumns=`repeat(${slots.length},minmax(0,1fr))`;
   for(const skill of slots){
     const figure=document.createElement('figure'),caption=document.createElement('figcaption');
-    if(skill.status==='got'){const src=skillVisual(skill);if(src){const image=document.createElement('img');image.src=src;image.alt=skill.name;figure.append(image);}caption.textContent=skill.name;}
+    if(skill.status==='got'){placeSkillIcon(figure,skillVisual(skill),skill.name);caption.textContent=skill.name;}
     else caption.textContent='???';
     figure.append(caption);row.append(figure);
   }
@@ -270,9 +276,11 @@ function showSkillAward(skill){
   if(journeyPanel)journeyPanel.hidden=true;
   awardOpen=true;awardFlashUntil=performance.now()+1600;playSkillDing();
   show('获得技能',[`获得技能：${skill.name}`],[{label:'OK',id:'skill-ok',run:finishSkillAward}],false,'player',false);
-  const src=skillVisual(skill);if(!src)return;
-  const image=document.querySelector('#skill-award-icon')||document.createElement('img');
-  image.id='skill-award-icon';image.alt='';image.src=src;
+  document.querySelector('#skill-award-icon')?.remove();
+  const holder=document.createElement('span');
+  placeSkillIcon(holder,skillVisual(skill),'');
+  const image=holder.firstElementChild;if(!image)return;
+  image.id='skill-award-icon';
   document.querySelector('#dialogue').prepend(image);
 }
 function collectSkill(skill){

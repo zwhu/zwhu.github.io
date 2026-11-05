@@ -2869,40 +2869,35 @@
       "name": "fibjs／nodejs 做全栈",
       "event": "open_forum_post",
       "flag": "report_read",
-      "role": "forum",
-      "icon": "./art/nanjing-skills/fibjs.svg"
+      "role": "forum"
     },
     {
       "id": "cicd",
       "name": "CI/CD 做集成测试",
       "event": "review_test_plan",
       "flag": "test_reviewed",
-      "role": "ci_desk",
-      "icon": "./art/nanjing-skills/cicd.svg"
+      "role": "ci_desk"
     },
     {
       "id": "release",
       "name": "对上线要有敬畏之心（灰度、观测、回滚）",
       "event": "comfort_read",
       "flag": "comfort_read",
-      "role": "recovery",
-      "icon": "./art/nanjing-skills/release.svg"
+      "role": "recovery"
     },
     {
       "id": "failure",
       "name": "学会从失败中学习经验",
       "event": "write_manual_entry",
       "flag": "manual_entry_written",
-      "role": "manual",
-      "icon": "./art/nanjing-skills/failure.svg"
+      "role": "manual"
     },
     {
       "id": "react",
       "name": "React／Webpack",
       "event": "notice_react",
       "flag": "react_noticed",
-      "role": "journey_react",
-      "icon": "./art/nanjing-skills/react.svg"
+      "role": "journey_react"
     }
   ],
   "journey": {

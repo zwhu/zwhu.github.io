@@ -89,7 +89,18 @@ async function hold(key, ms) {
   await sleep(ms);
   await send('Input.dispatchKeyEvent', {type: 'keyUp', key, code, windowsVirtualKeyCode: CODES[key] || 0});
 }
+async function assertImages() {
+  await evaluate(`Promise.all([...document.images].map(img => img.complete ? null : new Promise(resolve => { img.addEventListener('load', resolve, {once:true}); img.addEventListener('error', resolve, {once:true}); })))`);
+  const bad = await evaluate(`(() => [...document.images].filter(img => {
+    if (!img.getClientRects().length) return false;
+    const style = getComputedStyle(img);
+    if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) return false;
+    return !img.complete || img.naturalWidth <= 0;
+  }).map(img => img.currentSrc || img.src || img.alt))()`);
+  if (bad.length) throw new Error('visible image failed to load ' + JSON.stringify(bad));
+}
 async function shot(name) {
+  await assertImages();
   const message = await send('Page.captureScreenshot', {format: 'png'});
   writeFileSync(path.join(OUT, name), Buffer.from(message.result.data, 'base64'));
 }
