@@ -1,0 +1,287 @@
+{
+ "id": "hefei-founder-walk",
+ "version": "v2",
+ "source": "art/source/hefei-v2/hefei-founder-walk/original.png",
+ "source_sha256": "2af75ef50a333db01a5203b7a6111318cd707d5b273485eae614ed3c51ca6d1a",
+ "scripts": [
+  "tools/v2/process_founder.py",
+  "tools/v2/hand_edits_founder.py (run after process_founder.py)"
+ ],
+ "palette": "art/palette/hefei-v2-shared.json",
+ "palette_sha256": "63094a46fb6e3bd85d877f8b341005611684e0576ed480168aca7cbb70aeee5b",
+ "palette_subset": "FOUNDER_HEX (23) in tools/v2/process_founder_pal.py",
+ "layout": "3 cols x 4 rows: down, up, left, right; cols idle/stepA/stepB (same as Nanjing player-walk-v1)",
+ "cell": [
+  32,
+  48
+ ],
+ "body_axis_x": 16,
+ "foot_row_y": 45,
+ "foot_ratio": 0.958,
+ "nanjing_reference": "tools/v2/measure_ref.json",
+ "right_row": "generated natively (not mirrored); see compare/right-row-vs-mirrored-left-x6.png",
+ "process_log": "tools/v2/process_founder.log.json",
+ "hand_edits": [
+  {
+   "x": 43,
+   "y": 106,
+   "before": [
+    250,
+    214,
+    166,
+    255
+   ],
+   "after": [
+    34,
+    30,
+    26,
+    255
+   ],
+   "why": "left step A: eye was lost in downsample -> 1x2 dark eye"
+  },
+  {
+   "x": 43,
+   "y": 107,
+   "before": [
+    250,
+    214,
+    166,
+    255
+   ],
+   "after": [
+    34,
+    30,
+    26,
+    255
+   ],
+   "why": "left step A: eye (2nd row)"
+  },
+  {
+   "x": 85,
+   "y": 154,
+   "before": [
+    46,
+    38,
+    34,
+    255
+   ],
+   "after": [
+    250,
+    214,
+    166,
+    255
+   ],
+   "why": "right step B: separate eye from face outline (skin gap)"
+  },
+  {
+   "x": 82,
+   "y": 150,
+   "before": [
+    242,
+    198,
+    174,
+    255
+   ],
+   "after": [
+    46,
+    38,
+    34,
+    255
+   ],
+   "why": "right step B: stray skin pixel inside hair at crown -> hair"
+  }
+ ],
+ "files": [
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48-before-cleanup-x8.png",
+   "sha256": "150fbd1b1f3bf9e7b6bb9e09d2639f23ce875a3f10e946ffb33fc1acc26f9176",
+   "size": [
+    768,
+    1536
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48-before-cleanup.png",
+   "sha256": "d5971fe7fc726673929eba5f4b960f54d51ef505334b33b2635f5ffad7add6c1",
+   "size": [
+    96,
+    192
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48-x4.png",
+   "sha256": "4438cecb0eabe9029703253cd3067e365a5f118e94e466bb599710ca09d9864c",
+   "size": [
+    384,
+    768
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48-x4.webp",
+   "sha256": "0abfbb5eac4f45daad0fe316d5790b1fcda7e2652813efb7d3157e3e89a22c69",
+   "size": [
+    384,
+    768
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48-x8.png",
+   "sha256": "6fb305a9168420b46facabdafdcfa9947a76f49637678eb71b68166622799a03",
+   "size": [
+    768,
+    1536
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48.png",
+   "sha256": "a67312f14560bb0c8c1a6052a495b040bdfa52df4e12e586bb0b3a9c15aaf6d7",
+   "size": [
+    96,
+    192
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48.webp",
+   "sha256": "855d6e3af1afcadd1f7bdd9174eb997ddc0d28460c254ca018dea156553d355d",
+   "size": [
+    96,
+    192
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-48x48-x4.png",
+   "sha256": "3be0d713182073dcbc5943843983b5991db3b9f337311185d0008621e3e48f4d",
+   "size": [
+    576,
+    768
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-48x48-x4.webp",
+   "sha256": "ca246c6e7f06c1efc50eb5d28078a40202cf9b55d52f2bff2d72fae10c60cc22",
+   "size": [
+    576,
+    768
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-48x48.png",
+   "sha256": "cb6b2200acd1a72d6da7316d38ecca240f1f132ee088c52ae39751dda692d0ae",
+   "size": [
+    144,
+    192
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-48x48.webp",
+   "sha256": "b5395c06e0191757a9f9176908a64174794a63f16b3594343f7adeabe9d88941",
+   "size": [
+    144,
+    192
+   ]
+  }
+ ],
+ "verify": {
+  "assets": [
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48.png",
+    "size": [
+     96,
+     192
+    ],
+    "mode": "RGBA",
+    "colors": 20,
+    "palette": "founder subset 23",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-48x48.png",
+    "size": [
+     144,
+     192
+    ],
+    "mode": "RGBA",
+    "colors": 20,
+    "palette": "founder subset 23",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   }
+  ],
+  "webp": [
+   {
+    "png": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48.png",
+    "webp": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48.webp",
+    "w": 96,
+    "h": 192,
+    "png_bytes": 6221,
+    "webp_bytes": 2302,
+    "decoded_rgba_bytes": 73728,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48-x4.webp",
+    "w": 384,
+    "h": 768,
+    "png_bytes": 11389,
+    "webp_bytes": 3646,
+    "decoded_rgba_bytes": 1179648,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-48x48.png",
+    "webp": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-48x48.webp",
+    "w": 144,
+    "h": 192,
+    "png_bytes": 6580,
+    "webp_bytes": 2326,
+    "decoded_rgba_bytes": 110592,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-48x48-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-48x48-x4.webp",
+    "w": 576,
+    "h": 768,
+    "png_bytes": 12215,
+    "webp_bytes": 3812,
+    "decoded_rgba_bytes": 1769472,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   }
+  ],
+  "upscales": [
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48-before-cleanup-x8.png",
+    "k": 8,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48-x8.png",
+    "k": 8,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-48x48-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   }
+  ]
+ },
+ "status": "candidate_pending_producer_review"
+}

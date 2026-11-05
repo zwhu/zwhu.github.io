@@ -1,0 +1,351 @@
+{
+ "id": "hefei-founder-emotions",
+ "version": "v2",
+ "source": "art/source/hefei-v1/hefei-founder-emotions/original.png",
+ "source_sha256": "8a0efc40cbb443eb78abcf1b318d02b6a7298c2a65efb1e77fde46eb48705d7e",
+ "source_note": "v1 emotions original reused; re-processed on a detected art-pixel grid",
+ "script": "tools/v2/process_emotions.py",
+ "palette": "art/palette/hefei-v2-shared.json",
+ "palette_sha256": "63094a46fb6e3bd85d877f8b341005611684e0576ed480168aca7cbb70aeee5b",
+ "palette_subset": "FOUNDER_HEX (23)",
+ "cell": [
+  32,
+  32
+ ],
+ "process_log": {
+  "pitch": 18.85,
+  "phase_rayleigh": [
+   13.49,
+   1.72
+  ],
+  "phase": [
+   14.7,
+   3.1
+  ],
+  "palette": "founder subset (23, see process_founder_pal.py)",
+  "frames": {
+   "doubtful": {
+    "grid_size": [
+     23,
+     30
+    ],
+    "cell": [
+     32,
+     32
+    ],
+    "colors": 10,
+    "cleanup": {
+     "removed_lonely": 0,
+     "filled_holes": 0,
+     "outlined": 16,
+     "despeckled": 0
+    },
+    "in_palette": true
+   },
+   "approving": {
+    "grid_size": [
+     23,
+     30
+    ],
+    "cell": [
+     32,
+     32
+    ],
+    "colors": 9,
+    "cleanup": {
+     "removed_lonely": 0,
+     "filled_holes": 0,
+     "outlined": 15,
+     "despeckled": 0
+    },
+    "in_palette": true
+   }
+  },
+  "hand_edits": {
+   "doubtful": "cleared face rows 12-14 (x8-22), 15-16 (x9-21), 19-20 (x9-21) to skin; drew: right brow raised (y12 x17-20), left brow flat (y13 x9-12); eyes = lid row y15 x9-11/x17-19 + white+pupil y16 (x9 white, x10-11 pupil; x17 white, x18-19 pupil) = side glance; blush y19 x10,x20; crooked mouth y20 x12-14 + y19 x15-16",
+   "approving": "cleared same face rows to skin; drew: relaxed brows y13 x9-12/x17-20; closed happy eyes (arc) y15 x10,x18 + y16 x9,x11,x17,x19; blush y19 x10,x20; smile y19 x12,x16 + y20 x13-15"
+  }
+ },
+ "files": [
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/approving-32-before-hand-edit.png",
+   "sha256": "539e03bbc514bd13c6a1f9fb88a0a61756c9acc60703e6bd02f39603ab23a19d",
+   "size": [
+    32,
+    32
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/approving-32-x3.png",
+   "sha256": "1048dd09ad35524939d6d9eff79b0fc8b5d85633777c9c60debaed5cfd5cff49",
+   "size": [
+    96,
+    96
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/approving-32-x4.png",
+   "sha256": "7bf64631241b913bb21cac734f513593a3c87e6d00ff0960e86063e62eb07759",
+   "size": [
+    128,
+    128
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/approving-32-x4.webp",
+   "sha256": "b85491bd4eb05feaba42cc9e5f0bfd988f828cc96e6a8fb5b8db97b3cdfdf9f6",
+   "size": [
+    128,
+    128
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/approving-32-x6.png",
+   "sha256": "8ed93d42643f6e285f672d398bb3d4c150f25cd40983ff4f4d56a04fd7d80e25",
+   "size": [
+    192,
+    192
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/approving-32.png",
+   "sha256": "7d9dd98d65a8e36422f83bd97da6c78783bd75056bd4cd7cc51ea7c779db3fda",
+   "size": [
+    32,
+    32
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/approving-32.webp",
+   "sha256": "8b8afa51c6fa841d0a638dfbc58caf33719624ef12fb7e5959bac2e8a0bf0d35",
+   "size": [
+    32,
+    32
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32-before-hand-edit.png",
+   "sha256": "adcabdc42ff509c2268f54255e84a514afe9ec6e9b5dd70b4e6de10153353758",
+   "size": [
+    32,
+    32
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32-x3.png",
+   "sha256": "245e38f10f4a14e2e45afa18c59fef4d426fdba15dba5f9ce5f4d434ebe1597b",
+   "size": [
+    96,
+    96
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32-x4.png",
+   "sha256": "9d70835f784db7d995e4c68c7938329859eb197aa3b271b7431b99e55b05ec66",
+   "size": [
+    128,
+    128
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32-x4.webp",
+   "sha256": "aa408baf22ea39e8c75ce9bcf54699f40e82cbb4db89ca069e230c36db249af6",
+   "size": [
+    128,
+    128
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32-x6.png",
+   "sha256": "33b293754087590b9017303c70cb096efa1bd1568fe9b9951e7a1c7fd4d9ac15",
+   "size": [
+    192,
+    192
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32.png",
+   "sha256": "c3bdf7f44981da591bbb7767184596f57dd18a9e0996f50a8beef38b1872a3f5",
+   "size": [
+    32,
+    32
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32.webp",
+   "sha256": "3eab27999e0bbb1b8e9ab97f3caf34388eb22a30c34554cebffb4a41b99aeb0f",
+   "size": [
+    32,
+    32
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/emotions-strip-64x32-x6.png",
+   "sha256": "5a18880fa7c1d80eabc1cdcedc7cbfa46981090c396b91663d2ad2a3dd0b5d26",
+   "size": [
+    384,
+    192
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/emotions-strip-64x32.png",
+   "sha256": "0cc0740719f791708a568ba8bb3e3e3309f0fd124e66d206be48ca179bede9d3",
+   "size": [
+    64,
+    32
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-founder-emotions/emotions-strip-64x32.webp",
+   "sha256": "4019d52d038defbb58442b004b8605f80b32e7d813137555e9923fd9fc5f6f96",
+   "size": [
+    64,
+    32
+   ]
+  }
+ ],
+ "verify": {
+  "assets": [
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32.png",
+    "size": [
+     32,
+     32
+    ],
+    "mode": "RGBA",
+    "colors": 10,
+    "palette": "founder subset 23",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-emotions/approving-32.png",
+    "size": [
+     32,
+     32
+    ],
+    "mode": "RGBA",
+    "colors": 9,
+    "palette": "founder subset 23",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-emotions/emotions-strip-64x32.png",
+    "size": [
+     64,
+     32
+    ],
+    "mode": "RGBA",
+    "colors": 10,
+    "palette": "founder subset 23",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   }
+  ],
+  "webp": [
+   {
+    "png": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32.png",
+    "webp": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32.webp",
+    "w": 32,
+    "h": 32,
+    "png_bytes": 636,
+    "webp_bytes": 268,
+    "decoded_rgba_bytes": 4096,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32-x4.webp",
+    "w": 128,
+    "h": 128,
+    "png_bytes": 1075,
+    "webp_bytes": 362,
+    "decoded_rgba_bytes": 65536,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-founder-emotions/approving-32.png",
+    "webp": "art/processed/hefei-v2/hefei-founder-emotions/approving-32.webp",
+    "w": 32,
+    "h": 32,
+    "png_bytes": 672,
+    "webp_bytes": 260,
+    "decoded_rgba_bytes": 4096,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-founder-emotions/approving-32-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-founder-emotions/approving-32-x4.webp",
+    "w": 128,
+    "h": 128,
+    "png_bytes": 1046,
+    "webp_bytes": 350,
+    "decoded_rgba_bytes": 65536,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-founder-emotions/emotions-strip-64x32.png",
+    "webp": "art/processed/hefei-v2/hefei-founder-emotions/emotions-strip-64x32.webp",
+    "w": 64,
+    "h": 32,
+    "png_bytes": 856,
+    "webp_bytes": 364,
+    "decoded_rgba_bytes": 8192,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   }
+  ],
+  "upscales": [
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-emotions/approving-32-x3.png",
+    "k": 3,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-emotions/approving-32-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-emotions/approving-32-x6.png",
+    "k": 6,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32-x3.png",
+    "k": 3,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-emotions/doubtful-32-x6.png",
+    "k": 6,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-founder-emotions/emotions-strip-64x32-x6.png",
+    "k": 6,
+    "exact_nearest_of_logical": true
+   }
+  ]
+ },
+ "status": "candidate_pending_producer_review"
+}

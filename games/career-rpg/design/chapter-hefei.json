@@ -1,0 +1,195 @@
+{
+  "id": "hefei-first-job",
+  "title": "合肥：争取一次机会",
+  "entry": "interview",
+  "terminal": "complete",
+  "manualDialogue": "manual-1",
+  "savePolicy": {
+    "id": "atomic-per-event",
+    "key": "career-rpg:hefei:v1",
+    "checkpoints": "all_states",
+    "checkpointStates": ["interview", "day_tasks", "night_study", "raise", "complete"]
+  },
+  "objectives": {
+    "interview": "从门口走到老板桌前",
+    "day_tasks": {
+      "until": "day_task_taken",
+      "before": "去自己的工位，接过电脑上的任务",
+      "count": ["linux_git_reviewed", "frontend_reviewed"],
+      "pending": "白天 {n}/2 · 看看 Linux／Git，还有前端和《锋利的 jQuery》",
+      "done": "白天 2/2 · 这一天先到这里"
+    },
+    "night_study": {
+      "count": ["java_studied", "db_nosql_studied"],
+      "pending": "深夜 {n}/2 · 看看 Java，还有数据库和 NoSQL",
+      "done": "深夜 2/2 · 这几轮先到这里"
+    },
+    "raise": "走到老板桌前",
+    "complete": "合肥这一章完成 · 手册可以随时回看"
+  },
+  "roleTargets": {
+    "boss": ["boss"],
+    "my_pc": ["my_pc"],
+    "linux_screen": ["linux_screen"],
+    "jquery_book": ["jquery_book"],
+    "java_book": ["java_book"],
+    "db_screen": ["db_screen"],
+    "manual": ["manual_shelf"],
+    "dialog": ["dialog"]
+  },
+  "transitions": [
+    {
+      "id": "H01",
+      "event": "ask_for_chance",
+      "from": "interview",
+      "to": "interview",
+      "requires": [],
+      "effects": ["asked"],
+      "target": "boss",
+      "label": "我不要工资，让我来试试就行。",
+      "dialogue": "interview-boss-1"
+    },
+    {
+      "id": "H02",
+      "event": "boss_lets_try",
+      "from": "interview",
+      "to": "day_tasks",
+      "requires": ["asked"],
+      "effects": ["hired_trial"],
+      "target": "boss",
+      "label": "继续",
+      "dialogue": "interview-boss-2"
+    },
+    {
+      "id": "H03",
+      "event": "take_day_task",
+      "from": "day_tasks",
+      "to": "day_tasks",
+      "requires": [],
+      "effects": ["day_task_taken"],
+      "target": "my_pc",
+      "label": "接任务",
+      "dialogue": "day-task"
+    },
+    {
+      "id": "H04",
+      "event": "review_linux_git",
+      "from": "day_tasks",
+      "to": "day_tasks",
+      "requires": ["day_task_taken"],
+      "effects": ["linux_git_reviewed"],
+      "target": "linux_screen",
+      "label": "记下来",
+      "dialogue": "day-linux"
+    },
+    {
+      "id": "H05",
+      "event": "review_frontend",
+      "from": "day_tasks",
+      "to": "day_tasks",
+      "requires": ["day_task_taken"],
+      "effects": ["frontend_reviewed"],
+      "target": "jquery_book",
+      "label": "记下来",
+      "dialogue": "day-jquery"
+    },
+    {
+      "id": "H06",
+      "event": "night_falls",
+      "from": "day_tasks",
+      "to": "night_study",
+      "requires": ["linux_git_reviewed", "frontend_reviewed"],
+      "effects": ["day_done"],
+      "target": "dialog",
+      "label": "继续",
+      "dialogue": "night-falls"
+    },
+    {
+      "id": "H07",
+      "event": "study_java",
+      "from": "night_study",
+      "to": "night_study",
+      "requires": [],
+      "effects": ["java_studied"],
+      "target": "java_book",
+      "label": "记下来",
+      "dialogue": "night-java"
+    },
+    {
+      "id": "H08",
+      "event": "study_db_nosql",
+      "from": "night_study",
+      "to": "night_study",
+      "requires": [],
+      "effects": ["db_nosql_studied"],
+      "target": "db_screen",
+      "label": "记下来",
+      "dialogue": "night-db"
+    },
+    {
+      "id": "H09",
+      "event": "days_pass",
+      "from": "night_study",
+      "to": "raise",
+      "requires": ["java_studied", "db_nosql_studied"],
+      "effects": ["nights_done"],
+      "target": "dialog",
+      "label": "继续",
+      "dialogue": "days-pass"
+    },
+    {
+      "id": "H10",
+      "event": "raise_read",
+      "from": "raise",
+      "to": "complete",
+      "requires": ["nights_done"],
+      "effects": ["raise_seen"],
+      "target": "boss",
+      "label": "收起",
+      "dialogue": "raise-boss"
+    }
+  ],
+  "dialogues": [
+    {"id": "interview-narrator", "state": "interview", "speaker": "narrator", "basis": "fact_paraphrase", "text": "原本录用的人嫌工资低，没来。"},
+    {"id": "interview-boss-1", "state": "interview", "speaker": "boss", "basis": "fact", "text": "你能力不行，来了也干不了活。"},
+    {"id": "interview-player", "state": "interview", "speaker": "player", "basis": "fact", "text": "我不要工资，让我来试试就行。"},
+    {"id": "interview-boss-2", "state": "interview", "speaker": "boss", "basis": "fact", "text": "行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。"},
+    {"id": "day-narrator", "state": "day_tasks", "speaker": "narrator", "basis": "fact_paraphrase", "text": "第一次用 Linux 开发机，第一次用 Git，第一次写前端，还第一次写 E2E 测试。不会的就 Google。"},
+    {"id": "day-task", "state": "day_tasks", "speaker": "player", "basis": "staging", "text": "我在自己的工位坐下，接过电脑上的任务。"},
+    {"id": "day-linux", "state": "day_tasks", "speaker": "player", "basis": "staging", "text": "这一屏是 Linux 开发机和 Git。"},
+    {"id": "day-jquery", "state": "day_tasks", "speaker": "player", "basis": "staging", "text": "这一页是第一次写的前端，手边是《锋利的 jQuery》。"},
+    {"id": "night-falls", "state": "day_tasks", "speaker": "narrator", "basis": "staging", "text": "天黑了。"},
+    {"id": "night-narrator", "state": "night_study", "speaker": "narrator", "basis": "fact_paraphrase", "text": "天黑以后，我还在学。白天写前端，晚上啃 Java、数据库和 NoSQL。"},
+    {"id": "night-java", "state": "night_study", "speaker": "player", "basis": "staging", "text": "这一本是 Java。"},
+    {"id": "night-db", "state": "night_study", "speaker": "player", "basis": "staging", "text": "这一屏是数据库和 NoSQL。"},
+    {"id": "days-pass", "state": "night_study", "speaker": "narrator", "basis": "fact_paraphrase", "text": "日夜颠倒地学新东西，拼命把活干好。"},
+    {"id": "raise-narrator", "state": "raise", "speaker": "narrator", "basis": "fact_paraphrase", "text": "入职两个月，加了两次薪。"},
+    {"id": "raise-boss", "state": "raise", "speaker": "boss", "basis": "fact", "text": "努力工作的人一定会被看到的。"},
+    {"id": "manual-1", "state": "complete", "speaker": "manual", "basis": "fact", "text": "努力工作的人一定会被看到的。"}
+  ],
+  "legalSnapshots": {
+    "interview": [
+      [],
+      ["asked"]
+    ],
+    "day_tasks": [
+      ["asked", "hired_trial"],
+      ["asked", "hired_trial", "day_task_taken"],
+      ["asked", "hired_trial", "day_task_taken", "linux_git_reviewed"],
+      ["asked", "hired_trial", "day_task_taken", "frontend_reviewed"],
+      ["asked", "hired_trial", "day_task_taken", "linux_git_reviewed", "frontend_reviewed"]
+    ],
+    "night_study": [
+      ["asked", "hired_trial", "day_task_taken", "linux_git_reviewed", "frontend_reviewed", "day_done"],
+      ["asked", "hired_trial", "day_task_taken", "linux_git_reviewed", "frontend_reviewed", "day_done", "java_studied"],
+      ["asked", "hired_trial", "day_task_taken", "linux_git_reviewed", "frontend_reviewed", "day_done", "db_nosql_studied"],
+      ["asked", "hired_trial", "day_task_taken", "linux_git_reviewed", "frontend_reviewed", "day_done", "java_studied", "db_nosql_studied"]
+    ],
+    "raise": [
+      ["asked", "hired_trial", "day_task_taken", "linux_git_reviewed", "frontend_reviewed", "day_done", "java_studied", "db_nosql_studied", "nights_done"]
+    ],
+    "complete": [
+      ["asked", "hired_trial", "day_task_taken", "linux_git_reviewed", "frontend_reviewed", "day_done", "java_studied", "db_nosql_studied", "nights_done", "raise_seen"]
+    ]
+  }
+}

@@ -8,6 +8,34 @@
   "durationBasis": "设计预期 2～3 分钟（状态预算合计 180 秒），未实测。",
   "entry": "office",
   "terminal": "complete",
+  "roleTargets": {
+    "forum": ["forum_pc"],
+    "cto": ["cto_pc", "test_notes", "trap_note"],
+    "manual": ["manual_shelf"],
+    "dialog": ["dialog"]
+  },
+  "objectives": {
+    "office": "去左侧电脑，打开用户论坛",
+    "report": "读完用户反馈，继续",
+    "incident": "去右侧电脑，和 CTO 一起排查",
+    "investigation": {
+      "count": ["feedback_reviewed", "recheck_visited", "impact_confirmed"],
+      "pending": "排查 {n}/3 · {next}",
+      "steps": [
+        {"unless": "recheck_visited", "text": "右侧电脑：查看排查记录"},
+        {"unless": "impact_confirmed", "text": "右侧电脑：确认影响到谁"},
+        {"unless": "feedback_reviewed", "text": "左侧电脑：重读论坛反馈"}
+      ],
+      "elseStep": "右侧电脑：结束这轮排查"
+    },
+    "restored": "两小时后，读完同事们的宽慰",
+    "learning": {
+      "count": ["test_reviewed", "comment_reviewed"],
+      "pending": "看过 {n}/2 · 右侧电脑：分别查看测试和坑点注释",
+      "done": "看过 2/2 · 去右侧书架，把这一页写进手册"
+    },
+    "complete": "南京这一章完成 · 手册可以随时回看"
+  },
   "savePolicy": {
     "id": "atomic-per-event",
     "key": "career-rpg:nanjing:v1",
@@ -1829,6 +1857,7 @@
       "speaker": "narrator",
       "basis": "fact_paraphrase",
       "text": "画面压暗。整整两小时后，问题恢复了。",
+      "playerText": "整整两小时后，问题恢复了。",
       "note": "事实：登录框故障整整两小时。转场为演出，不做真实等待。"
     },
     {

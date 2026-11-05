@@ -1,0 +1,297 @@
+{
+ "id": "hefei-props/java-book",
+ "version": "v2",
+ "source": "art/source/hefei-v2/hefei-props/original.png",
+ "source_sha256": "75d0637328305ee5db6402f5ef0810decdabf5208a3ee75739fb449b02e28441",
+ "script": "tools/v2/process_props.py",
+ "palette": "art/palette/hefei-v2-shared.json",
+ "palette_sha256": "63094a46fb6e3bd85d877f8b341005611684e0576ed480168aca7cbb70aeee5b",
+ "process_log": {
+  "src_bbox": [
+   142,
+   51,
+   369,
+   350
+  ],
+  "card_cleanup": {
+   "removed_lonely": 1,
+   "filled_holes": 0,
+   "outlined": 597,
+   "despeckled": 111
+  },
+  "card_note": "hand-drawn procedurally (draw_book_card): source quadrant was only a blank label + one diagonal, so cover was rebuilt with a geometric pattern + pixel-font title",
+  "card_size": [
+   192,
+   236
+  ],
+  "card_colors": 9,
+  "icon_cleanup": "hand-drawn (draw_book_icon)",
+  "icon_size": [
+   17,
+   18
+  ],
+  "icon_colors": 6,
+  "icon_highlight_colors": 7,
+  "in_palette": true
+ },
+ "trademark_check": "no logos/mascots/brand shapes (checked by eye with Read at x4)",
+ "files": [
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/card-192-x4.png",
+   "sha256": "18cb6bd875ed8a87d20d2ec87141ee24bbac72962223ea28e046d75a657c86e6",
+   "size": [
+    768,
+    944
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/card-192-x4.webp",
+   "sha256": "820264ae05af546b6094bb0c3ceb601450b1126564ddf8743703e29d2101ed75",
+   "size": [
+    768,
+    944
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/card-192.png",
+   "sha256": "537ae2c3bbc6bfdde0357985bb6ff83ae2142004c1bc407ce195ce871311d18d",
+   "size": [
+    192,
+    236
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/card-192.webp",
+   "sha256": "4fe2d0b10ebb4bace77bc9798a3984dc21c489eacca466d5df6c230ddb6d41da",
+   "size": [
+    192,
+    236
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight-x4.png",
+   "sha256": "2511b6edccd6dc923efe9837bade30674d690c62f3014061b81c1f08ec712493",
+   "size": [
+    68,
+    72
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight-x4.webp",
+   "sha256": "ed2f4ea7a837133f07d092ad953765842f52fbc3fac5ae84a0a33025e0121477",
+   "size": [
+    68,
+    72
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight-x8.png",
+   "sha256": "6c8983e38bf267956f0f633899066f27f587e17d4dacaa3b99593149ff78f85c",
+   "size": [
+    136,
+    144
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight.png",
+   "sha256": "0691ea66253269b705b2dc811b64de860dda68c5e471738050ecabde7d0fc2ee",
+   "size": [
+    17,
+    18
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight.webp",
+   "sha256": "107fcee90f7a56d2e931896148bf40a11d3849ba9dcd5e4beef5f6c039ea593f",
+   "size": [
+    17,
+    18
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/icon-x4.png",
+   "sha256": "ea59a28656b00678febc42bafb038ff92d3ef8f42644f58af9194ae252b678e7",
+   "size": [
+    68,
+    72
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/icon-x4.webp",
+   "sha256": "871ccde78f60adc8014512f3f381c469b53cfc7e114ddc075a78ea72dcc452b9",
+   "size": [
+    68,
+    72
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/icon-x8.png",
+   "sha256": "d33257005d4e01d7a435d2efe5b9bf660ab256364bc728e27da0c9c3bfc67f17",
+   "size": [
+    136,
+    144
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/icon.png",
+   "sha256": "608de925aa370211d036e7da0c72eb30167cdf665836a9f9a309fce3e3402c1e",
+   "size": [
+    17,
+    18
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/java-book/icon.webp",
+   "sha256": "1afc8fd275586ddb7b2549dfc3af890ebfdd83795c2980b929afa6ebd0ba77ba",
+   "size": [
+    17,
+    18
+   ]
+  }
+ ],
+ "verify": {
+  "assets": [
+   {
+    "file": "art/processed/hefei-v2/hefei-props/java-book/icon.png",
+    "size": [
+     17,
+     18
+    ],
+    "mode": "RGBA",
+    "colors": 6,
+    "palette": "nanjing 34",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight.png",
+    "size": [
+     17,
+     18
+    ],
+    "mode": "RGBA",
+    "colors": 7,
+    "palette": "shared 125",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/java-book/card-192.png",
+    "size": [
+     192,
+     236
+    ],
+    "mode": "RGBA",
+    "colors": 9,
+    "palette": "nanjing 34",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   }
+  ],
+  "webp": [
+   {
+    "png": "art/processed/hefei-v2/hefei-props/java-book/icon.png",
+    "webp": "art/processed/hefei-v2/hefei-props/java-book/icon.webp",
+    "w": 17,
+    "h": 18,
+    "png_bytes": 209,
+    "webp_bytes": 104,
+    "decoded_rgba_bytes": 1224,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/java-book/icon-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-props/java-book/icon-x4.webp",
+    "w": 68,
+    "h": 72,
+    "png_bytes": 375,
+    "webp_bytes": 118,
+    "decoded_rgba_bytes": 19584,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight.png",
+    "webp": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight.webp",
+    "w": 17,
+    "h": 18,
+    "png_bytes": 267,
+    "webp_bytes": 118,
+    "decoded_rgba_bytes": 1224,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight-x4.webp",
+    "w": 68,
+    "h": 72,
+    "png_bytes": 453,
+    "webp_bytes": 146,
+    "decoded_rgba_bytes": 19584,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/java-book/card-192.png",
+    "webp": "art/processed/hefei-v2/hefei-props/java-book/card-192.webp",
+    "w": 192,
+    "h": 236,
+    "png_bytes": 1444,
+    "webp_bytes": 350,
+    "decoded_rgba_bytes": 181248,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/java-book/card-192-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-props/java-book/card-192-x4.webp",
+    "w": 768,
+    "h": 944,
+    "png_bytes": 6208,
+    "webp_bytes": 594,
+    "decoded_rgba_bytes": 2899968,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   }
+  ],
+  "upscales": [
+   {
+    "file": "art/processed/hefei-v2/hefei-props/java-book/card-192-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/java-book/icon-highlight-x8.png",
+    "k": 8,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/java-book/icon-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/java-book/icon-x8.png",
+    "k": 8,
+    "exact_nearest_of_logical": true
+   }
+  ]
+ },
+ "status": "candidate_pending_producer_review"
+}
