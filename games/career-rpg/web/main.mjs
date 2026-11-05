@@ -332,16 +332,31 @@ async function loadJourneyMap(){
 }
 function easeInOut(t){return t<.5?4*t*t*t:1-((-2*t+2)**3)/2;}
 const pixelLabels=new Map();
-function pixelLabel(text,fontPx=12){
-  const key=fontPx+'\0'+text;
-  if(pixelLabels.has(key))return pixelLabels.get(key);
-  const canvas=document.createElement('canvas'),width=Math.ceil(text.length*fontPx)+4,height=fontPx+2;
-  canvas.width=width;canvas.height=height;
-  const pen=canvas.getContext('2d');pen.font=`${fontPx}px ui-monospace,monospace`;pen.fillStyle='#3a2a1a';pen.textBaseline='middle';pen.textAlign='center';pen.fillText(text,width/2,height/2);
-  const pixels=pen.getImageData(0,0,width,height);
-  for(let i=3;i<pixels.data.length;i+=4)pixels.data[i]=pixels.data[i]>96?255:0;
-  pen.putImageData(pixels,0,0);
-  pixelLabels.set(key,canvas);
+// 8px system font plus an alpha threshold turns 合 into 古. Stamp 14×11 bitmaps at integer pixels.
+const placeGlyphs={
+  '合':['.......#......','......#.#.....','.....#...#....','....#.....#...','...#.......#..','.############.','...##########.','...#........#.','...#........#.','...#........#.','...##########.'],
+  '肥':['##....#######.','#.#..#......#.','##...#......#.','#.#..########.','##...#........','#.#..#........','##....######..','#.........#...','##........#...','#.............','#.............'],
+  '南':['.......#......','##############','.......#......','.############.','.#...#...#..#.','.#..#####...#.','.#.#########.#','.############.','.#....#.....#.','.#....#.....#.','.#........###.'],
+  '京':['.......#......','##############','..##########..','..#........#..','..#........#..','..##########..','....#.##.#....','...##.##.##...','.##...##...##.','....###.......','..............'],
+  '杭':['..#.....#.....','..#.....#.....','##############','..#...........','..##...#####..','.###...#...#..','.###...#...#..','####...#...#..','..#...##...#..','..#...##...#..','..#..#.....##.'],
+  '州':['...#...#...#..','...#...#...#..','.####..####.#.','.####..####.#.','...#...#...#..','...#...#...#..','..##...#...#..','..##...#...#..','.#.....#...#..','.#.....#...#..','.......#...#..'],
+};
+function pixelLabel(text){
+  if(pixelLabels.has(text))return pixelLabels.get(text);
+  const gw=14,gh=11,gap=1,width=text.length*gw+Math.max(0,text.length-1)*gap;
+  const canvas=document.createElement('canvas');canvas.width=width;canvas.height=gh;
+  const pen=canvas.getContext('2d');pen.imageSmoothingEnabled=false;
+  const image=pen.createImageData(width,gh);
+  for(let i=0;i<text.length;i++){
+    const rows=placeGlyphs[text[i]];if(!rows)continue;
+    const ox=i*(gw+gap);
+    for(let y=0;y<gh;y++)for(let x=0;x<gw;x++){
+      if(rows[y][x]!=='#')continue;
+      const p=(y*width+ox+x)*4;image.data[p]=0x16;image.data[p+1]=0x12;image.data[p+2]=0x0e;image.data[p+3]=255;
+    }
+  }
+  pen.putImageData(image,0,0);
+  pixelLabels.set(text,canvas);
   return canvas;
 }
 function drawJourney(progress){
@@ -363,7 +378,8 @@ function drawJourney(progress){
   if(plates){
     for(const plate of plates){
       const node=nodes[plate.id];if(!node)continue;
-      const [x0,y0,x1,y1]=plate.box,label=pixelLabel(node.name,8);
+      const [x0,y0,x1,y1]=plate.box,label=pixelLabel(node.name);
+      ctx.imageSmoothingEnabled=false;
       ctx.drawImage(label,Math.round((x0+x1-label.width)/2),Math.round((y0+y1-label.height)/2));
     }
   }else{
@@ -373,6 +389,7 @@ function drawJourney(progress){
       ctx.fillStyle='#f6edd6';ctx.fillRect(box.x,box.y,box.w,box.h);
       ctx.fillStyle='#6b4a32';
       ctx.fillRect(box.x,box.y,box.w,1);ctx.fillRect(box.x,box.y+box.h-1,box.w,1);ctx.fillRect(box.x,box.y,1,box.h);ctx.fillRect(box.x+box.w-1,box.y,1,box.h);
+      ctx.imageSmoothingEnabled=false;
       ctx.drawImage(label,Math.round(box.x+(box.w-label.width)/2),Math.round(box.y+(box.h-label.height)/2));
     }
   }
