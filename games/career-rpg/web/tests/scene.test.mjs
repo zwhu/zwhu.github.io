@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createChapter} from '../story.mjs';
-import {OFFICE,pendingMarkers,actionsFor,expressionFor} from '../scene-config.mjs';
-import {frameIndex,bubblePosition,typingFrame,stableFrameRects,motionForRender,WALK_POSE_HZ,walkClock,placeActor,sheetAnchor} from '../actors.mjs';
+import {OFFICE,HEFEI,HANGZHOU,pendingMarkers,actionsFor,expressionFor} from '../scene-config.mjs';
+import {frameIndex,bubblePosition,typingFrame,seatedFrame,stableFrameRects,motionForRender,WALK_POSE_HZ,walkClock,placeActor,sheetAnchor} from '../actors.mjs';
 import {MOVE_SPEED} from '../world.mjs';
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-01.json',import.meta.url),'utf8')),chapter=createChapter(data);
 test('direction rows and idle/step frames remain distinct, including typing clips',()=>{
@@ -12,6 +12,28 @@ test('direction rows and idle/step frames remain distinct, including typing clip
   assert.equal(WALK_POSE_HZ,4);
   assert.equal(frameIndex(atlas,'left',true,0),6);assert.equal(frameIndex(atlas,'left',true,.26),7);assert.equal(frameIndex(atlas,'left',true,.51),6);assert.equal(frameIndex(atlas,'left',true,.76),8);assert.equal(frameIndex(atlas,'left',false,.76),6);
   assert.equal(typingFrame(2,0,true),2);assert.equal(typingFrame(2,.4,true),6);assert.equal(typingFrame(2,.4,false),2);
+  assert.equal(seatedFrame(OFFICE.atlases.typing,2,.4,true),6);
+  assert.equal(seatedFrame(OFFICE.atlases.sit,0,.4,true),0);
+});
+test('the shared protagonist sits with the 18 by 30 back frame and the hip on the chair',()=>{
+  const png=readFileSync(new URL('../art/sit-back-hz-18x30.png',import.meta.url));
+  assert.equal(png.readUInt32BE(16),18);assert.equal(png.readUInt32BE(20),30);
+  for(const config of [OFFICE,HEFEI,HANGZHOU]){
+    assert.equal(config.atlases.player.url,OFFICE.atlases.player.url);
+    assert.equal(config.atlases.sit.url,'./art/sit-back-hz-18x30.png');
+    assert.equal(config.atlases.sit.columns,1);assert.equal(config.atlases.sit.rows,1);
+    const player=config.actors.find(a=>a.controllable);
+    assert.equal(player.sitAtlas,'sit');assert.equal(player.seatedHeight,30);assert.equal(player.height,44);
+  }
+  const seat=HANGZHOU.objects.find(o=>o.id==='webpack-screen').seat;
+  const placed=placeActor(seat.x,seat.y,0,30,HANGZHOU.height,true);
+  assert.deepEqual(placed,{x:seat.x,y:HANGZHOU.height-seat.y+15});
+  assert.equal(Number.isInteger(placed.x)&&Number.isInteger(placed.y),true);
+  for(const config of [OFFICE,HEFEI]){
+    const desk=config.objects.find(o=>o.seat&&o.events?.includes(config===OFFICE?'open_forum_post':'take_day_task'));
+    const hip=placeActor(desk.seat.x,desk.seat.y,0,30,config.height,true);
+    assert.equal(hip.y,config.height-desk.seat.y+15);
+  }
 });
 test('pose references keep one direction at a stable scale and align every visible sole',()=>{
   const frames=[

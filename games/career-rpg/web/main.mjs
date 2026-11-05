@@ -1,7 +1,7 @@
 import {WORLD,nearbyAll,integrateWalk,MOVE_SPEED} from './world.mjs';
 import {createChapter} from './story.mjs';
 import {OFFICE,HEFEI,HANGZHOU,actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './scene-config.mjs';
-import {createActor,atlasBounds,bubblePosition,typingFrame,motionForRender,walkClock} from './actors.mjs';
+import {createActor,atlasBounds,bubblePosition,seatedFrame,motionForRender,walkClock} from './actors.mjs';
 import {GAME_TITLE} from './title.mjs';
 const chapterKey=new URLSearchParams(location.search).get('chapter');
 const sceneConfig=chapterKey==='hangzhou'?HANGZHOU:chapterKey==='hefei'?HEFEI:OFFICE;
@@ -577,7 +577,9 @@ function frame(now){
     views.standing.mesh.visible=!typing;if(views.seated)views.seated.mesh.visible=typing;
     const view=typing?views.seated:views.standing;
     const play=state!=='paused'&&!(state==='dialogue'&&currentSpeaker===actor.id&&!actor.controllable);
-    view.update(renderPosition(actor),actor.controllable?facing:'down',actor.controllable&&moving,walkTime,typing?typingFrame(actor.typingColumn,now/1000,play):null,actor.controllable&&!typing);
+    const pose=typing&&actor.sitAtlas?sceneConfig.atlases[actor.sitAtlas]:typing?sceneConfig.atlases.typing:null;
+    const sitStill=!!(pose&&pose.columns===1&&pose.rows===1);
+    view.update(renderPosition(actor),actor.controllable?facing:'down',actor.controllable&&moving&&!sitStill,walkTime,pose?seatedFrame(pose,actor.typingColumn??0,now/1000,play&&!sitStill):null,actor.controllable&&(!typing||sitStill));
   }
   drawSkillGlints(now);
   positionEffects();placeBubble();updateUI();renderer.render(scene,camera);
@@ -662,7 +664,9 @@ async function start(){
   }
   for(const actor of sceneConfig.actors){
     const data=atlasData[actor.atlas],standing=createActor(THREE,data.image,sceneConfig.atlases[actor.atlas],actor,sceneConfig.height);
-    const seated=actor.typingColumn===undefined?null:createActor(THREE,atlasData.typing.image,sceneConfig.atlases.typing,{...actor,column:actor.typingColumn,height:actor.seatedHeight||40},sceneConfig.height);
+    const sit=actor.sitAtlas&&sceneConfig.atlases[actor.sitAtlas];
+    const seatedSpec=sit?{image:atlasData[actor.sitAtlas].image,atlas:sit,column:0,height:actor.seatedHeight||30}:actor.typingColumn===undefined?null:{image:atlasData.typing.image,atlas:sceneConfig.atlases.typing,column:actor.typingColumn,height:actor.seatedHeight||40};
+    const seated=seatedSpec?createActor(THREE,seatedSpec.image,seatedSpec.atlas,{...actor,column:seatedSpec.column,height:seatedSpec.height},sceneConfig.height):null;
     actorViews.set(actor.id,{standing,seated});scene.add(standing.mesh);if(seated)scene.add(seated.mesh);
   }
   glintCanvas=document.createElement('canvas');glintCanvas.id='skill-glints';glintCanvas.width=sceneConfig.width;glintCanvas.height=sceneConfig.height;glintCtx=glintCanvas.getContext('2d');stage.append(glintCanvas);
@@ -675,7 +679,7 @@ async function start(){
   else{document.querySelector('#save-status').textContent='已恢复上次确认的进度';enterScene();}
   raf=requestAnimationFrame(frame);
   // Read-only diagnostics support browser acceptance without changing game state.
-  window.careerPrototype={snapshot:()=>({position:{...position},state,active:active?.id||null,chapter:structuredClone(snapshot),saving,saveKey:chapter.key,bounds,three:THREE.REVISION,facing,moving,walkTime,walkMetrics:actorViews.get('player').standing.metrics(),actors:visibleRoom().actors.map(a=>({id:a.id,position:renderPosition(a),posture:isTyping(a)?'seatedTyping':'standing'})),frames:Object.fromEntries([...actorViews].map(([id,views])=>[id,(views.seated?.mesh.visible?views.seated:views.standing).frame()])),markers:pendingMarkers(visibleRoom(),chapter,snapshot),boardLit:propViews.some(item=>!!(item.lit&&item.mat.map===item.lit))})};
+  window.careerPrototype={snapshot:()=>({position:{...position},state,active:active?.id||null,chapter:structuredClone(snapshot),saving,saveKey:chapter.key,bounds,three:THREE.REVISION,facing,moving,walkTime,walkMetrics:actorViews.get('player').standing.metrics(),sit:actorViews.get('player').seated?.mesh.visible?actorViews.get('player').seated.metrics():null,actors:visibleRoom().actors.map(a=>({id:a.id,position:renderPosition(a),posture:isTyping(a)?'seatedTyping':'standing'})),frames:Object.fromEntries([...actorViews].map(([id,views])=>[id,(views.seated?.mesh.visible?views.seated:views.standing).frame()])),markers:pendingMarkers(visibleRoom(),chapter,snapshot),boardLit:propViews.some(item=>!!(item.lit&&item.mat.map===item.lit))})};
   window.addEventListener('pagehide',()=>{cancelAnimationFrame(raf);hideObjectCard();scene.traverse(o=>{o.geometry?.dispose();if(o.material){o.material.map?.dispose();o.material.alphaMap?.dispose();o.material.dispose();}});for(const tex of spareTextures)tex.dispose();renderer.dispose();},{once:true});
 }
 function navigateOption(key){

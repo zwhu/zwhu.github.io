@@ -1,0 +1,191 @@
+[
+  {
+    "id": "NJ",
+    "file": "/agent/repos/zwhu.github.io/games/career-rpg/web/review/sit-pose/before/NJ-SIT-01.png",
+    "view": {
+      "position": {
+        "x": 84,
+        "y": 129
+      },
+      "state": "dialogue",
+      "active": null,
+      "chapter": "office",
+      "posture": "seatedTyping",
+      "player": {
+        "id": "player",
+        "position": {
+          "x": 82,
+          "y": 108
+        },
+        "posture": "seatedTyping"
+      },
+      "frames": {
+        "player": 0,
+        "cto": 1,
+        "colleague-dev": 2,
+        "colleague-team": 3
+      },
+      "walk": {
+        "frame": 3,
+        "width": 27.766990291262136,
+        "height": 44,
+        "offset": 0.07119741100323625,
+        "x": 84,
+        "y": 109,
+        "reference": {
+          "left": 84,
+          "top": 396,
+          "width": 195,
+          "height": 309,
+          "centerOffset": 0.5
+        }
+      },
+      "sit": null,
+      "hidden": false,
+      "dialogue": "选择一项，读完后再确认。",
+      "stage": {
+        "left": 149,
+        "top": 268.078125,
+        "width": 982,
+        "height": 552.375
+      },
+      "scrollY": 0,
+      "dpr": 1,
+      "inner": {
+        "w": 1280,
+        "h": 900
+      }
+    },
+    "crop": {
+      "x": 52,
+      "y": 68,
+      "w": 60,
+      "h": 70
+    }
+  },
+  {
+    "id": "HF",
+    "file": "/agent/repos/zwhu.github.io/games/career-rpg/web/review/sit-pose/before/HF-SIT-01.png",
+    "view": {
+      "position": {
+        "x": 78,
+        "y": 192
+      },
+      "state": "dialogue",
+      "active": null,
+      "chapter": "day_tasks",
+      "posture": "seatedTyping",
+      "player": {
+        "id": "player",
+        "position": {
+          "x": 75,
+          "y": 176
+        },
+        "posture": "seatedTyping"
+      },
+      "frames": {
+        "player": 4,
+        "boss": 0,
+        "colleague-b2": 6,
+        "colleague-b3": 7
+      },
+      "walk": {
+        "frame": 6,
+        "width": 28.336569579288025,
+        "height": 44,
+        "offset": -0.6407766990291263,
+        "x": 78,
+        "y": 46,
+        "reference": {
+          "left": 77,
+          "top": 756,
+          "width": 199,
+          "height": 309,
+          "centerOffset": -4.5
+        }
+      },
+      "sit": null,
+      "hidden": false,
+      "dialogue": "黄色感叹号标在这台电脑上。",
+      "stage": {
+        "left": 149,
+        "top": 268.078125,
+        "width": 982,
+        "height": 552.375
+      },
+      "scrollY": 0,
+      "dpr": 1,
+      "inner": {
+        "w": 1280,
+        "h": 900
+      }
+    },
+    "crop": {
+      "x": 48,
+      "y": 130,
+      "w": 56,
+      "h": 70
+    }
+  },
+  {
+    "id": "HZ",
+    "file": "/agent/repos/zwhu.github.io/games/career-rpg/web/review/sit-pose/before/HZ-SIT-01.png",
+    "view": {
+      "position": {
+        "x": 78,
+        "y": 190
+      },
+      "state": "dialogue",
+      "active": null,
+      "chapter": "plugins",
+      "posture": "standing",
+      "player": {
+        "id": "player",
+        "position": {
+          "x": 78,
+          "y": 190
+        },
+        "posture": "standing"
+      },
+      "frames": {
+        "player": 0
+      },
+      "walk": {
+        "frame": 0,
+        "width": 27.251612903225805,
+        "height": 44,
+        "offset": 0,
+        "x": 78,
+        "y": 48,
+        "reference": {
+          "left": 85,
+          "top": 34,
+          "width": 192,
+          "height": 310,
+          "centerOffset": 0
+        }
+      },
+      "sit": null,
+      "hidden": false,
+      "dialogue": "这一屏写着 Webpack，也写着 Babel。",
+      "stage": {
+        "left": 149,
+        "top": 268.078125,
+        "width": 982,
+        "height": 552.375
+      },
+      "scrollY": 0,
+      "dpr": 1,
+      "inner": {
+        "w": 1280,
+        "h": 900
+      }
+    },
+    "crop": {
+      "x": 52,
+      "y": 120,
+      "w": 64,
+      "h": 76
+    }
+  }
+]
