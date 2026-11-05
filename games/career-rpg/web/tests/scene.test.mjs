@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createChapter} from '../story.mjs';
 import {OFFICE,pendingMarkers,actionsFor,expressionFor} from '../scene-config.mjs';
-import {frameIndex,bubblePosition,typingFrame,stableFrameRects,motionForRender,WALK_POSE_HZ,walkClock,placeActor} from '../actors.mjs';
+import {frameIndex,bubblePosition,typingFrame,stableFrameRects,motionForRender,WALK_POSE_HZ,walkClock,placeActor,sheetAnchor} from '../actors.mjs';
 import {MOVE_SPEED} from '../world.mjs';
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-01.json',import.meta.url),'utf8')),chapter=createChapter(data);
 test('direction rows and idle/step frames remain distinct, including typing clips',()=>{
@@ -32,6 +32,7 @@ test('walk phase follows distance and the standing sprite sits on whole pixels',
   assert.equal(walkClock(time,false,1,MOVE_SPEED),0);
   assert.deepEqual(placeActor(10.75,20,-0.25,44,216,true),{x:11,y:218});
   assert.deepEqual(placeActor(10.75,20,-0.25,44,216,false),{x:10.5,y:218});
+  assert.equal(sheetAnchor([0,0.0712,-0.6408,0.1429]),0);
 });
 test('render frames without a fixed physics tick do not reset walking, but key release does',()=>{
   let motion=motionForRender(true,true,true,100,-Infinity);assert.equal(motion.moving,true);

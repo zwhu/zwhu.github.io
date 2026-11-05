@@ -76,9 +76,9 @@ try{
     if(keyboardOnly)assert.equal(await run('document.activeElement.id'),'stage');else await run('document.querySelector("#stage").focus()');
     let p=(await state()).position;
     const transit=config.navigation.transitY;
-    if(Math.abs(p.y-transit)>2)await key(p.y<transit?'ArrowDown':'ArrowUp',Math.abs(p.y-transit)/54*1000);
-    p=(await state()).position;if(Math.abs(p.x-x)>2)await key(p.x<x?'ArrowRight':'ArrowLeft',Math.abs(p.x-x)/54*1000);
-    p=(await state()).position;if(Math.abs(p.y-y)>2)await key(p.y<y?'ArrowDown':'ArrowUp',Math.abs(p.y-y)/54*1000);
+    if(Math.abs(p.y-transit)>2)await key(p.y<transit?'ArrowDown':'ArrowUp',Math.abs(p.y-transit)/60*1000);
+    p=(await state()).position;if(Math.abs(p.x-x)>2)await key(p.x<x?'ArrowRight':'ArrowLeft',Math.abs(p.x-x)/60*1000);
+    p=(await state()).position;if(Math.abs(p.y-y)>2)await key(p.y<y?'ArrowDown':'ArrowUp',Math.abs(p.y-y)/60*1000);
   };
   if(dialogueReading){
     await readingHarness.runReading({send,run,state,key,reload,shot,out,evidenceLabel,errors,url});
@@ -127,7 +127,7 @@ try{
     }
     await send('Input.dispatchKeyEvent',{type:'keyUp',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});await sleep(40);const idle=await state();assert.equal(idle.moving,false);assert.equal(idle.frames.player,9);
     const first=samples[0].state.walkMetrics;for(const v of samples){assert.equal(v.state.walkMetrics.width,first.width);assert.equal(v.state.walkMetrics.height,first.height);assert.equal(v.state.walkMetrics.offset,first.offset);assert.equal(v.state.walkMetrics.reference.height,first.reference.height);}
-    assert.deepEqual(errors,[]);await writeFile(new URL('walk-cadence-check.json',out),JSON.stringify({result:'passed',poseHz:4,stepsPerSecond:2,sequence:['idle','stepA','idle','stepB'],movementSpeed:54,stableScale:true,stableFootAnchor:true,releaseImmediatelyIdle:true,samples:samples.map(v=>({time:v.time,walkTime:v.state.walkTime,frame:v.state.frames.player,metrics:v.state.walkMetrics})),scope:'Targeted Chrome rightward movement and screenshot sequence; no full chapter rerun'},null,2)+'\n');console.log('Walking cadence, fixed scale, sole anchor and immediate idle passed.');
+    assert.deepEqual(errors,[]);await writeFile(new URL('walk-cadence-check.json',out),JSON.stringify({result:'passed',poseHz:4,stepsPerSecond:2,sequence:['idle','stepA','idle','stepB'],movementSpeed:60,stableScale:true,stableFootAnchor:true,releaseImmediatelyIdle:true,samples:samples.map(v=>({time:v.time,walkTime:v.state.walkTime,frame:v.state.frames.player,metrics:v.state.walkMetrics})),scope:'Targeted Chrome rightward movement and screenshot sequence; no full chapter rerun'},null,2)+'\n');console.log('Walking cadence, fixed scale, sole anchor and immediate idle passed.');
   }else if(process.argv.includes('--features-only')){
     const seed=async stateName=>{await run(`(async()=>{const d=await(await fetch('../design/chapter-01.json')).json();localStorage.setItem(d.savePolicy.key,JSON.stringify({schema:1,chapter:d.id,state:${JSON.stringify(stateName)},flags:d.legalSnapshots[${JSON.stringify(stateName)}][0]}));})()`);return reload();};
     const bubbleInside=async()=>{const r=await run(`(()=>{const a=document.querySelector('#conversation').getBoundingClientRect(),b=document.querySelector('#stage').getBoundingClientRect();return {a:{left:a.left,right:a.right,top:a.top,bottom:a.bottom},b:{left:b.left,right:b.right,top:b.top,bottom:b.bottom},modal:!!document.querySelector(':modal')};})()`);assert.equal(r.modal,false);assert.ok(r.a.left>=r.b.left&&r.a.right<=r.b.right&&r.a.top>=r.b.top&&r.a.bottom<=r.b.bottom);};

@@ -2,7 +2,9 @@ import {OFFICE} from './scene-config.mjs';
 export const WORLD=OFFICE;
 export const OBSTACLES=OFFICE.obstacles;
 export const COMPUTERS=OFFICE.objects;
-export const MOVE_SPEED=54;
+// 60px/s is one world pixel per 60Hz frame. 54px/s was 0.9, so integer
+// placement dropped a step about every ten frames and the sprite hitched.
+export const MOVE_SPEED=60;
 export function blocked(x,y,config=OFFICE) {
   const b=config.bounds;
   if(x<b.left||x>b.right||y<b.top||y>b.bottom)return true;
@@ -21,17 +23,22 @@ export function move(position,dx,dy,seconds,config=OFFICE) {
   }
   return {x,y};
 }
-// One displayed frame. The frame dt is spent as-is: a 1/60 bucket moves 0 or 2
-// steps whenever vsync is not an exact multiple of 1/60, so the body hitches.
-export function integrateWalk(position,dx,dy,seconds,config=OFFICE) {
-  if(!(dx||dy)||!(seconds>0))return {x:position.x,y:position.y};
-  let remain=Math.min(seconds,.1),next=position;
-  do {
-    const step=Math.min(remain,.05);
-    next=move(next,dx,dy,step,config);
-    remain-=step;
-  } while(remain>1e-9);
-  return next;
+// Whole pixels for one displayed frame. The remainder keeps 60Hz jitter from
+// skipping or doubling a step: a stable frame stays on exactly one pixel.
+export function integrateWalk(position,dx,dy,seconds,config=OFFICE,remainder=0) {
+  if(!(dx||dy)||!(seconds>0))return {x:position.x,y:position.y,remainder:0};
+  const raw=remainder+MOVE_SPEED*Math.min(seconds,.1);
+  const pixels=Math.max(0,Math.round(raw));
+  const nextRemainder=raw-pixels;
+  if(!pixels)return {x:position.x,y:position.y,remainder:nextRemainder};
+  const distance=Math.hypot(dx,dy),sx=dx/distance,sy=dy/distance;
+  let next=position;
+  for(let i=0;i<pixels;i++){
+    if(sy===0){const nx=next.x+Math.sign(sx);next=blocked(nx,next.y,config)?next:{x:nx,y:next.y};}
+    else if(sx===0){const ny=next.y+Math.sign(sy);next=blocked(next.x,ny,config)?next:{x:next.x,y:ny};}
+    else next=move(next,dx,dy,1/MOVE_SPEED,config);
+  }
+  return {x:next.x,y:next.y,remainder:nextRemainder};
 }
 export function nearbyAll(position,config=OFFICE) {
   const point=o=>o.interaction||o;

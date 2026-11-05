@@ -16,6 +16,12 @@ export function placeActor(x,y,offset,height,worldHeight,snap){
   const px=x+offset,py=worldHeight-y+height/2;
   return snap?{x:Math.round(px),y:Math.round(py)}:{x:px,y:py};
 }
+// One integer anchor for the whole sheet. Per-direction offsets round to
+// different pixels and the first step of a turn jumps an extra pixel.
+export function sheetAnchor(offsets){
+  const values=[...offsets].sort((a,b)=>a-b);
+  return Math.round(values[values.length>>1]||0);
+}
 export function motionForRender(enabled,intent,moved,now,lastMovedAt){
   const latest=moved?now:lastMovedAt;
   return {moving:enabled&&intent&&(moved||now-latest<80),lastMovedAt:latest};
@@ -56,11 +62,12 @@ export function createActor(THREE,image,atlas,definition,worldHeight){
   const frames=atlasBounds(image,atlas),references=stableFrameRects(frames,atlas),texture=new THREE.Texture(image);
   texture.needsUpdate=true;texture.magFilter=texture.minFilter=THREE.NearestFilter;texture.generateMipmaps=false;texture.colorSpace=THREE.SRGBColorSpace;
   const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.5,depthTest:false}));
+  const anchor=sheetAnchor(references.map(b=>b.centerOffset*definition.height/b.height));
   let current=-1,offset=0;
   return {mesh,frames,update(position,facing,moving,time,explicitFrame=null,snap=false){
     const next=explicitFrame??frameIndex(atlas,facing,moving,time,definition.column||0);
     if(next!==current){const b=references[next];texture.repeat.set(b.width/image.width,b.height/image.height);texture.offset.set(b.left/image.width,1-(b.top+b.height)/image.height);mesh.scale.set(definition.height*b.width/b.height,definition.height,1);offset=b.centerOffset*definition.height/b.height;current=next;}
-    const placed=placeActor(position.x,position.y,offset,definition.height,worldHeight,snap);
+    const placed=placeActor(position.x,position.y,snap?anchor:offset,definition.height,worldHeight,snap);
     mesh.position.set(placed.x,placed.y,2);mesh.renderOrder=1+position.y;
   },frame:()=>current,metrics:()=>({frame:current,width:mesh.scale.x,height:mesh.scale.y,offset,x:mesh.position.x,y:mesh.position.y,reference:references[current]})};
 }
