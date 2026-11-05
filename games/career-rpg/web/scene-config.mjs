@@ -21,7 +21,7 @@ export const OFFICE={
   eventSpeakers:{cto_rallies_team:'cto',resume_narrative:'cto'},
 };
 const H='./art/hefei';
-// Hefei v2 runtime sheets. Candidates and records stay in art/processed/hefei-v2.
+// Room art is the v2 picture used as a placeholder. The confirmed room is a converted apartment: one long table, six facing seats, my_pc at the first seat on the left, boss tea table by the sofa at the lower right. When v3 arrives, replace the backgrounds and the coordinates in this object only.
 export const HEFEI={
   id:'hefei-office',width:384,height:216,chapter:'../design/chapter-hefei.json',
   background:`${H}/hefei-office-day/day-384x216.png`,

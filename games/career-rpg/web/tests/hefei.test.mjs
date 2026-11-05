@@ -119,11 +119,11 @@ test('either order reaches the same manual and every snapshot restores on the he
 
 test('hefei marker sits on my_pc, cards stay off the startup sheets, and the aisle reaches each point',()=>{
   const day=play(['ask_for_chance','boss_lets_try']);
+  const myPc=HEFEI.objects.find(o=>o.id==='my-pc');
   const marks=pendingMarkers(HEFEI,chapter,day);
   assert.deepEqual(marks.map(m=>m.id),['my-pc']);
-  assert.equal(marks[0].sprite.url.endsWith('marker-7x16.png'),true);
-  assert.deepEqual([marks[0].sprite.w,marks[0].sprite.h],[7,16]);
-  assert.equal(marks[0].x,46.5);assert.equal(marks[0].y,49);
+  assert.equal(marks[0].sprite,HEFEI.marker);
+  assert.equal(marks[0].x,myPc.markerPosition.x);assert.equal(marks[0].y,myPc.markerPosition.y);
   const taken=chapter.advance(day,'take_day_task').snapshot;
   assert.equal(pendingMarkers(HEFEI,chapter,taken).some(m=>m.id==='my-pc'),false);
   assert.equal(pendingMarkers(HEFEI,chapter,chapter.initial()).some(m=>m.id==='my-pc'),false);
@@ -144,20 +144,23 @@ test('hefei marker sits on my_pc, cards stay off the startup sheets, and the ais
   assert.deepEqual(night.actors.map(a=>a.id),['player']);
   assert.ok(night.objects.some(o=>o.id==='db-screen'));
   assert.equal(night.objects.some(o=>o.id==='linux-screen'),false);
-  const seen=new Set();const queue=[[197,172]];
+  const start=HEFEI.entryPoints.interview;
+  const seen=new Set();const queue=[[start.x,start.y]];
   while(queue.length){
     const [x,y]=queue.pop();const key=`${x},${y}`;if(seen.has(key)||blocked(x,y,HEFEI))continue;seen.add(key);
     queue.push([x+1,y],[x-1,y],[x,y+1],[x,y-1]);
   }
-  for(const point of [HEFEI.entryPoints.interview,HEFEI.objects.find(o=>o.id==='my-pc'),HEFEI.objects.find(o=>o.id==='jquery-book'),HEFEI.actors.find(a=>a.id==='boss'),HEFEI.entryPoints.complete]){
-    assert.equal(blocked(point.x,point.y,HEFEI),false,point.id||'entry');
-    assert.equal(seen.has(`${point.x},${point.y}`),true,point.id||'entry');
+  const points=[...Object.values(HEFEI.entryPoints),...HEFEI.objects,...HEFEI.actors.filter(a=>a.interaction).map(a=>a.interaction)];
+  for(const point of points){
+    assert.equal(blocked(point.x,point.y,HEFEI),false,point.id||'point');
+    assert.equal(seen.has(`${point.x},${point.y}`),true,point.id||'point');
   }
-  assert.equal(nearby({x:46,y:116},presentCast(HEFEI,{state:'day_tasks'})).id,'my-pc');
-  assert.equal(transitionBeat(4,0,600),0);
-  assert.equal(transitionBeat(4,600,600),1);
-  assert.equal(transitionFinished(4,2399,600),false);
-  assert.equal(transitionFinished(4,2400,600),true);
+  assert.equal(nearby(myPc,presentCast(HEFEI,{state:'day_tasks'})).id,'my-pc');
+  const nightBeats=HEFEI.transitionBeats.night_falls.length,beatMs=HEFEI.beatMs;
+  assert.equal(transitionBeat(nightBeats,0,beatMs),0);
+  assert.equal(transitionBeat(nightBeats,beatMs,beatMs),1);
+  assert.equal(transitionFinished(nightBeats,nightBeats*beatMs-1,beatMs),false);
+  assert.equal(transitionFinished(nightBeats,nightBeats*beatMs,beatMs),true);
   assert.equal(transitionFinished(HEFEI.transitionBeats.days_pass.length,HEFEI.transitionBeats.days_pass.length*HEFEI.beatMs,HEFEI.beatMs),true);
   assert.ok(HEFEI.transitionBeats.days_pass.length*HEFEI.beatMs<=6000);
 });
