@@ -1,0 +1,296 @@
+{
+  "directions": {
+    "left": {
+      "spanMs": 2199.9,
+      "world": {
+        "n": 132,
+        "mean": 1,
+        "std": 0,
+        "min": 1,
+        "max": 1,
+        "variance": 0
+      },
+      "screen": {
+        "n": 132,
+        "mean": 2,
+        "std": 0,
+        "min": 2,
+        "max": 2,
+        "variance": 0
+      },
+      "screenPixel": {
+        "n": 132,
+        "mean": 2,
+        "std": 0,
+        "min": 2,
+        "max": 2,
+        "variance": 0
+      },
+      "screenPixelHistogram": {
+        "2": 132
+      },
+      "speed": {
+        "n": 132,
+        "mean": 60.003604711696646,
+        "std": 0.22932655684443884,
+        "min": 59.52380952380888,
+        "max": 60.6060606060606,
+        "variance": 0.052590669674125644
+      },
+      "zeroMove": 0,
+      "animIntervalMs": {
+        "n": 8,
+        "mean": 249.9875,
+        "std": 8.325178301393844,
+        "min": 233.30000000000018,
+        "max": 266.5999999999999,
+        "variance": 69.30859374999889
+      }
+    },
+    "right": {
+      "spanMs": 2183.2999999999997,
+      "world": {
+        "n": 131,
+        "mean": 1,
+        "std": 0,
+        "min": 1,
+        "max": 1,
+        "variance": 0
+      },
+      "screen": {
+        "n": 131,
+        "mean": 2,
+        "std": 0,
+        "min": 2,
+        "max": 2,
+        "variance": 0
+      },
+      "screenPixel": {
+        "n": 131,
+        "mean": 2,
+        "std": 0,
+        "min": 2,
+        "max": 2,
+        "variance": 0
+      },
+      "screenPixelHistogram": {
+        "2": 131
+      },
+      "speed": {
+        "n": 131,
+        "mean": 60.00169446623355,
+        "std": 0.21608657572521434,
+        "min": 59.52380952380888,
+        "max": 60.6060606060606,
+        "variance": 0.04669340820864879
+      },
+      "zeroMove": 0,
+      "animIntervalMs": {
+        "n": 8,
+        "mean": 249.9875,
+        "std": 8.375326486173309,
+        "min": 233.20000000000073,
+        "max": 266.6999999999998,
+        "variance": 70.14609374999615
+      }
+    },
+    "down": {
+      "spanMs": 1699.8999999999996,
+      "world": {
+        "n": 102,
+        "mean": 1,
+        "std": 0,
+        "min": 1,
+        "max": 1,
+        "variance": 0
+      },
+      "screen": {
+        "n": 102,
+        "mean": 2,
+        "std": 0,
+        "min": 2,
+        "max": 2,
+        "variance": 0
+      },
+      "screenPixel": {
+        "n": 102,
+        "mean": 2,
+        "std": 0,
+        "min": 2,
+        "max": 2,
+        "variance": 0
+      },
+      "screenPixelHistogram": {
+        "2": 102
+      },
+      "speed": {
+        "n": 102,
+        "mean": 60.00448289010781,
+        "std": 0.239214172248517,
+        "min": 59.52380952380565,
+        "max": 60.6060606060606,
+        "variance": 0.05722342020454316
+      },
+      "zeroMove": 0,
+      "animIntervalMs": {
+        "n": 6,
+        "mean": 250,
+        "std": 9.613012014972522,
+        "min": 233.29999999999927,
+        "max": 266.60000000000036,
+        "variance": 92.41000000000606
+      }
+    },
+    "up": {
+      "spanMs": 1683.2999999999993,
+      "world": {
+        "n": 101,
+        "mean": 1,
+        "std": 0,
+        "min": 1,
+        "max": 1,
+        "variance": 0
+      },
+      "screen": {
+        "n": 101,
+        "mean": 2,
+        "std": 0,
+        "min": 2,
+        "max": 2,
+        "variance": 0
+      },
+      "screenPixel": {
+        "n": 101,
+        "mean": 2,
+        "std": 0,
+        "min": 2,
+        "max": 2,
+        "variance": 0
+      },
+      "screenPixelHistogram": {
+        "2": 101
+      },
+      "speed": {
+        "n": 101,
+        "mean": 60.002098203162426,
+        "std": 0.23367078442433564,
+        "min": 59.52380952380565,
+        "max": 60.6060606060606,
+        "variance": 0.054602035493484344
+      },
+      "zeroMove": 0,
+      "animIntervalMs": {
+        "n": 6,
+        "mean": 250,
+        "std": 9.642095207993341,
+        "min": 233.1999999999989,
+        "max": 266.60000000000036,
+        "variance": 92.97000000000814
+      }
+    },
+    "travel": {
+      "spanMs": 3316.6000000000004,
+      "world": {
+        "n": 188,
+        "mean": 1,
+        "std": 0,
+        "min": 1,
+        "max": 1,
+        "variance": 0
+      },
+      "screen": {
+        "n": 188,
+        "mean": 2,
+        "std": 0,
+        "min": 2,
+        "max": 2,
+        "variance": 0
+      },
+      "screenPixel": {
+        "n": 188,
+        "mean": 2,
+        "std": 0,
+        "min": 2,
+        "max": 2,
+        "variance": 0
+      },
+      "screenPixelHistogram": {
+        "2": 188
+      },
+      "speed": {
+        "n": 188,
+        "mean": 60.00134938544324,
+        "std": 0.20655780516996725,
+        "min": 59.52380952380565,
+        "max": 60.6060606060606,
+        "variance": 0.04266612687663415
+      },
+      "zeroMove": 0,
+      "animIntervalMs": {
+        "n": 13,
+        "mean": 252.55384615384608,
+        "std": 15.799786531401768,
+        "min": 233.29999999999927,
+        "max": 300,
+        "variance": 249.6332544378647
+      }
+    }
+  },
+  "pooledWorld": {
+    "n": 654,
+    "mean": 1,
+    "std": 0,
+    "min": 1,
+    "max": 1,
+    "variance": 0
+  },
+  "pooledAnimIntervalMs": {
+    "n": 41,
+    "mean": 250.8048780487805,
+    "std": 11.615148880738149,
+    "min": 233.1999999999989,
+    "max": 300,
+    "variance": 134.91168352171266
+  },
+  "marks": [
+    {
+      "name": "left",
+      "at": 1561,
+      "key": "ArrowLeft",
+      "ms": 2200
+    },
+    {
+      "name": "right",
+      "at": 3956,
+      "key": "ArrowRight",
+      "ms": 2200
+    },
+    {
+      "name": "down",
+      "at": 9858,
+      "key": "ArrowDown",
+      "ms": 1700
+    },
+    {
+      "name": "up",
+      "at": 11745,
+      "key": "ArrowUp",
+      "ms": 1700
+    }
+  ],
+  "origin": {
+    "x": 190,
+    "y": 196
+  },
+  "top": {
+    "x": 270,
+    "y": 88
+  },
+  "end": {
+    "x": 270,
+    "y": 89
+  },
+  "toColumn": true,
+  "toTop": true,
+  "errors": []
+}

@@ -1,7 +1,7 @@
-import {WORLD,move,nearbyAll} from './world.mjs';
+import {WORLD,nearbyAll,integrateWalk,MOVE_SPEED} from './world.mjs';
 import {createChapter} from './story.mjs';
 import {OFFICE,HEFEI,HANGZHOU,actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './scene-config.mjs';
-import {createActor,atlasBounds,bubblePosition,typingFrame,motionForRender} from './actors.mjs';
+import {createActor,atlasBounds,bubblePosition,typingFrame,motionForRender,walkClock} from './actors.mjs';
 import {GAME_TITLE} from './title.mjs';
 const chapterKey=new URLSearchParams(location.search).get('chapter');
 const sceneConfig=chapterKey==='hangzhou'?HANGZHOU:chapterKey==='hefei'?HEFEI:OFFICE;
@@ -33,7 +33,7 @@ const actorViews=new Map(),atlasData={};
 let dialogueSpeaker='player',currentSpeaker='player',facing='down',walkTime=0,moving=false,dialogueObject=null,lastMovedAt=-Infinity;
 const keys=new Set();
 let position={x:172,y:154},state='loading',active=null,chapter,snapshot,storage,saving=true;
-let renderer,scene,camera,player,previous=0,accumulator=0,raf=0,choicesReady=0,dismissible=true;
+let renderer,scene,camera,player,previous=0,walkRemainder=0,raf=0,choicesReady=0,dismissible=true;
 let lastUISnapshot=null,lastInteraction='',selectedTargetID='';
 let castSnapshot=null,castCache=sceneConfig;
 let transitionEvent=null,transitionStarted=0,transitionIndex=-1,awardOpen=false,awardFlashUntil=0,returnToJourney=false,journeyMode=null;
@@ -71,7 +71,7 @@ const readingKeys=new Set(['PageUp','PageDown','Home','End','ArrowUp','ArrowDown
 const movement=new Map([['ArrowLeft',[-1,0]],['a',[-1,0]],['ArrowRight',[1,0]],['d',[1,0]],['ArrowUp',[0,-1]],['w',[0,-1]],['ArrowDown',[0,1]],['s',[0,1]]]);
 const actionTitles={open_forum_post:'打开论坛反馈',cto_rallies_team:'听 CTO 排查',confirm_feedback_reviewed:'重读论坛反馈',confirm_recheck_visited:'查看排查记录',confirm_impact_scope:'确认这次影响到谁',resume_narrative:'这轮排查先到这里',review_test_plan:'查看补测清单',review_trap_comment:'查看坑点注释',write_manual_entry:'把这一页写进手册',open_journey:'打开这段路程',notice_react:'看见下一章',finish_journey:'这段路程看完了'};
 const pageLines={open_forum_post:['office-daily','office-n3','office-reaction'],cto_rallies_team:['incident-rally'],confirm_feedback_reviewed:['investigation-confirm-1'],confirm_recheck_visited:['investigation-confirm-3'],confirm_impact_scope:['investigation-confirm-2'],resume_narrative:['investigation-pending'],review_test_plan:['learning-test-first'],review_trap_comment:['learning-comment-first'],write_manual_entry:['learning-manual-1'],open_journey:['journey-open']};
-function clearInput(){keys.clear();accumulator=0;previous=0;}
+function clearInput(){keys.clear();previous=0;walkRemainder=0;}
 function setState(next){state=next;clearInput();}
 function optionScope(){return state==='paused'?pauseMenu:state==='dialogue'?(systemDialog.open?systemDialog:conversation):state==='journey'?document.querySelector('#journey-map'):null;}
 function enabledOptions(scope=optionScope()){return [...(scope?.querySelectorAll('.choices button')||[])].filter(b=>!b.disabled&&b.getAttribute('aria-disabled')!=='true');}
@@ -543,13 +543,15 @@ function frame(now){
   const elapsed=previous?Math.min((now-previous)/1000,.1):0;previous=now;
   const oldX=position.x,oldY=position.y;let intent=false;
   if(state==='explore'){
-    accumulator+=elapsed;let dx=0,dy=0;
+    let dx=0,dy=0;
     for(const key of keys){const delta=movement.get(key);if(delta){dx+=delta[0];dy+=delta[1];}}
     intent=!!(dx||dy);
     if(dx||dy)facing=Math.abs(dx)>=Math.abs(dy)?(dx<0?'left':'right'):(dy<0?'up':'down');
-    while(accumulator>=1/60){position=move(position,dx,dy,1/60,sceneConfig);accumulator-=1/60;}
-  }
-  const motion=motionForRender(state==='explore',intent,position.x!==oldX||position.y!==oldY,now,lastMovedAt);moving=motion.moving;lastMovedAt=motion.lastMovedAt;walkTime=moving?walkTime+elapsed:0;
+    const step=integrateWalk(position,dx,dy,elapsed,sceneConfig,walkRemainder);
+    position={x:step.x,y:step.y};walkRemainder=step.remainder;
+  }else walkRemainder=0;
+  const dist=Math.hypot(position.x-oldX,position.y-oldY);
+  const motion=motionForRender(state==='explore',intent,dist>0,now,lastMovedAt);moving=motion.moving;lastMovedAt=motion.lastMovedAt;walkTime=walkClock(walkTime,moving,dist,MOVE_SPEED);
   if(state==='transition'&&transitionEvent){
     const beats=sceneConfig.transitionBeats[transitionEvent];
     const index=transitionBeat(beats.length,now-transitionStarted,sceneConfig.beatMs);
@@ -575,7 +577,7 @@ function frame(now){
     views.standing.mesh.visible=!typing;if(views.seated)views.seated.mesh.visible=typing;
     const view=typing?views.seated:views.standing;
     const play=state!=='paused'&&!(state==='dialogue'&&currentSpeaker===actor.id&&!actor.controllable);
-    view.update(renderPosition(actor),actor.controllable?facing:'down',actor.controllable&&moving,walkTime,typing?typingFrame(actor.typingColumn,now/1000,play):null);
+    view.update(renderPosition(actor),actor.controllable?facing:'down',actor.controllable&&moving,walkTime,typing?typingFrame(actor.typingColumn,now/1000,play):null,actor.controllable&&!typing);
   }
   drawSkillGlints(now);
   positionEffects();placeBubble();updateUI();renderer.render(scene,camera);

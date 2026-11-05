@@ -1,0 +1,326 @@
+{
+  "speed": {
+    "before": 54,
+    "after": 60,
+    "reason": "54px/s is 0.9 world pixel per 60Hz frame. Integer placement then holds for one frame about every ten, a 6Hz hitch. 60px/s is exactly one world pixel per 60Hz frame, and at 2x display that is 2 screen pixels every frame."
+  },
+  "method": "Playwright 无头 Chrome，合肥章。屏幕按 2 倍整数缩放（舞台 768×432）。直方图统计 0<dt≤50ms 的稳定帧，含每段起步第一帧。",
+  "before": {
+    "world": {
+      "n": 725,
+      "mean": 0.8913103448275749,
+      "std": 0.27345870311032267,
+      "min": 0,
+      "max": 1.8000000000000114,
+      "variance": 0.0747796623067796
+    },
+    "screenPixel": {
+      "n": 725,
+      "mean": 1.7779310344827586,
+      "std": 0.6880726671244535,
+      "min": 0,
+      "max": 4,
+      "variance": 0.4734439952437589
+    }
+  },
+  "after": {
+    "world": {
+      "n": 654,
+      "mean": 1,
+      "std": 0,
+      "min": 1,
+      "max": 1,
+      "variance": 0
+    },
+    "screenPixel": {
+      "n": 654,
+      "mean": 2,
+      "std": 0,
+      "min": 2,
+      "max": 2,
+      "variance": 0
+    }
+  },
+  "histograms": {
+    "before": {
+      "left": {
+        "0": 31,
+        "1": 18,
+        "2": 53,
+        "3": 9,
+        "4": 21
+      },
+      "right": {
+        "1": 27,
+        "2": 104
+      },
+      "down": {
+        "1": 25,
+        "2": 97
+      },
+      "up": {
+        "0": 1,
+        "1": 25,
+        "2": 97
+      },
+      "travel": {
+        "0": 5,
+        "1": 43,
+        "2": 169
+      }
+    },
+    "after": {
+      "left": {
+        "2": 132
+      },
+      "right": {
+        "2": 131
+      },
+      "down": {
+        "2": 102
+      },
+      "up": {
+        "2": 101
+      },
+      "travel": {
+        "2": 188
+      }
+    }
+  },
+  "directions": {
+    "before": {
+      "left": {
+        "spanMs": 2200,
+        "world": {
+          "n": 132,
+          "mean": 0.8931818181818239,
+          "std": 0.6117774875025076,
+          "min": 0,
+          "max": 1.8000000000000114,
+          "variance": 0.3742716942148809
+        },
+        "screenPixel": {
+          "n": 132,
+          "mean": 1.7803030303030303,
+          "std": 1.3160684905463707,
+          "min": 0,
+          "max": 4,
+          "variance": 1.7320362718090025
+        },
+        "screenPixelHistogram": {
+          "0": 31,
+          "1": 18,
+          "2": 53,
+          "3": 9,
+          "4": 21
+        }
+      },
+      "right": {
+        "spanMs": 2183.2000000000003,
+        "world": {
+          "n": 131,
+          "mean": 0.9000000000000057,
+          "std": 0,
+          "min": 0.9000000000000057,
+          "max": 0.9000000000000057,
+          "variance": 0
+        },
+        "screenPixel": {
+          "n": 131,
+          "mean": 1.7938931297709924,
+          "std": 0.40450813128219126,
+          "min": 1,
+          "max": 2,
+          "variance": 0.16362682827341046
+        },
+        "screenPixelHistogram": {
+          "1": 27,
+          "2": 104
+        }
+      },
+      "down": {
+        "spanMs": 2033.199999999999,
+        "world": {
+          "n": 122,
+          "mean": 0.9000000000000057,
+          "std": 0,
+          "min": 0.9000000000000057,
+          "max": 0.9000000000000057,
+          "variance": 0
+        },
+        "screenPixel": {
+          "n": 122,
+          "mean": 1.7950819672131149,
+          "std": 0.40364171318836534,
+          "min": 1,
+          "max": 2,
+          "variance": 0.16292663262563858
+        },
+        "screenPixelHistogram": {
+          "1": 25,
+          "2": 97
+        }
+      },
+      "up": {
+        "spanMs": 2049.8999999999996,
+        "world": {
+          "n": 123,
+          "mean": 0.892682926829274,
+          "std": 0.08081971475990729,
+          "min": 0,
+          "max": 0.9000000000000057,
+          "variance": 0.006531826293872777
+        },
+        "screenPixel": {
+          "n": 123,
+          "mean": 1.7804878048780488,
+          "std": 0.43311286510137237,
+          "min": 0,
+          "max": 2,
+          "variance": 0.18758675391631957
+        },
+        "screenPixelHistogram": {
+          "0": 1,
+          "1": 25,
+          "2": 97
+        }
+      },
+      "travel": {
+        "spanMs": 3799.9000000000005,
+        "world": {
+          "n": 217,
+          "mean": 0.8792626728110632,
+          "std": 0.13503169158055106,
+          "min": 0,
+          "max": 0.9000000000000057,
+          "variance": 0.018233557731105066
+        },
+        "screenPixel": {
+          "n": 217,
+          "mean": 1.7557603686635945,
+          "std": 0.48028073366502816,
+          "min": 0,
+          "max": 2,
+          "variance": 0.23066958312981772
+        },
+        "screenPixelHistogram": {
+          "0": 5,
+          "1": 43,
+          "2": 169
+        }
+      }
+    },
+    "after": {
+      "left": {
+        "spanMs": 2199.9,
+        "world": {
+          "n": 132,
+          "mean": 1,
+          "std": 0,
+          "min": 1,
+          "max": 1,
+          "variance": 0
+        },
+        "screenPixel": {
+          "n": 132,
+          "mean": 2,
+          "std": 0,
+          "min": 2,
+          "max": 2,
+          "variance": 0
+        },
+        "screenPixelHistogram": {
+          "2": 132
+        }
+      },
+      "right": {
+        "spanMs": 2183.2999999999997,
+        "world": {
+          "n": 131,
+          "mean": 1,
+          "std": 0,
+          "min": 1,
+          "max": 1,
+          "variance": 0
+        },
+        "screenPixel": {
+          "n": 131,
+          "mean": 2,
+          "std": 0,
+          "min": 2,
+          "max": 2,
+          "variance": 0
+        },
+        "screenPixelHistogram": {
+          "2": 131
+        }
+      },
+      "down": {
+        "spanMs": 1699.8999999999996,
+        "world": {
+          "n": 102,
+          "mean": 1,
+          "std": 0,
+          "min": 1,
+          "max": 1,
+          "variance": 0
+        },
+        "screenPixel": {
+          "n": 102,
+          "mean": 2,
+          "std": 0,
+          "min": 2,
+          "max": 2,
+          "variance": 0
+        },
+        "screenPixelHistogram": {
+          "2": 102
+        }
+      },
+      "up": {
+        "spanMs": 1683.2999999999993,
+        "world": {
+          "n": 101,
+          "mean": 1,
+          "std": 0,
+          "min": 1,
+          "max": 1,
+          "variance": 0
+        },
+        "screenPixel": {
+          "n": 101,
+          "mean": 2,
+          "std": 0,
+          "min": 2,
+          "max": 2,
+          "variance": 0
+        },
+        "screenPixelHistogram": {
+          "2": 101
+        }
+      },
+      "travel": {
+        "spanMs": 3316.6000000000004,
+        "world": {
+          "n": 188,
+          "mean": 1,
+          "std": 0,
+          "min": 1,
+          "max": 1,
+          "variance": 0
+        },
+        "screenPixel": {
+          "n": 188,
+          "mean": 2,
+          "std": 0,
+          "min": 2,
+          "max": 2,
+          "variance": 0
+        },
+        "screenPixelHistogram": {
+          "2": 188
+        }
+      }
+    }
+  }
+}
