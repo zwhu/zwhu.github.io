@@ -1,0 +1,28 @@
+{
+ "id": "hefei-v3/walkable-seats",
+ "script": "tools/v3/make_walkable3.py (layout in tools/v3/layout3.py)",
+ "note": "美术建议，最终坐标以工程定的为准",
+ "files": [
+  {
+   "path": "art/processed/hefei-v3/walkable-seats/walkable-seats-384x216-x4.png",
+   "sha256": "46bac05f49fe571a0540fc49ec194febe62241269bc5d3c4d469376da58476c6",
+   "size": [
+    1536,
+    864
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v3/walkable-seats/walkable-seats-384x216.png",
+   "sha256": "e563af26064e7d8d88e1ca95668d33a94fb7a4ef82cc70d014464f6cddfc978c",
+   "size": [
+    384,
+    216
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v3/walkable-seats/walkable-seats.json",
+   "sha256": "81b8877f510edfcd81093d1abf34fc1138ffaf1c1851ad3f6306d407b0f3b990"
+  }
+ ],
+ "status": "candidate_pending_producer_review"
+}

@@ -1,0 +1,98 @@
+{
+ "id": "hefei-v3/compare",
+ "scripts": [
+  "tools/v3/make_mocks3.py"
+ ],
+ "reused_v2_assets": [
+  "art/processed/hefei-v2/hefei-founder-walk/walk-sheet-32x48.png",
+  "art/processed/hefei-v2/hefei-props/linux-git-screen/icon.png",
+  "art/processed/hefei-v2/hefei-props/frontend-jquery/icon.png",
+  "art/processed/hefei-v2/hefei-props/java-book/icon.png",
+  "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon.png"
+ ],
+ "nanjing_refs": [
+  "/workspace/career-rpg-ref/web/art/office-room-v2.png",
+  "/workspace/career-rpg-ref/web/art/typing-team-v1.png",
+  "/workspace/career-rpg-ref/web/art/player-walk-v1.png",
+  "/workspace/career-rpg-ref/web/art/npc-team-v1.png"
+ ],
+ "files": [
+  {
+   "path": "art/processed/hefei-v3/compare/mocks3.json",
+   "sha256": "6650b05b373fc715edf64f9f3987affe029c399f5ca015c8ac13e457d096d79b"
+  },
+  {
+   "path": "art/processed/hefei-v3/compare/nanjing-vs-hefei-v3-thumb-x2.png",
+   "sha256": "a75ad2e58c428a75ba51ed2aa1bf2b707ce4e21812dc3ed44e25ef38610decac",
+   "size": [
+    784,
+    216
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v3/compare/nanjing-vs-hefei-v3-x3.png",
+   "sha256": "0f72c9fddd90b56b108630682b3c1a04f2f01d422810bdede159f4f9b5f7f405",
+   "size": [
+    2328,
+    688
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v3/compare/props-mock-day-384x216-x4.png",
+   "sha256": "3330aab71b42ab5a6856916898a5cb25fe1cedde7214c7bf2a6968bc6efd770b",
+   "size": [
+    1536,
+    864
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v3/compare/props-mock-day-384x216.png",
+   "sha256": "4d5ea450ac87fe2af19382b3f34da359e367eb0918885b5df1c5063bb7995be8",
+   "size": [
+    384,
+    216
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v3/compare/scale-mock-day-384x216-x4.png",
+   "sha256": "4777abf4b49abfe4b25869188b0a23ef408786cca89a72c3ebb414f3ba5d42f4",
+   "size": [
+    1536,
+    864
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v3/compare/scale-mock-day-384x216.png",
+   "sha256": "0ddbb1b7111364914025ced782b133e8c720c170db16d6dd84b867a676846f6d",
+   "size": [
+    384,
+    216
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v3/compare/scale-mock-night-384x216-x4.png",
+   "sha256": "90f7bbf9262f214eed8540df743c749bfb236503fffcc763f63a313c74c2543f",
+   "size": [
+    1536,
+    864
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v3/compare/scale-mock-night-384x216.png",
+   "sha256": "2902f4f05c385c040a3c61dd60772f9126671e93b18f018302a8a2ff7b8f66b5",
+   "size": [
+    384,
+    216
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v3/compare/seated-mock-my_pc-x5.png",
+   "sha256": "3dd325072ffb85763926a9aff066303189637d6b200fd7f1b83291017295208c",
+   "size": [
+    1540,
+    580
+   ]
+  }
+ ],
+ "note": "review aids only, not runtime assets"
+}

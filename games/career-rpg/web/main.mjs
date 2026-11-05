@@ -324,6 +324,8 @@ function frame(now){
     if(!show)continue;
     const map=state==='explore'&&active&&active.id===item.id?item.hi:item.base;
     if(item.mat.map!==map)item.mat.map=map;
+    const opacity=item.nightDim&&snapshot.state==='night_study'?0.45:1;
+    if(item.mat.opacity!==opacity)item.mat.opacity=opacity;
   }
   const here=visibleRoom(),hide=here!==sceneConfig;
   for(const actor of sceneConfig.actors){
@@ -381,7 +383,7 @@ async function start(){
       const mesh=new THREE.Mesh(iconGeometry,mat);
       mesh.scale.set(object.iconSize[0],object.iconSize[1],1);
       mesh.position.set(object.iconAt.x,sceneConfig.height-object.iconAt.y,1);mesh.renderOrder=1;scene.add(mesh);
-      propViews.push({id:object.id,mesh,mat,base,hi,presentIn:object.presentIn||null});
+      propViews.push({id:object.id,mesh,mat,base,hi,presentIn:object.presentIn||null,nightDim:!!object.nightDim});
     });
   }
   for(const actor of sceneConfig.actors){

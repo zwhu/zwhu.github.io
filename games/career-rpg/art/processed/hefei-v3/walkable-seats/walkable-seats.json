@@ -1,0 +1,372 @@
+{
+ "_note": "美术建议（art suggestion）：384x216 逻辑像素，脚底锚点，格式仿 Nanjing scene-config.mjs；最终坐标以工程定的为准。",
+ "logicalSize": {
+  "width": 384,
+  "height": 216
+ },
+ "bounds": {
+  "left": 4,
+  "right": 380,
+  "top": 78,
+  "bottom": 200
+ },
+ "obstacles": [
+  {
+   "id": "bookshelf_manual",
+   "x": 6,
+   "y": 0,
+   "w": 36,
+   "h": 82
+  },
+  {
+   "id": "fridge",
+   "x": 192,
+   "y": 0,
+   "w": 26,
+   "h": 87
+  },
+  {
+   "id": "microwave_cabinet",
+   "x": 217,
+   "y": 0,
+   "w": 41,
+   "h": 88
+  },
+  {
+   "id": "plant",
+   "x": 263,
+   "y": 0,
+   "w": 23,
+   "h": 83
+  },
+  {
+   "id": "long_table",
+   "x": 38,
+   "y": 106,
+   "w": 216,
+   "h": 68
+  },
+  {
+   "id": "chair_T1",
+   "x": 64,
+   "y": 94,
+   "w": 22,
+   "h": 12
+  },
+  {
+   "id": "chair_T2",
+   "x": 136,
+   "y": 94,
+   "w": 22,
+   "h": 12
+  },
+  {
+   "id": "chair_T3",
+   "x": 204,
+   "y": 94,
+   "w": 22,
+   "h": 12
+  },
+  {
+   "id": "chair_B1",
+   "x": 63,
+   "y": 157,
+   "w": 23,
+   "h": 27
+  },
+  {
+   "id": "chair_B2",
+   "x": 135,
+   "y": 157,
+   "w": 23,
+   "h": 27
+  },
+  {
+   "id": "chair_B3",
+   "x": 204,
+   "y": 157,
+   "w": 23,
+   "h": 27
+  },
+  {
+   "id": "sofa",
+   "x": 309,
+   "y": 82,
+   "w": 64,
+   "h": 39
+  },
+  {
+   "id": "tea_table",
+   "x": 287,
+   "y": 131,
+   "w": 78,
+   "h": 44
+  },
+  {
+   "id": "visitor_chair_L",
+   "x": 300,
+   "y": 168,
+   "w": 21,
+   "h": 25
+  },
+  {
+   "id": "visitor_chair_R",
+   "x": 330,
+   "y": 168,
+   "w": 21,
+   "h": 25
+  }
+ ],
+ "navigation": {
+  "transitY": 192
+ },
+ "seats": [
+  {
+   "id": "T1",
+   "row": "top",
+   "seat": {
+    "x": 75,
+    "y": 107
+   },
+   "facing": "down",
+   "interaction": {
+    "x": 75,
+    "y": 91
+   },
+   "posture": "seated (needs a front-facing seated frame; typing-team-v1 has back views only)"
+  },
+  {
+   "id": "T2",
+   "row": "top",
+   "seat": {
+    "x": 147,
+    "y": 107
+   },
+   "facing": "down",
+   "interaction": {
+    "x": 147,
+    "y": 91
+   },
+   "posture": "seated (needs a front-facing seated frame; typing-team-v1 has back views only)"
+  },
+  {
+   "id": "T3",
+   "row": "top",
+   "seat": {
+    "x": 215,
+    "y": 107
+   },
+   "facing": "down",
+   "interaction": {
+    "x": 215,
+    "y": 91
+   },
+   "posture": "seated (needs a front-facing seated frame; typing-team-v1 has back views only)"
+  },
+  {
+   "id": "B1",
+   "row": "bottom",
+   "seat": {
+    "x": 75,
+    "y": 176
+   },
+   "facing": "up",
+   "interaction": {
+    "x": 75,
+    "y": 192
+   },
+   "posture": "seatedTyping",
+   "note": "my_pc"
+  },
+  {
+   "id": "B2",
+   "row": "bottom",
+   "seat": {
+    "x": 147,
+    "y": 176
+   },
+   "facing": "up",
+   "interaction": {
+    "x": 147,
+    "y": 192
+   },
+   "posture": "seatedTyping"
+  },
+  {
+   "id": "B3",
+   "row": "bottom",
+   "seat": {
+    "x": 215,
+    "y": 176
+   },
+   "facing": "up",
+   "interaction": {
+    "x": 215,
+    "y": 192
+   },
+   "posture": "seatedTyping"
+  }
+ ],
+ "objects": [
+  {
+   "id": "my_pc",
+   "role": "my_pc",
+   "x": 75,
+   "y": 192,
+   "seat": {
+    "x": 75,
+    "y": 176
+   },
+   "seatId": "B1",
+   "box": {
+    "x": 64,
+    "y": 127,
+    "w": 24,
+    "h": 16
+   },
+   "markerPosition": {
+    "x": 75,
+    "y": 124
+   }
+  },
+  {
+   "id": "linux-git-screen",
+   "role": "linux",
+   "x": 147,
+   "y": 192,
+   "seatId": "B2",
+   "iconTopLeft": {
+    "x": 134,
+    "y": 127
+   },
+   "icon": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon.png",
+   "markerPosition": {
+    "x": 147,
+    "y": 123
+   }
+  },
+  {
+   "id": "db-nosql-screen",
+   "role": "db",
+   "x": 215,
+   "y": 192,
+   "seatId": "B3",
+   "iconTopLeft": {
+    "x": 201,
+    "y": 127
+   },
+   "icon": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon.png",
+   "markerPosition": {
+    "x": 216,
+    "y": 124
+   }
+  },
+  {
+   "id": "frontend-jquery",
+   "role": "jquery",
+   "x": 111,
+   "y": 180,
+   "iconTopLeft": {
+    "x": 94,
+    "y": 118
+   },
+   "icon": "art/processed/hefei-v2/hefei-props/frontend-jquery/icon.png",
+   "markerPosition": {
+    "x": 111,
+    "y": 115
+   }
+  },
+  {
+   "id": "java-book",
+   "role": "java",
+   "x": 240,
+   "y": 180,
+   "iconTopLeft": {
+    "x": 232,
+    "y": 129
+   },
+   "icon": "art/processed/hefei-v2/hefei-props/java-book/icon.png",
+   "markerPosition": {
+    "x": 240,
+    "y": 126
+   }
+  },
+  {
+   "id": "manual_shelf",
+   "role": "manual",
+   "x": 24,
+   "y": 90,
+   "box": {
+    "x": 6,
+    "y": 18,
+    "w": 36,
+    "h": 64
+   },
+   "markerPosition": {
+    "x": 24,
+    "y": 15
+   }
+  }
+ ],
+ "actors": {
+  "boss": {
+   "x": 326,
+   "y": 128,
+   "facing": "down",
+   "interaction": {
+    "x": 326,
+    "y": 128
+   },
+   "note": "stands between sofa and tea table, facing the two visitor chairs"
+  }
+ },
+ "entryPoints": {
+  "office": {
+   "x": 190,
+   "y": 196,
+   "facing": "up"
+  },
+  "door": {
+   "x": 172,
+   "y": 184,
+   "w": 36,
+   "h": 18
+  }
+ },
+ "checks": {
+  "reachable_from_spawn": {
+   "spawn": true,
+   "boss": true,
+   "seat_T1_interaction": true,
+   "seat_T2_interaction": true,
+   "seat_T3_interaction": true,
+   "seat_B1_interaction": true,
+   "seat_B2_interaction": true,
+   "seat_B3_interaction": true,
+   "my_pc_interaction": true,
+   "linux-git-screen_interaction": true,
+   "db-nosql-screen_interaction": true,
+   "frontend-jquery_interaction": true,
+   "java-book_interaction": true,
+   "manual_shelf_interaction": true
+  },
+  "seat_anchor_inside_its_chair": {
+   "T1": true,
+   "T2": true,
+   "T3": true,
+   "B1": true,
+   "B2": true,
+   "B3": true
+  },
+  "clearance_px": {
+   "right_aisle_table_to_tea_table_at_y150": 33,
+   "top_aisle_at_x75 (wall..T1 chair)": 16,
+   "top_aisle_at_x215 (microwave..T3 chair)": 7,
+   "bottom_aisle_at_x111": 27,
+   "bottom_aisle_at_x75 (B1 chair..wall)": 17,
+   "sofa_to_tea_table_at_x326": 10,
+   "left_aisle_at_y140 (wall..table)": 34,
+   "right_of_tea_table_at_y150": 16
+  }
+ }
+}

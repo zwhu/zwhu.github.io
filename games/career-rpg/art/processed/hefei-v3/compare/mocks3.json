@@ -1,0 +1,84 @@
+{
+ "props": {
+  "my_pc": [
+   64,
+   127,
+   24,
+   16
+  ],
+  "linux-git-screen": [
+   134,
+   127
+  ],
+  "db-nosql-screen": [
+   201,
+   127
+  ],
+  "frontend-jquery": [
+   94,
+   118
+  ],
+  "java-book": [
+   232,
+   129
+  ],
+  "manual_shelf": [
+   6,
+   18,
+   36,
+   64
+  ]
+ },
+ "scale": {
+  "boss": [
+   [
+    17,
+    44
+   ],
+   [
+    326,
+    128
+   ]
+  ],
+  "player_walk": [
+   18,
+   44
+  ],
+  "typing": [
+   [
+    25,
+    44
+   ],
+   [
+    25,
+    44
+   ],
+   [
+    25,
+    44
+   ],
+   [
+    26,
+    44
+   ]
+  ]
+ },
+ "seated": {
+  "typing_size": [
+   25,
+   44
+  ],
+  "B1_sprite_box": [
+   63,
+   132,
+   88,
+   176
+  ],
+  "head_rows": [
+   132,
+   146
+  ],
+  "B1_occluders_in_front": "none (bottom row is drawn after the table; sprite is closest to camera)",
+  "T1_occluded_rows": "table top y>=109 and monitor back y95-125 hide chest/hands; typing-team-v1 has only back-view frames"
+ }
+}
