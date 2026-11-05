@@ -2,7 +2,10 @@ import {WORLD,move,nearbyAll} from './world.mjs';
 import {createChapter} from './story.mjs';
 import {OFFICE,HEFEI,actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './scene-config.mjs';
 import {createActor,atlasBounds,bubblePosition,typingFrame,motionForRender} from './actors.mjs';
+import {SLOGAN} from './slogan.mjs';
 const sceneConfig=new URLSearchParams(location.search).get('chapter')==='hefei'?HEFEI:OFFICE;
+document.title=SLOGAN;
+const gameTitle=document.querySelector('#game-title');if(gameTitle)gameTitle.textContent=SLOGAN;
 
 const stage=document.querySelector('#stage');
 const loading=document.querySelector('#loading');
@@ -32,14 +35,31 @@ let position={x:172,y:154},state='loading',active=null,chapter,snapshot,storage,
 let renderer,scene,camera,player,previous=0,accumulator=0,raf=0,choicesReady=0,dismissible=true;
 let lastUISnapshot=null,lastInteraction='',selectedTargetID='';
 let castSnapshot=null,castCache=sceneConfig;
-let transitionEvent=null,transitionStarted=0,transitionIndex=-1;
-let roomMaterial,dayTexture,nightTexture,dimMesh,dimMaterial,lampMesh,card,cardImg,caption;
+let transitionEvent=null,transitionStarted=0,transitionIndex=-1,awardOpen=false,awardFlashUntil=0,returnToJourney=false,journeyMode=null;
+let audioCtx=null;const skillAudioLog=[];
+function ensureAudio(){try{if(!audioCtx)audioCtx=new AudioContext();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}catch{return null;}}
+function playSkillDing(){
+  const ctx=ensureAudio();if(!ctx)return;
+  const start=ctx.currentTime,notes=[660,880,1320];
+  for(let i=0;i<notes.length;i++){
+    const when=start+i*.06,osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.type='sine';osc.frequency.setValueAtTime(notes[i],when);osc.frequency.exponentialRampToValueAtTime(notes[i]*1.04,when+.09);
+    gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(.12,when+.015);gain.gain.exponentialRampToValueAtTime(.0001,when+.16);
+    osc.connect(gain);gain.connect(ctx.destination);osc.start(when);osc.stop(when+.18);
+    skillAudioLog.push({kind:'oscillator-start',frequency:notes[i],when});
+  }
+}
+window.careerSkillAudio=()=>skillAudioLog.map(entry=>({...entry}));
+let roomMaterial,dayTexture,nightTexture,dimMesh,dimMaterial,lampMesh,card,cardImg,caption,glintCanvas,glintCtx;
 const propViews=[],spareTextures=[];
+function readyRoles(){return new Set((chapter?.skillSlots?.(snapshot)||[]).filter(skill=>skill.status==='ready').map(skill=>skill.role));}
 function visibleRoom(){
   if(!snapshot)return sceneConfig;
   if(castSnapshot===snapshot)return castCache;
   const cast=presentCast(sceneConfig,snapshot);
-  castCache=cast===sceneConfig?sceneConfig:{...sceneConfig,actors:cast.actors,objects:cast.objects};
+  const ready=readyRoles();
+  const objects=ready.size?sceneConfig.objects.filter(object=>cast.objects.includes(object)||ready.has(object.role)):cast.objects;
+  castCache=cast===sceneConfig&&!ready.size?sceneConfig:{...sceneConfig,actors:cast.actors,objects};
   castSnapshot=snapshot;return castCache;
 }
 function chapterSpawn(){return {...sceneConfig.entryPoints[chapter.initial().state]};}
@@ -48,11 +68,11 @@ let pageContext=null,dialogueBack=null,dialogueReturnFocus=stage,pauseContext=nu
 const confirmationKeys=new Set();
 const readingKeys=new Set(['PageUp','PageDown','Home','End','ArrowUp','ArrowDown']);
 const movement=new Map([['ArrowLeft',[-1,0]],['a',[-1,0]],['ArrowRight',[1,0]],['d',[1,0]],['ArrowUp',[0,-1]],['w',[0,-1]],['ArrowDown',[0,1]],['s',[0,1]]]);
-const actionTitles={open_forum_post:'打开论坛反馈',cto_rallies_team:'和 CTO 一起排查',confirm_feedback_reviewed:'重读论坛反馈',confirm_recheck_visited:'查看排查记录',confirm_impact_scope:'确认这次影响到谁',resume_narrative:'这轮排查先到这里',review_test_plan:'查看补测清单',review_trap_comment:'查看坑点注释',write_manual_entry:'把这一页写进手册'};
-const pageLines={open_forum_post:['office-n3','office-reaction'],cto_rallies_team:['incident-rally'],confirm_feedback_reviewed:['investigation-confirm-1'],confirm_recheck_visited:['investigation-confirm-3'],confirm_impact_scope:['investigation-confirm-2'],resume_narrative:['investigation-pending'],review_test_plan:['learning-test-first'],review_trap_comment:['learning-comment-first'],write_manual_entry:['learning-manual-1']};
+const actionTitles={open_forum_post:'打开论坛反馈',cto_rallies_team:'听 CTO 排查',confirm_feedback_reviewed:'重读论坛反馈',confirm_recheck_visited:'查看排查记录',confirm_impact_scope:'确认这次影响到谁',resume_narrative:'这轮排查先到这里',review_test_plan:'查看补测清单',review_trap_comment:'查看坑点注释',write_manual_entry:'把这一页写进手册',open_journey:'打开这段路程',notice_react:'看见下一章',finish_journey:'这段路程看完了'};
+const pageLines={open_forum_post:['office-daily','office-n3','office-reaction'],cto_rallies_team:['incident-rally'],confirm_feedback_reviewed:['investigation-confirm-1'],confirm_recheck_visited:['investigation-confirm-3'],confirm_impact_scope:['investigation-confirm-2'],resume_narrative:['investigation-pending'],review_test_plan:['learning-test-first'],review_trap_comment:['learning-comment-first'],write_manual_entry:['learning-manual-1'],open_journey:['journey-open']};
 function clearInput(){keys.clear();accumulator=0;previous=0;}
 function setState(next){state=next;clearInput();}
-function optionScope(){return state==='paused'?pauseMenu:state==='dialogue'?(systemDialog.open?systemDialog:conversation):null;}
+function optionScope(){return state==='paused'?pauseMenu:state==='dialogue'?(systemDialog.open?systemDialog:conversation):state==='journey'?document.querySelector('#journey-map'):null;}
 function enabledOptions(scope=optionScope()){return [...(scope?.querySelectorAll('.choices button')||[])].filter(b=>!b.disabled&&b.getAttribute('aria-disabled')!=='true');}
 function focusElement(element){(element?.isConnected&&element.matches('button, [href], [tabindex]')&&!element.disabled&&element.getAttribute('aria-disabled')!=='true'&&element.getClientRects().length?element:stage).focus({preventScroll:true});}
 function focusCurrentUI(){const scope=optionScope();if(scope){focusElement(scope.contains(lastGameFocus)?lastGameFocus:enabledOptions(scope)[0]);}else if(state==='explore')focusElement(lastGameFocus);}
@@ -104,7 +124,27 @@ function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeake
   choicesReady=performance.now()+180;
   if(system&&!systemDialog.open)systemDialog.showModal();
   drawPortrait(document.querySelector('#portrait'),currentSpeaker);
+  renderSkillSlots(options.slots||null);
   placeBubble();enabledOptions()[0]?.focus();updateUI();
+}
+function skillVisual(skill){return skill?.icon||sceneConfig.objects.find(item=>item.role===skill?.role)?.icon||'';}
+function placeSkillIcon(parent,src,alt){
+  if(!src)return;
+  const image=document.createElement('img');image.alt=alt||'';
+  image.addEventListener('error',()=>image.remove());
+  image.src=src;parent.append(image);
+}
+function renderSkillSlots(slots){
+  let row=document.querySelector('#skill-slots');
+  if(!slots){if(row)row.hidden=true;return;}
+  if(!row){row=document.createElement('div');row.id='skill-slots';document.querySelector('#dialogue').append(row);}
+  row.hidden=false;row.replaceChildren();row.style.gridTemplateColumns=`repeat(${slots.length},minmax(0,1fr))`;
+  for(const skill of slots){
+    const figure=document.createElement('figure'),caption=document.createElement('figcaption');
+    if(skill.status==='got'){placeSkillIcon(figure,skillVisual(skill),skill.name);caption.textContent=skill.name;}
+    else caption.textContent='???';
+    figure.append(caption);row.append(figure);
+  }
 }
 function lines(ids){return ids.map(id=>chapter.text(id)).filter(Boolean);}
 function persist(after){
@@ -124,6 +164,7 @@ function accept(event){
   const next=chapter.advance(snapshot,event);if(!next.accepted)return;
   const changed=next.snapshot.state!==snapshot.state;snapshot=next.snapshot;
   persist(()=>{
+    if(event==='open_journey'){openJourney('chapter');return;}
     const follow=sceneConfig.follow?.[event];
     if(follow){show(follow.title,lines(follow.lines),[],true,follow.speaker||'player');return;}
     if(changed){enterScene();return;}
@@ -152,7 +193,7 @@ function beginTransition(event){
   hideObjectCard();conversation.hidden=true;if(systemDialog.open)systemDialog.close();dialogueObject=null;
   transitionEvent=event;transitionStarted=performance.now();transitionIndex=-1;setState('transition');
   if(!caption){caption=document.createElement('p');caption.id='transition-caption';stage.append(caption);}
-  caption.textContent=chapter.text(sceneConfig.transitionLines[event]);caption.hidden=false;
+  caption.textContent=SLOGAN+'\n'+chapter.text(sceneConfig.transitionLines[event]);caption.hidden=false;
   applyBeat(sceneConfig.transitionBeats[event][0]);
 }
 function finishTransition(){
@@ -181,8 +222,9 @@ function manual(){
   dialogueSpeaker='player';
   const fromPause=state==='paused';
   if(pauseMenu.open)pauseMenu.close();
-  const full=snapshot.state==='complete';
-  show('工作手册',full?lines([chapter.manualId]):['这页还没有写完。',chapter.target(snapshot)],full?[{label:'从办公室重玩',id:'replay',run:confirmReplay}]:[],true,'player',false,{back:fromPause?()=>pause():null});
+  const written=chapter.has(snapshot,'manual_entry_written')||snapshot.state==='complete';
+  const slots=chapter.skillSlots?.(snapshot)||null;
+  show('工作手册',written?lines([chapter.manualId]):['这页还没有写完。',chapter.target(snapshot)],snapshot.state==='complete'?[{label:'从办公室重玩',id:'replay',run:confirmReplay}]:[],true,'player',false,{back:fromPause?()=>pause():null,slots});
 }
 function confirmReplay(){
   const fromPause=state==='paused',parent=fromPause?null:capturePage();
@@ -202,9 +244,9 @@ function enterHefei(){
     day_tasks:{title:'白天：第一次',lines:['day-narrator'],extra:['走到自己的工位。电脑上有黄色感叹号。']},
     night_study:{title:'深夜：学后端',lines:['night-narrator'],extra:['回到自己的工位，看看 Java，还有数据库和 NoSQL。']},
     raise:{title:'两个月后',lines:['raise-narrator'],extra:['走到老板桌前。']},
-    complete:{title:'合肥 · 本章完成',lines:['manual-1'],extra:['这句话记在手册里。'],choices:[{label:'从办公室重玩',id:'replay',run:confirmReplay}]},
+    complete:{title:'合肥 · 本章完成',lines:['manual-1'],extra:['这句话记在手册里。'],choices:[{label:'从合肥走到南京',id:'journey',run:()=>openJourney('bridge')},{label:'从办公室重玩',id:'replay',run:confirmReplay}]},
   }[snapshot.state];
-  show(copy.title,lines(copy.lines).concat(copy.extra),copy.choices||[],true);
+  show(copy.title,(snapshot.state==='interview'?[SLOGAN]:[]).concat(lines(copy.lines),copy.extra),copy.choices||[],true);
 }
 function enterScene(){
   dialogueSpeaker='player';
@@ -212,19 +254,160 @@ function enterScene(){
   if(sceneConfig.id==='hefei-office'){enterHefei();return;}
   const available=chapter.actions(snapshot,'dialog');
   if(snapshot.state==='report')show('读到反馈',lines(['report-reaction','report-player-1']),available.map(t=>({label:t.label,event:t.event,run:()=>accept(t.event)})),false);
-  else if(snapshot.state==='incident')show('我呆住了',lines(['incident-freeze']).concat('随后，CTO 带着我们一起排查。走到 CTO 身边，和大家一起看看。'));
-  else if(snapshot.state==='investigation')show('一起排查',lines(['investigation-n1']));
-  else if(snapshot.state==='restored')show('整整两小时后',lines(['restored-n1','restored-n3']),available.map(t=>({label:t.label,event:t.event,run:()=>accept(t.event)})),false);
+  else if(snapshot.state==='incident')show('我呆住了',lines(['incident-freeze']).concat('随后，CTO 开始排查。走到 CTO 身边看看。'));
+  else if(snapshot.state==='investigation')show('排查',lines(['investigation-n1']));
+  else if(snapshot.state==='restored')show('整整两小时后',lines(['restored-n1','restored-n3','restored-awe']),available.map(t=>({label:t.label,event:t.event,run:()=>accept(t.event)})),false);
   else if(snapshot.state==='learning')show('留下这次教训',lines(['learning-n1']).concat('去中间的排查电脑，分别看看补测清单和坑点注释；两项都看过后，到右侧书架写下这页手册。'));
-  else if(snapshot.state==='complete')show('南京 · 本章完成',lines(['learning-manual-1','complete-n1']).concat('这次记住的，是线上用户、一起承担，以及把教训写成测试和注释。'),[{label:'从办公室重玩',id:'replay',run:confirmReplay}]);
-  else show('南京的办公室',lines(['office-n1']).concat('这是我第一次面对真实的线上 C 端用户。走到左侧电脑，看看论坛。'));
+  else if(snapshot.state==='journey'){if(chapter.has(snapshot,'journey_opened'))openJourney('chapter');else show('手册写好了',lines(['learning-manual-1']).concat('书架上会留下这次学到的东西。通道里有一张从合肥走到南京的地图。'));}
+  else if(snapshot.state==='complete')show('南京 · 本章完成',lines(['learning-manual-1','complete-n1','complete-n2']).concat('这次记住的，是第一次把 C 端交给真实用户，以及从失败里写下的测试和注释。'),[{label:'从办公室重玩',id:'replay',run:confirmReplay}]);
+  else show('南京的办公室',[SLOGAN].concat(lines(['office-n1','office-daily'])).concat('这是我第一次做 C 端。走到左侧电脑，看看论坛。'));
   updateUI();
+}
+function finishSkillAward(){
+  awardOpen=false;
+  const back=returnToJourney;returnToJourney=false;
+  conversation.hidden=true;dialogueObject=null;selectedTargetID='';
+  document.querySelector('#skill-award-icon')?.remove();
+  if(back){openJourney('chapter',true);return;}
+  setState('explore');stage.focus({preventScroll:true});
+}
+function showSkillAward(skill){
+  returnToJourney=journeyMode==='chapter'||state==='journey';
+  if(journeyPanel)journeyPanel.hidden=true;
+  awardOpen=true;awardFlashUntil=performance.now()+1600;playSkillDing();
+  show('获得技能',[`获得技能：${skill.name}`],[{label:'OK',id:'skill-ok',run:finishSkillAward}],false,'player',false);
+  document.querySelector('#skill-award-icon')?.remove();
+  const holder=document.createElement('span');
+  placeSkillIcon(holder,skillVisual(skill),'');
+  const image=holder.firstElementChild;if(!image)return;
+  image.id='skill-award-icon';
+  document.querySelector('#dialogue').prepend(image);
+}
+function collectSkill(skill){
+  const next=chapter.collect(snapshot,skill.id);if(!next.accepted)return;
+  snapshot=next.snapshot;castSnapshot=null;
+  persist(()=>showSkillAward(skill));
+}
+function readySkill(object){
+  if(!object?.role)return null;
+  return (chapter.skillSlots?.(snapshot)||[]).find(item=>item.role===object.role&&item.status==='ready')||null;
+}
+const journeyPanel=document.createElement('section');
+journeyPanel.id='journey-map';journeyPanel.hidden=true;journeyPanel.dataset.artSlot='hefei-nanjing';
+journeyPanel.innerHTML='<p id="journey-slogan"></p><div id="journey-stage"><canvas id="journey-canvas" width="384" height="216"></canvas></div><p id="journey-copy" hidden></p><div id="journey-choices" class="choices"></div>';
+stage.append(journeyPanel);
+document.querySelector('#journey-slogan').textContent=SLOGAN;
+let journeyPack=null,journeyMap=null,journeyProgress=0,journeyArrived=false,journeyFrame=0;
+window.careerJourney=()=>({progress:journeyProgress,arrived:journeyArrived});
+async function journeyDefinition(){
+  if(chapter?.journey)return chapter.journey;
+  if(!journeyPack){const response=await fetch('../design/chapter-01.json');if(!response.ok)throw new Error('旅程地图资料加载失败');journeyPack=await response.json();}
+  return journeyPack.journey;
+}
+async function loadJourneyMap(){
+  if(journeyMap)return journeyMap;
+  const base='./art/transition-map/';
+  const [map,marker,check,ring,lock,data]=await Promise.all([
+    loadImage(base+'map-384x216.png'),loadImage(base+'player-marker-24.png'),loadImage(base+'check-12.png'),loadImage(base+'highlight-ring.png'),loadImage(base+'lock-10.png'),
+    fetch(base+'transition-map.json').then(response=>{if(!response.ok)throw new Error('旅程地图坐标加载失败');return response.json();}),
+  ]);
+  journeyMap={map,marker,check,ring,lock,data};
+  return journeyMap;
+}
+function easeInOut(t){return t<.5?4*t*t*t:1-((-2*t+2)**3)/2;}
+const pixelLabels=new Map();
+function pixelLabel(text){
+  if(pixelLabels.has(text))return pixelLabels.get(text);
+  const canvas=document.createElement('canvas'),width=text.length*12+4,height=14;
+  canvas.width=width;canvas.height=height;
+  const pen=canvas.getContext('2d');pen.font='12px ui-monospace,monospace';pen.fillStyle='#3a2a1a';pen.textBaseline='middle';pen.textAlign='center';pen.fillText(text,width/2,8);
+  const pixels=pen.getImageData(0,0,width,height);
+  for(let i=3;i<pixels.data.length;i+=4)pixels.data[i]=pixels.data[i]>96?255:0;
+  pen.putImageData(pixels,0,0);
+  pixelLabels.set(text,canvas);
+  return canvas;
+}
+function drawJourney(progress){
+  const ctx=document.querySelector('#journey-canvas').getContext('2d'),art=journeyMap,nodes=Object.fromEntries(art.data.nodes.map(node=>[node.id,node]));
+  ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,384,216);ctx.drawImage(art.map,0,0);
+  const hefei=nodes.hefei,nanjing=nodes.nanjing,hangzhou=nodes.hangzhou;
+  ctx.drawImage(art.check,58,62);
+  ctx.drawImage(art.ring,nanjing.coords_logical.x-21,nanjing.coords_logical.y-24);
+  ctx.drawImage(art.lock,hangzhou.coords_logical.x-5,hangzhou.coords_logical.y-34);
+  const plaques={hefei:{x:36,y:133,w:34,h:16},nanjing:{x:168,y:131,w:44,h:16},hangzhou:{x:302,y:131,w:44,h:16}};
+  for(const node of art.data.nodes){
+    const box=plaques[node.id],label=pixelLabel(node.name);
+    ctx.fillStyle='#f6edd6';ctx.fillRect(box.x,box.y,box.w,box.h);
+    ctx.fillStyle='#6b4a32';
+    ctx.fillRect(box.x,box.y,box.w,1);ctx.fillRect(box.x,box.y+box.h-1,box.w,1);ctx.fillRect(box.x,box.y,1,box.h);ctx.fillRect(box.x+box.w-1,box.y,1,box.h);
+    ctx.drawImage(label,Math.round(box.x+(box.w-label.width)/2),Math.round(box.y+(box.h-label.height)/2));
+  }
+  const motion=art.data.animation_suggestion,t=easeInOut(Math.min(1,Math.max(0,progress)));
+  const x=motion.marker_start.x+(motion.marker_end.x-motion.marker_start.x)*t,y=motion.marker_start.y+(motion.marker_end.y-motion.marker_start.y)*t;
+  ctx.drawImage(art.marker,Math.round(x-art.data.marker_anchor.x),Math.round(y-art.data.marker_anchor.y));
+}
+function journeyButton(label,id,run){
+  const button=document.createElement('button');button.type='button';button.textContent=label;button.dataset.action=id;
+  button.addEventListener('click',event=>{if(event.detail>0&&performance.now()<choicesReady)return;run();});
+  return button;
+}
+function showJourneyChoices(){
+  const copy=document.querySelector('#journey-copy'),choices=document.querySelector('#journey-choices');
+  const stops=(journeyMode==='bridge'?journeyPackStops.filter(stop=>!stop.skill):journeyPackStops);
+  copy.hidden=false;copy.textContent=stops.map(stop=>stop.text).join('');
+  choices.replaceChildren();
+  if(journeyMode==='bridge')choices.append(journeyButton('走到南京','journey-arrive',closeJourney));
+  else{
+    const skill=(chapter.skillSlots?.(snapshot)||[]).find(entry=>entry.id==='react');
+    if(skill?.status==='ready')choices.append(journeyButton('拾取','journey-pickup',()=>collectSkill(skill)));
+    choices.append(journeyButton('这段路程看完了','journey-finish',finishJourney));
+  }
+  choicesReady=performance.now()+180;choices.querySelector('button')?.focus();
+}
+function paintJourney(now){
+  const duration=journeyMap.data.animation_suggestion.duration_ms_hefei_to_nanjing;
+  journeyProgress=journeyArrived?1:Math.min(1,(now-journeyStarted)/duration);
+  drawJourney(journeyProgress);
+  if(journeyProgress>=1&&!journeyArrived){journeyArrived=true;ensureReact();}
+  if(!journeyArrived)journeyFrame=requestAnimationFrame(paintJourney);
+}
+let journeyStarted=0,journeyPackStops=[];
+function ensureReact(){
+  if(journeyMode!=='chapter'||chapter.has(snapshot,'react_noticed')){showJourneyChoices();return;}
+  const next=chapter.advance(snapshot,'notice_react');if(!next.accepted){showJourneyChoices();return;}
+  snapshot=next.snapshot;castSnapshot=null;persist(showJourneyChoices);
+}
+function finishJourney(){
+  const next=chapter.advance(snapshot,'finish_journey');if(!next.accepted)return;
+  snapshot=next.snapshot;castSnapshot=null;closeJourney();persist(enterScene);
+}
+function closeJourney(){
+  cancelAnimationFrame(journeyFrame);journeyMode=null;journeyPanel.hidden=true;
+  if(sceneConfig.id==='hefei-office'){setState('explore');enterHefei();return;}
+  setState('explore');
+}
+async function openJourney(mode,resume=false){
+  const definition=await journeyDefinition();if(!definition)return;
+  await loadJourneyMap();
+  journeyMode=mode;journeyPackStops=definition.stops||[];
+  journeyPanel.dataset.artSlot=definition.artSlot||'hefei-nanjing';
+  document.querySelector('#journey-slogan').textContent=SLOGAN;
+  journeyPanel.hidden=false;conversation.hidden=true;
+  if(!resume||!journeyArrived){journeyArrived=false;journeyProgress=0;journeyStarted=performance.now();document.querySelector('#journey-copy').hidden=true;document.querySelector('#journey-choices').replaceChildren();}
+  setState('journey');
+  cancelAnimationFrame(journeyFrame);
+  if(journeyArrived){drawJourney(1);showJourneyChoices();}
+  else journeyFrame=requestAnimationFrame(paintJourney);
 }
 function openConversation(){
   if(state!=='explore'||!active)return;
+  const pending=actionsFor(chapter,snapshot,active);
+  const skill=readySkill(active);
+  if(skill&&!pending.length){collectSkill(skill);return;}
   dialogueObject=active;showObjectCard(active);
   dialogueSpeaker=active.atlas?active.id:'player';
   const object=active.id;
+  if(object==='journey-map'&&snapshot.state==='journey'&&chapter.has(snapshot,'journey_opened')){openJourney('chapter');return;}
   if(snapshot.state==='complete'&&!active.atlas){manual();return;}
   const available=actionsFor(chapter,snapshot,active);
   const choices=available.map(t=>({label:eventTitle(t.event)||t.label,event:'view_'+t.event,run:()=>confirmPage(t)}));
@@ -245,7 +428,7 @@ function openConversation(){
 function updateUI(){
   const candidates=state==='explore'?nearbyAll(position,visibleRoom()):[];
   active=candidates.find(o=>o.id===selectedTargetID)||candidates.find(o=>actionsFor(chapter,snapshot,o).length)||candidates[0]||null;
-  const hint=active?`E / Enter · ${active.name}${candidates.length>1?' · Q 切换对象':''}`:'';
+  const hint=active?`E / Enter · ${readySkill(active)&&!actionsFor(chapter,snapshot,active).length?'拾取':active.name}${candidates.length>1?' · Q 切换对象':''}`:'';
   if(hint!==lastInteraction){interaction.textContent=hint;lastInteraction=hint;}
   if(chapter&&snapshot&&snapshot!==lastUISnapshot){task.textContent=sceneTarget(sceneConfig,chapter,snapshot);lastUISnapshot=snapshot;updateMarkers();updateExpressions();}
 }
@@ -319,7 +502,7 @@ function frame(now){
   }
   for(let i=0;i<propViews.length;i++){
     const item=propViews[i];
-    const show=!item.presentIn||item.presentIn.includes(snapshot.state);
+    const show=!item.presentIn||item.presentIn.includes(snapshot.state)||readyRoles().has(item.role);
     if(item.mesh.visible!==show)item.mesh.visible=show;
     if(!show)continue;
     const map=state==='explore'&&active&&active.id===item.id?item.hi:item.base;
@@ -337,15 +520,41 @@ function frame(now){
     const play=state!=='paused'&&!(state==='dialogue'&&currentSpeaker===actor.id&&!actor.controllable);
     view.update(renderPosition(actor),actor.controllable?facing:'down',actor.controllable&&moving,walkTime,typing?typingFrame(actor.typingColumn,now/1000,play):null);
   }
+  drawSkillGlints(now);
   positionEffects();placeBubble();updateUI();renderer.render(scene,camera);
+}
+function drawSkillGlints(now){
+  if(!glintCtx||!chapter?.skillSlots)return;
+  glintCanvas.style.zIndex=now<awardFlashUntil?'8':'2';
+  glintCtx.clearRect(0,0,sceneConfig.width,sceneConfig.height);
+  const slots=chapter.skillSlots(snapshot)||[];
+  glintCtx.imageSmoothingEnabled=false;
+  for(const skill of slots){
+    if(skill.status!=='ready')continue;
+    const object=sceneConfig.objects.find(item=>item.role===skill.role);
+    if(!object?.iconAt)continue;
+    for(let i=0;i<8;i++){
+      const angle=now/420+i*Math.PI/4,x=object.iconAt.x+Math.cos(angle)*14,y=object.iconAt.y+Math.sin(angle)*11;
+      glintCtx.fillStyle=i%2?'#f4e35a':'#fffaf0';
+      glintCtx.fillRect(x|0,y|0,2,2);
+    }
+  }
+  if(now<awardFlashUntil){
+    const left=Math.min(1,(awardFlashUntil-now)/1600);
+    for(let i=0;i<12;i++){
+      const angle=i/12*Math.PI*2,radius=(1-left)*28+6;
+      glintCtx.fillStyle=i%2?'#f4e35a':'#ffffff';
+      glintCtx.fillRect((sceneConfig.width/2+Math.cos(angle)*radius)|0,(sceneConfig.height/2+Math.sin(angle)*radius)|0,2,2);
+    }
+  }
 }
 function loadImage(url){return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error(`无法加载素材 ${url}，请检查文件并刷新。`));image.src=url;});}
 async function start(){
   const THREE=await import('./vendor/three.module.min.js');
   const atlasEntries=Object.entries(sceneConfig.atlases);
   if(sceneConfig.page){
-    document.title=sceneConfig.page.documentTitle;
-    const heading=document.querySelector('h1');if(heading)heading.textContent=sceneConfig.page.heading;
+    document.title=SLOGAN;
+    const heading=document.querySelector('#chapter-heading');if(heading)heading.textContent=sceneConfig.page.heading;
     const lead=document.querySelector('header p:last-of-type');if(lead)lead.textContent=sceneConfig.page.lead;
     document.querySelector('.game-shell')?.setAttribute('aria-label',sceneConfig.page.shell);
     const summary=document.querySelector('#chapter-summary p');if(summary)summary.textContent=sceneConfig.page.summary;
@@ -383,7 +592,7 @@ async function start(){
       const mesh=new THREE.Mesh(iconGeometry,mat);
       mesh.scale.set(object.iconSize[0],object.iconSize[1],1);
       mesh.position.set(object.iconAt.x,sceneConfig.height-object.iconAt.y,1);mesh.renderOrder=1;scene.add(mesh);
-      propViews.push({id:object.id,mesh,mat,base,hi,presentIn:object.presentIn||null,nightDim:!!object.nightDim});
+      propViews.push({id:object.id,role:object.role,mesh,mat,base,hi,presentIn:object.presentIn||null,nightDim:!!object.nightDim});
     });
   }
   for(const actor of sceneConfig.actors){
@@ -391,6 +600,7 @@ async function start(){
     const seated=actor.typingColumn===undefined?null:createActor(THREE,atlasData.typing.image,sceneConfig.atlases.typing,{...actor,column:actor.typingColumn,height:actor.seatedHeight||40},sceneConfig.height);
     actorViews.set(actor.id,{standing,seated});scene.add(standing.mesh);if(seated)scene.add(seated.mesh);
   }
+  glintCanvas=document.createElement('canvas');glintCanvas.id='skill-glints';glintCanvas.width=sceneConfig.width;glintCanvas.height=sceneConfig.height;glintCtx=glintCanvas.getContext('2d');stage.append(glintCanvas);
   loading.remove();pauseButton.disabled=false;document.querySelector('#manual').disabled=false;setState('explore');
   let restored;try{storage=window.localStorage;restored=chapter.inspect(storage);}catch{restored={kind:'unavailable'};}
   snapshot=restored.snapshot||chapter.initial();position={...sceneConfig.entryPoints[snapshot.state]};
@@ -414,6 +624,7 @@ function navigateOption(key){
   else{const target=rows[(rowIndex+step+rows.length)%rows.length],x=row[column].x;target.reduce((a,b)=>Math.abs(a.x-x)<=Math.abs(b.x-x)?a:b).button.focus();}
 }
 window.addEventListener('keydown',event=>{
+  ensureAudio();
   const key=event.key.length===1?event.key.toLowerCase():event.key;
   if(state==='error'||state==='loading'){if(event.repeat&&(key==='Enter'||key===' '))event.preventDefault();return;}
   if(state==='transition'){event.preventDefault();if(!event.repeat&&(key==='Enter'||key===' '||key==='Escape'))finishTransition();return;}
@@ -439,6 +650,8 @@ window.addEventListener('keydown',event=>{
   if(event.repeat){if(state!=='explore')event.preventDefault();return;}
   if(key==='m'&&state==='explore'&&document.activeElement===stage){event.preventDefault();manual();return;}
   if(key==='q'&&state==='explore'&&document.activeElement===stage){const list=nearbyAll(position,visibleRoom());if(list.length>1){event.preventDefault();selectedTargetID=list[(list.findIndex(o=>o.id===active?.id)+1)%list.length].id;updateUI();}return;}
+  if(awardOpen&&key==='Escape'){event.preventDefault();return;}
+  if(state==='journey'&&key==='Escape'){event.preventDefault();return;}
   if(key==='Escape'){
     event.preventDefault();
     if(state==='explore')pause();

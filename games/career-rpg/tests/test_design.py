@@ -8,7 +8,7 @@ validate = runpy.run_path(str(Path(__file__).resolve().parents[1] / 'scripts/che
 
 
 def example():
-    states = ['office', 'report', 'incident', 'investigation', 'restored', 'learning', 'complete']
+    states = ['office', 'report', 'incident', 'investigation', 'restored', 'learning', 'journey', 'complete']
     return {
         'id': 'nanjing-first-release', 'targetSeconds': [120, 180], 'entry': 'office', 'terminal': 'complete',
         'states': [{'id': state, 'goal': '继续探索', 'playerAction': '交互', 'feedback': '继续', 'checkpoint': True}
@@ -33,7 +33,7 @@ class DesignTests(unittest.TestCase):
         self.design = example()
 
     def test_valid_design_can_finish_with_flags_and_reachable_interactions(self):
-        self.assertEqual(validate(self.design), (7, 382))
+        self.assertEqual(validate(self.design), (8, 382))
 
     def test_graph_edge_does_not_make_an_unproducible_flag_reachable(self):
         self.design['transitions'][0]['requires'] = ['never_created']

@@ -9,32 +9,62 @@
   "entry": "office",
   "terminal": "complete",
   "roleTargets": {
-    "forum": ["forum_pc"],
-    "cto": ["cto_pc", "test_notes", "trap_note"],
-    "manual": ["manual_shelf"],
-    "dialog": ["dialog"]
+    "forum": [
+      "forum_pc"
+    ],
+    "cto": [
+      "cto_pc",
+      "test_notes",
+      "trap_note"
+    ],
+    "manual": [
+      "manual_shelf"
+    ],
+    "dialog": [
+      "dialog"
+    ],
+    "journey_map": [
+      "journey_map"
+    ]
   },
   "objectives": {
     "office": "去左侧电脑，打开用户论坛",
     "report": "读完用户反馈，继续",
     "incident": "去右侧电脑，和 CTO 一起排查",
     "investigation": {
-      "count": ["feedback_reviewed", "recheck_visited", "impact_confirmed"],
+      "count": [
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed"
+      ],
       "pending": "排查 {n}/3 · {next}",
       "steps": [
-        {"unless": "recheck_visited", "text": "右侧电脑：查看排查记录"},
-        {"unless": "impact_confirmed", "text": "右侧电脑：确认影响到谁"},
-        {"unless": "feedback_reviewed", "text": "左侧电脑：重读论坛反馈"}
+        {
+          "unless": "recheck_visited",
+          "text": "右侧电脑：查看排查记录"
+        },
+        {
+          "unless": "impact_confirmed",
+          "text": "右侧电脑：确认影响到谁"
+        },
+        {
+          "unless": "feedback_reviewed",
+          "text": "左侧电脑：重读论坛反馈"
+        }
       ],
       "elseStep": "右侧电脑：结束这轮排查"
     },
     "restored": "两小时后，读完同事们的宽慰",
     "learning": {
-      "count": ["test_reviewed", "comment_reviewed"],
+      "count": [
+        "test_reviewed",
+        "comment_reviewed"
+      ],
       "pending": "看过 {n}/2 · 右侧电脑：分别查看测试和坑点注释",
       "done": "看过 2/2 · 去右侧书架，把这一页写进手册"
     },
-    "complete": "南京这一章完成 · 手册可以随时回看"
+    "complete": "南京这一章完成 · 手册可以随时回看",
+    "journey": "手册写好了。去通道里的旅程地图，看从合肥走到南京"
   },
   "savePolicy": {
     "id": "atomic-per-event",
@@ -47,13 +77,15 @@
       "investigation",
       "restored",
       "learning",
+      "journey",
       "complete"
     ],
     "snapshotShape": [
       "schema",
       "chapter",
       "state",
-      "flags"
+      "flags",
+      "skills"
     ],
     "acceptRule": "确认项显示／接受条件 = requires 全部满足，并且本次 effects 至少有一个尚未在 flags 里。effects 已全在 flags 里时，该项只展示只读页：不接受、不写快照。物件当前确认项只从满足该条件的项里取，已完成的项不占位，后面的未完成确认与只读页照常出现。",
     "chapterStart": {
@@ -98,6 +130,10 @@
       "complete": [
         21,
         4
+      ],
+      "journey": [
+        21,
+        4
       ]
     },
     "replayLines": {
@@ -130,6 +166,9 @@
       ],
       "complete": [
         "complete-n1"
+      ],
+      "journey": [
+        "journey-open"
       ]
     }
   },
@@ -941,8 +980,8 @@
         "outage_over",
         "comfort_read"
       ],
-      "endCondition": "test_reviewed 与 comment_reviewed 都写入后，在 manual_shelf 点“把这页写进手册”（T11，requires 同时包含两者），进入 complete。",
-      "feedback": "任务条“看过 0/2→2/2”；手册打开新页（learning-manual-1），状态进入 complete。",
+      "endCondition": "test_reviewed 与 comment_reviewed 都写入后，在 manual_shelf 点“把这页写进手册”（T11），进入 journey。",
+      "feedback": "任务条“看过 0/2→2/2”；手册打开新页（learning-manual-1），状态进入 journey。",
       "repeatRule": "T09／T10 只在首次确认时写标记；再交互只显示该项只读页（learning-test-copy／learning-comment-copy），不加标记、不写快照，也不挡住另一项的确认。",
       "checkpoint": true,
       "snapshot": "atomic-per-event",
@@ -953,11 +992,11 @@
       ]
     },
     {
-      "id": "complete",
-      "title": "手册新增一页",
-      "budgetSeconds": 10,
-      "goal": "翻看本章手册页，结束或重玩。",
-      "playerAction": "读手册页，选“结束本章”（收起手册，显示完成摘要）或“从办公室重玩”（再确认一次）。探视手册以外的物件不再触发事件，complete 的合法快照只有这一个。",
+      "id": "journey",
+      "title": "从合肥走到南京",
+      "budgetSeconds": 0,
+      "goal": "走完从合肥到南京的旅程地图，并看见下一章的钩子。",
+      "playerAction": "到旅程地图打开过场，逐段看到南京，再在最后一站看见 React／Webpack。可以按 E 拾取，也可以直接看完，没拾取的技能在 complete 补齐。",
       "enterFlags": [
         "report_read",
         "incident_started",
@@ -971,8 +1010,41 @@
         "comment_reviewed",
         "manual_entry_written"
       ],
+      "endCondition": "notice_react 之后点“这段路程看完了”（T14），进入 complete。",
+      "feedback": "时间线从合肥走到南京，最后一站指向 Alibaba／杭州。",
+      "repeatRule": "open_journey 与 notice_react 各只写一次标记。",
+      "checkpoint": true,
+      "snapshot": "atomic-per-event",
+      "resumeRule": "刷新后仍停在 journey，按已有标记继续地图，不回到手册之前。",
+      "entryPlacement": [
+        21,
+        4
+      ]
+    },
+    {
+      "id": "complete",
+      "title": "本章完成",
+      "budgetSeconds": 10,
+      "goal": "旅程地图走完，本章结束。",
+      "playerAction": "在旅程地图看到从合肥走到南京，并看见下一章 Alibaba／杭州 的 React／Webpack。点“这段路程看完了”进入 complete。可以从办公室重玩。",
+      "enterFlags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read",
+        "test_reviewed",
+        "comment_reviewed",
+        "manual_entry_written",
+        "journey_opened",
+        "react_noticed",
+        "journey_finished"
+      ],
       "endCondition": "终态。重玩是另一个入口，不经过状态转移，也不写任何事件。",
-      "feedback": "显示“第一章完成”、本章事实与演出说明、回博客链接与重玩入口。",
+      "feedback": "本章完成。手册可以回看。没按 E 拾取的技能在这里补齐。",
       "repeatRule": "刷新或重进都读回 complete 的同一个快照，停在完成页，不再接受任何事件；重玩只清除本游戏命名空间下的本章存档。",
       "checkpoint": true,
       "snapshot": "atomic-per-event",
@@ -1055,7 +1127,7 @@
       ],
       "target": "cto_pc",
       "choice": "confirm",
-      "label": "一起过去",
+      "label": "过去看看",
       "dialogue": "incident-rally",
       "playerFeedback": "任务条切到“排查 0/3”，可以自由走动。",
       "effectMode": "add",
@@ -1067,7 +1139,7 @@
             "incident_started"
           ],
           "choice": "confirm",
-          "label": "一起过去",
+          "label": "过去看看",
           "effects": [
             "incident_seen"
           ],
@@ -1420,7 +1492,7 @@
       "id": "T11",
       "from": "learning",
       "event": "write_manual_entry",
-      "to": "complete",
+      "to": "journey",
       "requires": [
         "report_read",
         "incident_started",
@@ -1439,7 +1511,7 @@
       "choice": "confirm",
       "label": "把这页写进手册",
       "dialogue": "learning-manual-1",
-      "playerFeedback": "手册打开新页，状态进入 complete。",
+      "playerFeedback": "手册打开新页，进入旅程地图。还没拾取的技能留到本章结束时记入手册。",
       "effectMode": "add",
       "options": [
         {
@@ -1474,6 +1546,60 @@
         }
       ],
       "readPage": "learning-pending"
+    },
+    {
+      "id": "T12",
+      "from": "journey",
+      "event": "open_journey",
+      "to": "journey",
+      "requires": [
+        "manual_entry_written"
+      ],
+      "effects": [
+        "journey_opened"
+      ],
+      "target": "journey_map",
+      "choice": "confirm",
+      "label": "打开这段路程",
+      "dialogue": "journey-open",
+      "playerFeedback": "旅程地图展开，从合肥走到南京。",
+      "effectMode": "add"
+    },
+    {
+      "id": "T13",
+      "from": "journey",
+      "event": "notice_react",
+      "to": "journey",
+      "requires": [
+        "journey_opened"
+      ],
+      "effects": [
+        "react_noticed"
+      ],
+      "target": "journey_react",
+      "choice": "confirm",
+      "label": "看见下一章",
+      "dialogue": "journey-next",
+      "playerFeedback": "React／Webpack 出现在下一站，可以拾取。",
+      "effectMode": "add"
+    },
+    {
+      "id": "T14",
+      "from": "journey",
+      "event": "finish_journey",
+      "to": "complete",
+      "requires": [
+        "react_noticed"
+      ],
+      "effects": [
+        "journey_finished"
+      ],
+      "target": "journey_map",
+      "choice": "confirm",
+      "label": "这段路程看完了",
+      "dialogue": "journey-done",
+      "playerFeedback": "旅程结束，本章完成。没拾取的技能记入手册。",
+      "effectMode": "add"
     }
   ],
   "legalSnapshots": {
@@ -1563,7 +1689,7 @@
         "impact_confirmed",
         "outage_over",
         "comfort_read",
-        "comment_reviewed"
+        "test_reviewed"
       ],
       [
         "report_read",
@@ -1574,7 +1700,7 @@
         "impact_confirmed",
         "outage_over",
         "comfort_read",
-        "test_reviewed"
+        "comment_reviewed"
       ],
       [
         "report_read",
@@ -1589,7 +1715,7 @@
         "comment_reviewed"
       ]
     ],
-    "complete": [
+    "journey": [
       [
         "report_read",
         "incident_started",
@@ -1602,6 +1728,53 @@
         "test_reviewed",
         "comment_reviewed",
         "manual_entry_written"
+      ],
+      [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read",
+        "test_reviewed",
+        "comment_reviewed",
+        "manual_entry_written",
+        "journey_opened"
+      ],
+      [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read",
+        "test_reviewed",
+        "comment_reviewed",
+        "manual_entry_written",
+        "journey_opened",
+        "react_noticed"
+      ]
+    ],
+    "complete": [
+      [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read",
+        "test_reviewed",
+        "comment_reviewed",
+        "manual_entry_written",
+        "journey_opened",
+        "react_noticed",
+        "journey_finished"
       ]
     ]
   },
@@ -1769,7 +1942,7 @@
       "state": "incident",
       "speaker": "narrator",
       "basis": "fact_paraphrase",
-      "text": "CTO 带着大家一起排查。",
+      "text": "CTO 带着大家排查。",
       "note": "事实：CTO 带大家排查；具体分工未确认，不出现。"
     },
     {
@@ -1784,7 +1957,7 @@
       "state": "investigation",
       "speaker": "cto",
       "basis": "staging",
-      "text": "你那边也看看，我们一起来。"
+      "text": "你那边也看看，先把能确认的记下来。"
     },
     {
       "id": "investigation-confirm-1",
@@ -1911,7 +2084,7 @@
       "state": "learning",
       "speaker": "narrator",
       "basis": "staging",
-      "text": "便签上列着这次补的测试。"
+      "text": "便签上列着这次补的测试，集成测试要进 CI/CD。"
     },
     {
       "id": "learning-cto-1",
@@ -1955,7 +2128,7 @@
       "state": "learning",
       "speaker": "narrator",
       "basis": "staging",
-      "text": "工作手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”",
+      "text": "工作手册翻到新的一页：“第一次做 C 端，用户先说无法登录。失败留在这页：补测试，写清楚坑；上线前先准备灰度、观测和回滚。”",
       "note": "工作手册是游戏机制，不是确认的历史行为。"
     },
     {
@@ -1970,8 +2143,48 @@
       "state": "complete",
       "speaker": "player",
       "basis": "staging",
-      "text": "（往后回家读书、学前端，是另一段了。）",
+      "text": "（再往后是 Alibaba／杭州。React／Webpack 是下一章的事。）",
       "note": "夜读与事故的因果关系未确认。"
+    },
+    {
+      "id": "office-daily",
+      "state": "office",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "工位上开着 fibjs 和 nodejs。全栈的日常，就是这两样。",
+      "note": "技能节点演出，不是确认的历史工具清单。"
+    },
+    {
+      "id": "restored-awe",
+      "state": "restored",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "上线不是按下去就结束。灰度、观测、回滚，这次都要记住。",
+      "note": "技能节点演出。不写事故根因。"
+    },
+    {
+      "id": "journey-open",
+      "state": "journey",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "地图从合肥展开，一路走到南京。",
+      "note": "过场占位。像素地图以后替换 art 字段指向的文件。"
+    },
+    {
+      "id": "journey-next",
+      "state": "journey",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "下一站是 Alibaba／杭州。React／Webpack 先出现在这里。",
+      "note": "钩子，不进入杭州场景。"
+    },
+    {
+      "id": "journey-done",
+      "state": "journey",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "这段路看完了。南京这一章停在这里。",
+      "note": "过场结束。"
     }
   ],
   "assets": [
@@ -2649,5 +2862,70 @@
     "准确年份与日期",
     "工作手册是否在真实工作中存在（本章手册为游戏机制）",
     "作者是否认可美术方向（概念板未获认可，也不是生产素材）"
-  ]
+  ],
+  "skills": [
+    {
+      "id": "fibjs",
+      "name": "fibjs／nodejs 做全栈",
+      "event": "open_forum_post",
+      "flag": "report_read",
+      "role": "forum"
+    },
+    {
+      "id": "cicd",
+      "name": "CI/CD 做集成测试",
+      "event": "review_test_plan",
+      "flag": "test_reviewed",
+      "role": "ci_desk"
+    },
+    {
+      "id": "release",
+      "name": "对上线要有敬畏之心（灰度、观测、回滚）",
+      "event": "comfort_read",
+      "flag": "comfort_read",
+      "role": "recovery"
+    },
+    {
+      "id": "failure",
+      "name": "学会从失败中学习经验",
+      "event": "write_manual_entry",
+      "flag": "manual_entry_written",
+      "role": "manual"
+    },
+    {
+      "id": "react",
+      "name": "React／Webpack",
+      "event": "notice_react",
+      "flag": "react_noticed",
+      "role": "journey_react"
+    }
+  ],
+  "journey": {
+    "artSlot": "hefei-nanjing",
+    "art": "./art/transition-map/map-384x216.png",
+    "stops": [
+      {
+        "id": "hefei",
+        "title": "合肥",
+        "text": "合肥。先在那张长桌上把不会的东西学完，才有后来这一程。"
+      },
+      {
+        "id": "road",
+        "title": "路上",
+        "text": "离开合肥，往南京走。"
+      },
+      {
+        "id": "nanjing",
+        "title": "南京",
+        "text": "南京。第一次做 C 端，用户在论坛说无法登录。大约两小时后恢复。失败记在测试、注释，还有上线前的灰度、观测和回滚。"
+      },
+      {
+        "id": "next",
+        "title": "下一章",
+        "text": "再往后是 Alibaba／杭州。React／Webpack 先记在这里。",
+        "skill": "react"
+      }
+    ],
+    "map": "./art/transition-map/transition-map.json"
+  }
 }
