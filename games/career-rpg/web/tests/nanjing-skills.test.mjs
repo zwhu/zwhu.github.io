@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createChapter} from '../story.mjs';
-import {SLOGAN} from '../slogan.mjs';
+import {GAME_TITLE} from '../title.mjs';
 
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-01.json',import.meta.url),'utf8'));
 const chapter=createChapter(data);
@@ -14,9 +14,9 @@ const memory=()=>{const saved=new Map();return {saved,store:{getItem:key=>saved.
 test('nanjing lists five skills',()=>{
   assert.deepEqual(chapter.skillSlots(chapter.initial()).map(skill=>skill.name),names);
   assert.deepEqual(chapter.skillSlots(chapter.initial()).map(skill=>skill.status),['none','none','none','none','none']);
-  assert.equal(SLOGAN,'欢迎你游戏我的职业前半生');
-  for(const file of ['../main.mjs','../index.html','../story.mjs','../scene-config.mjs','../../design/chapter-01.json'])assert.equal(readFileSync(new URL(file,import.meta.url),'utf8').includes(SLOGAN),false,file);
-  assert.match(readFileSync(new URL('../main.mjs',import.meta.url),'utf8'),/SLOGAN/);
+  assert.equal(GAME_TITLE,'像素前端');
+  assert.match(readFileSync(new URL('../main.mjs',import.meta.url),'utf8'),/GAME_TITLE/);
+  assert.match(readFileSync(new URL('../index.html',import.meta.url),'utf8'),/像素前端/);
   const map=JSON.parse(readFileSync(new URL('../art/transition-map/transition-map.json',import.meta.url),'utf8'));
   assert.equal(map.animation_suggestion.duration_ms_hefei_to_nanjing,3200);
   assert.equal(map.animation_suggestion.easing,'ease-in-out');

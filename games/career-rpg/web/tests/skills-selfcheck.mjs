@@ -166,7 +166,7 @@ async function focusObject(id) {
 try {
   await connect();
   let view = await waitText('原本录用的人嫌工资低');
-  if (view.title !== '欢迎你游戏我的职业前半生') throw new Error('slogan title ' + view.title);
+  if (view.title !== '像素前端') throw new Error('title ' + view.title);
   await dismiss();
   await tap('m');
   view = await waitText('???');

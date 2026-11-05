@@ -2926,6 +2926,26 @@
         "skill": "react"
       }
     ],
+    "toHangzhou": {
+      "artSlot": "nanjing-hangzhou",
+      "stops": [
+        {
+          "id": "nanjing",
+          "title": "南京",
+          "text": "南京。第一次做 C 端，失败记在测试和注释里。"
+        },
+        {
+          "id": "road",
+          "title": "路上",
+          "text": "离开南京，往杭州走。"
+        },
+        {
+          "id": "hangzhou",
+          "title": "杭州",
+          "text": "杭州。商品发布这一摊，从这里开始。"
+        }
+      ]
+    },
     "map": "./art/transition-map/transition-map.json"
   }
 }

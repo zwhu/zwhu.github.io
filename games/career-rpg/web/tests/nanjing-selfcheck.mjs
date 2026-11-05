@@ -190,12 +190,12 @@ async function openManual(part) {
 }
 try {
   await connect();
-  let view = await waitText('欢迎你游戏我的职业前半生');
-  if (view.title !== '欢迎你游戏我的职业前半生') throw new Error('title ' + view.title);
+  let view = await waitText('第一次做 C 端');
+  if (view.title !== '像素前端') throw new Error('title ' + view.title);
   await evaluate('window.scrollTo(0,0)');
   await sleep(150);
   await shot('SLOGAN-01-title.png');
-  if (!view.dialogue.includes('欢迎你游戏我的职业前半生') || !view.dialogue.includes('第一次做 C 端')) throw new Error('opening ' + view.dialogue);
+  if (!view.dialogue.includes('第一次做 C 端')) throw new Error('opening ' + view.dialogue);
   await shot('SLOGAN-01-opening.png');
   await dismiss();
   await openManual('???');
@@ -266,7 +266,7 @@ try {
     await sleep(80);
   }
   view = await snap();
-  if (!view.journey || view.slogan !== '欢迎你游戏我的职业前半生') throw new Error('journey slogan ' + JSON.stringify(view));
+  if (!view.journey || view.slogan !== '像素前端') throw new Error('journey title ' + JSON.stringify(view));
   if (!startShot || !midShot) throw new Error('missed bridge frames ' + JSON.stringify(await evaluate('careerJourney()')));
   await shot('NJ-BRIDGE-01-arrive.png');
   await press('拾取');
@@ -286,7 +286,7 @@ try {
   await waitText('从办公室重玩');
   await press('从办公室重玩');
   await press('确认重新开始');
-  await waitText('欢迎你游戏我的职业前半生');
+  await waitText('第一次做 C 端');
   await dismiss();
   await walkTo(82, 127); await use('forum', '打开论坛反馈', '确认，去处理'); await press('继续'); await dismiss();
   await walkTo(185, 127); await use('cto', '听 CTO 排查', '过去看看'); await dismiss();

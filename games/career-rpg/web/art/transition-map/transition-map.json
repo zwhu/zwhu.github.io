@@ -1,12 +1,19 @@
 {
-  "id": "transition-map-v1",
+  "id": "transition-map-v2",
+  "title": "旅程地图／时间线（合肥→南京→杭州）",
   "logical_size": [
     384,
     216
   ],
+  "palette": "art/palette/hangzhou-v1-shared.json",
+  "palette_total": 174,
+  "palette_note": "hefei-v3 133 colours unchanged + hangzhou group appended (see palette json). Base edited from transition-map-v1 base; v1 files untouched.",
+  "base_asset": "art/processed/transition-map-v2/base/map-384x216.png",
+  "marker_asset": "art/processed/transition-map-v1/marker/player-marker-24.png (reused, unchanged)",
   "marker_anchor": {
     "x": 6,
-    "y": 23
+    "y": 23,
+    "note": "foot / bottom-center; map onto route point"
   },
   "marker_size": [
     12,
@@ -16,6 +23,7 @@
     {
       "id": "hefei",
       "name": "合肥",
+      "name_en": "Hefei",
       "status": "completed",
       "coords_logical": {
         "x": 72,
@@ -28,12 +36,15 @@
       "marker_stop": {
         "x": 72,
         "y": 120
-      }
+      },
+      "icon": "apartment residential with balcony laundry",
+      "notes": "美术建议坐标，最终由工程定"
     },
     {
       "id": "nanjing",
       "name": "南京",
-      "status": "current",
+      "name_en": "Nanjing",
+      "status": "completed",
       "coords_logical": {
         "x": 190,
         "y": 105
@@ -45,12 +56,15 @@
       "marker_stop": {
         "x": 190,
         "y": 120
-      }
+      },
+      "icon": "qinhuai riverside office building",
+      "notes": "美术建议坐标，最终由工程定"
     },
     {
       "id": "hangzhou",
-      "name": "杭州?",
-      "status": "locked",
+      "name": "杭州",
+      "name_en": "Hangzhou",
+      "status": "current",
       "coords_logical": {
         "x": 324,
         "y": 98
@@ -62,194 +76,272 @@
       "marker_stop": {
         "x": 324,
         "y": 120
-      }
+      },
+      "icon": "campus glass office building + lawn (from hangzhou-v1 day window), no brand",
+      "notes": "美术建议坐标，最终由工程定"
     }
   ],
   "route": {
     "type": "polyline",
-    "points_logical": [
+    "segments": [
       {
-        "x": 72,
-        "y": 120
+        "id": "hefei->nanjing",
+        "points_logical": [
+          {
+            "x": 72,
+            "y": 120
+          },
+          {
+            "x": 78,
+            "y": 120
+          },
+          {
+            "x": 84,
+            "y": 120
+          },
+          {
+            "x": 91,
+            "y": 120
+          },
+          {
+            "x": 97,
+            "y": 120
+          },
+          {
+            "x": 103,
+            "y": 120
+          },
+          {
+            "x": 109,
+            "y": 120
+          },
+          {
+            "x": 115,
+            "y": 120
+          },
+          {
+            "x": 122,
+            "y": 120
+          },
+          {
+            "x": 128,
+            "y": 120
+          },
+          {
+            "x": 134,
+            "y": 120
+          },
+          {
+            "x": 140,
+            "y": 120
+          },
+          {
+            "x": 147,
+            "y": 120
+          },
+          {
+            "x": 153,
+            "y": 120
+          },
+          {
+            "x": 159,
+            "y": 120
+          },
+          {
+            "x": 165,
+            "y": 120
+          },
+          {
+            "x": 171,
+            "y": 120
+          },
+          {
+            "x": 178,
+            "y": 120
+          },
+          {
+            "x": 184,
+            "y": 120
+          },
+          {
+            "x": 190,
+            "y": 120
+          }
+        ]
       },
       {
-        "x": 78,
-        "y": 120
-      },
-      {
-        "x": 84,
-        "y": 120
-      },
-      {
-        "x": 91,
-        "y": 120
-      },
-      {
-        "x": 97,
-        "y": 120
-      },
-      {
-        "x": 103,
-        "y": 120
-      },
-      {
-        "x": 109,
-        "y": 120
-      },
-      {
-        "x": 115,
-        "y": 120
-      },
-      {
-        "x": 122,
-        "y": 120
-      },
-      {
-        "x": 128,
-        "y": 120
-      },
-      {
-        "x": 134,
-        "y": 120
-      },
-      {
-        "x": 140,
-        "y": 120
-      },
-      {
-        "x": 147,
-        "y": 120
-      },
-      {
-        "x": 153,
-        "y": 120
-      },
-      {
-        "x": 159,
-        "y": 120
-      },
-      {
-        "x": 165,
-        "y": 120
-      },
-      {
-        "x": 171,
-        "y": 120
-      },
-      {
-        "x": 178,
-        "y": 120
-      },
-      {
-        "x": 184,
-        "y": 120
-      },
-      {
-        "x": 190,
-        "y": 120
-      },
-      {
-        "x": 196,
-        "y": 120
-      },
-      {
-        "x": 202,
-        "y": 120
-      },
-      {
-        "x": 208,
-        "y": 120
-      },
-      {
-        "x": 214,
-        "y": 120
-      },
-      {
-        "x": 220,
-        "y": 120
-      },
-      {
-        "x": 227,
-        "y": 120
-      },
-      {
-        "x": 233,
-        "y": 120
-      },
-      {
-        "x": 239,
-        "y": 120
-      },
-      {
-        "x": 245,
-        "y": 120
-      },
-      {
-        "x": 251,
-        "y": 120
-      },
-      {
-        "x": 257,
-        "y": 120
-      },
-      {
-        "x": 263,
-        "y": 120
-      },
-      {
-        "x": 269,
-        "y": 120
-      },
-      {
-        "x": 275,
-        "y": 120
-      },
-      {
-        "x": 281,
-        "y": 120
-      },
-      {
-        "x": 287,
-        "y": 120
-      },
-      {
-        "x": 294,
-        "y": 120
-      },
-      {
-        "x": 300,
-        "y": 120
-      },
-      {
-        "x": 306,
-        "y": 120
-      },
-      {
-        "x": 312,
-        "y": 120
-      },
-      {
-        "x": 318,
-        "y": 120
-      },
-      {
-        "x": 324,
-        "y": 120
+        "id": "nanjing->hangzhou",
+        "points_logical": [
+          {
+            "x": 190,
+            "y": 120
+          },
+          {
+            "x": 196,
+            "y": 120
+          },
+          {
+            "x": 202,
+            "y": 120
+          },
+          {
+            "x": 208,
+            "y": 120
+          },
+          {
+            "x": 214,
+            "y": 120
+          },
+          {
+            "x": 220,
+            "y": 120
+          },
+          {
+            "x": 227,
+            "y": 120
+          },
+          {
+            "x": 233,
+            "y": 120
+          },
+          {
+            "x": 239,
+            "y": 120
+          },
+          {
+            "x": 245,
+            "y": 120
+          },
+          {
+            "x": 251,
+            "y": 120
+          },
+          {
+            "x": 257,
+            "y": 120
+          },
+          {
+            "x": 263,
+            "y": 120
+          },
+          {
+            "x": 269,
+            "y": 120
+          },
+          {
+            "x": 275,
+            "y": 120
+          },
+          {
+            "x": 281,
+            "y": 120
+          },
+          {
+            "x": 287,
+            "y": 120
+          },
+          {
+            "x": 294,
+            "y": 120
+          },
+          {
+            "x": 300,
+            "y": 120
+          },
+          {
+            "x": 306,
+            "y": 120
+          },
+          {
+            "x": 312,
+            "y": 120
+          },
+          {
+            "x": 318,
+            "y": 120
+          },
+          {
+            "x": 324,
+            "y": 120
+          }
+        ]
       }
     ],
     "path_y": 120,
-    "style": "dashed railway baked into base; fades into fog toward Hangzhou"
+    "style": "railway baked into base, continuous Hefei→Nanjing→Hangzhou (fog removed)"
   },
   "animation_suggestion": {
-    "duration_ms_hefei_to_nanjing": 3200,
+    "note": "美术建议，最终工程定",
+    "duration_ms_nanjing_to_hangzhou": 3600,
     "easing": "ease-in-out",
     "marker_start": {
-      "x": 72,
+      "x": 190,
       "y": 120
     },
     "marker_end": {
-      "x": 190,
+      "x": 324,
       "y": 120
+    },
+    "hold_ms_at_end": 800,
+    "duration_ms_hefei_to_nanjing": 3200
+  },
+  "text": {
+    "baked_labels": false,
+    "labels": [
+      "合肥",
+      "南京",
+      "杭州"
+    ],
+    "note": "三块地名牌内部已留白（v1 地名糊），工程用像素字体叠字。label_plates 为牌子外框（含描边），文字建议居中、单行、≤3字。",
+    "label_plates_logical": [
+      {
+        "id": "hefei",
+        "box": [
+          32,
+          133,
+          66,
+          145
+        ]
+      },
+      {
+        "id": "nanjing",
+        "box": [
+          172,
+          133,
+          206,
+          145
+        ]
+      },
+      {
+        "id": "hangzhou",
+        "box": [
+          307,
+          133,
+          342,
+          145
+        ]
+      }
+    ],
+    "title_safe_band_logical": {
+      "x0": 16,
+      "y0": 6,
+      "x1": 368,
+      "y1": 28
     }
-  }
+  },
+  "layers": {
+    "highlight_ring": "art/processed/transition-map-v1/nodes/highlight-ring.png",
+    "check": "art/processed/transition-map-v1/nodes/check-12.png",
+    "lock": "art/processed/transition-map-v1/nodes/lock-10.png",
+    "preview_with_marker": "art/processed/transition-map-v2/layers/preview-with-marker-384x216.png",
+    "note": "v1 layers reused unchanged: check on completed nodes, highlight_ring on current node"
+  },
+  "hangzhou_foreshadow": null,
+  "hangzhou_icon_box_logical": [
+    298,
+    86,
+    350,
+    124
+  ],
+  "_note": "坐标为美术建议，最终以工程定的为准"
 }
