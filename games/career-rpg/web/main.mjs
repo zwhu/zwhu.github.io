@@ -32,14 +32,31 @@ let position={x:172,y:154},state='loading',active=null,chapter,snapshot,storage,
 let renderer,scene,camera,player,previous=0,accumulator=0,raf=0,choicesReady=0,dismissible=true;
 let lastUISnapshot=null,lastInteraction='',selectedTargetID='';
 let castSnapshot=null,castCache=sceneConfig;
-let transitionEvent=null,transitionStarted=0,transitionIndex=-1;
-let roomMaterial,dayTexture,nightTexture,dimMesh,dimMaterial,lampMesh,card,cardImg,caption;
+let transitionEvent=null,transitionStarted=0,transitionIndex=-1,awardOpen=false,awardFlashUntil=0;
+let audioCtx=null;const skillAudioLog=[];
+function ensureAudio(){try{if(!audioCtx)audioCtx=new AudioContext();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}catch{return null;}}
+function playSkillDing(){
+  const ctx=ensureAudio();if(!ctx)return;
+  const start=ctx.currentTime,notes=[660,880,1320];
+  for(let i=0;i<notes.length;i++){
+    const when=start+i*.06,osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.type='sine';osc.frequency.setValueAtTime(notes[i],when);osc.frequency.exponentialRampToValueAtTime(notes[i]*1.04,when+.09);
+    gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(.12,when+.015);gain.gain.exponentialRampToValueAtTime(.0001,when+.16);
+    osc.connect(gain);gain.connect(ctx.destination);osc.start(when);osc.stop(when+.18);
+    skillAudioLog.push({kind:'oscillator-start',frequency:notes[i],when});
+  }
+}
+window.careerSkillAudio=()=>skillAudioLog.map(entry=>({...entry}));
+let roomMaterial,dayTexture,nightTexture,dimMesh,dimMaterial,lampMesh,card,cardImg,caption,glintCanvas,glintCtx;
 const propViews=[],spareTextures=[];
+function readyRoles(){return new Set((chapter?.skillSlots?.(snapshot)||[]).filter(skill=>skill.status==='ready').map(skill=>skill.role));}
 function visibleRoom(){
   if(!snapshot)return sceneConfig;
   if(castSnapshot===snapshot)return castCache;
   const cast=presentCast(sceneConfig,snapshot);
-  castCache=cast===sceneConfig?sceneConfig:{...sceneConfig,actors:cast.actors,objects:cast.objects};
+  const ready=readyRoles();
+  const objects=ready.size?sceneConfig.objects.filter(object=>cast.objects.includes(object)||ready.has(object.role)):cast.objects;
+  castCache=cast===sceneConfig&&!ready.size?sceneConfig:{...sceneConfig,actors:cast.actors,objects};
   castSnapshot=snapshot;return castCache;
 }
 function chapterSpawn(){return {...sceneConfig.entryPoints[chapter.initial().state]};}
@@ -84,6 +101,18 @@ function restorePage(page){
   show(page.title,page.paragraphs,page.choices,page.canDismiss,page.speaker,page.system,{back:page.back,returnFocus:page.returnFocus});
   focusElement(enabledOptions()[Math.max(0,page.selectedIndex)]);
 }
+function renderSkillSlots(slots){
+  let row=document.querySelector('#skill-slots');
+  if(!slots){if(row)row.hidden=true;return;}
+  if(!row){row=document.createElement('div');row.id='skill-slots';document.querySelector('#dialogue').append(row);}
+  row.hidden=false;row.replaceChildren();
+  for(const skill of slots){
+    const figure=document.createElement('figure'),caption=document.createElement('figcaption');
+    if(skill.status==='got'){const image=document.createElement('img');const object=sceneConfig.objects.find(item=>item.role===skill.role);image.src=object?.icon||'';image.alt=skill.name;figure.append(image);caption.textContent=skill.name;}
+    else caption.textContent='???';
+    figure.append(caption);row.append(figure);
+  }
+}
 function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeaker,system=false,options={}){
   const content=document.querySelector('#dialogue-content');
   dialogueBack=options.back||null;dialogueReturnFocus=options.returnFocus||document.activeElement;
@@ -104,6 +133,7 @@ function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeake
   choicesReady=performance.now()+180;
   if(system&&!systemDialog.open)systemDialog.showModal();
   drawPortrait(document.querySelector('#portrait'),currentSpeaker);
+  renderSkillSlots(options.slots||null);
   placeBubble();enabledOptions()[0]?.focus();updateUI();
 }
 function lines(ids){return ids.map(id=>chapter.text(id)).filter(Boolean);}
@@ -182,7 +212,8 @@ function manual(){
   const fromPause=state==='paused';
   if(pauseMenu.open)pauseMenu.close();
   const full=snapshot.state==='complete';
-  show('工作手册',full?lines([chapter.manualId]):['这页还没有写完。',chapter.target(snapshot)],full?[{label:'从办公室重玩',id:'replay',run:confirmReplay}]:[],true,'player',false,{back:fromPause?()=>pause():null});
+  const slots=chapter.skillSlots?.(snapshot)||null;
+  show('工作手册',full?lines([chapter.manualId]):['这页还没有写完。',chapter.target(snapshot)],full?[{label:'从办公室重玩',id:'replay',run:confirmReplay}]:[],true,'player',false,{back:fromPause?()=>pause():null,slots});
 }
 function confirmReplay(){
   const fromPause=state==='paused',parent=fromPause?null:capturePage();
@@ -220,8 +251,26 @@ function enterScene(){
   else show('南京的办公室',lines(['office-n1']).concat('这是我第一次面对真实的线上 C 端用户。走到左侧电脑，看看论坛。'));
   updateUI();
 }
+function finishSkillAward(){
+  awardOpen=false;conversation.hidden=true;dialogueObject=null;selectedTargetID='';setState('explore');stage.focus({preventScroll:true});
+}
+function showSkillAward(skill){
+  awardOpen=true;awardFlashUntil=performance.now()+1600;playSkillDing();
+  const object=sceneConfig.objects.find(item=>item.role===skill.role);
+  show('获得技能',[`获得技能：${skill.name}`],[{label:'OK',id:'skill-ok',run:finishSkillAward}],false,'player',false);
+  const image=document.querySelector('#skill-award-icon')||document.createElement('img');
+  image.id='skill-award-icon';image.alt='';image.src=object?.icon||'';
+  document.querySelector('#dialogue').prepend(image);
+}
+function collectSkill(skill){
+  const next=chapter.collect(snapshot,skill.id);if(!next.accepted)return;
+  snapshot=next.snapshot;castSnapshot=null;
+  persist(()=>showSkillAward(skill));
+}
 function openConversation(){
   if(state!=='explore'||!active)return;
+  const skill=(chapter.skillSlots?.(snapshot)||[]).find(item=>item.role===active.role&&item.status==='ready');
+  if(skill){collectSkill(skill);return;}
   dialogueObject=active;showObjectCard(active);
   dialogueSpeaker=active.atlas?active.id:'player';
   const object=active.id;
@@ -319,7 +368,7 @@ function frame(now){
   }
   for(let i=0;i<propViews.length;i++){
     const item=propViews[i];
-    const show=!item.presentIn||item.presentIn.includes(snapshot.state);
+    const show=!item.presentIn||item.presentIn.includes(snapshot.state)||readyRoles().has(item.role);
     if(item.mesh.visible!==show)item.mesh.visible=show;
     if(!show)continue;
     const map=state==='explore'&&active&&active.id===item.id?item.hi:item.base;
@@ -337,7 +386,33 @@ function frame(now){
     const play=state!=='paused'&&!(state==='dialogue'&&currentSpeaker===actor.id&&!actor.controllable);
     view.update(renderPosition(actor),actor.controllable?facing:'down',actor.controllable&&moving,walkTime,typing?typingFrame(actor.typingColumn,now/1000,play):null);
   }
+  drawSkillGlints(now);
   positionEffects();placeBubble();updateUI();renderer.render(scene,camera);
+}
+function drawSkillGlints(now){
+  if(!glintCtx||!chapter?.skillSlots)return;
+  glintCanvas.style.zIndex=now<awardFlashUntil?'6':'2';
+  glintCtx.clearRect(0,0,sceneConfig.width,sceneConfig.height);
+  const slots=chapter.skillSlots(snapshot)||[];
+  glintCtx.imageSmoothingEnabled=false;
+  for(const skill of slots){
+    if(skill.status!=='ready')continue;
+    const object=sceneConfig.objects.find(item=>item.role===skill.role);
+    if(!object?.iconAt)continue;
+    for(let i=0;i<8;i++){
+      const angle=now/420+i*Math.PI/4,x=object.iconAt.x+Math.cos(angle)*14,y=object.iconAt.y+Math.sin(angle)*11;
+      glintCtx.fillStyle=i%2?'#f4e35a':'#fffaf0';
+      glintCtx.fillRect(x|0,y|0,2,2);
+    }
+  }
+  if(now<awardFlashUntil){
+    const left=Math.min(1,(awardFlashUntil-now)/1600);
+    for(let i=0;i<12;i++){
+      const angle=i/12*Math.PI*2,radius=(1-left)*28+6;
+      glintCtx.fillStyle=i%2?'#f4e35a':'#ffffff';
+      glintCtx.fillRect((sceneConfig.width/2+Math.cos(angle)*radius)|0,(sceneConfig.height/2+Math.sin(angle)*radius)|0,2,2);
+    }
+  }
 }
 function loadImage(url){return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error(`无法加载素材 ${url}，请检查文件并刷新。`));image.src=url;});}
 async function start(){
@@ -383,7 +458,7 @@ async function start(){
       const mesh=new THREE.Mesh(iconGeometry,mat);
       mesh.scale.set(object.iconSize[0],object.iconSize[1],1);
       mesh.position.set(object.iconAt.x,sceneConfig.height-object.iconAt.y,1);mesh.renderOrder=1;scene.add(mesh);
-      propViews.push({id:object.id,mesh,mat,base,hi,presentIn:object.presentIn||null,nightDim:!!object.nightDim});
+      propViews.push({id:object.id,role:object.role,mesh,mat,base,hi,presentIn:object.presentIn||null,nightDim:!!object.nightDim});
     });
   }
   for(const actor of sceneConfig.actors){
@@ -391,6 +466,7 @@ async function start(){
     const seated=actor.typingColumn===undefined?null:createActor(THREE,atlasData.typing.image,sceneConfig.atlases.typing,{...actor,column:actor.typingColumn,height:actor.seatedHeight||40},sceneConfig.height);
     actorViews.set(actor.id,{standing,seated});scene.add(standing.mesh);if(seated)scene.add(seated.mesh);
   }
+  glintCanvas=document.createElement('canvas');glintCanvas.id='skill-glints';glintCanvas.width=sceneConfig.width;glintCanvas.height=sceneConfig.height;glintCtx=glintCanvas.getContext('2d');stage.append(glintCanvas);
   loading.remove();pauseButton.disabled=false;document.querySelector('#manual').disabled=false;setState('explore');
   let restored;try{storage=window.localStorage;restored=chapter.inspect(storage);}catch{restored={kind:'unavailable'};}
   snapshot=restored.snapshot||chapter.initial();position={...sceneConfig.entryPoints[snapshot.state]};
@@ -414,6 +490,7 @@ function navigateOption(key){
   else{const target=rows[(rowIndex+step+rows.length)%rows.length],x=row[column].x;target.reduce((a,b)=>Math.abs(a.x-x)<=Math.abs(b.x-x)?a:b).button.focus();}
 }
 window.addEventListener('keydown',event=>{
+  ensureAudio();
   const key=event.key.length===1?event.key.toLowerCase():event.key;
   if(state==='error'||state==='loading'){if(event.repeat&&(key==='Enter'||key===' '))event.preventDefault();return;}
   if(state==='transition'){event.preventDefault();if(!event.repeat&&(key==='Enter'||key===' '||key==='Escape'))finishTransition();return;}
@@ -439,6 +516,7 @@ window.addEventListener('keydown',event=>{
   if(event.repeat){if(state!=='explore')event.preventDefault();return;}
   if(key==='m'&&state==='explore'&&document.activeElement===stage){event.preventDefault();manual();return;}
   if(key==='q'&&state==='explore'&&document.activeElement===stage){const list=nearbyAll(position,visibleRoom());if(list.length>1){event.preventDefault();selectedTargetID=list[(list.findIndex(o=>o.id===active?.id)+1)%list.length].id;updateUI();}return;}
+  if(awardOpen&&key==='Escape'){event.preventDefault();return;}
   if(key==='Escape'){
     event.preventDefault();
     if(state==='explore')pause();

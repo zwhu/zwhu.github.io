@@ -4,6 +4,12 @@
   "entry": "interview",
   "terminal": "complete",
   "manualDialogue": "manual-1",
+  "skills": [
+    {"id": "linux", "name": "精通 Linux 系统重装", "event": "review_linux_git", "flag": "linux_git_reviewed", "role": "linux_screen"},
+    {"id": "jquery", "name": "熟练使用 jQuery 切西瓜", "event": "review_frontend", "flag": "frontend_reviewed", "role": "jquery_book"},
+    {"id": "java", "name": "细品 Java ☕️", "event": "study_java", "flag": "java_studied", "role": "java_book"},
+    {"id": "db", "name": "问 SQL 你 No 不 No", "event": "study_db_nosql", "flag": "db_nosql_studied", "role": "db_screen"}
+  ],
   "savePolicy": {
     "id": "atomic-per-event",
     "key": "career-rpg:hefei:v1",
