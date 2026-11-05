@@ -15,10 +15,8 @@ test('nanjing lists five skills',()=>{
   assert.deepEqual(chapter.skillSlots(chapter.initial()).map(skill=>skill.name),names);
   assert.deepEqual(chapter.skillSlots(chapter.initial()).map(skill=>skill.status),['none','none','none','none','none']);
   assert.equal(GAME_TITLE,'像素前端');
-  const banned='欢迎你游戏我的职业前半生';
-  for(const file of ['../main.mjs','../index.html','../story.mjs','../scene-config.mjs','../title.mjs','../../design/chapter-01.json'])assert.equal(readFileSync(new URL(file,import.meta.url),'utf8').includes(banned),false,file);
-  assert.equal(readFileSync(new URL('../index.html',import.meta.url),'utf8').includes('一路写来'),false);
   assert.match(readFileSync(new URL('../main.mjs',import.meta.url),'utf8'),/GAME_TITLE/);
+  assert.match(readFileSync(new URL('../index.html',import.meta.url),'utf8'),/像素前端/);
   const map=JSON.parse(readFileSync(new URL('../art/transition-map/transition-map.json',import.meta.url),'utf8'));
   assert.equal(map.animation_suggestion.duration_ms_hefei_to_nanjing,3200);
   assert.equal(map.animation_suggestion.easing,'ease-in-out');

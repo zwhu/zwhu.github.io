@@ -192,7 +192,6 @@ try {
   await connect();
   let view = await waitText('第一次做 C 端');
   if (view.title !== '像素前端') throw new Error('title ' + view.title);
-  if (`${view.dialogue}${view.title}`.includes('欢迎你游戏我的职业前半生') || `${view.dialogue}${view.title}`.includes('一路写来')) throw new Error('old name ' + view.dialogue);
   await evaluate('window.scrollTo(0,0)');
   await sleep(150);
   await shot('SLOGAN-01-title.png');

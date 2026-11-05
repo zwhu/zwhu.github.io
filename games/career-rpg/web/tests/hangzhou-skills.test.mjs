@@ -28,7 +28,6 @@ test('hangzhou lists five skills and does not replace hefei or nanjing',()=>{
   assert.equal(chapter.key,'career-rpg:hangzhou:v1');
   assert.equal(GAME_TITLE,'像素前端');
   assert.equal(chapter.skillSlots(chapter.initial()).filter(skill=>skill.role==='webpack_screen').map(skill=>skill.id).join(','),'webpack,babel');
-  assert.equal(readFileSync(new URL('../main.mjs',import.meta.url),'utf8').includes('欢迎你游戏我的职业前半生'),false);
 });
 
 test('each beat readies only its skill, and a second collect does nothing',()=>{

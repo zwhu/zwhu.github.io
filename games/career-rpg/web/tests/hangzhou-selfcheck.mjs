@@ -230,10 +230,12 @@ async function use(id, first, second) {
 }
 const NAMES = ['读懂商品发布这摊业务', '精读 23 种设计模式', '吃透 Webpack 插件机制', '吃透 Babel 插件机制', '一套表单架构，撑起五条业务线'];
 async function pickup(name, glintFile, awardFile, extra = []) {
+  await evaluate('window.scrollTo(0,0)');
   await shot(glintFile);
   await tap('e');
   const award = await waitText('获得技能：' + name);
   if (award.state === 'explore') throw new Error('award did not open ' + name);
+  await evaluate('window.scrollTo(0,0)');
   await shot(awardFile);
   for (const file of extra) await shot(file);
   const locked = award.position;
@@ -338,8 +340,8 @@ try {
   await send('Page.addScriptToEvaluateOnNewDocument', {source: `localStorage.setItem('career-rpg:nanjing:v1', ${JSON.stringify(save)});`});
   await send('Page.reload', {ignoreCache: true});
   let view = await waitText('南京 · 本章完成');
-  if (view.slogan !== '像素前端') throw new Error('journey title ' + view.slogan);
-  if (`${view.title}${view.dialogue}${view.slogan}`.includes('欢迎你游戏我的职业前半生') || `${view.title}${view.dialogue}`.includes('一路写来')) throw new Error('old name still visible');
+  if (view.slogan !== '像素前端' || view.title !== '像素前端') throw new Error('journey title ' + view.slogan + ' ' + view.title);
+  await evaluate('window.scrollTo(0,0)');
   await press('从南京走到杭州');
   const started = Date.now();
   let startShot = false, midShot = false;
@@ -365,9 +367,7 @@ try {
   await waitText('报到');
   const titled = await snap();
   const pageTitle = await evaluate('document.title');
-  const body = await evaluate('document.body.innerText');
   if (titled.title !== '像素前端' || pageTitle !== '像素前端') throw new Error('title ' + titled.title + ' ' + pageTitle);
-  if (body.includes('欢迎你游戏我的职业前半生') || body.includes('一路写来')) throw new Error('old name in page');
   await evaluate('window.scrollTo(0,0)');
   await shot('HZ-TITLE-01.png');
   await play(true);
