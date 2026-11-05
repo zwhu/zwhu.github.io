@@ -1,0 +1,286 @@
+{
+  "scene": "nanjing-office",
+  "stage": "lifecycle",
+  "scene_accepted": false,
+  "next_scene_authorized": false,
+  "hashes": {
+    "main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+    "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+  },
+  "evidence_base": "games/career-rpg/",
+  "version_note": "Current00b8c0/35dee8/d63b62 keyboard16/journey23 and scoped ISOLATION independently passed. This task adds STORY-05 pure sampled replay evidence only; no art/device/scene signoff or resource/performance change.",
+  "items": [
+    {
+      "id": "MERGE",
+      "scope": "合并阶段：当时88文件一致；不代表阅读改动后再次与源一致",
+      "status": "passed",
+      "evidence": "review/merge-2026-11-05/supervisor-check.json"
+    },
+    {
+      "id": "VERIFY",
+      "scope": "00b8c0 current worker: root 13 groups / game 15 offline rules, no browser/experience acceptance",
+      "status": "passed",
+      "evidence": "web/review/fallback/current-verify.log"
+    },
+    {
+      "id": "KEYBOARD-16",
+      "scope": "00b8c0 current production: independent Chrome keyboard16 targeted checks; other devices/scene gates separate",
+      "status": "passed",
+      "evidence": "web/review/keyboard-acceptance/latest-supervisor-checks.json"
+    },
+    {
+      "id": "JOURNEY-23",
+      "scope": "00b8c0/35dee8/d63b62 current production: independent continuous23-step/108 trusted-key journey, no pointer/checkpoint seed",
+      "status": "passed",
+      "evidence": "web/review/keyboard-journey/summary.json; web/review/keyboard-journey/latest-supervisor-review.json"
+    },
+    {
+      "id": "READING-4",
+      "scope": "255f77ac历史阅读修复版：正文首尾/焦点/返回/不串滚动，1280/375模拟",
+      "status": "passed",
+      "evidence": "web/review/dialogue-reading/supervisor-summary.json"
+    },
+    {
+      "id": "LOGIC-15",
+      "scope": "最新离线剧情前置/两学习顺序/幂等/15存档配置/碰撞等",
+      "status": "passed",
+      "evidence": "web/review/fallback/current-verify.log"
+    },
+    {
+      "id": "ART-01",
+      "scope": "南京场景/像素尺度/透视/硬边整体",
+      "status": "unverified",
+      "evidence": "web/review/keyboard-journey/latest-supervisor-review.json",
+      "gap": "Current1280 completion/seated screenshots reviewed; strict production-scale/grid and full art/layout scope still unverified"
+    },
+    {
+      "id": "ART-02",
+      "scope": "既有主角四向轮廓/服装与NPC区分：素材层沿用",
+      "status": "passed",
+      "evidence": "art/character-four-directions-v1-review.md; web/review/shared-features-checks.json"
+    },
+    {
+      "id": "ART-03",
+      "scope": "其他城市与昼夜对照，非本轮单一南京办公室",
+      "status": "not_applicable",
+      "gap": "其他场景未授权；不将其标成通过"
+    },
+    {
+      "id": "ART-04",
+      "scope": "完整文字/UI可读与气泡协调",
+      "status": "unverified",
+      "evidence": "web/review/dialogue-reading/supervisor-review.json",
+      "gap": "仅正文4项通过；窄屏整体/头部标题未正式验"
+    },
+    {
+      "id": "ART-05",
+      "scope": "生产网格/透明边缘/帧尺寸/脚底/渗色",
+      "status": "unverified",
+      "evidence": "art/README.md",
+      "gap": "运行alpha裁取不等于严格生产网格验收"
+    },
+    {
+      "id": "ART-06",
+      "scope": "作者确认本阶段视角/人物/色彩/UI",
+      "status": "unverified",
+      "evidence": "acceptance.md",
+      "gap": "旧Web原型获认可，不代签最新阶段作者验收"
+    },
+    {
+      "id": "ART-07",
+      "scope": "最新完整UI及南京成品一致性",
+      "status": "unverified",
+      "evidence": "web/review/keyboard-journey/latest-supervisor-review.json",
+      "gap": "Current1280 completion/seated screenshots reviewed; strict production-scale/grid and full art/layout scope still unverified"
+    },
+    {
+      "id": "ART-08",
+      "scope": "事实/布局可追溯、独立全场景门禁",
+      "status": "unverified",
+      "evidence": "spec.md",
+      "gap": "缺原话/真实布局等；scene_accepted=false"
+    },
+    {
+      "id": "PLAY-01",
+      "scope": "键盘/触屏移动、斜走/碰撞/边界/失焦",
+      "status": "unverified",
+      "evidence": "web/review/desktop-checks.json; web/tests/world.test.mjs",
+      "gap": "历史桌面/最新纯规则通过；触屏及最新完整交互未验"
+    },
+    {
+      "id": "PLAY-02",
+      "scope": "多对象优先级/距离/重复领取完整交互",
+      "status": "unverified",
+      "evidence": "web/review/shared-features-checks.json; web/tests/world.test.mjs",
+      "gap": "既有对象规则/Q证据可复用；最新UI未全覆盖"
+    },
+    {
+      "id": "PLAY-03",
+      "scope": "对话连续点击/关闭/跳过与输入隔离",
+      "status": "unverified",
+      "evidence": "web/review/keyboard-acceptance/supervisor-review.json",
+      "gap": "最新阅读返回通过，非全部连续点击/跳过回归"
+    },
+    {
+      "id": "PLAY-04",
+      "scope": "Current Chrome core keyboard journey, menu options/focus/manual/replay/storage choices; scope of16 checks plus continuous journey",
+      "status": "passed",
+      "evidence": "web/review/keyboard-acceptance/latest-supervisor-checks.json; web/review/keyboard-journey/latest-supervisor-review.json",
+      "gap": "Only supplied current Chrome scopes passed; no real-device/all-browser acceptance"
+    },
+    {
+      "id": "PLAY-05",
+      "scope": "Current Chrome confirmation press/release, cross-UI boundary, required choices, native blur input clearing",
+      "status": "passed",
+      "evidence": "web/review/keyboard-acceptance/latest-supervisor-checks.json",
+      "gap": "Other devices remain unverified"
+    },
+    {
+      "id": "STORY-01",
+      "scope": "Current production continuous Nanjing event chain to completion; sampled completion/manual/replay UI",
+      "status": "passed",
+      "evidence": "web/review/keyboard-journey/latest-supervisor-review.json; web/review/keyboard-acceptance/latest-supervisor-checks.json",
+      "gap": "Does not accept entire art/scene/device matrix"
+    },
+    {
+      "id": "STORY-02",
+      "scope": "稳定节点保存/刷新/继续/幂等",
+      "status": "unverified",
+      "evidence": "web/review/chapter-checks.json; web/tests/story.test.mjs",
+      "gap": "当前纯恢复规则通过；最新浏览器稳定节点未全验"
+    },
+    {
+      "id": "STORY-03",
+      "scope": "损坏/旧/禁用存储的完整UI恢复",
+      "status": "unverified",
+      "evidence": "web/review/keyboard-acceptance/latest-supervisor-checks.json",
+      "gap": "Current targeted storage choices/reset/replay passed; broader old-save/restore-old-event UI combinations not fully covered by this evidence"
+    },
+    {
+      "id": "STORY-04",
+      "scope": "Current Chrome targeted pause/resume, native dialogue focus return and native blur clearing held movement",
+      "status": "passed",
+      "evidence": "web/review/keyboard-acceptance/latest-supervisor-checks.json",
+      "gap": "Other browser/device combinations not covered"
+    },
+    {
+      "id": "STORY-05",
+      "scope": "Public-API sampled independent deterministic replay: two learning orders,15 events each,32 stable saves/restores, serializable state/manual equality",
+      "status": "passed",
+      "evidence": "web/review/story-determinism/supervisor-review.json",
+      "gap": "Supervisor independently passed this bounded public-API replay/restore scope; not universal proof"
+    },
+    {
+      "id": "STORY-06",
+      "scope": "恢复旧事件/菜单重玩只改本游戏",
+      "status": "unverified",
+      "evidence": "web/review/keyboard-acceptance/latest-supervisor-checks.json",
+      "gap": "Current targeted storage choices/reset/replay passed; broader old-save/restore-old-event UI combinations not fully covered by this evidence"
+    },
+    {
+      "id": "NARRATIVE",
+      "scope": "既有事实核对/经历表达与缺失史实",
+      "status": "unverified",
+      "evidence": "spec.md; design/supervision.md",
+      "gap": "已确认事实设计核对可复用；作者最终表达、根因/原话/真实布局未补"
+    },
+    {
+      "id": "BROWSER-MATRIX",
+      "scope": "Chrome/Safari/真实iOS与Android",
+      "status": "unverified",
+      "evidence": "web/review/dialogue-reading/supervisor-review.json",
+      "gap": "Chrome仅专项通过；Safari与真机矩阵缺证据"
+    },
+    {
+      "id": "RESPONSIVE",
+      "scope": "375/560/700/1280整体、横竖切换、高DPR",
+      "status": "unverified",
+      "evidence": "web/review/dialogue-reading/supervisor-review.json",
+      "gap": "375只阅读模拟；标题/整体/横竖/实屏未正式验"
+    },
+    {
+      "id": "FALLBACK",
+      "scope": "Supervisor current-version fault/read/retry/returnscope; 1280/375 are simulated, no full-scene or true-device acceptance",
+      "status": "passed",
+      "evidence": "web/review/fallback/supervisor-review.json",
+      "review": "10 cases passed independently; 127 key presses / zero pointers"
+    },
+    {
+      "id": "HUMAN-3",
+      "scope": "至少3名非设计参与者/时长/停顿点",
+      "status": "unverified",
+      "evidence": "acceptance.md",
+      "gap": "无真人记录；自动事件/软件GL不是真人试玩"
+    },
+    {
+      "id": "AUTHOR",
+      "scope": "本阶段美术/个人经历/体验正式确认",
+      "status": "unverified",
+      "evidence": "acceptance.md",
+      "gap": "保留原型历史认可；最新整章作者未确认"
+    },
+    {
+      "id": "DEPENDENCY",
+      "scope": "固定本地Three0.180.0及MIT许可留存，不含预算",
+      "status": "passed",
+      "evidence": "web/README.md; web/vendor/LICENSE"
+    },
+    {
+      "id": "ISOLATION",
+      "scope": "Independent two-page Chrome cold-cache24 requests/0 game resources;68 HTML direct refs static only",
+      "status": "passed",
+      "evidence": "web/review/blog-isolation/supervisor-review.json",
+      "gap": "Three public telemetry/comment scripts blocked; third-party execution, all-page/browser matrix outside scope"
+    },
+    {
+      "id": "BUDGET-LOAD",
+      "scope": "Static current Nanjing HTML-reachable closure, first 512KiB gzip / runtime 2MiB raw / HTML budgets",
+      "status": "failed",
+      "evidence": "web/review/resource-budget/summary.json; web/review/resource-budget/manifest.json",
+      "gap": "15 runtime files: 3864937 gzip bytes exceeds 524288 by 3340649; 5191167 raw bytes exceeds 2097152 by 3094015. HTML 3985 raw/1930 gzip passes only its size limits. No optimization or budget change.",
+      "current_phase_applicable": false,
+      "scope_change_reason": "Author defers H5/mobile; historical result retained, not passed."
+    },
+    {
+      "id": "BUDGET-START",
+      "scope": "1Mbps/150ms冷3次启动中位≤8秒",
+      "status": "unverified",
+      "evidence": "acceptance.md",
+      "gap": "缺受控测量；不作为已通过或自动后移",
+      "current_phase_applicable": false,
+      "scope_change_reason": "Author defers H5/mobile; historical result retained, not passed."
+    },
+    {
+      "id": "BUDGET-FRAME",
+      "scope": "桌面p95≤20ms/真实中端手机≤33.3ms及走路体验",
+      "status": "paused",
+      "evidence": "handoff.md; web/review/walk-cadence-check.json",
+      "gap": "走路卡顿未解决，用户要求暂停；软件GL/步态不替代体验",
+      "current_phase_applicable": false,
+      "scope_change_reason": "Author defers H5/mobile; historical result retained, not passed."
+    },
+    {
+      "id": "LIFECYCLE",
+      "scope": "Current real chapter replay/full document reload20 times; no in-document scene switch API",
+      "status": "unverified",
+      "evidence": "web/review/lifecycle/summary.json; web/review/lifecycle/series-final-counts.json",
+      "gap": "Native trusted pagehide/after-dispose counts verified and replay counts stable; complete JS/native memory,7 context helpers implicit reclamation, global listener/ResizeObserver teardown and BFCache scope unverified. No production leak asserted."
+    },
+    {
+      "id": "EXPORT-SITE",
+      "scope": "确定性导出/白名单/同步/导航/站点接入检查",
+      "status": "unverified",
+      "evidence": "acceptance.md",
+      "gap": "尚未实装/验；未授权发布不等于技术通过"
+    },
+    {
+      "id": "REMOTE-RELEASE",
+      "scope": "远端发布/PR提交：当前收尾未授权",
+      "status": "not_applicable",
+      "gap": "不提交推送发布；后续标准保留"
+    }
+  ],
+  "next": "Review seven remaining-character design sheets, then prepare frame/anchor candidates; no production integration, next-scene authorization, loop or cold-start resumption.",
+  "current_scope_note": "2026-11-05: Desktop keyboard phase. H5/mobile/touch/network-delivery targets deferred per author; historical statuses retained, not converted to passed. See ../../technical-plan.md and ../../handoff.md. Artwork sheets are candidates, no scene signoff."
+}

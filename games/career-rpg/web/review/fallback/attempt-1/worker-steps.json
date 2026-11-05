@@ -1,0 +1,371 @@
+{
+  "keys": [
+    {
+      "case": "js-disabled-1280",
+      "operation": "Tab to #read-summary",
+      "key": "Tab",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "js-disabled-1280",
+      "operation": "Tab to #read-summary",
+      "key": "Enter",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "js-disabled-1280",
+      "operation": "Tab to #back-blog",
+      "key": "Tab",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "js-disabled-1280",
+      "operation": "Tab to #back-blog",
+      "key": "Tab",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "js-disabled-1280",
+      "operation": "Tab to #back-blog",
+      "key": "Enter",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "operation": "inject webgl-failed",
+      "key": "Tab",
+      "modifiers": 8,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "operation": "inject webgl-failed",
+      "key": "Tab",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "operation": "Tab to #failure-read",
+      "key": "Tab",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "operation": "Tab to #failure-read",
+      "key": "Enter",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "operation": "Tab to #retry-game",
+      "key": "Tab",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "operation": "Tab to #retry-game",
+      "key": "Tab",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "operation": "Tab to #retry-game",
+      "key": "Tab",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "operation": "Tab to #retry-game",
+      "key": "Tab",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "operation": "Tab to #retry-game",
+      "key": "Enter",
+      "modifiers": 0,
+      "duration": 0,
+      "transport": "Input.dispatchKeyEvent"
+    }
+  ],
+  "observations": [
+    {
+      "case": "js-disabled-1280",
+      "label": "summary read",
+      "input": {
+        "keys": [],
+        "pointers": []
+      },
+      "focus": "chapter-summary",
+      "summary": "这一章的经历\n\n在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+    },
+    {
+      "case": "js-disabled-1280",
+      "label": "before keyboard return to blog",
+      "input": {
+        "keys": [],
+        "pointers": []
+      },
+      "focus": "back-blog",
+      "summary": "这一章的经历\n\n在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "label": "summary read",
+      "input": {
+        "keys": [
+          {
+            "type": "keydown",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "retry-game"
+          },
+          {
+            "type": "keyup",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "back-blog"
+          },
+          {
+            "type": "keydown",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "back-blog"
+          },
+          {
+            "type": "keyup",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "retry-game"
+          },
+          {
+            "type": "keydown",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "retry-game"
+          },
+          {
+            "type": "keyup",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "failure-read"
+          },
+          {
+            "type": "keydown",
+            "key": "Enter",
+            "trusted": true,
+            "focus": "failure-read"
+          },
+          {
+            "type": "keyup",
+            "key": "Enter",
+            "trusted": true,
+            "focus": "chapter-summary"
+          }
+        ],
+        "pointers": []
+      },
+      "focus": "chapter-summary",
+      "summary": "这一章的经历\n\n在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+    },
+    {
+      "case": "webgl-failed-1280",
+      "label": "persistent WebGL failure",
+      "input": {
+        "keys": [
+          {
+            "type": "keydown",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "retry-game"
+          },
+          {
+            "type": "keyup",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "back-blog"
+          },
+          {
+            "type": "keydown",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "back-blog"
+          },
+          {
+            "type": "keyup",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "retry-game"
+          },
+          {
+            "type": "keydown",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "retry-game"
+          },
+          {
+            "type": "keyup",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "failure-read"
+          },
+          {
+            "type": "keydown",
+            "key": "Enter",
+            "trusted": true,
+            "focus": "failure-read"
+          },
+          {
+            "type": "keyup",
+            "key": "Enter",
+            "trusted": true,
+            "focus": "chapter-summary"
+          },
+          {
+            "type": "keydown",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "chapter-summary"
+          },
+          {
+            "type": "keyup",
+            "key": "Tab",
+            "trusted": true,
+            "focus": ""
+          },
+          {
+            "type": "keydown",
+            "key": "Tab",
+            "trusted": true,
+            "focus": ""
+          },
+          {
+            "type": "keyup",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "read-summary"
+          },
+          {
+            "type": "keydown",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "read-summary"
+          },
+          {
+            "type": "keyup",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "back-blog"
+          },
+          {
+            "type": "keydown",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "back-blog"
+          },
+          {
+            "type": "keyup",
+            "key": "Tab",
+            "trusted": true,
+            "focus": "retry-game"
+          }
+        ],
+        "pointers": []
+      },
+      "focus": "retry-game",
+      "summary": "这一章的经历\n\n在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+    }
+  ],
+  "network": [
+    {
+      "case": "js-disabled-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/",
+      "status": 200
+    },
+    {
+      "case": "js-disabled-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/style.css",
+      "status": 200
+    },
+    {
+      "case": "js-disabled-1280",
+      "url": "http://127.0.0.1:65077/docs/index.html",
+      "status": 200
+    },
+    {
+      "case": "js-disabled-1280",
+      "url": "http://127.0.0.1:65077/docs/style.css",
+      "status": 200
+    },
+    {
+      "case": "js-disabled-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/",
+      "status": 200
+    },
+    {
+      "case": "js-disabled-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/style.css",
+      "status": 200
+    },
+    {
+      "case": "js-disabled-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/main.mjs",
+      "status": 200
+    },
+    {
+      "case": "webgl-failed-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/",
+      "status": 200
+    },
+    {
+      "case": "webgl-failed-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/style.css",
+      "status": 200
+    },
+    {
+      "case": "webgl-failed-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/main.mjs",
+      "status": 200
+    },
+    {
+      "case": "webgl-failed-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/",
+      "status": 200
+    },
+    {
+      "case": "webgl-failed-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/style.css",
+      "status": 200
+    },
+    {
+      "case": "webgl-failed-1280",
+      "url": "http://127.0.0.1:65077/games/career-rpg/web/main.mjs",
+      "status": 200
+    }
+  ]
+}

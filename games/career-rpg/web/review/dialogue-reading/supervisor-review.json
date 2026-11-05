@@ -1,0 +1,54 @@
+{
+  "time": "2026-11-04T20:12:41.391008+00:00",
+  "result": "passed_targeted_dialogue_reading_only",
+  "command": "node games/career-rpg/web/tests/browser.mjs --dialogue-reading --evidence=supervisor",
+  "hashes": {
+    "main.mjs": "255f77acfbcc2aedbe636af92b833e3bfb521a4891acf936581e7495d96d2c47",
+    "index.html": "b932843f68895a68d1ec2af804fb9ee10019a4ffdd4dcb43a5d8d4ce6e11272a",
+    "style.css": "229902e2e1c94e42bf7e49a37c204e35beb6e8f2fc4dec8a79c6a19840d4843e"
+  },
+  "cases": [
+    {
+      "kind": "complete",
+      "width": 1280,
+      "readable": true,
+      "pageStayed": true,
+      "returnAndConfirmNoMovement": true
+    },
+    {
+      "kind": "complete",
+      "width": 375,
+      "readable": true,
+      "pageStayed": true,
+      "returnAndConfirmNoMovement": true
+    },
+    {
+      "kind": "long-system",
+      "width": 1280,
+      "readable": true,
+      "pageStayed": true,
+      "returnAndConfirmNoMovement": true
+    },
+    {
+      "kind": "long-system",
+      "width": 375,
+      "readable": true,
+      "pageStayed": true,
+      "returnAndConfirmNoMovement": true
+    }
+  ],
+  "verify": "supervisor-verify.log: 13 checks passed",
+  "diff_check": "passed",
+  "visual_review": [
+    "supervisor-complete-1280-last.png",
+    "supervisor-complete-375-first.png",
+    "supervisor-complete-375-last.png",
+    "supervisor-long-system-375-last.png"
+  ],
+  "limits": [
+    "375仅正文阅读预览，不代表手机整体布局/真机通过",
+    "用户暂停的走路卡顿仍未解决",
+    "全场景/作者/真机未放行"
+  ],
+  "next_scene_authorized": false
+}

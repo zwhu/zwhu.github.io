@@ -1,0 +1,108 @@
+{
+  "status": "design_candidates_only_not_runtime_atlases",
+  "alpha_threshold": 128,
+  "source_rgba_unchanged": false,
+  "production_replaced": false,
+  "method": "libpng RGBA8 decode; alpha<128 removed, others opaque; transparent RGB zeroed; no resize or palette quantization; PNG->WebP lossless exact; decode verified",
+  "metadata": "Original images and provenance retained under art/source; derived candidate contains sRGB only, no provenance claim transferred",
+  "limitations": [
+    "Threshold changes alpha and may remove detail; visual comparison required.",
+    "Sheets are not split into runtime frames or aligned by animation anchors.",
+    "Walking, typing and runtime rendering not implemented for new characters."
+  ],
+  "characters": [
+    {
+      "id": "hangzhou-tl",
+      "width": 1536,
+      "height": 1024,
+      "original_bytes": 1223987,
+      "candidate_png_bytes": 652637,
+      "candidate_webp_bytes": 316176,
+      "alpha_changed_pixels": 1472950,
+      "source_sha256": "91c9930fa5658cdbfe6fa224dbfc2e33a1826f583f64d82d3f5c25a0290399f9",
+      "candidate_rgba_sha256": "2f089cccb288bc60d74bf077f51ceeb844323716e483ed3b89e9c689ac1ab6ce",
+      "candidate_webp_sha256": "e7aeaf2746498a5350abf81f7644ae550602f3a4923dc6fb937ecfc1556fa031",
+      "webp_decoded_exact_to_processed_png": true
+    },
+    {
+      "id": "hefei-founder",
+      "width": 1536,
+      "height": 1024,
+      "original_bytes": 1247669,
+      "candidate_png_bytes": 696899,
+      "candidate_webp_bytes": 322628,
+      "alpha_changed_pixels": 1483587,
+      "source_sha256": "738070c07660e21ccdec78b9021f379ab7c52675b727dc34ce61a093dc7538fc",
+      "candidate_rgba_sha256": "401adf08f3da44c3ff847463e168c756fe566380ce9bb1db30c102a22323cbc6",
+      "candidate_webp_sha256": "0705493b2d1563d45181d169888e3a5c929231923109050dd52feb0a2a5e7305",
+      "webp_decoded_exact_to_processed_png": true
+    },
+    {
+      "id": "hefei-roommate",
+      "width": 1536,
+      "height": 1024,
+      "original_bytes": 1244417,
+      "candidate_png_bytes": 609768,
+      "candidate_webp_bytes": 300448,
+      "alpha_changed_pixels": 1506183,
+      "source_sha256": "f430bdfe066162a83162afba05fb04e873ceef0e076cbf11c88229cdac573298",
+      "candidate_rgba_sha256": "46cfa1acb3fd7270ab163cb86f6c02509b4c434cac161416c877dec7257f4b91",
+      "candidate_webp_sha256": "5b947923f31b36ba5bd27c60dcd73cf54dd5b034a39eb15e9114ee8f1ba2b1c6",
+      "webp_decoded_exact_to_processed_png": true
+    },
+    {
+      "id": "nanjing-founder",
+      "width": 1536,
+      "height": 1024,
+      "original_bytes": 1254458,
+      "candidate_png_bytes": 709756,
+      "candidate_webp_bytes": 342922,
+      "alpha_changed_pixels": 1452553,
+      "source_sha256": "787a917602eb16de674d1ba3731ca6f59ab26640205312e3ea047032144af227",
+      "candidate_rgba_sha256": "0cb3403da7618eeebff9cfc19f11dd68afd40c9d923128f714c9ceb46885bcf8",
+      "candidate_webp_sha256": "da8fee2b9c8f764a94b513723a1f7ab05234af5c723170a4afea8305fd93749f",
+      "webp_decoded_exact_to_processed_png": true
+    },
+    {
+      "id": "project-colleague",
+      "width": 1536,
+      "height": 1024,
+      "original_bytes": 1236725,
+      "candidate_png_bytes": 708190,
+      "candidate_webp_bytes": 340436,
+      "alpha_changed_pixels": 1464545,
+      "source_sha256": "230581621c4bce14832e2c765aca1cc284c3dc3ab121726d41834da77d370ae4",
+      "candidate_rgba_sha256": "266eb3612900ac4daa0d104c126e65b69351dc42a5350bcd4c672b6ac1530a17",
+      "candidate_webp_sha256": "5b2a46efe3fd6e73b2702fc9d95c517124654fa85cce94f77163b948fb545f40",
+      "webp_decoded_exact_to_processed_png": true
+    },
+    {
+      "id": "resident-parent",
+      "width": 1536,
+      "height": 1024,
+      "original_bytes": 1221729,
+      "candidate_png_bytes": 678488,
+      "candidate_webp_bytes": 318638,
+      "alpha_changed_pixels": 1466016,
+      "source_sha256": "e6f69b12b3d170fd0b50d0eb30a0c024e2229dcadf293eef16fc3f588701b246",
+      "candidate_rgba_sha256": "36e214d9df58ff1026881605fd5b6e08508b6e8ea435399c4579ac4bc2a76b3d",
+      "candidate_webp_sha256": "162162b9f36e4d1361138df39978a92c46405a864f9067893747041274a9954e",
+      "webp_decoded_exact_to_processed_png": true
+    },
+    {
+      "id": "station-worker",
+      "width": 1536,
+      "height": 1024,
+      "original_bytes": 1309306,
+      "candidate_png_bytes": 732324,
+      "candidate_webp_bytes": 350214,
+      "alpha_changed_pixels": 1459731,
+      "source_sha256": "f429e3b48be28465fad3bcf7ff75279e089665013095b504f18ce011298b53b5",
+      "candidate_rgba_sha256": "8d645e4ae53f3aee090faa30a20d1b277191b27a3bbce2e8cbedf58c3a60aab6",
+      "candidate_webp_sha256": "8f760b2be4914b70678140c26a81ac210cbf928cdde879d45491753814dd825e",
+      "webp_decoded_exact_to_processed_png": true
+    }
+  ],
+  "total_original_bytes": 8738291,
+  "total_candidate_webp_bytes": 2291462
+}

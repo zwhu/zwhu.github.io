@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>程序绘制工位 · 南京对照样品</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#faf8f3;color:#292825;font:15px/1.8 system-ui,sans-serif}main{max-width:1040px;margin:auto;padding:32px 24px}h1{font-size:27px;font-weight:600;margin:8px 0}h2{font-size:18px;font-weight:500}p{max-width:760px}a{color:#a64335}a:focus-visible{outline:3px solid #a64335;outline-offset:4px}.muted,figcaption{color:#77746e;font-size:13px}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:24px}figure{margin:0}.stage{width:100%;aspect-ratio:160/128;display:block;background:#e9ddcb;border:1px solid #d7cdbd;image-rendering:pixelated}.variants{display:flex;gap:16px;flex-wrap:wrap}.variants img{width:240px;max-width:100%;image-rendering:pixelated;background:#e9ddcb;border:1px solid #d7cdbd}section{padding:20px 0;border-top:1px solid #e6e2da}table{border-collapse:collapse;width:100%;font-size:14px}td,th{text-align:left;padding:8px;border-bottom:1px solid #e6e2da}th{font-weight:500}@media(max-width:600px){main{padding:20px 16px}.comparison{grid-template-columns:1fr}h1{font-size:24px}}
+</style>
+<main>
+<p class="muted">独立绘图实验 · 未替换游戏素材 · 无需联网或安装依赖</p>
+<h1>用代码画一个南京工位</h1>
+<p>手工编写轮廓、色块和图层，再由程序输出透明 PNG。保留暖木色、深描边、蓝灰电脑与椅子，以及书、杯子、笔筒和便签；右图没有复制原图像素。</p>
+<div class="comparison">
+<figure><h2>南京现有参考</h2><svg class="stage" viewBox="175 215 350 300" role="img" aria-label="南京背景中左上工位的原图裁切视窗"><image href="../../web/art/office-room-v2.png" width="1672" height="941"/></svg><figcaption>原背景的局部视窗；包括地板。仅供风格对照，不是独立原素材。</figcaption></figure>
+<figure><h2>程序绘制 · 160 × 128</h2><img class="stage" src="desk-warm.png" alt="程序绘制的暖木工位，有电脑、蓝灰椅子、书本、杯子和文具"><figcaption>45 种 RGBA 值（含透明），PNG 1,186 B。放大只用于审阅像素，不新增细节。</figcaption></figure>
+</div>
+<section><h2>同一模板的参数变体</h2><div class="variants"><figure><img src="desk-dark.png" alt="较深木色的同一工位"><figcaption>深木色 · 1,187 B</figcaption></figure><figure><img src="desk-active.png" alt="屏幕更亮的同一工位"><figcaption>亮屏 · 1,186 B</figcaption></figure></div></section>
+<section><h2>这次能证明什么</h2><table><tr><th>项目</th><th>结果与边界</th></tr><tr><td>运行图</td><td>单个工位约 1.16 KiB；三版合计 3,559 B。</td></tr><tr><td>复用</td><td>共用一个函数，参数生成木色与屏幕变体。</td></tr><tr><td>尺寸与内存</td><td>160 × 128，未压缩 RGBA 缓冲区为 80 KiB；GPU 实际分配另计。</td></tr><tr><td>速度</td><td>三图生成约 0.04 秒，仅为脚本执行耗时，不包含设计、编码和审阅。</td></tr><tr><td>质量差距</td><td>参考的木纹、材质层次和非规则轮廓更丰富；样品更规整、更简化，尚未达到同风格替代标准。</td></tr><tr><td>成本</td><td>未测出可靠工时降幅；不能拿整幅背景与一个小工位比较压缩率。</td></tr></table></section>
+<p>建议先确认你是否接受这种像素语言。当前只完成工位样品，没有绘制人物或整场景，也没有接入碰撞和游戏。</p>
+<p><a href="generate.py">绘图源码</a> · <a href="report.json">尺寸与体积记录</a> · <a href="../../web/">回到南京游戏</a></p>
+</main>
+</html>

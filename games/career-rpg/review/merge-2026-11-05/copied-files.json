@@ -1,0 +1,870 @@
+[
+  {
+    "path": "games/career-rpg/AGENTS.md",
+    "sha256": "de4b676a572ad2f65634d695793521d0ec01c88257ef9473f1b81d9ded84cc02",
+    "bytes": 4441,
+    "action": "replaced_backed_up",
+    "target_before_sha256": "baf697727c715f03fc2e60a71bcc5798cc815ab253efd15a49a71a86a14cc15d"
+  },
+  {
+    "path": "games/career-rpg/README.md",
+    "sha256": "74f6060ac22ff1cbe1e776ba37333cf0eeb8cbc9f1f17c4ac619d8d00d233059",
+    "bytes": 1451,
+    "action": "replaced_backed_up",
+    "target_before_sha256": "aa23f9d2c95485d26cee0776baa45fc5214c6be34f74b2ff703f779544316bee"
+  },
+  {
+    "path": "games/career-rpg/acceptance.md",
+    "sha256": "8e0da200c3b0e338a2f1eb96793f87c512e5b5feddadbac62498fe92f3184a59",
+    "bytes": 16636,
+    "action": "replaced_backed_up",
+    "target_before_sha256": "3b2ea5604eba33b45b593179f369c8c0292305dc88fd65f3235f94cc0ef489d7"
+  },
+  {
+    "path": "games/career-rpg/art/README.md",
+    "sha256": "a12cf6a969144fb843ee497b7063ec6942c5bbe9136ffb78c581d8dd279645ac",
+    "bytes": 2695,
+    "action": "replaced_backed_up",
+    "target_before_sha256": "8534538f9ca2ce419905aad06c59fb013f8bc4eb2aa3bcada5f22d9102236f8a"
+  },
+  {
+    "path": "games/career-rpg/art/character-four-directions-v1-prompt.txt",
+    "sha256": "8d89829ed0fc858fb130945082c15a4e4607aedaf6e063d1209978c13718931b",
+    "bytes": 1732,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/character-four-directions-v1-review.md",
+    "sha256": "0b25d6b0944007d20c531b7e15ad918124bf339cfd00778dae8312b2c257e0f9",
+    "bytes": 491,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/character-four-directions-v1.png",
+    "sha256": "35cda03b7a85b248a6c8f9d2debdd4c7d9f2378d8c5e4c12f14b8680267e2533",
+    "bytes": 1183104,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/character-front-v1-imagegen-prompt.txt",
+    "sha256": "813a0209ab721fe0d9b3f4205058cac3399c337800e8d33e8e0424d7e21b4fe7",
+    "bytes": 1526,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/character-front-v1-prompt.txt",
+    "sha256": "4769236b898edb1f36c0e623cde0cac6c66f6b8b23eda3827ff6a04ebfc9d0a1",
+    "bytes": 596,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/character-front-v1-review.md",
+    "sha256": "8c366a6709b9990d04f4fe9bc5265c81232d888c2f445398cd37b93aa7219cfa",
+    "bytes": 638,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/character-front-v1.png",
+    "sha256": "deaa6249ac09892fe2609377638df13a278af64932b6b79b6a3a476bfb5c93fd",
+    "bytes": 1054266,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/grid-sample-v1/README.md",
+    "sha256": "8706b784b7bfe13b562ed2a9bf23566361f11beb6d33ca1a73e49e656d24be8a",
+    "bytes": 2985,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/grid-sample-v1/codex-audit.json",
+    "sha256": "27fcea2df3a83ae6bb7e5f0f765b2de183dde8890f0aa825e668929edd27bcb8",
+    "bytes": 303,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/grid-sample-v1/flash-finish.json",
+    "sha256": "aacb93350bf5cee45891f7a1c4d96adeba9b975a6327cbf83c275f5032bc222c",
+    "bytes": 1100,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/grid-sample-v1/floor.png",
+    "sha256": "c75c353a37ba3ba2d002783bce10ca26b67c276e4e5004054ea62034ecbd7e37",
+    "bytes": 104,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/grid-sample-v1/generate.py",
+    "sha256": "9d593e896544ea66c7b0e7d0542587d1f4f5ed8abc08b8aea861c081263f82e8",
+    "bytes": 8824,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/grid-sample-v1/player.png",
+    "sha256": "bab6be265f0d88580a9707e652ded8ac9d70da66879de7178eb1b4c3780ac454",
+    "bytes": 291,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/grid-sample-v1/preview.png",
+    "sha256": "988a8b411b6d7223450466234d8fc036199311ce68539a5efcc2a980d8f4c8f3",
+    "bytes": 14366,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/grid-sample-v1/source.json",
+    "sha256": "d6f1166909cd6555ae5990a8ab0ace9004d72a55e901b947b446a859617f9761",
+    "bytes": 5036,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/grid-sample-v1/verification.json",
+    "sha256": "807ccc921435e973d63135dd2af0aa5756e90925596e755f733258dc92c590d7",
+    "bytes": 1844,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/image-audit-v2-v3.json",
+    "sha256": "86bdd2a5b27f26bed0e2a0e79b0ec1af853823181a71cb76b2e36c42ca4372e3",
+    "bytes": 447,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/nanjing-art-direction-v1.png",
+    "sha256": "93e382bd5c0b8d9855d2e54c708fb18993e0d958cf35047f49e6373bf122b34b",
+    "bytes": 1854569,
+    "action": "already_identical",
+    "target_before_sha256": "93e382bd5c0b8d9855d2e54c708fb18993e0d958cf35047f49e6373bf122b34b"
+  },
+  {
+    "path": "games/career-rpg/art/nanjing-art-direction-v2.png",
+    "sha256": "dd63712c5a11f6c5aca6389cd045cfc3d5bd09bca76436352bdc461d48704e4c",
+    "bytes": 1370916,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/nanjing-art-direction-v3.png",
+    "sha256": "a415a21a3cc204cce8a4e0f9ca77547e0c568f45ab1307960b5b60e5fd1f97cb",
+    "bytes": 1318486,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/npc-team-v1-prompt.txt",
+    "sha256": "196e085ad7d0e313e49d6c6c8bd1b7ff75edad9f928404dfbf81ee25f00c44c5",
+    "bytes": 1441,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/office-props-v1-prompt.txt",
+    "sha256": "8815d65fac10250127a479c152f821160083358b5647a17d3cd6173e97571b47",
+    "bytes": 1983,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/office-props-v1-review.md",
+    "sha256": "5f81f901bbacd807f74581c38d0d5594fd2d1d4fdd949dd746e7607acc0a8799",
+    "bytes": 689,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/office-props-v1.png",
+    "sha256": "f2f099792b8f99774d261287505b1e0d178d054033920491a62ac9e4e7e27136",
+    "bytes": 1181702,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/player-emotions-v1-prompt.txt",
+    "sha256": "76de61149ded84202436bb7548adb18edfb90ecd60f5afbe361af3422547278d",
+    "bytes": 1377,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/player-walk-v1-prompt.txt",
+    "sha256": "8f02a9068fc3639fb680a0083582440221620723841abf84836ef02e4c68a471",
+    "bytes": 1687,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/prompt-v1.txt",
+    "sha256": "2f4273988ae973fed0843aea7d0445bd907ae12da758d7d4c50710d575b37e08",
+    "bytes": 2727,
+    "action": "already_identical",
+    "target_before_sha256": "2f4273988ae973fed0843aea7d0445bd907ae12da758d7d4c50710d575b37e08"
+  },
+  {
+    "path": "games/career-rpg/art/prompt-v2.txt",
+    "sha256": "838823fad26ec7fb1f32ec961f0f214ac6593aaf7c7f1dd787f9059184049300",
+    "bytes": 1617,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/prompt-v3.txt",
+    "sha256": "341fec09add911dcd80c127d2d57bd3c18f35efd9f9b099ba8ac3f9a8e167217",
+    "bytes": 1009,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/review-v2-plan.md",
+    "sha256": "ea8ccb5e21d00bd4adcc23fd64ab14d5bc302cc8f20e2d259bad95b571a0f25e",
+    "bytes": 775,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/review-v2.md",
+    "sha256": "9153d099e36f491ea2a5cd15d9fcac162a9ebf6fbf8dd4f3938551ead291076d",
+    "bytes": 571,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/review-v3.md",
+    "sha256": "041511100470d30722ddaec5cc163670f28c29797f745c93c092ef66ad064d15",
+    "bytes": 767,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/typing-team-v1-prompt.txt",
+    "sha256": "1bbfab8db8458870004f090b5b26bfeb67356fa8a5d13cbfd12fa3efeb81fc07",
+    "bytes": 1931,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/web-player-v1-prompt.txt",
+    "sha256": "b781a444c2128bc0d4a96563a86b052d9065347d75706f1dbee798780ebf08b9",
+    "bytes": 776,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/web-room-v1-prompt.txt",
+    "sha256": "8ef8937dde6db156ec8fbb09293363bc8b52f3afa6285929c62f34d62d326bb9",
+    "bytes": 1502,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/art/web-room-v2-prompt.txt",
+    "sha256": "77218e13a8c3a1227349d030807d09cff943fc59a272a5116c547c00fec75793",
+    "bytes": 1859,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/chapter-01-art.md",
+    "sha256": "1df797f528dc41d999f63e6d00f324e6f4039689f232665690e4975dcf3ec142",
+    "bytes": 11530,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/chapter-01.json",
+    "sha256": "bd44b33318ac4ca61d24c13452ff6da2f4b3ba3e72ab1f1cff4639d5073721e8",
+    "bytes": 73537,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/chapter-01.md",
+    "sha256": "7cd06df21efbbcc6405603cc6c8535781ed307a654a51af6b5931dbcc5e15402",
+    "bytes": 36089,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/agent-v1-chapter-01-art.md",
+    "sha256": "5933fc14e46b37c88ccf90e78318d43f155f29331b7776c115f52e0903162943",
+    "bytes": 7177,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/agent-v1-chapter-01.json",
+    "sha256": "2b0602e25de2e64507c5b51265e6238f5d186b0a06c8e226430622f0d514a343",
+    "bytes": 48103,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/agent-v1-chapter-01.md",
+    "sha256": "adaaffcd5381f23d75c209508e9c66e6e8c0e050ca617bfdb155562d7a3cd201",
+    "bytes": 28673,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/agent-v2-chapter-01-art.md",
+    "sha256": "c5e89347f7befaa5a497af8d58793497d98d54363d7339864378bd3df626e003",
+    "bytes": 10901,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/agent-v2-chapter-01.json",
+    "sha256": "13f1847b56ea276ba861c8b5f7bed85da6d2b0ede45b23af911e2c9bcddc1ede",
+    "bytes": 66031,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/agent-v2-chapter-01.md",
+    "sha256": "f31436412c83ee24bdb8106944022d0670898798485d7d9f02e86f14178f557f",
+    "bytes": 22739,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/agent-v3-chapter-01-art.md",
+    "sha256": "c111ee5659e184a6b8a168eddeb804d904f0910ee4bb13504f90708ba71cd7cf",
+    "bytes": 11873,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/agent-v3-chapter-01.json",
+    "sha256": "1f4d4f9fdee13ee3a050fff3f95724e43defc98a72908a5c91f662d2518afb8a",
+    "bytes": 80853,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/agent-v3-chapter-01.md",
+    "sha256": "9db0e375d6283f57d20575dc52c6ddf57bba1af009a8785eea12cfb1fa166995",
+    "bytes": 28887,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/flash-data-v1.json",
+    "sha256": "c22ce4d69a2406726026c9c94a3127080d2b95a70bf48f025f9cd3c4079123be",
+    "bytes": 16937,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/flash-data-v2-invalid.txt",
+    "sha256": "a94e47faafbc8186dca18d161523c01c9df321033eda756a78527c043b8c1e5c",
+    "bytes": 16323,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/gen-chapter-01.py",
+    "sha256": "69ccf3d643f950827096c59a37db07caf719e908b3d1baadb5e320e8f5e52700",
+    "bytes": 112858,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/review-01.md",
+    "sha256": "1a290f22580ecd4f10f5c3c4c27b015457c554bc06fcc1bd8bced9522ecb74fc",
+    "bytes": 3245,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/review-02.md",
+    "sha256": "708a811619ddb9b1d225d8720692c98cb3eaf0302a3177728308b07fe0e26302",
+    "bytes": 1542,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/review-03.md",
+    "sha256": "4ae07e3cfbce2cff0128263dd90a7a11cb42f26c0ef1ca917e8ec7afba81f024",
+    "bytes": 3856,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/review-04.md",
+    "sha256": "de5990698f585402d6976437bbccf0b1bc7e4aeec40c7186e11e9bab140a29b0",
+    "bytes": 2661,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/review-05.md",
+    "sha256": "0ce6981ef2a0a63a6d03199850d09967480ed6d8e7bc1d694dbb3fa1dd392ad4",
+    "bytes": 3983,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/review-06.md",
+    "sha256": "60ca1cdc43f437a151082171f83140096983ab9a09d0f4d38f72463de7d5fe37",
+    "bytes": 2038,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/revisions/review-07.md",
+    "sha256": "ea2ff772eaba5929753e345ae727fbde9876f360b97d8f5e361eb59ed23a0038",
+    "bytes": 2147,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/design/supervision.md",
+    "sha256": "71f4fb7d5997433090c089da42a4feb35d4d6a640aa5323ff97af9c50745b219",
+    "bytes": 2631,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/handoff.md",
+    "sha256": "bea4fc5fa148fc7f9b99a214a867ecbc9d3fc4fe227c9642a893a24f0255a0dd",
+    "bytes": 10891,
+    "action": "replaced_backed_up",
+    "target_before_sha256": "139d01d021d49f98516d46b64f946aea6075a2795ef9e196966f30ce97a32079"
+  },
+  {
+    "path": "games/career-rpg/history/handoff-before-scene-upgrade-2026-11-05.md",
+    "sha256": "6eed1bfb5bd0c62602c6532ce87c08999d64653f22c5f9fb1262ae85baf6c5d7",
+    "bytes": 24163,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/scripts/audit-chapter-01.py",
+    "sha256": "1d6e23b66b46cddbf9578cf864f2c02f91e01ad24264755b791d0dcd32998964",
+    "bytes": 4085,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/scripts/check-design.py",
+    "sha256": "f204f71beb740a6db41d6e431d03b1ee7d7f38b5805383e873500b89a22bdf58",
+    "bytes": 8976,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/spec.md",
+    "sha256": "450c9297b100161126bce1775d527acbf15231e72b9f1d23754fb8d03d7c1f91",
+    "bytes": 10342,
+    "action": "replaced_backed_up",
+    "target_before_sha256": "37753db66e971119769af7acf1744ddff6407a5bf730f0c4667ef4f6f495d3de"
+  },
+  {
+    "path": "games/career-rpg/tasks/art-grid-sample.md",
+    "sha256": "e26cafbdc6999684b162a321c8fdc11427ef0053c42302bdde200acc4092f7ad",
+    "bytes": 2095,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/tasks/chapter-01-execute.md",
+    "sha256": "179ad2d52e8a64d24c823ed1cc87d69fe7c464eb72774aa1e16f01ac5aa677c4",
+    "bytes": 3599,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/tasks/chapter-01-flash.md",
+    "sha256": "ddd7e36726aaf4cacf75b8faba63a5e16f37991469d206c431c350e1bc99992e",
+    "bytes": 4745,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/tasks/grid-finish.md",
+    "sha256": "12ae41cd8666ed8d5f462c7fdc9005b7a8460e136e7dfe43ff10cfece22546d0",
+    "bytes": 2264,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/tests/test_design.py",
+    "sha256": "9c53896d237c1ac11898c187640adf60ec7311bae0db05702970ae2e7eee8a36",
+    "bytes": 5543,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/README.md",
+    "sha256": "508a8b518baae2a53bcba9f03012ecbcac81d912ae27ddc642a1dbdeee5e0efc",
+    "bytes": 5642,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/actors.mjs",
+    "sha256": "f10a5eb44b2d600e7aceb05f64e78f34c9b179ad92b239934267349b4b5718a3",
+    "bytes": 4236,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/art/npc-team-v1.png",
+    "sha256": "25a4188b1b181e00180c89d127926b8d2101fe2d961fafc83315962aacedb9b1",
+    "bytes": 524318,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/art/office-room-v2.png",
+    "sha256": "3f72d04fc17c0e04fedd57557857c87fc91b966231a8facab8f0f28e4e17a7fe",
+    "bytes": 1518707,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/art/office-room.png",
+    "sha256": "2e12c47e5fbccc8e9effaade485f1c35ebd9717b1faf177e4498093cec3583ef",
+    "bytes": 1298198,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/art/player-emotions-v1.png",
+    "sha256": "65524bcdcc181753b4721e644b7f9f02e966ce433e3d7d157ca7fc373829d80f",
+    "bytes": 786164,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/art/player-front.png",
+    "sha256": "2ad989af40a14dc82bd26b80d64932fa083c10791c82a9c7b1e530d9bf160452",
+    "bytes": 900168,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/art/player-walk-v1.png",
+    "sha256": "0f72b54f7f757b21638087ce52d940588eafb30a3b8323d4bf3c7313b23591ff",
+    "bytes": 616093,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/art/typing-team-v1.png",
+    "sha256": "a9ffc37e0a18e55062cb167bb3c090be2f0a2427caffacd394b6fe5567d57507",
+    "bytes": 898822,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/handoff.md",
+    "sha256": "0bd7fd80c8a0fb6ed50775d8724276182df26484346c81e392b2dedc49a3fb09",
+    "bytes": 8171,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/index.html",
+    "sha256": "d24c348b95241d7622b155b2a03fc248ae0fff14efa90fc75515e76e14d3e7b5",
+    "bytes": 2517,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/main.mjs",
+    "sha256": "f01ec568147132e792f4156bab076c7dc98ba60dc30d758bc4e6256e4f083eb7",
+    "bytes": 21263,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/chapter-checks.json",
+    "sha256": "2f20f6f42c43a9f490c226a3d96710edf685755bcda17c4222188d62c873a5c9",
+    "bytes": 727,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/chapter-complete.png",
+    "sha256": "1df83d1fe47c538cbe5c714e4547872f5a39ebaba066955ec909a05bbe01ba62",
+    "bytes": 445459,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/chapter-office.png",
+    "sha256": "9cbac1f48e730aad7650777046375b23580a9fd254e249333fe77add2d01a72d",
+    "bytes": 475292,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/chapter-restored.png",
+    "sha256": "4a4e0f290116c04e246801df64ea31c077d6dbd385556af61445257acce83292",
+    "bytes": 395645,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/cold-move-baseline.json",
+    "sha256": "9775dc59bd9ab1c8dc06da5c824315bce42b16d7a0a8b952f88341556090365a",
+    "bytes": 86187,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/desktop-checks.json",
+    "sha256": "c022d8c37e3d6fe7caa995f858176734906472b9ac66d44c90ff8d894c9d82bd",
+    "bytes": 544,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/desktop-dialogue.png",
+    "sha256": "c2cc6d5be945f3f534c0e92a8a906e5c8e65b4ec4d59834334de305c8412281d",
+    "bytes": 288209,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/desktop-office.png",
+    "sha256": "15bb1b5c16b62c09d46213f5de9132ec4b1cef1738f5dbb96eec4baf1966da2c",
+    "bytes": 393241,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/desktop-startup-error.png",
+    "sha256": "fa7da4c4a75933cf56051df14b7e4382f6acba64efe1833a710c1c7fa8c9bf7f",
+    "bytes": 32711,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/restored-copy-check.json",
+    "sha256": "b8aca32b4a86d0e84a87a60c5187bf7a6ebb41bdd947b2c2ef4e62ae293cb4bd",
+    "bytes": 218,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/shared-cto-bubble.png",
+    "sha256": "1846874c29b42dc1605a24a3edf3d6162c08ab89a27a709faa6436e0842e24ee",
+    "bytes": 449942,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/shared-features-checks.json",
+    "sha256": "556c36b38559b14c103ac8cf910811398e48d05149efd8298dbbbbe87290cbb5",
+    "bytes": 591,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/shared-happy.png",
+    "sha256": "961ed471b3cba7deb7d0fb1cfe05ecfa5036c3a12bf5b95e81d69d1ac0d30d62",
+    "bytes": 393514,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/shared-office-work.png",
+    "sha256": "bb52635896c4f537d819a5784f5ac06dcdfa26f2f79afe98e2f69f9556e800c6",
+    "bytes": 474004,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/shared-player-typing.png",
+    "sha256": "1ecc106acf9d35e9eb5567483fa7d82d73dda7736be7dfe7c0c7dbd1139efda0",
+    "bytes": 454438,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/shared-tense.png",
+    "sha256": "ab8a9e52336a589a8d49c685f6bee72685abb56deb80796ead7774ae09f9d1af",
+    "bytes": 448535,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/shared-walk-down.png",
+    "sha256": "f621a06de4b15f60b328f3e959ac87dea3bf717badc4e90ff1ee5e734cfac769",
+    "bytes": 474308,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/shared-walk-left.png",
+    "sha256": "a120329bab8c68c9b11fc262290dc954073279266b921408e818e61d9b683830",
+    "bytes": 474884,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/shared-walk-right.png",
+    "sha256": "a8991f76734ed64f659007a7f009e0d8e3428d92e055fde6fbf411ec6c9b5168",
+    "bytes": 474783,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/shared-walk-up.png",
+    "sha256": "d0fbcdb6660c49704f2562866a33d2fdcb8f90d18ff42cdd2bebba37ed80ba58",
+    "bytes": 473478,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/startup-error.json",
+    "sha256": "680ec2390c949005a34e097e96880d6657263a591b6ff52acc03d60700f14610",
+    "bytes": 297,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/task-marker-check.json",
+    "sha256": "1d331928678099dba4622b7019de781249c740324da1f6bca425108dadbc7d61",
+    "bytes": 1826,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/task-marker-visible.png",
+    "sha256": "c62b74b1fabdc8aa01dc2523f42349741ad3a3dfa610244c9f8a5a0acd4cef01",
+    "bytes": 476776,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/walk-cadence-check.json",
+    "sha256": "b1ae3406cd6ee8c5938266c37b4fdd6a3e60bcb52b0e2371eab8ad44e4fcb100",
+    "bytes": 6532,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/walk-sample-00.png",
+    "sha256": "048f2b7e3d335bb9602a7ec872736759ffea63ed528032250fbd336df5922154",
+    "bytes": 476139,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/walk-sample-01.png",
+    "sha256": "e8c27b46ddc3464ef585f98196e88a28816719f5ed4287745e6d105078fee08c",
+    "bytes": 476796,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/walk-sample-02.png",
+    "sha256": "75761ae7099cac3335faaac8bc351becb10c89aef8c5a82f3be25a039279c6e4",
+    "bytes": 476036,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/review/walk-sample-03.png",
+    "sha256": "cb5d024fbfd305b174113efb5ad0752e90ae648275f4c75efd54402641470fbf",
+    "bytes": 476879,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/scene-config.mjs",
+    "sha256": "6a9277bd4da740a37cf1d1e06a9289112fd91798181c3d788c0593b2062373f2",
+    "bytes": 4332,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/story.mjs",
+    "sha256": "6b13dad3a8ad77cb01465a1685694978cc1acad70527b1ac86a390252450e424",
+    "bytes": 4029,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/style.css",
+    "sha256": "89b20e589948800713da0ac13a1b3a8b91cdd5f9f22773019c8ee6c3783444f8",
+    "bytes": 4945,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/tests/browser.mjs",
+    "sha256": "47fed72db67d68ce9f79e3c20f1988199afdf5b1cf8a1da70e45a8e81d2d03f5",
+    "bytes": 23955,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/tests/scene.test.mjs",
+    "sha256": "445808e3addff3d870527408f12e2a4af56f7a67a3a3a9037d3218191bea84e0",
+    "bytes": 4317,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/tests/story.test.mjs",
+    "sha256": "31f1d915f737184e345743e1ef167070cdc8a98f37d082cbac927fa0d48fcbef",
+    "bytes": 3978,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/tests/world.test.mjs",
+    "sha256": "2b74c8c2cd145cad63b887cfb23915bb3c14ee268944d71c4155ff54fcaec845",
+    "bytes": 846,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/vendor/LICENSE",
+    "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+    "bytes": 1081,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/vendor/three.core.min.js",
+    "sha256": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de",
+    "bytes": 381124,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/vendor/three.module.min.js",
+    "sha256": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6",
+    "bytes": 338908,
+    "action": "added",
+    "target_before_sha256": null
+  },
+  {
+    "path": "games/career-rpg/web/world.mjs",
+    "sha256": "f2c80bb039766af708fa0b9f7f324e1fffaa459c923882ec9aa46e2af87d650d",
+    "bytes": 1291,
+    "action": "added",
+    "target_before_sha256": null
+  }
+]

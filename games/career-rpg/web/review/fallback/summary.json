@@ -1,0 +1,475 @@
+{
+  "status": "ready_for_review",
+  "scene": "nanjing-office",
+  "stage": "fallback",
+  "worker_self_check": "passed",
+  "supervisor_review": "passed_fallback_only",
+  "scene_accepted": false,
+  "next_scene_authorized": false,
+  "current_hashes": {
+    "main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+    "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+  },
+  "checks": {
+    "browser": "10 cases: 4 fault types plus affected normal smoke, each at 1280/375 simulated widths; version-specific reuse below",
+    "root_verify": {
+      "command": "python3 scripts/verify.py",
+      "exit_code": 0,
+      "groups": 13,
+      "game_rules": 15,
+      "evidence": "current-verify.log"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "status": "passed",
+      "exit_code": 0
+    },
+    "unchanged_files": {
+      "count": 24,
+      "status": "passed",
+      "evidence": "unchanged-files.json"
+    },
+    "input": "Trusted Chrome CDP keyboard events, zero pointers; no click(), focus(), scrollTop assignment, checkpoint seeding or story functions; page activation is a real browser tab action"
+  },
+  "cases": [
+    {
+      "id": "js-disabled-1280",
+      "status": "passed",
+      "evidence": "final-checks.json",
+      "steps": "final-steps.json",
+      "tested_hashes": {
+        "main.mjs": "b54ba5f73b65b0938289d7af0882386aa879ff039f027896584216f35174df33",
+        "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+        "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+      },
+      "reuse": "JS disabled: identical HTML/CSS, main never executes",
+      "behavior": {
+        "message": "游戏脚本尚未启动；若已关闭 JavaScript 或脚本无法加载，可继续阅读下方经历摘要，或回到博客。恢复脚本后可刷新本页重试。",
+        "retry": "browser/profile JavaScript restored; new navigation starts game; disabled JS retains summary and native return",
+        "summary": {
+          "top": 364.8125,
+          "bottom": 390,
+          "viewport": 900,
+          "focus": true,
+          "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+        },
+        "blog": {
+          "href": "http://127.0.0.1:65466/docs/index.html",
+          "status": 200,
+          "pathname": "/docs/index.html",
+          "title": "技术博客 · zwhu",
+          "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+        }
+      },
+      "screenshots": [
+        "js-disabled-1280-failure.png",
+        "js-disabled-1280-summary.png"
+      ]
+    },
+    {
+      "id": "js-disabled-375",
+      "status": "passed",
+      "evidence": "final-fixed-checks.json",
+      "steps": "final-fixed-steps.json",
+      "tested_hashes": {
+        "main.mjs": "baf973adbe96a1014e16aa93281e8c1212cee8ead81be65ca977b7d34d063be5",
+        "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+        "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+      },
+      "reuse": "JS disabled: identical HTML/CSS, main never executes",
+      "behavior": {
+        "message": "游戏脚本尚未启动；若已关闭 JavaScript 或脚本无法加载，可继续阅读下方经历摘要，或回到博客。恢复脚本后可刷新本页重试。",
+        "retry": "browser/profile JavaScript restored; new navigation starts game; disabled JS retains summary and native return",
+        "summary": {
+          "top": 415.09375,
+          "bottom": 490.65625,
+          "viewport": 900,
+          "focus": true,
+          "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+        },
+        "blog": {
+          "href": "http://127.0.0.1:49178/docs/index.html",
+          "status": 200,
+          "pathname": "/docs/index.html",
+          "title": "技术博客 · zwhu",
+          "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+        }
+      },
+      "screenshots": [
+        "js-disabled-375-failure.png",
+        "js-disabled-375-summary.png"
+      ]
+    },
+    {
+      "id": "webgl-failed-1280",
+      "status": "passed",
+      "evidence": "final-fixed-checks.json",
+      "steps": "final-fixed-steps.json",
+      "tested_hashes": {
+        "main.mjs": "baf973adbe96a1014e16aa93281e8c1212cee8ead81be65ca977b7d34d063be5",
+        "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+        "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+      },
+      "reuse": "After this test main only added renderer canvas removal; these failures precede renderer assignment, so removal is a no-op",
+      "behavior": {
+        "message": "办公室暂未打开：Error creating WebGL context. 请检查浏览器的图形支持、网络与本地 HTTP 服务后重试。",
+        "retry": "keyboard Enter reload -> office dialogue, stable save preserved",
+        "persistentRetry": "still readable with retry/summary/blog when graphics stay unavailable",
+        "summary": {
+          "top": 673.703125,
+          "bottom": 698.890625,
+          "viewport": 900,
+          "focus": true,
+          "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+        },
+        "blog": {
+          "href": "http://127.0.0.1:49178/docs/index.html",
+          "status": 200,
+          "pathname": "/docs/index.html",
+          "title": "技术博客 · zwhu",
+          "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+        }
+      },
+      "screenshots": [
+        "webgl-failed-1280-failure.png",
+        "webgl-failed-1280-summary.png"
+      ]
+    },
+    {
+      "id": "webgl-failed-375",
+      "status": "passed",
+      "evidence": "final-fixed-checks.json",
+      "steps": "final-fixed-steps.json",
+      "tested_hashes": {
+        "main.mjs": "baf973adbe96a1014e16aa93281e8c1212cee8ead81be65ca977b7d34d063be5",
+        "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+        "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+      },
+      "reuse": "After this test main only added renderer canvas removal; these failures precede renderer assignment, so removal is a no-op",
+      "behavior": {
+        "message": "办公室暂未打开：Error creating WebGL context. 请检查浏览器的图形支持、网络与本地 HTTP 服务后重试。",
+        "retry": "keyboard Enter reload -> office dialogue, stable save preserved",
+        "summary": {
+          "top": 788.578125,
+          "bottom": 864.140625,
+          "viewport": 900,
+          "focus": true,
+          "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+        },
+        "blog": {
+          "href": "http://127.0.0.1:49178/docs/index.html",
+          "status": 200,
+          "pathname": "/docs/index.html",
+          "title": "技术博客 · zwhu",
+          "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+        }
+      },
+      "screenshots": [
+        "webgl-failed-375-failure.png",
+        "webgl-failed-375-summary.png"
+      ]
+    },
+    {
+      "id": "resource-failed-1280",
+      "status": "passed",
+      "evidence": "final-fixed-checks.json",
+      "steps": "final-fixed-steps.json",
+      "tested_hashes": {
+        "main.mjs": "baf973adbe96a1014e16aa93281e8c1212cee8ead81be65ca977b7d34d063be5",
+        "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+        "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+      },
+      "reuse": "After this test main only added renderer canvas removal; these failures precede renderer assignment, so removal is a no-op",
+      "behavior": {
+        "message": "办公室暂未打开：无法加载素材 ./art/office-room-v2.png，请检查文件并刷新。 请检查浏览器的图形支持、网络与本地 HTTP 服务后重试。",
+        "retry": "keyboard Enter reload -> office dialogue, stable save preserved",
+        "failedResources": [
+          "http://127.0.0.1:49178/games/career-rpg/web/art/office-room-v2.png"
+        ],
+        "summary": {
+          "top": 673.703125,
+          "bottom": 698.890625,
+          "viewport": 900,
+          "focus": true,
+          "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+        },
+        "blog": {
+          "href": "http://127.0.0.1:49178/docs/index.html",
+          "status": 200,
+          "pathname": "/docs/index.html",
+          "title": "技术博客 · zwhu",
+          "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+        }
+      },
+      "screenshots": [
+        "resource-failed-1280-failure.png",
+        "resource-failed-1280-summary.png"
+      ]
+    },
+    {
+      "id": "resource-failed-375",
+      "status": "passed",
+      "evidence": "final-fixed-checks.json",
+      "steps": "final-fixed-steps.json",
+      "tested_hashes": {
+        "main.mjs": "baf973adbe96a1014e16aa93281e8c1212cee8ead81be65ca977b7d34d063be5",
+        "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+        "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+      },
+      "reuse": "After this test main only added renderer canvas removal; these failures precede renderer assignment, so removal is a no-op",
+      "behavior": {
+        "message": "办公室暂未打开：无法加载素材 ./art/office-room-v2.png，请检查文件并刷新。 请检查浏览器的图形支持、网络与本地 HTTP 服务后重试。",
+        "retry": "keyboard Enter reload -> office dialogue, stable save preserved",
+        "failedResources": [
+          "http://127.0.0.1:49178/games/career-rpg/web/art/office-room-v2.png"
+        ],
+        "summary": {
+          "top": 788.578125,
+          "bottom": 864.140625,
+          "viewport": 900,
+          "focus": true,
+          "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+        },
+        "blog": {
+          "href": "http://127.0.0.1:49178/docs/index.html",
+          "status": 200,
+          "pathname": "/docs/index.html",
+          "title": "技术博客 · zwhu",
+          "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+        }
+      },
+      "screenshots": [
+        "resource-failed-375-failure.png",
+        "resource-failed-375-summary.png"
+      ]
+    },
+    {
+      "id": "context-lost-1280",
+      "status": "passed",
+      "evidence": "context-fixed-checks.json",
+      "steps": "context-fixed-steps.json",
+      "tested_hashes": {
+        "main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+        "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+        "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+      },
+      "reuse": "Retested at final production version",
+      "behavior": {
+        "message": "图形上下文已丢失，游戏已停止。可重新加载尝试恢复图形，或继续文字阅读。",
+        "retry": "keyboard Enter reload -> office dialogue, stable save preserved",
+        "freeze": "RAF stopped, input cannot move/advance; stable chapter/save unchanged",
+        "summary": {
+          "top": 676.109375,
+          "bottom": 701.296875,
+          "viewport": 900,
+          "focus": true,
+          "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+        },
+        "blog": {
+          "href": "http://127.0.0.1:49406/docs/index.html",
+          "status": 200,
+          "pathname": "/docs/index.html",
+          "title": "技术博客 · zwhu",
+          "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+        },
+        "restoredMessage": "图形上下文已恢复。请重新加载游戏以恢复到已保存的进度，或继续文字阅读。",
+        "failureLayout": {
+          "display": "block",
+          "top": 235.078125,
+          "bottom": 508.78125,
+          "height": 273.703125,
+          "text": "办公室暂未打开\n\n图形上下文已丢失，游戏已停止。可重新加载尝试恢复图形，或继续文字阅读。\n\n文字摘要仍可阅读。重试会重新加载本页，回到上次已确认的存档；未确认的操作不会保留。若仍无法打开，请继续文字阅读。\n\n重新加载游戏\n继续文字阅读\n回到博客\n\nTab / Shift+Tab 选择入口 · Enter 确认",
+          "liveCanvas": false
+        }
+      },
+      "screenshots": [
+        "context-lost-1280-failure.png",
+        "context-lost-1280-summary.png"
+      ]
+    },
+    {
+      "id": "context-lost-375",
+      "status": "passed",
+      "evidence": "context-fixed-checks.json",
+      "steps": "context-fixed-steps.json",
+      "tested_hashes": {
+        "main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+        "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+        "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+      },
+      "reuse": "Retested at final production version",
+      "behavior": {
+        "message": "图形上下文已丢失，游戏已停止。可重新加载尝试恢复图形，或继续文字阅读。",
+        "retry": "keyboard Enter reload -> office dialogue, stable save preserved",
+        "freeze": "RAF stopped, input cannot move/advance; stable chapter/save unchanged",
+        "summary": {
+          "top": 787.984375,
+          "bottom": 863.546875,
+          "viewport": 900,
+          "focus": true,
+          "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+        },
+        "blog": {
+          "href": "http://127.0.0.1:49406/docs/index.html",
+          "status": 200,
+          "pathname": "/docs/index.html",
+          "title": "技术博客 · zwhu",
+          "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+        },
+        "restoredMessage": "图形上下文已恢复。请重新加载游戏以恢复到已保存的进度，或继续文字阅读。",
+        "failureLayout": {
+          "display": "block",
+          "top": 220.578125,
+          "bottom": 575.28125,
+          "height": 354.703125,
+          "text": "办公室暂未打开\n\n图形上下文已丢失，游戏已停止。可重新加载尝试恢复图形，或继续文字阅读。\n\n文字摘要仍可阅读。重试会重新加载本页，回到上次已确认的存档；未确认的操作不会保留。若仍无法打开，请继续文字阅读。\n\n重新加载游戏\n继续文字阅读\n回到博客\n\nTab / Shift+Tab 选择入口 · Enter 确认",
+          "liveCanvas": false
+        }
+      },
+      "screenshots": [
+        "context-lost-375-failure.png",
+        "context-lost-375-summary.png"
+      ]
+    },
+    {
+      "id": "normal-smoke-1280",
+      "status": "passed",
+      "evidence": "context-fixed-checks.json",
+      "steps": "context-fixed-steps.json",
+      "tested_hashes": {
+        "main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+        "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+        "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+      },
+      "reuse": "Retested at final production version",
+      "behavior": {
+        "reading": "initial prose Shift+Tab/Home/End/PageDown; text/page/position unchanged; Enter -> stage; Esc pause/return focus",
+        "summary": {
+          "top": 812.78125,
+          "bottom": 837.96875,
+          "viewport": 900,
+          "focus": true,
+          "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+        },
+        "blog": {
+          "href": "http://127.0.0.1:49406/docs/index.html",
+          "status": 200,
+          "pathname": "/docs/index.html",
+          "title": "技术博客 · zwhu",
+          "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+        }
+      },
+      "screenshots": [
+        "normal-smoke-1280.png"
+      ]
+    },
+    {
+      "id": "normal-smoke-375",
+      "status": "passed",
+      "evidence": "context-fixed-checks.json",
+      "steps": "context-fixed-steps.json",
+      "tested_hashes": {
+        "main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+        "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+        "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+      },
+      "reuse": "Retested at final production version",
+      "behavior": {
+        "reading": "initial prose Shift+Tab/Home/End/PageDown; text/page/position unchanged; Enter -> stage; Esc pause/return focus",
+        "summary": {
+          "top": 648.09375,
+          "bottom": 723.65625,
+          "viewport": 900,
+          "focus": true,
+          "text": "在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。"
+        },
+        "blog": {
+          "href": "http://127.0.0.1:49406/docs/index.html",
+          "status": 200,
+          "pathname": "/docs/index.html",
+          "title": "技术博客 · zwhu",
+          "method": "Tab and Enter; actual repository docs/index.html HTTP 200"
+        }
+      },
+      "screenshots": [
+        "normal-smoke-375.png"
+      ]
+    }
+  ],
+  "environment": "Isolated local Chrome headless/software WebGL; 375 is simulated, no true device/person/author/performance acceptance",
+  "fixture": "Opt-in read-only repository games/career-rpg and docs mounts; real development blog URL /docs/index.html returns 200 and keyboard navigation reaches it. Existing game-only server modes unchanged; no remote publishing",
+  "fault_scope": "Isolated profile Emulation for JS, removable getContext fixture, Fetch interception of office-room-v2.png only, actual WEBGL_lose_context; no global setting changes",
+  "changes": [
+    "Always readable static prose and native summary/blog anchors; script-unavailable message",
+    "Failure panel with keyboard retry, text and real blog return; visible focus",
+    "Context loss clears input/stops RAF/detaches damaged canvas; context restoration requires explicit reload; stable save retained",
+    "Retry replaces current URL without summary fragment, preserving path/query/save"
+  ],
+  "commands": [
+    "node games/career-rpg/web/tests/browser.mjs --fallback --evidence=final",
+    "node games/career-rpg/web/tests/browser.mjs --fallback --fallback-case=webgl-failed-1280,resource-failed-1280,context-lost-1280,normal-smoke-1280,js-disabled-375,webgl-failed-375,resource-failed-375,context-lost-375,normal-smoke-375 --evidence=final-fixed",
+    "node games/career-rpg/web/tests/browser.mjs --fallback --fallback-case=context-lost-1280,context-lost-375,normal-smoke-1280,normal-smoke-375 --evidence=context-fixed",
+    "python3 scripts/verify.py",
+    "git diff --check"
+  ],
+  "repro_and_fixes": [
+    {
+      "id": "BASELINE",
+      "evidence": "/private/tmp/traex-career-rpg-supervisor/fallback-backup-20261105/",
+      "finding": "Collapsed prose, no blog return, no retry, no explicit context-loss fallback",
+      "fix": "Small HTML/CSS/main patch; static prose unchanged"
+    },
+    {
+      "id": "TEST-FOCUS",
+      "evidence": [
+        "attempt-1/worker-checks.json",
+        "attempt-2/worker-final-checks.json",
+        "attempt-3/worker-final-checks.json",
+        "focus-probe-checks.json"
+      ],
+      "finding": "First focus diagnosis was mistaken: hasFocus=false for the whole Chrome tab after native reload; premature old-document reads and forward-only Tab to preceding header were test issues",
+      "fix": "Wait for actual new-document navigation/load; activate only this isolated tab; use Tab/Shift+Tab, no direct element focus. Failure controls keep explicit focus outline"
+    },
+    {
+      "id": "RETRY-FRAGMENT",
+      "evidence": "attempt-4/final-checks.json",
+      "finding": "Reload retained #chapter-summary and could restore prose focus when closing the intro",
+      "fix": "Retry clears fragment with replace, preserves path/query/save; final-fixed retest passed"
+    },
+    {
+      "id": "CONTEXT-VISUAL",
+      "evidence": [
+        "context-visual-before/context-lost-1280-failure.png",
+        "context-visual-before/context-lost-375-failure.png"
+      ],
+      "finding": "DOM and keyboard passed but Chrome damaged-canvas layer covered failure text: visual failure",
+      "fix": "Detach canvas on failure; context-fixed keyboard retest and actual view_image review passed"
+    }
+  ],
+  "visual_review": {
+    "method": "Actual view_image inspection, separate from DOM assertions",
+    "passed": [
+      "context-lost-1280-failure.png",
+      "context-lost-375-failure.png",
+      "context-lost-375-summary.png",
+      "js-disabled-375-summary.png",
+      "resource-failed-375-failure.png",
+      "normal-smoke-1280.png",
+      "normal-smoke-375.png"
+    ],
+    "scope": "Fault text, retry focus, complete static prose, affected Nanjing startup; no full scene or mobile/author acceptance"
+  },
+  "evidence_reuse": "24 pure modules/chapter/art/vendor baseline hashes match. Existing pure story/collision/art/license evidence remains reusable. Historical keyboard16/journey23/255f reading4 keep their actual scopes; only startup/failure/prose/focus/return smoke is new, no blanket migration of full UI acceptance",
+  "known_issues": [
+    "Walking stutter unresolved and explicitly paused; no performance measurements added",
+    "Safari/real iOS/Android, full responsive matrix/high DPR/rotation remain unverified",
+    "Author confirmation, 3 real testers/read duration and unknown history/root cause/quotes/layout remain unverified",
+    "Remaining current-scene gates unchanged; no scene acceptance, next-scene authorization or release"
+  ],
+  "next": "FALLBACK independent review passed for this scope only; resource budget is a separately authorized static-only task.",
+  "independent_evidence": "supervisor-review.json",
+  "supervisor_current_version_cases": 10,
+  "supervisor_key_presses": 127,
+  "supervisor_pointer_inputs": 0
+}

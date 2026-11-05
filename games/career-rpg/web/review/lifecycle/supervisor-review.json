@@ -1,0 +1,28 @@
+{
+  "reviewed_at": "2026-11-04T23:14:13.568337+00:00",
+  "reviewer": "supervisor",
+  "method": "Independent audit of all 20 raw rounds and native pagehide snapshots; SHA256 of all 15 current production resources. No duplicate browser run.",
+  "evidence": "series-final-counts.json",
+  "checks": {
+    "rounds": 20,
+    "native_trusted_non_bfcache_exits": 20,
+    "production_hashes_match": 15,
+    "runtime_errors": 0,
+    "active_object_dom_role_counts_stable": true,
+    "active_raf_one_and_exit_raf_zero": true,
+    "logical_disposal_counts_verified": true
+  },
+  "observable_evidence": "accepted within stated scope",
+  "full_lifecycle_gate": "unverified",
+  "limits": [
+    "Headless software WebGL, not true hardware.",
+    "Counters do not prove JS heap, decoded image, canvas, native or driver memory reclamation.",
+    "Remaining context fallback texture/framebuffer handles and document listeners/ResizeObserver rely on browser teardown; complete reclamation unproven.",
+    "BFCache and future scene transitions not tested."
+  ],
+  "production_changed": false,
+  "walking_stutter": "unresolved, author-paused",
+  "scene_accepted": false,
+  "next_scene_authorized": false,
+  "next": "Preserve evidence; no further repeated lifecycle profiling. Resource budget preference remains pending."
+}

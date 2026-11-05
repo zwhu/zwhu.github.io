@@ -1,0 +1,150 @@
+{
+  "status": "passed_native_observation_scope",
+  "command": "node games/career-rpg/web/tests/browser.mjs --lifecycle --lifecycle-cycles=1 --evidence=observer-chain",
+  "exit_code": 0,
+  "raw": "observer-chain-counts.json",
+  "native_event": {
+    "nativeEventType": "pagehide",
+    "nativeEventTrusted": true,
+    "persisted": false,
+    "docID": "acb3c680-c210-4b20-b6af-1f58b469521f"
+  },
+  "snapshot": {
+    "outcome": "returned",
+    "snapshot_error": null,
+    "after_app_dispose": true,
+    "ordering_evidence": "Observer registered only after real main startup and keyboard replay, after production once pagehide handler. No synthetic dispatch or pre-dispose call."
+  },
+  "runtime_binding": {
+    "runtimeBindingType": "function",
+    "bindingOutcome": "returned",
+    "bindingError": null,
+    "cdpBindingObserved": false
+  },
+  "telemetry": "Actual native event snapshot persisted first to isolated test-profile sessionStorage; optional binding returned but CDP event absent. No game localStorage mutation by observer.",
+  "cleanup": {
+    "classes": {
+      "renderers": {
+        "created": 1,
+        "disposeCalls": 1,
+        "disposed": 1
+      },
+      "scenes": {
+        "created": 1,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "cameras": {
+        "created": 1,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "geometries": {
+        "created": 9,
+        "disposeCalls": 9,
+        "disposed": 9
+      },
+      "textures": {
+        "created": 9,
+        "disposeCalls": 9,
+        "disposed": 9
+      },
+      "materials": {
+        "created": 9,
+        "disposeCalls": 9,
+        "disposed": 9
+      },
+      "meshes": {
+        "created": 9,
+        "disposeCalls": 0,
+        "disposed": 0
+      }
+    },
+    "pending_raf": 0,
+    "renderer_info": {
+      "geometries": 0,
+      "textures": 0,
+      "programs": 0
+    },
+    "webgl": [
+      {
+        "resources": {
+          "textures": {
+            "created": 9,
+            "deleted": 5,
+            "live": 4
+          },
+          "framebuffers": {
+            "created": 3,
+            "deleted": 0,
+            "live": 3
+          },
+          "buffers": {
+            "created": 20,
+            "deleted": 20,
+            "live": 0
+          },
+          "programs": {
+            "created": 2,
+            "deleted": 2,
+            "live": 0
+          },
+          "shaders": {
+            "created": 4,
+            "deleted": 4,
+            "live": 0
+          },
+          "vertexArrays": {
+            "created": 5,
+            "deleted": 5,
+            "live": 0
+          }
+        },
+        "contextWeaklyReachable": true
+      }
+    ],
+    "listeners": {
+      "registered": 26,
+      "activeConnected": 19,
+      "activeDetachedWeaklyObserved": 1,
+      "scope": "add/remove/once only; onload/onerror properties excluded; WeakRefs do not prove garbage collection"
+    },
+    "shared": {
+      "imageObjectsCreated": 5,
+      "imageObjectsWeaklyReachable": 5,
+      "scriptCanvasesCreated": 13,
+      "twoDContextsObserved": 13,
+      "resizeObserversCreated": 1,
+      "resizeDisconnectCalls": 0,
+      "resizeActiveTargets": 1
+    }
+  },
+  "runtime_exceptions": [],
+  "cdp_context_events": [
+    {
+      "event": "cleared"
+    },
+    {
+      "event": "cleared"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "origin": "http://127.0.0.1:56930",
+      "frame": "741A62C7F3EC12B52250BE1B9F245ED6"
+    },
+    {
+      "event": "cleared"
+    },
+    {
+      "event": "cleared"
+    },
+    {
+      "event": "created",
+      "id": 3,
+      "origin": "http://127.0.0.1:56930",
+      "frame": "741A62C7F3EC12B52250BE1B9F245ED6"
+    }
+  ],
+  "boundary": "Context-cleared protocol events invalidate inspector contexts; not proof of JS/native/GPU memory reclamation. Full lifecycle memory scope stays unverified."
+}

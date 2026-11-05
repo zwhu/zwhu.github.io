@@ -1,0 +1,94 @@
+{
+  "date": "2026-11-05",
+  "status": "proposal_for_review_only",
+  "scene": "nanjing-office",
+  "stage": "original-art-proposal",
+  "proposal": "original-art-proposal.md",
+  "basis": [
+    "design-options.md",
+    "manifest.json",
+    "supervisor-review.json",
+    "../lifecycle/supervisor-review.json"
+  ],
+  "production_hashes": {
+    "main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+    "index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213"
+  },
+  "manifest_sha256": "fc638ab9b1b0f497af539d80d0487aea3d61b0b773ee1e015458682192c2f417",
+  "accounting": {
+    "first_requested_files": 15,
+    "runtime_raw_bytes": 5191167,
+    "static_per_file_gzip_bytes": 3864937,
+    "distribution_files": 16,
+    "license_raw_bytes": 1081,
+    "distribution_raw_bytes_including_license": 5192248,
+    "first_and_chapter_runtime_sets_identical": true
+  },
+  "pending_limits": {
+    "first_static_gzip_bytes": 4194304,
+    "chapter_distribution_raw_bytes": 6291456,
+    "startup_cold_3_trial_median_seconds": 40,
+    "html_limits_unchanged": true
+  },
+  "static_headroom_vs_proposal_bytes": {
+    "first_gzip": 329367,
+    "chapter_raw_including_license": 1099208
+  },
+  "body_only_at_125000_Bps": [
+    {
+      "scenario": "offline_all_file_gzip_estimate",
+      "bytes": 3864937,
+      "lower_bound_seconds": 30.919496,
+      "remaining_of_40_seconds": 9.080504
+    },
+    {
+      "scenario": "proposed_text_gzip_png_identity_not_implemented",
+      "bytes": 4558569,
+      "lower_bound_seconds": 36.468552,
+      "remaining_of_40_seconds": 3.531448,
+      "exceeds_4MiB_wire_bytes": 364265
+    },
+    {
+      "scenario": "current_fixture_all_identity",
+      "bytes": 5191167,
+      "lower_bound_seconds": 41.529336,
+      "remaining_of_40_seconds": -1.529336
+    }
+  ],
+  "acceptance_proposal": "Three independent cold profiles; navigation to visible trusted-key movement >=1 logical pixel; M/Esc focus check; full per-trial network/key/error evidence; failures not replaced; median<=40 only with three successes; proposed observation bound60s, not production timeout.",
+  "approvals_pending": [
+    "4MiB static gzip and6MiB distribution raw including MIT license",
+    "40s cold3 median and exact delivery/cache/operability definition",
+    "long-wait messages, retry/return experience and separately authorized implementation/testing"
+  ],
+  "unverified": [
+    "actual HTTP encodings and transmitted bytes",
+    "40s startup and latency/decode/control margin",
+    "slow-network long-wait focus and recovery",
+    "real-device/author/human experience",
+    "full lifecycle memory; accepted20 observable records only"
+  ],
+  "production_changed": false,
+  "performance_tests_run": false,
+  "other_tests_rerun": false,
+  "original_budget_status": "failed unchanged;512KiB gzip/2MiB raw/8s remain in force",
+  "lifecycle_status": "unverified; supervisor accepts observable20 only",
+  "walking_stutter": "unresolved, author-paused",
+  "scene_accepted": false,
+  "next_scene_authorized": false,
+  "full_journey_goal": "paused",
+  "checks": {
+    "documentation_review": "passed: resource table, arithmetic, local links and JSON consistency",
+    "production_manifest_hashes": "15/15 unchanged",
+    "git_diff_check": "passed",
+    "root_verify": "not rerun; documentation-only, production unchanged"
+  },
+  "next": "Stop for supervisor/author review; route preference is not threshold approval.",
+  "initial_150ms_lower_bound": {
+    "mixed_seconds": 36.618552,
+    "mixed_remaining_of_40_seconds": 3.381448,
+    "identity_seconds": 41.679336,
+    "not_measured": true
+  }
+}

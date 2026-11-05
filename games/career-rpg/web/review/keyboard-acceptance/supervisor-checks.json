@@ -1,0 +1,2029 @@
+{
+  "scope": "Targeted keyboard gaps only; existing chapter/story, movement and performance evidence not rerun",
+  "environment": "Desktop Chrome headless, 1280x900, software WebGL; no real-device or performance acceptance",
+  "input": "Chrome CDP Input.dispatchKeyEvent; no clicks or production state-changing functions",
+  "checks": {
+    "pauseDirectionNavigation": true,
+    "pauseManualReturn": true,
+    "tabHudAndManualFocus": true,
+    "dialogueDirectionAndShortcuts": true,
+    "confirmationPageBack": true,
+    "enterReleaseBoundary": true,
+    "spaceReleaseBoundary": true,
+    "requiredDialoguePauseAndDisabled": true,
+    "nativeDialogueFocusRestore": true,
+    "nativeBlurClearsHeldMovement": true,
+    "completionManualReplay": true,
+    "damagedSaveChoices": true,
+    "explicitSaveReset": true,
+    "storageFailureKeyboard": true,
+    "responsiveDirectionPreview": true,
+    "realKeyboardEventsOnly": true
+  },
+  "mainSHA256": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7",
+  "fixtures": "LocalStorage legal checkpoints and isolated storage failure only; no chapter.advance, button.click, dispatchEvent or direct focus to drive acceptance.",
+  "operations": [
+    {
+      "id": "pauseDirectionNavigation",
+      "keys": "↑↓←→",
+      "operation": "Pause options select visibly; all four directions; player stays still",
+      "result": "passed"
+    },
+    {
+      "id": "pauseManualReturn",
+      "keys": "↓ Enter Esc Esc",
+      "operation": "Manual returns to pause menu, then exploration",
+      "result": "passed"
+    },
+    {
+      "id": "tabHudAndManualFocus",
+      "keys": "M Esc Tab Shift+Tab Enter",
+      "operation": "Tab retained; HUD manual returns to its button; HUD focus cannot move player",
+      "result": "passed"
+    },
+    {
+      "id": "dialogueDirectionAndShortcuts",
+      "keys": "E Q ↑↓ Tab Shift+Tab",
+      "operation": "Nearby target Q and E retained; dialogue selects both available actions without moving",
+      "result": "passed"
+    },
+    {
+      "id": "confirmationPageBack",
+      "keys": "Enter held/repeat Esc",
+      "operation": "Held Enter only opens confirmation; Esc returns to original selected option",
+      "result": "passed"
+    },
+    {
+      "id": "enterReleaseBoundary",
+      "keys": "Enter held/repeat, release, new Enter",
+      "operation": "One confirmation records once; repeats cannot close the next interface or trigger behind it",
+      "result": "passed"
+    },
+    {
+      "id": "spaceReleaseBoundary",
+      "keys": "Space held/repeat, release, new Space",
+      "operation": "Space retained and release does not accidentally confirm next page",
+      "result": "passed"
+    },
+    {
+      "id": "requiredDialoguePauseAndDisabled",
+      "keys": "Esc ↑↓←→ Enter",
+      "operation": "Required report is preserved; disabled manual/replay skipped; resume restores original choice",
+      "result": "passed"
+    },
+    {
+      "id": "nativeDialogueFocusRestore",
+      "keys": "browser tab switch, Enter",
+      "operation": "Real trusted blur/visibility event pauses dialogue; returning restores resume then prior choice",
+      "result": "passed"
+    },
+    {
+      "id": "nativeBlurClearsHeldMovement",
+      "keys": "held →, tab switch, Enter",
+      "operation": "Actual focus loss clears held movement; returning has no position jump or residual input",
+      "result": "passed"
+    },
+    {
+      "id": "completionManualReplay",
+      "keys": "↑↓ Enter Esc M",
+      "operation": "Completion/manual/replay options navigate and cancel; confirming replay starts once without skipping introduction",
+      "result": "passed"
+    },
+    {
+      "id": "damagedSaveChoices",
+      "keys": "↑↓ Esc Enter",
+      "operation": "Damaged save options and safe pause return work; only-in-session retains original save",
+      "result": "passed"
+    },
+    {
+      "id": "explicitSaveReset",
+      "keys": "Enter",
+      "operation": "Explicit reset operates only on game save; unrelated storage retained",
+      "result": "passed"
+    },
+    {
+      "id": "storageFailureKeyboard",
+      "keys": "Enter retry Esc ↓ Enter",
+      "operation": "Write failure retry and continue-unsaved reached with keys; existing save preserved",
+      "result": "passed"
+    },
+    {
+      "id": "responsiveDirectionPreview",
+      "keys": "↑↓←→ at 375/560/700/1280 CSS px",
+      "operation": "Wrapped menu option navigation and visible selection; simulated narrow viewport, not real mobile device",
+      "result": "passed"
+    },
+    {
+      "id": "realKeyboardEventsOnly",
+      "keys": "CDP keyboard events",
+      "operation": "All observed key events trusted; zero pointer inputs; no clicks/state actions used by test",
+      "result": "passed"
+    }
+  ],
+  "inputEvidence": [
+    {
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "restart"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "restart"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "m",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "m",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "manual"
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        }
+      ],
+      "clicks": [
+        {
+          "action": "close-dialogue"
+        },
+        {
+          "action": "pause-manual"
+        },
+        {
+          "action": "manual"
+        }
+      ],
+      "pointers": [],
+      "windowEvents": [
+        {
+          "type": "focus",
+          "trusted": true
+        }
+      ]
+    },
+    {
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "q",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "q",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "q",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "q",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "e",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "e",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "read-recheck_visited"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "read-recheck_visited"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_trap_comment"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_trap_comment"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_trap_comment"
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_trap_comment"
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "e",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_trap_comment"
+        },
+        {
+          "type": "keyup",
+          "key": "e",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_trap_comment"
+        },
+        {
+          "type": "keydown",
+          "key": " ",
+          "repeat": false,
+          "trusted": true,
+          "focus": "review_trap_comment"
+        },
+        {
+          "type": "keydown",
+          "key": " ",
+          "repeat": true,
+          "trusted": true,
+          "focus": "review_trap_comment"
+        },
+        {
+          "type": "keydown",
+          "key": " ",
+          "repeat": true,
+          "trusted": true,
+          "focus": "review_trap_comment"
+        },
+        {
+          "type": "keydown",
+          "key": " ",
+          "repeat": true,
+          "trusted": true,
+          "focus": "review_trap_comment"
+        },
+        {
+          "type": "keydown",
+          "key": " ",
+          "repeat": true,
+          "trusted": true,
+          "focus": "review_trap_comment"
+        },
+        {
+          "type": "keydown",
+          "key": " ",
+          "repeat": true,
+          "trusted": true,
+          "focus": "review_trap_comment"
+        },
+        {
+          "type": "keyup",
+          "key": " ",
+          "repeat": false,
+          "trusted": true,
+          "focus": "review_trap_comment"
+        },
+        {
+          "type": "keydown",
+          "key": " ",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": " ",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        }
+      ],
+      "clicks": [
+        {
+          "action": "view_review_test_plan"
+        },
+        {
+          "action": "view_review_test_plan"
+        },
+        {
+          "action": "review_test_plan"
+        },
+        {
+          "action": "view_review_trap_comment"
+        },
+        {
+          "action": "review_trap_comment"
+        }
+      ],
+      "pointers": [],
+      "windowEvents": [
+        {
+          "type": "focus",
+          "trusted": true
+        }
+      ]
+    },
+    {
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "read_feedback"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "read_feedback"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "Tab",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "read_feedback"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "read_feedback"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "read_feedback"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "read_feedback"
+        }
+      ],
+      "clicks": [
+        {
+          "action": "resume"
+        },
+        {
+          "action": "resume"
+        }
+      ],
+      "pointers": [],
+      "windowEvents": [
+        {
+          "type": "focus",
+          "trusted": true
+        },
+        {
+          "type": "blur",
+          "trusted": true
+        },
+        {
+          "type": "focus",
+          "trusted": true
+        },
+        {
+          "type": "blur",
+          "trusted": true
+        },
+        {
+          "type": "focus",
+          "trusted": true
+        },
+        {
+          "type": "focus",
+          "trusted": true
+        },
+        {
+          "type": "blur",
+          "trusted": true
+        },
+        {
+          "type": "visibilitychange",
+          "hidden": true,
+          "trusted": true
+        },
+        {
+          "type": "visibilitychange",
+          "hidden": false,
+          "trusted": true
+        },
+        {
+          "type": "focus",
+          "trusted": true
+        }
+      ]
+    },
+    {
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        }
+      ],
+      "clicks": [
+        {
+          "action": "resume"
+        }
+      ],
+      "pointers": [],
+      "windowEvents": [
+        {
+          "type": "blur",
+          "trusted": true
+        },
+        {
+          "type": "visibilitychange",
+          "hidden": true,
+          "trusted": true
+        },
+        {
+          "type": "visibilitychange",
+          "hidden": false,
+          "trusted": true
+        },
+        {
+          "type": "focus",
+          "trusted": true
+        }
+      ]
+    },
+    {
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "replay"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "replay"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "confirm-replay"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "confirm-replay"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "replay"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "replay"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "m",
+          "repeat": false,
+          "trusted": true,
+          "focus": "replay"
+        },
+        {
+          "type": "keyup",
+          "key": "m",
+          "repeat": false,
+          "trusted": true,
+          "focus": "replay"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "confirm-replay"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "confirm-replay"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "replay"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "replay"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "confirm-replay"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "confirm-replay"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": true,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        }
+      ],
+      "clicks": [
+        {
+          "action": "replay"
+        },
+        {
+          "action": "replay"
+        },
+        {
+          "action": "close-dialogue"
+        },
+        {
+          "action": "replay"
+        },
+        {
+          "action": "confirm-replay"
+        }
+      ],
+      "pointers": [],
+      "windowEvents": []
+    },
+    {
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "continue-unsaved"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "continue-unsaved"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "reset-save"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "reset-save"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "reset-save"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "reset-save"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "continue-unsaved"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "continue-unsaved"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        }
+      ],
+      "clicks": [
+        {
+          "action": "continue-unsaved"
+        }
+      ],
+      "pointers": [],
+      "windowEvents": []
+    },
+    {
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        }
+      ],
+      "clicks": [
+        {
+          "action": "reset-save"
+        }
+      ],
+      "pointers": [],
+      "windowEvents": []
+    },
+    {
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "e",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "e",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "reset-save"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "reset-save"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        }
+      ],
+      "clicks": [
+        {
+          "action": "view_review_test_plan"
+        },
+        {
+          "action": "review_test_plan"
+        },
+        {
+          "action": "retry-save"
+        },
+        {
+          "action": "reset-save"
+        }
+      ],
+      "pointers": [],
+      "windowEvents": []
+    },
+    {
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowRight",
+          "repeat": false,
+          "trusted": true,
+          "focus": "pause-manual"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowLeft",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "m",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "m",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        }
+      ],
+      "clicks": [],
+      "pointers": [],
+      "windowEvents": []
+    }
+  ],
+  "result": "passed"
+}

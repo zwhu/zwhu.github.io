@@ -1,0 +1,1112 @@
+{
+  "status": "passed",
+  "scene": "nanjing-office",
+  "stage": "keyboard-journey",
+  "command": "node games/career-rpg/web/tests/browser.mjs --keyboard-journey",
+  "workspace": "/Users/bytedance/work/AI/zwhu.github.io/",
+  "url": "http://127.0.0.1:61159/web/",
+  "profile": "/var/folders/nv/g6m5_3nx1r9_v9dk3zh_5zw40000gn/T/career-web-chrome-6H1HSQ",
+  "hashes": {
+    "main.mjs": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7",
+    "index.html": "64dd4bfaaef4522e533f75a6c1a565e0d4bf650b5972754e479985df136c72de",
+    "style.css": "2df9f0b9e1bbf66f52356e1808702ce89d11f80b94319bce651dcc2a69162e7d"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "label": "new-game-office",
+      "chapter": "office",
+      "flags": [],
+      "ui": "dialogue",
+      "position": {
+        "x": 172,
+        "y": 154
+      },
+      "focus": "close-dialogue",
+      "keyEventRange": [
+        0,
+        0
+      ],
+      "keys": [],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "office",
+        "flags": []
+      }
+    },
+    {
+      "step": 2,
+      "label": "enter-office",
+      "chapter": "office",
+      "flags": [],
+      "ui": "explore",
+      "position": {
+        "x": 172,
+        "y": 154
+      },
+      "focus": "stage",
+      "keyEventRange": [
+        0,
+        2
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "office",
+        "flags": []
+      }
+    },
+    {
+      "step": 3,
+      "label": "walk-to-forum",
+      "chapter": "office",
+      "flags": [],
+      "ui": "dialogue",
+      "position": {
+        "x": 82.89999999999944,
+        "y": 126.99999999999983
+      },
+      "focus": "view_open_forum_post",
+      "keyEventRange": [
+        2,
+        10
+      ],
+      "keys": [
+        "keydown:ArrowUp",
+        "keyup:ArrowUp",
+        "keydown:ArrowLeft",
+        "keyup:ArrowLeft",
+        "keydown:ArrowUp",
+        "keyup:ArrowUp",
+        "keydown:e",
+        "keyup:e"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "office",
+        "flags": []
+      }
+    },
+    {
+      "step": 4,
+      "label": "view_open_forum_post",
+      "chapter": "office",
+      "flags": [],
+      "ui": "dialogue",
+      "position": {
+        "x": 82.89999999999944,
+        "y": 126.99999999999983
+      },
+      "focus": "open_forum_post",
+      "keyEventRange": [
+        10,
+        16
+      ],
+      "keys": [
+        "keydown:Tab",
+        "keyup:Tab",
+        "keydown:Tab",
+        "keyup:Tab",
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "office",
+        "flags": []
+      }
+    },
+    {
+      "step": 5,
+      "label": "open_forum_post",
+      "chapter": "report",
+      "flags": [
+        "report_read"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 82.89999999999944,
+        "y": 126.99999999999983
+      },
+      "focus": "read_feedback",
+      "keyEventRange": [
+        16,
+        18
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "report",
+        "flags": [
+          "report_read"
+        ]
+      }
+    },
+    {
+      "step": 6,
+      "label": "read_feedback",
+      "chapter": "incident",
+      "flags": [
+        "report_read",
+        "incident_started"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 82.89999999999944,
+        "y": 126.99999999999983
+      },
+      "focus": "close-dialogue",
+      "keyEventRange": [
+        18,
+        20
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "incident",
+        "flags": [
+          "report_read",
+          "incident_started"
+        ]
+      }
+    },
+    {
+      "step": 7,
+      "label": "walk-to-cto",
+      "chapter": "incident",
+      "flags": [
+        "report_read",
+        "incident_started"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 183.70000000000007,
+        "y": 126.99999999999983
+      },
+      "focus": "view_cto_rallies_team",
+      "keyEventRange": [
+        20,
+        30
+      ],
+      "keys": [
+        "keydown:Escape",
+        "keyup:Escape",
+        "keydown:ArrowDown",
+        "keyup:ArrowDown",
+        "keydown:ArrowRight",
+        "keyup:ArrowRight",
+        "keydown:ArrowUp",
+        "keyup:ArrowUp",
+        "keydown:e",
+        "keyup:e"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "incident",
+        "flags": [
+          "report_read",
+          "incident_started"
+        ]
+      }
+    },
+    {
+      "step": 8,
+      "label": "view_cto_rallies_team",
+      "chapter": "incident",
+      "flags": [
+        "report_read",
+        "incident_started"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 183.70000000000007,
+        "y": 126.99999999999983
+      },
+      "focus": "cto_rallies_team",
+      "keyEventRange": [
+        30,
+        32
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "incident",
+        "flags": [
+          "report_read",
+          "incident_started"
+        ]
+      }
+    },
+    {
+      "step": 9,
+      "label": "cto_rallies_team",
+      "chapter": "investigation",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 183.70000000000007,
+        "y": 126.99999999999983
+      },
+      "focus": "close-dialogue",
+      "keyEventRange": [
+        32,
+        34
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "investigation",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen"
+        ]
+      }
+    },
+    {
+      "step": 10,
+      "label": "view_confirm_feedback_reviewed",
+      "chapter": "investigation",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 81.99999999999943,
+        "y": 126.99999999999983
+      },
+      "focus": "confirm_feedback_reviewed",
+      "keyEventRange": [
+        34,
+        46
+      ],
+      "keys": [
+        "keydown:Escape",
+        "keyup:Escape",
+        "keydown:ArrowDown",
+        "keyup:ArrowDown",
+        "keydown:ArrowLeft",
+        "keyup:ArrowLeft",
+        "keydown:ArrowUp",
+        "keyup:ArrowUp",
+        "keydown:e",
+        "keyup:e",
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "investigation",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen"
+        ]
+      }
+    },
+    {
+      "step": 11,
+      "label": "confirm_feedback_reviewed",
+      "chapter": "investigation",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 81.99999999999943,
+        "y": 126.99999999999983
+      },
+      "focus": "close-dialogue",
+      "keyEventRange": [
+        46,
+        48
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "investigation",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed"
+        ]
+      }
+    },
+    {
+      "step": 12,
+      "label": "view_confirm_recheck_visited",
+      "chapter": "investigation",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "confirm_recheck_visited",
+      "keyEventRange": [
+        48,
+        60
+      ],
+      "keys": [
+        "keydown:Escape",
+        "keyup:Escape",
+        "keydown:ArrowDown",
+        "keyup:ArrowDown",
+        "keydown:ArrowRight",
+        "keyup:ArrowRight",
+        "keydown:ArrowUp",
+        "keyup:ArrowUp",
+        "keydown:e",
+        "keyup:e",
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "investigation",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed"
+        ]
+      }
+    },
+    {
+      "step": 13,
+      "label": "confirm_recheck_visited",
+      "chapter": "investigation",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "close-dialogue",
+      "keyEventRange": [
+        60,
+        62
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "investigation",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited"
+        ]
+      }
+    },
+    {
+      "step": 14,
+      "label": "view_confirm_impact_scope",
+      "chapter": "investigation",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "confirm_impact_scope",
+      "keyEventRange": [
+        62,
+        68
+      ],
+      "keys": [
+        "keydown:Escape",
+        "keyup:Escape",
+        "keydown:e",
+        "keyup:e",
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "investigation",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited"
+        ]
+      }
+    },
+    {
+      "step": 15,
+      "label": "confirm_impact_scope",
+      "chapter": "investigation",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "close-dialogue",
+      "keyEventRange": [
+        68,
+        70
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "investigation",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited",
+          "impact_confirmed"
+        ]
+      }
+    },
+    {
+      "step": 16,
+      "label": "view_resume_narrative",
+      "chapter": "investigation",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "resume_narrative",
+      "keyEventRange": [
+        70,
+        76
+      ],
+      "keys": [
+        "keydown:Escape",
+        "keyup:Escape",
+        "keydown:e",
+        "keyup:e",
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "investigation",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited",
+          "impact_confirmed"
+        ]
+      }
+    },
+    {
+      "step": 17,
+      "label": "resume_narrative",
+      "chapter": "restored",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "comfort_read",
+      "keyEventRange": [
+        76,
+        78
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "restored",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited",
+          "impact_confirmed",
+          "outage_over"
+        ]
+      }
+    },
+    {
+      "step": 18,
+      "label": "comfort_read",
+      "chapter": "learning",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "close-dialogue",
+      "keyEventRange": [
+        78,
+        80
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "learning",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited",
+          "impact_confirmed",
+          "outage_over",
+          "comfort_read"
+        ]
+      }
+    },
+    {
+      "step": 19,
+      "label": "view_review_test_plan",
+      "chapter": "learning",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "review_test_plan",
+      "keyEventRange": [
+        80,
+        86
+      ],
+      "keys": [
+        "keydown:Escape",
+        "keyup:Escape",
+        "keydown:e",
+        "keyup:e",
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "learning",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited",
+          "impact_confirmed",
+          "outage_over",
+          "comfort_read"
+        ]
+      }
+    },
+    {
+      "step": 20,
+      "label": "review_test_plan",
+      "chapter": "learning",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read",
+        "test_reviewed"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "close-dialogue",
+      "keyEventRange": [
+        86,
+        88
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "learning",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited",
+          "impact_confirmed",
+          "outage_over",
+          "comfort_read",
+          "test_reviewed"
+        ]
+      }
+    },
+    {
+      "step": 21,
+      "label": "view_review_trap_comment",
+      "chapter": "learning",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read",
+        "test_reviewed"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "review_trap_comment",
+      "keyEventRange": [
+        88,
+        94
+      ],
+      "keys": [
+        "keydown:Escape",
+        "keyup:Escape",
+        "keydown:e",
+        "keyup:e",
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "learning",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited",
+          "impact_confirmed",
+          "outage_over",
+          "comfort_read",
+          "test_reviewed"
+        ]
+      }
+    },
+    {
+      "step": 22,
+      "label": "review_trap_comment",
+      "chapter": "learning",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read",
+        "test_reviewed",
+        "comment_reviewed"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 184.60000000000008,
+        "y": 126.99999999999983
+      },
+      "focus": "close-dialogue",
+      "keyEventRange": [
+        94,
+        96
+      ],
+      "keys": [
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "learning",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited",
+          "impact_confirmed",
+          "outage_over",
+          "comfort_read",
+          "test_reviewed",
+          "comment_reviewed"
+        ]
+      }
+    },
+    {
+      "step": 23,
+      "label": "write_manual_entry",
+      "chapter": "complete",
+      "flags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read",
+        "test_reviewed",
+        "comment_reviewed",
+        "manual_entry_written"
+      ],
+      "ui": "dialogue",
+      "position": {
+        "x": 343.89999999999833,
+        "y": 85.59999999999957
+      },
+      "focus": "replay",
+      "keyEventRange": [
+        96,
+        108
+      ],
+      "keys": [
+        "keydown:Escape",
+        "keyup:Escape",
+        "keydown:ArrowDown",
+        "keyup:ArrowDown",
+        "keydown:ArrowRight",
+        "keyup:ArrowRight",
+        "keydown:ArrowUp",
+        "keyup:ArrowUp",
+        "keydown:e",
+        "keyup:e",
+        "keydown:Enter",
+        "keyup:Enter"
+      ],
+      "saved": {
+        "schema": 1,
+        "chapter": "nanjing-first-release",
+        "state": "complete",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "recheck_visited",
+          "impact_confirmed",
+          "outage_over",
+          "comfort_read",
+          "test_reviewed",
+          "comment_reviewed",
+          "manual_entry_written"
+        ]
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "player-seated.png",
+      "kind": "主角在论坛工位坐姿",
+      "chapter": "office",
+      "viewport": {
+        "width": 1280,
+        "height": 900,
+        "dpr": 1
+      },
+      "hashes": {
+        "main.mjs": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7",
+        "index.html": "64dd4bfaaef4522e533f75a6c1a565e0d4bf650b5972754e479985df136c72de",
+        "style.css": "2df9f0b9e1bbf66f52356e1808702ce89d11f80b94319bce651dcc2a69162e7d"
+      }
+    },
+    {
+      "file": "player-tense.png",
+      "kind": "论坛反馈后的紧张",
+      "chapter": "report",
+      "viewport": {
+        "width": 1280,
+        "height": 900,
+        "dpr": 1
+      },
+      "hashes": {
+        "main.mjs": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7",
+        "index.html": "64dd4bfaaef4522e533f75a6c1a565e0d4bf650b5972754e479985df136c72de",
+        "style.css": "2df9f0b9e1bbf66f52356e1808702ce89d11f80b94319bce651dcc2a69162e7d"
+      }
+    },
+    {
+      "file": "cto-bubble.png",
+      "kind": "CTO头部气泡",
+      "chapter": "incident",
+      "viewport": {
+        "width": 1280,
+        "height": 900,
+        "dpr": 1
+      },
+      "hashes": {
+        "main.mjs": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7",
+        "index.html": "64dd4bfaaef4522e533f75a6c1a565e0d4bf650b5972754e479985df136c72de",
+        "style.css": "2df9f0b9e1bbf66f52356e1808702ce89d11f80b94319bce651dcc2a69162e7d"
+      }
+    },
+    {
+      "file": "player-happy.png",
+      "kind": "两小时后恢复与团队安慰",
+      "chapter": "restored",
+      "viewport": {
+        "width": 1280,
+        "height": 900,
+        "dpr": 1
+      },
+      "hashes": {
+        "main.mjs": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7",
+        "index.html": "64dd4bfaaef4522e533f75a6c1a565e0d4bf650b5972754e479985df136c72de",
+        "style.css": "2df9f0b9e1bbf66f52356e1808702ce89d11f80b94319bce651dcc2a69162e7d"
+      }
+    },
+    {
+      "file": "chapter-complete.png",
+      "kind": "手册归档与南京完成",
+      "chapter": "complete",
+      "viewport": {
+        "width": 1280,
+        "height": 900,
+        "dpr": 1
+      },
+      "hashes": {
+        "main.mjs": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7",
+        "index.html": "64dd4bfaaef4522e533f75a6c1a565e0d4bf650b5972754e479985df136c72de",
+        "style.css": "2df9f0b9e1bbf66f52356e1808702ce89d11f80b94319bce651dcc2a69162e7d"
+      }
+    }
+  ],
+  "scope": "One new game to complete; no reload, checkpoint seeding, mouse input or production state-changing function calls. Software WebGL technical evidence only.",
+  "loaded_resources": {
+    "main.mjs": {
+      "url": "http://127.0.0.1:61159/web/main.mjs",
+      "sha256": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7"
+    },
+    "index.html": {
+      "url": "http://127.0.0.1:61159/web/",
+      "sha256": "64dd4bfaaef4522e533f75a6c1a565e0d4bf650b5972754e479985df136c72de"
+    },
+    "style.css": {
+      "url": "http://127.0.0.1:61159/web/style.css",
+      "sha256": "2df9f0b9e1bbf66f52356e1808702ce89d11f80b94319bce651dcc2a69162e7d"
+    }
+  },
+  "browser": {
+    "protocolVersion": "1.3",
+    "product": "Chrome/156.0.8078.79",
+    "revision": "@a21ce95c24ce3964416f09ae1862f53f319eb4d0",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+    "jsVersion": "15.6.75.27"
+  },
+  "state_path": [
+    "office",
+    "report",
+    "incident",
+    "investigation",
+    "restored",
+    "learning",
+    "complete"
+  ],
+  "final": {
+    "schema": 1,
+    "chapter": "nanjing-first-release",
+    "state": "complete",
+    "flags": [
+      "report_read",
+      "incident_started",
+      "incident_seen",
+      "feedback_reviewed",
+      "recheck_visited",
+      "impact_confirmed",
+      "outage_over",
+      "comfort_read",
+      "test_reviewed",
+      "comment_reviewed",
+      "manual_entry_written"
+    ]
+  },
+  "input": {
+    "trusted_key_events": 108,
+    "pointer_inputs": 0
+  },
+  "continuity": {
+    "fresh_profile": true,
+    "navigations": [
+      "http://127.0.0.1:61159/web/"
+    ],
+    "storage_writes": 12,
+    "manual_storage_changes": 0,
+    "checkpoint_seeding": 0,
+    "production_saves_only": true
+  },
+  "handoff_status": "ready_for_review",
+  "attempts": 1,
+  "production_files_unchanged": 54,
+  "production_code_changed": false,
+  "changed_test_files": [
+    "games/career-rpg/web/tests/browser.mjs",
+    "games/career-rpg/web/tests/keyboard-journey.mjs"
+  ],
+  "evidence_files": [
+    "games/career-rpg/web/review/keyboard-journey/steps.json",
+    "games/career-rpg/web/review/keyboard-journey/input-and-storage.json"
+  ],
+  "full_scene_approved": false,
+  "checks": {
+    "one_fresh_continuous_path": "passed",
+    "trusted_keyboard_events": 108,
+    "pointer_inputs": 0,
+    "one_navigation_no_reload": true,
+    "production_storage_writes_only": 12,
+    "checkpoint_seeding": 0,
+    "network_html_css_code_hashes_match_workspace": true,
+    "production_baseline_unchanged": true,
+    "prior_16_tests": "not_rerun; independently passed by supervisor",
+    "verify": "not_rerun; production unchanged, per user instruction",
+    "performance": "not_run; issue remains paused"
+  },
+  "visual_review": {
+    "tool": "view_image",
+    "files": [
+      "player-seated.png",
+      "player-tense.png",
+      "cto-bubble.png",
+      "player-happy.png",
+      "chapter-complete.png"
+    ],
+    "result": "沿途五图已打开：主角坐姿、CTO身份与头部气泡、紧张/开心状态、手册完成及选中项可辨；不代替作者或完整美术验收",
+    "completed_dialogue_note": "完成正文使用既有滚动区域；本轮仅路径补证，不声称真人完整阅读或文本可访问性专项通过"
+  },
+  "unverified": [
+    "监督者对本次连续路径及五张同版本画面的独立复验",
+    "整个南京场景放行",
+    "真人连续试玩/阅读时长与作者对美术、经历和体验的确认",
+    "真实iOS/Android及其他浏览器、真机触控与性能",
+    "真实设备或真人录屏、至少3名非设计参与者试玩",
+    "资源预算/生命周期、导出及正式发布对应验收",
+    "已有事故根因/排查细节/原话/真实布局等史实缺口"
+  ],
+  "paused_issue": "走路卡顿仍未解决，本轮没有排查或性能探针；旧全旅程goal保持暂停",
+  "next": "停止，等待监督者独立复验；不扩场景，不修改20分钟监工调度"
+}

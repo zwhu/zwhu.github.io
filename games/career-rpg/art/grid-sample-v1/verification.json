@@ -1,0 +1,115 @@
+{
+  "source": "source.json",
+  "model": "deepseek-flash",
+  "frame_size": [
+    16,
+    24
+  ],
+  "tile_size": [
+    16,
+    16
+  ],
+  "order": [
+    "down",
+    "up",
+    "left",
+    "right"
+  ],
+  "anchor": [
+    8,
+    23
+  ],
+  "outputs": {
+    "player.png": {
+      "size": [
+        16,
+        96
+      ],
+      "sha256": "bab6be265f0d88580a9707e652ded8ac9d70da66879de7178eb1b4c3780ac454"
+    },
+    "floor.png": {
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "c75c353a37ba3ba2d002783bce10ca26b67c276e4e5004054ea62034ecbd7e37"
+    },
+    "preview.png": {
+      "size": [
+        1648,
+        544
+      ],
+      "sha256": "988a8b411b6d7223450466234d8fc036199311ce68539a5efcc2a980d8f4c8f3"
+    }
+  },
+  "checks": {
+    "frame_order": true,
+    "frame_dimensions": true,
+    "palette_exact": true,
+    "opaque_alpha_255": true,
+    "anchor_nontransparent": true,
+    "anchor_connected_to_body": true,
+    "tile_fully_opaque": true,
+    "sprite_foot_equals_tile_foot": true,
+    "bounds_valid": true,
+    "png_reproducible": true
+  },
+  "bodies": [
+    {
+      "view": "down",
+      "body_pixels": 164
+    },
+    {
+      "view": "up",
+      "body_pixels": 166
+    },
+    {
+      "view": "left",
+      "body_pixels": 152
+    },
+    {
+      "view": "right",
+      "body_pixels": 152
+    }
+  ],
+  "placements": [
+    {
+      "view": "down",
+      "tile": [
+        3,
+        1
+      ],
+      "sprite_origin": [
+        992,
+        80
+      ],
+      "sprite_foot": [
+        1056,
+        264
+      ],
+      "tile_foot": [
+        1056,
+        264
+      ]
+    },
+    {
+      "view": "right",
+      "tile": [
+        5,
+        1
+      ],
+      "sprite_origin": [
+        1248,
+        80
+      ],
+      "sprite_foot": [
+        1312,
+        264
+      ],
+      "tile_foot": [
+        1312,
+        264
+      ]
+    }
+  ]
+}

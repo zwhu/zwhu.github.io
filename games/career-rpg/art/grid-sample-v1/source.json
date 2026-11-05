@@ -1,0 +1,236 @@
+{
+  "meta": {
+    "model": "deepseek-flash",
+    "kind": "exploratory pixel grid sample (original matrices, not derived from concept boards)",
+    "grid": {
+      "player": [
+        16,
+        24
+      ],
+      "tile": [
+        16,
+        16
+      ],
+      "order": [
+        "down",
+        "up",
+        "left",
+        "right"
+      ],
+      "anchor": [
+        8,
+        23
+      ]
+    },
+    "paletteNotes": "warm backgrounds use palette 12 colors only; alpha 0 = transparent, other alpha 255",
+    "anchorNote": "anchor [8,23] = join of the two shoes on the bottom row; opaque and 4-connected to both legs; row 23 may hold the full sole",
+    "directionNote": "left faces left, right faces right; both are exact mirrors of one side view; same character in all four views",
+    "floorNote": "two brick courses per tile (rows 0-7, 8-15); joints D: edge joints at x=0 and x=8 of rows 7 and 15 (tile seams), long joints at x=3 (upper course) and x=12 (lower course); no full-width row",
+    "source": "DeepSeek Flash original pixel matrices authored in source.json; no external images, interpolation or randomness",
+    "revision": "Codex revised character readability after final Flash attempt; original grid workflow and tile by Flash."
+  },
+  "palette": {
+    ".": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "W": [
+      250,
+      248,
+      243,
+      255
+    ],
+    "K": [
+      41,
+      40,
+      37,
+      255
+    ],
+    "S": [
+      119,
+      116,
+      110,
+      255
+    ],
+    "C": [
+      166,
+      67,
+      53,
+      255
+    ],
+    "D": [
+      107,
+      74,
+      50,
+      255
+    ],
+    "L": [
+      168,
+      124,
+      85,
+      255
+    ],
+    "B": [
+      141,
+      138,
+      131,
+      255
+    ],
+    "G": [
+      111,
+      143,
+      90,
+      255
+    ],
+    "U": [
+      93,
+      110,
+      122,
+      255
+    ],
+    "N": [
+      47,
+      58,
+      69,
+      255
+    ],
+    "E": [
+      232,
+      223,
+      200,
+      255
+    ],
+    "Y": [
+      233,
+      194,
+      122,
+      255
+    ]
+  },
+  "frames": {
+    "down": [
+      "................",
+      "................",
+      ".....KKKKKK.....",
+      "....KKKKKKKK....",
+      "....KKKKKKKK....",
+      "....KKKKKKKK....",
+      "....KKKEEEEK....",
+      "....KEKEEKEK....",
+      "....EEEEEEEE....",
+      ".....EEEEEE.....",
+      "......EEEE......",
+      "......EEEE......",
+      "....CCCEECCC....",
+      "...CCCCCCCCCC...",
+      "...CCCCCCCCCC...",
+      "...CCCCCCDCCC...",
+      "...CCCCCCCCCC...",
+      "...ECCCCCCCCE...",
+      "...ECCCCCCCCE...",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      "....KKKKK.KKK..."
+    ],
+    "up": [
+      "................",
+      "................",
+      ".....KKKKKK.....",
+      "....KKKKKKKK....",
+      "....KKKKKKKK....",
+      "....KKKKKKKK....",
+      "....KKKKKKKK....",
+      "....KKKKKKKK....",
+      "....KKKKKKKK....",
+      ".....KKKKKK.....",
+      ".....KKKKKK.....",
+      "......EEEE......",
+      "....CCCCCCCC....",
+      "...CCDDDDDDCC...",
+      "...CCCCCCCCCC...",
+      "...CCCCCCCCCC...",
+      "...CCCCCCCCCC...",
+      "...ECCCCCCCCE...",
+      "...ECCCCCCCCE...",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      "....KKKKK.KKK..."
+    ],
+    "left": [
+      "................",
+      "................",
+      ".....KKKKKK.....",
+      "....KKKKKKKK....",
+      "....KKKKKKKK....",
+      "....KKKKKKKK....",
+      "....EEEKKKKK....",
+      "....KEEKKKKK....",
+      "...EEEEKKKKK....",
+      "....EEEE........",
+      ".....EEEEE......",
+      "......EEEE......",
+      "....CCCCCCCC....",
+      "....CCCDDCCC....",
+      "....CCCDDCCC....",
+      "....CCCDDCCC....",
+      "....CCCDDCCC....",
+      "....CCCEECCC....",
+      "....CCCEECCC....",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      "....KKKKK.KKK..."
+    ],
+    "right": [
+      "................",
+      "................",
+      ".....KKKKKK.....",
+      "....KKKKKKKK....",
+      "....KKKKKKSK....",
+      "....KKKKKKKK....",
+      "....KKKKKEEE....",
+      "....KKKKKEEK....",
+      "....KKKKKEEEE...",
+      "........EEEE....",
+      "......EEEEE.....",
+      "......EEEE......",
+      "....CCCCCCCC....",
+      "....CCCDDCCC....",
+      "....CCCDDCCC....",
+      "....CCCDDCDC....",
+      "....CCCDDCCC....",
+      "....CCCEECCC....",
+      "....CCCEECCC....",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      ".....NNN..NN....",
+      "....KKKKK.KKK..."
+    ]
+  },
+  "tile": [
+    "LLLDLLLLLLLLLLLL",
+    "LLLDLLLLLLLLLLLL",
+    "LLLDLLLLLLLLLLLL",
+    "LLLDLLLLLLLLLLLL",
+    "LLLDLLLLLLLLLLLL",
+    "LLLDLLLLLLLLLLLL",
+    "LLLDLLLLLLLLLLLL",
+    "DLLLLLLLDLLLLLLL",
+    "LLLLLLLLLLLLDLLL",
+    "LLLLLLLLLLLLDLLL",
+    "LLLLLLLLLLLLDLLL",
+    "LLLLLLLLLLLLDLLL",
+    "LLLLLLLLLLLLDLLL",
+    "LLLLLLLLLLLLDLLL",
+    "LLLLLLLLLLLLDLLL",
+    "DLLLLLLLDLLLLLLL"
+  ]
+}

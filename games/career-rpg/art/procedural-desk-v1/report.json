@@ -1,0 +1,38 @@
+{
+  "method": "Hand-authored raster drawing functions; Python standard library only",
+  "reference": "../../web/art/office-room-v2.png",
+  "source_pixels_copied": false,
+  "production_replaced": false,
+  "assets": [
+    {
+      "file": "desk-warm.png",
+      "width": 160,
+      "height": 128,
+      "bytes": 1186,
+      "rgba_colors": 45,
+      "sha256": "11e7347b1db13797e75c42a020f63a64f68b6b6d8d27b9bc4467bf990285ad30"
+    },
+    {
+      "file": "desk-dark.png",
+      "width": 160,
+      "height": 128,
+      "bytes": 1187,
+      "rgba_colors": 45,
+      "sha256": "4030b2ac2bd43951869026d377b7701fa7937a71845044c6f03735c2b554acab"
+    },
+    {
+      "file": "desk-active.png",
+      "width": 160,
+      "height": 128,
+      "bytes": 1186,
+      "rgba_colors": 45,
+      "sha256": "10ff0234e890a6b7719307f06206a3bcee5e8684ed62ce272cca83281b6abfe0"
+    }
+  ],
+  "generation_seconds": 0.0428,
+  "limits": [
+    "Not a pixel-identical recreation of the reference.",
+    "Build time excludes design, coding and visual iteration.",
+    "No proven labor-cost reduction; no characters or whole scene generated."
+  ]
+}

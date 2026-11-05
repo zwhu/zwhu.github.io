@@ -1,0 +1,16 @@
+{
+  "model": "deepseek-flash",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 4734,
+    "completion_tokens": 4069,
+    "total_tokens": 8803,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 4734
+  },
+  "summary": "Concise stdlib-only generator producing player.png (16x96 vertical frame stack), floor.png (16x16), preview.png (four 8x scaled directional views plus an 8x4 tiled floor with two standing figures placed by the exact foot-anchor formula), and verification.json with real checks and SHA-256 hashes. Validations were simplified to size, exact palette, alpha, anchor nontransparent and 4-connected to body, tile opacity, sprite-foot==tile-foot equality and bounds; left/right mirror equality is not asserted. PNG bytes are encoded twice and compared before writing for reproducibility. README states truthfully that matrices are original Flash-style, exploratory, not author-approved and not gameplay-verified.",
+  "method": "single direct Flash request without tools; files authored by Flash"
+}

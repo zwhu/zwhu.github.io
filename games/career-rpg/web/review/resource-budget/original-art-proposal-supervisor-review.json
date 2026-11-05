@@ -1,0 +1,11 @@
+{
+  "reviewed_at": "2026-11-05T00:31:30.932057+00:00",
+  "status": "Accounting and protocol accepted for candidate evaluation only",
+  "hashes_verified": 15,
+  "raw": 5191167,
+  "static_gzip": 3864937,
+  "mixed_body": 4558569,
+  "mixed_seconds_at_1Mbps": 36.468552,
+  "threshold_change_approved": false,
+  "scene_accepted": false
+}

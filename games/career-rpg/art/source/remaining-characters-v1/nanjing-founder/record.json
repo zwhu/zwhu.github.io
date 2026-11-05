@@ -1,0 +1,27 @@
+{
+  "id": "nanjing-founder",
+  "tool": "image_gen built-in",
+  "original_source": "/Users/bytedance/.codex/generated_images/01a1a770-e0c5-7db1-9fb1-9cd951d27c44/exec-a3e9f1bf-3fd1-4291-9ff4-9056c35694da.png",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 1254458,
+  "sha256": "787a917602eb16de674d1ba3731ca6f59ab26640205312e3ea047032144af227",
+  "references": [
+    "web/art/npc-team-v1.png",
+    "art/character-four-directions-v1.png"
+  ],
+  "status": "design_sheet_generated_pending_production_processing",
+  "author_accepted": false,
+  "scene_accepted": false,
+  "production_replaced": false,
+  "visual_note": "Four standing views and three expressions present; background/alpha and soft halo require inspection before extraction.",
+  "alpha_audit": {
+    "source_format": 3,
+    "minimum": 0,
+    "maximum": 254,
+    "fully_transparent_pixels": 1009098,
+    "fully_opaque_pixels": 0,
+    "intermediate_alpha_pixels": 563766,
+    "total_pixels": 1572864
+  }
+}

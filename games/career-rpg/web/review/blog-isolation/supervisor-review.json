@@ -1,0 +1,31 @@
+{
+  "time": "2026-11-04T22:13:00.417629+00:00",
+  "result": "passed_scoped_isolation",
+  "command": "node games/career-rpg/web/tests/browser.mjs --blog-isolation --evidence=supervisor",
+  "pages": [
+    {
+      "path": "/docs/index.html",
+      "requests": 7,
+      "gameResourceCount": 0,
+      "local_failures": 0,
+      "blocked_external": 1
+    },
+    {
+      "path": "/docs/claude-code-review.html",
+      "requests": 17,
+      "gameResourceCount": 0,
+      "local_failures": 0,
+      "blocked_external": 2
+    }
+  ],
+  "total_game_requests": 0,
+  "static_pages": 68,
+  "boundaries": [
+    "Two-page real network evidence only, Chrome headless desktop; static references cover docs HTML but do not prove every page/browser execution",
+    "All unrelated public Internet requests blocked before network. Third-party code execution and online analytics/comment behavior are outside this scoped result",
+    "PageDown/End only exercise public article lazy loads; no mouse/gameplay, no startup/frame or walking performance",
+    "Resource-budget remains failed; scene/next-scene acceptance false; true-device/author/people gates unchanged"
+  ],
+  "production_unchanged": true,
+  "next_scene_authorized": false
+}

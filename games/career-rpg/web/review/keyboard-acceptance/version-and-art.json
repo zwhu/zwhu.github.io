@@ -1,0 +1,10 @@
+{
+  "art_files": 16,
+  "art_unchanged": true,
+  "main_version_matches_final_browser_checks": true,
+  "browser": "Google Chrome 156.0.8078.79",
+  "os": "26.6.2",
+  "rendering": "headless/software WebGL",
+  "viewport": "1280x900; narrow menu previews375/560/700; 375 DPR2 simulated",
+  "not_real_devices": true
+}

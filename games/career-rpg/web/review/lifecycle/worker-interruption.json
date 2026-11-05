@@ -1,0 +1,8 @@
+{
+  "tool_exit_code": 130,
+  "reason": "User steering requested immediate stop; Ctrl-C was sent to owned session",
+  "captured_cycles": 20,
+  "captured_pagehide": 20,
+  "saved_result_status": "observed_stable_full_memory_unverified",
+  "boundary": "Buffered stdout and persisted artifact show20 complete count records before interrupt returned. Overall process/cleanup completion is not claimed from exit130; no further20-cycle run is scheduled."
+}

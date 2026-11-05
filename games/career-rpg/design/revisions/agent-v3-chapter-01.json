@@ -1,0 +1,2903 @@
+{
+  "id": "nanjing-first-release",
+  "title": "南京：第一次上线",
+  "targetSeconds": [
+    120,
+    180
+  ],
+  "durationBasis": "设计预期 2～3 分钟（状态预算合计 180 秒），未实测。",
+  "entry": "office",
+  "terminal": "complete",
+  "map": {
+    "width": 24,
+    "height": 16,
+    "origin": "左上角为 (0,0)；x 向右，y 向下，单位为整数格。",
+    "spawn": [
+      3,
+      14
+    ],
+    "blockedTiles": [
+      [
+        3,
+        12
+      ],
+      [
+        6,
+        12
+      ],
+      [
+        9,
+        3
+      ],
+      [
+        11,
+        3
+      ],
+      [
+        13,
+        3
+      ],
+      [
+        15,
+        3
+      ],
+      [
+        19,
+        3
+      ],
+      [
+        20,
+        3
+      ],
+      [
+        21,
+        3
+      ]
+    ],
+    "outsideTiles": {
+      "rule": "0≤x≤23、0≤y≤15 的每一格都是可走地板、地毯或家具占格，地图矩形边界本身阻挡移动。办公室的内墙与窗是背景层：上墙画在地图矩形上方一格高的画布区域（画布像素行 -16～-1），左墙画在 x<0 的画布区域，窗嵌在上墙的 x=80～143。背景层不铺进 24×16 地图，也不写进 blockedTiles；地图内只有地板、地毯和家具。门口深度线索画在 [2,0]～[4,0] 的地板上，不改碰撞。"
+    },
+    "tiles": [
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "forum_pc",
+        "floor",
+        "trap_note",
+        "floor",
+        "test_notes",
+        "floor",
+        "cto_pc",
+        "floor",
+        "floor",
+        "floor",
+        "bookshelf",
+        "floor",
+        "manual_shelf",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "rug",
+        "rug",
+        "rug",
+        "floor",
+        "floor",
+        "floor",
+        "rug",
+        "rug",
+        "rug",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "warm_guy_plant",
+        "floor",
+        "floor",
+        "coffee_mug",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ],
+      [
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor",
+        "floor"
+      ]
+    ],
+    "objects": [
+      {
+        "id": "forum_pc",
+        "assetId": "obj-forum-pc",
+        "label": "我的工位电脑",
+        "tile": [
+          9,
+          3
+        ],
+        "interactionTile": [
+          9,
+          4
+        ],
+        "footprint": [
+          [
+            9,
+            3
+          ]
+        ],
+        "required": true,
+        "description": "主线。office 中交互打开论坛，读用户无法登录的反馈，点“确认，去处理”进入 report（T01）；investigation 中再交互，重读论坛反馈，点“记下来”写入 feedback_reviewed（T04）。report_read 已存在时 office 里再交互只显示 office-reopen，不推进。"
+      },
+      {
+        "id": "trap_note",
+        "assetId": "obj-trap-note",
+        "label": "坑点注释",
+        "tile": [
+          11,
+          3
+        ],
+        "interactionTile": [
+          11,
+          4
+        ],
+        "footprint": [
+          [
+            11,
+            3
+          ]
+        ],
+        "required": true,
+        "description": "主线（learning 的交互物件）。注释说明为什么有坑，不显示真实代码。交互后点“确认看过注释”写入 comment_reviewed（T10）；已有标记时再交互只显示 learning-comment-copy。"
+      },
+      {
+        "id": "test_notes",
+        "assetId": "obj-test-notes",
+        "label": "补测便签",
+        "tile": [
+          13,
+          3
+        ],
+        "interactionTile": [
+          13,
+          4
+        ],
+        "footprint": [
+          [
+            13,
+            3
+          ]
+        ],
+        "required": true,
+        "description": "主线（learning 的交互物件）。补测试后的便签，是叙事装置。交互后点“确认看过测试计划”写入 test_reviewed（T09）；已有标记时再交互只显示 learning-test-copy。"
+      },
+      {
+        "id": "cto_pc",
+        "assetId": "obj-cto-pc",
+        "label": "CTO 工位电脑",
+        "tile": [
+          15,
+          3
+        ],
+        "interactionTile": [
+          15,
+          4
+        ],
+        "footprint": [
+          [
+            15,
+            3
+          ]
+        ],
+        "required": true,
+        "description": "主线。incident 中与在这里的 CTO 对话，点“一起过去”进入 investigation（T03）；investigation 中交互读 CTO 电脑上的排查记录，点“记下来”写入 recheck_visited（T06）；再次交互读笔记本上的“这次影响到谁”，点“记下来”写入 impact_confirmed（T05）；三项齐全后再交互，才出现“这轮排查先到这里”，进入 restored（T07）。CTO 不移动、不占格，只换朝向。"
+      },
+      {
+        "id": "manual_shelf",
+        "assetId": "obj-manual-shelf",
+        "label": "手册书架",
+        "tile": [
+          21,
+          3
+        ],
+        "interactionTile": [
+          21,
+          4
+        ],
+        "footprint": [
+          [
+            21,
+            3
+          ]
+        ],
+        "required": true,
+        "description": "主线（learning／complete）。工作手册所在的矮书架，是游戏机制。两项确认齐全后交互，点“把这页写进手册”进入 complete（T11）；未齐时只显示 learning-pending。"
+      },
+      {
+        "id": "bookshelf",
+        "assetId": "obj-bookshelf",
+        "label": "书架",
+        "tile": [
+          19,
+          3
+        ],
+        "interactionTile": [
+          19,
+          4
+        ],
+        "footprint": [
+          [
+            19,
+            3
+          ],
+          [
+            20,
+            3
+          ]
+        ],
+        "required": false,
+        "description": "可选观察。地面占 2×1 格，交互点在 [19,4]；一句环境旁白，不指向事故。"
+      },
+      {
+        "id": "warm_guy_plant",
+        "assetId": "obj-plant",
+        "label": "窗边绿植",
+        "tile": [
+          3,
+          12
+        ],
+        "interactionTile": [
+          3,
+          13
+        ],
+        "footprint": [
+          [
+            3,
+            12
+          ]
+        ],
+        "required": false,
+        "description": "可选观察。一句旁白，不推进剧情。"
+      },
+      {
+        "id": "coffee_mug",
+        "assetId": "obj-mug",
+        "label": "CTO 的保温杯",
+        "tile": [
+          6,
+          12
+        ],
+        "interactionTile": [
+          6,
+          13
+        ],
+        "footprint": [
+          [
+            6,
+            12
+          ]
+        ],
+        "required": false,
+        "description": "可选观察。一句旁白，不推进剧情。"
+      }
+    ]
+  },
+  "actors": [
+    {
+      "id": "player",
+      "name": "我",
+      "tile": [
+        3,
+        14
+      ],
+      "size": [
+        16,
+        24
+      ],
+      "anchor": [
+        8,
+        23
+      ],
+      "positionRule": "出生在门口 [3,14]。玩家移动由输入决定；剧情不瞬移玩家，只在重玩时回到出生点。位置不写入存档：报告中写明的玩家格（如 [15,4]、[21,4]）只是各段演出开始时的位置，读档按下一段演出重新摆放玩家，[3,14] 只用于出生。"
+    },
+    {
+      "id": "cto",
+      "name": "CTO",
+      "tile": [
+        16,
+        2
+      ],
+      "size": [
+        16,
+        24
+      ],
+      "anchor": [
+        8,
+        23
+      ],
+      "positionRule": "整章站在 [16,2]，不寻路、不移动、不占碰撞格、不阻挡玩家，也不在任何交互点上；剧情推进只通过与 cto_pc 交互点对话完成（玩家站在 [15,4] 时离他两格）。换朝向时直接切站立帧，不做行走。朝向由 facingFor 根据状态与标记推出，不写入存档。",
+      "facingFor": {
+        "ifStateIn": [
+          "investigation",
+          "restored",
+          "learning"
+        ],
+        "andHasFlag": "incident_seen",
+        "facing": "down",
+        "otherwise": "down"
+      },
+      "colleague": "investigation 与 restored 的旁白提到大家，但不出现同事立绘、不出现走动和具体分工。"
+    }
+  ],
+  "states": [
+    {
+      "id": "office",
+      "title": "办公室",
+      "budgetSeconds": 25,
+      "goal": "从门口走到自己的工位电脑，打开论坛，看清用户不能登录的反馈。",
+      "playerAction": "走到 forum_pc 交互点 [9,4]，朝上，按 E／空格（手机点 A 按钮或点提示），读帖后点“确认，去处理”。路上可顺手看书架、绿植、保温杯。",
+      "enterFlags": [],
+      "repeatRule": "论坛已读后再交互只显示 office-reopen，不写新标记。若存档状态是 office，可用“接着处理”从已读反馈处继续（换到 report，不重复写 report_read）。",
+      "endCondition": "在 forum_pc 点“确认，去处理”，触发 open_forum_post。",
+      "feedback": "论坛面板出现，高亮“无法登录”；确认后进入 report。",
+      "checkpoint": true,
+      "checkpointKind": "scene",
+      "resumeRule": "章节开始时写 {office, []} 快照，玩家在出生点 [3,14]。存档若停在 office，入口为出生点；带 report_read 时“接着处理”换到 report，不会用新标记配旧状态。",
+      "snapshot": {
+        "state": "office",
+        "flags": []
+      }
+    },
+    {
+      "id": "report",
+      "title": "读到反馈",
+      "budgetSeconds": 15,
+      "goal": "看着屏幕上刚读过的反馈，意识到这是我第一次面对真实的线上 C 端用户。",
+      "playerAction": "进入 report 时玩家仍在 [9,4] 的交互点上，旁白与内心独白依次出现，移动锁定；读完点“继续”。",
+      "enterFlags": [
+        "report_read"
+      ],
+      "repeatRule": "这段反应每次回到 report 都播放；同一点击不会连带触发下一条事件。没有 report 快照。",
+      "endCondition": "旁白读完点“继续”（事件 read_feedback）后进入 incident，没有跑腿找 CTO 的步骤。",
+      "feedback": "任务条改为“先稳住”。我的位置不因剧情改变。",
+      "checkpoint": false,
+      "checkpointKind": "none",
+      "resumeRule": "不写快照，只保留 T01 写下的 {report, [report_read]} 快照；从中途退出后读档回到 report 入口，反应重播、report_read 不重复写。",
+      "snapshot": null
+    },
+    {
+      "id": "incident",
+      "title": "呆住",
+      "budgetSeconds": 25,
+      "goal": "让“呆住”先发生：我先看着登录框，做不出反应；随后 CTO 带大家一起排查。",
+      "playerAction": "进入 incident 时玩家仍在 [9,4]。约 1.5 秒里移动锁定、镜头停在登录示意上，我保持站立，这一幕表现“呆住”（按跳过键立即显示 incident-freeze）。随后 CTO 开口；走到 cto_pc 交互点 [15,4] 交互读对话，点“一起过去”。",
+      "enterFlags": [
+        "report_read",
+        "incident_started"
+      ],
+      "repeatRule": "演示与对话在 incident 只播一次；跳过键只压缩表达，事件照常写入。没有 incident 快照。",
+      "endCondition": "cto_pc 对话读完并点“一起过去”（事件 cto_rallies_team），进入 investigation。",
+      "feedback": "登录示意注在制作说明里标为“非技术复现”，只表现页面交不出结果，不显示真实报错或日志；CTO 在自己工位换朝下图示，不出现走路动画。之后可自由走动。",
+      "checkpoint": false,
+      "checkpointKind": "none",
+      "resumeRule": "不写快照，只保留 T02 写下的 {incident, [report_read, incident_started]} 快照；从中途退出后读档回到 incident 开场，呆住演示与对话重播，标记不重复写。",
+      "snapshot": null
+    },
+    {
+      "id": "investigation",
+      "title": "一起排查",
+      "budgetSeconds": 45,
+      "goal": "在 CTO 带领大家排查时，做三件我能确认的事：重读论坛反馈、读 CTO 电脑上的排查记录、记下这次影响到谁。不猜根因。",
+      "playerAction": "a. 到 forum_pc [9,4] 交互，重读论坛反馈，点“记下来”（T04，feedback_reviewed）；b. 到 cto_pc [15,4] 交互，读 CTO 电脑上的排查记录，点“记下来”（T06，recheck_visited）；c. 再在 cto_pc [15,4] 交互，读笔记本上的“这次影响到谁”，点“记下来”（T05，impact_confirmed）。三项顺序任意、可来回。",
+      "enterFlags": [
+        "report_read",
+        "incident_started",
+        "incident_seen"
+      ],
+      "repeatRule": "已确认的项再点只显示 *-copy 台词，不重复写标记。最先在 cto_pc 交互且尚未看过排查记录时，只显示 investigation-cto-pc-first，先看记录才能记下影响范围。",
+      "endCondition": "三项标记齐全后，在 cto_pc 交互并按“这轮排查先到这里”（事件 resume_narrative），进入 restored。",
+      "feedback": "任务条显示“排查 0/3→3/3”；继续按钮只在 3/3 出现。转场把时间推进整整两小时，玩家不需要真实等待。所有点击只表示“我去看了并记下来”，不代表修好了线上问题。",
+      "checkpoint": true,
+      "checkpointKind": "per_event_then_on_leave",
+      "resumeRule": "不在进入时写快照，避免把“刚进入”当成“已离开”。每次首次确认（T04／T05／T06）都写一个{investigation, 当前标记, 当前格} 快照；离开（T07）写入 restored 快照。中途刷新回到最近一次确认。",
+      "snapshot": {
+        "state": "investigation",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen"
+        ]
+      }
+    },
+    {
+      "id": "restored",
+      "title": "两小时后",
+      "budgetSeconds": 25,
+      "goal": "接受“整整两小时后、问题恢复”的叙事转场，读 CTO、老板、同事的宽慰。",
+      "playerAction": "转场中不移动；点“继续”或按跳过键逐句出示旁白与宽慰。读完最后一句，在对话框上点“收起”，只关闭宽慰。",
+      "enterFlags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "recheck_visited",
+        "outage_over"
+      ],
+      "repeatRule": "回到 restored 会重播宽慰；每句单独确认，点“收起”一次只做一件事。带 comfort_read 的存档不在 restored，而是停在 learning 快照。",
+      "endCondition": "点“收起”（事件 comfort_read），进入 learning。",
+      "feedback": "画面用离散色阶降暗显示“两小时后”，然后用 2～3 句交代问题恢复；对白标明事实转述与演出。",
+      "checkpoint": true,
+      "checkpointKind": "scene",
+      "resumeRule": "进入 restored（T07）时写 {restored, 全部排查标记+outage_over} 快照，玩家由演出摆在 [15,4]。此后另起事件 comfort_read 才离开，宽慰因此可以单独重播。",
+      "snapshot": {
+        "state": "restored",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "impact_confirmed",
+          "recheck_visited",
+          "outage_over"
+        ]
+      }
+    },
+    {
+      "id": "learning",
+      "title": "补测试与注释",
+      "budgetSeconds": 35,
+      "goal": "亲眼看补测试和坑点注释，再把经验写进工作手册。",
+      "playerAction": "test_notes [13,4] 交互并点“确认看过测试计划”（T09）；trap_note [11,4] 交互并点“确认看过注释”（T10）；两者顺序任意、可来回。两项齐全后到 manual_shelf [21,4] 交互并点“把这页写进手册”（T11）。",
+      "enterFlags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "recheck_visited",
+        "outage_over",
+        "comfort_read"
+      ],
+      "repeatRule": "review_test_plan／review_trap_comment 只在第一次交互写标记，再次交互只显示 learning-test-copy／learning-comment-copy，不加标记、不倒退。",
+      "endCondition": "test_reviewed 与 comment_reviewed 都写入后，在 manual_shelf 点“把这页写进手册”（事件 write_manual_entry，requires 同时包含两个标记），进入 complete。",
+      "feedback": "任务条“看过 0/2→2/2”；手册打开新页（learning-manual-1），状态进入 complete。",
+      "checkpoint": true,
+      "checkpointKind": "per_event_then_on_leave",
+      "resumeRule": "进入 learning（comfort_read）时写快照；T09／T10 每首次写入一个标记再写一次新快照。任一标记组合都合法，读档后剩余的确认照常可做。",
+      "snapshot": {
+        "state": "learning",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "impact_confirmed",
+          "recheck_visited",
+          "outage_over",
+          "comfort_read"
+        ]
+      }
+    },
+    {
+      "id": "complete",
+      "title": "手册新增一页",
+      "budgetSeconds": 10,
+      "goal": "翻看本章手册页，结束或重玩。",
+      "playerAction": "读手册页；之后仍可走动和观察。选“结束本章”（收起手册，显示章节完成摘要）或“从办公室重玩”（弹层再确认一次）。",
+      "enterFlags": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "recheck_visited",
+        "outage_over",
+        "comfort_read",
+        "test_reviewed",
+        "comment_reviewed",
+        "manual_entry_written"
+      ],
+      "repeatRule": "重新载入存档直接停在 complete；重玩会先确认，只清除本游戏命名空间下的本章存档。",
+      "endCondition": "章节结束，本身已是终态。重玩是另一个入口，不是状态转移。",
+      "feedback": "显示“第一章完成”、本章事实与演出说明、回博客链接与重玩入口。",
+      "checkpoint": true,
+      "checkpointKind": "scene",
+      "resumeRule": "T11 写入 {complete, 全部标记} 快照，玩家由演出摆在 [21,4]；读档停在 complete。",
+      "snapshot": {
+        "state": "complete",
+        "flags": [
+          "report_read",
+          "incident_started",
+          "incident_seen",
+          "feedback_reviewed",
+          "impact_confirmed",
+          "recheck_visited",
+          "outage_over",
+          "comfort_read",
+          "test_reviewed",
+          "comment_reviewed",
+          "manual_entry_written"
+        ]
+      }
+    }
+  ],
+  "transitions": [
+    {
+      "id": "T01",
+      "from": "office",
+      "event": "open_forum_post",
+      "to": "report",
+      "requires": [],
+      "effects": [
+        "report_read"
+      ],
+      "effectMode": "add",
+      "target": "forum_pc",
+      "action": "confirm",
+      "choice": "confirm",
+      "label": "确认，去处理",
+      "dialogue": "office-reaction",
+      "options": [
+        {
+          "event": "open_forum_post",
+          "requires": [],
+          "choice": "confirm",
+          "label": "确认，去处理",
+          "dialogue": "office-reaction",
+          "effects": [
+            "report_read"
+          ]
+        },
+        {
+          "event": "office_reopen",
+          "requires": [
+            "report_read"
+          ],
+          "choice": "resume_report",
+          "label": "接着处理（已读反馈）",
+          "dialogue": "office-reopen",
+          "effects": [
+            "report_read"
+          ]
+        },
+        {
+          "event": "office_close",
+          "requires": [
+            "report_read"
+          ],
+          "choice": "close",
+          "label": "关闭",
+          "dialogue": "office-reopen",
+          "effects": []
+        }
+      ],
+      "noStateChangeWithoutEffects": true
+    },
+    {
+      "id": "T02",
+      "from": "report",
+      "event": "read_feedback",
+      "to": "incident",
+      "requires": [
+        "report_read"
+      ],
+      "effects": [
+        "incident_started"
+      ],
+      "effectMode": "add",
+      "target": "dialog",
+      "action": "advance",
+      "choice": "confirm",
+      "label": "继续",
+      "dialogue": "report-reaction",
+      "options": [
+        {
+          "event": "read_feedback",
+          "requires": [
+            "report_read"
+          ],
+          "choice": "confirm",
+          "label": "继续",
+          "dialogue": "report-reaction",
+          "effects": [
+            "incident_started"
+          ]
+        },
+        {
+          "event": "report_close_only",
+          "requires": [
+            "report_read"
+          ],
+          "choice": "close",
+          "label": "关闭",
+          "dialogue": "report-reaction",
+          "effects": []
+        }
+      ]
+    },
+    {
+      "id": "T03",
+      "from": "incident",
+      "event": "cto_rallies_team",
+      "to": "investigation",
+      "requires": [
+        "report_read",
+        "incident_started"
+      ],
+      "effects": [
+        "incident_seen"
+      ],
+      "effectMode": "add",
+      "target": "cto_pc",
+      "action": "confirm",
+      "choice": "confirm",
+      "label": "一起过去",
+      "dialogue": "incident-rally"
+    },
+    {
+      "id": "T04",
+      "from": "investigation",
+      "event": "confirm_feedback_reviewed",
+      "to": "investigation",
+      "requires": [
+        "report_read",
+        "incident_started",
+        "incident_seen"
+      ],
+      "effects": [
+        "feedback_reviewed"
+      ],
+      "effectMode": "add",
+      "target": "forum_pc",
+      "action": "confirm",
+      "choice": "confirm",
+      "label": "记下来",
+      "dialogue": "investigation-confirm-1",
+      "options": [
+        {
+          "event": "investigation_confirm_feedback",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen"
+          ],
+          "choice": "confirm",
+          "label": "记下来",
+          "dialogue": "investigation-confirm-1",
+          "effects": [
+            "feedback_reviewed"
+          ]
+        },
+        {
+          "event": "investigation_feedback_copy",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "feedback_reviewed"
+          ],
+          "choice": "close",
+          "label": "关闭",
+          "dialogue": "investigation-feedback-copy",
+          "effects": []
+        }
+      ]
+    },
+    {
+      "id": "T06",
+      "from": "investigation",
+      "event": "confirm_recheck_visited",
+      "to": "investigation",
+      "requires": [
+        "report_read",
+        "incident_started",
+        "incident_seen"
+      ],
+      "effects": [
+        "recheck_visited"
+      ],
+      "effectMode": "add",
+      "target": "cto_pc",
+      "action": "confirm",
+      "choice": "confirm",
+      "label": "记下来",
+      "dialogue": "investigation-confirm-3",
+      "options": [
+        {
+          "event": "investigation_confirm_recheck",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen"
+          ],
+          "choice": "confirm",
+          "label": "记下来",
+          "dialogue": "investigation-confirm-3",
+          "effects": [
+            "recheck_visited"
+          ]
+        },
+        {
+          "event": "investigation_recheck_copy",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited"
+          ],
+          "choice": "close",
+          "label": "关闭",
+          "dialogue": "investigation-recheck-copy",
+          "effects": []
+        }
+      ]
+    },
+    {
+      "id": "T05",
+      "from": "investigation",
+      "event": "confirm_impact_scope",
+      "to": "investigation",
+      "requires": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "recheck_visited"
+      ],
+      "effects": [
+        "impact_confirmed"
+      ],
+      "effectMode": "add",
+      "target": "cto_pc",
+      "action": "confirm",
+      "choice": "confirm",
+      "label": "记下来",
+      "dialogue": "investigation-confirm-2",
+      "options": [
+        {
+          "event": "investigation_confirm_impact",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited"
+          ],
+          "choice": "confirm",
+          "label": "记下来",
+          "dialogue": "investigation-confirm-2",
+          "effects": [
+            "impact_confirmed"
+          ]
+        },
+        {
+          "event": "investigation_read_first",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen"
+          ],
+          "choice": "close",
+          "label": "先看排查记录",
+          "dialogue": "investigation-cto-pc-first",
+          "effects": []
+        },
+        {
+          "event": "investigation_impact_copy",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "recheck_visited",
+            "impact_confirmed"
+          ],
+          "choice": "close",
+          "label": "关闭",
+          "dialogue": "investigation-impact-copy",
+          "effects": []
+        }
+      ]
+    },
+    {
+      "id": "T07",
+      "from": "investigation",
+      "event": "resume_narrative",
+      "to": "restored",
+      "requires": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "recheck_visited"
+      ],
+      "effects": [
+        "outage_over"
+      ],
+      "effectMode": "add",
+      "target": "cto_pc",
+      "action": "confirm",
+      "choice": "confirm",
+      "label": "这轮排查先到这里",
+      "dialogue": "investigation-handoff",
+      "options": [
+        {
+          "event": "investigation_resume",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "feedback_reviewed",
+            "impact_confirmed",
+            "recheck_visited"
+          ],
+          "choice": "confirm",
+          "label": "这轮排查先到这里",
+          "dialogue": "investigation-handoff",
+          "effects": [
+            "outage_over"
+          ]
+        },
+        {
+          "event": "investigation_pending",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen"
+          ],
+          "choice": "close",
+          "label": "关闭",
+          "dialogue": "investigation-pending",
+          "effects": []
+        }
+      ],
+      "noStateChangeWithoutEffects": true
+    },
+    {
+      "id": "T08",
+      "from": "restored",
+      "event": "comfort_read",
+      "to": "learning",
+      "requires": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "recheck_visited",
+        "outage_over"
+      ],
+      "effects": [
+        "comfort_read"
+      ],
+      "effectMode": "add",
+      "target": "dialog",
+      "action": "advance",
+      "choice": "confirm",
+      "label": "收起",
+      "dialogue": "restored-closing",
+      "options": [
+        {
+          "event": "comfort_read",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "feedback_reviewed",
+            "impact_confirmed",
+            "recheck_visited",
+            "outage_over"
+          ],
+          "choice": "confirm",
+          "label": "收起",
+          "dialogue": "restored-closing",
+          "effects": [
+            "comfort_read"
+          ]
+        },
+        {
+          "event": "comfort_close_only",
+          "requires": [
+            "report_read",
+            "incident_started",
+            "incident_seen",
+            "feedback_reviewed",
+            "impact_confirmed",
+            "recheck_visited",
+            "outage_over"
+          ],
+          "choice": "close",
+          "label": "关闭",
+          "dialogue": "restored-closing",
+          "effects": []
+        }
+      ]
+    },
+    {
+      "id": "T09",
+      "from": "learning",
+      "event": "review_test_plan",
+      "to": "learning",
+      "requires": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "recheck_visited",
+        "outage_over",
+        "comfort_read"
+      ],
+      "effects": [
+        "test_reviewed"
+      ],
+      "effectMode": "keep",
+      "target": "test_notes",
+      "action": "read",
+      "choice": "confirm",
+      "label": "确认看过测试计划",
+      "dialogue": "learning-test-copy"
+    },
+    {
+      "id": "T10",
+      "from": "learning",
+      "event": "review_trap_comment",
+      "to": "learning",
+      "requires": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "recheck_visited",
+        "outage_over",
+        "comfort_read"
+      ],
+      "effects": [
+        "comment_reviewed"
+      ],
+      "effectMode": "keep",
+      "target": "trap_note",
+      "action": "read",
+      "choice": "confirm",
+      "label": "确认看过注释",
+      "dialogue": "learning-comment-copy"
+    },
+    {
+      "id": "T11",
+      "from": "learning",
+      "event": "write_manual_entry",
+      "to": "complete",
+      "requires": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "recheck_visited",
+        "outage_over",
+        "comfort_read",
+        "test_reviewed",
+        "comment_reviewed"
+      ],
+      "effects": [
+        "manual_entry_written"
+      ],
+      "effectMode": "add",
+      "target": "manual_shelf",
+      "action": "confirm",
+      "choice": "confirm",
+      "label": "把这页写进手册",
+      "dialogue": "learning-manual-1"
+    }
+  ],
+  "dialogueLinks": {
+    "T01": [
+      "office-n1",
+      "office-first-pc-1",
+      "office-n3",
+      "office-reaction",
+      "office-reopen"
+    ],
+    "T02": [
+      "report-reaction",
+      "report-player-1"
+    ],
+    "T03": [
+      "incident-freeze",
+      "incident-cto-1",
+      "incident-rally"
+    ],
+    "T04": [
+      "investigation-n1",
+      "investigation-cto-prompt",
+      "investigation-confirm-1",
+      "investigation-feedback-copy"
+    ],
+    "T05": [
+      "investigation-cto-pc-first",
+      "investigation-confirm-2",
+      "investigation-impact-copy",
+      "investigation-short"
+    ],
+    "T06": [
+      "investigation-confirm-3",
+      "investigation-recheck-copy"
+    ],
+    "T07": [
+      "investigation-pending",
+      "investigation-handoff",
+      "restored-n1"
+    ],
+    "T08": [
+      "restored-cto-1",
+      "restored-colleague-1",
+      "restored-n3",
+      "restored-player-1",
+      "restored-closing"
+    ],
+    "T09": [
+      "learning-n1",
+      "learning-cto-1",
+      "learning-test-first",
+      "learning-test-copy"
+    ],
+    "T10": [
+      "learning-comment-first",
+      "learning-comment-copy"
+    ],
+    "T11": [
+      "learning-pending",
+      "learning-manual-1",
+      "complete-n1",
+      "complete-n2"
+    ]
+  },
+  "dialogues": [
+    {
+      "id": "office-n1",
+      "state": "office",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "南京的办公室，下午。屋里安静，只有键盘声。"
+    },
+    {
+      "id": "office-first-pc-1",
+      "state": "office",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "（打开论坛，看看怎么回事。）"
+    },
+    {
+      "id": "office-n3",
+      "state": "office",
+      "speaker": "narrator",
+      "basis": "fact_paraphrase",
+      "text": "论坛里，有用户说无法登录。这是我第一次面对真实的线上 C 端用户。"
+    },
+    {
+      "id": "office-reaction",
+      "state": "office",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "（以前只在书上读过“线上用户”，现在他们就在这条帖子里。）"
+    },
+    {
+      "id": "office-reopen",
+      "state": "office",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "这条反馈我已经看过了，还没理清怎么办。",
+      "requires": [
+        "report_read"
+      ],
+      "shownWhen": [
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-bookshelf-office",
+      "state": "office",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "书架上摆着几本翻旧的书，其中一本夹着一张便签。",
+      "object": "bookshelf",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": []
+    },
+    {
+      "id": "observe-plant-office",
+      "state": "office",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "窗边有一盆绿植，叶子擦得很干净。",
+      "object": "warm_guy_plant",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": []
+    },
+    {
+      "id": "observe-mug-office",
+      "state": "office",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "桌上放着一个保温杯，杯盖没拧紧。",
+      "object": "coffee_mug",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": []
+    },
+    {
+      "id": "report-reaction",
+      "state": "report",
+      "speaker": "narrator",
+      "basis": "fact_paraphrase",
+      "text": "屏幕上的反馈还在。这是我第一次面对真实的线上 C 端用户。"
+    },
+    {
+      "id": "report-player-1",
+      "state": "report",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "（……）"
+    },
+    {
+      "id": "observe-bookshelf-report",
+      "state": "report",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "书架上摆着几本翻旧的书，其中一本夹着一张便签。",
+      "object": "bookshelf",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-plant-report",
+      "state": "report",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "窗边有一盆绿植，叶子擦得很干净。",
+      "object": "warm_guy_plant",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-mug-report",
+      "state": "report",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "桌上放着一个保温杯，杯盖没拧紧。",
+      "object": "coffee_mug",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "report_read"
+      ]
+    },
+    {
+      "id": "incident-freeze",
+      "state": "incident",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "我盯着登录框，一动没动。",
+      "requires": [
+        "incident_started",
+        "report_read"
+      ],
+      "shownWhen": [
+        "incident_started",
+        "report_read"
+      ],
+      "skip": "可跳过"
+    },
+    {
+      "id": "incident-cto-1",
+      "state": "incident",
+      "speaker": "cto",
+      "basis": "staging",
+      "text": "都过来，一起看看。别急，先弄清楚发生了什么。",
+      "requires": [
+        "incident_started",
+        "report_read"
+      ],
+      "shownWhen": [
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "incident-rally",
+      "state": "incident",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "CTO 带着大家一起排查。",
+      "requires": [
+        "incident_started",
+        "report_read"
+      ],
+      "shownWhen": [
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-bookshelf-incident",
+      "state": "incident",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "书架上摆着几本翻旧的书，其中一本夹着一张便签。",
+      "object": "bookshelf",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-plant-incident",
+      "state": "incident",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "窗边有一盆绿植，叶子擦得很干净。",
+      "object": "warm_guy_plant",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-mug-incident",
+      "state": "incident",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "桌上放着一个保温杯，杯盖没拧紧。",
+      "object": "coffee_mug",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "investigation-n1",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "我能确认的事不多，先一件件记下来：再读一遍反馈，看看 CTO 电脑上的记录，记下这次影响到谁。",
+      "requires": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ],
+      "shownWhen": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "investigation-cto-prompt",
+      "state": "investigation",
+      "speaker": "cto",
+      "basis": "staging",
+      "text": "你那边也看看，我们一起来。",
+      "requires": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ],
+      "shownWhen": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "investigation-confirm-1",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "fact_paraphrase",
+      "text": "用户说的是无法登录。我把这句话记在笔记本上。"
+    },
+    {
+      "id": "investigation-feedback-copy",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "论坛反馈已经记过了。",
+      "requires": [
+        "feedback_reviewed",
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ],
+      "shownWhen": [
+        "feedback_reviewed",
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "investigation-cto-pc-first",
+      "state": "investigation",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "（先看 CTO 电脑上的排查记录。）"
+    },
+    {
+      "id": "investigation-confirm-2",
+      "state": "investigation",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "（笔记本上写着：这次影响到的是真实用户。）"
+    },
+    {
+      "id": "investigation-impact-copy",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "影响范围已经记过了。",
+      "requires": [
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "investigation-confirm-3",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "CTO 电脑上记着大家这段时间看过的线索。我把这页抄进自己的笔记本，没有急着下结论。"
+    },
+    {
+      "id": "investigation-recheck-copy",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "排查记录已经抄过了。",
+      "requires": [
+        "incident_seen",
+        "incident_started",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "incident_seen",
+        "incident_started",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "investigation-short",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "这一项已经记下了。",
+      "requires": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ],
+      "shownWhen": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "investigation-pending",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "笔记本上还有没记下的，先把能确认的写完。",
+      "requires": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ],
+      "shownWhen": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "investigation-handoff",
+      "state": "investigation",
+      "speaker": "cto",
+      "basis": "staging",
+      "text": "先到这里。你去旁边缓一缓，这边还有大家。",
+      "requires": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ],
+      "shownWhen": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-bookshelf-investigation",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "书架上摆着几本翻旧的书，其中一本夹着一张便签。",
+      "object": "bookshelf",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-plant-investigation",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "窗边有一盆绿植，叶子擦得很干净。",
+      "object": "warm_guy_plant",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-mug-investigation",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "桌上放着一个保温杯，杯盖没拧紧。",
+      "object": "coffee_mug",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "incident_seen",
+        "incident_started",
+        "report_read"
+      ]
+    },
+    {
+      "id": "restored-n1",
+      "state": "restored",
+      "speaker": "narrator",
+      "basis": "fact_paraphrase",
+      "text": "画面转暗。整整两小时后，问题恢复了。",
+      "requires": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "restored-cto-1",
+      "state": "restored",
+      "speaker": "cto",
+      "basis": "staging",
+      "text": "好了，没事了，别太自责。",
+      "requires": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "restored-colleague-1",
+      "state": "restored",
+      "speaker": "colleague",
+      "basis": "staging",
+      "text": "没关系，大家都经历过。",
+      "requires": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "restored-n3",
+      "state": "restored",
+      "speaker": "narrator",
+      "basis": "fact_paraphrase",
+      "text": "CTO、老板、同事都安慰我，告诉我没关系，大家都经历过。",
+      "requires": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "restored-player-1",
+      "state": "restored",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "（我点点头。）",
+      "requires": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "restored-closing",
+      "state": "restored",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "这一页，写进本章的工作手册。",
+      "requires": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-bookshelf-restored",
+      "state": "restored",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "书架上摆着几本翻旧的书，其中一本夹着一张便签。",
+      "object": "bookshelf",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-plant-restored",
+      "state": "restored",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "窗边有一盆绿植，叶子擦得很干净。",
+      "object": "warm_guy_plant",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-mug-restored",
+      "state": "restored",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "桌上放着一个保温杯，杯盖没拧紧。",
+      "object": "coffee_mug",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "learning-n1",
+      "state": "learning",
+      "speaker": "narrator",
+      "basis": "fact_paraphrase",
+      "text": "后来，我们补了测试，也补了注释，说明这里为什么会踩坑。",
+      "requires": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "learning-cto-1",
+      "state": "learning",
+      "speaker": "cto",
+      "basis": "staging",
+      "text": "这两处你都看看，以后心里有数。",
+      "requires": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "learning-test-first",
+      "state": "learning",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "便签上写着这次补的是什么测试。"
+    },
+    {
+      "id": "learning-test-copy",
+      "state": "learning",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "测试清单已经看过了。",
+      "requires": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read",
+        "test_reviewed"
+      ],
+      "shownWhen": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read",
+        "test_reviewed"
+      ]
+    },
+    {
+      "id": "learning-comment-first",
+      "state": "learning",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "代码旁多了一段注释：这里是陷阱，以后改这里的人要当心。"
+    },
+    {
+      "id": "learning-comment-copy",
+      "state": "learning",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "注释已经看过了。",
+      "requires": [
+        "comfort_read",
+        "comment_reviewed",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "comfort_read",
+        "comment_reviewed",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "learning-pending",
+      "state": "learning",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "测试和注释还有没看的，先看完。",
+      "requires": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ],
+      "shownWhen": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "learning-manual-1",
+      "state": "learning",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "手册翻到新的一页：“第一次上线，是真实用户先告诉我出了问题。补测试，写清楚坑；出了事，大家会一起扛。”"
+    },
+    {
+      "id": "observe-bookshelf-learning",
+      "state": "learning",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "书架上摆着几本翻旧的书，其中一本夹着一张便签。",
+      "object": "bookshelf",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-plant-learning",
+      "state": "learning",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "窗边有一盆绿植，叶子擦得很干净。",
+      "object": "warm_guy_plant",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "observe-mug-learning",
+      "state": "learning",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "桌上放着一个保温杯，杯盖没拧紧。",
+      "object": "coffee_mug",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "comfort_read",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "outage_over",
+        "recheck_visited",
+        "report_read"
+      ]
+    },
+    {
+      "id": "complete-n1",
+      "state": "complete",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "本章到此结束。",
+      "requires": [
+        "comfort_read",
+        "comment_reviewed",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "manual_entry_written",
+        "outage_over",
+        "recheck_visited",
+        "report_read",
+        "test_reviewed"
+      ],
+      "shownWhen": [
+        "comfort_read",
+        "comment_reviewed",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "manual_entry_written",
+        "outage_over",
+        "recheck_visited",
+        "report_read",
+        "test_reviewed"
+      ]
+    },
+    {
+      "id": "complete-n2",
+      "state": "complete",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "（往后回家读书、学前端，是另一段了。）",
+      "requires": [
+        "comfort_read",
+        "comment_reviewed",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "manual_entry_written",
+        "outage_over",
+        "recheck_visited",
+        "report_read",
+        "test_reviewed"
+      ],
+      "shownWhen": [
+        "comfort_read",
+        "comment_reviewed",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "manual_entry_written",
+        "outage_over",
+        "recheck_visited",
+        "report_read",
+        "test_reviewed"
+      ]
+    },
+    {
+      "id": "observe-bookshelf-complete",
+      "state": "complete",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "书架上摆着几本翻旧的书，其中一本夹着一张便签。",
+      "object": "bookshelf",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "comfort_read",
+        "comment_reviewed",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "manual_entry_written",
+        "outage_over",
+        "recheck_visited",
+        "report_read",
+        "test_reviewed"
+      ]
+    },
+    {
+      "id": "observe-plant-complete",
+      "state": "complete",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "窗边有一盆绿植，叶子擦得很干净。",
+      "object": "warm_guy_plant",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "comfort_read",
+        "comment_reviewed",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "manual_entry_written",
+        "outage_over",
+        "recheck_visited",
+        "report_read",
+        "test_reviewed"
+      ]
+    },
+    {
+      "id": "observe-mug-complete",
+      "state": "complete",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "桌上放着一个保温杯，杯盖没拧紧。",
+      "object": "coffee_mug",
+      "note": "环境摆件是游戏演出，不表示当时的陈设。",
+      "shownWhen": [
+        "comfort_read",
+        "comment_reviewed",
+        "feedback_reviewed",
+        "impact_confirmed",
+        "incident_seen",
+        "incident_started",
+        "manual_entry_written",
+        "outage_over",
+        "recheck_visited",
+        "report_read",
+        "test_reviewed"
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "id": "player-walk",
+      "kind": "sprite",
+      "size": [
+        16,
+        24
+      ],
+      "description": "主角“我”（设定：黑发、朱砂红上衣、深色裤子，不代表真人外貌）。四向行走图：down／up／left／right，各 4 帧（站立、左迈、站立、右迈），行序 down,up,left,right。逐帧 16×24，脚底锚点 (8,23)；图集 4 列×4 行，整图 64×96。行走占 1 个碰撞格，不阻挡他人。",
+      "frameSize": [
+        16,
+        24
+      ],
+      "sheetSize": [
+        64,
+        96
+      ],
+      "frames": 16,
+      "sheets": {
+        "walk": {
+          "columns": 4,
+          "rows": 4,
+          "rowsOrder": [
+            "down",
+            "up",
+            "left",
+            "right"
+          ],
+          "fps": 8,
+          "anchor": [
+            8,
+            23
+          ]
+        }
+      }
+    },
+    {
+      "id": "npc-cto",
+      "kind": "sprite",
+      "size": [
+        16,
+        24
+      ],
+      "description": "CTO（设定：深灰外套、圆眼镜，不还原真人）。只有四向站立各 1 帧，整章不做行走动画。帧 16×24，锚点 (8,23)；图集 1 列×4 行，整图 16×96。站立占 1 格，不阻挡他人。",
+      "frameSize": [
+        16,
+        24
+      ],
+      "sheetSize": [
+        16,
+        96
+      ],
+      "frames": 4,
+      "sheets": {
+        "idle": {
+          "columns": 1,
+          "rows": 4,
+          "rowsOrder": [
+            "down",
+            "up",
+            "left",
+            "right"
+          ],
+          "anchor": [
+            8,
+            23
+          ]
+        }
+      }
+    },
+    {
+      "id": "obj-forum-pc",
+      "kind": "sprite",
+      "size": [
+        40,
+        32
+      ],
+      "description": "我的工位电脑＋椅子。贴图 40×32：比一格宽（40 px），视觉包围约 2.5 格宽、从锚点向上约 2 格高，相邻叠画到左右空格与第 2 行；地面碰撞只占 [9,3]。",
+      "groundFootprint": [
+        [
+          9,
+          3
+        ]
+      ],
+      "anchorX": 19,
+      "anchorY": 31
+    },
+    {
+      "id": "obj-cto-pc",
+      "kind": "sprite",
+      "size": [
+        40,
+        32
+      ],
+      "description": "CTO 工位电脑＋椅子。贴图 40×32：比一格宽，视觉包围约 2.5 格宽、约 2 格高；地面碰撞只占 [15,3]。",
+      "groundFootprint": [
+        [
+          15,
+          3
+        ]
+      ],
+      "anchorX": 19,
+      "anchorY": 31
+    },
+    {
+      "id": "obj-test-notes",
+      "kind": "sprite",
+      "size": [
+        24,
+        12
+      ],
+      "description": "桌上的补测便签。贴图 24×12：视觉比一格窄、高不足一格；地面碰撞只占 [13,3]。",
+      "groundFootprint": [
+        [
+          13,
+          3
+        ]
+      ],
+      "anchorX": 11,
+      "anchorY": 11
+    },
+    {
+      "id": "obj-trap-note",
+      "kind": "sprite",
+      "size": [
+        24,
+        32
+      ],
+      "description": "桌上立着的注释卡片，卡片上只有色块线条，不写可读代码。贴图 24×32：视觉约 1.5 格宽、2 格高；地面碰撞只占 [11,3]。",
+      "groundFootprint": [
+        [
+          11,
+          3
+        ]
+      ],
+      "anchorX": 11,
+      "anchorY": 31
+    },
+    {
+      "id": "obj-bookshelf",
+      "kind": "sprite",
+      "size": [
+        40,
+        48
+      ],
+      "description": "书架。贴图 40×48：视觉约 2.5 格宽、3 格高；地面占 [19,3]、[20,3] 两格，视觉向上叠进第 2、1 行。",
+      "groundFootprint": [
+        [
+          19,
+          3
+        ],
+        [
+          20,
+          3
+        ]
+      ],
+      "anchorX": 19,
+      "anchorY": 47
+    },
+    {
+      "id": "obj-manual-shelf",
+      "kind": "sprite",
+      "size": [
+        24,
+        40
+      ],
+      "description": "放工作手册的矮书架。贴图 24×40：视觉约 1.5 格宽、约 2.5 格高；地面碰撞只占 [21,3]。",
+      "groundFootprint": [
+        [
+          21,
+          3
+        ]
+      ],
+      "anchorX": 11,
+      "anchorY": 39
+    },
+    {
+      "id": "obj-plant",
+      "kind": "sprite",
+      "size": [
+        24,
+        28
+      ],
+      "description": "窗边绿植。贴图 24×28：视觉约 1.5 格宽、约 1.75 格高；地面碰撞只占 [3,12]。",
+      "groundFootprint": [
+        [
+          3,
+          12
+        ]
+      ],
+      "anchorX": 11,
+      "anchorY": 27
+    },
+    {
+      "id": "obj-mug",
+      "kind": "sprite",
+      "size": [
+        12,
+        12
+      ],
+      "description": "桌上的保温杯。贴图 12×12：视觉高不足一格；地面碰撞只占 [6,12]。",
+      "groundFootprint": [
+        [
+          6,
+          12
+        ]
+      ],
+      "anchorX": 5,
+      "anchorY": 11
+    },
+    {
+      "id": "tile-floor-wood",
+      "kind": "tile",
+      "size": [
+        16,
+        16
+      ],
+      "description": "木地板，4 个细微噪点变体，整图 64×16（4×1 排布）。",
+      "variants": 4,
+      "sheetSize": [
+        64,
+        16
+      ]
+    },
+    {
+      "id": "tile-rug",
+      "kind": "tile",
+      "size": [
+        16,
+        16
+      ],
+      "description": "工位地毯，与木地板同尺寸。"
+    },
+    {
+      "id": "tile-wall",
+      "kind": "tile",
+      "size": [
+        16,
+        32
+      ],
+      "description": "背景墙与踢脚线，作为背景层画在地图矩形上方一格高的画布区域（画布 y=-16～-1），不铺进 24×16 地图，不占可走格、不参与碰撞。"
+    },
+    {
+      "id": "tile-window",
+      "kind": "tile",
+      "size": [
+        16,
+        32
+      ],
+      "description": "窗，叠在上墙背景层的 x=80～143，属背景层，不占可走格、不参与碰撞。"
+    },
+    {
+      "id": "tile-outage-dim",
+      "kind": "tile",
+      "size": [
+        16,
+        16
+      ],
+      "description": "两小时转场用离散蓝灰叠加，分两档，不做渐变模糊。"
+    },
+    {
+      "id": "ui-dialog-box",
+      "kind": "ui",
+      "size": [
+        240,
+        64
+      ],
+      "description": "对话框底框，暖白、细边框、朱砂姓名签；文字用 DOM。"
+    },
+    {
+      "id": "ui-forum-panel",
+      "kind": "ui",
+      "size": [
+        216,
+        120
+      ],
+      "description": "论坛面板（DOM）：标题、“无法登录”高亮、返回按钮；不出现真实用户名、日期、截图。"
+    },
+    {
+      "id": "ui-notebook",
+      "kind": "ui",
+      "size": [
+        120,
+        80
+      ],
+      "description": "排查笔记本（DOM）：三项确认勾选，勾选时有短高亮。"
+    },
+    {
+      "id": "ui-manual-page",
+      "kind": "ui",
+      "size": [
+        216,
+        136
+      ],
+      "description": "工作手册页（DOM 排版），新页文字见 learning-manual-1。"
+    },
+    {
+      "id": "ui-hud-task",
+      "kind": "ui",
+      "size": [
+        160,
+        16
+      ],
+      "description": "任务提示条（DOM），显示“排查 1/3”“看过 1/2”，只用文字。"
+    },
+    {
+      "id": "ui-choice-button",
+      "kind": "ui",
+      "size": [
+        96,
+        24
+      ],
+      "description": "选项按钮底板，CSS 放大后触控区 ≥44 CSS px。"
+    },
+    {
+      "id": "ui-mobile-controls",
+      "kind": "ui",
+      "size": [
+        96,
+        96
+      ],
+      "description": "手机方向键与 A 球按钮，触控热区 ≥44 CSS px。"
+    },
+    {
+      "id": "ui-pause-menu",
+      "kind": "ui",
+      "size": [
+        160,
+        88
+      ],
+      "description": "暂停菜单（DOM）：继续、查看手册、重玩、声音开关。"
+    },
+    {
+      "id": "audio-ui-click",
+      "kind": "audio",
+      "durationMs": 60,
+      "description": "确认音，木质短点击。"
+    },
+    {
+      "id": "audio-ui-move",
+      "kind": "audio",
+      "durationMs": 40,
+      "description": "光标移动音。"
+    },
+    {
+      "id": "audio-notebook-tick",
+      "kind": "audio",
+      "durationMs": 120,
+      "description": "勾选音。"
+    },
+    {
+      "id": "audio-manual-page",
+      "kind": "audio",
+      "durationMs": 300,
+      "description": "手册翻页声。"
+    },
+    {
+      "id": "audio-open-forum",
+      "kind": "audio",
+      "durationMs": 220,
+      "description": "打开论坛面板的轻响。"
+    },
+    {
+      "id": "audio-step",
+      "kind": "audio",
+      "durationMs": 150,
+      "description": "一步脚步，木地板与地毯各一版，由实现时选用。"
+    },
+    {
+      "id": "audio-transition-dim",
+      "kind": "audio",
+      "durationMs": 400,
+      "description": "两小时转场压暗时的一声低音，不持续。"
+    },
+    {
+      "id": "audio-ambient-office",
+      "kind": "audio",
+      "durationMs": 1500,
+      "description": "办公室环境底噪（键盘、椅轮），循环播放。用户开启声音后才播放。",
+      "loop": true
+    }
+  ],
+  "interactionDirs": {
+    "forum_pc": "down",
+    "trap_note": "down",
+    "test_notes": "down",
+    "cto_pc": "down",
+    "manual_shelf": "down",
+    "bookshelf": "down",
+    "warm_guy_plant": "down",
+    "coffee_mug": "down"
+  },
+  "runtimeRules": {
+    "interaction": {
+      "definitions": "每个对象有三个格：对象本体 tile（家具所在格，在 footprint 内）、交互点 interactionTile（玩家应站的格，与本体相邻、不在 footprint 内）、视觉包围（贴图像素，可比一格宽或高）。",
+      "triggerRule": "玩家所在的格 == 对象的 interactionTile，且玩家朝向 == fromDir[id]，按 E／空格（或点提示 / A 按钮）才触发。fromDir[id] 由 interactionTile 与 tile 推算：tile 在交互点正上方 → 朝上；正下方 → 朝下；正左方 → 朝右；正右方 → 朝左。若玩家在交互点但朝向不对，第一次按键只转身，不触发。",
+      "notTrigger": "玩家在对象本体格旁边、但不在它的 interactionTile 上（例如站在 [9,2] 朝下看 forum_pc，或者站在书架另一格 [20,4]）不触发，只显示“走近一点”的提示。",
+      "examples": {
+        "forum_pc": "交互点 [9,4]，本体 [9,3] 在正上方，所以站 [9,4] 朝上即可；[9,3] 是家具本体，不是交互点，玩家永远不能站到本体格上。",
+        "cto_pc": "交互点 [15,4]，朝上。",
+        "test_notes": "交互点 [13,4]，朝上。",
+        "trap_note": "交互点 [11,4]，朝上。",
+        "manual_shelf": "交互点 [21,4]，朝上。",
+        "bookshelf": "交互点 [19,4]，朝上；[20,4] 不是它的交互点。",
+        "warm_guy_plant": "交互点 [3,13]，朝上。",
+        "coffee_mug": "交互点 [6,13]，朝上。"
+      },
+      "touch": "点屏幕只在玩家已站在该对象的 interactionTile 且已朝向 fromDir 时才触发；否则只显示“走近一点”提示，不自动寻路、不隔空触发。"
+    },
+    "actors": "演员（玩家与 CTO）不是碰撞体：碰撞只认 blockedTiles 与地图矩形。剧情锁定期间（report、incident 的呆住演示、restored 转场）输入冻结，演员停在剧情指定格。",
+    "events": "转移只有在 from == 当前状态且带 options 时，按 options 顺序选第一个 requires 全部满足的选项执行；每个选项的效果并入标记集合（并集），不删除任何标记。没有满足任何选项的选项即不显示可执行按钮。",
+    "savePolicy": "单键原子快照：每次写存档，把 {schema:1, state, flags} 作为一个 JSON 对象一次写入 localStorage['career-rpg:nanjing:v1']，读取时整体校验。标记从不单独保存，只随快照的 state 一起写入，所以不存在“新标记配旧检查点状态”。玩家位置与朝向不入档，读档后由所在状态的入口位置与演出摆放。",
+    "checkpointWrites": [
+      "chapter_start：{state:office, flags:[]}。",
+      "T01 open_forum_post：{state:report, flags:[report_read]}。",
+      "T02 read_feedback：{state:incident, flags:[report_read, incident_started]}。",
+      "T03 cto_rallies_team：{state:investigation, flags:[…, incident_seen]}。",
+      "T04／T05／T06 首次确认后：{state:investigation, flags:当前并集}。",
+      "T07 resume_narrative：{state:restored, flags:…+outage_over}。",
+      "T08 comfort_read：{state:learning, flags:…+comfort_read}。",
+      "T09／T10 首次写入标记后：{state:learning, flags:当前并集}。",
+      "T11 write_manual_entry：{state:complete, flags:全部}。"
+    ],
+    "restore": "读档时按快照整体恢复 state 与 flags，玩家摆到该状态入口位置（office 为出生点 [3,14]，report／incident 为 [9,4]，investigation 为 [15,4]，restored 为 [15,4]，learning 为 [15,4]，complete 为 [21,4]），都满足交互规则。恢复后的配置都满足状态表的 enterFlags（每个写快照的事件都把该状态的必需标记一并写入），不会把新 flags 配旧状态。",
+    "reloadExamples": {
+      "office 初始存档": "chapter_start 写入 {office, []}；刷新读回后玩家在 [3,14]，做 open_forum_post。",
+      "report 刷新（review-04 反例）": "磁盘是 {report, [report_read]}；读回 report，玩家在 [9,4]，再读反应，点“继续”进 incident。若退回 chapter_start 快照，则落在 office 且带 report_read，论坛选项为“接着处理”，换到 report 重新开始反应。两条路径都能前进。",
+      "incident 刷新": "磁盘是 {incident, [report_read, incident_started]}；读回 incident，玩家在 [9,4]，重播呆住演示与 CTO 对话，再与 cto_pc 交互。",
+      "调查自循环": "三次确认各写一次 {investigation, 当前并集}；读回后玩家在 [15,4]，已确认项只显示 *-copy，剩余确认照常可做；三项齐全后在 cto_pc 选“这轮排查先到这里”进 restored。",
+      "learning 任一标记组合": "T08 写 {learning, 无测试/注释标记}；T09／T10 分别重写快照。四种组合（无、只有测试、只有注释、两者）都合法，手册书架的“把这页写进手册”只在两者都有时出现。",
+      "complete": "T11 写 {complete, 全部标记}；读回直接停在 complete。"
+    },
+    "resumeFromOffice": {
+      "id": "resume_from_office",
+      "trigger": "存档 state 为 office 且 office 可执行选项按顺序为：open_forum_post（无 report_read）、office_reopen（有 report_read）。有 report_read 时，默认选中“接着处理”。",
+      "choice": "resume_report",
+      "behaviour": "播放 office-reopen 原文（已读反馈），点“继续”后按 report 入口播放 report-reaction；把快照改写为 {state:report, flags:已保存标记（含 report_read）}。report_read 不是新写，来自原快照，所以不会出现新标记配旧状态；不重复写 report_read。",
+      "keyboard": "在 office 且论坛未读时 E 只执行 open_forum_post；已读时 E 执行“接着处理”，不连带触发其余事件。",
+      "touch": "站在 [9,4] 且已读时，点提示或 A 按钮等同于“接着处理”。",
+      "refreshing_report_incident": "report 与 incident 没有快照；刷新后落在 office 快照并带上已有的 report_read／incident_started。office 的“接着处理”换到 report，用户点“继续”进入 incident，状态与标记按既有脚本重置到 incident 入口（演出重播、标记只多不少），不存在卡死或倒退。"
+    }
+  },
+  "basisLegend": {
+    "fact_paraphrase": "按作者提供事实转述，不作逐字记录。",
+    "staging": "演出、界面、人物动作或游戏机制草稿，不是确认的历史。"
+  },
+  "palette": [
+    [
+      "warm_white",
+      "#faf8f3"
+    ],
+    [
+      "ink",
+      "#292825"
+    ],
+    [
+      "stone",
+      "#77746e"
+    ],
+    [
+      "cinnabar",
+      "#a64335"
+    ],
+    [
+      "wood_dark",
+      "#6b4a32"
+    ],
+    [
+      "wood_light",
+      "#a87c55"
+    ],
+    [
+      "brick_gray",
+      "#8d8a83"
+    ],
+    [
+      "grass_green",
+      "#6f8f5a"
+    ],
+    [
+      "blue_gray",
+      "#5d6e7a"
+    ],
+    [
+      "night_blue",
+      "#2f3a45"
+    ],
+    [
+      "window_light",
+      "#e8dfc8"
+    ],
+    [
+      "warm_light",
+      "#e9c27a"
+    ]
+  ],
+  "blockedHistoricalDetails": [
+    "事故根因、具体报错、代码和完整修复过程",
+    "排查中每个人具体做了什么（谁看日志、谁检查部署、谁负责哪部分服务）",
+    "具体技术分工、换浏览器、改密码、群消息是否持续、先吃饭、哪条路径漏测是不是根因",
+    "老板原话、同事姓名外貌与逐字安慰措辞（旁白按作者回忆转述，CTO、同事的台词是演出草稿）",
+    "事故与随后深夜学习是否存在直接因果",
+    "准确年份与日期",
+    "工作手册是否在真实工作中存在（本章手册为游戏机制）"
+  ]
+}

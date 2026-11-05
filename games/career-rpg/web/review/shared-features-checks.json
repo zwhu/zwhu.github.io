@@ -1,0 +1,16 @@
+{
+  "result": "passed",
+  "browser": "Chrome headless desktop1280x900/software WebGL",
+  "checks": {
+    "threePartnersWorking": true,
+    "typingHasTwoFrames": true,
+    "fourDirectionsAnimatedAndIdle": true,
+    "playerComputerSeatedAndFootSafe": true,
+    "acceptedMarkerAndTensePortrait": true,
+    "ctoBubbleAndTypingPause": true,
+    "bothCompanionsInteract": true,
+    "happyPortraitAndHeadBadge": true,
+    "replayMarkerReturns": true
+  },
+  "scope": "Configurable actors, non-modal bubbles, task markers, emotion imagery and seated typing; no other-end or performance acceptance"
+}

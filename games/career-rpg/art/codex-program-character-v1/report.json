@@ -1,0 +1,29 @@
+{
+  "author": "Codex",
+  "method": "independently authored raster polygons and pixel clusters; no source pixels sampled",
+  "frame_size": [
+    48,
+    64
+  ],
+  "directions": [
+    "down",
+    "up",
+    "left",
+    "right"
+  ],
+  "bytes": 1298,
+  "rgba_colors": 18,
+  "sha256": "171c702157c57fed74641f8895b8e6f21700aeb7a317b023adaeabeccb6c5f6a",
+  "baseline_y": [
+    61,
+    61,
+    61,
+    61
+  ],
+  "production_replaced": false,
+  "limits": [
+    "Standing frames only; no animation or integration.",
+    "Side geometry is mostly mirrored; not a full asymmetric character design.",
+    "Visual fidelity requires review, not inferred from file size."
+  ]
+}

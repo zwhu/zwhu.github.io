@@ -1,0 +1,924 @@
+{
+  "status": "observed_stable_full_memory_unverified",
+  "scene": "nanjing-office",
+  "stage": "lifecycle",
+  "profile": "/var/folders/nv/g6m5_3nx1r9_v9dk3zh_5zw40000gn/T/career-web-chrome-3QPri2",
+  "url": "http://127.0.0.1:56930/games/career-rpg/web/",
+  "hashes": {
+    "games/career-rpg/web/index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "games/career-rpg/web/style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213",
+    "games/career-rpg/web/main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+    "games/career-rpg/web/world.mjs": "f2c80bb039766af708fa0b9f7f324e1fffaa459c923882ec9aa46e2af87d650d",
+    "games/career-rpg/web/story.mjs": "6b13dad3a8ad77cb01465a1685694978cc1acad70527b1ac86a390252450e424",
+    "games/career-rpg/web/scene-config.mjs": "6a9277bd4da740a37cf1d1e06a9289112fd91798181c3d788c0593b2062373f2",
+    "games/career-rpg/web/actors.mjs": "f10a5eb44b2d600e7aceb05f64e78f34c9b179ad92b239934267349b4b5718a3",
+    "games/career-rpg/web/vendor/three.module.min.js": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6",
+    "games/career-rpg/web/vendor/three.core.min.js": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de",
+    "games/career-rpg/web/art/office-room-v2.png": "3f72d04fc17c0e04fedd57557857c87fc91b966231a8facab8f0f28e4e17a7fe",
+    "games/career-rpg/design/chapter-01.json": "bd44b33318ac4ca61d24c13452ff6da2f4b3ba3e72ab1f1cff4639d5073721e8",
+    "games/career-rpg/web/art/player-walk-v1.png": "0f72b54f7f757b21638087ce52d940588eafb30a3b8323d4bf3c7313b23591ff",
+    "games/career-rpg/web/art/npc-team-v1.png": "25a4188b1b181e00180c89d127926b8d2101fe2d961fafc83315962aacedb9b1",
+    "games/career-rpg/web/art/player-emotions-v1.png": "65524bcdcc181753b4721e644b7f9f02e966ce433e3d7d157ca7fc373829d80f",
+    "games/career-rpg/web/art/typing-team-v1.png": "a9ffc37e0a18e55062cb167bb3c090be2f0a2427caffacd394b6fe5567d57507"
+  },
+  "cycles": 1,
+  "rounds": [
+    {
+      "cycle": 1,
+      "before": {
+        "docID": "acb3c680-c210-4b20-b6af-1f58b469521f",
+        "classes": {
+          "renderers": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "scenes": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "cameras": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "geometries": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "textures": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "materials": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "meshes": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          }
+        },
+        "scene": {
+          "nodes": 10,
+          "meshes": 9
+        },
+        "rendererInfo": {
+          "geometries": 5,
+          "textures": 5,
+          "programs": 2
+        },
+        "dom": {
+          "canvases": 2,
+          "labels": 3,
+          "effects": 3,
+          "markers": 1,
+          "buttons": 7
+        },
+        "listeners": {
+          "registered": 23,
+          "activeConnected": 23,
+          "activeDetachedWeaklyObserved": 0,
+          "scope": "add/remove/once only; onload/onerror properties excluded; WeakRefs do not prove garbage collection"
+        },
+        "raf": {
+          "pending": 1,
+          "cancelCalls": 0
+        },
+        "webgl": [
+          {
+            "resources": {
+              "textures": {
+                "created": 9,
+                "deleted": 0,
+                "live": 9
+              },
+              "framebuffers": {
+                "created": 3,
+                "deleted": 0,
+                "live": 3
+              },
+              "buffers": {
+                "created": 20,
+                "deleted": 0,
+                "live": 20
+              },
+              "programs": {
+                "created": 2,
+                "deleted": 0,
+                "live": 2
+              },
+              "shaders": {
+                "created": 4,
+                "deleted": 4,
+                "live": 0
+              },
+              "vertexArrays": {
+                "created": 5,
+                "deleted": 0,
+                "live": 5
+              }
+            },
+            "contextWeaklyReachable": true
+          }
+        ],
+        "shared": {
+          "imageObjectsCreated": 5,
+          "imageObjectsWeaklyReachable": 5,
+          "scriptCanvasesCreated": 13,
+          "twoDContextsObserved": 13,
+          "resizeObserversCreated": 1,
+          "resizeDisconnectCalls": 0,
+          "resizeActiveTargets": 1
+        },
+        "input": {
+          "keys": 2,
+          "untrusted": 0,
+          "pointers": 0
+        }
+      },
+      "replayed": {
+        "docID": "acb3c680-c210-4b20-b6af-1f58b469521f",
+        "classes": {
+          "renderers": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "scenes": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "cameras": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "geometries": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "textures": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "materials": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "meshes": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          }
+        },
+        "scene": {
+          "nodes": 10,
+          "meshes": 9
+        },
+        "rendererInfo": {
+          "geometries": 5,
+          "textures": 5,
+          "programs": 2
+        },
+        "dom": {
+          "canvases": 2,
+          "labels": 3,
+          "effects": 3,
+          "markers": 1,
+          "buttons": 7
+        },
+        "listeners": {
+          "registered": 26,
+          "activeConnected": 23,
+          "activeDetachedWeaklyObserved": 1,
+          "scope": "add/remove/once only; onload/onerror properties excluded; WeakRefs do not prove garbage collection"
+        },
+        "raf": {
+          "pending": 1,
+          "cancelCalls": 0
+        },
+        "webgl": [
+          {
+            "resources": {
+              "textures": {
+                "created": 9,
+                "deleted": 0,
+                "live": 9
+              },
+              "framebuffers": {
+                "created": 3,
+                "deleted": 0,
+                "live": 3
+              },
+              "buffers": {
+                "created": 20,
+                "deleted": 0,
+                "live": 20
+              },
+              "programs": {
+                "created": 2,
+                "deleted": 0,
+                "live": 2
+              },
+              "shaders": {
+                "created": 4,
+                "deleted": 4,
+                "live": 0
+              },
+              "vertexArrays": {
+                "created": 5,
+                "deleted": 0,
+                "live": 5
+              }
+            },
+            "contextWeaklyReachable": true
+          }
+        ],
+        "shared": {
+          "imageObjectsCreated": 5,
+          "imageObjectsWeaklyReachable": 5,
+          "scriptCanvasesCreated": 13,
+          "twoDContextsObserved": 13,
+          "resizeObserversCreated": 1,
+          "resizeDisconnectCalls": 0,
+          "resizeActiveTargets": 1
+        },
+        "input": {
+          "keys": 14,
+          "untrusted": 0,
+          "pointers": 0
+        }
+      },
+      "result": "observed-stable",
+      "reentered": {
+        "docID": "60e426ed-5d25-445a-8f1e-7bb22ae49dc7",
+        "classes": {
+          "renderers": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "scenes": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "cameras": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "geometries": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "textures": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "materials": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "meshes": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          }
+        },
+        "scene": {
+          "nodes": 10,
+          "meshes": 9
+        },
+        "rendererInfo": {
+          "geometries": 5,
+          "textures": 5,
+          "programs": 2
+        },
+        "dom": {
+          "canvases": 2,
+          "labels": 3,
+          "effects": 3,
+          "markers": 1,
+          "buttons": 7
+        },
+        "listeners": {
+          "registered": 23,
+          "activeConnected": 23,
+          "activeDetachedWeaklyObserved": 0,
+          "scope": "add/remove/once only; onload/onerror properties excluded; WeakRefs do not prove garbage collection"
+        },
+        "raf": {
+          "pending": 1,
+          "cancelCalls": 0
+        },
+        "webgl": [
+          {
+            "resources": {
+              "textures": {
+                "created": 9,
+                "deleted": 0,
+                "live": 9
+              },
+              "framebuffers": {
+                "created": 3,
+                "deleted": 0,
+                "live": 3
+              },
+              "buffers": {
+                "created": 20,
+                "deleted": 0,
+                "live": 20
+              },
+              "programs": {
+                "created": 2,
+                "deleted": 0,
+                "live": 2
+              },
+              "shaders": {
+                "created": 4,
+                "deleted": 4,
+                "live": 0
+              },
+              "vertexArrays": {
+                "created": 5,
+                "deleted": 0,
+                "live": 5
+              }
+            },
+            "contextWeaklyReachable": true
+          }
+        ],
+        "shared": {
+          "imageObjectsCreated": 5,
+          "imageObjectsWeaklyReachable": 5,
+          "scriptCanvasesCreated": 13,
+          "twoDContextsObserved": 13,
+          "resizeObserversCreated": 1,
+          "resizeDisconnectCalls": 0,
+          "resizeActiveTargets": 1
+        },
+        "input": {
+          "keys": 2,
+          "untrusted": 0,
+          "pointers": 0
+        }
+      },
+      "pagehide": {
+        "event": "pagehide-after-app-dispose",
+        "nativeEventType": "pagehide",
+        "nativeEventTrusted": true,
+        "docID": "acb3c680-c210-4b20-b6af-1f58b469521f",
+        "persisted": false,
+        "runtimeBindingType": "function",
+        "classes": {
+          "renderers": {
+            "created": 1,
+            "disposeCalls": 1,
+            "disposed": 1
+          },
+          "scenes": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "cameras": {
+            "created": 1,
+            "disposeCalls": 0,
+            "disposed": 0
+          },
+          "geometries": {
+            "created": 9,
+            "disposeCalls": 9,
+            "disposed": 9
+          },
+          "textures": {
+            "created": 9,
+            "disposeCalls": 9,
+            "disposed": 9
+          },
+          "materials": {
+            "created": 9,
+            "disposeCalls": 9,
+            "disposed": 9
+          },
+          "meshes": {
+            "created": 9,
+            "disposeCalls": 0,
+            "disposed": 0
+          }
+        },
+        "scene": {
+          "nodes": 10,
+          "meshes": 9
+        },
+        "rendererInfo": {
+          "geometries": 0,
+          "textures": 0,
+          "programs": 0
+        },
+        "dom": {
+          "canvases": 2,
+          "labels": 3,
+          "effects": 3,
+          "markers": 1,
+          "buttons": 7
+        },
+        "listeners": {
+          "registered": 26,
+          "activeConnected": 19,
+          "activeDetachedWeaklyObserved": 1,
+          "scope": "add/remove/once only; onload/onerror properties excluded; WeakRefs do not prove garbage collection"
+        },
+        "raf": {
+          "pending": 0,
+          "cancelCalls": 2
+        },
+        "webgl": [
+          {
+            "resources": {
+              "textures": {
+                "created": 9,
+                "deleted": 5,
+                "live": 4
+              },
+              "framebuffers": {
+                "created": 3,
+                "deleted": 0,
+                "live": 3
+              },
+              "buffers": {
+                "created": 20,
+                "deleted": 20,
+                "live": 0
+              },
+              "programs": {
+                "created": 2,
+                "deleted": 2,
+                "live": 0
+              },
+              "shaders": {
+                "created": 4,
+                "deleted": 4,
+                "live": 0
+              },
+              "vertexArrays": {
+                "created": 5,
+                "deleted": 5,
+                "live": 0
+              }
+            },
+            "contextWeaklyReachable": true
+          }
+        ],
+        "shared": {
+          "imageObjectsCreated": 5,
+          "imageObjectsWeaklyReachable": 5,
+          "scriptCanvasesCreated": 13,
+          "twoDContextsObserved": 13,
+          "resizeObserversCreated": 1,
+          "resizeDisconnectCalls": 0,
+          "resizeActiveTargets": 1
+        },
+        "input": {
+          "keys": 14,
+          "untrusted": 0,
+          "pointers": 0
+        },
+        "snapshotOutcome": "returned",
+        "bindingOutcome": "returned",
+        "cdpBindingObserved": false
+      },
+      "pagehideDocID": "acb3c680-c210-4b20-b6af-1f58b469521f"
+    }
+  ],
+  "exits": [
+    {
+      "event": "pagehide-after-app-dispose",
+      "nativeEventType": "pagehide",
+      "nativeEventTrusted": true,
+      "docID": "acb3c680-c210-4b20-b6af-1f58b469521f",
+      "persisted": false,
+      "runtimeBindingType": "function",
+      "classes": {
+        "renderers": {
+          "created": 1,
+          "disposeCalls": 1,
+          "disposed": 1
+        },
+        "scenes": {
+          "created": 1,
+          "disposeCalls": 0,
+          "disposed": 0
+        },
+        "cameras": {
+          "created": 1,
+          "disposeCalls": 0,
+          "disposed": 0
+        },
+        "geometries": {
+          "created": 9,
+          "disposeCalls": 9,
+          "disposed": 9
+        },
+        "textures": {
+          "created": 9,
+          "disposeCalls": 9,
+          "disposed": 9
+        },
+        "materials": {
+          "created": 9,
+          "disposeCalls": 9,
+          "disposed": 9
+        },
+        "meshes": {
+          "created": 9,
+          "disposeCalls": 0,
+          "disposed": 0
+        }
+      },
+      "scene": {
+        "nodes": 10,
+        "meshes": 9
+      },
+      "rendererInfo": {
+        "geometries": 0,
+        "textures": 0,
+        "programs": 0
+      },
+      "dom": {
+        "canvases": 2,
+        "labels": 3,
+        "effects": 3,
+        "markers": 1,
+        "buttons": 7
+      },
+      "listeners": {
+        "registered": 26,
+        "activeConnected": 19,
+        "activeDetachedWeaklyObserved": 1,
+        "scope": "add/remove/once only; onload/onerror properties excluded; WeakRefs do not prove garbage collection"
+      },
+      "raf": {
+        "pending": 0,
+        "cancelCalls": 2
+      },
+      "webgl": [
+        {
+          "resources": {
+            "textures": {
+              "created": 9,
+              "deleted": 5,
+              "live": 4
+            },
+            "framebuffers": {
+              "created": 3,
+              "deleted": 0,
+              "live": 3
+            },
+            "buffers": {
+              "created": 20,
+              "deleted": 20,
+              "live": 0
+            },
+            "programs": {
+              "created": 2,
+              "deleted": 2,
+              "live": 0
+            },
+            "shaders": {
+              "created": 4,
+              "deleted": 4,
+              "live": 0
+            },
+            "vertexArrays": {
+              "created": 5,
+              "deleted": 5,
+              "live": 0
+            }
+          },
+          "contextWeaklyReachable": true
+        }
+      ],
+      "shared": {
+        "imageObjectsCreated": 5,
+        "imageObjectsWeaklyReachable": 5,
+        "scriptCanvasesCreated": 13,
+        "twoDContextsObserved": 13,
+        "resizeObserversCreated": 1,
+        "resizeDisconnectCalls": 0,
+        "resizeActiveTargets": 1
+      },
+      "input": {
+        "keys": 14,
+        "untrusted": 0,
+        "pointers": 0
+      },
+      "snapshotOutcome": "returned",
+      "bindingOutcome": "returned",
+      "cdpBindingObserved": false
+    }
+  ],
+  "contexts": [
+    {
+      "event": "cleared"
+    },
+    {
+      "event": "cleared"
+    },
+    {
+      "event": "created",
+      "id": 2,
+      "origin": "http://127.0.0.1:56930",
+      "frame": "741A62C7F3EC12B52250BE1B9F245ED6"
+    },
+    {
+      "event": "cleared"
+    },
+    {
+      "event": "cleared"
+    },
+    {
+      "event": "created",
+      "id": 3,
+      "origin": "http://127.0.0.1:56930",
+      "frame": "741A62C7F3EC12B52250BE1B9F245ED6"
+    }
+  ],
+  "interceptions": [
+    {
+      "kind": "test-only-three-wrapper",
+      "url": "http://127.0.0.1:56930/games/career-rpg/web/vendor/three.module.min.js"
+    },
+    {
+      "kind": "test-only-three-wrapper",
+      "url": "http://127.0.0.1:56930/games/career-rpg/web/vendor/three.module.min.js"
+    }
+  ],
+  "scope": "Existing chapter replay through trusted keyboard, then native full document reload. Cycles1 validates native observation chain;20 is the bounded series. No in-document room-switch API exists; not simulated scene transitions.",
+  "instrumentation": {
+    "sourceSHA256": "9a3dcfc252c30fc3cca8fcb6e83515a81c09eb62e7964d75ac9077032d99756f",
+    "vendorWrapperSHA256": "07eb970c2ba835e4f57ac32d09a29dfcc750d3ea8b0e8a5cc344f045bcef2186",
+    "mode": "Test-profile Fetch wrapper preserves native r180 constructors/behavior and counts creation/dispose events. WeakRefs avoid observer ownership. No production source mutation or timing/performance probe."
+  },
+  "runtimeErrors": [],
+  "browser": "Chrome/156.0.8078.79",
+  "baseline": {
+    "docID": "acb3c680-c210-4b20-b6af-1f58b469521f",
+    "classes": {
+      "renderers": {
+        "created": 1,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "scenes": {
+        "created": 1,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "cameras": {
+        "created": 1,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "geometries": {
+        "created": 9,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "textures": {
+        "created": 9,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "materials": {
+        "created": 9,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "meshes": {
+        "created": 9,
+        "disposeCalls": 0,
+        "disposed": 0
+      }
+    },
+    "scene": {
+      "nodes": 10,
+      "meshes": 9
+    },
+    "rendererInfo": {
+      "geometries": 5,
+      "textures": 5,
+      "programs": 2
+    },
+    "dom": {
+      "canvases": 2,
+      "labels": 3,
+      "effects": 3,
+      "markers": 1,
+      "buttons": 7
+    },
+    "listeners": {
+      "registered": 23,
+      "activeConnected": 23,
+      "activeDetachedWeaklyObserved": 0,
+      "scope": "add/remove/once only; onload/onerror properties excluded; WeakRefs do not prove garbage collection"
+    },
+    "raf": {
+      "pending": 1,
+      "cancelCalls": 0
+    },
+    "webgl": [
+      {
+        "resources": {
+          "textures": {
+            "created": 9,
+            "deleted": 0,
+            "live": 9
+          },
+          "framebuffers": {
+            "created": 3,
+            "deleted": 0,
+            "live": 3
+          },
+          "buffers": {
+            "created": 20,
+            "deleted": 0,
+            "live": 20
+          },
+          "programs": {
+            "created": 2,
+            "deleted": 0,
+            "live": 2
+          },
+          "shaders": {
+            "created": 4,
+            "deleted": 4,
+            "live": 0
+          },
+          "vertexArrays": {
+            "created": 5,
+            "deleted": 0,
+            "live": 5
+          }
+        },
+        "contextWeaklyReachable": true
+      }
+    ],
+    "shared": {
+      "imageObjectsCreated": 5,
+      "imageObjectsWeaklyReachable": 5,
+      "scriptCanvasesCreated": 13,
+      "twoDContextsObserved": 13,
+      "resizeObserversCreated": 1,
+      "resizeDisconnectCalls": 0,
+      "resizeActiveTargets": 1
+    },
+    "input": {
+      "keys": 2,
+      "untrusted": 0,
+      "pointers": 0
+    }
+  },
+  "final": {
+    "docID": "60e426ed-5d25-445a-8f1e-7bb22ae49dc7",
+    "classes": {
+      "renderers": {
+        "created": 1,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "scenes": {
+        "created": 1,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "cameras": {
+        "created": 1,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "geometries": {
+        "created": 9,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "textures": {
+        "created": 9,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "materials": {
+        "created": 9,
+        "disposeCalls": 0,
+        "disposed": 0
+      },
+      "meshes": {
+        "created": 9,
+        "disposeCalls": 0,
+        "disposed": 0
+      }
+    },
+    "scene": {
+      "nodes": 10,
+      "meshes": 9
+    },
+    "rendererInfo": {
+      "geometries": 5,
+      "textures": 5,
+      "programs": 2
+    },
+    "dom": {
+      "canvases": 2,
+      "labels": 3,
+      "effects": 3,
+      "markers": 1,
+      "buttons": 7
+    },
+    "listeners": {
+      "registered": 23,
+      "activeConnected": 23,
+      "activeDetachedWeaklyObserved": 0,
+      "scope": "add/remove/once only; onload/onerror properties excluded; WeakRefs do not prove garbage collection"
+    },
+    "raf": {
+      "pending": 1,
+      "cancelCalls": 0
+    },
+    "webgl": [
+      {
+        "resources": {
+          "textures": {
+            "created": 9,
+            "deleted": 0,
+            "live": 9
+          },
+          "framebuffers": {
+            "created": 3,
+            "deleted": 0,
+            "live": 3
+          },
+          "buffers": {
+            "created": 20,
+            "deleted": 0,
+            "live": 20
+          },
+          "programs": {
+            "created": 2,
+            "deleted": 0,
+            "live": 2
+          },
+          "shaders": {
+            "created": 4,
+            "deleted": 4,
+            "live": 0
+          },
+          "vertexArrays": {
+            "created": 5,
+            "deleted": 0,
+            "live": 5
+          }
+        },
+        "contextWeaklyReachable": true
+      }
+    ],
+    "shared": {
+      "imageObjectsCreated": 5,
+      "imageObjectsWeaklyReachable": 5,
+      "scriptCanvasesCreated": 13,
+      "twoDContextsObserved": 13,
+      "resizeObserversCreated": 1,
+      "resizeDisconnectCalls": 0,
+      "resizeActiveTargets": 1
+    },
+    "input": {
+      "keys": 2,
+      "untrusted": 0,
+      "pointers": 0
+    }
+  },
+  "production_unchanged": true,
+  "unloadTelemetry": "Same native pagehide observer snapshots stored in isolated test-only sessionStorage key __career_rpg_lifecycle_probe; game localStorage save never altered by test. CDP binding optional, not sole unload evidence.",
+  "unverified": [
+    "Complete JS heap/native decoded-image/canvas/driver memory release and byte growth, no heap profiler/GC proof used",
+    "Weakly seen detached nodes/listeners are not a retention/leak verdict; property event handlers excluded",
+    "Internal per-context fallback WebGL textures may outlive renderer.dispose until browser context teardown; JS delete counts do not prove implicit driver reclamation",
+    "Global DOM listeners/ResizeObserver rely on full document teardown; no application disconnect guarantee is inferred",
+    "Only real chapter replay plus document reload exists and was tested; no separate scene-switch path, BFCache restoration or hidden lifecycle failure paths tested",
+    "Headless/software WebGL is not true device or author/whole-scene acceptance"
+  ],
+  "next": "Stop for supervisor independent lifecycle interpretation; leave full lifecycle gate unverified where native/heap evidence is missing. Resource budget failed and walking stutter remains paused."
+}

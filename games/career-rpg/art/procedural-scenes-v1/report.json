@@ -1,0 +1,123 @@
+{
+  "method": "Python standard-library raster drawing with shared hand-authored furniture",
+  "size": [
+    384,
+    216
+  ],
+  "scenes": [
+    {
+      "id": "hefei-dorm",
+      "title": "合肥 · 大学宿舍",
+      "note": "宿舍、游戏与求职前的自己；家具布局为演出设定。",
+      "bytes": 3191,
+      "sha256": "0e54c6df1e6111ac3e846b254765ee3aac6f2d8475453d690ff18c27b412aae9",
+      "file": "hefei-dorm.png"
+    },
+    {
+      "id": "hefei-startup",
+      "title": "合肥 · 安风徳办公室",
+      "note": "求职、技术习惯与两次加薪；不虚构老板原话。",
+      "bytes": 3207,
+      "sha256": "fc8e7d0109b5b95714fe1675b6688c15e5a06c3acfc911c89d7d6f3e682e1f56",
+      "file": "hefei-startup.png"
+    },
+    {
+      "id": "nanjing-night",
+      "title": "南京 · 深夜书桌",
+      "note": "回家读技术书至凌晨两点；不把学习与故障强行建立因果。",
+      "bytes": 2344,
+      "sha256": "0de31b5b516d81521374985708a02f8b18fd035304dcdd68e9e429a039223379",
+      "file": "nanjing-night.png"
+    },
+    {
+      "id": "hangzhou-product",
+      "title": "杭州 · 商品发布团队",
+      "note": "商品发布与SDK协作；屏幕仅示意，不伪造真实系统。",
+      "bytes": 3233,
+      "sha256": "e2837f48b04c7b459664b6628f00309ad1022ec2f5f7a4305b60bb673a7d1802",
+      "file": "hangzhou-product.png"
+    },
+    {
+      "id": "double11",
+      "title": "杭州 · 双11值守",
+      "note": "与TL共同排查；不编造超卖根因或真实日志。",
+      "bytes": 3047,
+      "sha256": "52d3d1718f120ad2a7090ebd08c99a9cd83ac942f577c1419ad9d2076bd49ca6",
+      "file": "double11.png"
+    },
+    {
+      "id": "cloud-project",
+      "title": "杭州 · 浙里办项目",
+      "note": "设计系统与低码协作；不冒充真实办公空间。",
+      "bytes": 2245,
+      "sha256": "e4a83c6c0b5caff48bd3d097b097b1f97c5e06770d270d09711a8144c96f0244",
+      "file": "cloud-project.png"
+    },
+    {
+      "id": "community-feedback",
+      "title": "杭州 · 读到业主群反馈",
+      "note": "主角在家阅读转述；不把群消息改成与家长当面见面。",
+      "bytes": 2344,
+      "sha256": "e99e95a1929435dac8271ed9c7e53bcf74ad749a45be2c379d146417d85a819e",
+      "file": "community-feedback.png"
+    },
+    {
+      "id": "healthcode",
+      "title": "春节 · 健康码支援",
+      "note": "只表现临时抽调参与，不添加未确认的职责、地址与成果。",
+      "bytes": 2399,
+      "sha256": "72f119fbc7199c30e2c845f31c1b5c0d0c2c1f8a05155628f4f3c07815843980",
+      "file": "healthcode.png"
+    },
+    {
+      "id": "parcel-station",
+      "title": "菜鸟 · 驿站工作现场",
+      "note": "驿站包裹与扫码工作区；不绘制雇主标志或真实用户标签。",
+      "bytes": 2707,
+      "sha256": "5f9b34b670220709bb2e5a857b15b1e0fe035ffa7ee01f74a8c9a797056b6557",
+      "file": "parcel-station.png"
+    },
+    {
+      "id": "delivery-estate",
+      "title": "双11 · 送货入楼",
+      "note": "小区入口与楼道配送演出，不指定真实小区布局。",
+      "bytes": 2297,
+      "sha256": "efe820652ae4373a2c8e3b9144f63893196c73e536e0f716de1c9d76a4f4e3e4",
+      "file": "delivery-estate.png"
+    },
+    {
+      "id": "bytedance",
+      "title": "字节 · 性能工作",
+      "note": "当前工作协作场景；不伪造内部看板或企业UI。",
+      "bytes": 3339,
+      "sha256": "11aaf54d1e2452c7c58791788244f230394e857b5230e642179a609b27b5bb73",
+      "file": "bytedance.png"
+    },
+    {
+      "id": "present-study",
+      "title": "现在 · AI与写作书桌",
+      "note": "学习、工具、AgentToy与Blogflow；屏幕不生成假对话。",
+      "bytes": 2473,
+      "sha256": "af943df1d2c2e8d3838c5ff7173d04caa9371678bb88d720ed01c46026891a65",
+      "file": "present-study.png"
+    }
+  ],
+  "total_png_bytes": 32826,
+  "nanjing_office": "reuse ../../web/art/office-room-v2.png; not redrawn",
+  "status": "environment_design_drafts_only",
+  "characters_included": false,
+  "game_integrated": false,
+  "limits": [
+    "Not a faithful recreation of real buildings.",
+    "Simplified textures and geometry differ from canonical Nanjing art; not approved replacements.",
+    "No collision, foreground occlusion layers or interaction anchors supplied."
+  ],
+  "author_feedback": {
+    "status": "rejected_visual_direction",
+    "feedback": [
+      "非常简化",
+      "没有什么区分度"
+    ],
+    "next": "Three spatial redesign drafts in procedural-scenes-v2; other nine not redrawn."
+  }
+}

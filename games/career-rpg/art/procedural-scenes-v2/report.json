@@ -1,0 +1,40 @@
+{
+  "method": "program-only raster geometry; no image_gen",
+  "prior_feedback": "v1 too simplified and indistinguishable; rejected as visual direction",
+  "status": "three_scene_spatial_redesign_drafts",
+  "dimensions": [
+    384,
+    216
+  ],
+  "scenes": [
+    {
+      "id": "hefei-dorm",
+      "title": "合肥大学宿舍",
+      "note": "上下铺、梯子、晾衣、双人学习位，中央保留走道。",
+      "bytes": 4071,
+      "sha256": "7d1d8ddcb5bffadddb4c31b03ff8001e091defaffea086115ad64ea0995b1d98"
+    },
+    {
+      "id": "parcel-station",
+      "title": "菜鸟驿站",
+      "note": "开放卷帘门、密集包裹架、打包台、滚筒带和笼车。",
+      "bytes": 3071,
+      "sha256": "66f13dadd4b61de8d0db7cc1690c1964d4371881a41348f06a20785130ce135a"
+    },
+    {
+      "id": "delivery-estate",
+      "title": "送货小区",
+      "note": "室外住宅立面、内凹入口、台阶、庭院铺装与配送车。",
+      "bytes": 3653,
+      "sha256": "06a176ddfa789a9281b79475d31915d3ab917b752e7923bb52aa3b559c20e4d5"
+    }
+  ],
+  "total_scene_bytes": 10795,
+  "production_replaced": false,
+  "limits": [
+    "Game staging layouts, not historical reconstruction.",
+    "Still simpler than canonical Nanjing; no formal style acceptance.",
+    "No actors, collisions, foreground layers or game integration.",
+    "Other nine v1 scenes have not received this redesign."
+  ]
+}

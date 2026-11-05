@@ -1,0 +1,24 @@
+{
+  "skill": "/Users/bytedance/.trae/skills/bits-unit-test-gen/SKILL.md",
+  "steps": {
+    "Step1": "local existing Node22.23.1 preparation complete; prepare_test.sh not executed under higher-priority user restriction",
+    "Step2": "LANG=javascript; existing node:test/node:assert built-ins; no dependency install/config changes or external credential reads",
+    "Step3": "Explicit STORY-05 scope; TARGETS createChapter/public initial advance save inspect has text; source currently untracked, read directly, no forged diff hunk",
+    "Step4": "BUG_MAP=[]; existing coverage gap is not a demonstrated implementation bug",
+    "Step5": "Round1: generated->targeted failed test-only manual literal. Round2: test contract corrected->targeted all-pass->root verify once13 groups/16 rules; no production defects observed; no production changes.",
+    "Step6": "User local report/trace complete; utree flush not invoked under higher-priority explicit local Node scope. No test work left undone."
+  },
+  "exceptions": {
+    "prepare_quote": "Step1: 运行 prepare_test.sh",
+    "script_evidence": "prepare_test.sh unconditionally ensure_utree_installed in background; may curl/install/update and invokes utree begin; user prohibits new dependencies/tools and unknown hooks",
+    "report_quote": "Report-B: 执行 flush[强制要求]",
+    "resolution": "User explicit instructions outrank skill. No download/install/utree begin/update/flush or credential-config inspection. Requested tests and local report proceed with current Node standard tools."
+  },
+  "existing_tests_reused": [
+    "both learning orders complete only after both reviews and manual confirmation",
+    "prerequisites and duplicate confirmations cannot advance, remove flags or shadow later actions",
+    "every designed legal configuration restores exactly through a single atomic value"
+  ],
+  "filtered_candidate": "Missing pairwise independent replay evidence does not prove production nondeterminism; no bug invented.",
+  "BUG_MAP": []
+}

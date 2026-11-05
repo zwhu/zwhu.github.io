@@ -1,0 +1,128 @@
+{
+  "status": "passed_scoped",
+  "scene": "nanjing-office",
+  "stage": "blog-isolation-and-options",
+  "environment": "Fresh isolated Chrome headless desktop 1280x900; real repository docs assets, no game page visited",
+  "profile": "/var/folders/nv/g6m5_3nx1r9_v9dk3zh_5zw40000gn/T/career-web-chrome-jB4w1G",
+  "origin": "http://127.0.0.1:53211",
+  "pages": [
+    {
+      "path": "/docs/index.html",
+      "url": "http://127.0.0.1:53211/docs/index.html",
+      "status": "passed",
+      "requestCount": 7,
+      "gameResourceCount": 0,
+      "failures": [],
+      "blockedExternal": [
+        {
+          "url": "https://static.cloudflareinsights.com/beacon.min.js",
+          "resourceType": "Script",
+          "failed": {
+            "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector",
+            "canceled": false,
+            "blockedReason": "inspector"
+          },
+          "intentionallyBlocked": true
+        }
+      ],
+      "cache": {
+        "clearBeforeNavigation": true,
+        "disabled": true,
+        "storageClearedForIsolatedOrigin": true,
+        "serviceWorkerBypassed": true,
+        "observedLocalCacheHits": 0
+      },
+      "title": "技术博客 · zwhu",
+      "articleCoverage": {
+        "initialViewport": true,
+        "pageDownCount": 4,
+        "documentHeight": 3185,
+        "viewport": 900,
+        "endReached": true,
+        "purpose": "Trigger lazy public article images/comment request; no game or performance measurements"
+      },
+      "documentSHA256": "93eb43996765d734e1a96e522db4ed439af4849470309bcb8fce26a1a663e739"
+    },
+    {
+      "path": "/docs/claude-code-review.html",
+      "url": "http://127.0.0.1:53211/docs/claude-code-review.html",
+      "status": "passed",
+      "requestCount": 17,
+      "gameResourceCount": 0,
+      "failures": [],
+      "blockedExternal": [
+        {
+          "url": "https://static.cloudflareinsights.com/beacon.min.js",
+          "resourceType": "Script",
+          "failed": {
+            "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector",
+            "canceled": false,
+            "blockedReason": "inspector"
+          },
+          "intentionallyBlocked": true
+        },
+        {
+          "url": "https://giscus.app/client.js",
+          "resourceType": "Script",
+          "failed": {
+            "error": "net::ERR_BLOCKED_BY_CLIENT.Inspector",
+            "canceled": false,
+            "blockedReason": "inspector"
+          },
+          "intentionallyBlocked": true
+        }
+      ],
+      "cache": {
+        "clearBeforeNavigation": true,
+        "disabled": true,
+        "storageClearedForIsolatedOrigin": true,
+        "serviceWorkerBypassed": true,
+        "observedLocalCacheHits": 0
+      },
+      "title": "Claude Code 团队如何做代码审查 · 全文对照翻译",
+      "articleCoverage": {
+        "initialViewport": true,
+        "pageDownCount": 18,
+        "documentHeight": 14995,
+        "viewport": 900,
+        "endReached": true,
+        "purpose": "Trigger lazy public article images/comment request; no game or performance measurements"
+      },
+      "documentSHA256": "1e9be3c6ce5bc7113a07876a0332f00dbaca7a8977646b9be0cff56f2d7ae063"
+    }
+  ],
+  "request_list": "worker-requests.json",
+  "scene_accepted": false,
+  "next_scene_authorized": false,
+  "browser": "Chrome/156.0.8078.79",
+  "static_pages": 68,
+  "static_evidence": "static-references.json",
+  "production_unchanged": true,
+  "production_hashes": {
+    "games/career-rpg/web/index.html": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+    "games/career-rpg/web/style.css": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213",
+    "games/career-rpg/web/main.mjs": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+    "games/career-rpg/web/world.mjs": "f2c80bb039766af708fa0b9f7f324e1fffaa459c923882ec9aa46e2af87d650d",
+    "games/career-rpg/web/story.mjs": "6b13dad3a8ad77cb01465a1685694978cc1acad70527b1ac86a390252450e424",
+    "games/career-rpg/web/scene-config.mjs": "6a9277bd4da740a37cf1d1e06a9289112fd91798181c3d788c0593b2062373f2",
+    "games/career-rpg/web/actors.mjs": "f10a5eb44b2d600e7aceb05f64e78f34c9b179ad92b239934267349b4b5718a3",
+    "games/career-rpg/web/vendor/three.module.min.js": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6",
+    "games/career-rpg/web/vendor/three.core.min.js": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de",
+    "games/career-rpg/web/art/office-room-v2.png": "3f72d04fc17c0e04fedd57557857c87fc91b966231a8facab8f0f28e4e17a7fe",
+    "games/career-rpg/design/chapter-01.json": "bd44b33318ac4ca61d24c13452ff6da2f4b3ba3e72ab1f1cff4639d5073721e8",
+    "games/career-rpg/web/art/player-walk-v1.png": "0f72b54f7f757b21638087ce52d940588eafb30a3b8323d4bf3c7313b23591ff",
+    "games/career-rpg/web/art/npc-team-v1.png": "25a4188b1b181e00180c89d127926b8d2101fe2d961fafc83315962aacedb9b1",
+    "games/career-rpg/web/art/player-emotions-v1.png": "65524bcdcc181753b4721e644b7f9f02e966ce433e3d7d157ca7fc373829d80f",
+    "games/career-rpg/web/art/typing-team-v1.png": "a9ffc37e0a18e55062cb167bb3c090be2f0a2427caffacd394b6fe5567d57507"
+  },
+  "runtimeExceptions": [],
+  "totalGameResourceRequests": 0,
+  "boundaries": [
+    "Two-page real network evidence only, Chrome headless desktop; static references cover docs HTML but do not prove every page/browser execution",
+    "All unrelated public Internet requests blocked before network. Third-party code execution and online analytics/comment behavior are outside this scoped result",
+    "PageDown/End only exercise public article lazy loads; no mouse/gameplay, no startup/frame or walking performance",
+    "Resource-budget remains failed; scene/next-scene acceptance false; true-device/author/people gates unchanged"
+  ],
+  "fixtureFailures": [],
+  "next": "Stop for independent supervisor isolation review and resource design-option review."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "resident-parent",
+  "tool": "image_gen built-in",
+  "original_source": "/Users/bytedance/.codex/generated_images/01a1a770-e0c5-7db1-9fb1-9cd951d27c44/exec-1041a83a-a67d-48f8-8486-5b4e67726460.png",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 1221729,
+  "sha256": "e6f69b12b3d170fd0b50d0eb30a0c024e2229dcadf293eef16fc3f588701b246",
+  "references": [
+    "web/art/npc-team-v1.png",
+    "art/character-four-directions-v1.png"
+  ],
+  "status": "design_sheet_generated_pending_production_processing",
+  "author_accepted": false,
+  "scene_accepted": false,
+  "production_replaced": false,
+  "visual_note": "Four standing views and three expressions present; background/alpha and soft halo require inspection before extraction.",
+  "alpha_audit": {
+    "source_format": 3,
+    "minimum": 0,
+    "maximum": 254,
+    "fully_transparent_pixels": 1013128,
+    "fully_opaque_pixels": 0,
+    "intermediate_alpha_pixels": 559736,
+    "total_pixels": 1572864
+  }
+}

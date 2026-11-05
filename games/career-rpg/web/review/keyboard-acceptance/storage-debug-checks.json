@@ -1,0 +1,227 @@
+{
+  "scope": "Targeted keyboard gaps only; existing chapter/story, movement and performance evidence not rerun",
+  "environment": "Desktop Chrome headless, 1280x900, software WebGL; no real-device or performance acceptance",
+  "input": "Chrome CDP Input.dispatchKeyEvent; no clicks or production state-changing functions",
+  "checks": {
+    "storageFailureKeyboard": true,
+    "realKeyboardEventsOnly": true
+  },
+  "mainSHA256": "ec509b518f42ba806260c3ce56bb7d0c0388a0938b24899a1a1dea42017cba1f",
+  "fixtures": "LocalStorage legal checkpoints and isolated storage failure only; no chapter.advance, button.click, dispatchEvent or direct focus to drive acceptance.",
+  "operations": [
+    {
+      "id": "storageFailureKeyboard",
+      "keys": "Enter retry Esc ↓ Enter",
+      "operation": "Write failure retry and continue-unsaved reached with keys; existing save preserved",
+      "result": "passed"
+    },
+    {
+      "id": "realKeyboardEventsOnly",
+      "keys": "CDP keyboard events",
+      "operation": "All observed key events trusted; zero pointer inputs; no clicks/state actions used by test",
+      "result": "passed"
+    }
+  ],
+  "inputEvidence": [
+    {
+      "keys": [],
+      "clicks": [],
+      "pointers": [],
+      "windowEvents": []
+    },
+    {
+      "keys": [
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowUp",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keydown",
+          "key": "e",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "e",
+          "repeat": false,
+          "trusted": true,
+          "focus": "view_review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "review_test_plan"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "resume"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "retry-save"
+        },
+        {
+          "type": "keydown",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "reset-save"
+        },
+        {
+          "type": "keyup",
+          "key": "ArrowDown",
+          "repeat": false,
+          "trusted": true,
+          "focus": "reset-save"
+        },
+        {
+          "type": "keydown",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keyup",
+          "key": "Enter",
+          "repeat": false,
+          "trusted": true,
+          "focus": "close-dialogue"
+        },
+        {
+          "type": "keydown",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        },
+        {
+          "type": "keyup",
+          "key": "Escape",
+          "repeat": false,
+          "trusted": true,
+          "focus": "stage"
+        }
+      ],
+      "clicks": [
+        {
+          "action": "view_review_test_plan"
+        },
+        {
+          "action": "review_test_plan"
+        },
+        {
+          "action": "retry-save"
+        },
+        {
+          "action": "reset-save"
+        }
+      ],
+      "pointers": [],
+      "windowEvents": [
+        {
+          "type": "focus",
+          "trusted": true
+        }
+      ]
+    }
+  ],
+  "result": "passed"
+}

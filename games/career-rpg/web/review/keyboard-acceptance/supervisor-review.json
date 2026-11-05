@@ -1,0 +1,20 @@
+{
+  "time": "2026-11-04T19:32:28.038079+00:00",
+  "result": "passed_targeted_keyboard_only",
+  "version": "3917ce66a381c636b99221dabb314ef2703a673c5eb8653cf9731fcbef584ca7",
+  "execution": "node games/career-rpg/web/tests/browser.mjs --keyboard-acceptance --evidence=supervisor",
+  "passed_checks": 16,
+  "visual_review": [
+    "supervisor-pause-selection.png",
+    "supervisor-bubble-1280.png",
+    "final-menu-375.png",
+    "../shared-office-work.png"
+  ],
+  "visual_result": "当前截图人物和南京成品背景一致，选中项可见，气泡及暂停菜单可读；未代替完整最新美术或作者体验验收",
+  "remaining": [
+    "连续新开局到完成的全键盘路径证据",
+    "最新坐姿/CTO气泡/情绪同版本画面完整核对",
+    "走路卡顿未解决且暂停；其他阶段设备/作者项保持未验"
+  ],
+  "next_scene_authorized": false
+}

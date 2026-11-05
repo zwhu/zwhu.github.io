@@ -1,0 +1,229 @@
+{
+  "source": {
+    "path": "/Users/bytedance/.codex/worktrees/0f28/zwhu.github.io",
+    "chat_title": "设计博客小游戏展示方案 (2)",
+    "chat_id": "01a1a5d7-c6c8-7373-9bde-a03ae9040255",
+    "readonly": true
+  },
+  "target": {
+    "path": "/Users/bytedance/work/AI/zwhu.github.io",
+    "sole_future_workspace": true
+  },
+  "heads": {
+    "source": "dfa162878415287377e087ed2e2f4310976cc787",
+    "target": "1a1edf8c143b009b02dc215f89fcc41aff09821f"
+  },
+  "copied_files": {
+    "count": 124,
+    "bytes": 24701673,
+    "added": 116,
+    "replaced_with_backup": 6,
+    "already_identical": 2,
+    "manifest": "games/career-rpg/review/merge-2026-11-05/copied-files.json",
+    "source_document_archives": [
+      "games/career-rpg/history/merge-source-2026-11-05/AGENTS.md",
+      "games/career-rpg/history/merge-source-2026-11-05/README.md",
+      "games/career-rpg/history/merge-source-2026-11-05/spec.md",
+      "games/career-rpg/history/merge-source-2026-11-05/acceptance.md",
+      "games/career-rpg/history/merge-source-2026-11-05/handoff.md",
+      "games/career-rpg/history/merge-source-2026-11-05/art/README.md",
+      "games/career-rpg/history/merge-source-2026-11-05/web/handoff.md",
+      "games/career-rpg/history/merge-source-2026-11-05/web/README.md"
+    ],
+    "excluded_unrelated": [
+      "social-media-redacted.png"
+    ]
+  },
+  "identical_code_assets": {
+    "result": "passed",
+    "non_document_count": 88,
+    "plus_verify_runner": 1,
+    "all_source_non_markdown_files_identical": true,
+    "runtime_behavior_changed": false,
+    "art_changed": false,
+    "manifest": "games/career-rpg/review/merge-2026-11-05/sha256-check.json"
+  },
+  "merged_documents": [
+    {
+      "path": "games/career-rpg/AGENTS.md",
+      "reason": "源现有实现为基础，合入质量、单场景、完成即停、20分钟巡检和键盘要求；保留暂停",
+      "sha256": "80cc73b9fd88e9332356930ece20cd56e402f231f39f122619b960d96f4a75df"
+    },
+    {
+      "path": "games/career-rpg/spec.md",
+      "reason": "保留源玩法及费翔🐘事实，成品基准和方向键选项要求合入，明确仅文档目标未验证",
+      "sha256": "cab958dfe10f7ff9595427698ca7cf94de30e5c4c2bd8b82753c535394078025"
+    },
+    {
+      "path": "games/career-rpg/acceptance.md",
+      "reason": "保留历史桌面验收及预算；合入ART-07/08、PLAY-04/05和场景门禁，更新已有离线测试事实",
+      "sha256": "ceb1c6b20d12ed9a654635ac434733c76059e331ec046436c40b1c901ccdff5d"
+    },
+    {
+      "path": "games/career-rpg/handoff.md",
+      "reason": "头部列已有成果、唯一工作目录、合并证据和暂停；完整保留源历史",
+      "sha256": "492b4eeed55a86e4f7208dbd417962a05bbb7aae3ae025c3a3a86e7ce71b2b3d"
+    },
+    {
+      "path": "games/career-rpg/web/handoff.md",
+      "reason": "最新卡顿暂停反馈覆盖旧优先级，源历史与未验项保留",
+      "sha256": "75b7cda6b44c6f8de927afcf5c4111fbbc01dfe82cb31b32052747c1089cf83a"
+    },
+    {
+      "path": "games/career-rpg/README.md",
+      "reason": "纠正完整样章尚未实现的过期描述",
+      "sha256": "5119417055c3965dba20f99a068aaaaf25be53602ce72db066c1db15d082496a"
+    },
+    {
+      "path": "games/career-rpg/web/README.md",
+      "reason": "保留使用说明，头部标本次合并和暂停，不改运行行为",
+      "sha256": "55e01e606c10e3455841e964de193e07e2bee1357fc964aad4f53c14aa52e2c1"
+    },
+    {
+      "path": "games/career-rpg/art/README.md",
+      "reason": "更新成品基准与已有四向/行走事实，完整保留生成历史",
+      "sha256": "3ff7be97f367b8f7ebab7491fb0041bf6f76d64659efccb375aadc20de9b51ce"
+    },
+    {
+      "path": "games/career-rpg/art/style-guide.md",
+      "reason": "七张南京成品为共同基准，旧v1概念仅辅助，grid-sample不作正式造型",
+      "sha256": "00b723f2749910a875cfb9df08ca5228e1c01eb55b6f4adfc0083d1c4b759c97"
+    },
+    {
+      "path": "games/career-rpg/art/nanjing-scene-inventory.md",
+      "reason": "误基线记录明确标过期，不能覆盖运行布局和进度",
+      "sha256": "c36dd51d51e0e77a9ddb05925a726a0d3d26a4e3f826203cc324878a2fbff877"
+    },
+    {
+      "path": "games/career-rpg/art/requests/NJ-CHAR-001.json",
+      "reason": "pending改superseded，指向已有四向和行走，保留原请求且禁止生成",
+      "sha256": "df8e34c2cf83f54bae25a7f69f35eb4dd4dbc411b0dc2024bc68562709316c50"
+    },
+    {
+      "path": "games/career-rpg/review/nanjing-art-preflight/README.md",
+      "reason": "新增过期说明，原日志/JSON不改，不作为最新验收",
+      "sha256": "5dc6b4131debd0acb60887ca5dbc42e709c9fcc7335afe604cda8fe8d40d9e44"
+    },
+    {
+      "path": "content/verification-guide.md",
+      "reason": "只合入源新增南京离线规则一行，保留目标其余内容",
+      "sha256": "3b7b1c2dc6c9b1ada56d2b7bb8c23a8b0a9d9ea1c8684ef20297d032159be0bd"
+    },
+    {
+      "path": "docs/content/verification-guide.md",
+      "reason": "按根指南由render-site生成副本，未手改",
+      "sha256": "3b7b1c2dc6c9b1ada56d2b7bb8c23a8b0a9d9ea1c8684ef20297d032159be0bd"
+    }
+  ],
+  "checks": {
+    "source_inventory": {
+      "result": "passed",
+      "regular_files": 125,
+      "included_files": 124,
+      "symlinks": [],
+      "symlink_handling": "followlinks=False inspected; none present, none followed or copied",
+      "excluded": [
+        "games/career-rpg/tests/__pycache__/test_design.cpython-39.pyc"
+      ]
+    },
+    "backup": {
+      "result": "passed",
+      "path": "/private/tmp/traex-career-rpg-supervisor/merge-backup-20261105",
+      "target_files": 16,
+      "manifest": "backup-manifest.json"
+    },
+    "sha256": {
+      "result": "passed",
+      "non_document_subproject_files_identical": 88,
+      "verify_runner_identical_to_source": true,
+      "manifest": "games/career-rpg/review/merge-2026-11-05/sha256-check.json"
+    },
+    "source_readonly": {
+      "result": "passed",
+      "source_files_and_git_status_unchanged": true,
+      "both_heads_unchanged": true
+    },
+    "art_reference_review": {
+      "tool": "view_image",
+      "result": "seven original images opened and reviewed",
+      "files": [
+        "games/career-rpg/web/art/office-room-v2.png",
+        "games/career-rpg/web/art/player-walk-v1.png",
+        "games/career-rpg/web/art/npc-team-v1.png",
+        "games/career-rpg/web/art/player-emotions-v1.png",
+        "games/career-rpg/web/art/typing-team-v1.png",
+        "games/career-rpg/art/character-front-v1.png",
+        "games/career-rpg/art/character-four-directions-v1.png"
+      ],
+      "limitation": "原图基准核对，不是最新运行表现或作者验收"
+    },
+    "render_site": {
+      "command": "python3 scripts/render-site.py",
+      "exit_code": 0,
+      "result": "64页面公共区块、SEO和sitemap无变化；仅同步docs/content/verification-guide.md",
+      "unrelated_site_changes": []
+    },
+    "verify": {
+      "command": "python3 scripts/verify.py",
+      "exit_code": 0,
+      "groups_passed": 13,
+      "rpg_rule_tests_passed": 15,
+      "log": "games/career-rpg/review/merge-2026-11-05/verify.log"
+    },
+    "diff_check": {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "log": "games/career-rpg/review/merge-2026-11-05/diff-check.log"
+    },
+    "browser_performance": {
+      "result": "not_run",
+      "reason": "无行为变更；用户禁止借合并重跑整章、追加性能或恢复暂停卡顿排查"
+    }
+  },
+  "known_issues": {
+    "unresolved_paused": [
+      "走路仍卡，用户要求暂停处理；保留原实现和cold/warm文件，不分析、不补测，不恢复旧session"
+    ],
+    "unverified": [
+      "全键盘专项；方向键选择所有选项/Enter确认新增要求只合入文档，未补实现",
+      "最新坐姿/头部气泡等最终视觉",
+      "真实iOS Safari/Android Chrome、其他端、高DPR与真机性能",
+      "真人试玩至少3人和实际阅读时长",
+      "作者对最新表现、经历表达与最终体验的验收",
+      "资源预算、生命周期、导出同步、正式站点接入及发布对应验收"
+    ],
+    "fact_gaps": [
+      "事故根因、排查代码与完整修复路径",
+      "原帖/逐字对白、阶段年份、真人外貌、真实建筑及工位布局、恢复画面"
+    ],
+    "retained_author_decisions": [
+      "上一版桌面Web原型已获作者验收，不扩大为最新整体验收",
+      "绿衣同事显示名费翔🐘；不扩写外貌/职位/原话",
+      "本次用户指定7张南京成品基准；旧概念辅助，grid-sample不作正式造型",
+      "保留头部气泡、四向/行走、NPC、情绪、坐姿、五工位、黄色任务标记和既有快捷键"
+    ],
+    "missing_source_code_or_art": [],
+    "not_provided_or_not_verified": [
+      "史实缺口与人工/真机证据如上；不虚构补齐"
+    ],
+    "outdated_records": [
+      "目标旧inventory/preflight只供追溯",
+      "NJ-CHAR-001已superseded，禁止生成",
+      "源旧任务/session不作为当前恢复指令"
+    ]
+  },
+  "next": {
+    "status": "ready_for_review",
+    "scene": "nanjing-office",
+    "stage": "merge-existing-work",
+    "action": "停止，等待监督者核对合并摘要与成果",
+    "scope": "仅合并自验通过，不是游戏全部验收通过",
+    "old_full_journey_goal": "paused",
+    "resume_required_before": [
+      "研发或绘图",
+      "卡顿排查",
+      "全键盘/最新视觉复验"
+    ],
+    "next_scene_gate": "当期必验项全通过；监督者明确通过版本并另行授权；当前没有下一场景授权"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "time": "2026-11-04T22:14:58.299516+00:00",
+  "result": "passed_targeted_keyboard_current_version",
+  "main_sha256": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+  "checks": 16,
+  "evidence": "latest-supervisor-checks.json",
+  "limits": "桌面软件WebGL规范级键盘专项；非真机/作者/性能/整个场景通过",
+  "next_scene_authorized": false
+}

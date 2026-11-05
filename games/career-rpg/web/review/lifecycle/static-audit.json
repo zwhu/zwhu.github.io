@@ -1,0 +1,64 @@
+{
+  "scope": "Static current-source lifecycle audit, no standalone room-switch API invented",
+  "paths": {
+    "chapter_replay": "main confirmReplay -> initial snapshot/persist/enterScene; updates narrative/DOM/markers only, no start()/renderer reconstruction",
+    "document_reload": "Real native Page.reload -> pagehide once -> cancelRAF, scene traverse geometry/map/material dispose, renderer.dispose -> new document start",
+    "scene_transition": "No separately exported room enter/leave/switch resource API currently exists; narrative enterScene is not a new Three scene"
+  },
+  "expected_per_document_logical_resources": {
+    "scene": 1,
+    "renderer": 1,
+    "camera": 1,
+    "actors": 4,
+    "actor_meshes": 8,
+    "room_meshes": 1,
+    "geometry_material_texture_objects_each": 9,
+    "loaded_images": 5
+  },
+  "explicit_cleanup": [
+    "cancelAnimationFrame(raf)",
+    "geometry.dispose for every mesh",
+    "material.map.dispose and material.dispose for every mesh",
+    "renderer.dispose once"
+  ],
+  "implicit_cleanup_or_unverified": [
+    "Scene/mesh/camera JS objects and atlas/frame/imageData allocations are not explicitly destroyed; full document/GC owns their lifetime",
+    "Global window/document/button listeners and ResizeObserver lack an explicit app disconnect teardown; full realm lifetime relied on",
+    "Retained detached dialog nodes may depend on current focus/back references and GC; listener counts alone do not prove retained heap"
+  ],
+  "shared_boundaries": [
+    "Five loaded source image objects and atlasData/frame caches are reused within a document; actor meshes have distinct Three.Texture wrappers",
+    "Three module/core caches are per JavaScript realm; test wrapper adds one alias import for original module, does not add production assets",
+    "GPU counter reads use renderer.info.memory and native API create/delete only, not complete driver memory"
+  ],
+  "vendor_context_fallback_texture_evidence": {
+    "file": "games/career-rpg/web/vendor/three.module.min.js",
+    "sha256": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6",
+    "offset": 245372,
+    "excerpt": "z[e.TEXTURE_2D]=V(e.TEXTURE_2D,e.TEXTURE_2D,1),z[e.TEXTURE_CUBE_MAP]=V(e.TEXTURE_CUBE_MAP,e.TEXTURE_CUBE_MAP_POSITIVE_X,6),z[e.TEXTURE_2D_ARRAY]=V(e.TEXTURE_2D_ARRAY,e.TEXTURE_2D_ARRAY,1,1),z[e.TEXTURE_3D]=V(e.TEXTURE_3D,e.TEXTURE_3D,1,1),r.setClear(0,0,0,1),i.setClear(1),a.setClear(0),W(e.DEPTH_TEST),i.setFunc(Me),j(!1),Z(je),W(e.CULL_FACE),q(I);const Y={[Ae]:e.FUNC_ADD,[Re]:e.FUNC_SUBTRACT,[xe]:e.FUNC_REVERSE_SUBTRACT};Y[tt]=e.MIN,Y[nt]=e.MAX;const K={[Ge]:e.ZERO,[He]:e.ONE,[Be]:e.SRC_COLOR,[Fe]:e.SRC_ALPHA,[Oe]:e.SRC_ALPHA_SATURATE,[Ne]:e.DST_COLOR,[ye]:e.DST_ALPHA,[Ie]:e.ONE_MINUS_SRC_COLOR,[we]:e.ONE_MINUS_SRC_ALPHA,[De]:e.ONE_MINUS_DST_COLOR,[Ue]:e.ONE_MINUS_DST_ALPHA,[Pe]:e.CONSTANT_C",
+    "meaning": "Native WebGL state creates fallback1x1 texture targets2D/cube/2D_ARRAY/3D; final API-live counts must be compared with these context-owned allocations, not silently ignored as leaked or proven released."
+  },
+  "framebuffer_creation_source_candidates": [
+    {
+      "offset": 275638,
+      "excerpt": "ipmaps&&n.mipmaps.length>0){a.__webglFramebuffer=[];for(let t=0;t<n.mipmaps.length;t++)a.__webglFramebuffer[t]=e.createFramebuffer()}else a.__webglFramebuffer=e.createFramebuffer();if(u)for(let t=0,n=c.length;t<n;t++){const n=i.get(c[t]);void 0===n.__webglTexture&&(n.__webglTexture=e.createTexture(),s.memory.textures++)}if(t.samples>0&&!1===Z(t)){a"
+    },
+    {
+      "offset": 275861,
+      "excerpt": " n=i.get(c[t]);void 0===n.__webglTexture&&(n.__webglTexture=e.createTexture(),s.memory.textures++)}if(t.samples>0&&!1===Z(t)){a.__webglMultisampledFramebuffer=e.createFramebuffer(),a.__webglColorRenderbuffer=[],r.bindFramebuffer(e.FRAMEBUFFER,a.__webglMultisampledFramebuffer);for(let n=0;n<c.length;n++){const r=c[n];a.__webglColorRenderbuffer[n]=e."
+    },
+    {
+      "offset": 325917,
+      "excerpt": "hasExternalTextures=!0},this.setRenderTargetFramebuffer=function(e,t){const n=ue.get(e);n.__webglFramebuffer=t,n.__useDefaultFramebuffer=void 0===t};const et=Ie.createFramebuffer();this.setRenderTarget=function(e,t=0,n=0){w=e,P=t,U=n;let r=!0,i=null,a=!1,o=!1;if(e){const s=ue.get(e);if(void 0!==s.__useDefaultFramebuffer)ce.bindFramebuffer(Ie.FRAMEB"
+    },
+    {
+      "offset": 330276,
+      "excerpt": "floor(e.image.height*r),o=null!==t?t.x:0,s=null!==t?t.y:0;pe.setTexture2D(e,0),Ie.copyTexSubImage2D(Ie.TEXTURE_2D,n,0,0,o,s,i,a),ce.unbindTexture()};const tt=Ie.createFramebuffer(),nt=Ie.createFramebuffer();this.copyTextureToTexture=function(e,t,n=null,r=null,i=0,a=null){let o,s,l,c,d,u,f,p,m;null===a&&(0!==i?(H(\"WebGLRenderer: copyTextureToTexture"
+    },
+    {
+      "offset": 330302,
+      "excerpt": "null!==t?t.x:0,s=null!==t?t.y:0;pe.setTexture2D(e,0),Ie.copyTexSubImage2D(Ie.TEXTURE_2D,n,0,0,o,s,i,a),ce.unbindTexture()};const tt=Ie.createFramebuffer(),nt=Ie.createFramebuffer();this.copyTextureToTexture=function(e,t,n=null,r=null,i=0,a=null){let o,s,l,c,d,u,f,p,m;null===a&&(0!==i?(H(\"WebGLRenderer: copyTextureToTexture function signature has ch"
+    }
+  ],
+  "framebuffer_boundary": "Observed3 native framebuffer handles remain after renderer.dispose, with no delete observed. Source candidates retained; actual driver/context reclamation not proved."
+}

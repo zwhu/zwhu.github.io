@@ -1,0 +1,1190 @@
+{
+  "entry": "/games/career-rpg/web/",
+  "resources": [
+    {
+      "file": "games/career-rpg/web/index.html",
+      "raw_bytes": 3985,
+      "gzip_bytes": 1930,
+      "gzip_sha256": "a343e9d1b7bf15c050b080b9745712bac25354c91145d36d588d7f1ea1a0b955",
+      "sha256": "35dee878a076e8285299058b6439657d9c26266045d661dec28865172a9a81dd",
+      "url": "/games/career-rpg/web/",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/",
+          "reference": "./",
+          "to": "/games/career-rpg/web/",
+          "kind": "document"
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/style.css",
+      "raw_bytes": 6867,
+      "gzip_bytes": 2204,
+      "gzip_sha256": "81d64bb995ae7603bcc60d286d9bafbe78b93a86cda7574e043238fb8b987198",
+      "sha256": "d63b626c58f2bb058b6926bb57af4d11d718f28750f563a47bfffad3f8f12213",
+      "url": "/games/career-rpg/web/style.css",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/",
+          "reference": "./style.css",
+          "to": "/games/career-rpg/web/style.css",
+          "kind": "html-stylesheet"
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/main.mjs",
+      "raw_bytes": 28754,
+      "gzip_bytes": 9588,
+      "gzip_sha256": "784768a126841c0f80fe2ef6a5a28f4c629d2236f84fdf818738df44ed369183",
+      "sha256": "00b8c0c26cddc956a5401e7d3df3fbfdb637f192532f6d0d8881822fe34c93f1",
+      "url": "/games/career-rpg/web/main.mjs",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/",
+          "reference": "./main.mjs",
+          "to": "/games/career-rpg/web/main.mjs",
+          "kind": "html-script"
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/world.mjs",
+      "raw_bytes": 1291,
+      "gzip_bytes": 589,
+      "gzip_sha256": "9e6464e6b4591cf253feca3212568a32196625b28a5fc82d341fea9cc86330d9",
+      "sha256": "f2c80bb039766af708fa0b9f7f324e1fffaa459c923882ec9aa46e2af87d650d",
+      "url": "/games/career-rpg/web/world.mjs",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/main.mjs",
+          "reference": "./world.mjs",
+          "to": "/games/career-rpg/web/world.mjs",
+          "kind": "static-import",
+          "offset": 0,
+          "line": 1
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/story.mjs",
+      "raw_bytes": 4029,
+      "gzip_bytes": 1758,
+      "gzip_sha256": "66173b0d64f4b9cc53ae6b31b6c270b8f9f62db274480eddcafab541280acf36",
+      "sha256": "6b13dad3a8ad77cb01465a1685694978cc1acad70527b1ac86a390252450e424",
+      "url": "/games/career-rpg/web/story.mjs",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/main.mjs",
+          "reference": "./story.mjs",
+          "to": "/games/career-rpg/web/story.mjs",
+          "kind": "static-import",
+          "offset": 50,
+          "line": 2
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/scene-config.mjs",
+      "raw_bytes": 4332,
+      "gzip_bytes": 1983,
+      "gzip_sha256": "70691a9ffdfd929bae9d92e04af9b41e264b40ad4c9ce107900a80bbd7b59373",
+      "sha256": "6a9277bd4da740a37cf1d1e06a9289112fd91798181c3d788c0593b2062373f2",
+      "url": "/games/career-rpg/web/scene-config.mjs",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/main.mjs",
+          "reference": "./scene-config.mjs",
+          "to": "/games/career-rpg/web/scene-config.mjs",
+          "kind": "static-import",
+          "offset": 93,
+          "line": 3
+        },
+        {
+          "from": "/games/career-rpg/web/world.mjs",
+          "reference": "./scene-config.mjs",
+          "to": "/games/career-rpg/web/scene-config.mjs",
+          "kind": "static-import",
+          "offset": 0,
+          "line": 1
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/actors.mjs",
+      "raw_bytes": 4236,
+      "gzip_bytes": 1757,
+      "gzip_sha256": "c9b53fd5a711693c1acc98b908492ff817966b904308db04aed7c09a0f7624a2",
+      "sha256": "f10a5eb44b2d600e7aceb05f64e78f34c9b179ad92b239934267349b4b5718a3",
+      "url": "/games/career-rpg/web/actors.mjs",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/main.mjs",
+          "reference": "./actors.mjs",
+          "to": "/games/career-rpg/web/actors.mjs",
+          "kind": "static-import",
+          "offset": 188,
+          "line": 4
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/vendor/three.module.min.js",
+      "raw_bytes": 338908,
+      "gzip_bytes": 78794,
+      "gzip_sha256": "6a82bc735f06d49faa92b728cba439b37fd6ab54a54fe984c177eb174f75a973",
+      "sha256": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6",
+      "url": "/games/career-rpg/web/vendor/three.module.min.js",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/main.mjs",
+          "reference": "./vendor/three.module.min.js",
+          "to": "/games/career-rpg/web/vendor/three.module.min.js",
+          "kind": "dynamic-import",
+          "offset": 18438,
+          "line": 242
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/vendor/three.core.min.js",
+      "raw_bytes": 381124,
+      "gzip_bytes": 100467,
+      "gzip_sha256": "fdb67ca0cf2020c2cf2f80de4c609c8a3622ee44bb6c2e428fc5fb82a059c178",
+      "sha256": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de",
+      "url": "/games/career-rpg/web/vendor/three.core.min.js",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/vendor/three.module.min.js",
+          "reference": "./three.core.min.js",
+          "to": "/games/career-rpg/web/vendor/three.core.min.js",
+          "kind": "static-import",
+          "offset": 92,
+          "line": 6
+        },
+        {
+          "from": "/games/career-rpg/web/vendor/three.module.min.js",
+          "reference": "./three.core.min.js",
+          "to": "/games/career-rpg/web/vendor/three.core.min.js",
+          "kind": "re-export",
+          "offset": 4357,
+          "line": 6
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/art/office-room-v2.png",
+      "raw_bytes": 1518707,
+      "gzip_bytes": 1305066,
+      "gzip_sha256": "ec0e139ea0d369034f35a4f8ab8e3361f9252144fbb037d79e35baa80c7ec672",
+      "sha256": "3f72d04fc17c0e04fedd57557857c87fc91b966231a8facab8f0f28e4e17a7fe",
+      "png": {
+        "width": 1672,
+        "height": 941,
+        "bit_depth": 8,
+        "color_type": 2
+      },
+      "png_chunks": [
+        {
+          "type": "IHDR",
+          "payload_bytes": 13,
+          "total_bytes": 25
+        },
+        {
+          "type": "caBX",
+          "payload_bytes": 21881,
+          "total_bytes": 21893
+        },
+        {
+          "type": "IDAT",
+          "payload_bytes": 1496757,
+          "total_bytes": 1496769
+        },
+        {
+          "type": "IEND",
+          "payload_bytes": 0,
+          "total_bytes": 12
+        }
+      ],
+      "ancillary_chunk_bytes": 21893,
+      "trailing_bytes": 0,
+      "url": "/games/career-rpg/web/art/office-room-v2.png",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/",
+          "reference": "./art/office-room-v2.png",
+          "to": "/games/career-rpg/web/art/office-room-v2.png",
+          "kind": "startup-image",
+          "offset": 18592,
+          "line": 244,
+          "resolved_via": "OFFICE.background in scene-config.mjs; image.src resolves against document base",
+          "source_code": "games/career-rpg/web/main.mjs"
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/design/chapter-01.json",
+      "raw_bytes": 73537,
+      "gzip_bytes": 15395,
+      "gzip_sha256": "3e914243a2540075c9fe6c0fcbea52e8accd1ad845f221b0065ab37e827bd82d",
+      "sha256": "bd44b33318ac4ca61d24c13452ff6da2f4b3ba3e72ab1f1cff4639d5073721e8",
+      "url": "/games/career-rpg/design/chapter-01.json",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/",
+          "reference": "../design/chapter-01.json",
+          "to": "/games/career-rpg/design/chapter-01.json",
+          "kind": "startup-json",
+          "resolved_via": "main.mjs fetch in awaited Promise.all",
+          "source_code": "games/career-rpg/web/main.mjs"
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/art/player-walk-v1.png",
+      "raw_bytes": 616093,
+      "gzip_bytes": 540727,
+      "gzip_sha256": "f8f1447f9f32302439a04364fa39e5ca61fd843f9733e24567e1c11561ff1ce0",
+      "sha256": "0f72b54f7f757b21638087ce52d940588eafb30a3b8323d4bf3c7313b23591ff",
+      "png": {
+        "width": 1086,
+        "height": 1448,
+        "bit_depth": 8,
+        "color_type": 6
+      },
+      "png_chunks": [
+        {
+          "type": "IHDR",
+          "payload_bytes": 13,
+          "total_bytes": 25
+        },
+        {
+          "type": "caBX",
+          "payload_bytes": 23654,
+          "total_bytes": 23666
+        },
+        {
+          "type": "IDAT",
+          "payload_bytes": 592370,
+          "total_bytes": 592382
+        },
+        {
+          "type": "IEND",
+          "payload_bytes": 0,
+          "total_bytes": 12
+        }
+      ],
+      "ancillary_chunk_bytes": 23666,
+      "trailing_bytes": 0,
+      "url": "/games/career-rpg/web/art/player-walk-v1.png",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/",
+          "reference": "./art/player-walk-v1.png",
+          "to": "/games/career-rpg/web/art/player-walk-v1.png",
+          "kind": "startup-atlas",
+          "resolved_via": "OFFICE.atlases.player.url in scene-config.mjs; all entries awaited in main.mjs",
+          "source_code": "games/career-rpg/web/main.mjs"
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/art/npc-team-v1.png",
+      "raw_bytes": 524318,
+      "gzip_bytes": 434291,
+      "gzip_sha256": "8e9b87cb2e67ea21ace0ee194dc371cc8e4903e86fcbd05bcffd4a72822d7c00",
+      "sha256": "25a4188b1b181e00180c89d127926b8d2101fe2d961fafc83315962aacedb9b1",
+      "png": {
+        "width": 2172,
+        "height": 724,
+        "bit_depth": 8,
+        "color_type": 6
+      },
+      "png_chunks": [
+        {
+          "type": "IHDR",
+          "payload_bytes": 13,
+          "total_bytes": 25
+        },
+        {
+          "type": "caBX",
+          "payload_bytes": 23654,
+          "total_bytes": 23666
+        },
+        {
+          "type": "IDAT",
+          "payload_bytes": 500595,
+          "total_bytes": 500607
+        },
+        {
+          "type": "IEND",
+          "payload_bytes": 0,
+          "total_bytes": 12
+        }
+      ],
+      "ancillary_chunk_bytes": 23666,
+      "trailing_bytes": 0,
+      "url": "/games/career-rpg/web/art/npc-team-v1.png",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/",
+          "reference": "./art/npc-team-v1.png",
+          "to": "/games/career-rpg/web/art/npc-team-v1.png",
+          "kind": "startup-atlas",
+          "resolved_via": "OFFICE.atlases.team.url in scene-config.mjs; all entries awaited in main.mjs",
+          "source_code": "games/career-rpg/web/main.mjs"
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/art/player-emotions-v1.png",
+      "raw_bytes": 786164,
+      "gzip_bytes": 620035,
+      "gzip_sha256": "f669d3a72c9a040f376d95dc3c59788bf7a1bd0c7f8af135ed51ac11c556ff64",
+      "sha256": "65524bcdcc181753b4721e644b7f9f02e966ce433e3d7d157ca7fc373829d80f",
+      "png": {
+        "width": 2172,
+        "height": 724,
+        "bit_depth": 8,
+        "color_type": 6
+      },
+      "png_chunks": [
+        {
+          "type": "IHDR",
+          "payload_bytes": 13,
+          "total_bytes": 25
+        },
+        {
+          "type": "caBX",
+          "payload_bytes": 21881,
+          "total_bytes": 21893
+        },
+        {
+          "type": "IDAT",
+          "payload_bytes": 764214,
+          "total_bytes": 764226
+        },
+        {
+          "type": "IEND",
+          "payload_bytes": 0,
+          "total_bytes": 12
+        }
+      ],
+      "ancillary_chunk_bytes": 21893,
+      "trailing_bytes": 0,
+      "url": "/games/career-rpg/web/art/player-emotions-v1.png",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/",
+          "reference": "./art/player-emotions-v1.png",
+          "to": "/games/career-rpg/web/art/player-emotions-v1.png",
+          "kind": "startup-atlas",
+          "resolved_via": "OFFICE.atlases.emotions.url in scene-config.mjs; all entries awaited in main.mjs",
+          "source_code": "games/career-rpg/web/main.mjs"
+        }
+      ]
+    },
+    {
+      "file": "games/career-rpg/web/art/typing-team-v1.png",
+      "raw_bytes": 898822,
+      "gzip_bytes": 750353,
+      "gzip_sha256": "5366bb1d64280f5c0e0cdc3977c77c1f08b1940faf5ff3058b22ad383b11060b",
+      "sha256": "a9ffc37e0a18e55062cb167bb3c090be2f0a2427caffacd394b6fe5567d57507",
+      "png": {
+        "width": 1774,
+        "height": 887,
+        "bit_depth": 8,
+        "color_type": 6
+      },
+      "png_chunks": [
+        {
+          "type": "IHDR",
+          "payload_bytes": 13,
+          "total_bytes": 25
+        },
+        {
+          "type": "caBX",
+          "payload_bytes": 23654,
+          "total_bytes": 23666
+        },
+        {
+          "type": "IDAT",
+          "payload_bytes": 875099,
+          "total_bytes": 875111
+        },
+        {
+          "type": "IEND",
+          "payload_bytes": 0,
+          "total_bytes": 12
+        }
+      ],
+      "ancillary_chunk_bytes": 23666,
+      "trailing_bytes": 0,
+      "url": "/games/career-rpg/web/art/typing-team-v1.png",
+      "first_interactive": true,
+      "chapter_runtime": true,
+      "references": [
+        {
+          "from": "/games/career-rpg/web/",
+          "reference": "./art/typing-team-v1.png",
+          "to": "/games/career-rpg/web/art/typing-team-v1.png",
+          "kind": "startup-atlas",
+          "resolved_via": "OFFICE.atlases.typing.url in scene-config.mjs; all entries awaited in main.mjs",
+          "source_code": "games/career-rpg/web/main.mjs"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "/games/career-rpg/web/",
+      "reference": "./",
+      "to": "/games/career-rpg/web/",
+      "kind": "document"
+    },
+    {
+      "from": "/games/career-rpg/web/",
+      "reference": "./style.css",
+      "to": "/games/career-rpg/web/style.css",
+      "kind": "html-stylesheet"
+    },
+    {
+      "from": "/games/career-rpg/web/",
+      "reference": "./main.mjs",
+      "to": "/games/career-rpg/web/main.mjs",
+      "kind": "html-script"
+    },
+    {
+      "from": "/games/career-rpg/web/main.mjs",
+      "reference": "./world.mjs",
+      "to": "/games/career-rpg/web/world.mjs",
+      "kind": "static-import",
+      "offset": 0,
+      "line": 1
+    },
+    {
+      "from": "/games/career-rpg/web/main.mjs",
+      "reference": "./story.mjs",
+      "to": "/games/career-rpg/web/story.mjs",
+      "kind": "static-import",
+      "offset": 50,
+      "line": 2
+    },
+    {
+      "from": "/games/career-rpg/web/main.mjs",
+      "reference": "./scene-config.mjs",
+      "to": "/games/career-rpg/web/scene-config.mjs",
+      "kind": "static-import",
+      "offset": 93,
+      "line": 3
+    },
+    {
+      "from": "/games/career-rpg/web/main.mjs",
+      "reference": "./actors.mjs",
+      "to": "/games/career-rpg/web/actors.mjs",
+      "kind": "static-import",
+      "offset": 188,
+      "line": 4
+    },
+    {
+      "from": "/games/career-rpg/web/main.mjs",
+      "reference": "./vendor/three.module.min.js",
+      "to": "/games/career-rpg/web/vendor/three.module.min.js",
+      "kind": "dynamic-import",
+      "offset": 18438,
+      "line": 242
+    },
+    {
+      "from": "/games/career-rpg/web/world.mjs",
+      "reference": "./scene-config.mjs",
+      "to": "/games/career-rpg/web/scene-config.mjs",
+      "kind": "static-import",
+      "offset": 0,
+      "line": 1
+    },
+    {
+      "from": "/games/career-rpg/web/vendor/three.module.min.js",
+      "reference": "./three.core.min.js",
+      "to": "/games/career-rpg/web/vendor/three.core.min.js",
+      "kind": "static-import",
+      "offset": 92,
+      "line": 6
+    },
+    {
+      "from": "/games/career-rpg/web/vendor/three.module.min.js",
+      "reference": "./three.core.min.js",
+      "to": "/games/career-rpg/web/vendor/three.core.min.js",
+      "kind": "re-export",
+      "offset": 4357,
+      "line": 6
+    },
+    {
+      "from": "/games/career-rpg/web/",
+      "reference": "./art/office-room-v2.png",
+      "to": "/games/career-rpg/web/art/office-room-v2.png",
+      "kind": "startup-image",
+      "offset": 18592,
+      "line": 244,
+      "resolved_via": "OFFICE.background in scene-config.mjs; image.src resolves against document base",
+      "source_code": "games/career-rpg/web/main.mjs"
+    },
+    {
+      "from": "/games/career-rpg/web/",
+      "reference": "../design/chapter-01.json",
+      "to": "/games/career-rpg/design/chapter-01.json",
+      "kind": "startup-json",
+      "resolved_via": "main.mjs fetch in awaited Promise.all",
+      "source_code": "games/career-rpg/web/main.mjs"
+    },
+    {
+      "from": "/games/career-rpg/web/",
+      "reference": "./art/player-walk-v1.png",
+      "to": "/games/career-rpg/web/art/player-walk-v1.png",
+      "kind": "startup-atlas",
+      "resolved_via": "OFFICE.atlases.player.url in scene-config.mjs; all entries awaited in main.mjs",
+      "source_code": "games/career-rpg/web/main.mjs"
+    },
+    {
+      "from": "/games/career-rpg/web/",
+      "reference": "./art/npc-team-v1.png",
+      "to": "/games/career-rpg/web/art/npc-team-v1.png",
+      "kind": "startup-atlas",
+      "resolved_via": "OFFICE.atlases.team.url in scene-config.mjs; all entries awaited in main.mjs",
+      "source_code": "games/career-rpg/web/main.mjs"
+    },
+    {
+      "from": "/games/career-rpg/web/",
+      "reference": "./art/player-emotions-v1.png",
+      "to": "/games/career-rpg/web/art/player-emotions-v1.png",
+      "kind": "startup-atlas",
+      "resolved_via": "OFFICE.atlases.emotions.url in scene-config.mjs; all entries awaited in main.mjs",
+      "source_code": "games/career-rpg/web/main.mjs"
+    },
+    {
+      "from": "/games/career-rpg/web/",
+      "reference": "./art/typing-team-v1.png",
+      "to": "/games/career-rpg/web/art/typing-team-v1.png",
+      "kind": "startup-atlas",
+      "resolved_via": "OFFICE.atlases.typing.url in scene-config.mjs; all entries awaited in main.mjs",
+      "source_code": "games/career-rpg/web/main.mjs"
+    }
+  ],
+  "runtime_count": 15,
+  "runtime_totals": {
+    "raw_bytes": 5191167,
+    "gzip_bytes": 3864937
+  },
+  "first_interactive_totals": {
+    "raw_bytes": 5191167,
+    "gzip_bytes": 3864937
+  },
+  "counts_by_extension": {
+    ".html": 1,
+    ".css": 1,
+    ".mjs": 5,
+    ".js": 2,
+    ".png": 5,
+    ".json": 1
+  },
+  "totals_by_extension": {
+    ".html": {
+      "raw_bytes": 3985,
+      "gzip_bytes": 1930
+    },
+    ".css": {
+      "raw_bytes": 6867,
+      "gzip_bytes": 2204
+    },
+    ".mjs": {
+      "raw_bytes": 42642,
+      "gzip_bytes": 15675
+    },
+    ".js": {
+      "raw_bytes": 720032,
+      "gzip_bytes": 179261
+    },
+    ".png": {
+      "raw_bytes": 4344104,
+      "gzip_bytes": 3650472
+    },
+    ".json": {
+      "raw_bytes": 73537,
+      "gzip_bytes": 15395
+    }
+  },
+  "required_non_network_distribution_files": [
+    {
+      "file": "games/career-rpg/web/vendor/LICENSE",
+      "raw_bytes": 1081,
+      "gzip_bytes": 662,
+      "gzip_sha256": "faeeadc7421965649204251d55d1617e369c5709ac5f0f55a4df7dc5b6fb5ae7",
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+      "network_requested": false,
+      "category": "required-distribution-license"
+    }
+  ],
+  "distribution_totals": {
+    "raw_bytes": 5192248,
+    "gzip_bytes": 3865599
+  },
+  "excluded_unreferenced_art": [
+    {
+      "file": "games/career-rpg/web/art/office-room.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/web/art/player-front.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/README.md",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/character-four-directions-v1-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/character-four-directions-v1-review.md",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/character-four-directions-v1.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/character-front-v1-imagegen-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/character-front-v1-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/character-front-v1-review.md",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/character-front-v1.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/grid-sample-v1/README.md",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/grid-sample-v1/codex-audit.json",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/grid-sample-v1/flash-finish.json",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/grid-sample-v1/floor.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/grid-sample-v1/generate.py",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/grid-sample-v1/player.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/grid-sample-v1/preview.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/grid-sample-v1/source.json",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/grid-sample-v1/verification.json",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/image-audit-v2-v3.json",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/nanjing-art-direction-v1.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/nanjing-art-direction-v2.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/nanjing-art-direction-v3.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/nanjing-scene-inventory.md",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/npc-team-v1-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/office-props-v1-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/office-props-v1-review.md",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/office-props-v1.png",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/player-emotions-v1-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/player-walk-v1-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/prompt-v1.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/prompt-v2.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/prompt-v3.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/requests/NJ-CHAR-001.json",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/review-v2-plan.md",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/review-v2.md",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/review-v3.md",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/style-guide.md",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/typing-team-v1-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/web-player-v1-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/web-room-v1-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    },
+    {
+      "file": "games/career-rpg/art/web-room-v2-prompt.txt",
+      "reason": "No reference from current runtime closure"
+    }
+  ],
+  "project_resource_sinks": [
+    {
+      "file": "games/career-rpg/web/main.mjs",
+      "line": 240,
+      "snippet": "new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error(`无法加载素材 ${url}，请检查文件并刷新。`));image.src=url;});}"
+    },
+    {
+      "file": "games/career-rpg/web/main.mjs",
+      "line": 240,
+      "snippet": ".src=url;});}"
+    },
+    {
+      "file": "games/career-rpg/web/main.mjs",
+      "line": 244,
+      "snippet": "fetch('../design/chapter-01.json').then(r=>{if(!r.ok)throw new Error('章节资料加载失败');return r.json();}),...atlasEntries.map(([,atlas])=>loadImag"
+    },
+    {
+      "file": "games/career-rpg/web/main.mjs",
+      "line": 336,
+      "snippet": "new URL(window.location.href);url.hash='';window.location.replace(url.href);});"
+    }
+  ],
+  "dynamic_resolution": {
+    "background": "./art/office-room-v2.png",
+    "atlases": {
+      "player": {
+        "url": "./art/player-walk-v1.png",
+        "columns": 3,
+        "rows": 4,
+        "referenceGrouping": "row",
+        "directions": [
+          "down",
+          "up",
+          "left",
+          "right"
+        ]
+      },
+      "team": {
+        "url": "./art/npc-team-v1.png",
+        "columns": 3,
+        "rows": 1,
+        "directions": [
+          "down"
+        ]
+      },
+      "emotions": {
+        "url": "./art/player-emotions-v1.png",
+        "columns": 3,
+        "rows": 1,
+        "directions": [
+          "down"
+        ]
+      },
+      "typing": {
+        "url": "./art/typing-team-v1.png",
+        "columns": 4,
+        "rows": 2,
+        "referenceGrouping": "column",
+        "directions": [
+          "down",
+          "up"
+        ]
+      }
+    }
+  },
+  "unresolved_dynamic_paths": [],
+  "rules": {
+    "dedup": "Normalized request URL, fragment removed, query retained; same body at different URLs is counted twice. Repeated imports/reexports of the same URL count once per document/module registry. Reload/retry is a new navigation and not added to a single-page bundle.",
+    "gzip": "Per-file gzip.compress(compresslevel=9, mtime=0), gzip header/trailer included, summed independently; no concatenation or Brotli; no production files compressed or rewritten.",
+    "readiness": "All reachable module dependencies and stylesheet plus background, JSON and every OFFICE atlas count before first interactive; main awaits Three then a single Promise.all. Chapter has no later asset loader, so first and entire runtime resource sets are identical.",
+    "scope": "HTML-reachable current Nanjing runtime, not source-tree size. Unrequested LICENSE separately counted for minimum distribution; navigation to blog leaves the game and is excluded. Portrait/atlas/GPU textures are generated from already-loaded images with no new URL.",
+    "vendor": "The whole local Three module/core byte payload is included; general unused Three loaders do not request assets in the reviewed renderer/Texture/material/geometry call path.",
+    "network": "Static payload bytes, not measured transfers. No headers/TLS/cache/CDN or browser implicit favicon/devtools source-map request accounting; no explicit icon or source-map exists. No cold network run performed."
+  },
+  "blog_static_samples": [
+    {
+      "file": "docs/index.html",
+      "sha256": "93eb43996765d734e1a96e522db4ed439af4849470309bcb8fce26a1a663e739",
+      "direct_resource_references": [
+        [
+          "./style.css",
+          "html-stylesheet"
+        ],
+        [
+          "./archive.css",
+          "html-stylesheet"
+        ],
+        [
+          "./favicon.ico",
+          "html-icon"
+        ],
+        [
+          "./favicon.svg",
+          "html-icon"
+        ],
+        [
+          "./assets/home/paper-plane.svg?v=2",
+          "img-src"
+        ],
+        [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "html-script"
+        ]
+      ],
+      "game_resource_references": [],
+      "scope": "Direct static references only; not recursive cold-cache request acceptance"
+    },
+    {
+      "file": "docs/claude-code-review.html",
+      "sha256": "1e9be3c6ce5bc7113a07876a0332f00dbaca7a8977646b9be0cff56f2d7ae063",
+      "direct_resource_references": [
+        [
+          "./style.css",
+          "html-stylesheet"
+        ],
+        [
+          "./translation.css?v=20261103",
+          "html-stylesheet"
+        ],
+        [
+          "./archive.css",
+          "html-stylesheet"
+        ],
+        [
+          "./favicon.ico",
+          "html-icon"
+        ],
+        [
+          "./favicon.svg",
+          "html-icon"
+        ],
+        [
+          "./assets/optimized/c660894ee02b9500-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/c660894ee02b9500-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/c660894ee02b9500-1600-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/c660894ee02b9500.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/e227a5e5d0bdb5d1-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/e227a5e5d0bdb5d1-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/e227a5e5d0bdb5d1-1370-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/e227a5e5d0bdb5d1.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/3660ec25a6a870de-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/3660ec25a6a870de-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/3660ec25a6a870de-1370-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/3660ec25a6a870de.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/e227a5e5d0bdb5d1-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/e227a5e5d0bdb5d1-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/e227a5e5d0bdb5d1-1370-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/e227a5e5d0bdb5d1.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/3660ec25a6a870de-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/3660ec25a6a870de-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/3660ec25a6a870de-1370-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/3660ec25a6a870de.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/8bbed6f611dfb487-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/8bbed6f611dfb487-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/8bbed6f611dfb487-1324-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/8bbed6f611dfb487.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/8bbed6f611dfb487-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/8bbed6f611dfb487-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/8bbed6f611dfb487-1324-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/8bbed6f611dfb487.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/b27577c75499a60b-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/b27577c75499a60b-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/b27577c75499a60b-1370-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/b27577c75499a60b.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/73c160deb77f9e4a-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/73c160deb77f9e4a-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/73c160deb77f9e4a-1370-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/73c160deb77f9e4a.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/b27577c75499a60b-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/b27577c75499a60b-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/b27577c75499a60b-1370-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/b27577c75499a60b.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/73c160deb77f9e4a-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/73c160deb77f9e4a-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/73c160deb77f9e4a-1370-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/73c160deb77f9e4a.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/a5407026cc8ed24f-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/a5407026cc8ed24f-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/a5407026cc8ed24f-1600-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/a5407026cc8ed24f.jpg",
+          "img-src"
+        ],
+        [
+          "./assets/optimized/a5407026cc8ed24f-640-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/a5407026cc8ed24f-1024-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/optimized/a5407026cc8ed24f-1600-q88.webp",
+          "source-srcset-candidate"
+        ],
+        [
+          "./assets/translations/original/a5407026cc8ed24f.jpg",
+          "img-src"
+        ],
+        [
+          "./comments-config.js?v=2",
+          "html-script"
+        ],
+        [
+          "./comments.js?v=6",
+          "html-script"
+        ],
+        [
+          "https://static.cloudflareinsights.com/beacon.min.js",
+          "html-script"
+        ]
+      ],
+      "game_resource_references": [],
+      "scope": "Direct static references only; not recursive cold-cache request acceptance"
+    }
+  ],
+  "measurement_environment": {
+    "python": "3.9.23",
+    "zlib": "1.2.12"
+  },
+  "measurement_script_sha256": "3326f55bab5a26d68740cb82d112b057155bab127f5ef433077ff284e4591786"
+}
