@@ -2,6 +2,7 @@ import {OFFICE} from './scene-config.mjs';
 export const WORLD=OFFICE;
 export const OBSTACLES=OFFICE.obstacles;
 export const COMPUTERS=OFFICE.objects;
+export const MOVE_SPEED=54;
 export function blocked(x,y,config=OFFICE) {
   const b=config.bounds;
   if(x<b.left||x>b.right||y<b.top||y>b.bottom)return true;
@@ -10,7 +11,7 @@ export function blocked(x,y,config=OFFICE) {
 export function move(position,dx,dy,seconds,config=OFFICE) {
   const distance=Math.hypot(dx,dy);
   if(!distance||seconds<=0)return {...position};
-  const scale=54*Math.min(seconds,.05)/distance;
+  const scale=MOVE_SPEED*Math.min(seconds,.05)/distance;
   const steps=Math.max(1,Math.ceil(Math.max(Math.abs(dx*scale),Math.abs(dy*scale))));
   let {x,y}=position;
   for(let i=0;i<steps;i++) {
@@ -19,6 +20,18 @@ export function move(position,dx,dy,seconds,config=OFFICE) {
     if(!blocked(x,ny,config))y=ny;
   }
   return {x,y};
+}
+// One displayed frame. The frame dt is spent as-is: a 1/60 bucket moves 0 or 2
+// steps whenever vsync is not an exact multiple of 1/60, so the body hitches.
+export function integrateWalk(position,dx,dy,seconds,config=OFFICE) {
+  if(!(dx||dy)||!(seconds>0))return {x:position.x,y:position.y};
+  let remain=Math.min(seconds,.1),next=position;
+  do {
+    const step=Math.min(remain,.05);
+    next=move(next,dx,dy,step,config);
+    remain-=step;
+  } while(remain>1e-9);
+  return next;
 }
 export function nearbyAll(position,config=OFFICE) {
   const point=o=>o.interaction||o;
