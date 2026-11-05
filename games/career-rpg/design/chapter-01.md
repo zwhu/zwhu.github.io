@@ -6,7 +6,7 @@
 
 玩家扮演当年的作者：论坛有人反馈无法登录；我第一次面对真实的线上 C 端用户，呆住；CTO 带大家排查；整整两小时后恢复；CTO、老板、同事安慰我；再补测试和注释，写进游戏里的工作手册。
 
-顺序固定为：论坛反馈 → 呆住 → CTO 带大家排查 → 两小时 → 宽慰 → 补测试与注释 → 手册。没有考试、失败或分数，也没有要猜的技术谜题：排查段只让玩家去不同物件重读已有内容并确认，恢复靠叙事转场。
+顺序固定为：论坛反馈 → 呆住 → CTO 排查 → 约两小时恢复 → 安抚 → 补测试与注释 → 手册 → 从合肥走到南京的旅程地图。主题是第一次做 C 端，以及从这次失败里记下的东西。没有考试或分数，也没有要猜的技术谜题：排查段只让玩家去不同物件重读已有内容并确认。
 
 | 状态 | 标题 | 预算 | 检查点 | 入口格 | 离开条件 |
 | --- | --- | --- | --- | --- | --- |
@@ -15,10 +15,38 @@
 | incident | 呆住 | 25s | true（`atomic-per-event`） | [9,4] | `cto_rallies_team`→investigation |
 | investigation | 一起排查 | 45s | true（`atomic-per-event`） | [15,4] | `confirm_feedback_reviewed`→investigation；`confirm_recheck_visited`→investigation；`confirm_impact_scope`→investigation；`resume_narrative`→restored |
 | restored | 两小时后 | 25s | true（`atomic-per-event`） | [15,4] | `comfort_read`→learning |
-| learning | 补测试与注释 | 35s | true（`atomic-per-event`） | [15,4] | `review_test_plan`→learning；`review_trap_comment`→learning；`write_manual_entry`→complete |
-| complete | 手册新增一页 | 10s | true（`atomic-per-event`） | [21,4] | — |
+| learning | 补测试与注释 | 35s | true（`atomic-per-event`） | [15,4] | `review_test_plan`→learning；`review_trap_comment`→learning；`write_manual_entry`→journey |
+| journey | 从合肥走到南京 | 计入本章 | true（`atomic-per-event`） | [21,4] | `open_journey`→journey；`notice_react`→journey；`finish_journey`→complete |
+| complete | 本章完成 | 10s | true（`atomic-per-event`） | [21,4] | — |
 
-合计 180 秒，落在 120～180 秒的预期内；各状态预算含阅读与操作，需真人试玩校正。七个状态入口都是稳定检查点，读档只恢复最近一次被接受事件写下的同一个快照（第七节）。
+合计仍按 180 秒计，旅程地图不另加预算。各状态入口都是稳定检查点，读档只恢复最近一次被接受事件写下的同一个快照（第七节）。
+
+## 技能、旅程与标题
+
+五个技能只做收集和展示，不加数值。名字只写在 `chapter-01.json` 的 `skills`。完成对应事件后，物件外围出现像素闪光，再按 E 拾取。拾取锁住操作，弹出「获得技能：{名字}」，同时有像素闪光和一段现场合成的 WebAudio 叮声；点 OK 才继续。手册（M）里还没拿到的显示「???」。存档带上 `skills`。「从办公室重玩」回到全部未获得。进入 `complete` 时，还没拾取的技能改为已获得。合肥章节数据没有 `skills`，这套机制不把合肥的四个技能写进 main。
+
+| 节点 | 技能名 | 事件 |
+| --- | --- | --- |
+| 工位日常（打开自己的电脑） | fibjs／nodejs 做全栈 | `open_forum_post` |
+| 补测试 / CI | CI/CD 做集成测试 | `review_test_plan` |
+| 事故与恢复 | 对上线要有敬畏之心（灰度、观测、回滚） | `comfort_read` |
+| 手册收束 | 学会从失败中学习经验 | `write_manual_entry` |
+| 章末过场，钩子指向 Alibaba／杭州 | React／Webpack | `notice_react` |
+
+旅程地图用运行图 `web/art/transition-map/`：底图 `map-384x216.png`，人物 `player-marker-24.png`（12×24，脚底锚点 6,23），状态层为勾、高亮环和锁。坐标在同目录 `transition-map.json`。人物沿路线从合肥走到南京，3200ms，ease-in-out，停在南京，不走进杭州的雾。合肥打勾，南京套高亮环，杭州只有雾、问号和锁，不加品牌。底图里的地名另叠一层像素字。合肥完成页可以再看同一段到南京为止的路程，不改合肥存档，也不发放南京技能。
+
+口号 `欢迎你游戏我的职业前半生` 只写在 `web/slogan.mjs`。游戏标题、开场、转场（含这张旅程地图）都读这个常量。
+
+| ID | 玩家能看到什么 | 怎么算做完 |
+| --- | --- | --- |
+| NJ-SKILL-01 | 拾取「fibjs／nodejs 做全栈」，手册出现这个名字；没拾取时章末也会补上 | 实机截图：闪光、获得弹窗、手册；名字与上表一致 |
+| NJ-SKILL-02 | 拾取「CI/CD 做集成测试」，手册与章末补发同样核对 | 同上 |
+| NJ-SKILL-03 | 拾取「对上线要有敬畏之心（灰度、观测、回滚）」 | 同上 |
+| NJ-SKILL-04 | 拾取「学会从失败中学习经验」 | 同上 |
+| NJ-SKILL-05 | 在旅程地图上拾取「React／Webpack」 | 同上 |
+| NJ-STORY-01 | 论坛反馈、呆住、CTO 排查、约两小时恢复、安抚、补测试与注释、手册能走完 | 实机走完；文案不把「有人扛」写成这一章的教训 |
+| NJ-BRIDGE-01 | 旅程地图从合肥走到南京 | 起点、中途、到达南京各一张实机截图 |
+| SLOGAN-01 | 标题、开场、转场都是同一句口号 | 三处各一张实机截图；测试断言文案与 `slogan.mjs` 一致 |
 
 ## 二、事实、演出与缺失
 

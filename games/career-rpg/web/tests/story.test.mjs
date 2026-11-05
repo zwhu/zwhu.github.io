@@ -15,7 +15,9 @@ test('both learning orders complete only after both reviews and manual confirmat
     let s=apply(prefix);assert.equal(chapter.advance(s,'write_manual_entry').accepted,false);
     s=chapter.advance(s,order[0]).snapshot;assert.equal(chapter.advance(s,'write_manual_entry').accepted,false);
     s=chapter.advance(s,order[1]).snapshot;s=chapter.advance(s,'write_manual_entry').snapshot;
-    assert.equal(s.state,'complete');assert.ok(s.flags.includes('comfort_read'));
+    assert.equal(s.state,'journey');assert.ok(s.flags.includes('comfort_read'));
+    s=chapter.advance(s,'open_journey').snapshot;s=chapter.advance(s,'notice_react').snapshot;s=chapter.advance(s,'finish_journey').snapshot;
+    assert.equal(s.state,'complete');
   }
 });
 test('prerequisites and duplicate confirmations cannot advance, remove flags or shadow later actions',()=>{
@@ -34,7 +36,7 @@ test('every designed legal configuration restores exactly through a single atomi
     const before=writes;assert.equal(chapter.save(store,s),true);assert.equal(writes,before+1);
     assert.deepEqual(chapter.inspect(store),{kind:'valid',snapshot:s});configurations++;
   }
-  assert.equal(configurations,15);
+  assert.equal(configurations,18);
 });
 test('damaged, old and impossible snapshots are preserved and reported, never silently reset',()=>{
   for(const raw of ['{broken',JSON.stringify({state:'office'}),JSON.stringify({...chapter.initial(),schema:0}),JSON.stringify({...chapter.initial(),state:'__proto__'}),JSON.stringify({...chapter.initial(),flags:['test_reviewed']})]){
@@ -71,7 +73,8 @@ test('identical semantic journeys replay equally across independent instances an
     const accepted=event=>({event,accepted:true});
     const sequence=[...prefix.slice(0,4).map(accepted),{event:'confirm_recheck_visited',accepted:false},
       ...prefix.slice(4).map(accepted),...order.map(accepted),{event:order[0],accepted:false},
-      {event:'write_manual_entry',accepted:true},{event:'open_forum_post',accepted:false},{event:'write_manual_entry',accepted:false}];
+      {event:'write_manual_entry',accepted:true},{event:'open_forum_post',accepted:false},{event:'write_manual_entry',accepted:false},
+      {event:'open_journey',accepted:true},{event:'notice_react',accepted:true},{event:'finish_journey',accepted:true}];
     const initial=view(left,a);assert.deepEqual(initial,view(right,b));
     for(const step of sequence){
       recover();const before=view(left,a);
@@ -86,6 +89,7 @@ test('identical semantic journeys replay equally across independent instances an
     recover();const final=view(left,a);assert.equal(final.snapshot.state,'complete');assert.equal(final.manual.written,true);
     assert.equal(final.manual.text,data.dialogues.find(d=>d.id==='learning-manual-1').text);
     assert.match(final.manual.text,/补测试/);
+    assert.equal(/有人扛|一起扛|一起承担/.test(final.manual.text),false);
     runs.push({learningOrder:order,initial,trace,recoveries,final});
   }
   // Different learning orders may serialize flag insertion order differently; semantic outcomes agree.

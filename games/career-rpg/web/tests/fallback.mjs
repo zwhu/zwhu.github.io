@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 
-const prose='在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。';
+const prose='在南京第一次做 C 端上线，用户在论坛反馈无法登录。故障大约两小时后恢复。CTO 带大家排查，同事过来安抚。事后补测试、写注释，把这次失败记下来。';
 const instrument=`window.__fallbackInput={keys:[],pointers:[]};for(const type of ['keydown','keyup'])window.addEventListener(type,e=>window.__fallbackInput.keys.push({type,key:e.key,trusted:e.isTrusted,focus:document.activeElement.id}),true);for(const type of ['pointerdown','mousedown','touchstart'])window.addEventListener(type,e=>window.__fallbackInput.pointers.push(type),true);`;
 const noGL=`(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){if(['webgl','webgl2','experimental-webgl'].includes(type))return null;return original.call(this,type,...args);};})()`;
 export async function runFallback(ctx){

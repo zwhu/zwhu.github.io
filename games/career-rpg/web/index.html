@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>一路写来 · 南京办公室</title>
+  <title>一路写来</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <main>
-    <header><p class="eyebrow">一路写来 / WEB 原型</p><h1>南京，第一次上线</h1><p>走进办公室，去电脑前看看。</p></header>
+    <header><p class="eyebrow">一路写来 / WEB 原型</p><h1 id="game-title"></h1><p id="chapter-heading">南京，第一次上线</p><p>走进办公室，去电脑前看看。</p></header>
     <nav class="text-navigation" aria-label="文字阅读与博客"><a id="read-summary" href="#chapter-summary">阅读这一章的经历</a> · <a id="back-blog" href="../../../docs/index.html">回到博客</a></nav>
     <p class="script-fallback note">游戏脚本尚未启动；若已关闭 JavaScript 或脚本无法加载，可继续阅读下方经历摘要，或回到博客。恢复脚本后可刷新本页重试。</p>
     <p id="save-status" class="note" role="status"></p>
@@ -21,7 +21,7 @@
     </section>
     <p class="controls">探索：方向键 / WASD 移动 · E / Enter 交互 · Q 切换对象 · M 手册 · Esc 暂停<br>对话与菜单：方向键选择 · Enter / Space 确认 · Esc 返回 · Tab / Shift+Tab 切换焦点</p>
     <p class="note">场景与外观为游戏设定，剧情据作者回忆改写；事故根因没有被编造成技术谜题。角色支持四向移动和行走姿态。</p>
-    <section id="chapter-summary" tabindex="0" aria-labelledby="summary-title"><h2 id="summary-title">这一章的经历</h2><p>在南京第一次发布上线，用户在论坛反馈无法登录。故障持续两小时，CTO 带大家排查，事后团队给予宽慰，大家补测试、写注释，留下这次教训。</p></section>
+    <section id="chapter-summary" tabindex="0" aria-labelledby="summary-title"><h2 id="summary-title">这一章的经历</h2><p>在南京第一次做 C 端上线，用户在论坛反馈无法登录。故障大约两小时后恢复。CTO 带大家排查，同事过来安抚。事后补测试、写注释，把这次失败记下来。</p></section>
   </main>
   <dialog id="system-dialog" aria-label="存档或重玩确认"></dialog>
   <dialog id="pause-menu"><h2>稍作停留</h2><p>暂停时角色不会移动，已确认的进度会保留。</p><div class="choices"><button id="resume" type="button">继续</button><button id="pause-manual" type="button">查看手册</button><button id="restart" type="button">从办公室重玩</button></div></dialog>

@@ -28,12 +28,12 @@ def apply(state,flags,event):
 prefix=['open_forum_post','read_feedback','cto_rallies_team','confirm_feedback_reviewed','confirm_recheck_visited','confirm_impact_scope','resume_narrative','comfort_read']
 for order in [('review_test_plan','review_trap_comment'),('review_trap_comment','review_test_plan')]:
  state,flags=start
- for event in prefix+list(order)+['write_manual_entry']:
+ for event in prefix+list(order)+['write_manual_entry','open_journey','notice_react','finish_journey']:
   state,flags,accepted=apply(state,flags,event);assert accepted
   if event in ['confirm_recheck_visited','review_test_plan','review_trap_comment']:
    s2,f2,accepted2=apply(state,flags,event)
    assert not accepted2 and s2==state and f2==flags
- assert state=='complete' and {'test_reviewed','comment_reviewed','comfort_read'}<=flags
+ assert state=='complete' and {'test_reviewed','comment_reviewed','comfort_read','journey_finished'}<=flags
 for d in c['dialogues']:
  assert not any(x in d['text'] for x in ['当时原话我记不清','这个项目第一次','不止一个人','游戏里的摆设','不代表当时'])
 text=(p/'chapter-01.md').read_text();art=(p/'chapter-01-art.md').read_text()

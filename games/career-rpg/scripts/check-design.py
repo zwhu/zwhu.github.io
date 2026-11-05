@@ -6,7 +6,7 @@ from collections import deque
 from pathlib import Path
 
 GAME = Path(__file__).resolve().parents[1]
-STATES = {'office', 'report', 'incident', 'investigation', 'restored', 'learning', 'complete'}
+STATES = {'office', 'report', 'incident', 'investigation', 'restored', 'learning', 'journey', 'complete'}
 
 
 def require(condition, message):

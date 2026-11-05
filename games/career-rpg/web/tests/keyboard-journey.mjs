@@ -79,16 +79,21 @@ export async function runJourney(ctx){
 
     operation='test-learning';await open('cto-pc');await act('review_test_plan','learning','test_reviewed');await close();
     operation='comment-learning';await open('cto-pc');await act('review_trap_comment','learning','comment_reviewed');await close();
-    operation='write-manual';await walk(shelf.x,shelf.y);await open('manual');await confirm('write_manual_entry','complete');
-    await capture('chapter-complete.png','手册归档与南京完成');
+    operation='write-manual';await walk(shelf.x,shelf.y);await open('manual');await confirm('write_manual_entry','journey');await close();
+    const journeyMap=config.objects.find(o=>o.id==='journey-map');
+    operation='open-journey';await walk(journeyMap.x,journeyMap.y);await open('journey-map');await act('open_journey','journey','journey_opened');
+    for(let n=0;n<40&&!(await run('window.careerJourney?.().arrived'));n++)await new Promise(resolve=>setTimeout(resolve,200));
+    operation='finish-journey';await select('[data-action="journey-finish"]');await key('Enter');
+    assert.equal((await state()).chapter.state,'complete');await record('finish-journey');
+    await capture('chapter-complete.png','旅程地图之后南京完成');
 
     operation='audit-continuity';const e=await evidence(),s=await state();
     const statePath=result.steps.map(step=>step.chapter).filter((v,i,a)=>i===0||v!==a[i-1]);
-    assert.deepEqual(statePath,['office','report','incident','investigation','restored','learning','complete']);
+    assert.deepEqual(statePath,['office','report','incident','investigation','restored','learning','journey','complete']);
     assert.equal(s.chapter.state,'complete');assert.deepEqual(e.pointers,[]);assert.ok(e.keys.length>0);assert.ok(e.keys.every(k=>k.trusted));assert.deepEqual(e.storageDeletes,[]);
     assert.ok(e.storageWrites.every(w=>w.key===s.saveKey&&w.stack.includes('/web/story.mjs')),'Unexpected manual storage write or checkpoint seeding');
     const saveStates=e.storageWrites.map(w=>JSON.parse(w.value).state);
-    assert.deepEqual(saveStates,['office','report','incident','investigation','investigation','investigation','investigation','restored','learning','learning','learning','complete']);
+    assert.deepEqual(saveStates,['office','report','incident','investigation','investigation','investigation','investigation','restored','learning','learning','learning','journey','journey','journey','complete']);
     assert.deepEqual(navigations,[url],'Journey must have one navigation and no reload/checkpoint jump');assert.deepEqual(errors,[]);
     result.status='passed';result.state_path=statePath;result.final=s.chapter;result.input={trusted_key_events:e.keys.length,pointer_inputs:e.pointers.length};result.continuity={fresh_profile:true,navigations,storage_writes:e.storageWrites.length,manual_storage_changes:0,checkpoint_seeding:0,production_saves_only:true};
     await writeFile(new URL('input-and-storage.json',out),JSON.stringify(e,null,2)+'\n');
