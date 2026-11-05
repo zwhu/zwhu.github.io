@@ -1,6 +1,73 @@
 # 《一路写来》交接
 
-## 当前阶段：保留原图路线提案完成，停等评审
+## 当前恢复点（2026-11-05，停止制作并交接）
+
+接手先读本节与[技术方案](./technical-plan.md)，按任务再读相关规格；无需通读下方长历史。工作目录唯一为 `/Users/bytedance/work/AI/zwhu.github.io`。已合并的源worktree继续只读，不再重新合并或重做南京。
+
+### 当前决定
+
+- 保留现有Three.js正交相机、二维背景/人物贴图和项目自用逻辑；程序绘图改变素材生产，不意味着改为Three.js三维建模或切换引擎。
+- 人物、NPC、表情和关键姿态用image_gen，实际传入南京成品参考。程序负责所有环境场景、家具、图集整理与压缩；环境不调用image_gen。已有素材优先复用，原图完整归档。
+- 当前桌面键盘游玩，浏览器作本地开发入口。H5、移动端、触控、弱网、游戏上线暂不实施，原生安装包工具未定。旧网络预算失败和40秒候选保留历史，不记通过，不继续据此研发。
+- **loop为PAUSED；TraeX当前无执行任务，旧全旅程goal暂停。用户说handoff，本轮停止制作。** 不擅自恢复监控、冷启动测试或全旅程目标。走路卡顿未解决，排查继续按用户要求暂停。
+- 质量高于速度，一个场景验收通过再接下个；提前准备人物或背景不代表场景通过。人物外貌与没有照片依据的布局是游戏设定，不声称真人或真实空间还原。
+
+### 用户最新反馈与停止位置
+
+用户对12张程序场景v1明确反馈“确实非常简化”“没有什么区分度”。这批未获认可，不能以32KB或数量齐全证明效果可用。问题在于共用房间骨架、规则矩形和重复道具，缺少每个场所的空间特征与材质细节。
+
+随后只重画了3张v2：宿舍加入上下铺/梯子/晾衣与学习区；驿站加入货架/开放卷帘门/打包台/滚筒带/笼车；小区改为室外建筑/内凹入口/庭院/台阶/配送车。**v2尚未收到用户评价，仍为简化草图，不能写成达到南京基准。其余9张尚未按v2重画。**
+
+### 产物与完成范围
+
+| 内容 | 路径与当前结论 |
+| --- | --- |
+| 原南京游戏 | `web/`，主线、四向、NPC、情绪、坐姿、五工位、头部气泡已有；完整场景仍未通过。不要写成“只有概念图”。 |
+| 全旅程人物清单 | [art/character-roster.md](./art/character-roster.md)。主角、CTO、费翔🐘、米衣同伴复用已有图集。 |
+| 新人物7个 | 大学同学、安风徳老板、南京老板、杭州TL、项目同伴、业主家长、驿站工作人员；每人四向站姿＋3表情。原图/提示词/记录在 `art/source/remaining-characters-v1/`。外貌是设定，未获用户认可。 |
+| 人物候选与总览 | [art/remaining-characters-v1/index.html](./art/remaining-characters-v1/index.html)；候选与审阅记录在 `art/processed/remaining-characters-v1/`。没有新行走/打字动画，未切帧、校准动画锚点或接入游戏。 |
+| 人物处理脚本 | `scripts/prepare-character-sheets.py`：使用已有libpng/cwebp/dwebp；alpha阈值128归一化改变原图像素，后续PNG→WebP逐张解码RGBA一致。原图8,738,291 B，候选2,291,462 B；不能把整个过程称为无损或推导内存同比下降。 |
+| 程序环境v1 | [art/procedural-scenes-v1/index.html](./art/procedural-scenes-v1/index.html)，12个384×216背景，单场景PNG合计32,826 B。用户不认可其简化程度和区分度；只留作草图历史。 |
+| 程序环境v2 | [art/procedural-scenes-v2/index.html](./art/procedural-scenes-v2/index.html)，3个重画背景、旧图对照、`generate.py`、`report.json`和`contact-sheet.png`。单场景PNG合计10,795 B，待审；未配置人物/遮挡层/碰撞/剧情/交互。 |
+| 程序绘图探索 | `art/procedural-desk-v1/`、`art/codex-program-character-v1/`、`art/traex-program-character-v1/`；人物纯程序路线已结束实验，不作为默认正式人物。 |
+| 官方资料调研 | [design/pixel-rpg-art-pipeline-research.md](./design/pixel-rpg-art-pipeline-research.md)，说明图集、物件/图块/独特背景混用与渲染分工；没有测得工时或token节省比例。 |
+
+v1的12个环境是：大学宿舍、安风徳办公室、南京深夜书桌、杭州商品发布、双11值守、浙里办项目、在家读业主群反馈、健康码支援、驿站、送货入楼、字节工作与现在AI/写作书桌。业主群反馈不改写成当面见家长；健康码不补未知职责；屏幕不伪造日志、聊天或内部系统。
+
+### 接手后的唯一下一步
+
+等用户评价v2；收到明确继续指令后，先选一个场景把空间特征、物件细节和南京风格做到满意，再按同样标准逐张修改。不要直接批量复制v2模板补其余9张，不继续用“全部背景已生成”代替质量验收。人物也先核对设定，再做切帧/锚点/压缩和实际渲染；未认可的候选不替换运行引用。
+
+本次handoff只整理文档，不再启动绘图、TraeX、子代理或性能任务。
+
+### 验证与Git
+
+- 最近一次 `python3 scripts/verify.py` 全部13组通过；场景图与浏览器预览不等于场景可玩验收。
+- 7个人物候选已逐张看图，候选WebP解码核对通过；总览页桌面、键盘展开原图和375px无溢出已检查。v1场景总览桌面/375px已看；v2三图和桌面对照页已看，未声称新的手机或游戏交互验收。
+- 既有南京键盘16项、连续23步、长对话、回退、博客隔离与规则各有独立证据；生命周期只接受20轮可观测计数和显式释放，完整堆/驱动内存仍未验证。最新整体视觉、作者体验和其他桌面环境不得代签。
+- 最近一次用户要求提交已完成于 `97b5843`。其后方案文档、程序样品、调研、新人物及环境草图仍是**未提交工作区改动**，需保留；本轮handoff未commit、push或发布。
+
+### 预览与复现
+
+若本地预览服务已退出，可从仓库根目录运行 `python3 -u -m http.server 8765 --bind 127.0.0.1`。优先打开：
+
+- 场景v2：`http://127.0.0.1:8765/games/career-rpg/art/procedural-scenes-v2/`
+- 新人物：`http://127.0.0.1:8765/games/career-rpg/art/remaining-characters-v1/`
+- 现有南京：`http://127.0.0.1:8765/games/career-rpg/web/`
+
+绘图可从仓库根目录执行 `python3 games/career-rpg/art/procedural-scenes-v2/generate.py`；依赖v1的Canvas与程序工位函数，均为仓库本地源码，不调用image_gen。重复生成只重建实验产物，不代表验收，需保留用户反馈记录。v1与程序人物旧命令仅作追溯，不需要重跑。
+
+TraeX旧会话UUID为 `01a1a787-db6c-77a0-b19c-b70908df7e60`；专用tmux socket `/private/tmp/traex-career-rpg-supervisor/tmux.sock`，pane `career-rpg:0.0`，模型顺序 `gpt-6.1-sol → gpt-6-astra → gpt-5.6-sol`。这些仅供明确授权后恢复；当前不启动、不resume旧goal。临时监督state不能覆盖本节的最新决定。
+
+以下为历史记录；其中旧“仅合并”“待资源偏好”“恢复后自动巡检”等状态不代表当前任务。
+
+## 历史记录：程序绘制工位独立样品
+
+随后用户授权 TraeX 做单次四向人物绘图测试，产物在 `art/traex-program-character-v1/`；完成后已停止，loop 未恢复。用户又要求 Codex 自画对比版，产物与三方对照页在 [codex-program-character-v1](./art/codex-program-character-v1/index.html)：每帧48×64，四向PNG共1,298 B，18种RGBA值，脚底y=61；独立手写绘图几何，原素材不改。两版都只有站姿，均未通过南京造型一致性验收。人物对照页已检查桌面、375px无横向溢出与图片加载。行业流程调研见 `design/pixel-rpg-art-pipeline-research.md`，不自动触发引擎迁移或扩场景。
+
+用户已暂停 loop 与 TraeX，并明确授权 Codex 自行用程序绘制“桌子＋电脑＋椅子”对照样品。样品在 [procedural-desk-v1](./art/procedural-desk-v1/index.html)，源码为同目录 `generate.py`，仅用 Python 标准库逐像素绘制，不读取或复制参考图像素。160×128 透明 PNG 三版分别为 1,186／1,187／1,186 B，尺寸、颜色数和哈希见 `report.json`；不据此推算整幅背景压缩率或人工成本降幅。当前样品比南京参考更规整、材质更简化，未达到正式替换标准，未接入游戏。已预览桌面与375px窄屏，无横向溢出，三图加载正常。用户暂不考虑 H5，不自动继续此前弱网启动测试；旧预算记录保留为历史结果。下一步等待用户审阅此样品的视觉方向，loop、TraeX 与走路卡顿排查均保持暂停。
+
+## 历史阶段：保留原图路线提案完成，停等评审
 
 用户已选择“保留原图，评审4 MiB/6 MiB与40秒加载提案”，这是评审路线选择，尚未批准门槛变更。[具体提案](./web/review/resource-budget/original-art-proposal.md)及[独立短摘要](./web/review/resource-budget/original-art-proposal-summary.json)已落盘，不覆盖既有测量摘要；旧路线偏好待答/推荐仅为当时记录，以本段为准。
 

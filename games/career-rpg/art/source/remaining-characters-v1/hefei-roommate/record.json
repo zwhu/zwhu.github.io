@@ -1,0 +1,27 @@
+{
+  "id": "hefei-roommate",
+  "tool": "image_gen built-in",
+  "original_source": "/Users/bytedance/.codex/generated_images/01a1a770-e0c5-7db1-9fb1-9cd951d27c44/exec-0cfba7d3-ff4e-45b9-b91f-849e9aec72d7.png",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 1244417,
+  "sha256": "f430bdfe066162a83162afba05fb04e873ceef0e076cbf11c88229cdac573298",
+  "references": [
+    "web/art/npc-team-v1.png",
+    "art/character-four-directions-v1.png"
+  ],
+  "status": "design_sheet_generated_pending_production_processing",
+  "author_accepted": false,
+  "scene_accepted": false,
+  "production_replaced": false,
+  "visual_note": "Four standing views and three expressions present; background/alpha and soft halo require inspection before extraction.",
+  "alpha_audit": {
+    "source_format": 3,
+    "minimum": 0,
+    "maximum": 254,
+    "fully_transparent_pixels": 1020243,
+    "fully_opaque_pixels": 0,
+    "intermediate_alpha_pixels": 552621,
+    "total_pixels": 1572864
+  }
+}

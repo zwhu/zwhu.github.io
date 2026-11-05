@@ -1,0 +1,27 @@
+{
+  "id": "station-worker",
+  "tool": "image_gen built-in",
+  "original_source": "/Users/bytedance/.codex/generated_images/01a1a770-e0c5-7db1-9fb1-9cd951d27c44/exec-5d49b765-5fa2-4ef3-9ed2-e8feba2149a2.png",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 1309306,
+  "sha256": "f429e3b48be28465fad3bcf7ff75279e089665013095b504f18ce011298b53b5",
+  "references": [
+    "web/art/npc-team-v1.png",
+    "art/character-four-directions-v1.png"
+  ],
+  "status": "design_sheet_generated_pending_production_processing",
+  "author_accepted": false,
+  "scene_accepted": false,
+  "production_replaced": false,
+  "visual_note": "Four standing views and three expressions present; background/alpha and soft halo require inspection before extraction.",
+  "alpha_audit": {
+    "source_format": 3,
+    "minimum": 0,
+    "maximum": 254,
+    "fully_transparent_pixels": 1011608,
+    "fully_opaque_pixels": 0,
+    "intermediate_alpha_pixels": 561256,
+    "total_pixels": 1572864
+  }
+}

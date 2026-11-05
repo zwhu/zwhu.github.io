@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>四向人物 · 南京 / Codex / TraeX 对照</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#faf8f3;color:#292825;font:15px/1.8 system-ui,sans-serif}main{max-width:1160px;padding:28px 24px;margin:auto}h1{font-size:27px;font-weight:600;margin:8px 0}h2{font-size:19px;font-weight:500}p{max-width:800px}.muted,figcaption{color:#77746e;font-size:13px}section{border-top:1px solid #e6e2da;padding:12px 0 24px}figure{margin:0}.sheet{display:block;width:100%;height:auto;image-rendering:pixelated;background:#eee9e0}a{color:#a64335}a:focus-visible{outline:3px solid #a64335;outline-offset:4px}.reference{max-width:800px;margin:auto}.reference img{width:100%;height:auto}.labels{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;color:#77746e;font-size:13px}@media(max-width:600px){main{padding:20px 12px}h1{font-size:23px}}
+</style>
+<main>
+<p class="muted">独立程序绘图实验 · 同尺寸比较 · 未替换游戏人物</p>
+<h1>同一个南京主角，两份程序绘制样品</h1>
+<p>两版均为每帧48×64、下／上／左／右四向站姿、透明PNG，脚底对齐。Codex版自行编写轮廓与色块，没有复制或修改TraeX的绘图几何，也未抽取原图像素。棋盘格仅用于显示透明区域。</p>
+<section><h2>Codex 绘制</h2><figure><img class="sheet" src="preview.png" alt="Codex绘制的南京主角四向站姿：黑发、浅领红上衣、深裤与靴"><div class="labels"><span>向下</span><span>向上</span><span>向左</span><span>向右</span></div><figcaption>图集1,298 B，18种RGBA值（含透明）。头部收窄、躯干更修长，使用不规则发束与分块衣褶；侧向几何主要镜像。</figcaption></figure></section>
+<section><h2>TraeX 绘制</h2><figure><img class="sheet" src="../traex-program-character-v1/preview.png" alt="TraeX绘制的同一主角四向站姿"><div class="labels"><span>向下</span><span>向上</span><span>向左</span><span>向右</span></div><figcaption>图集1,460 B，20种RGBA值（含透明）。保持相同画布与展示宽度，不按文件大小评价美术质量。</figcaption></figure></section>
+<section><h2>南京原有造型参考</h2><figure class="reference"><img src="../character-four-directions-v1.png" alt="南京已有人物四向设定参考"><figcaption>原作造型参考；分辨率和绘制方式不同，不能拿整幅参考文件与小图集计算压缩率。</figcaption></figure></section>
+<p>我对自己的判断：基本服装与四向辨识度已保留，但侧脸、鞋型与发束仍有差别，尚未达到南京成品的一致性要求。两版都只有站姿，不代表行走、情绪或坐姿已经完成。</p>
+<p><a href="generate.py">Codex绘图源码</a> · <a href="report.json">尺寸与哈希记录</a> · <a href="../traex-program-character-v1/">TraeX原对照页</a> · <a href="../../web/">南京游戏</a></p>
+</main></html>

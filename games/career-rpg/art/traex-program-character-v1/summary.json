@@ -1,0 +1,174 @@
+{
+  "status": "independent_capability_experiment_not_approved_art",
+  "method": "Hand-authored integer raster polygons; standard-library PNG RGBA writer; no antialiasing",
+  "tool": "Python standard library",
+  "runtime": {
+    "python": "3.9.23",
+    "implementation": "CPython",
+    "zlib": "1.2.12"
+  },
+  "frame_dimensions": [
+    48,
+    64
+  ],
+  "directions": [
+    {
+      "direction": "down",
+      "rect": [
+        0,
+        0,
+        48,
+        64
+      ],
+      "foot_baseline_y": 61,
+      "bounding_box": [
+        8,
+        5,
+        39,
+        61
+      ]
+    },
+    {
+      "direction": "up",
+      "rect": [
+        48,
+        0,
+        48,
+        64
+      ],
+      "foot_baseline_y": 61,
+      "bounding_box": [
+        8,
+        5,
+        39,
+        61
+      ]
+    },
+    {
+      "direction": "left",
+      "rect": [
+        96,
+        0,
+        48,
+        64
+      ],
+      "foot_baseline_y": 61,
+      "bounding_box": [
+        9,
+        5,
+        39,
+        61
+      ]
+    },
+    {
+      "direction": "right",
+      "rect": [
+        144,
+        0,
+        48,
+        64
+      ],
+      "foot_baseline_y": 61,
+      "bounding_box": [
+        8,
+        5,
+        38,
+        61
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "file": "character.png",
+      "width": 192,
+      "height": 64,
+      "bytes": 1460,
+      "rgba_colors": 20,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "sha256": "3f6a2d73d4d125288bd2886a282f05805c0469f2c35eca718c093e67433b3c46",
+      "decoded_rgba_sha256": "9001a7816043d6fc6f26f2f82e125fa304f724963919d6e541c085641a7a7b18"
+    },
+    {
+      "file": "preview.png",
+      "width": 1152,
+      "height": 384,
+      "bytes": 11692,
+      "rgba_colors": 21,
+      "alpha_values": [
+        255
+      ],
+      "sha256": "afe3537b963fe5f78954e36cb0c8b8cada5caf4b2bfb238fababf42c3153eb75",
+      "decoded_rgba_sha256": "2e19a987e9e29dcea510413a5620a47d427f144ea01f69e2275ce5f515cb0fde"
+    }
+  ],
+  "preview": {
+    "nearest_neighbor_scale": 6,
+    "checkerboard_only_in_preview": true
+  },
+  "color_space": "8-bit RGBA, sRGB rendering intent0;19 authored opaque colors maximum plus transparent",
+  "references": [
+    {
+      "file": "art/character-four-directions-v1.png",
+      "sha256": "35cda03b7a85b248a6c8f9d2debdd4c7d9f2378d8c5e4c12f14b8680267e2533"
+    },
+    {
+      "file": "web/art/player-walk-v1.png",
+      "sha256": "0f72b54f7f757b21638087ce52d940588eafb30a3b8323d4bf3c7313b23591ff"
+    }
+  ],
+  "references_used_in_drawing": false,
+  "source_pixels_decoded_copied_traced_or_resized_for_drawing": false,
+  "production_replaced": false,
+  "network_or_dependencies_installed": false,
+  "initial_drawings": 1,
+  "visual_corrections": 1,
+  "visual_self_review": {
+    "status": "completed_by_actual_image_view_not_independent_acceptance",
+    "references_viewed": [
+      "art/character-four-directions-v1.png",
+      "web/art/player-walk-v1.png"
+    ],
+    "images_viewed": [
+      "initial preview.png",
+      "final preview.png"
+    ],
+    "observed": [
+      "Four standing directions distinguishable; black fluffy silhouette, simple eyes, red sleeves/light collar, bluegrey trousers/dark boots present",
+      "All four feet reach y61; character alpha is binary0/255; preview is6x nearest-neighbor with checkerboard"
+    ],
+    "correction": "One visual correction: softened hair highlight and shortened chin highlight stripe",
+    "gaps": [
+      "Head is wider than reference and silhouette more geometric",
+      "Hair tufts, shirt folds and facial/profile detail are reduced",
+      "Left/right share reflected authored geometry; no asymmetric pose nuance",
+      "Only standing poses; visual style/proportions are not approved"
+    ],
+    "author_accepted": false,
+    "supervisor_accepted": false
+  },
+  "limits": [
+    "Four standing directions only; no walk/emotion/typing states.",
+    "Right profile uses reflected authored geometry, not independently asymmetric clothing/hair.",
+    "Reduced facial/hair/clothing detail and proportional fidelity need independent visual review.",
+    "No animation, scene integration, hardware, startup or game acceptance."
+  ],
+  "automation": "paused",
+  "old_full_journey_goal": "paused",
+  "other_files": [
+    {
+      "file": "generate.py",
+      "bytes": 16628,
+      "sha256": "7cc5cf205f16ff563aa255d09b0442a3d6de76d13acb105167a9081a2a8cf33a"
+    },
+    {
+      "file": "index.html",
+      "bytes": 2420456,
+      "sha256": "f4dc23f1a4d84e178a923d3cfa26741c31e5d1c030917eaf31d29e1b95d2bf36"
+    }
+  ],
+  "generator_executable": true,
+  "scope": "All experiment outputs in this directory only; no production/reference/handoff changes for drawing; procedural-desk-v1 preserved; cold-start task not continued."
+}

@@ -1,5 +1,11 @@
 # 首轮像素美术方向
 
+## 当前制作路线（2026-11-05）
+
+人物、表情和关键动作采用image_gen，实际输入南京对应参考；已有可用人物优先复用。程序负责可复用环境物件及裁切、锚点、图集排布和压缩，原图完整归档，视觉变化须对照复核。详细流程见[技术方案](../technical-plan.md)和[美术规范](./style-guide.md)。程序人物样品只作实验，不替代image_gen人物路线。
+
+用户已授权先准备剩余场景缺失的人物图，按[全旅程人物清单](./character-roster.md)登记生成与复用；这项素材准备不代表场景通过或允许批量接入。以下内容保留为历史，不按旧“仅概念图”状态推进任务。
+
 ## 当前成品与合并结论（2026-11-05）
 
 南京完整样章已接入 `../web/art/office-room-v2.png`、`player-walk-v1.png`、`npc-team-v1.png`、`player-emotions-v1.png`、`typing-team-v1.png`；人物设定为本目录的 `character-front-v1.png`、`character-four-directions-v1.png`。这些已实现素材共同构成用户本次指定基准，详见[美术规范](./style-guide.md)。本轮已通过 `view_image` 打开七张原图核对，未重画、未规整或修改原图。
