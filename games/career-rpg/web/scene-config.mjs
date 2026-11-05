@@ -4,10 +4,10 @@ export const OFFICE={
   bounds:{left:6,right:378,top:72,bottom:211},
   obstacles:[{x:0,y:0,w:384,h:69},{x:41,y:69,w:77,h:47},{x:148,y:69,w:77,h:47},{x:257,y:69,w:78,h:47},{x:341,y:0,w:39,h:73},{x:353,y:111,w:27,h:42},{x:41,y:156,w:80,h:47},{x:257,y:156,w:80,h:47},{x:0,y:161,w:38,h:43},{x:7,y:55,w:24,h:46}],
   navigation:{transitY:137},
-  atlases:{player:{url:'./art/player-walk-v1.png',columns:3,rows:4,referenceGrouping:'row',directions:['down','up','left','right']},team:{url:'./art/npc-team-v1.png',columns:3,rows:1,directions:['down']},emotions:{url:'./art/player-emotions-v1.png',columns:3,rows:1,directions:['down']},typing:{url:'./art/typing-team-v1.png',columns:4,rows:2,referenceGrouping:'column',directions:['down','up']}},
+  atlases:{player:{url:'./art/player-walk-v1.png',columns:3,rows:4,referenceGrouping:'row',directions:['down','up','left','right']},team:{url:'./art/npc-team-v1.png',columns:3,rows:1,directions:['down']},emotions:{url:'./art/player-emotions-v1.png',columns:3,rows:1,directions:['down']},typing:{url:'./art/typing-team-v1.png',columns:4,rows:2,referenceGrouping:'column',directions:['down','up']},sit:{url:'./art/sit-back-hz-18x30.png',columns:1,rows:1,directions:['up']}},
   expressions:{normal:0,tense:1,happy:2},
   actors:[
-    {id:'player',name:'我',atlas:'player',height:44,controllable:true,typingColumn:0,expressionByState:{report:'tense',incident:'tense',investigation:'tense',restored:'happy',complete:'happy'}},
+    {id:'player',name:'我',atlas:'player',height:44,controllable:true,typingColumn:0,sitAtlas:'sit',seatedHeight:30,expressionByState:{report:'tense',incident:'tense',investigation:'tense',restored:'happy',complete:'happy'}},
     {id:'cto',name:'CTO',role:'cto',atlas:'team',column:0,typingColumn:1,height:44,x:185,y:108,seat:{x:185,y:108},interaction:{x:185,y:127},posture:'seatedTyping',events:['cto_rallies_team','resume_narrative'],marker:true,dialogue:{default:'CTO 在工位旁。这次上线，用户已经在用。',restored:'问题恢复后，CTO、老板和同事过来安抚。',learning:'测试和注释里记下了这次失败。'}},
     {id:'colleague-dev',name:'费翔🐘',atlas:'team',column:1,typingColumn:2,height:42,x:296,y:108,seat:{x:296,y:108},interaction:{x:296,y:127},posture:'seatedTyping',dialogue:{default:'同伴也在办公室。出了问题，先看用户反馈。',restored:'同事们告诉我，没关系，大家都经历过。',complete:'这次经历留在了手册里，测试和注释也留给后来改代码的人。'}},
     {id:'colleague-team',name:'同伴 · 协作',atlas:'team',column:2,typingColumn:3,height:42,x:82,y:197,seat:{x:82,y:197},interaction:{x:125,y:190},posture:'seatedTyping',dialogue:{default:'工位上的日常是 fibjs 和 nodejs，全栈都在这台机器上。',restored:'同事过来安抚。这次失败，要补进测试和注释。',complete:'往后还有新的学习，也会遇到新的问题。'}},
@@ -46,7 +46,7 @@ export const HEFEI={
   },
   expressions:OFFICE.expressions,
   actors:[
-    {id:'player',name:'我',atlas:'player',height:44,controllable:true,typingColumn:0,expressionByState:{interview:'tense',raise:'happy',complete:'happy'}},
+    {id:'player',name:'我',atlas:'player',height:44,controllable:true,typingColumn:0,sitAtlas:'sit',seatedHeight:30,expressionByState:{interview:'tense',raise:'happy',complete:'happy'}},
     {id:'boss',name:'老板',role:'boss',atlas:'boss',height:44,x:326,y:128,interaction:{x:310,y:128},events:['ask_for_chance','boss_lets_try','raise_read'],presentIn:['interview','day_tasks','raise','complete'],emotionAtlas:'bossEmotions',expressions:{doubtful:0,approving:1,normal:0},expressionByState:{interview:'doubtful',raise:'approving',complete:'approving'},dialogue:{default:'老板在茶桌旁。'},readPages:[{flag:'asked',title:'我',lines:['interview-player'],label:'我说过的话 · 回看',speaker:'player'},{flag:'hired_trial',title:'老板',lines:['interview-boss-2'],label:'老板当时的回复 · 回看',speaker:'boss'},{flag:'raise_seen',title:'老板',lines:['raise-boss'],label:'老板那句话 · 回看',speaker:'boss'}]},
     {id:'colleague-b2',name:'同事',atlas:'team',column:1,typingColumn:2,height:42,x:147,y:176,seat:{x:147,y:176},interaction:{x:147,y:192},posture:'seatedTyping',presentIn:['interview','day_tasks','raise','complete'],dialogue:{default:'同事坐在长桌对面写东西。'}},
     {id:'colleague-b3',name:'同事',atlas:'team',column:2,typingColumn:3,height:42,x:215,y:176,seat:{x:215,y:176},interaction:{x:215,y:192},posture:'seatedTyping',presentIn:['interview','day_tasks','raise','complete'],dialogue:{default:'同事坐在长桌对面写东西。'}},
@@ -88,13 +88,13 @@ export const HANGZHOU={
   atlases:{...OFFICE.atlases},
   expressions:OFFICE.expressions,
   actors:[
-    {id:'player',name:'我',atlas:'player',height:44,controllable:true,typingColumn:0,expressionByState:{arrive:'tense',board:'happy',complete:'happy'}},
+    {id:'player',name:'我',atlas:'player',height:44,controllable:true,typingColumn:0,sitAtlas:'sit',seatedHeight:30,expressionByState:{arrive:'tense',board:'happy',complete:'happy'}},
   ],
   objects:[
     {id:'check-in',role:'check_in',name:'前台',x:46,y:108,events:['check_in'],marker:true,dialogue:{default:'前台。先报到。'}},
     {id:'publish',role:'publish_desk',name:'商品发布',x:180,y:120,iconAt:{x:180,y:86},events:['review_publish'],marker:true,dialogue:{default:'商品发布这摊业务。'}},
     {id:'patterns-book',role:'patterns_book',name:'设计模式',x:46,y:168,iconAt:{x:63,y:157},iconSize:[14,17],icon:`${HP}/design-pattern-book/design-pattern-book-small-14x17.png`,card:`${HP}/design-pattern-book/design-pattern-book-card-192x238.png`,events:['study_patterns'],marker:true,dialogue:{default:'设计模式的书还摊着。'}},
-    {id:'webpack-screen',role:'webpack_screen',name:'Webpack / Babel',x:78,y:190,iconAt:{x:85,y:141},iconSize:[26,13],icon:`${HP}/webpack-screen/webpack-screen-small-26x13.png`,card:`${HP}/webpack-screen/webpack-screen-card-192x120.png`,events:['study_webpack','study_babel'],marker:true,dialogue:{default:'这一屏写着 Webpack，也写着 Babel。'}},
+    {id:'webpack-screen',role:'webpack_screen',name:'Webpack / Babel',x:78,y:190,seat:{x:82,y:172},iconAt:{x:85,y:141},iconSize:[26,13],icon:`${HP}/webpack-screen/webpack-screen-small-26x13.png`,card:`${HP}/webpack-screen/webpack-screen-card-192x120.png`,events:['study_webpack','study_babel'],marker:true,dialogue:{default:'这一屏写着 Webpack，也写着 Babel。'}},
     {id:'line-1',role:'line_1',name:'淘宝',x:123,y:112,iconAt:{x:123,y:84},iconSize:[10,15],icon:`${HP}/req-taobao/req-taobao-small-10x15.png`,card:`${HP}/req-taobao/req-taobao-card-192x279.png`,events:['read_line_1'],marker:true,dialogue:{default:'淘宝的需求单。'}},
     {id:'line-2',role:'line_2',name:'天猫',x:276,y:118,iconAt:{x:291,y:80},iconSize:[10,15],icon:`${HP}/req-tmall/req-tmall-small-10x15.png`,card:`${HP}/req-tmall/req-tmall-card-192x279.png`,events:['read_line_2'],marker:true,dialogue:{default:'天猫的需求单。'}},
     {id:'line-3',role:'line_3',name:'闲鱼',x:112,y:178,iconAt:{x:103,y:141},iconSize:[10,15],icon:`${HP}/req-xianyu/req-xianyu-small-10x15.png`,card:`${HP}/req-xianyu/req-xianyu-card-192x279.png`,events:['read_line_3'],marker:true,dialogue:{default:'闲鱼的需求单。'}},

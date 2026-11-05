@@ -7,6 +7,11 @@ export function frameIndex(atlas,facing,moving,time,column=0){
   return row*atlas.columns+col;
 }
 export const typingFrame=(column,time,playing)=>column+(playing?Math.floor(time*3)%2*4:0);
+// A one-cell sit sheet has no typing cycle. Its bottom edge is the hip, not a sole.
+export function seatedFrame(atlas,column,time,playing){
+  if((atlas.columns||1)===1&&(atlas.rows||1)===1)return 0;
+  return typingFrame(column,time,playing);
+}
 // Pose phase is distance / speed, so a frame that does not move does not step the legs.
 export function walkClock(walkTime,moving,distance,speed){
   if(!moving)return 0;
