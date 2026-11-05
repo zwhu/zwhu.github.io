@@ -242,6 +242,7 @@
   },
   "animation_suggestion": {
     "duration_ms_hefei_to_nanjing": 3200,
+    "duration_ms_nanjing_to_hangzhou": 3200,
     "easing": "ease-in-out",
     "marker_start": {
       "x": 72,

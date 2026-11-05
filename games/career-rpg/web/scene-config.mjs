@@ -72,6 +72,41 @@ export const HEFEI={
   beatMs:600,
   page:{documentTitle:'一路写来 · 合肥',heading:'合肥，争取一次机会',lead:'合肥办公室。从门口走到老板桌前。同事沿用南京人物。',summary:'原本录用的人嫌工资低，没来。老板说：「你能力不行，来了也干不了活。」我说：「我不要工资，让我来试试就行。」老板说：「行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。」入职两个月，加了两次薪。老板说：「努力工作的人一定会被看到的。」',shell:'合肥办公室游戏'},
 };
+// 杭州房间是色块占位。正式皮肤还没到；缺图沿用现有失败即移除，不另做像素管线。
+export const HANGZHOU={
+  id:'hangzhou-office',width:384,height:216,chapter:'../design/chapter-hangzhou.json',
+  background:'./art/hangzhou/room-placeholder.png',
+  bounds:{left:16,right:368,top:80,bottom:204},
+  obstacles:[],
+  navigation:{transitY:150},
+  atlases:{...OFFICE.atlases},
+  expressions:OFFICE.expressions,
+  actors:[
+    {id:'player',name:'我',atlas:'player',height:44,controllable:true,typingColumn:0,expressionByState:{arrive:'tense',board:'happy',complete:'happy'}},
+  ],
+  objects:[
+    {id:'check-in',role:'check_in',name:'前台',x:48,y:128,events:['check_in'],marker:true,dialogue:{default:'前台。先报到。'}},
+    {id:'publish',role:'publish_desk',name:'商品发布',x:120,y:128,iconAt:{x:120,y:104},events:['review_publish'],marker:true,dialogue:{default:'商品发布这摊业务。'}},
+    {id:'patterns-book',role:'patterns_book',name:'设计模式',x:192,y:124,iconAt:{x:192,y:96},events:['study_patterns'],marker:true,dialogue:{default:'设计模式的书还摊着。'}},
+    {id:'webpack-screen',role:'webpack_screen',name:'Webpack',x:270,y:124,iconAt:{x:270,y:96},events:['study_webpack'],marker:true,dialogue:{default:'Webpack 这一屏。'}},
+    {id:'babel-screen',role:'babel_screen',name:'Babel',x:336,y:128,iconAt:{x:336,y:100},events:['study_babel'],marker:true,dialogue:{default:'Babel 这一屏。'}},
+    {id:'line-1',role:'line_1',name:'需求单一',x:40,y:172,events:['read_line_1'],marker:true,dialogue:{default:'第一条业务线的需求单。'}},
+    {id:'line-2',role:'line_2',name:'需求单二',x:104,y:172,events:['read_line_2'],marker:true,dialogue:{default:'第二条业务线的需求单。'}},
+    {id:'line-3',role:'line_3',name:'需求单三',x:168,y:172,events:['read_line_3'],marker:true,dialogue:{default:'第三条业务线的需求单。'}},
+    {id:'line-4',role:'line_4',name:'需求单四',x:232,y:172,events:['read_line_4'],marker:true,dialogue:{default:'第四条业务线的需求单。'}},
+    {id:'line-5',role:'line_5',name:'需求单五',x:296,y:172,events:['read_line_5'],marker:true,dialogue:{default:'第五条业务线的需求单。'}},
+    {id:'whiteboard',role:'whiteboard',name:'白板',x:348,y:164,iconAt:{x:348,y:128},events:['light_board'],marker:true,dialogue:{default:'白板。五条线还没对齐。'}},
+    {id:'exit',role:'exit',name:'门口',x:200,y:198,events:['finish_chapter'],marker:true,dialogue:{default:'门口。这一章还没写完。'}},
+  ],
+  entryPoints:{arrive:{x:200,y:188},night:{x:192,y:140},plugins:{x:270,y:140},sheets:{x:168,y:188},board:{x:348,y:176},complete:{x:200,y:188}},
+  chainDialog:true,
+  actionTitles:{check_in:'报到',review_publish:'看这摊业务',to_night:'夜深了',study_patterns:'翻开设计模式',to_plugins:'去看插件',study_webpack:'看 Webpack',study_babel:'看 Babel',to_sheets:'去看需求单',read_line_1:'看第一条',read_line_2:'看第二条',read_line_3:'看第三条',read_line_4:'看第四条',read_line_5:'看第五条',light_board:'回到白板',finish_chapter:'这一章先到这里'},
+  boardLights:{
+    when:['line_1','line_2','line_3','line_4','line_5'],
+    bars:[{x:336,y:116,w:24,h:4},{x:336,y:122,w:24,h:4},{x:336,y:128,w:24,h:4},{x:336,y:134,w:24,h:4},{x:336,y:140,w:24,h:4}],
+  },
+  page:{documentTitle:'一路写来 · 杭州',heading:'杭州，商品发布',lead:'杭州。先报到，再把商品发布这摊业务读懂。',summary:'到杭州负责商品发布。深夜读设计模式，再拆 Webpack 和 Babel 的插件。五条业务线的需求对齐之后，白板上的五条线一起亮起来。',shell:'杭州办公室游戏'},
+};
 export function transitionBeat(count,elapsed,beatMs){if(elapsed<0)return 0;return Math.min(count-1,Math.floor(elapsed/beatMs));}
 export function transitionFinished(count,elapsed,beatMs){return elapsed>=count*beatMs;}
 export function presentCast(config,snapshot){

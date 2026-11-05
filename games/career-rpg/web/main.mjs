@@ -1,9 +1,10 @@
 import {WORLD,move,nearbyAll} from './world.mjs';
 import {createChapter} from './story.mjs';
-import {OFFICE,HEFEI,actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './scene-config.mjs';
+import {OFFICE,HEFEI,HANGZHOU,actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './scene-config.mjs';
 import {createActor,atlasBounds,bubblePosition,typingFrame,motionForRender} from './actors.mjs';
 import {SLOGAN} from './slogan.mjs';
-const sceneConfig=new URLSearchParams(location.search).get('chapter')==='hefei'?HEFEI:OFFICE;
+const chapterKey=new URLSearchParams(location.search).get('chapter');
+const sceneConfig=chapterKey==='hangzhou'?HANGZHOU:chapterKey==='hefei'?HEFEI:OFFICE;
 document.title=SLOGAN;
 const gameTitle=document.querySelector('#game-title');if(gameTitle)gameTitle.textContent=SLOGAN;
 
@@ -248,10 +249,24 @@ function enterHefei(){
   }[snapshot.state];
   show(copy.title,(snapshot.state==='interview'?[SLOGAN]:[]).concat(lines(copy.lines),copy.extra),copy.choices||[],true);
 }
+function enterHangzhou(){
+  const dialog=chapter.actions(snapshot,'dialog');
+  if(dialog.length){presentDialog(dialog[0]);return;}
+  const copy={
+    arrive:{title:'报到',lines:['arrive-1'],extra:['去前台报到。'],slogan:!chapter.has(snapshot,'checked_in')},
+    night:{title:'深夜苦读',lines:['night-1'],extra:['设计模式的书还摊着。']},
+    plugins:{title:'扒插件',lines:['plugins-1'],extra:['Webpack 一屏，Babel 一屏。']},
+    sheets:{title:'五条业务线',lines:['sheets-1'],extra:['五张需求单，看完回到白板。']},
+    board:{title:'白板',lines:['board-1'],extra:['五条线亮了。拾取之后，到门口结束这一章。']},
+    complete:{title:'杭州 · 本章完成',lines:['manual-1'],extra:['这一页记着商品发布。'],choices:[{label:'从办公室重玩',id:'replay',run:confirmReplay}]},
+  }[snapshot.state];
+  show(copy.title,(copy.slogan?[SLOGAN]:[]).concat(lines(copy.lines),copy.extra),copy.choices||[],true);
+}
 function enterScene(){
   dialogueSpeaker='player';
   document.querySelector('.game-shell').classList.toggle('two-hours',snapshot.state==='restored');
   if(sceneConfig.id==='hefei-office'){enterHefei();return;}
+  if(sceneConfig.id==='hangzhou-office'){enterHangzhou();return;}
   const available=chapter.actions(snapshot,'dialog');
   if(snapshot.state==='report')show('读到反馈',lines(['report-reaction','report-player-1']),available.map(t=>({label:t.label,event:t.event,run:()=>accept(t.event)})),false);
   else if(snapshot.state==='incident')show('我呆住了',lines(['incident-freeze']).concat('随后，CTO 开始排查。走到 CTO 身边看看。'));
@@ -259,7 +274,7 @@ function enterScene(){
   else if(snapshot.state==='restored')show('整整两小时后',lines(['restored-n1','restored-n3','restored-awe']),available.map(t=>({label:t.label,event:t.event,run:()=>accept(t.event)})),false);
   else if(snapshot.state==='learning')show('留下这次教训',lines(['learning-n1']).concat('去中间的排查电脑，分别看看补测清单和坑点注释；两项都看过后，到右侧书架写下这页手册。'));
   else if(snapshot.state==='journey'){if(chapter.has(snapshot,'journey_opened'))openJourney('chapter');else show('手册写好了',lines(['learning-manual-1']).concat('书架上会留下这次学到的东西。通道里有一张从合肥走到南京的地图。'));}
-  else if(snapshot.state==='complete')show('南京 · 本章完成',lines(['learning-manual-1','complete-n1','complete-n2']).concat('这次记住的，是第一次把 C 端交给真实用户，以及从失败里写下的测试和注释。'),[{label:'从办公室重玩',id:'replay',run:confirmReplay}]);
+  else if(snapshot.state==='complete')show('南京 · 本章完成',lines(['learning-manual-1','complete-n1','complete-n2']).concat('这次记住的，是第一次把 C 端交给真实用户，以及从失败里写下的测试和注释。'),[{label:'从南京走到杭州',id:'bridge-hangzhou',run:()=>openJourney('to-hangzhou')},{label:'从办公室重玩',id:'replay',run:confirmReplay}]);
   else show('南京的办公室',[SLOGAN].concat(lines(['office-n1','office-daily'])).concat('这是我第一次做 C 端。走到左侧电脑，看看论坛。'));
   updateUI();
 }
@@ -297,8 +312,8 @@ journeyPanel.id='journey-map';journeyPanel.hidden=true;journeyPanel.dataset.artS
 journeyPanel.innerHTML='<p id="journey-slogan"></p><div id="journey-stage"><canvas id="journey-canvas" width="384" height="216"></canvas></div><p id="journey-copy" hidden></p><div id="journey-choices" class="choices"></div>';
 stage.append(journeyPanel);
 document.querySelector('#journey-slogan').textContent=SLOGAN;
-let journeyPack=null,journeyMap=null,journeyProgress=0,journeyArrived=false,journeyFrame=0;
-window.careerJourney=()=>({progress:journeyProgress,arrived:journeyArrived});
+let journeyPack=null,journeyMap=null,journeyProgress=0,journeyArrived=false,journeyFrame=0,journeyRoute='hefei-nanjing';
+window.careerJourney=()=>({progress:journeyProgress,arrived:journeyArrived,route:journeyRoute,hangzhouUnlocked:journeyRoute==='nanjing-hangzhou'&&journeyArrived});
 async function journeyDefinition(){
   if(chapter?.journey)return chapter.journey;
   if(!journeyPack){const response=await fetch('../design/chapter-01.json');if(!response.ok)throw new Error('旅程地图资料加载失败');journeyPack=await response.json();}
@@ -330,20 +345,29 @@ function pixelLabel(text){
 function drawJourney(progress){
   const ctx=document.querySelector('#journey-canvas').getContext('2d'),art=journeyMap,nodes=Object.fromEntries(art.data.nodes.map(node=>[node.id,node]));
   ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,384,216);ctx.drawImage(art.map,0,0);
-  const hefei=nodes.hefei,nanjing=nodes.nanjing,hangzhou=nodes.hangzhou;
+  const nanjing=nodes.nanjing,hangzhou=nodes.hangzhou,toHangzhou=journeyRoute==='nanjing-hangzhou';
   ctx.drawImage(art.check,58,62);
-  ctx.drawImage(art.ring,nanjing.coords_logical.x-21,nanjing.coords_logical.y-24);
-  ctx.drawImage(art.lock,hangzhou.coords_logical.x-5,hangzhou.coords_logical.y-34);
+  if(toHangzhou){
+    ctx.drawImage(art.check,nanjing.coords_logical.x-6,nanjing.coords_logical.y-38);
+    const focus=progress>=1?hangzhou:nanjing;
+    ctx.drawImage(art.ring,focus.coords_logical.x-21,focus.coords_logical.y-24);
+    if(progress<1){ctx.save();ctx.globalAlpha=Math.max(0,1-progress);ctx.drawImage(art.lock,hangzhou.coords_logical.x-5,hangzhou.coords_logical.y-34);ctx.restore();}
+    else ctx.drawImage(art.check,hangzhou.coords_logical.x-6,hangzhou.coords_logical.y-38);
+  }else{
+    ctx.drawImage(art.ring,nanjing.coords_logical.x-21,nanjing.coords_logical.y-24);
+    ctx.drawImage(art.lock,hangzhou.coords_logical.x-5,hangzhou.coords_logical.y-34);
+  }
   const plaques={hefei:{x:36,y:133,w:34,h:16},nanjing:{x:168,y:131,w:44,h:16},hangzhou:{x:302,y:131,w:44,h:16}};
   for(const node of art.data.nodes){
-    const box=plaques[node.id],label=pixelLabel(node.name);
+    const box=plaques[node.id],label=pixelLabel(node.id==='hangzhou'&&toHangzhou&&progress>=1?'杭州':node.name);
     ctx.fillStyle='#f6edd6';ctx.fillRect(box.x,box.y,box.w,box.h);
     ctx.fillStyle='#6b4a32';
     ctx.fillRect(box.x,box.y,box.w,1);ctx.fillRect(box.x,box.y+box.h-1,box.w,1);ctx.fillRect(box.x,box.y,1,box.h);ctx.fillRect(box.x+box.w-1,box.y,1,box.h);
     ctx.drawImage(label,Math.round(box.x+(box.w-label.width)/2),Math.round(box.y+(box.h-label.height)/2));
   }
   const motion=art.data.animation_suggestion,t=easeInOut(Math.min(1,Math.max(0,progress)));
-  const x=motion.marker_start.x+(motion.marker_end.x-motion.marker_start.x)*t,y=motion.marker_start.y+(motion.marker_end.y-motion.marker_start.y)*t;
+  const from=toHangzhou?nanjing.marker_stop:motion.marker_start,to=toHangzhou?hangzhou.marker_stop:motion.marker_end;
+  const x=from.x+(to.x-from.x)*t,y=from.y+(to.y-from.y)*t;
   ctx.drawImage(art.marker,Math.round(x-art.data.marker_anchor.x),Math.round(y-art.data.marker_anchor.y));
 }
 function journeyButton(label,id,run){
@@ -357,6 +381,7 @@ function showJourneyChoices(){
   copy.hidden=false;copy.textContent=stops.map(stop=>stop.text).join('');
   choices.replaceChildren();
   if(journeyMode==='bridge')choices.append(journeyButton('走到南京','journey-arrive',closeJourney));
+  else if(journeyMode==='to-hangzhou')choices.append(journeyButton('走到杭州','journey-arrive',closeJourney));
   else{
     const skill=(chapter.skillSlots?.(snapshot)||[]).find(entry=>entry.id==='react');
     if(skill?.status==='ready')choices.append(journeyButton('拾取','journey-pickup',()=>collectSkill(skill)));
@@ -365,7 +390,8 @@ function showJourneyChoices(){
   choicesReady=performance.now()+180;choices.querySelector('button')?.focus();
 }
 function paintJourney(now){
-  const duration=journeyMap.data.animation_suggestion.duration_ms_hefei_to_nanjing;
+  const suggestion=journeyMap.data.animation_suggestion;
+  const duration=journeyRoute==='nanjing-hangzhou'?suggestion.duration_ms_nanjing_to_hangzhou:suggestion.duration_ms_hefei_to_nanjing;
   journeyProgress=journeyArrived?1:Math.min(1,(now-journeyStarted)/duration);
   drawJourney(journeyProgress);
   if(journeyProgress>=1&&!journeyArrived){journeyArrived=true;ensureReact();}
@@ -382,15 +408,20 @@ function finishJourney(){
   snapshot=next.snapshot;castSnapshot=null;closeJourney();persist(enterScene);
 }
 function closeJourney(){
+  const mode=journeyMode;
   cancelAnimationFrame(journeyFrame);journeyMode=null;journeyPanel.hidden=true;
-  if(sceneConfig.id==='hefei-office'){setState('explore');enterHefei();return;}
   setState('explore');
+  if(sceneConfig.id==='hefei-office'){enterHefei();return;}
+  if(mode==='to-hangzhou')enterScene();
 }
 async function openJourney(mode,resume=false){
   const definition=await journeyDefinition();if(!definition)return;
   await loadJourneyMap();
-  journeyMode=mode;journeyPackStops=definition.stops||[];
-  journeyPanel.dataset.artSlot=definition.artSlot||'hefei-nanjing';
+  const bridge=mode==='to-hangzhou'?definition.toHangzhou:null;
+  if(mode==='to-hangzhou'&&!bridge)return;
+  journeyMode=mode;journeyRoute=mode==='to-hangzhou'?'nanjing-hangzhou':'hefei-nanjing';
+  journeyPackStops=(bridge?bridge.stops:definition.stops)||[];
+  journeyPanel.dataset.artSlot=bridge?.artSlot||definition.artSlot||'hefei-nanjing';
   document.querySelector('#journey-slogan').textContent=SLOGAN;
   journeyPanel.hidden=false;conversation.hidden=true;
   if(!resume||!journeyArrived){journeyArrived=false;journeyProgress=0;journeyStarted=performance.now();document.querySelector('#journey-copy').hidden=true;document.querySelector('#journey-choices').replaceChildren();}
@@ -538,6 +569,10 @@ function drawSkillGlints(now){
       glintCtx.fillStyle=i%2?'#f4e35a':'#fffaf0';
       glintCtx.fillRect(x|0,y|0,2,2);
     }
+  }
+  const lights=sceneConfig.boardLights;
+  if(lights&&snapshot&&lights.when.every(flag=>chapter.has(snapshot,flag))){
+    for(const bar of lights.bars){glintCtx.fillStyle='#6b4a32';glintCtx.fillRect(bar.x-1,bar.y-1,bar.w+2,bar.h+2);glintCtx.fillStyle='#f4e35a';glintCtx.fillRect(bar.x,bar.y,bar.w,bar.h);}
   }
   if(now<awardFlashUntil){
     const left=Math.min(1,(awardFlashUntil-now)/1600);

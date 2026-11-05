@@ -1,0 +1,715 @@
+{
+  "id": "hangzhou-publish",
+  "title": "杭州：商品发布",
+  "entry": "arrive",
+  "terminal": "complete",
+  "manualDialogue": "manual-1",
+  "skills": [
+    {
+      "id": "publish",
+      "name": "读懂商品发布这摊业务",
+      "event": "review_publish",
+      "flag": "publish_read",
+      "role": "publish_desk"
+    },
+    {
+      "id": "patterns",
+      "name": "精读 23 种设计模式",
+      "event": "study_patterns",
+      "flag": "patterns_read",
+      "role": "patterns_book"
+    },
+    {
+      "id": "webpack",
+      "name": "吃透 Webpack 插件机制",
+      "event": "study_webpack",
+      "flag": "webpack_read",
+      "role": "webpack_screen"
+    },
+    {
+      "id": "babel",
+      "name": "吃透 Babel 插件机制",
+      "event": "study_babel",
+      "flag": "babel_read",
+      "role": "babel_screen"
+    },
+    {
+      "id": "forms",
+      "name": "一套表单架构，撑起五条业务线",
+      "event": "light_board",
+      "flag": "lines_lit",
+      "role": "whiteboard"
+    }
+  ],
+  "savePolicy": {
+    "id": "atomic-per-event",
+    "key": "career-rpg:hangzhou:v1",
+    "checkpoints": "all_states",
+    "checkpointStates": [
+      "arrive",
+      "night",
+      "plugins",
+      "sheets",
+      "board",
+      "complete"
+    ]
+  },
+  "objectives": {
+    "arrive": {
+      "until": "checked_in",
+      "before": "去前台报到",
+      "count": [
+        "publish_read"
+      ],
+      "pending": "去商品发布的台子，把这摊业务读懂",
+      "done": "这摊业务看过了"
+    },
+    "night": "翻开设计模式",
+    "plugins": {
+      "count": [
+        "webpack_read",
+        "babel_read"
+      ],
+      "pending": "插件 {n}/2 · {next}",
+      "done": "插件 2/2",
+      "steps": [
+        {
+          "unless": "webpack_read",
+          "text": "Webpack 那一屏"
+        },
+        {
+          "unless": "babel_read",
+          "text": "Babel 那一屏"
+        }
+      ],
+      "elseStep": ""
+    },
+    "sheets": {
+      "count": [
+        "line_1",
+        "line_2",
+        "line_3",
+        "line_4",
+        "line_5"
+      ],
+      "pending": "需求单 {n}/5 · {next}",
+      "done": "五张单齐了 · 回到白板",
+      "steps": [
+        {
+          "unless": "line_1",
+          "text": "第一条"
+        },
+        {
+          "unless": "line_2",
+          "text": "第二条"
+        },
+        {
+          "unless": "line_3",
+          "text": "第三条"
+        },
+        {
+          "unless": "line_4",
+          "text": "第四条"
+        },
+        {
+          "unless": "line_5",
+          "text": "第五条"
+        }
+      ],
+      "elseStep": ""
+    },
+    "board": "五条线亮了 · 可以拾取，再到门口结束",
+    "complete": "杭州这一章完成 · 手册可以随时回看"
+  },
+  "roleTargets": {
+    "check_in": [
+      "check_in"
+    ],
+    "publish_desk": [
+      "publish_desk"
+    ],
+    "patterns_book": [
+      "patterns_book"
+    ],
+    "webpack_screen": [
+      "webpack_screen"
+    ],
+    "babel_screen": [
+      "babel_screen"
+    ],
+    "line_1": [
+      "line_1"
+    ],
+    "line_2": [
+      "line_2"
+    ],
+    "line_3": [
+      "line_3"
+    ],
+    "line_4": [
+      "line_4"
+    ],
+    "line_5": [
+      "line_5"
+    ],
+    "whiteboard": [
+      "whiteboard"
+    ],
+    "exit": [
+      "exit"
+    ],
+    "dialog": [
+      "dialog"
+    ]
+  },
+  "transitions": [
+    {
+      "id": "Z01",
+      "event": "check_in",
+      "from": "arrive",
+      "to": "arrive",
+      "requires": [],
+      "effects": [
+        "checked_in"
+      ],
+      "target": "check_in",
+      "label": "记下",
+      "dialogue": "check-in"
+    },
+    {
+      "id": "Z02",
+      "event": "review_publish",
+      "from": "arrive",
+      "to": "arrive",
+      "requires": [
+        "checked_in"
+      ],
+      "effects": [
+        "publish_read"
+      ],
+      "target": "publish_desk",
+      "label": "记下",
+      "dialogue": "publish"
+    },
+    {
+      "id": "Z03",
+      "event": "to_night",
+      "from": "arrive",
+      "to": "night",
+      "requires": [
+        "publish_read"
+      ],
+      "effects": [
+        "night_started"
+      ],
+      "target": "dialog",
+      "label": "夜深了",
+      "dialogue": "night-falls"
+    },
+    {
+      "id": "Z04",
+      "event": "study_patterns",
+      "from": "night",
+      "to": "night",
+      "requires": [],
+      "effects": [
+        "patterns_read"
+      ],
+      "target": "patterns_book",
+      "label": "记下",
+      "dialogue": "patterns"
+    },
+    {
+      "id": "Z05",
+      "event": "to_plugins",
+      "from": "night",
+      "to": "plugins",
+      "requires": [
+        "patterns_read"
+      ],
+      "effects": [
+        "plugins_started"
+      ],
+      "target": "dialog",
+      "label": "去看插件",
+      "dialogue": "plugins-falls"
+    },
+    {
+      "id": "Z06",
+      "event": "study_webpack",
+      "from": "plugins",
+      "to": "plugins",
+      "requires": [],
+      "effects": [
+        "webpack_read"
+      ],
+      "target": "webpack_screen",
+      "label": "记下",
+      "dialogue": "webpack"
+    },
+    {
+      "id": "Z07",
+      "event": "study_babel",
+      "from": "plugins",
+      "to": "plugins",
+      "requires": [],
+      "effects": [
+        "babel_read"
+      ],
+      "target": "babel_screen",
+      "label": "记下",
+      "dialogue": "babel"
+    },
+    {
+      "id": "Z08",
+      "event": "to_sheets",
+      "from": "plugins",
+      "to": "sheets",
+      "requires": [
+        "webpack_read",
+        "babel_read"
+      ],
+      "effects": [
+        "sheets_started"
+      ],
+      "target": "dialog",
+      "label": "去看需求单",
+      "dialogue": "sheets-falls"
+    },
+    {
+      "id": "Z09",
+      "event": "read_line_1",
+      "from": "sheets",
+      "to": "sheets",
+      "requires": [],
+      "effects": [
+        "line_1"
+      ],
+      "target": "line_1",
+      "label": "记下",
+      "dialogue": "line-1"
+    },
+    {
+      "id": "Z10",
+      "event": "read_line_2",
+      "from": "sheets",
+      "to": "sheets",
+      "requires": [
+        "line_1"
+      ],
+      "effects": [
+        "line_2"
+      ],
+      "target": "line_2",
+      "label": "记下",
+      "dialogue": "line-2"
+    },
+    {
+      "id": "Z11",
+      "event": "read_line_3",
+      "from": "sheets",
+      "to": "sheets",
+      "requires": [
+        "line_1",
+        "line_2"
+      ],
+      "effects": [
+        "line_3"
+      ],
+      "target": "line_3",
+      "label": "记下",
+      "dialogue": "line-3"
+    },
+    {
+      "id": "Z12",
+      "event": "read_line_4",
+      "from": "sheets",
+      "to": "sheets",
+      "requires": [
+        "line_1",
+        "line_2",
+        "line_3"
+      ],
+      "effects": [
+        "line_4"
+      ],
+      "target": "line_4",
+      "label": "记下",
+      "dialogue": "line-4"
+    },
+    {
+      "id": "Z13",
+      "event": "read_line_5",
+      "from": "sheets",
+      "to": "sheets",
+      "requires": [
+        "line_1",
+        "line_2",
+        "line_3",
+        "line_4"
+      ],
+      "effects": [
+        "line_5"
+      ],
+      "target": "line_5",
+      "label": "记下",
+      "dialogue": "line-5"
+    },
+    {
+      "id": "Z14",
+      "event": "light_board",
+      "from": "sheets",
+      "to": "board",
+      "requires": [
+        "line_1",
+        "line_2",
+        "line_3",
+        "line_4",
+        "line_5"
+      ],
+      "effects": [
+        "lines_lit"
+      ],
+      "target": "whiteboard",
+      "label": "五条线亮了",
+      "dialogue": "board-light"
+    },
+    {
+      "id": "Z15",
+      "event": "finish_chapter",
+      "from": "board",
+      "to": "complete",
+      "requires": [
+        "lines_lit"
+      ],
+      "effects": [
+        "chapter_closed"
+      ],
+      "target": "exit",
+      "label": "收起",
+      "dialogue": "finish"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "arrive-1",
+      "state": "arrive",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "到杭州，来商品发布这边报到。"
+    },
+    {
+      "id": "check-in",
+      "state": "arrive",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "前台把工位指给我。这一摊是商品发布。"
+    },
+    {
+      "id": "publish",
+      "state": "arrive",
+      "speaker": "player",
+      "basis": "fact_paraphrase",
+      "text": "我负责商品发布。先把这摊业务读懂，发布要服务后面的几条线。"
+    },
+    {
+      "id": "night-falls",
+      "state": "arrive",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "夜深了。设计模式的书还摊在桌上。"
+    },
+    {
+      "id": "night-1",
+      "state": "night",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "深夜。书摊开着，一页一页往下看。"
+    },
+    {
+      "id": "patterns",
+      "state": "night",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "这本是设计模式。二十三种，对着自己的代码往下读。"
+    },
+    {
+      "id": "plugins-falls",
+      "state": "night",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "书先放到这里。发布链路上的插件还没看完。"
+    },
+    {
+      "id": "plugins-1",
+      "state": "plugins",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "Webpack 一屏，Babel 一屏。插件从这里往下拆。"
+    },
+    {
+      "id": "webpack",
+      "state": "plugins",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "这一屏是 Webpack 的插件机制。"
+    },
+    {
+      "id": "babel",
+      "state": "plugins",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "这一屏是 Babel 的插件机制。"
+    },
+    {
+      "id": "sheets-falls",
+      "state": "plugins",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "两条插件都看过。五条业务线的需求单在桌上。"
+    },
+    {
+      "id": "sheets-1",
+      "state": "sheets",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "五张需求单，一条业务线一张。"
+    },
+    {
+      "id": "line-1",
+      "state": "sheets",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "第一条业务线的需求。"
+    },
+    {
+      "id": "line-2",
+      "state": "sheets",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "第二条业务线的需求。"
+    },
+    {
+      "id": "line-3",
+      "state": "sheets",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "第三条业务线的需求。"
+    },
+    {
+      "id": "line-4",
+      "state": "sheets",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "第四条业务线的需求。"
+    },
+    {
+      "id": "line-5",
+      "state": "sheets",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "第五条业务线的需求。"
+    },
+    {
+      "id": "board-1",
+      "state": "board",
+      "speaker": "narrator",
+      "basis": "staging",
+      "text": "五张单子对齐。白板上五条线一起亮起来。"
+    },
+    {
+      "id": "board-light",
+      "state": "sheets",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "一套表单架构，撑起五条业务线。"
+    },
+    {
+      "id": "finish",
+      "state": "board",
+      "speaker": "player",
+      "basis": "staging",
+      "text": "这一章先到这里。"
+    },
+    {
+      "id": "manual-1",
+      "state": "complete",
+      "speaker": "manual",
+      "basis": "staging",
+      "text": "一套表单架构，撑起五条业务线。"
+    }
+  ],
+  "legalSnapshots": {
+    "arrive": [
+      [],
+      [
+        "checked_in"
+      ],
+      [
+        "checked_in",
+        "publish_read"
+      ]
+    ],
+    "night": [
+      [
+        "checked_in",
+        "publish_read",
+        "night_started"
+      ],
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read"
+      ]
+    ],
+    "plugins": [
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started"
+      ],
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "webpack_read"
+      ],
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "babel_read"
+      ],
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "webpack_read",
+        "babel_read"
+      ]
+    ],
+    "sheets": [
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "webpack_read",
+        "babel_read",
+        "sheets_started"
+      ],
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "webpack_read",
+        "babel_read",
+        "sheets_started",
+        "line_1"
+      ],
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "webpack_read",
+        "babel_read",
+        "sheets_started",
+        "line_1",
+        "line_2"
+      ],
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "webpack_read",
+        "babel_read",
+        "sheets_started",
+        "line_1",
+        "line_2",
+        "line_3"
+      ],
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "webpack_read",
+        "babel_read",
+        "sheets_started",
+        "line_1",
+        "line_2",
+        "line_3",
+        "line_4"
+      ],
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "webpack_read",
+        "babel_read",
+        "sheets_started",
+        "line_1",
+        "line_2",
+        "line_3",
+        "line_4",
+        "line_5"
+      ]
+    ],
+    "board": [
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "webpack_read",
+        "babel_read",
+        "sheets_started",
+        "line_1",
+        "line_2",
+        "line_3",
+        "line_4",
+        "line_5",
+        "lines_lit"
+      ]
+    ],
+    "complete": [
+      [
+        "checked_in",
+        "publish_read",
+        "night_started",
+        "patterns_read",
+        "plugins_started",
+        "webpack_read",
+        "babel_read",
+        "sheets_started",
+        "line_1",
+        "line_2",
+        "line_3",
+        "line_4",
+        "line_5",
+        "lines_lit",
+        "chapter_closed"
+      ]
+    ]
+  }
+}
