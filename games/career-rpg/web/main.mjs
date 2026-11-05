@@ -2,11 +2,11 @@ import {WORLD,move,nearbyAll} from './world.mjs';
 import {createChapter} from './story.mjs';
 import {OFFICE,HEFEI,HANGZHOU,actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './scene-config.mjs';
 import {createActor,atlasBounds,bubblePosition,typingFrame,motionForRender} from './actors.mjs';
-import {SLOGAN} from './slogan.mjs';
+import {GAME_TITLE} from './title.mjs';
 const chapterKey=new URLSearchParams(location.search).get('chapter');
 const sceneConfig=chapterKey==='hangzhou'?HANGZHOU:chapterKey==='hefei'?HEFEI:OFFICE;
-document.title=SLOGAN;
-const gameTitle=document.querySelector('#game-title');if(gameTitle)gameTitle.textContent=SLOGAN;
+document.title=GAME_TITLE;
+const gameTitle=document.querySelector('#game-title');if(gameTitle)gameTitle.textContent=GAME_TITLE;
 
 const stage=document.querySelector('#stage');
 const loading=document.querySelector('#loading');
@@ -194,7 +194,7 @@ function beginTransition(event){
   hideObjectCard();conversation.hidden=true;if(systemDialog.open)systemDialog.close();dialogueObject=null;
   transitionEvent=event;transitionStarted=performance.now();transitionIndex=-1;setState('transition');
   if(!caption){caption=document.createElement('p');caption.id='transition-caption';stage.append(caption);}
-  caption.textContent=SLOGAN+'\n'+chapter.text(sceneConfig.transitionLines[event]);caption.hidden=false;
+  caption.textContent=chapter.text(sceneConfig.transitionLines[event]);caption.hidden=false;
   applyBeat(sceneConfig.transitionBeats[event][0]);
 }
 function finishTransition(){
@@ -208,10 +208,11 @@ function finishTransition(){
   accept(event);
 }
 function hideObjectCard(){if(!card)return;card.hidden=true;cardImg.removeAttribute('src');delete cardImg.dataset.src;}
+function objectCardSrc(object){return object.cardLit&&object.litWhen&&object.litWhen.every(flag=>chapter.has(snapshot,flag))?object.cardLit:object.card;}
 function showObjectCard(object){
-  if(!object?.card){hideObjectCard();return;}
+  const src=objectCardSrc(object);if(!src){hideObjectCard();return;}
   if(!card){card=document.createElement('figure');card.id='object-card';cardImg=document.createElement('img');cardImg.alt='物件大图';const cap=document.createElement('figcaption');cap.textContent='';card.append(cardImg,cap);stage.append(card);}
-  if(cardImg.dataset.src!==object.card){cardImg.src=object.card;cardImg.dataset.src=object.card;}
+  if(cardImg.dataset.src!==src){cardImg.src=src;cardImg.dataset.src=src;}
   card.hidden=false;
 }
 function confirmPage(transition){
@@ -247,20 +248,20 @@ function enterHefei(){
     raise:{title:'两个月后',lines:['raise-narrator'],extra:['走到老板桌前。']},
     complete:{title:'合肥 · 本章完成',lines:['manual-1'],extra:['这句话记在手册里。'],choices:[{label:'从合肥走到南京',id:'journey',run:()=>openJourney('bridge')},{label:'从办公室重玩',id:'replay',run:confirmReplay}]},
   }[snapshot.state];
-  show(copy.title,(snapshot.state==='interview'?[SLOGAN]:[]).concat(lines(copy.lines),copy.extra),copy.choices||[],true);
+  show(copy.title,lines(copy.lines).concat(copy.extra),copy.choices||[],true);
 }
 function enterHangzhou(){
   const dialog=chapter.actions(snapshot,'dialog');
   if(dialog.length){presentDialog(dialog[0]);return;}
   const copy={
-    arrive:{title:'报到',lines:['arrive-1'],extra:['去前台报到。'],slogan:!chapter.has(snapshot,'checked_in')},
+    arrive:{title:'报到',lines:['arrive-1'],extra:['去前台报到。']},
     night:{title:'深夜苦读',lines:['night-1'],extra:['设计模式的书还摊着。']},
     plugins:{title:'扒插件',lines:['plugins-1'],extra:['Webpack 一屏，Babel 一屏。']},
     sheets:{title:'五条业务线',lines:['sheets-1'],extra:['五张需求单，看完回到白板。']},
     board:{title:'白板',lines:['board-1'],extra:['五条线亮了。拾取之后，到门口结束这一章。']},
     complete:{title:'杭州 · 本章完成',lines:['manual-1'],extra:['这一页记着商品发布。'],choices:[{label:'从办公室重玩',id:'replay',run:confirmReplay}]},
   }[snapshot.state];
-  show(copy.title,(copy.slogan?[SLOGAN]:[]).concat(lines(copy.lines),copy.extra),copy.choices||[],true);
+  show(copy.title,lines(copy.lines).concat(copy.extra),copy.choices||[],true);
 }
 function enterScene(){
   dialogueSpeaker='player';
@@ -275,7 +276,7 @@ function enterScene(){
   else if(snapshot.state==='learning')show('留下这次教训',lines(['learning-n1']).concat('去中间的排查电脑，分别看看补测清单和坑点注释；两项都看过后，到右侧书架写下这页手册。'));
   else if(snapshot.state==='journey'){if(chapter.has(snapshot,'journey_opened'))openJourney('chapter');else show('手册写好了',lines(['learning-manual-1']).concat('书架上会留下这次学到的东西。通道里有一张从合肥走到南京的地图。'));}
   else if(snapshot.state==='complete')show('南京 · 本章完成',lines(['learning-manual-1','complete-n1','complete-n2']).concat('这次记住的，是第一次把 C 端交给真实用户，以及从失败里写下的测试和注释。'),[{label:'从南京走到杭州',id:'bridge-hangzhou',run:()=>openJourney('to-hangzhou')},{label:'从办公室重玩',id:'replay',run:confirmReplay}]);
-  else show('南京的办公室',[SLOGAN].concat(lines(['office-n1','office-daily'])).concat('这是我第一次做 C 端。走到左侧电脑，看看论坛。'));
+  else show('南京的办公室',lines(['office-n1','office-daily']).concat('这是我第一次做 C 端。走到左侧电脑，看看论坛。'));
   updateUI();
 }
 function finishSkillAward(){
@@ -311,7 +312,7 @@ const journeyPanel=document.createElement('section');
 journeyPanel.id='journey-map';journeyPanel.hidden=true;journeyPanel.dataset.artSlot='hefei-nanjing';
 journeyPanel.innerHTML='<p id="journey-slogan"></p><div id="journey-stage"><canvas id="journey-canvas" width="384" height="216"></canvas></div><p id="journey-copy" hidden></p><div id="journey-choices" class="choices"></div>';
 stage.append(journeyPanel);
-document.querySelector('#journey-slogan').textContent=SLOGAN;
+document.querySelector('#journey-slogan').textContent=GAME_TITLE;
 let journeyPack=null,journeyMap=null,journeyProgress=0,journeyArrived=false,journeyFrame=0,journeyRoute='hefei-nanjing';
 window.careerJourney=()=>({progress:journeyProgress,arrived:journeyArrived,route:journeyRoute,hangzhouUnlocked:journeyRoute==='nanjing-hangzhou'&&journeyArrived});
 async function journeyDefinition(){
@@ -331,15 +332,16 @@ async function loadJourneyMap(){
 }
 function easeInOut(t){return t<.5?4*t*t*t:1-((-2*t+2)**3)/2;}
 const pixelLabels=new Map();
-function pixelLabel(text){
-  if(pixelLabels.has(text))return pixelLabels.get(text);
-  const canvas=document.createElement('canvas'),width=text.length*12+4,height=14;
+function pixelLabel(text,fontPx=12){
+  const key=fontPx+'\0'+text;
+  if(pixelLabels.has(key))return pixelLabels.get(key);
+  const canvas=document.createElement('canvas'),width=Math.ceil(text.length*fontPx)+4,height=fontPx+2;
   canvas.width=width;canvas.height=height;
-  const pen=canvas.getContext('2d');pen.font='12px ui-monospace,monospace';pen.fillStyle='#3a2a1a';pen.textBaseline='middle';pen.textAlign='center';pen.fillText(text,width/2,8);
+  const pen=canvas.getContext('2d');pen.font=`${fontPx}px ui-monospace,monospace`;pen.fillStyle='#3a2a1a';pen.textBaseline='middle';pen.textAlign='center';pen.fillText(text,width/2,height/2);
   const pixels=pen.getImageData(0,0,width,height);
   for(let i=3;i<pixels.data.length;i+=4)pixels.data[i]=pixels.data[i]>96?255:0;
   pen.putImageData(pixels,0,0);
-  pixelLabels.set(text,canvas);
+  pixelLabels.set(key,canvas);
   return canvas;
 }
 function drawJourney(progress){
@@ -357,16 +359,25 @@ function drawJourney(progress){
     ctx.drawImage(art.ring,nanjing.coords_logical.x-21,nanjing.coords_logical.y-24);
     ctx.drawImage(art.lock,hangzhou.coords_logical.x-5,hangzhou.coords_logical.y-34);
   }
-  const plaques={hefei:{x:36,y:133,w:34,h:16},nanjing:{x:168,y:131,w:44,h:16},hangzhou:{x:302,y:131,w:44,h:16}};
-  for(const node of art.data.nodes){
-    const box=plaques[node.id],label=pixelLabel(node.id==='hangzhou'&&toHangzhou&&progress>=1?'杭州':node.name);
-    ctx.fillStyle='#f6edd6';ctx.fillRect(box.x,box.y,box.w,box.h);
-    ctx.fillStyle='#6b4a32';
-    ctx.fillRect(box.x,box.y,box.w,1);ctx.fillRect(box.x,box.y+box.h-1,box.w,1);ctx.fillRect(box.x,box.y,1,box.h);ctx.fillRect(box.x+box.w-1,box.y,1,box.h);
-    ctx.drawImage(label,Math.round(box.x+(box.w-label.width)/2),Math.round(box.y+(box.h-label.height)/2));
+  const plates=art.data.text?.label_plates_logical;
+  if(plates){
+    for(const plate of plates){
+      const node=nodes[plate.id];if(!node)continue;
+      const [x0,y0,x1,y1]=plate.box,label=pixelLabel(node.name,8);
+      ctx.drawImage(label,Math.round((x0+x1-label.width)/2),Math.round((y0+y1-label.height)/2));
+    }
+  }else{
+    const plaques={hefei:{x:36,y:133,w:34,h:16},nanjing:{x:168,y:131,w:44,h:16},hangzhou:{x:302,y:131,w:44,h:16}};
+    for(const node of art.data.nodes){
+      const box=plaques[node.id],label=pixelLabel(node.name);
+      ctx.fillStyle='#f6edd6';ctx.fillRect(box.x,box.y,box.w,box.h);
+      ctx.fillStyle='#6b4a32';
+      ctx.fillRect(box.x,box.y,box.w,1);ctx.fillRect(box.x,box.y+box.h-1,box.w,1);ctx.fillRect(box.x,box.y,1,box.h);ctx.fillRect(box.x+box.w-1,box.y,1,box.h);
+      ctx.drawImage(label,Math.round(box.x+(box.w-label.width)/2),Math.round(box.y+(box.h-label.height)/2));
+    }
   }
-  const motion=art.data.animation_suggestion,t=easeInOut(Math.min(1,Math.max(0,progress)));
-  const from=toHangzhou?nanjing.marker_stop:motion.marker_start,to=toHangzhou?hangzhou.marker_stop:motion.marker_end;
+  const t=easeInOut(Math.min(1,Math.max(0,progress)));
+  const from=toHangzhou?nanjing.marker_stop:nodes.hefei.marker_stop,to=toHangzhou?hangzhou.marker_stop:nanjing.marker_stop;
   const x=from.x+(to.x-from.x)*t,y=from.y+(to.y-from.y)*t;
   ctx.drawImage(art.marker,Math.round(x-art.data.marker_anchor.x),Math.round(y-art.data.marker_anchor.y));
 }
@@ -391,7 +402,7 @@ function showJourneyChoices(){
 }
 function paintJourney(now){
   const suggestion=journeyMap.data.animation_suggestion;
-  const duration=journeyRoute==='nanjing-hangzhou'?suggestion.duration_ms_nanjing_to_hangzhou:suggestion.duration_ms_hefei_to_nanjing;
+  const duration=journeyRoute==='nanjing-hangzhou'?(suggestion.duration_ms_nanjing_to_hangzhou||3200):(suggestion.duration_ms_hefei_to_nanjing||3200);
   journeyProgress=journeyArrived?1:Math.min(1,(now-journeyStarted)/duration);
   drawJourney(journeyProgress);
   if(journeyProgress>=1&&!journeyArrived){journeyArrived=true;ensureReact();}
@@ -422,7 +433,7 @@ async function openJourney(mode,resume=false){
   journeyMode=mode;journeyRoute=mode==='to-hangzhou'?'nanjing-hangzhou':'hefei-nanjing';
   journeyPackStops=(bridge?bridge.stops:definition.stops)||[];
   journeyPanel.dataset.artSlot=bridge?.artSlot||definition.artSlot||'hefei-nanjing';
-  document.querySelector('#journey-slogan').textContent=SLOGAN;
+  document.querySelector('#journey-slogan').textContent=GAME_TITLE;
   journeyPanel.hidden=false;conversation.hidden=true;
   if(!resume||!journeyArrived){journeyArrived=false;journeyProgress=0;journeyStarted=performance.now();document.querySelector('#journey-copy').hidden=true;document.querySelector('#journey-choices').replaceChildren();}
   setState('journey');
@@ -536,7 +547,8 @@ function frame(now){
     const show=!item.presentIn||item.presentIn.includes(snapshot.state)||readyRoles().has(item.role);
     if(item.mesh.visible!==show)item.mesh.visible=show;
     if(!show)continue;
-    const map=state==='explore'&&active&&active.id===item.id?item.hi:item.base;
+    const litOn=item.lit&&item.litWhen&&item.litWhen.every(flag=>chapter.has(snapshot,flag));
+    const map=litOn?item.lit:(state==='explore'&&active&&active.id===item.id?item.hi:item.base);
     if(item.mat.map!==map)item.mat.map=map;
     const opacity=item.nightDim&&snapshot.state==='night_study'?0.45:1;
     if(item.mat.opacity!==opacity)item.mat.opacity=opacity;
@@ -560,19 +572,18 @@ function drawSkillGlints(now){
   glintCtx.clearRect(0,0,sceneConfig.width,sceneConfig.height);
   const slots=chapter.skillSlots(snapshot)||[];
   glintCtx.imageSmoothingEnabled=false;
-  for(const skill of slots){
-    if(skill.status!=='ready')continue;
+  const ready=slots.filter(skill=>skill.status==='ready');
+  for(const skill of ready){
     const object=sceneConfig.objects.find(item=>item.role===skill.role);
     if(!object?.iconAt)continue;
+    const shared=ready.filter(item=>item.role===skill.role);
+    const index=shared.indexOf(skill);
+    const ox=object.iconAt.x+(shared.length>1?(index-(shared.length-1)/2)*12:0);
     for(let i=0;i<8;i++){
-      const angle=now/420+i*Math.PI/4,x=object.iconAt.x+Math.cos(angle)*14,y=object.iconAt.y+Math.sin(angle)*11;
+      const angle=now/420+i*Math.PI/4,x=ox+Math.cos(angle)*10,y=object.iconAt.y+Math.sin(angle)*8;
       glintCtx.fillStyle=i%2?'#f4e35a':'#fffaf0';
       glintCtx.fillRect(x|0,y|0,2,2);
     }
-  }
-  const lights=sceneConfig.boardLights;
-  if(lights&&snapshot&&lights.when.every(flag=>chapter.has(snapshot,flag))){
-    for(const bar of lights.bars){glintCtx.fillStyle='#6b4a32';glintCtx.fillRect(bar.x-1,bar.y-1,bar.w+2,bar.h+2);glintCtx.fillStyle='#f4e35a';glintCtx.fillRect(bar.x,bar.y,bar.w,bar.h);}
   }
   if(now<awardFlashUntil){
     const left=Math.min(1,(awardFlashUntil-now)/1600);
@@ -588,7 +599,7 @@ async function start(){
   const THREE=await import('./vendor/three.module.min.js');
   const atlasEntries=Object.entries(sceneConfig.atlases);
   if(sceneConfig.page){
-    document.title=SLOGAN;
+    document.title=GAME_TITLE;
     const heading=document.querySelector('#chapter-heading');if(heading)heading.textContent=sceneConfig.page.heading;
     const lead=document.querySelector('header p:last-of-type');if(lead)lead.textContent=sceneConfig.page.lead;
     document.querySelector('.game-shell')?.setAttribute('aria-label',sceneConfig.page.shell);
@@ -596,7 +607,8 @@ async function start(){
   }
   const roomURLs=sceneConfig.backgrounds?[sceneConfig.backgrounds.day,sceneConfig.backgrounds.night,sceneConfig.backgrounds.lightMask]:[sceneConfig.background];
   const props=sceneConfig.objects.filter(o=>o.icon);
-  const [roomImages,chapterData,atlasImages,propImages]=await Promise.all([Promise.all(roomURLs.map(loadImage)),fetch(sceneConfig.chapter).then(r=>{if(!r.ok)throw new Error('章节资料加载失败');return r.json();}),Promise.all(atlasEntries.map(([,atlas])=>loadImage(atlas.url))),Promise.all(props.flatMap(o=>[loadImage(o.icon),loadImage(o.iconHighlight)]))]);
+  const loadProp=async object=>({base:await loadImage(object.icon),hi:await loadImage(object.iconHighlight||object.icon),lit:object.iconLit?await loadImage(object.iconLit):null});
+  const [roomImages,chapterData,atlasImages,propPacks]=await Promise.all([Promise.all(roomURLs.map(loadImage)),fetch(sceneConfig.chapter).then(r=>{if(!r.ok)throw new Error('章节资料加载失败');return r.json();}),Promise.all(atlasEntries.map(([,atlas])=>loadImage(atlas.url))),Promise.all(props.map(loadProp))]);
   atlasEntries.forEach(([id,atlas],i)=>atlasData[id]={image:atlasImages[i],frames:atlasBounds(atlasImages[i],atlas)});
   chapter=createChapter(chapterData);
   const bounds=atlasData.player.frames[0];
@@ -620,14 +632,16 @@ async function start(){
     dimMesh.position.set(WORLD.width/2,WORLD.height/2,0);dimMesh.renderOrder=.2;dimMesh.visible=false;scene.add(dimMesh);
     lampMesh=new THREE.Mesh(new THREE.PlaneGeometry(WORLD.width,WORLD.height),new THREE.MeshBasicMaterial({map:dayTexture,alphaMap:mask,transparent:true,depthTest:false}));
     lampMesh.position.set(WORLD.width/2,WORLD.height/2,0);lampMesh.renderOrder=.4;lampMesh.visible=false;scene.add(lampMesh);
+  }
+  if(props.length){
     const iconGeometry=new THREE.PlaneGeometry(1,1);
     props.forEach((object,i)=>{
-      const base=texture(propImages[i*2]),hi=texture(propImages[i*2+1]);spareTextures.push(base,hi);
+      const pack=propPacks[i],base=texture(pack.base),hi=texture(pack.hi),lit=pack.lit?texture(pack.lit):null;spareTextures.push(base,hi);if(lit)spareTextures.push(lit);
       const mat=new THREE.MeshBasicMaterial({map:base,transparent:true,alphaTest:.5,depthTest:false});
       const mesh=new THREE.Mesh(iconGeometry,mat);
       mesh.scale.set(object.iconSize[0],object.iconSize[1],1);
       mesh.position.set(object.iconAt.x,sceneConfig.height-object.iconAt.y,1);mesh.renderOrder=1;scene.add(mesh);
-      propViews.push({id:object.id,role:object.role,mesh,mat,base,hi,presentIn:object.presentIn||null,nightDim:!!object.nightDim});
+      propViews.push({id:object.id,role:object.role,mesh,mat,base,hi,lit,litWhen:object.litWhen||null,presentIn:object.presentIn||null,nightDim:!!object.nightDim});
     });
   }
   for(const actor of sceneConfig.actors){
@@ -645,7 +659,7 @@ async function start(){
   else{document.querySelector('#save-status').textContent='已恢复上次确认的进度';enterScene();}
   raf=requestAnimationFrame(frame);
   // Read-only diagnostics support browser acceptance without changing game state.
-  window.careerPrototype={snapshot:()=>({position:{...position},state,active:active?.id||null,chapter:structuredClone(snapshot),saving,saveKey:chapter.key,bounds,three:THREE.REVISION,facing,moving,walkTime,walkMetrics:actorViews.get('player').standing.metrics(),actors:visibleRoom().actors.map(a=>({id:a.id,position:renderPosition(a),posture:isTyping(a)?'seatedTyping':'standing'})),frames:Object.fromEntries([...actorViews].map(([id,views])=>[id,(views.seated?.mesh.visible?views.seated:views.standing).frame()])),markers:pendingMarkers(visibleRoom(),chapter,snapshot)})};
+  window.careerPrototype={snapshot:()=>({position:{...position},state,active:active?.id||null,chapter:structuredClone(snapshot),saving,saveKey:chapter.key,bounds,three:THREE.REVISION,facing,moving,walkTime,walkMetrics:actorViews.get('player').standing.metrics(),actors:visibleRoom().actors.map(a=>({id:a.id,position:renderPosition(a),posture:isTyping(a)?'seatedTyping':'standing'})),frames:Object.fromEntries([...actorViews].map(([id,views])=>[id,(views.seated?.mesh.visible?views.seated:views.standing).frame()])),markers:pendingMarkers(visibleRoom(),chapter,snapshot),boardLit:propViews.some(item=>!!(item.lit&&item.mat.map===item.lit))})};
   window.addEventListener('pagehide',()=>{cancelAnimationFrame(raf);hideObjectCard();scene.traverse(o=>{o.geometry?.dispose();if(o.material){o.material.map?.dispose();o.material.alphaMap?.dispose();o.material.dispose();}});for(const tex of spareTextures)tex.dispose();renderer.dispose();},{once:true});
 }
 function navigateOption(key){

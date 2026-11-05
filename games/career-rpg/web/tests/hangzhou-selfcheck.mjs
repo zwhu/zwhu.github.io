@@ -4,6 +4,8 @@ import {mkdirSync, writeFileSync, createReadStream, rmSync} from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import os from 'node:os';
+import {blocked} from '../world.mjs';
+import {HANGZHOU} from '../scene-config.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '../../../..');
 const OUT = path.join(ROOT, 'games/career-rpg/web/review/hangzhou-selfcheck');
@@ -142,22 +144,73 @@ async function dismiss() {
   await press(view.buttons.some(button => button.text === '继续探索') ? '继续探索' : '返回');
   return snap();
 }
-async function walkTo(tx, ty) {
-  for (let i = 0; i < 180; i++) {
+function routeTo(from, tx, ty) {
+  const start = [Math.round(from.x), Math.round(from.y)];
+  const key = (x, y) => `${x},${y}`;
+  const prev = new Map();
+  const q = [start];
+  const seen = new Set([key(...start)]);
+  let found = null, head = 0;
+  while (head < q.length) {
+    const [x, y] = q[head++];
+    if (Math.hypot(x - tx, y - ty) <= 8) { found = [x, y]; break; }
+    for (const [nx, ny] of [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]]) {
+      const id = key(nx, ny);
+      if (seen.has(id) || blocked(nx, ny, HANGZHOU)) continue;
+      seen.add(id); prev.set(id, [x, y]); q.push([nx, ny]);
+    }
+  }
+  if (!found) throw new Error('no path ' + tx + ',' + ty);
+  const path = [found];
+  let cur = key(...found);
+  while (prev.has(cur)) { const point = prev.get(cur); path.push(point); cur = key(...point); }
+  path.reverse();
+  const corners = [path[0]];
+  for (let i = 1; i < path.length - 1; i++) {
+    const a = path[i - 1], b = path[i], c = path[i + 1];
+    if (b[0] - a[0] !== c[0] - b[0] || b[1] - a[1] !== c[1] - b[1]) corners.push(b);
+  }
+  corners.push(path.at(-1));
+  return corners;
+}
+async function stepTo(tx, ty) {
+  let last = Infinity;
+  for (let i = 0; i < 50; i++) {
     const view = await snap();
     if (view.state !== 'explore') throw new Error('walk interrupted ' + JSON.stringify({state: view.state, speaker: view.speaker, dialogue: view.dialogue.slice(0, 80)}));
     const dx = tx - view.position.x, dy = ty - view.position.y;
-    if (Math.hypot(dx, dy) <= 8) return view;
-    const key = Math.abs(dx) >= Math.abs(dy) ? (dx > 0 ? 'ArrowRight' : 'ArrowLeft') : (dy > 0 ? 'ArrowDown' : 'ArrowUp');
+    const dist = Math.hypot(dx, dy);
+    if (dist <= 4) return view;
+    if (dist > last + 6) throw new Error('diverged ' + tx + ',' + ty);
+    last = dist;
+    const horizontal = dx > 0 ? 'ArrowRight' : 'ArrowLeft';
+    const vertical = dy > 0 ? 'ArrowDown' : 'ArrowUp';
+    const preferH = Math.abs(dx) >= Math.abs(dy);
+    const open = key => {
+      const nx = view.position.x + (key === 'ArrowRight' ? 3 : key === 'ArrowLeft' ? -3 : 0);
+      const ny = view.position.y + (key === 'ArrowDown' ? 3 : key === 'ArrowUp' ? -3 : 0);
+      return !blocked(Math.round(nx), Math.round(ny), HANGZHOU);
+    };
+    const key = open(preferH ? horizontal : vertical) ? (preferH ? horizontal : vertical) : open(preferH ? vertical : horizontal) ? (preferH ? vertical : horizontal) : (preferH ? horizontal : vertical);
     const before = view.position;
-    await hold(key, 140);
+    await hold(key, 45);
     const after = (await snap()).position;
-    if (Math.hypot(after.x - before.x, after.y - before.y) < 1) {
-      const other = key.startsWith('ArrowL') || key.startsWith('ArrowR') ? (dy > 0 ? 'ArrowDown' : 'ArrowUp') : (dx > 0 ? 'ArrowRight' : 'ArrowLeft');
-      await hold(other, 180);
-    }
+    if (Math.hypot(after.x - before.x, after.y - before.y) < 0.4) await hold(key.startsWith('ArrowL') || key.startsWith('ArrowR') ? vertical : horizontal, 70);
   }
   throw new Error('stuck ' + tx + ',' + ty + ' ' + JSON.stringify((await snap()).position));
+}
+async function walkTo(tx, ty) {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      const here = await snap();
+      if (Math.hypot(here.position.x - tx, here.position.y - ty) <= 8) return here;
+      for (const [x, y] of routeTo(here.position, tx, ty)) await stepTo(x, y);
+      return snap();
+    } catch (error) {
+      if (attempt === 4 || !/stuck|diverged|no path/.test(String(error.message))) throw error;
+    }
+  }
+  throw new Error('stuck ' + tx + ',' + ty);
 }
 async function focusObject(id) {
   for (let i = 0; i < 6; i++) {
@@ -207,13 +260,13 @@ async function play(take) {
     await shot('HZ-SKILL-01-manual-empty.png');
     await dismiss();
   }
-  await readAt('check-in', 48, 128, '报到', '记下');
+  await readAt('check-in', 46, 108, '报到', '记下');
   await dismiss();
-  await readAt('publish', 120, 128, '看这摊业务', '记下');
+  await readAt('publish', 180, 120, '看这摊业务', '记下');
   await press('夜深了');
   await dismiss();
   if (take) {
-    await walkTo(120, 128);
+    await walkTo(180, 120);
     await pickup(NAMES[0], 'HZ-SKILL-01-glint.png', 'HZ-SKILL-01-award.png');
     const audio = await evaluate('JSON.stringify(window.careerSkillAudio ? careerSkillAudio() : [])');
     writeFileSync(path.join(OUT, 'audio-log.json'), audio);
@@ -224,56 +277,52 @@ async function play(take) {
     await shot('HZ-SKILL-01-manual.png');
     await dismiss();
   }
-  await readAt('patterns-book', 192, 124, '翻开设计模式', '记下');
+  await readAt('patterns-book', 46, 168, '翻开设计模式', '记下');
   await press('去看插件');
   await dismiss();
   if (take) {
-    await walkTo(192, 124);
+    await walkTo(46, 168);
     await pickup(NAMES[1], 'HZ-SKILL-02-glint.png', 'HZ-SKILL-02-award.png');
     await openManual(NAMES[1]);
     await shot('HZ-SKILL-02-manual.png');
     await dismiss();
   }
-  await readAt('webpack-screen', 270, 124, '看 Webpack', '记下');
+  await readAt('webpack-screen', 78, 190, '看 Webpack', '记下');
+  await dismiss();
+  await readAt('webpack-screen', 78, 190, '看 Babel', '记下');
+  await press('去看需求单');
   await dismiss();
   if (take) {
-    await walkTo(270, 124);
+    await walkTo(78, 190);
     await pickup(NAMES[2], 'HZ-SKILL-03-glint.png', 'HZ-SKILL-03-award.png');
     await openManual(NAMES[2]);
     await shot('HZ-SKILL-03-manual.png');
     await dismiss();
-  }
-  await readAt('babel-screen', 336, 128, '看 Babel', '记下');
-  await press('去看需求单');
-  await dismiss();
-  if (take) {
-    await walkTo(336, 128);
+    await walkTo(78, 190);
     await pickup(NAMES[3], 'HZ-SKILL-04-glint.png', 'HZ-SKILL-04-award.png');
     await openManual(NAMES[3]);
     await shot('HZ-SKILL-04-manual.png');
     await dismiss();
   }
-  const dark = await evaluate(`(() => { const c = document.querySelector('#skill-glints').getContext('2d').getImageData(348, 128, 1, 1).data; return [c[0], c[1], c[2], c[3]]; })()`);
-  if (dark[3] !== 0) throw new Error('whiteboard already lit ' + JSON.stringify(dark));
-  const sheets = [[40, 172, 'line-1', '看第一条'], [104, 172, 'line-2', '看第二条'], [168, 172, 'line-3', '看第三条'], [232, 172, 'line-4', '看第四条'], [296, 172, 'line-5', '看第五条']];
+  if ((await evaluate('careerPrototype.snapshot().boardLit')) !== false) throw new Error('whiteboard lit before the five sheets');
+  const sheets = [[123, 112, 'line-1', '看第一条'], [276, 118, 'line-2', '看第二条'], [112, 178, 'line-3', '看第三条'], [160, 178, 'line-4', '看第四条'], [230, 178, 'line-5', '看第五条']];
   for (const [x, y, id, title] of sheets) {
     await readAt(id, x, y, title, '记下');
     await dismiss();
   }
-  await walkTo(348, 164);
-  const lit = await evaluate(`(() => { const c = document.querySelector('#skill-glints').getContext('2d').getImageData(348, 128, 1, 1).data; return [c[0], c[1], c[2], c[3]]; })()`);
-  if (!(lit[0] > 200 && lit[1] > 180 && lit[2] < 160 && lit[3] === 255)) throw new Error('whiteboard did not light ' + JSON.stringify(lit));
+  await walkTo(304, 148);
+  if ((await evaluate('careerPrototype.snapshot().boardLit')) !== true) throw new Error('whiteboard did not light');
   if (take) await shot('HZ-STORY-01-lights.png');
   await use('whiteboard', '回到白板', '五条线亮了');
   await dismiss();
   if (take) {
-    await walkTo(348, 164);
+    await walkTo(304, 148);
     await pickup(NAMES[4], 'HZ-SKILL-05-glint.png', 'HZ-SKILL-05-award.png', ['HZ-STORY-01-award.png']);
     await openManual(NAMES[4]);
     await shot('HZ-SKILL-05-manual.png');
     await dismiss();
   }
-  await walkTo(200, 198);
+  await walkTo(192, 196);
   await use('exit', '这一章先到这里', '收起');
   await waitText('杭州 · 本章完成');
   await dismiss();
@@ -289,7 +338,8 @@ try {
   await send('Page.addScriptToEvaluateOnNewDocument', {source: `localStorage.setItem('career-rpg:nanjing:v1', ${JSON.stringify(save)});`});
   await send('Page.reload', {ignoreCache: true});
   let view = await waitText('南京 · 本章完成');
-  if (view.slogan && view.slogan !== '欢迎你游戏我的职业前半生') throw new Error('slogan ' + view.slogan);
+  if (view.slogan !== '像素前端') throw new Error('journey title ' + view.slogan);
+  if (`${view.title}${view.dialogue}${view.slogan}`.includes('欢迎你游戏我的职业前半生') || `${view.title}${view.dialogue}`.includes('一路写来')) throw new Error('old name still visible');
   await press('从南京走到杭州');
   const started = Date.now();
   let startShot = false, midShot = false;
@@ -303,7 +353,7 @@ try {
   }
   view = await snap();
   const arrived = await evaluate('careerJourney()');
-  if (!view.journey || view.slogan !== '欢迎你游戏我的职业前半生') throw new Error('journey slogan ' + JSON.stringify(view));
+  if (!view.journey || view.slogan !== '像素前端') throw new Error('journey title ' + JSON.stringify(view));
   if (!arrived.arrived || arrived.route !== 'nanjing-hangzhou' || arrived.hangzhouUnlocked !== true) throw new Error('bridge ' + JSON.stringify(arrived));
   if (!view.copy.includes('商品发布这一摊')) throw new Error('bridge copy ' + view.copy);
   if (!startShot || !midShot) throw new Error('missed bridge frames ' + JSON.stringify(arrived));
@@ -313,7 +363,13 @@ try {
 
   await send('Page.navigate', {url: pageURL + '?chapter=hangzhou'});
   await waitText('报到');
-  if ((await snap()).title !== '欢迎你游戏我的职业前半生') throw new Error('title ' + (await snap()).title);
+  const titled = await snap();
+  const pageTitle = await evaluate('document.title');
+  const body = await evaluate('document.body.innerText');
+  if (titled.title !== '像素前端' || pageTitle !== '像素前端') throw new Error('title ' + titled.title + ' ' + pageTitle);
+  if (body.includes('欢迎你游戏我的职业前半生') || body.includes('一路写来')) throw new Error('old name in page');
+  await evaluate('window.scrollTo(0,0)');
+  await shot('HZ-TITLE-01.png');
   await play(true);
   const audio = JSON.parse(await evaluate('JSON.stringify(careerSkillAudio())'));
   const notes = audio.filter(event => event.kind === 'oscillator-start').map(event => event.frequency);

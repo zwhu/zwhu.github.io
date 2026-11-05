@@ -31,7 +31,7 @@
       "name": "吃透 Babel 插件机制",
       "event": "study_babel",
       "flag": "babel_read",
-      "role": "babel_screen"
+      "role": "webpack_screen"
     },
     {
       "id": "forms",
@@ -133,9 +133,6 @@
     ],
     "webpack_screen": [
       "webpack_screen"
-    ],
-    "babel_screen": [
-      "babel_screen"
     ],
     "line_1": [
       "line_1"
@@ -256,7 +253,7 @@
       "effects": [
         "babel_read"
       ],
-      "target": "babel_screen",
+      "target": "webpack_screen",
       "label": "记下",
       "dialogue": "babel"
     },
@@ -459,7 +456,7 @@
       "state": "plugins",
       "speaker": "player",
       "basis": "staging",
-      "text": "这一屏是 Babel 的插件机制。"
+      "text": "还是这一屏，下面是 Babel 的插件机制。"
     },
     {
       "id": "sheets-falls",
@@ -480,35 +477,35 @@
       "state": "sheets",
       "speaker": "player",
       "basis": "staging",
-      "text": "第一条业务线的需求。"
+      "text": "淘宝这一条的需求。"
     },
     {
       "id": "line-2",
       "state": "sheets",
       "speaker": "player",
       "basis": "staging",
-      "text": "第二条业务线的需求。"
+      "text": "天猫这一条的需求。"
     },
     {
       "id": "line-3",
       "state": "sheets",
       "speaker": "player",
       "basis": "staging",
-      "text": "第三条业务线的需求。"
+      "text": "闲鱼这一条的需求。"
     },
     {
       "id": "line-4",
       "state": "sheets",
       "speaker": "player",
       "basis": "staging",
-      "text": "第四条业务线的需求。"
+      "text": "飞猪这一条的需求。"
     },
     {
       "id": "line-5",
       "state": "sheets",
       "speaker": "player",
       "basis": "staging",
-      "text": "第五条业务线的需求。"
+      "text": "盒马这一条的需求。"
     },
     {
       "id": "board-1",

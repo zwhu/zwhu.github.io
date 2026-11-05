@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createChapter} from '../story.mjs';
 import {HANGZHOU,pendingMarkers} from '../scene-config.mjs';
 import {blocked,nearby} from '../world.mjs';
-import {SLOGAN} from '../slogan.mjs';
+import {GAME_TITLE} from '../title.mjs';
 
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-hangzhou.json',import.meta.url),'utf8'));
 const chapter=createChapter(data);
@@ -26,7 +26,9 @@ test('hangzhou lists five skills and does not replace hefei or nanjing',()=>{
   assert.equal(nanjing.collect(nanjing.initial(),'publish').accepted,false);
   assert.equal(hefei.collect(hefei.initial(),'forms').accepted,false);
   assert.equal(chapter.key,'career-rpg:hangzhou:v1');
-  for(const file of ['../main.mjs','../scene-config.mjs','../../design/chapter-hangzhou.json','../../design/chapter-01.json'])assert.equal(readFileSync(new URL(file,import.meta.url),'utf8').includes(SLOGAN),false,file);
+  assert.equal(GAME_TITLE,'像素前端');
+  assert.equal(chapter.skillSlots(chapter.initial()).filter(skill=>skill.role==='webpack_screen').map(skill=>skill.id).join(','),'webpack,babel');
+  assert.equal(readFileSync(new URL('../main.mjs',import.meta.url),'utf8').includes('欢迎你游戏我的职业前半生'),false);
 });
 
 test('each beat readies only its skill, and a second collect does nothing',()=>{
@@ -115,17 +117,19 @@ test('every designed snapshot is reachable and the placeholder room can reach ea
     assert.ok(Math.hypot(a.x-b.x,a.y-b.y)>30,`${a.id} ${b.id}`);
   }
   assert.equal(nearby(HANGZHOU.objects.find(object=>object.id==='check-in'),HANGZHOU).id,'check-in');
-  assert.equal(HANGZHOU.background.endsWith('room-placeholder.png'),true);
-  assert.equal(HANGZHOU.objects.some(object=>object.icon),false);
+  assert.equal(HANGZHOU.background.endsWith('day-384x216.png'),true);
+  assert.deepEqual(HANGZHOU.objects.find(object=>object.id==='webpack-screen').events,['study_webpack','study_babel']);
+  assert.equal(HANGZHOU.objects.some(object=>object.id==='babel-screen'),false);
 });
 
 test('nanjing still walks hefei to nanjing, and the new bridge walks nanjing to hangzhou',()=>{
   const nanjingData=JSON.parse(readFileSync(new URL('../../design/chapter-01.json',import.meta.url),'utf8'));
   const map=JSON.parse(readFileSync(new URL('../art/transition-map/transition-map.json',import.meta.url),'utf8'));
   assert.equal(map.animation_suggestion.duration_ms_hefei_to_nanjing,3200);
-  assert.equal(map.animation_suggestion.duration_ms_nanjing_to_hangzhou,3200);
+  assert.equal(map.animation_suggestion.duration_ms_nanjing_to_hangzhou,3600);
   assert.equal(map.animation_suggestion.easing,'ease-in-out');
-  assert.equal(map.nodes.find(node=>node.id==='hangzhou').status,'locked');
+  assert.equal(map.text.baked_labels,false);
+  assert.deepEqual(map.text.labels,['合肥','南京','杭州']);
   assert.equal(nanjingData.journey.artSlot,'hefei-nanjing');
   assert.deepEqual(nanjingData.journey.stops.map(stop=>stop.id),['hefei','road','nanjing','next']);
   assert.equal(nanjingData.journey.toHangzhou.artSlot,'nanjing-hangzhou');
