@@ -1,0 +1,321 @@
+{
+ "id": "hefei-props/linux-git-screen",
+ "version": "v2",
+ "source": "art/source/hefei-v2/hefei-props/original.png",
+ "source_sha256": "75d0637328305ee5db6402f5ef0810decdabf5208a3ee75739fb449b02e28441",
+ "script": "tools/v2/process_props.py",
+ "palette": "art/palette/hefei-v2-shared.json",
+ "palette_sha256": "63094a46fb6e3bd85d877f8b341005611684e0576ed480168aca7cbb70aeee5b",
+ "process_log": {
+  "src_bbox": [
+   97,
+   112,
+   437,
+   416
+  ],
+  "card_cleanup": {
+   "removed_lonely": 0,
+   "filled_holes": 2,
+   "outlined": 135,
+   "despeckled": 345
+  },
+  "git_graph": {
+   "redrawn_box": [
+    126,
+    26,
+    168,
+    116
+   ],
+   "lanes_x": [
+    138,
+    156
+   ],
+   "fork_y": [
+    46,
+    58
+   ],
+   "merge_y": [
+    94,
+    106
+   ]
+  },
+  "card_size": [
+   192,
+   172
+  ],
+  "card_colors": 19,
+  "icon_cleanup": {
+   "removed_lonely": 0,
+   "filled_holes": 0,
+   "outlined": 27,
+   "despeckled": 10
+  },
+  "icon_size": [
+   28,
+   25
+  ],
+  "icon_colors": 8,
+  "icon_highlight_colors": 9,
+  "in_palette": true
+ },
+ "trademark_check": "no logos/mascots/brand shapes (checked by eye with Read at x4)",
+ "files": [
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/card-192-x4.png",
+   "sha256": "2f8b025280b3241b77a957a0832982bb8d2449181350bb7b195b47972f55a967",
+   "size": [
+    768,
+    688
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/card-192-x4.webp",
+   "sha256": "dafb91131d112a5ee7159fae7f39c93d738b871e9384e560f9ee499603adb44b",
+   "size": [
+    768,
+    688
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/card-192.png",
+   "sha256": "57d6b0421b4acaea951955a1fc76b10a3298a49dcfe59805d1c4400af835cd97",
+   "size": [
+    192,
+    172
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/card-192.webp",
+   "sha256": "cc4831d306814b0cd391e69e2022cc921be9ece221ef6608b85a3a8cf1b4a731",
+   "size": [
+    192,
+    172
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight-x4.png",
+   "sha256": "535f85dab4fb3e53253e7ebcc1641512bb0bf98ee3c108ff7ce72e69f713bc2d",
+   "size": [
+    112,
+    100
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight-x4.webp",
+   "sha256": "11d1891c161b2df3aaf28693ae22d361fb81bea6569c5fe718b2f5ea22ed6c15",
+   "size": [
+    112,
+    100
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight-x8.png",
+   "sha256": "584254e92d967df3d0f8dde621bef540d74f594781d79fc4a505d8c5a78e6a1d",
+   "size": [
+    224,
+    200
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight.png",
+   "sha256": "5f3bd47d8912d4eeb189037a75f536ef878847436f6d356e0f728d84ede2ac06",
+   "size": [
+    28,
+    25
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight.webp",
+   "sha256": "a1e3e5b014c46ee142f30cfd6d3926eef4fa259495fdf38c7ad671f347902960",
+   "size": [
+    28,
+    25
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-x4.png",
+   "sha256": "9930cf14d4a9503e8fc8b329e94fdd39ae7f9ed1893b1732e6c34f692b77c1bc",
+   "size": [
+    112,
+    100
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-x4.webp",
+   "sha256": "e7d5f02b2c0daa8b7f442131c1de03db7861ffe2669258f9b4ad987d6c2e461d",
+   "size": [
+    112,
+    100
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-x8.png",
+   "sha256": "584eb5777f7bfc95e00422b9621c6d4003a4d36376fd586e5ce57a3f449ffc3b",
+   "size": [
+    224,
+    200
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon.png",
+   "sha256": "7159fd310a970ab4b53f1cd7d7b825c188229648e62643736f7d6683cd0ba715",
+   "size": [
+    28,
+    25
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon.webp",
+   "sha256": "7c02154787cd8d12517b3d1bc45a20f3be2597e340cb178950a21a57ce95e4c2",
+   "size": [
+    28,
+    25
+   ]
+  }
+ ],
+ "verify": {
+  "assets": [
+   {
+    "file": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon.png",
+    "size": [
+     28,
+     25
+    ],
+    "mode": "RGBA",
+    "colors": 8,
+    "palette": "nanjing 34",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight.png",
+    "size": [
+     28,
+     25
+    ],
+    "mode": "RGBA",
+    "colors": 9,
+    "palette": "shared 125",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/linux-git-screen/card-192.png",
+    "size": [
+     192,
+     172
+    ],
+    "mode": "RGBA",
+    "colors": 19,
+    "palette": "nanjing 34",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   }
+  ],
+  "webp": [
+   {
+    "png": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon.png",
+    "webp": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon.webp",
+    "w": 28,
+    "h": 25,
+    "png_bytes": 344,
+    "webp_bytes": 152,
+    "decoded_rgba_bytes": 2800,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-x4.webp",
+    "w": 112,
+    "h": 100,
+    "png_bytes": 622,
+    "webp_bytes": 192,
+    "decoded_rgba_bytes": 44800,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight.png",
+    "webp": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight.webp",
+    "w": 28,
+    "h": 25,
+    "png_bytes": 403,
+    "webp_bytes": 170,
+    "decoded_rgba_bytes": 2800,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight-x4.webp",
+    "w": 112,
+    "h": 100,
+    "png_bytes": 730,
+    "webp_bytes": 214,
+    "decoded_rgba_bytes": 44800,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/linux-git-screen/card-192.png",
+    "webp": "art/processed/hefei-v2/hefei-props/linux-git-screen/card-192.webp",
+    "w": 192,
+    "h": 172,
+    "png_bytes": 4832,
+    "webp_bytes": 1872,
+    "decoded_rgba_bytes": 132096,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/linux-git-screen/card-192-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-props/linux-git-screen/card-192-x4.webp",
+    "w": 768,
+    "h": 688,
+    "png_bytes": 10342,
+    "webp_bytes": 2954,
+    "decoded_rgba_bytes": 2113536,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   }
+  ],
+  "upscales": [
+   {
+    "file": "art/processed/hefei-v2/hefei-props/linux-git-screen/card-192-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-highlight-x8.png",
+    "k": 8,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/linux-git-screen/icon-x8.png",
+    "k": 8,
+    "exact_nearest_of_logical": true
+   }
+  ]
+ },
+ "status": "candidate_pending_producer_review"
+}

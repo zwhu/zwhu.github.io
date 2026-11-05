@@ -1,0 +1,30 @@
+{
+ "sprite": "marker-7x16.png",
+ "size": [
+  7,
+  16
+ ],
+ "colors": 4,
+ "palette": [
+  "#221E1A outline",
+  "#FFD640 base",
+  "#E8A818 shade",
+  "#FFF4C0 highlight"
+ ],
+ "anchor_bottom_centre_logical": [
+  46.5,
+  49
+ ],
+ "placed_px": [
+  43,
+  33
+ ],
+ "my_pc_monitor_logical": {
+  "top_y": 50,
+  "x": [
+   34,
+   59
+  ]
+ },
+ "note": "overlay drawn by the engine at runtime; day/night base images contain no UI yellow (checked in process_scene.log.json day_has_ui_yellow=False)"
+}

@@ -1,0 +1,177 @@
+{
+ "palette": {
+  "file": "art/palette/hefei-v3-shared.json",
+  "sha256": "f662320966856a3c05e2bc8572328003b576c1739368eebd5b13e810a608887e",
+  "total": 133
+ },
+ "upscales": [
+  {
+   "file": "art/processed/hefei-v3/compare/props-mock-day-384x216-x4.png",
+   "k": 4,
+   "exact_nearest_of_logical": true
+  },
+  {
+   "file": "art/processed/hefei-v3/compare/scale-mock-day-384x216-x4.png",
+   "k": 4,
+   "exact_nearest_of_logical": true
+  },
+  {
+   "file": "art/processed/hefei-v3/compare/scale-mock-night-384x216-x4.png",
+   "k": 4,
+   "exact_nearest_of_logical": true
+  },
+  {
+   "file": "art/processed/hefei-v3/hefei-office-day/day-384x216-x4.png",
+   "k": 4,
+   "exact_nearest_of_logical": true
+  },
+  {
+   "file": "art/processed/hefei-v3/hefei-office-day/day-384x216-x5.png",
+   "k": 5,
+   "exact_nearest_of_logical": true
+  },
+  {
+   "file": "art/processed/hefei-v3/hefei-office-night/night-384x216-x4.png",
+   "k": 4,
+   "exact_nearest_of_logical": true
+  },
+  {
+   "file": "art/processed/hefei-v3/hefei-office-night/night-384x216-x5.png",
+   "k": 5,
+   "exact_nearest_of_logical": true
+  }
+ ],
+ "assets": [
+  {
+   "file": "art/processed/hefei-v3/hefei-office-day/day-384x216.png",
+   "size": [
+    384,
+    216
+   ],
+   "mode": "RGB",
+   "colors": 38,
+   "palette": "v3 day group (nanjing 34 + screen 1 + apartment 3)",
+   "in_palette": true,
+   "has_ui_yellow_FFD640": false
+  },
+  {
+   "file": "art/processed/hefei-v3/hefei-office-night/night-384x216.png",
+   "size": [
+    384,
+    216
+   ],
+   "mode": "RGB",
+   "colors": 75,
+   "palette": "v3 shared 133",
+   "in_palette": true,
+   "has_ui_yellow_FFD640": false
+  }
+ ],
+ "webp": [
+  {
+   "png": "art/processed/hefei-v3/hefei-office-day/day-384x216.png",
+   "webp": "art/processed/hefei-v3/hefei-office-day/day-384x216.webp",
+   "w": 384,
+   "h": 216,
+   "png_bytes": 23714,
+   "webp_bytes": 9266,
+   "decoded_rgba_bytes": 331776,
+   "rgba_roundtrip_identical": true,
+   "gpu_observed": "not measured (no browser/GPU run)"
+  },
+  {
+   "png": "art/processed/hefei-v3/hefei-office-day/day-384x216-x4.png",
+   "webp": "art/processed/hefei-v3/hefei-office-day/day-384x216-x4.webp",
+   "w": 1536,
+   "h": 864,
+   "png_bytes": 40594,
+   "webp_bytes": 14140,
+   "decoded_rgba_bytes": 5308416,
+   "rgba_roundtrip_identical": true,
+   "gpu_observed": "not measured (no browser/GPU run)"
+  },
+  {
+   "png": "art/processed/hefei-v3/hefei-office-night/night-384x216.png",
+   "webp": "art/processed/hefei-v3/hefei-office-night/night-384x216.webp",
+   "w": 384,
+   "h": 216,
+   "png_bytes": 25406,
+   "webp_bytes": 9782,
+   "decoded_rgba_bytes": 331776,
+   "rgba_roundtrip_identical": true,
+   "gpu_observed": "not measured (no browser/GPU run)"
+  },
+  {
+   "png": "art/processed/hefei-v3/hefei-office-night/night-384x216-x4.png",
+   "webp": "art/processed/hefei-v3/hefei-office-night/night-384x216-x4.webp",
+   "w": 1536,
+   "h": 864,
+   "png_bytes": 43410,
+   "webp_bytes": 14706,
+   "decoded_rgba_bytes": 5308416,
+   "rgba_roundtrip_identical": true,
+   "gpu_observed": "not measured (no browser/GPU run)"
+  }
+ ],
+ "night_checks": {
+  "lit_screen_px_total": 238,
+  "lit_screen_bbox": [
+   64,
+   128,
+   87,
+   143
+  ],
+  "lit_only_inside_my_pc_box": true,
+  "monitors": {
+   "B1_my_pc": {
+    "lit_px": 238,
+    "median_lum_night": 177.892
+   },
+   "B2": {
+    "lit_px": 0,
+    "median_lum_night": 20.884
+   },
+   "B3": {
+    "lit_px": 0,
+    "median_lum_night": 20.884
+   },
+   "T1": {
+    "lit_px": 0,
+    "median_lum_night": 35.104
+   },
+   "T2": {
+    "lit_px": 0,
+    "median_lum_night": 20.884
+   },
+   "T3": {
+    "lit_px": 0,
+    "median_lum_night": 20.884
+   }
+  },
+  "sofa_median_lum": 39.587999999999994,
+  "sofa_black_px_share(lum<16)": 0.10229202037351443,
+  "tea_table_median_lum": 29.648,
+  "floor_far_median_lum": 54.785,
+  "pure_black_share_whole_night": 0.07632860725308642,
+  "pure_black_share_whole_day": 0.0,
+  "night_colors": 75,
+  "day_colors": 38
+ },
+ "upscale_skipped": [
+  {
+   "file": "art/processed/hefei-v3/walkable-seats/walkable-seats-384x216-x4.png",
+   "reason": "annotation: labels drawn at x4 on purpose, not a pure upscale"
+  },
+  {
+   "file": "art/processed/hefei-v3/walkable-seats/walkable-seats-384x216.png",
+   "reason": "annotation: labels drawn at x4 on purpose, not a pure upscale"
+  }
+ ],
+ "summary": {
+  "upscales_exact": "7/7",
+  "assets_in_palette": true,
+  "no_ui_yellow": true,
+  "webp_roundtrip_all": true,
+  "only_my_pc_lit": true
+ }
+}

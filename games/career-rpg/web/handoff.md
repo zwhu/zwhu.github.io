@@ -1,5 +1,9 @@
 # 南京办公室 · Web交接
 
+## 当前恢复点（2026-11-05，合肥章）
+
+默认页仍是南京。`?chapter=hefei` 加载 `HEFEI` 和 `design/chapter-hefei.json`。老板表情不叠在头上：`emotionAtlas` 指向 `emotions-strip-64x32.png`，由 `expressionByState` 驱动，经 `drawPortrait` 画在气泡旁；场景里的 `emotion-badge` 仍只给可控的主角。日夜两张底图和 light-mask 开场预加载，切换只换纹理。大图卡片交互时才设置 `img.src`，关闭时去掉。
+
 ## 当前恢复点（2026-11-05）
 
 先读[根handoff当前恢复点](../handoff.md)及[技术方案](../technical-plan.md)。用户本轮要求handoff，停止制作，不恢复loop或TraeX；卡顿排查继续暂停。当前桌面开发入口保留，H5/移动/弱网/上线暂不实施。

@@ -1,0 +1,159 @@
+{
+ "id": "hefei-office-night",
+ "version": "v2",
+ "source": "art/source/hefei-v1/hefei-office-day/original.png",
+ "source_sha256": "7f99d5407857ce0f60f84c454ff7af2b826ea7ca3420ea0e9b04aa1c0ee276b2",
+ "source_note": "no new generation; v1 day original reused unchanged (referenced by hash)",
+ "script": "tools/v2/process_scene.py",
+ "palette": "art/palette/hefei-v2-shared.json",
+ "palette_sha256": "63094a46fb6e3bd85d877f8b341005611684e0576ed480168aca7cbb70aeee5b",
+ "night_transform": {
+  "0 (dark)": "COOL*(4+0.46*c)",
+  "1 (spill)": "COOL*(8+0.62*c)",
+  "2 (pool)": "WARM*(8+0.78*c)",
+  "3 (lamp)": "day colour",
+  "COOL": [
+   0.55,
+   0.62,
+   0.9
+  ],
+  "WARM": [
+   1.0,
+   0.95,
+   0.84
+  ]
+ },
+ "process_log": {
+  "day_cleanup": {
+   "removed_lonely": 0,
+   "filled_holes": 0,
+   "outlined": 0,
+   "despeckled": 407
+  },
+  "rug_fixed_px": 121,
+  "screen_box_logical": [
+   35,
+   52,
+   57,
+   64
+  ],
+  "bulb_logical": [
+   64,
+   61,
+   68,
+   63
+  ],
+  "day_colors": 34,
+  "night_colors": 67,
+  "day_in_nanjing_group": true,
+  "night_in_shared": true,
+  "day_has_ui_yellow": false
+ },
+ "ui_marker_in_base": false,
+ "marker_note": "yellow ! is NOT in the base image; it is the separate sprite art/processed/hefei-v2/hefei-marker/marker-7x16.png",
+ "files": [
+  {
+   "path": "art/processed/hefei-v2/hefei-office-night/light-mask-384x216.png",
+   "sha256": "1860fbe6a0d1343b41240295053d5e3b9a45cd4002445ae75357a7263eb0ed12",
+   "size": [
+    384,
+    216
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-office-night/night-384x216-x4.png",
+   "sha256": "4d1f824329290bfad7bcec6e8e74260fba9eeb760ef247ec5192e4766d6de02a",
+   "size": [
+    1536,
+    864
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-office-night/night-384x216-x4.webp",
+   "sha256": "0ba40659c2f878dbea8a3581c5e5fe89e5d53a118a8b2511203f82549e0f44d9",
+   "size": [
+    1536,
+    864
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-office-night/night-384x216-x5.png",
+   "sha256": "84ac0edb44e4e9ce4b535b89a2e71b7737f264c84f16e41cd231ed88cddb1175",
+   "size": [
+    1920,
+    1080
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-office-night/night-384x216.png",
+   "sha256": "9e9e8bc6ba51a190c2d74b29ab661239549bc246a1555e2a2ca30ce9c80d438c",
+   "size": [
+    384,
+    216
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-office-night/night-384x216.webp",
+   "sha256": "1a3a381fb809b3278e40eace4ee504937d6fcade663fb798ea4751a60b6eab26",
+   "size": [
+    384,
+    216
+   ]
+  }
+ ],
+ "verify": {
+  "assets": [
+   {
+    "file": "art/processed/hefei-v2/hefei-office-night/night-384x216.png",
+    "size": [
+     384,
+     216
+    ],
+    "mode": "RGB",
+    "colors": 67,
+    "palette": "shared 125",
+    "in_palette": true,
+    "alpha_values": [
+     255
+    ]
+   }
+  ],
+  "webp": [
+   {
+    "png": "art/processed/hefei-v2/hefei-office-night/night-384x216.png",
+    "webp": "art/processed/hefei-v2/hefei-office-night/night-384x216.webp",
+    "w": 384,
+    "h": 216,
+    "png_bytes": 18433,
+    "webp_bytes": 7018,
+    "decoded_rgba_bytes": 331776,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-office-night/night-384x216-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-office-night/night-384x216-x4.webp",
+    "w": 1536,
+    "h": 864,
+    "png_bytes": 32698,
+    "webp_bytes": 10980,
+    "decoded_rgba_bytes": 5308416,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   }
+  ],
+  "upscales": [
+   {
+    "file": "art/processed/hefei-v2/hefei-office-night/night-384x216-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-office-night/night-384x216-x5.png",
+    "k": 5,
+    "exact_nearest_of_logical": true
+   }
+  ]
+ },
+ "status": "candidate_pending_producer_review"
+}

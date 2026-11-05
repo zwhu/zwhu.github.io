@@ -1,0 +1,145 @@
+{
+ "founder_all_frames": [
+  [
+   0,
+   0,
+   44,
+   15,
+   0.341,
+   45
+  ],
+  [
+   0,
+   1,
+   44,
+   15,
+   0.341,
+   45
+  ],
+  [
+   0,
+   2,
+   44,
+   15,
+   0.341,
+   45
+  ],
+  [
+   1,
+   0,
+   43,
+   14,
+   0.326,
+   45
+  ],
+  [
+   1,
+   1,
+   42,
+   14,
+   0.333,
+   45
+  ],
+  [
+   1,
+   2,
+   43,
+   15,
+   0.349,
+   45
+  ],
+  [
+   2,
+   0,
+   43,
+   16,
+   0.372,
+   45
+  ],
+  [
+   2,
+   1,
+   43,
+   15,
+   0.349,
+   45
+  ],
+  [
+   2,
+   2,
+   43,
+   16,
+   0.372,
+   45
+  ],
+  [
+   3,
+   0,
+   43,
+   16,
+   0.372,
+   45
+  ],
+  [
+   3,
+   1,
+   43,
+   16,
+   0.372,
+   45
+  ],
+  [
+   3,
+   2,
+   43,
+   16,
+   0.372,
+   45
+  ]
+ ],
+ "founder v2 (front, idle)": 0.341,
+ "npc-team-v1 col0": 0.356,
+ "npc-team-v1 col1": 0.356,
+ "npc-team-v1 col2": 0.364,
+ "player-walk-v1 down col1": 0.345,
+ "right_vs_flipped_left": [
+  {
+   "alpha_IoU": 0.978,
+   "identical_px_of_union": 0.671
+  },
+  {
+   "alpha_IoU": 0.921,
+   "identical_px_of_union": 0.629
+  },
+  {
+   "alpha_IoU": 0.959,
+   "identical_px_of_union": 0.647
+  }
+ ],
+ "quantize": {
+  "founder idle": {
+   "before_colors": 619,
+   "after_colors": 15,
+   "logical_size": [
+    17,
+    44
+   ]
+  },
+  "scene crop (my_pc)": {
+   "before_colors": 3657,
+   "after_colors": 29,
+   "logical_size": [
+    100,
+    60
+   ]
+  },
+  "card db-nosql": {
+   "before_colors": 5989,
+   "after_colors": 19,
+   "logical_size": [
+    192,
+    138
+   ]
+  }
+ }
+}

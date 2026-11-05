@@ -1,0 +1,326 @@
+{
+ "id": "hefei-props/db-nosql-screen",
+ "version": "v2",
+ "source": "art/source/hefei-v2/hefei-props/original.png",
+ "source_sha256": "75d0637328305ee5db6402f5ef0810decdabf5208a3ee75739fb449b02e28441",
+ "script": "tools/v2/process_props.py",
+ "palette": "art/palette/hefei-v2-shared.json",
+ "palette_sha256": "efe113d72406213d27cc0295e9146bcc516ae11f26daa2b042ee1af2b9594086",
+ "process_log": {
+  "src_bbox": [
+   22,
+   48,
+   449,
+   356
+  ],
+  "card_navy": {
+   "screen_box": [
+    18,
+    20,
+    137,
+    93
+   ],
+   "navy_px": 4086
+  },
+  "card_cleanup": {
+   "removed_lonely": 0,
+   "filled_holes": 3,
+   "outlined": 51,
+   "despeckled": 64
+  },
+  "card_size": [
+   192,
+   138
+  ],
+  "card_colors": 20,
+  "icon_navy": {
+   "screen_box": [
+    3,
+    3,
+    20,
+    14
+   ],
+   "navy_px": 93
+  },
+  "icon_cleanup": {
+   "removed_lonely": 1,
+   "filled_holes": 2,
+   "outlined": 38,
+   "despeckled": 8
+  },
+  "icon_size": [
+   32,
+   24
+  ],
+  "icon_colors": 6,
+  "icon_highlight_colors": 7,
+  "palette": "nanjing+screen",
+  "in_palette": true
+ },
+ "trademark_check": "no logos/mascots/brand shapes (checked by eye with Read at x4)",
+ "files": [
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/card-192-x4.png",
+   "sha256": "48e17c4bfb5dc52f526e00498abc1ec2ed2caa4354518adb24005893d2daedd1",
+   "size": [
+    768,
+    552
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/card-192-x4.webp",
+   "sha256": "ac0dab49a4d03f985c5584ada30f8cda2ff1947e897d66a0936b686f18e62324",
+   "size": [
+    768,
+    552
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/card-192.png",
+   "sha256": "4b3372520eb8432b1fcc627cebd548d63bd3f71f2c0adbcf79a879d579019836",
+   "size": [
+    192,
+    138
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/card-192.webp",
+   "sha256": "31d5c6e58e1424b1607631fba1f7df2d234dd0f4b57de0d2db6115ede8b544f6",
+   "size": [
+    192,
+    138
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight-x4.png",
+   "sha256": "4e849c6483e9d57ed1050bdf3573083f795985333d6a9aff2acb46de996545d5",
+   "size": [
+    128,
+    96
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight-x4.webp",
+   "sha256": "b95f8bf88cf70b4311871dd7001849b65cdce457d8d4e3f5086b633397158cb7",
+   "size": [
+    128,
+    96
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight-x8.png",
+   "sha256": "5de3e44ef3424809b63217472c24e1f585d2717610c3cd0d6e91689510ca7e2f",
+   "size": [
+    256,
+    192
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight.png",
+   "sha256": "a73455057d3752075659430479d442354c5154c939a52cf0ffc1c817f81fec7b",
+   "size": [
+    32,
+    24
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight.webp",
+   "sha256": "513449dc44f65083124d66fbed3701e35389e26501f87cf5cfb1d650a83a890b",
+   "size": [
+    32,
+    24
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-x4.png",
+   "sha256": "49cabb8b4b3c07eae1db7f6f96fe1d6544224ac075013f5f232bc14acdaee305",
+   "size": [
+    128,
+    96
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-x4.webp",
+   "sha256": "ea66621f255f5a905daf791998433f78268e927bfd837277ed82c85bff756f35",
+   "size": [
+    128,
+    96
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-x8.png",
+   "sha256": "3db25ad15e7fe3befdbeeae84304ceabf12f5808ee00f4bd149aed25da77cf84",
+   "size": [
+    256,
+    192
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon.png",
+   "sha256": "8a5161aecda94d0889fecd941d58fc842a14cb41e2102a8a4c580b225f253145",
+   "size": [
+    32,
+    24
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon.webp",
+   "sha256": "b60f2761ae70c681bcf5fd05f5a61ab2e60815e8ac4debb6480da4bb9ee39d78",
+   "size": [
+    32,
+    24
+   ]
+  }
+ ],
+ "verify": {
+  "assets": [
+   {
+    "file": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon.png",
+    "size": [
+     32,
+     24
+    ],
+    "mode": "RGBA",
+    "colors": 6,
+    "palette": "nanjing 34 + screen 1",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight.png",
+    "size": [
+     32,
+     24
+    ],
+    "mode": "RGBA",
+    "colors": 7,
+    "palette": "shared 126",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/db-nosql-screen/card-192.png",
+    "size": [
+     192,
+     138
+    ],
+    "mode": "RGBA",
+    "colors": 20,
+    "palette": "nanjing 34 + screen 1",
+    "in_palette": true,
+    "alpha_values": [
+     0,
+     255
+    ]
+   }
+  ],
+  "webp": [
+   {
+    "png": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon.png",
+    "webp": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon.webp",
+    "w": 32,
+    "h": 24,
+    "png_bytes": 343,
+    "webp_bytes": 152,
+    "decoded_rgba_bytes": 3072,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-x4.webp",
+    "w": 128,
+    "h": 96,
+    "png_bytes": 628,
+    "webp_bytes": 196,
+    "decoded_rgba_bytes": 49152,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight.png",
+    "webp": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight.webp",
+    "w": 32,
+    "h": 24,
+    "png_bytes": 446,
+    "webp_bytes": 188,
+    "decoded_rgba_bytes": 3072,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight-x4.webp",
+    "w": 128,
+    "h": 96,
+    "png_bytes": 763,
+    "webp_bytes": 240,
+    "decoded_rgba_bytes": 49152,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/db-nosql-screen/card-192.png",
+    "webp": "art/processed/hefei-v2/hefei-props/db-nosql-screen/card-192.webp",
+    "w": 192,
+    "h": 138,
+    "png_bytes": 3994,
+    "webp_bytes": 1302,
+    "decoded_rgba_bytes": 105984,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   },
+   {
+    "png": "art/processed/hefei-v2/hefei-props/db-nosql-screen/card-192-x4.png",
+    "webp": "art/processed/hefei-v2/hefei-props/db-nosql-screen/card-192-x4.webp",
+    "w": 768,
+    "h": 552,
+    "png_bytes": 8257,
+    "webp_bytes": 1964,
+    "decoded_rgba_bytes": 1695744,
+    "rgba_roundtrip_identical": true,
+    "gpu_observed": "not measured (no browser/GPU run)"
+   }
+  ],
+  "upscales": [
+   {
+    "file": "art/processed/hefei-v2/hefei-props/db-nosql-screen/card-192-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-highlight-x8.png",
+    "k": 8,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-x4.png",
+    "k": 4,
+    "exact_nearest_of_logical": true
+   },
+   {
+    "file": "art/processed/hefei-v2/hefei-props/db-nosql-screen/icon-x8.png",
+    "k": 8,
+    "exact_nearest_of_logical": true
+   }
+  ]
+ },
+ "status": "candidate_pending_producer_review",
+ "palette_subset": "nanjing 34 + screen 1 (#284058) for icon/card; shared 126 for icon-highlight",
+ "revision": {
+  "date": "2026-11-05",
+  "by": "producer request after v2 approval",
+  "change": "screen back to navy: palette gained screen group #284058 (126 total, first 125 unchanged in order); navy limited to the screen box; icon, highlight, card-192 (+x4/x8) and their webp regenerated"
+ }
+}

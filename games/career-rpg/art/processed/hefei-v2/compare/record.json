@@ -1,0 +1,79 @@
+{
+ "id": "compare",
+ "version": "v2",
+ "scripts": [
+  "tools/v2/make_compare.py",
+  "tools/v2/make_scale_mock.py"
+ ],
+ "files": [
+  {
+   "path": "art/processed/hefei-v2/compare/compare.json",
+   "sha256": "58b83eb5171bd7ed8186cb9665657a013cc224150902ec298447d66889b66f05"
+  },
+  {
+   "path": "art/processed/hefei-v2/compare/founder-measure.json",
+   "sha256": "0c9d7189692a471bc4e10f935ef905fa053cf3d41aaab36dfb88187a15269ecf"
+  },
+  {
+   "path": "art/processed/hefei-v2/compare/head-ratio-vs-nanjing.png",
+   "sha256": "b58c55ae536830074d25015d201d07ee91999c172f660fe63264cd2a229a991d",
+   "size": [
+    1398,
+    414
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/compare/quantize-before-after-x4.png",
+   "sha256": "9051edce11317293e6e76862b1788c222c43231c3adfd99d185145fa58bb507b",
+   "size": [
+    1548,
+    1224
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/compare/right-row-vs-mirrored-left-x6.png",
+   "sha256": "e1411ba478b48714501e9cff118ab80708b5261b7f0810f923f999544d609151",
+   "size": [
+    576,
+    648
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/compare/scale-mock-day-384x216-x4.png",
+   "sha256": "5031ae9a30389f281d1a80f198d7a804416af80d9c995a07dfd7b6be5afe56c1",
+   "size": [
+    1536,
+    864
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/compare/scale-mock-day-384x216.png",
+   "sha256": "22817eaa173107f5053737702dfd422e8977d7ccb7ec7b46bb108f0816b3bae1",
+   "size": [
+    384,
+    216
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/compare/scale-mock-night-384x216-x4.png",
+   "sha256": "8d8bbffe3f1674807737d3c279d1f1118499622374da69d32c64271de491fc4f",
+   "size": [
+    1536,
+    864
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/compare/scale-mock-night-384x216.png",
+   "sha256": "f4ac193555bae32b2cd97978518ac0129c454609765e35a2fc489691aeb9572b",
+   "size": [
+    384,
+    216
+   ]
+  },
+  {
+   "path": "art/processed/hefei-v2/compare/scale-mock.json",
+   "sha256": "0d755023d45219e8be4f3b10c9c764bc26e17bbc5e93a34994b8c48544b9ffc9"
+  }
+ ],
+ "note": "review aids only, not runtime assets"
+}

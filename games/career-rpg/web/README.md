@@ -12,6 +12,8 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 打开 `http://127.0.0.1:8765/games/career-rpg/web/`。点击场景后，用方向键或 WASD 移动；靠近两台电脑，按 E 或 Enter 阅读对话。同一工位有多个对象时，按 Q 切换；M 打开手册，Tab / Shift+Tab 在选项间切换，Enter / Space 确认，Esc 关闭可关闭的气泡。Esc 或右上按钮暂停，窗口失焦时暂停并清空按键；点击继续恢复。
 
+合肥章入口是 `http://127.0.0.1:8765/games/career-rpg/web/?chapter=hefei`。不带参数时仍是南京。老板的 32×32 表情（doubtful / approving，合在 `emotions-strip-64x32.png`）和南京主角一样：不叠在角色头上，走 `main.mjs` 的 `emotion-badge` / `drawPortrait`，在气泡旁的 DOM 里显示小头像，由 `expressionByState` 驱动。
+
 桌面 Web 原型已获作者验收。当前在同一间办公室扩展南京完整样章：论坛反馈、第一次呆住、CTO带领排查、两小时后恢复、团队宽慰、补测试与注释、手册归档。角色支持四向行走，CTO和两位同伴在场工作并可交互。场景和外观为设定，剧情据作者回忆改写，不虚构事故根因。
 
 ## 文件与维护
