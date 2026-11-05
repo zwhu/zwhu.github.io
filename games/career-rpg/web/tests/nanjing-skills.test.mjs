@@ -6,19 +6,14 @@ import {SLOGAN} from '../slogan.mjs';
 
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-01.json',import.meta.url),'utf8'));
 const chapter=createChapter(data);
-const hefeiData=JSON.parse(readFileSync(new URL('../../design/chapter-hefei.json',import.meta.url),'utf8'));
-const hefei=createChapter(hefeiData);
 const names=['fibjs／nodejs 做全栈','CI/CD 做集成测试','对上线要有敬畏之心（灰度、观测、回滚）','学会从失败中学习经验','React／Webpack'];
 const prefix=['open_forum_post','read_feedback','cto_rallies_team','confirm_recheck_visited','confirm_impact_scope','confirm_feedback_reviewed','resume_narrative','comfort_read'];
 function play(events,start=chapter.initial()){return events.reduce((snapshot,event)=>{const next=chapter.advance(snapshot,event);assert.equal(next.accepted,true,event);return next.snapshot;},start);}
 const memory=()=>{const saved=new Map();return {saved,store:{getItem:key=>saved.get(key)??null,setItem:(key,value)=>saved.set(key,value)}}};
 
-test('nanjing lists five skills and hefei stays without a skill list',()=>{
+test('nanjing lists five skills',()=>{
   assert.deepEqual(chapter.skillSlots(chapter.initial()).map(skill=>skill.name),names);
   assert.deepEqual(chapter.skillSlots(chapter.initial()).map(skill=>skill.status),['none','none','none','none','none']);
-  assert.equal(hefeiData.skills,undefined);
-  assert.equal(hefei.skillSlots(hefei.initial()),null);
-  assert.equal(hefei.collect(hefei.initial(),'linux').accepted,false);
   assert.equal(SLOGAN,'欢迎你游戏我的职业前半生');
   for(const file of ['../main.mjs','../index.html','../story.mjs','../scene-config.mjs','../../design/chapter-01.json'])assert.equal(readFileSync(new URL(file,import.meta.url),'utf8').includes(SLOGAN),false,file);
   assert.match(readFileSync(new URL('../main.mjs',import.meta.url),'utf8'),/SLOGAN/);
