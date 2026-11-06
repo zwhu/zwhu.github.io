@@ -1,7 +1,8 @@
 {
   "baselineGit": "e61f8cc5b38b4814edc478b3266f48c31df9896a",
   "afterGit": "424c06e237546d869b3bc4ee07999eaf8acd9130",
-  "afterNote": "after.json was recorded on the working tree after the baseline commit and before the implementation commit. Those sources are the implementation commit. The git field inside after.json is still the baseline commit because HEAD had not moved.",
+  "implementationCommit": "c931ee276d5fa95f6fa9ae680d4f924fec194836",
+  "afterNote": "after.json was recorded on the working tree that became implementationCommit, before that commit existed. The git field inside after.json is the baseline commit because HEAD had not moved yet.",
   "page": "/games/career-rpg/web/?chapter=hefei",
   "machine": {
     "chrome": "Google Chrome 156.0.8078.47",
