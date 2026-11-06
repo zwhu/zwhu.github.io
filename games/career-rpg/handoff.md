@@ -1,5 +1,82 @@
 # 《像素前端》交接
 
+## 当前恢复点（2026-11-06，去掉世界道具浮标，尚未实现）
+
+本节迁自 GitHub issue #46「像素前端：去掉世界里的道具浮标（交接，尚未入库）」。用户要求将交接保存在仓库，并在保存后删除 issue；原 issue 无评论。以下保留需求、验收项和两轮未交付记录，未把 VM 内的尝试计为已完成。
+
+当前仅迁移交接文档，未实施游戏修改。后续从最新 main 开始，按下列范围开发、提交 PR 和实际运行截图；游戏改动等待用户明确说「合」后再合并。下方旧恢复点中的已上线前暂停决定和过期实现说明，仅作历史参考。
+
+这是制作人 2026-11-06 的接手文档。两轮 Cloud Agent 都只在各自 VM 里改过，没有 commit、没有 push、没有 PR、没有截图。下一人必须从当前 main 重头做。
+
+### 当前仓库
+
+- 仓库：https://github.com/zwhu/zwhu.github.io
+- 路径：`games/career-rpg/`
+- 基线 main：`c8baafea216a6366ccbf067d4bf32d32acc1eb70`（[#45](https://github.com/zwhu/zwhu.github.io/pull/45) squash，标题「把合肥面试开场的「面试」放到对话名牌上」）
+- 线上：https://zwhu.github.io/games/career-rpg/ （`?chapter=hefei|nanjing|hangzhou`）
+- 开放 PR：0
+- 远程没有本单分支。两个本地名 `cursor/no-world-prop-floats-0659`、`cursor/no-world-prop-floats-11f0` 在远程是 404。
+
+### 玩家要的东西
+
+世界里不要再画额外道具 PNG。交互热区留在场景里已经画好的家具上（自己的电脑、书架、工位、白板等）。闪点 → E → 对话框里的卡/台词 → 手册 ??? 这一套保留。卡片可以继续出现在对话里，不要作为场景浮标。
+
+现状共用层会把对象上的 `icon` / `iconHighlight` / `iconLit` 叠在背景家具上（`games/career-rpg/web/main.mjs` 里 `objects.filter(o=>o.icon)` → propViews；`nightDim` 会把夜里图设成 0.45 透明度）。
+
+#### 合肥（`games/career-rpg/web/chapters/hefei.mjs`，玩家已确认）
+
+1. `linux-screen`：`hefei-props/linux-git-screen` 图标叠在自己工位电脑上（iconAt 约 75,130，28×25）。学 Linux/Git 仍交互自己那台电脑，不要浮出第二块屏。
+2. `jquery-book`：`hefei-props/frontend-jquery` 图标画成了显示器+气泡，叠在左边柜子/书架（iconAt 约 20,46，34×29）。左边只留书。面试未结束翻书架只说「现在先去找老板面试。」；留下来后走近发现「书架上夹着一本《锋利的 jQuery》。」再拿下来学，文案不变。
+3. 夜里 `java-book` + `db-screen`（`nightDim` 0.45）叠在同一台工位显示器上，看起来像两台电脑。夜里仍在自己工位学，不要半透明重影。
+
+#### 南京（`games/career-rpg/web/chapters/nanjing.mjs`）
+
+对象有 `iconAt`，当前没有 `icon` 图路径，按理不会画出世界浮标。要实机核论坛电脑、书架手册、排查电脑等，确认没有多出来的电脑/屏幕/书浮在家具上。有就按同规则去掉；没有就在验收里写明「南京无世界道具图」。闪点可以留。
+
+#### 杭州（`games/career-rpg/web/chapters/hangzhou.mjs`）
+
+同一套 `icon` 叠图：
+- `webpack-screen`（webpack-screen-small 约 26×13 @ 85,141）：去掉世界图，热区留在那台电脑上，Webpack/Babel 仍可学。
+- `patterns-book`（design-pattern-book-small）：不要往桌上再叠一本小书图；热区留在已有的书/桌上。
+- 五张需求单 `line-1`…`line-5` 的 small 图标：不要在桌上再浮一层纸片；热区+闪点留下，五条线仍能拾取。
+- 白板高潮保留：五张单齐了之后白板能从暗到亮。若 `icon`/`iconLit` 是叠在已画白板上变成两块板，就改成贴合原白板的原地状态切换；不要新造一张飘着的板。
+
+### 不要动
+
+技能名、走路、坐姿、对话窗（框内米色窗+名牌+▼）、合肥开场名牌「面试」与正文「原本录用的人嫌工资低，没来。」、宣传短片、录片模式、首页导航、杭州其余尚未拆的章节。
+
+### 验收（真实运行截图，等用户说「合」再合）
+
+- 合肥白天留下后：工位只有一台电脑，没有 Linux 浮屏；左边柜子/书架只有书，没有电脑气泡。
+- 合肥夜里：工位仍是一台电脑，没有半透明书+数据库屏重影。
+- 合肥 Linux / jQuery / Java / 数据库仍能按原流程学到，手册四个 ??? 能点亮；面试阶段书架拦截文案仍对。
+- 南京办公室一眼看去没有叠在家具上的道具图。
+- 杭州：没有 Webpack 浮屏、没有额外小书和图标纸片；报到→设计模式→Webpack/Babel→五张需求单→白板点亮整条能走完，手册五项能点亮。
+- 三章对话框仍是框内米色窗+ 名牌+▼；合肥开场名牌仍是「面试」，正文「原本录用的人嫌工资低，没来。」
+
+### 两轮失败拉下了什么（仅供参考，不可复用代码）
+
+#### 旧单 https://cursor.com/agents/bc-f8ad525a-f27a-5607-a280-5900a90b0659
+
+本地分支名 `cursor/no-world-prop-floats-0659`（远程 404）。
+称改过：`hefei.mjs`、`hangzhou.mjs`、`main.mjs`、`engine/view.mjs`、`engine/props.mjs`、`hefei.test.mjs`、`world-props.test.mjs`、`scripts/verify.py`，并写了 `tests/no-world-prop-capture.mjs`。`nanjing.mjs` 未见改动。
+自称单元测试过了，接着用真浏览器走三章；在补 capture（合肥夜里截图、杭州流程）时 error，没交付。
+
+#### 新单 https://cursor.com/agents/bc-3e638657-6fd2-53b3-8456-bf43ab3411f0
+
+本地分支名 `cursor/no-world-prop-floats-11f0`（远程 404）。
+称改过：`hefei.mjs`、`hangzhou.mjs`、`engine/view.mjs`、`main.mjs`、`hefei.test.mjs`、`world-props.test.mjs`、`scripts/verify.py`。`nanjing.mjs` 未见改动。
+思路：只给挂了 `worldSprite` 的物体画世界图（杭州白板保留原地亮起），浮标留 `icon` 给手册卡。卡在 `world-props.test.mjs` 里 `play()`（`review_linux_git` / `study_patterns` 不被 accept），没跑到真浏览器截图，没提交。
+
+### 下一轮必须
+
+1. 从 main `c8baafe` 开独立分支，不要接两个已死的 VM。
+2. 代码一稳就 **commit 并 push**，先开 PR，再补真实运行截图。不要等 capture 全跑完才提交——两轮都死在这一步，仓库一无所获。
+3. 用量额度快没时，先预留 2 到 3 美元做交接和提交（把已有分支/PR 推出去），不要把最后的钱花在继续实现或补截图上。
+4. `docs/` 用现有发布脚本同步。不要合；交 PR 和截图给制作人，等用户说「合」。
+
+---
+
 ## 当前恢复点（2026-11-06，合肥面试开场名牌）
 
 合肥开场 `interview-narrator` 仍是旁白。名牌写「面试」，正文是「原本录用的人嫌工资低，没来。」没有头像、红箭头和「旁白」标签。其他对白和米色窗没改。证据在 `web/review/hefei-interview-nameplate/`。
