@@ -1,9 +1,14 @@
 // Frame selection and DOM placement are pure; atlas reading never changes the source image.
+// 3-column sheets keep idle, stride A, idle, stride B. A walkSequence lists only
+// the moving columns, so a standing pose is not inserted into the stride.
 export const WALK_POSE_HZ=4;
 export const WALK_SEQUENCE=Object.freeze([0,1,0,2]);
+const walkColumns=atlas=>atlas.walkSequence||WALK_SEQUENCE;
+const walkRate=atlas=>atlas.poseHz||WALK_POSE_HZ;
 export function frameIndex(atlas,facing,moving,time,column=0){
   const row=Math.max(0,atlas.directions.indexOf(facing));
-  const col=moving&&atlas.columns>1?WALK_SEQUENCE[Math.floor(time*WALK_POSE_HZ)%WALK_SEQUENCE.length]:column;
+  const sequence=walkColumns(atlas);
+  const col=moving&&atlas.columns>1?sequence[Math.floor(time*walkRate(atlas))%sequence.length]:column;
   return row*atlas.columns+col;
 }
 export const typingFrame=(column,time,playing)=>column+(playing?Math.floor(time*3)%2*4:0);

@@ -1,5 +1,6 @@
 // Desktop acceptance through Chrome DevTools Protocol; no npm dependencies.
 import {spawn} from 'node:child_process';
+import {existsSync} from 'node:fs';
 import {mkdtemp,writeFile,mkdir} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -28,7 +29,8 @@ const isolationHarness=blogIsolation?await import('./blog-isolation.mjs'):null;
 const lifecycleHarness=lifecycle?await import('./lifecycle.mjs'):null;
 const keyboardSite=keyboardHarness?await keyboardHarness.serveSite({repository:fallback||blogIsolation||lifecycle}):null;
 const profile=await mkdtemp(path.join(os.tmpdir(),'career-web-chrome-'));
-const chrome=spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',['--headless=new','--remote-debugging-port=0',`--user-data-dir=${profile}`,'--enable-unsafe-swiftshader','--hide-scrollbars','about:blank'],{stdio:['ignore','ignore','pipe']});
+const chromeBin=existsSync('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')?'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome':'google-chrome-stable';
+const chrome=spawn(chromeBin,['--headless=new','--remote-debugging-port=0',`--user-data-dir=${profile}`,'--enable-unsafe-swiftshader','--hide-scrollbars','--no-sandbox','--disable-dev-shm-usage','about:blank'],{stdio:['ignore','ignore','pipe']});
 const port=await new Promise((resolve,reject)=>{let log='';const timer=setTimeout(()=>{chrome.kill();keyboardSite?.server.close();reject(Error(`Chrome startup timeout: ${log.slice(-1000)}`));},15000);chrome.stderr.on('data',b=>{log+=b;const m=log.match(/DevTools listening on ws:\/\/[^:]+:(\d+)\//);if(m){clearTimeout(timer);resolve(Number(m[1]));}});chrome.on('error',e=>{clearTimeout(timer);keyboardSite?.server.close();reject(e);});chrome.on('exit',code=>{clearTimeout(timer);keyboardSite?.server.close();reject(Error(`Chrome exit ${code}: ${log.slice(-1000)}`));});});
 let ws;const checks={};
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -122,19 +124,19 @@ try{
     for(let n=0;n<16;n++){
       await sleep(70);const value=await run('({time:performance.now(),state:window.careerPrototype.snapshot()})');samples.push(value);
       assert.equal(value.state.moving,true);assert.equal(value.state.facing,'right');
-      const expected=[0,1,0,2][Math.floor(value.state.walkTime*4)%4];assert.equal(value.state.frames.player,9+expected);
+      const sequence=[1,2,3,4,5,6];const expected=sequence[Math.floor(value.state.walkTime*10)%sequence.length];assert.equal(value.state.frames.player,21+expected);assert.ok(expected>=1&&expected<=6);
       if(value.state.frames.player!==previousFrame&&shots<4){await shot(`walk-sample-${String(shots).padStart(2,'0')}.png`);shots++;previousFrame=value.state.frames.player;}
     }
-    await send('Input.dispatchKeyEvent',{type:'keyUp',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});await sleep(40);const idle=await state();assert.equal(idle.moving,false);assert.equal(idle.frames.player,9);
+    await send('Input.dispatchKeyEvent',{type:'keyUp',key:'ArrowRight',code:'ArrowRight',windowsVirtualKeyCode:39});await sleep(40);const idle=await state();assert.equal(idle.moving,false);assert.equal(idle.frames.player,21);
     const first=samples[0].state.walkMetrics;for(const v of samples){assert.equal(v.state.walkMetrics.width,first.width);assert.equal(v.state.walkMetrics.height,first.height);assert.equal(v.state.walkMetrics.offset,first.offset);assert.equal(v.state.walkMetrics.reference.height,first.reference.height);}
-    assert.deepEqual(errors,[]);await writeFile(new URL('walk-cadence-check.json',out),JSON.stringify({result:'passed',poseHz:4,stepsPerSecond:2,sequence:['idle','stepA','idle','stepB'],movementSpeed:60,stableScale:true,stableFootAnchor:true,releaseImmediatelyIdle:true,samples:samples.map(v=>({time:v.time,walkTime:v.state.walkTime,frame:v.state.frames.player,metrics:v.state.walkMetrics})),scope:'Targeted Chrome rightward movement and screenshot sequence; no full chapter rerun'},null,2)+'\n');console.log('Walking cadence, fixed scale, sole anchor and immediate idle passed.');
+    assert.deepEqual(errors,[]);await writeFile(new URL('walk-cadence-check.json',out),JSON.stringify({result:'passed',poseHz:10,sequence:['walk-01','walk-02','walk-03','walk-04','walk-05','walk-06'],idleInCycle:false,movementSpeed:60,stableScale:true,stableFootAnchor:true,releaseImmediatelyIdle:true,samples:samples.map(v=>({time:v.time,walkTime:v.state.walkTime,frame:v.state.frames.player,metrics:v.state.walkMetrics})),scope:'Targeted Chrome rightward movement and screenshot sequence; no full chapter rerun'},null,2)+'\n');console.log('Walking cadence, fixed scale, sole anchor and immediate idle passed.');
   }else if(process.argv.includes('--features-only')){
     const seed=async stateName=>{await run(`(async()=>{const d=await(await fetch('../design/chapter-01.json')).json();localStorage.setItem(d.savePolicy.key,JSON.stringify({schema:1,chapter:d.id,state:${JSON.stringify(stateName)},flags:d.legalSnapshots[${JSON.stringify(stateName)}][0]}));})()`);return reload();};
     const bubbleInside=async()=>{const r=await run(`(()=>{const a=document.querySelector('#conversation').getBoundingClientRect(),b=document.querySelector('#stage').getBoundingClientRect();return {a:{left:a.left,right:a.right,top:a.top,bottom:a.bottom},b:{left:b.left,right:b.right,top:b.top,bottom:b.bottom},modal:!!document.querySelector(':modal')};})()`);assert.equal(r.modal,false);assert.ok(r.a.left>=r.b.left&&r.a.right<=r.b.right&&r.a.top>=r.b.top&&r.a.bottom<=r.b.bottom);};
     await seed('office');await close();let snap=await state();assert.equal(snap.actors.filter(a=>a.id!=='player'&&a.posture==='seatedTyping').length,3);await shot('shared-office-work.png');checks.threePartnersWorking=true;
     const beforeFrames=snap.frames;let changedTyping=false;for(let n=0;n<8&&!changedTyping;n++){await sleep(100);snap=await state();changedTyping=Object.keys(beforeFrames).filter(id=>id!=='player').some(id=>snap.frames[id]!==beforeFrames[id]);}assert.ok(changedTyping);checks.typingHasTwoFrames=true;
     for(const [direction,k,row] of [['down','ArrowDown',0],['up','ArrowUp',1],['left','ArrowLeft',2],['right','ArrowRight',3]]){
-      await run('document.querySelector("#stage").focus()');await send('Input.dispatchKeyEvent',{type:'keyDown',key:k,code:k});await sleep(260);snap=await state();assert.equal(snap.facing,direction);assert.equal(snap.moving,true);assert.equal(Math.floor(snap.frames.player/3),row);assert.ok(snap.frames.player%3>0);await shot(`shared-walk-${direction}.png`);await send('Input.dispatchKeyEvent',{type:'keyUp',key:k,code:k});await sleep(100);assert.equal((await state()).frames.player,row*3);
+      await run('document.querySelector("#stage").focus()');await send('Input.dispatchKeyEvent',{type:'keyDown',key:k,code:k});await sleep(260);snap=await state();assert.equal(snap.facing,direction);assert.equal(snap.moving,true);assert.equal(Math.floor(snap.frames.player/7),row);assert.ok(snap.frames.player%7>0);await shot(`shared-walk-${direction}.png`);await send('Input.dispatchKeyEvent',{type:'keyUp',key:k,code:k});await sleep(100);assert.equal((await state()).frames.player,row*7);
     }checks.fourDirectionsAnimatedAndIdle=true;
     await walk(forum.x,forum.y);const foot=(await state()).position;await open('forum');snap=await state();assert.equal(snap.actors.find(a=>a.id==='player').posture,'seatedTyping');assert.deepEqual(snap.position,foot);assert.ok(snap.markers.some(m=>m.events.includes('open_forum_post')));await bubbleInside();await shot('shared-player-typing.png');checks.playerComputerSeatedAndFootSafe=true;
     await act('open_forum_post');snap=await state();assert.ok(!snap.markers.some(m=>m.events.includes('open_forum_post')));assert.equal(await run('document.querySelector("#portrait").dataset.expression'),'tense');assert.equal(await run('document.querySelector(".emotion-badge").dataset.expression'),'tense');await bubbleInside();await shot('shared-tense.png');checks.acceptedMarkerAndTensePortrait=true;

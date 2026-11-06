@@ -1,0 +1,371 @@
+{
+  "cell": [
+    28,
+    44
+  ],
+  "dirs": [
+    "down",
+    "up",
+    "left",
+    "right"
+  ],
+  "names": [
+    "idle",
+    "walk-01",
+    "walk-02",
+    "walk-03",
+    "walk-04",
+    "walk-05",
+    "walk-06"
+  ],
+  "palette": [
+    "#231D1A",
+    "#1C1816",
+    "#2D2521",
+    "#F0C4A8",
+    "#E8BCA0",
+    "#803028",
+    "#642820",
+    "#502018",
+    "#F5F0E6",
+    "#3C3F48",
+    "#303238",
+    "#282422",
+    "#372D28"
+  ],
+  "meta": {
+    "down": {
+      "frames": [
+        {
+          "name": "idle",
+          "hi_bbox": [
+            4,
+            163,
+            127,
+            485
+          ],
+          "logical_nonzero": 476
+        },
+        {
+          "name": "walk-01",
+          "hi_bbox": [
+            4,
+            163,
+            124,
+            491
+          ],
+          "logical_nonzero": 426
+        },
+        {
+          "name": "walk-02",
+          "hi_bbox": [
+            4,
+            163,
+            122,
+            491
+          ],
+          "logical_nonzero": 423
+        },
+        {
+          "name": "walk-03",
+          "hi_bbox": [
+            4,
+            163,
+            124,
+            491
+          ],
+          "logical_nonzero": 432
+        },
+        {
+          "name": "walk-04",
+          "hi_bbox": [
+            4,
+            165,
+            124,
+            491
+          ],
+          "logical_nonzero": 425
+        },
+        {
+          "name": "walk-05",
+          "hi_bbox": [
+            4,
+            165,
+            124,
+            490
+          ],
+          "logical_nonzero": 451
+        },
+        {
+          "name": "walk-06",
+          "hi_bbox": [
+            4,
+            164,
+            126,
+            493
+          ],
+          "logical_nonzero": 461
+        }
+      ],
+      "foot_ys": [
+        43,
+        43,
+        43,
+        43,
+        43,
+        43,
+        43
+      ]
+    },
+    "up": {
+      "frames": [
+        {
+          "name": "idle",
+          "hi_bbox": [
+            4,
+            169,
+            133,
+            506
+          ],
+          "logical_nonzero": 474
+        },
+        {
+          "name": "walk-01",
+          "hi_bbox": [
+            4,
+            170,
+            136,
+            508
+          ],
+          "logical_nonzero": 444
+        },
+        {
+          "name": "walk-02",
+          "hi_bbox": [
+            4,
+            170,
+            132,
+            508
+          ],
+          "logical_nonzero": 420
+        },
+        {
+          "name": "walk-03",
+          "hi_bbox": [
+            4,
+            170,
+            130,
+            508
+          ],
+          "logical_nonzero": 442
+        },
+        {
+          "name": "walk-04",
+          "hi_bbox": [
+            4,
+            170,
+            139,
+            508
+          ],
+          "logical_nonzero": 440
+        },
+        {
+          "name": "walk-05",
+          "hi_bbox": [
+            4,
+            170,
+            136,
+            508
+          ],
+          "logical_nonzero": 420
+        },
+        {
+          "name": "walk-06",
+          "hi_bbox": [
+            4,
+            170,
+            131,
+            508
+          ],
+          "logical_nonzero": 465
+        }
+      ],
+      "foot_ys": [
+        43,
+        43,
+        43,
+        43,
+        43,
+        43,
+        43
+      ]
+    },
+    "left": {
+      "frames": [
+        {
+          "name": "idle",
+          "hi_bbox": [
+            4,
+            181,
+            132,
+            514
+          ],
+          "logical_nonzero": 367
+        },
+        {
+          "name": "walk-01",
+          "hi_bbox": [
+            4,
+            181,
+            164,
+            514
+          ],
+          "logical_nonzero": 456
+        },
+        {
+          "name": "walk-02",
+          "hi_bbox": [
+            4,
+            181,
+            141,
+            514
+          ],
+          "logical_nonzero": 447
+        },
+        {
+          "name": "walk-03",
+          "hi_bbox": [
+            4,
+            181,
+            132,
+            513
+          ],
+          "logical_nonzero": 426
+        },
+        {
+          "name": "walk-04",
+          "hi_bbox": [
+            4,
+            181,
+            163,
+            513
+          ],
+          "logical_nonzero": 456
+        },
+        {
+          "name": "walk-05",
+          "hi_bbox": [
+            4,
+            181,
+            141,
+            513
+          ],
+          "logical_nonzero": 438
+        },
+        {
+          "name": "walk-06",
+          "hi_bbox": [
+            4,
+            181,
+            132,
+            511
+          ],
+          "logical_nonzero": 433
+        }
+      ],
+      "foot_ys": [
+        43,
+        43,
+        43,
+        43,
+        43,
+        43,
+        43
+      ]
+    },
+    "right": {
+      "frames": [
+        {
+          "name": "idle",
+          "hi_bbox": [
+            4,
+            182,
+            128,
+            497
+          ],
+          "logical_nonzero": 481
+        },
+        {
+          "name": "walk-01",
+          "hi_bbox": [
+            4,
+            182,
+            149,
+            497
+          ],
+          "logical_nonzero": 460
+        },
+        {
+          "name": "walk-02",
+          "hi_bbox": [
+            4,
+            182,
+            127,
+            499
+          ],
+          "logical_nonzero": 435
+        },
+        {
+          "name": "walk-03",
+          "hi_bbox": [
+            4,
+            182,
+            131,
+            498
+          ],
+          "logical_nonzero": 455
+        },
+        {
+          "name": "walk-04",
+          "hi_bbox": [
+            4,
+            182,
+            148,
+            498
+          ],
+          "logical_nonzero": 460
+        },
+        {
+          "name": "walk-05",
+          "hi_bbox": [
+            4,
+            182,
+            138,
+            497
+          ],
+          "logical_nonzero": 462
+        },
+        {
+          "name": "walk-06",
+          "hi_bbox": [
+            4,
+            182,
+            127,
+            499
+          ],
+          "logical_nonzero": 430
+        }
+      ],
+      "foot_ys": [
+        43,
+        43,
+        43,
+        43,
+        43,
+        43,
+        43
+      ]
+    }
+  },
+  "sheet": "/workspace/career-rpg-hefei-art/art/processed/player-walk-v2/sheets/player-walk-v2-sheet.png"
+}

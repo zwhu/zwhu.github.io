@@ -6,7 +6,7 @@
 
 | 角色 | 出现场景 | 当前素材 |
 | --- | --- | --- |
-| 主角 | 所有经历、南京夜读及现在 | `web/art/player-walk-v1.png`、`player-emotions-v1.png`、`typing-team-v1.png`；正面/四向设定在 `art/`，不重画 |
+| 主角 | 所有经历、南京夜读及现在 | `web/art/player-walk-v2-sheet.png`（站立 idle，走路 walk-01…06）、`player-emotions-v1.png`、`typing-team-v1.png`；坐姿 `sit-back-hz-18x30.png`；正面/四向设定在 `art/`，不重画 |
 | 南京CTO | 首次上线、共同排查与宽慰 | `web/art/npc-team-v1.png`及打字图集 |
 | 费翔🐘、米衣同伴 | 南京办公室 | 同上；不将图中的外貌当真人依据 |
 
