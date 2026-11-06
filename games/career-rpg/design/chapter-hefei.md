@@ -45,7 +45,7 @@
 
 `fact` = 作者原话（2026-11-05 确认）；`fact_paraphrase` = 事实转述；`staging` = 演出草稿。
 
-- interview · narrator［fact_paraphrase］：原本录用的人嫌工资低，没来。
+- interview · narrator［fact_paraphrase］名牌「面试」：原本录用的人嫌工资低，没来。
 - interview · boss［fact］：你能力不行，来了也干不了活。
 - interview · player［fact］：我不要工资，让我来试试就行。
 - interview · boss［fact］：行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。

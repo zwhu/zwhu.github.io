@@ -80,6 +80,13 @@ const SNAP = `(() => {
     pageReview: document.body.innerText.includes('回看'),
     arrowVisible: !arrow.hidden && ar.height > 0,
     arrowActor: arrow.dataset.actor || '',
+    nameplate: (() => {
+      const plate = document.querySelector('#nameplate');
+      if (!plate || plate.hidden) return '';
+      const style = getComputedStyle(plate);
+      if (style.display === 'none' || style.visibility === 'hidden') return '';
+      return plate.textContent || '';
+    })(),
   };
 })()`;
 async function snap() {
@@ -198,6 +205,8 @@ const steps = [];
 async function record(id, file, expect = {}) {
   const view = await snap();
   if (expect.text && !`${view.dialogue}\n${view.task}`.includes(expect.text)) throw new Error(id + ' missing ' + expect.text + ' ' + JSON.stringify(view));
+  if (expect.exact != null && view.dialogue !== expect.exact) throw new Error(id + ' dialogue ' + JSON.stringify(view.dialogue));
+  if (expect.plate != null && view.nameplate !== expect.plate) throw new Error(id + ' nameplate ' + JSON.stringify(view.nameplate));
   if (expect.arrow === null && view.arrowVisible) throw new Error(id + ' narration has an arrow ' + view.arrowActor);
   if (expect.arrow && view.arrowActor !== expect.arrow) throw new Error(id + ' arrow ' + view.arrowActor);
   if (expect.bottom && !view.bottom) throw new Error(id + ' dialogue is not docked to the bottom');
@@ -217,8 +226,8 @@ try {
     objects: Object.fromEntries(mod.HEFEI.objects.map(item => [item.id, {x: item.x, y: item.y, role: item.role || '', iconAt: item.iconAt || null}])),
     actors: Object.fromEntries(mod.HEFEI.actors.filter(item => item.interaction).map(item => [item.id, item.interaction])),
   }))`);
-  await waitText('面试。原本录用的人嫌工资低，没来。');
-  await record('interview-narration', '01-interview-narration.png', {text: '面试。原本录用的人嫌工资低，没来。', arrow: null, bottom: true});
+  await waitText('原本录用的人嫌工资低，没来。');
+  await record('interview-narration', '01-interview-narration.png', {exact: '原本录用的人嫌工资低，没来。', plate: '面试', arrow: null, bottom: true});
   await dismiss();
   await walkTo(147, 192);
   await focusObject('colleague-b2');

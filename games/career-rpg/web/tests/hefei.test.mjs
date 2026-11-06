@@ -11,7 +11,7 @@ const nanjing=createChapter(nanjingData);
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-hefei.json',import.meta.url),'utf8'));
 const chapter=createChapter(data);
 const facts={
-  'interview-narrator':'面试。原本录用的人嫌工资低，没来。',
+  'interview-narrator':'原本录用的人嫌工资低，没来。',
   'interview-boss-1':'你能力不行，来了也干不了活。',
   'interview-player':'我不要工资，让我来试试就行。',
   'interview-boss-2':'行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。',
@@ -59,6 +59,10 @@ test('hefei keeps five states, ten events and the author wording',()=>{
   assert.deepEqual(Object.keys(data.legalSnapshots),['interview','day_tasks','night_study','raise','complete']);
   assert.deepEqual(data.transitions.map(t=>t.event),['ask_for_chance','boss_lets_try','take_day_task','review_linux_git','review_frontend','night_falls','study_java','study_db_nosql','days_pass','raise_read']);
   for(const [id,text] of Object.entries(facts))assert.equal(chapter.text(id),text,id);
+  assert.equal(chapter.nameplate('interview-narrator'),'面试');
+  assert.equal(chapter.text('interview-narrator').includes('面试'),false);
+  assert.equal(data.dialogues.find(line=>line.id==='interview-narrator').speaker,'narrator');
+  for(const line of data.dialogues)if(line.id!=='interview-narrator')assert.equal(line.nameplate,undefined,line.id);
   assert.equal(chapter.text(chapter.manualId),chapter.text('raise-boss'));
   const blob=JSON.stringify(data.dialogues)+JSON.stringify(data.objectives);
   assert.doesNotMatch(blob,/20\d\d|安风|\d+\s*元/);
@@ -194,6 +198,10 @@ test('hefei marker sits on my_pc, cards stay off the startup sheets, and the ais
   assert.equal(pageSource.includes('id="nameplate"'),true);
   assert.equal(cssSource.includes('rgba(249,248,241,.8)'),true);
   assert.equal(cssSource.includes('dialogue-caret'),true);
+  assert.equal(cssSource.includes('.speech-bubble.narration #nameplate{display:none}'),true);
+  assert.equal(cssSource.includes('.speech-bubble.docked.scene-title #nameplate:not([hidden]){display:block}'),true);
+  assert.equal(mainSource.includes("plate:chapter.nameplate('interview-narrator')"),true);
+  assert.equal(mainSource.includes("plate:chapter.nameplate('raise-narrator')"),false);
   assert.equal(HEFEI.actors.some(actor=>actor.readPages)||HEFEI.objects.some(object=>object.readPages),false);
   const start=HEFEI.entryPoints.interview;
   const seen=new Set();const queue=[[start.x,start.y]];

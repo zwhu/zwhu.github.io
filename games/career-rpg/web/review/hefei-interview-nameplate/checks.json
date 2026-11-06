@@ -1,0 +1,73 @@
+{
+  "ready": true,
+  "state": "dialogue",
+  "chapter": "interview",
+  "flags": [],
+  "task": "面试：从门口走到老板桌前",
+  "speaker": "旁白",
+  "speakerVisible": false,
+  "speakerBox": {
+    "w": 1,
+    "h": 1,
+    "clip": "inset(50%)",
+    "position": "absolute"
+  },
+  "dialogue": "原本录用的人嫌工资低，没来。",
+  "dialogueParagraphs": [
+    "原本录用的人嫌工资低，没来。"
+  ],
+  "narration": true,
+  "docked": true,
+  "sceneTitle": true,
+  "bubbleBackground": "rgba(249, 248, 241, 0.8)",
+  "nameplate": "面试",
+  "nameplateHidden": false,
+  "nameplateDisplay": "block",
+  "nameplateVisible": true,
+  "nameplateStyle": {
+    "background": "rgb(255, 255, 255)",
+    "color": "rgb(40, 38, 34)",
+    "borderTopWidth": "2px",
+    "borderTopStyle": "solid",
+    "borderTopColor": "rgb(40, 38, 34)",
+    "fontWeight": "600",
+    "fontSize": "28.1302px",
+    "fontFamily": "\"Noto Sans CJK SC\", \"Noto Sans SC\", \"Source Han Sans SC\", \"PingFang SC\", \"Microsoft YaHei\", \"WenQuanYi Micro Hei\", sans-serif"
+  },
+  "nameplateBox": {
+    "x": 244.96875,
+    "y": 567.25,
+    "w": 90.9375,
+    "h": 44
+  },
+  "nameplateInsideStage": true,
+  "portraitDisplay": "none",
+  "portraitHidden": true,
+  "portraitVisible": false,
+  "arrowVisible": false,
+  "arrowActor": "",
+  "buttons": [
+    {
+      "text": "",
+      "label": "继续",
+      "caret": true,
+      "visible": true
+    }
+  ],
+  "continueExplore": false,
+  "hintText": "",
+  "hintVisible": false,
+  "caret": {
+    "content": "\"\"",
+    "opacity": "1",
+    "animationName": "dialogue-caret"
+  },
+  "box": {
+    "x": 20.453125,
+    "y": 404.0625,
+    "w": 941.078125,
+    "h": 138.09375,
+    "stageW": 982,
+    "stageH": 552.375
+  }
+}

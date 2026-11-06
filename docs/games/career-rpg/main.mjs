@@ -79,7 +79,7 @@ function visibleRoom(){
 }
 function chapterSpawn(){return {...sceneConfig.entryPoints[chapter.initial().state]};}
 function eventTitle(event){return sceneConfig.actionTitles?.[event]||actionTitles[event];}
-let pageContext=null,dialogueBack=null,dialogueReturnFocus=stage,pauseContext=null,lastGameFocus=stage;
+let pageContext=null,dialogueBack=null,dialogueReturnFocus=stage,dialoguePlate='',pauseContext=null,lastGameFocus=stage;
 const confirmationKeys=new Set();
 const readingKeys=new Set(['PageUp','PageDown','Home','End','ArrowUp','ArrowDown']);
 const movement=new Map([['ArrowLeft',[-1,0]],['a',[-1,0]],['ArrowRight',[1,0]],['d',[1,0]],['ArrowUp',[0,-1]],['w',[0,-1]],['ArrowDown',[0,1]],['s',[0,1]]]);
@@ -116,13 +116,14 @@ function closeConversation(){
 function capturePage(){return pageContext?{...pageContext,selectedIndex:enabledOptions().indexOf(document.activeElement),object:dialogueObject,targetID:selectedTargetID}:null;}
 function restorePage(page){
   dialogueObject=page.object;selectedTargetID=page.targetID;
-  show(page.title,page.paragraphs,page.choices,page.canDismiss,page.speaker,page.system,{back:page.back,returnFocus:page.returnFocus});
+  show(page.title,page.paragraphs,page.choices,page.canDismiss,page.speaker,page.system,{back:page.back,returnFocus:page.returnFocus,plate:page.plate||''});
   focusElement(enabledOptions()[Math.max(0,page.selectedIndex)]);
 }
 function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeaker,system=false,options={}){
   const content=document.querySelector('#dialogue-content');
   dialogueBack=options.back||null;dialogueReturnFocus=options.returnFocus||document.activeElement;
-  pageContext={title,paragraphs,choices,canDismiss,speaker,system,back:dialogueBack,returnFocus:dialogueReturnFocus};
+  dialoguePlate=options.plate||'';
+  pageContext={title,paragraphs,choices,canDismiss,speaker,system,back:dialogueBack,returnFocus:dialogueReturnFocus,plate:dialoguePlate};
   currentSpeaker=speaker;
   if(system){conversation.hidden=true;systemDialog.append(content);}else{if(systemDialog.open)systemDialog.close();conversation.append(content);conversation.hidden=false;}
   setState('dialogue');dismissible=canDismiss;
@@ -254,6 +255,7 @@ function applyBeat(beat){
   lampOn=dimOpacity>0;
 }
 function showNarrationBar(text){
+  dialoguePlate='';
   currentSpeaker='narrator';
   const content=document.querySelector('#dialogue-content');
   if(systemDialog.open)systemDialog.close();
@@ -327,7 +329,7 @@ function enterHefei(){
   const dialog=chapter.actions(snapshot,'dialog');
   if(dialog.length&&sceneConfig.transitionLines?.[dialog[0].event]){beginTransition(dialog[0].event);return;}
   if(dialog.length){presentDialog(dialog[0]);return;}
-  if(snapshot.state==='interview'){show('旁白',lines(['interview-narrator']),[],true,'narrator');return;}
+  if(snapshot.state==='interview'){show('旁白',lines(['interview-narrator']),[],true,'narrator',false,{plate:chapter.nameplate('interview-narrator')});return;}
   if(snapshot.state==='raise'){show('旁白',lines(['raise-narrator']),[],true,'narrator');return;}
   if(snapshot.state==='complete'){
     show('合肥 · 本章完成',lines(['manual-1']).concat('这句话记在手册里。'),[{label:'从合肥走到南京',id:'journey',run:()=>openJourney('bridge')},{label:'从办公室重玩',id:'replay',run:confirmReplay}],true,'narrator');
@@ -621,7 +623,7 @@ function screenPoint(actor,head=true){
 function placeBubble(){
   conversation.style.left='';conversation.style.right='';conversation.style.top='';conversation.style.bottom='';conversation.style.width='';
   const plate=document.querySelector('#nameplate');
-  if(conversation.hidden){speakerArrow.hidden=true;if(plate)plate.hidden=true;return;}
+  if(conversation.hidden){speakerArrow.hidden=true;if(plate)plate.hidden=true;conversation.classList.remove('scene-title');return;}
   const actor=sceneConfig.actors.find(item=>item.id===currentSpeaker)||null;
   const narrating=!actor||currentSpeaker==='narrator';
   conversation.classList.add('docked');
@@ -630,10 +632,14 @@ function placeBubble(){
   conversation.dataset.actor=narrating?'':actor.id;
   const heading=document.querySelector('#speaker').textContent;
   const spoken=conversation.dataset.spoken==='1';
-  const showPlate=!!actor&&!narrating&&(actor.id!=='player'||heading===actor.name||spoken);
-  if(plate){plate.textContent=showPlate?actor.name:'';plate.hidden=!showPlate;}
+  const actorPlate=!!actor&&!narrating&&(actor.id!=='player'||heading===actor.name||spoken);
+  // Scene title stays narration: same nameplate, no portrait and no arrow.
+  const titlePlate=narrating&&dialoguePlate?dialoguePlate:'';
+  conversation.classList.toggle('scene-title',!!titlePlate);
+  const showPlate=actorPlate||!!titlePlate;
+  if(plate){plate.textContent=actorPlate?actor.name:titlePlate;plate.hidden=!showPlate;}
   document.querySelector('#dialogue')?.setAttribute('aria-labelledby',showPlate?'nameplate':'speaker');
-  if(!showPlate){speakerArrow.hidden=true;delete speakerArrow.dataset.actor;return;}
+  if(!actorPlate){speakerArrow.hidden=true;delete speakerArrow.dataset.actor;return;}
   const point=screenPoint(actor);
   speakerArrow.hidden=false;speakerArrow.dataset.actor=actor.id;
   speakerArrow.style.left=`${point.x}px`;speakerArrow.style.top=`${point.y-18}px`;
