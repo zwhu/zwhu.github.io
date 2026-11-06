@@ -1,7 +1,7 @@
 import {nearbyAll,integrateWalk,MOVE_SPEED,blocked} from './engine/world.mjs';
 import {createChapter} from './story.mjs';
 import {actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './chapters/logic.mjs';
-import {createActor,bubblePosition,seatedFrame,motionForRender,walkClock,scanAtlas} from './actors.mjs';
+import {createActor,seatedFrame,motionForRender,walkClock,scanAtlas} from './actors.mjs';
 import {createView,maskedImage} from './engine/view.mjs';
 import {GAME_TITLE} from './title.mjs';
 import {wrapNarrow} from './narrow-wrap.mjs';
@@ -23,6 +23,9 @@ const task=document.querySelector('#task');
 const interaction=document.querySelector('#interaction');
 const pauseButton=document.querySelector('#pause');
 const conversation=document.querySelector('#conversation');
+const speakerArrow=document.createElement('span');
+speakerArrow.id='speaker-arrow';speakerArrow.hidden=true;speakerArrow.setAttribute('aria-hidden','true');
+stage.append(speakerArrow);
 const pauseMenu=document.querySelector('#pause-menu');
 const systemDialog=document.querySelector('#system-dialog');
 document.documentElement.classList.remove('no-js');
@@ -91,7 +94,7 @@ function focusCurrentUI(){const scope=optionScope();if(scope){focusElement(scope
 function pause(){
   if(state!=='explore'&&state!=='dialogue')return;
   pauseContext={state,focus:document.activeElement,system:systemDialog.open};
-  if(state==='dialogue'){conversation.hidden=true;if(systemDialog.open)systemDialog.close();}
+  if(state==='dialogue'){conversation.hidden=true;speakerArrow.hidden=true;if(systemDialog.open)systemDialog.close();}
   setState('paused');
   // A required story/save decision must resume in place; menus cannot discard it.
   document.querySelector('#pause-manual').disabled=pauseContext.state==='dialogue';
@@ -107,7 +110,7 @@ function resume(){
 function closeConversation(){
   if(!dismissible){pause();return;}
   const back=dialogueBack,returnFocus=dialogueReturnFocus;
-  hideObjectCard();conversation.hidden=true;dialogueObject=null;selectedTargetID='';if(systemDialog.open)systemDialog.close();setState('explore');
+  hideObjectCard();conversation.hidden=true;speakerArrow.hidden=true;dialogueObject=null;selectedTargetID='';if(systemDialog.open)systemDialog.close();setState('explore');
   if(back)back();else focusElement(returnFocus);
 }
 function capturePage(){return pageContext?{...pageContext,selectedIndex:enabledOptions().indexOf(document.activeElement),object:dialogueObject,targetID:selectedTargetID}:null;}
@@ -124,6 +127,10 @@ function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeake
   if(system){conversation.hidden=true;systemDialog.append(content);}else{if(systemDialog.open)systemDialog.close();conversation.append(content);conversation.hidden=false;}
   setState('dialogue');dismissible=canDismiss;
   document.querySelector('#speaker').textContent=title;
+  const portrait=document.querySelector('#portrait');
+  const narrating=speaker==='narrator'||!sceneConfig?.actors?.some(actor=>actor.id===speaker);
+  portrait.hidden=narrating;
+  if(!narrating)drawPortrait(portrait,speaker);
   const body=document.querySelector('#dialogue');body.replaceChildren();
   for(const text of paragraphs){const p=document.createElement('p');p.dataset.narrow=text;p.textContent=text;body.append(p);}
   const container=document.querySelector('#choices');container.replaceChildren();
@@ -135,7 +142,6 @@ function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeake
   if(canDismiss){const button=document.createElement('button');button.type='button';button.textContent=dialogueBack?'返回':'继续探索';button.id='close-dialogue';button.addEventListener('click',event=>{if(event.detail===0||performance.now()>=choicesReady)closeConversation();});container.append(button);}
   choicesReady=performance.now()+180;
   if(system&&!systemDialog.open)systemDialog.showModal();
-  drawPortrait(document.querySelector('#portrait'),currentSpeaker);
   renderSkillSlots(options.slots||null);
   repaintNarrow();
   placeBubble();enabledOptions()[0]?.focus();updateUI();
@@ -209,11 +215,22 @@ function accept(event){
   persist(()=>{
     if(event==='open_journey'){openJourney('chapter');return;}
     const follow=sceneConfig.follow?.[event];
-    if(follow){show(follow.title,lines(follow.lines),[],true,follow.speaker||'player');return;}
+    if(follow){
+      const choices=[];
+      if(follow.continueEvent)choices.push({label:'继续',id:'continue-line',run:()=>{
+        const transition=chapter.actions(snapshot,follow.continueRole||'boss').find(item=>item.event===follow.continueEvent);
+        if(transition)confirmPage(transition,false);
+      }});
+      show(follow.title,lines(follow.lines),choices,true,follow.speaker||'player');return;
+    }
     if(changed){enterScene();return;}
     if(sceneConfig.chainDialog){
       const pending=chapter.actions(snapshot,'dialog');
-      if(pending[0]){presentDialog(pending[0]);return;}
+      if(pending[0]){
+        if(sceneConfig.transitionLines?.[pending[0].event]){beginTransition(pending[0].event);return;}
+        presentDialog(pending[0]);return;
+      }
+      if(sceneConfig.directTalk){settleExplore();return;}
       show('已经记下',[sceneTarget(sceneConfig,chapter,snapshot)],[],true);return;
     }
     show('已经记下',[chapter.target(snapshot)],[],true);
@@ -229,35 +246,58 @@ function applyBeat(beat){
   dimOpacity=beat.dim||0;
   lampOn=dimOpacity>0;
 }
+function showNarrationBar(text){
+  currentSpeaker='narrator';
+  const content=document.querySelector('#dialogue-content');
+  if(systemDialog.open)systemDialog.close();
+  conversation.append(content);conversation.hidden=false;
+  document.querySelector('#speaker').textContent='旁白';
+  document.querySelector('#portrait').hidden=true;
+  const body=document.querySelector('#dialogue');body.replaceChildren();
+  const paragraph=document.createElement('p');paragraph.dataset.narrow=text;paragraph.textContent=text;body.append(paragraph);
+  document.querySelector('#choices').replaceChildren();
+  dismissible=false;repaintNarrow();placeBubble();
+}
+function settleExplore(){
+  hideObjectCard();conversation.hidden=true;speakerArrow.hidden=true;dialogueObject=null;selectedTargetID='';
+  document.querySelector('#dialogue').replaceChildren();document.querySelector('#speaker').textContent='';
+  if(systemDialog.open)systemDialog.close();setState('explore');stage.focus({preventScroll:true});updateUI();
+}
 function beginTransition(event){
   if(transitionEvent)return;
-  hideObjectCard();conversation.hidden=true;if(systemDialog.open)systemDialog.close();dialogueObject=null;
-  transitionEvent=event;transitionStarted=cinematicOn?cinematicClock():performance.now();transitionIndex=-1;setState('transition');
-  if(!caption){caption=document.createElement('p');caption.id='transition-caption';stage.append(caption);}
-  caption.textContent=chapter.text(sceneConfig.transitionLines[event]);caption.hidden=false;
-  applyBeat(sceneConfig.transitionBeats[event][0]);
+  const next=chapter.advance(snapshot,event);if(!next.accepted)return;
+  snapshot=next.snapshot;castSnapshot=null;
+  hideObjectCard();dialogueObject=null;selectedTargetID='';
+  persist(()=>{
+    transitionEvent=event;transitionStarted=cinematicOn?cinematicClock():performance.now();transitionIndex=-1;setState('transition');
+    showNarrationBar(chapter.text(sceneConfig.transitionLines[event]));
+    applyBeat(sceneConfig.transitionBeats[event][0]);
+    updateUI();
+  });
 }
 function finishTransition(){
   const event=transitionEvent;if(!event)return;
   transitionEvent=null;transitionIndex=-1;
-  if(caption)caption.hidden=true;
+  conversation.hidden=true;speakerArrow.hidden=true;
   const beats=sceneConfig.transitionBeats[event];
-  applyBeat(beats[beats.length-1]);
+  if(beats)applyBeat(beats[beats.length-1]);
   dimOpacity=0;lampOn=false;
-  accept(event);
+  enterScene();
 }
 function hideObjectCard(){if(!card)return;card.hidden=true;cardImg.removeAttribute('src');delete cardImg.dataset.src;}
 function objectCardSrc(object){return object.cardLit&&object.litWhen&&object.litWhen.every(flag=>chapter.has(snapshot,flag))?object.cardLit:object.card;}
 function showObjectCard(object){
+  if(object.cardIn&&!object.cardIn.includes(snapshot.state)){hideObjectCard();return;}
   const src=objectCardSrc(object);if(!src){hideObjectCard();return;}
   if(!card){card=document.createElement('figure');card.id='object-card';cardImg=document.createElement('img');cardImg.alt='物件大图';const cap=document.createElement('figcaption');cap.textContent='';card.append(cardImg,cap);stage.append(card);}
   if(cardImg.dataset.src!==src){cardImg.src=src;cardImg.dataset.src=src;}
   card.hidden=false;
 }
-function confirmPage(transition){
-  const parent=capturePage();
+function confirmPage(transition,linkParent=true){
+  const parent=linkParent?capturePage():null;
   dialogueSpeaker=sceneConfig.eventSpeakers?.[transition.event]||'player';
-  show(eventTitle(transition.event)||transition.label,lines(pageLines[transition.event]||[transition.dialogue]),[{label:transition.label,event:transition.event,run:()=>accept(transition.event)}],true,dialogueSpeaker,false,{back:parent?()=>restorePage(parent):null});
+  const run=()=>sceneConfig.transitionLines?.[transition.event]?beginTransition(transition.event):accept(transition.event);
+  show(eventTitle(transition.event)||transition.label,lines(pageLines[transition.event]||[transition.dialogue]),[{label:transition.label,event:transition.event,run}],true,dialogueSpeaker,false,{back:parent?()=>restorePage(parent):null});
 }
 function manual(){
   dialogueSpeaker='player';
@@ -278,15 +318,15 @@ function enterHefei(){
     dimOpacity=0;lampOn=false;
   }
   const dialog=chapter.actions(snapshot,'dialog');
+  if(dialog.length&&sceneConfig.transitionLines?.[dialog[0].event]){beginTransition(dialog[0].event);return;}
   if(dialog.length){presentDialog(dialog[0]);return;}
-  const copy={
-    interview:{title:'面试之前',lines:['interview-narrator'],extra:['从门口走到老板桌前。']},
-    day_tasks:{title:'白天：第一次',lines:['day-narrator'],extra:['走到自己的工位。电脑上有黄色感叹号。']},
-    night_study:{title:'深夜：学后端',lines:['night-narrator'],extra:['回到自己的工位，看看 Java，还有数据库和 NoSQL。']},
-    raise:{title:'两个月后',lines:['raise-narrator'],extra:['走到老板桌前。']},
-    complete:{title:'合肥 · 本章完成',lines:['manual-1'],extra:['这句话记在手册里。'],choices:[{label:'从合肥走到南京',id:'journey',run:()=>openJourney('bridge')},{label:'从办公室重玩',id:'replay',run:confirmReplay}]},
-  }[snapshot.state];
-  show(copy.title,lines(copy.lines).concat(copy.extra),copy.choices||[],true);
+  if(snapshot.state==='interview'){show('旁白',lines(['interview-narrator']),[],true,'narrator');return;}
+  if(snapshot.state==='raise'){show('旁白',lines(['raise-narrator']),[],true,'narrator');return;}
+  if(snapshot.state==='complete'){
+    show('合肥 · 本章完成',lines(['manual-1']).concat('这句话记在手册里。'),[{label:'从合肥走到南京',id:'journey',run:()=>openJourney('bridge')},{label:'从办公室重玩',id:'replay',run:confirmReplay}],true,'narrator');
+    return;
+  }
+  settleExplore();
 }
 function enterHangzhou(){
   const dialog=chapter.actions(snapshot,'dialog');
@@ -505,24 +545,45 @@ function openConversation(){
   if(object==='journey-map'&&snapshot.state==='journey'&&chapter.has(snapshot,'journey_opened')){openJourney('chapter');return;}
   if(snapshot.state==='complete'&&!active.atlas){manual();return;}
   const available=actionsFor(chapter,snapshot,active);
-  const choices=available.map(t=>({label:eventTitle(t.event)||t.label,event:'view_'+t.event,run:()=>confirmPage(t)}));
-  const history=[];
-  if(active.readPages)for(const page of active.readPages)if(chapter.has(snapshot,page.flag))history.push({label:page.label,id:`read-${page.flag}`,run:()=>show(page.title,lines(page.lines),[],true,page.speaker||dialogueSpeaker)});
-  if(object==='forum'&&chapter.has(snapshot,'feedback_reviewed'))history.push({label:'已记录的论坛反馈 · 回看',id:'read-feedback',run:()=>show('论坛反馈',lines(['investigation-confirm-1','investigation-feedback-copy']))});
-  if(object==='cto-pc'){
-    for(const [flag,label,id] of [['recheck_visited','排查记录','investigation-confirm-3'],['impact_confirmed','影响范围','investigation-confirm-2'],['test_reviewed','补测清单','learning-test-copy'],['comment_reviewed','坑点注释','learning-comment-copy']])
-      if(chapter.has(snapshot,flag))history.push({label:`已看过的${label} · 回看`,id:`read-${flag}`,run:()=>show(label,lines([id]))});
-  }
   if(object==='manual'){
     if(available.length){confirmPage(available[0]);return;}
     manual();return;
   }
+  if(sceneConfig.directTalk&&available.length<=1){
+    if(available.length===1){
+      const preface=prefaceText(active);
+      if(preface){show('旁白',[preface],[{label:active.prefaceAction||'继续',run:()=>confirmPage(available[0],false)}],true,'narrator');return;}
+      confirmPage(available[0],false);return;
+    }
+    const line=spokenLine(active);
+    if(!line){dialogueObject=null;hideObjectCard();return;}
+    const speaker=active.atlas?active.id:'narrator';
+    show(speaker==='narrator'?'旁白':active.name,[line],[],true,speaker);return;
+  }
+  const choices=available.map(t=>({label:eventTitle(t.event)||t.label,event:'view_'+t.event,run:()=>confirmPage(t)}));
   const words=active.dialogue?[active.dialogue[snapshot.state]||active.dialogue.default]:[available.length?'选择一项，读完后再确认。':sceneTarget(sceneConfig,chapter,snapshot)];
-  show(active.name,words,choices.concat(history));
+  show(active.name,words,choices);
+}
+function lineText(object,id){
+  if(!id)return '';
+  return object.lineIds?chapter.text(id):id;
+}
+function spokenLine(object){
+  if(object.lines){
+    const id=snapshot.state==='interview'?object.lines.interview:(object.lines[snapshot.state]||object.lines.day||'');
+    return lineText(object,id);
+  }
+  const bank=object.dialogue;
+  if(!bank)return '';
+  return bank[snapshot.state]||bank.default||'';
+}
+function prefaceText(object){
+  const id=object.preface?.[snapshot.state]||object.preface?.default||'';
+  return lineText(object,id);
 }
 function updateUI(){
   const candidates=state==='explore'?nearbyAll(position,visibleRoom()):[];
-  active=candidates.find(o=>o.id===selectedTargetID)||candidates.find(o=>actionsFor(chapter,snapshot,o).length)||candidates[0]||null;
+  active=candidates.find(o=>o.id===selectedTargetID)||candidates.find(o=>actionsFor(chapter,snapshot,o).length)||candidates.find(o=>readySkill(o))||candidates[0]||null;
   const hint=active?`E / Enter · ${readySkill(active)&&!actionsFor(chapter,snapshot,active).length?'拾取':active.name}${candidates.length>1?' · Q 切换对象':''}`:'';
   if(hint!==lastInteraction){interaction.textContent=hint;lastInteraction=hint;}
   if(chapter&&snapshot&&snapshot!==lastUISnapshot){task.textContent=sceneTarget(sceneConfig,chapter,snapshot);lastUISnapshot=snapshot;updateMarkers();updateExpressions();}
@@ -551,10 +612,18 @@ function screenPoint(actor,head=true){
   return {x:p.x/sceneConfig.width*stage.clientWidth,y:gy/sceneConfig.height*stage.clientHeight};
 }
 function placeBubble(){
-  if(conversation.hidden)return;
-  const actor=sceneConfig.actors.find(a=>a.id===currentSpeaker)||sceneConfig.actors[0],anchor=screenPoint(actor);
-  const placement=bubblePosition(anchor,{width:conversation.offsetWidth,height:conversation.offsetHeight},{width:stage.clientWidth,height:stage.clientHeight});
-  conversation.style.left=`${placement.left}px`;conversation.style.top=`${placement.top}px`;conversation.style.setProperty('--tail-left',`${placement.tail}px`);conversation.classList.toggle('below',placement.below);conversation.dataset.actor=actor.id;
+  if(conversation.hidden){speakerArrow.hidden=true;return;}
+  const actor=sceneConfig.actors.find(item=>item.id===currentSpeaker)||null;
+  const narrating=!actor||currentSpeaker==='narrator';
+  conversation.classList.add('docked');
+  conversation.classList.toggle('narration',narrating);
+  conversation.classList.remove('below');
+  conversation.dataset.actor=narrating?'':actor.id;
+  conversation.style.left='0';conversation.style.right='0';conversation.style.top='auto';conversation.style.bottom='0';conversation.style.width='100%';
+  if(narrating){speakerArrow.hidden=true;delete speakerArrow.dataset.actor;return;}
+  const point=screenPoint(actor);
+  speakerArrow.hidden=false;speakerArrow.dataset.actor=actor.id;
+  speakerArrow.style.left=`${point.x}px`;speakerArrow.style.top=`${point.y-18}px`;
 }
 function updateMarkers(){
   const layer=document.querySelector('#task-markers');layer.replaceChildren();
@@ -610,11 +679,14 @@ function frame(now,elapsedOverride){
   if(cinematicOn&&state==='journey')paintJourney(now);
   for(let i=0;i<propViews.length;i++){
     const item=propViews[i];
-    const show=!item.presentIn||item.presentIn.includes(snapshot.state)||readyRoles().has(item.role);
+    let show=!item.presentIn||item.presentIn.includes(snapshot.state)||readyRoles().has(item.role);
+    if(show&&item.iconHiddenIn&&item.iconHiddenIn.includes(snapshot.state))show=false;
+    if(show&&item.iconAfterFlag&&!chapter.has(snapshot,item.iconAfterFlag))show=false;
     item.visible=show;
     if(!show)continue;
     const litOn=item.lit&&item.litWhen&&item.litWhen.every(flag=>chapter.has(snapshot,flag));
-    item.image=litOn?item.lit:(state==='explore'&&active&&active.id===item.id?item.hi:item.base);
+    const glow=item.glowUntilFlag&&!chapter.has(snapshot,item.glowUntilFlag);
+    item.image=litOn?item.lit:(glow||(state==='explore'&&active&&active.id===item.id)?item.hi:item.base);
     item.showing=litOn?'lit':item.image===item.hi?'hi':'base';
     item.opacity=item.nightDim&&snapshot.state==='night_study'?0.45:1;
   }
@@ -795,7 +867,7 @@ async function start(){
   if(roomImages[1]){nightImage=roomImages[1];lampImage=maskedImage(dayImage,roomImages[2]);}
   props.forEach((object,i)=>{
     const pack=propPacks[i];
-    propViews.push({id:object.id,role:object.role,visible:true,image:pack.base,base:pack.base,hi:pack.hi,lit:pack.lit,showing:'base',x:object.iconAt.x,y:object.iconAt.y,w:object.iconSize[0],h:object.iconSize[1],opacity:1,litWhen:object.litWhen||null,presentIn:object.presentIn||null,nightDim:!!object.nightDim});
+    propViews.push({id:object.id,role:object.role,visible:true,image:pack.base,base:pack.base,hi:pack.hi,lit:pack.lit,showing:'base',x:object.iconAt.x,y:object.iconAt.y,w:object.iconSize[0],h:object.iconSize[1],opacity:1,litWhen:object.litWhen||null,presentIn:object.presentIn||null,nightDim:!!object.nightDim,iconHiddenIn:object.iconHiddenIn||null,iconAfterFlag:object.iconAfterFlag||'',glowUntilFlag:object.glowUntilFlag||''});
   });
   for(const actor of sceneConfig.actors){
     const data=atlasData[actor.atlas],standing=createActor(data.image,sceneConfig.atlases[actor.atlas],actor,sceneConfig.height,data.frames);

@@ -67,7 +67,7 @@ const SNAP = `(() => {
   const buttons = root ? [...root.querySelectorAll('.choices button, #journey-choices button')].map(button => ({text: button.textContent, focused: document.activeElement === button})) : [];
   const slots = [...document.querySelectorAll('#skill-slots figure')].map(figure => figure.textContent.replace(/\\s+/g, ' ').trim());
   const images = [...document.querySelectorAll('#skill-slots img, #skill-award-icon')].map(img => img.currentSrc || img.src);
-  return {position: s.position, state: s.state, active: s.active, chapter: s.chapter.state, skills: s.chapter.skills || null, flags: s.chapter.flags, speaker: document.querySelector('#speaker')?.textContent || '', dialogue: document.querySelector('#dialogue')?.textContent || '', hidden: convo.hidden, journey: journey ? !journey.hidden : false, slogan: document.querySelector('#journey-slogan')?.textContent || '', title: document.querySelector('#game-title')?.textContent || '', buttons, slots, images, focus: document.activeElement && (document.activeElement.id || document.activeElement.textContent)};
+  return {position: s.position, state: s.state, active: s.active, chapter: s.chapter.state, skills: s.chapter.skills || null, flags: s.chapter.flags, task: document.querySelector('#task')?.textContent || '', speaker: document.querySelector('#speaker')?.textContent || '', dialogue: document.querySelector('#dialogue')?.textContent || '', hidden: convo.hidden, review: buttons.some(button => button.text.includes('回看')), arrow: document.querySelector('#speaker-arrow')?.dataset.actor || '', arrowHidden: document.querySelector('#speaker-arrow')?.hidden !== false, docked: convo.classList.contains('docked'), journey: journey ? !journey.hidden : false, slogan: document.querySelector('#journey-slogan')?.textContent || '', title: document.querySelector('#game-title')?.textContent || '', buttons, slots, images, focus: document.activeElement && (document.activeElement.id || document.activeElement.textContent)};
 })()`;
 async function snap() {
   const started = Date.now();
@@ -110,7 +110,7 @@ async function waitText(part) {
   let last = null;
   while (Date.now() - started < 8000) {
     last = await snap();
-    const blob = `${last.title}\n${last.dialogue}\n${last.slogan}\n${last.speaker}\n${(last.slots || []).join('\n')}`;
+    const blob = `${last.title}\n${last.dialogue}\n${last.task || ''}\n${last.slogan}\n${last.speaker}\n${(last.slots || []).join('\n')}`;
     if (blob.includes(part) || last.buttons.some(button => button.text.includes(part))) return last;
     await sleep(80);
   }
@@ -154,6 +154,16 @@ async function walkTo(tx, ty) {
   throw new Error('stuck ' + tx + ',' + ty + ' ' + JSON.stringify((await snap()).position));
 }
 async function route(points) { for (const point of points) await walkTo(point.x, point.y); }
+async function waitExplore() {
+  const started = Date.now();
+  let last = null;
+  while (Date.now() - started < 10000) {
+    last = await snap();
+    if (last.state === 'explore' && last.hidden) return last;
+    await sleep(80);
+  }
+  throw new Error('not exploring ' + JSON.stringify(last));
+}
 async function focusObject(id) {
   for (let i = 0; i < 6; i++) {
     const view = await snap();
@@ -174,37 +184,39 @@ try {
   if (view.images.length) throw new Error('opening manual showed an icon ' + JSON.stringify(view.images));
   await shot('SKILL-01-SKILL-02-opening-manual.png');
   await dismiss();
-  await route([{x: 270, y: 196}, {x: 270, y: 128}, {x: 310, y: 128}]);
+  await route([{x: 24, y: 196}, {x: 24, y: 90}]);
+  await focusObject('jquery-book');
+  await tap('e');
+  await waitText('现在先去找老板面试');
+  view = await snap();
+  if (view.buttons.some(button => /拿下来|记下来|回看/.test(button.text))) throw new Error('interview shelf offered the book ' + JSON.stringify(view.buttons));
+  await dismiss();
+  await route([{x: 24, y: 196}, {x: 270, y: 196}, {x: 270, y: 128}, {x: 310, y: 128}]);
   await focusObject('boss');
   await tap('e');
-  await press('听老板说');
   await waitText('你能力不行');
+  if ((await snap()).arrow !== 'boss') throw new Error('boss arrow missing');
   await press('我不要工资');
   await waitText('我不要工资，让我来试试就行');
-  await dismiss();
-  await focusObject('boss');
-  await tap('e');
-  await press('继续听');
+  if ((await snap()).arrow !== 'player') throw new Error('player arrow missing');
+  await press('继续');
   await waitText('行，那你想试试我也不拦你');
   await press('继续');
-  await waitText('第一次用 Linux');
-  await dismiss();
+  await waitText('就这样留下了');
+  view = await waitExplore();
+  if (!view.task.includes('白天：去自己的工位开始干活')) throw new Error('day task ' + view.task);
   await route([{x: 270, y: 128}, {x: 270, y: 192}, {x: 75, y: 192}]);
   await focusObject('my-pc');
   await tap('e');
-  await press('接任务');
   await waitText('我在自己的工位坐下');
   await press('接任务');
-  await waitText('白天');
-  await dismiss();
-  await walkTo(147, 192);
+  await waitExplore();
   await focusObject('linux-screen');
   await tap('e');
-  await press('记下来');
-  await waitText('这一屏是 Linux');
+  await waitText('第一次用 Linux');
   await press('记下来');
   await waitText('白天 1/2');
-  await dismiss();
+  await waitExplore();
   view = await snap();
   if (view.skills?.linux !== 'ready') throw new Error('linux not ready ' + JSON.stringify(view.skills));
   const glints = await evaluate(`(() => { const c = document.querySelector('#skill-glints'); if (!c) return 0; const data = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < data.length; i += 4) if (data[i] > 0) n++; return n; })()`);
@@ -234,49 +246,42 @@ try {
   ws = null; seq = 0; pending = new Map();
   await sleep(400);
   await connect();
-  await waitText('第一次用 Linux');
-  await dismiss();
+  view = await snap();
+  if (view.skills?.linux !== 'got' || view.chapter !== 'day_tasks') throw new Error('refresh lost the desk ' + JSON.stringify(view));
   await tap('m');
   view = await waitText('精通 Linux 系统重装');
   if (!view.slots.some(slot => slot.includes('精通 Linux 系统重装'))) throw new Error('refresh lost skill ' + JSON.stringify(view.slots));
   await shot('SKILL-06-manual-after-refresh.png');
   await dismiss();
-  await walkTo(111, 180);
+  await route([{x: 75, y: 192}, {x: 24, y: 192}, {x: 24, y: 90}]);
   await focusObject('jquery-book');
   await tap('e');
+  await waitText('书架上夹着一本《锋利的 jQuery》');
+  await press('拿下来');
+  await waitText('第一次写前端');
   await press('记下来');
-  await waitText('锋利的 jQuery');
-  await press('记下来');
-  await waitText('天黑了');
-  await press('继续');
-  await sleep(2600);
-  await waitText('天黑以后');
-  await dismiss();
-  await route([{x: 111, y: 192}, {x: 240, y: 192}, {x: 240, y: 180}]);
+  await waitText('白天的活告一段落');
+  view = await waitExplore();
+  if (view.chapter !== 'night_study') throw new Error('night state ' + view.chapter);
+  await route([{x: 24, y: 192}, {x: 75, y: 192}]);
   await focusObject('java-book');
   await tap('e');
-  await press('记下来');
-  await waitText('这一本是 Java');
+  await waitText('晚上对着 Java');
   await press('记下来');
   await waitText('深夜 1/2');
-  await dismiss();
-  await route([{x: 240, y: 192}, {x: 215, y: 192}]);
+  await waitExplore();
   await focusObject('db-screen');
   await tap('e');
+  await waitText('再学数据库和 NoSQL');
   await press('记下来');
-  await waitText('数据库和 NoSQL');
-  await press('记下来');
-  await waitText('日夜颠倒地学新东西');
-  await press('继续');
-  await sleep(80);
-  await tap('Enter');
+  await waitText('日夜颠倒地学新东西，拼命把活干好，争取能留下来');
   await waitText('入职两个月');
   await dismiss();
   await route([{x: 270, y: 192}, {x: 270, y: 128}, {x: 310, y: 128}]);
   await focusObject('boss');
   await tap('e');
-  await press('听老板说');
   await waitText('努力工作的人一定会被看到的');
+  if ((await snap()).buttons.some(button => button.text.includes('回看'))) throw new Error('raise still offers 回看');
   await press('收起');
   view = await waitText('合肥 · 本章完成');
   if (Object.values(view.skills).some(status => status !== 'got')) throw new Error('complete skills ' + JSON.stringify(view.skills));

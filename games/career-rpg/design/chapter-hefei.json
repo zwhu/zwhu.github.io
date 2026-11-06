@@ -17,21 +17,21 @@
     "checkpointStates": ["interview", "day_tasks", "night_study", "raise", "complete"]
   },
   "objectives": {
-    "interview": "从门口走到老板桌前",
+    "interview": "面试：从门口走到老板桌前",
     "day_tasks": {
       "until": "day_task_taken",
-      "before": "去自己的工位，接过电脑上的任务",
+      "before": "白天：去自己的工位开始干活",
       "count": ["linux_git_reviewed", "frontend_reviewed"],
-      "pending": "白天 {n}/2 · 看看 Linux／Git，还有前端和《锋利的 jQuery》",
+      "pending": "白天 {n}/2 · 自己的电脑学 Linux／Git，左边书架拿《锋利的 jQuery》",
       "done": "白天 2/2 · 这一天先到这里"
     },
     "night_study": {
       "count": ["java_studied", "db_nosql_studied"],
-      "pending": "深夜 {n}/2 · 看看 Java，还有数据库和 NoSQL",
+      "pending": "深夜 {n}/2 · 自己工位上看 Java，还有数据库和 NoSQL",
       "done": "深夜 2/2 · 这几轮先到这里"
     },
     "raise": "走到老板桌前",
-    "complete": "合肥这一章完成 · 手册可以随时回看"
+    "complete": "合肥这一章完成 · 打开手册"
   },
   "roleTargets": {
     "boss": ["boss"],
@@ -156,19 +156,24 @@
     }
   ],
   "dialogues": [
-    {"id": "interview-narrator", "state": "interview", "speaker": "narrator", "basis": "fact_paraphrase", "text": "原本录用的人嫌工资低，没来。"},
+    {"id": "interview-narrator", "state": "interview", "speaker": "narrator", "basis": "fact_paraphrase", "text": "面试。原本录用的人嫌工资低，没来。"},
     {"id": "interview-boss-1", "state": "interview", "speaker": "boss", "basis": "fact", "text": "你能力不行，来了也干不了活。"},
     {"id": "interview-player", "state": "interview", "speaker": "player", "basis": "fact", "text": "我不要工资，让我来试试就行。"},
     {"id": "interview-boss-2", "state": "interview", "speaker": "boss", "basis": "fact", "text": "行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。"},
-    {"id": "day-narrator", "state": "day_tasks", "speaker": "narrator", "basis": "fact_paraphrase", "text": "第一次用 Linux 开发机，第一次用 Git，第一次写前端，还第一次写 E2E 测试。不会的就 Google。"},
+    {"id": "stayed", "state": "interview", "speaker": "narrator", "basis": "staging", "text": "就这样留下了。"},
+    {"id": "shelf-interview", "state": "interview", "speaker": "narrator", "basis": "staging", "text": "现在先去找老板面试。"},
+    {"id": "colleague-near-interview", "state": "interview", "speaker": "colleague", "basis": "staging", "text": "你是来面试的吧？别在这儿站着，老板在右边茶桌等你。"},
+    {"id": "colleague-far-interview", "state": "interview", "speaker": "colleague", "basis": "staging", "text": "招人的事别问我，找老板。他在茶桌那边坐着。"},
+    {"id": "colleague-near-day", "state": "day_tasks", "speaker": "colleague", "basis": "staging", "text": "好饿啊，搞完这点要不去吃面？"},
+    {"id": "colleague-far-day", "state": "day_tasks", "speaker": "colleague", "basis": "staging", "text": "没事，熬过星期三就是星期五。"},
     {"id": "day-task", "state": "day_tasks", "speaker": "player", "basis": "staging", "text": "我在自己的工位坐下，接过电脑上的任务。"},
-    {"id": "day-linux", "state": "day_tasks", "speaker": "player", "basis": "staging", "text": "这一屏是 Linux 开发机和 Git。"},
-    {"id": "day-jquery", "state": "day_tasks", "speaker": "player", "basis": "staging", "text": "这一页是第一次写的前端，手边是《锋利的 jQuery》。"},
-    {"id": "night-falls", "state": "day_tasks", "speaker": "narrator", "basis": "staging", "text": "天黑了。"},
-    {"id": "night-narrator", "state": "night_study", "speaker": "narrator", "basis": "fact_paraphrase", "text": "天黑以后，我还在学。白天写前端，晚上啃 Java、数据库和 NoSQL。"},
-    {"id": "night-java", "state": "night_study", "speaker": "player", "basis": "staging", "text": "这一本是 Java。"},
-    {"id": "night-db", "state": "night_study", "speaker": "player", "basis": "staging", "text": "这一屏是数据库和 NoSQL。"},
-    {"id": "days-pass", "state": "night_study", "speaker": "narrator", "basis": "fact_paraphrase", "text": "日夜颠倒地学新东西，拼命把活干好。"},
+    {"id": "day-linux", "state": "day_tasks", "speaker": "player", "basis": "fact_paraphrase", "text": "第一次用 Linux 开发机，第一次用 Git。不会的就 Google。"},
+    {"id": "jquery-found", "state": "day_tasks", "speaker": "narrator", "basis": "staging", "text": "书架上夹着一本《锋利的 jQuery》。"},
+    {"id": "day-jquery", "state": "day_tasks", "speaker": "player", "basis": "fact_paraphrase", "text": "第一次写前端，手边是《锋利的 jQuery》。还第一次写了 E2E 测试。"},
+    {"id": "night-falls", "state": "day_tasks", "speaker": "narrator", "basis": "staging", "text": "白天的活告一段落。天黑了，我还没走。"},
+    {"id": "night-java", "state": "night_study", "speaker": "player", "basis": "staging", "text": "晚上对着 Java 往下啃。"},
+    {"id": "night-db", "state": "night_study", "speaker": "player", "basis": "staging", "text": "再学数据库和 NoSQL。"},
+    {"id": "days-pass", "state": "night_study", "speaker": "narrator", "basis": "fact_paraphrase", "text": "日夜颠倒地学新东西，拼命把活干好，争取能留下来。"},
     {"id": "raise-narrator", "state": "raise", "speaker": "narrator", "basis": "fact_paraphrase", "text": "入职两个月，加了两次薪。"},
     {"id": "raise-boss", "state": "raise", "speaker": "boss", "basis": "fact", "text": "努力工作的人一定会被看到的。"},
     {"id": "manual-1", "state": "complete", "speaker": "manual", "basis": "fact", "text": "努力工作的人一定会被看到的。"}

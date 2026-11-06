@@ -66,7 +66,7 @@ export async function runJourney(ctx){
     await confirm('read_feedback','incident');await close();
 
     operation='walk-to-cto';await walk(cto.interaction.x,cto.interaction.y);await open('cto');await record(operation);
-    assert.equal(await run('document.querySelector("#conversation").dataset.actor'),'cto');await capture('cto-bubble.png','CTO头部气泡');
+    assert.equal(await run('document.querySelector("#conversation").dataset.actor'),'cto');assert.equal(await run('document.querySelector("#speaker-arrow").dataset.actor'),'cto');assert.equal(await run('document.querySelector("#conversation").classList.contains("docked")'),true);await capture('cto-bubble.png','CTO底部对话，红箭头在头顶');
     await act('cto_rallies_team','investigation');await close();
 
     operation='revisit-feedback';await walk(forum.x,forum.y);await open('forum');await act('confirm_feedback_reviewed','investigation','feedback_reviewed');await close();

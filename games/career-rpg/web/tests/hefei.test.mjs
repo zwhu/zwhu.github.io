@@ -11,13 +11,23 @@ const nanjing=createChapter(nanjingData);
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-hefei.json',import.meta.url),'utf8'));
 const chapter=createChapter(data);
 const facts={
-  'interview-narrator':'原本录用的人嫌工资低，没来。',
+  'interview-narrator':'面试。原本录用的人嫌工资低，没来。',
   'interview-boss-1':'你能力不行，来了也干不了活。',
   'interview-player':'我不要工资，让我来试试就行。',
   'interview-boss-2':'行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。',
-  'day-narrator':'第一次用 Linux 开发机，第一次用 Git，第一次写前端，还第一次写 E2E 测试。不会的就 Google。',
-  'night-narrator':'天黑以后，我还在学。白天写前端，晚上啃 Java、数据库和 NoSQL。',
-  'days-pass':'日夜颠倒地学新东西，拼命把活干好。',
+  'stayed':'就这样留下了。',
+  'shelf-interview':'现在先去找老板面试。',
+  'jquery-found':'书架上夹着一本《锋利的 jQuery》。',
+  'colleague-near-interview':'你是来面试的吧？别在这儿站着，老板在右边茶桌等你。',
+  'colleague-far-interview':'招人的事别问我，找老板。他在茶桌那边坐着。',
+  'colleague-near-day':'好饿啊，搞完这点要不去吃面？',
+  'colleague-far-day':'没事，熬过星期三就是星期五。',
+  'day-linux':'第一次用 Linux 开发机，第一次用 Git。不会的就 Google。',
+  'day-jquery':'第一次写前端，手边是《锋利的 jQuery》。还第一次写了 E2E 测试。',
+  'night-falls':'白天的活告一段落。天黑了，我还没走。',
+  'night-java':'晚上对着 Java 往下啃。',
+  'night-db':'再学数据库和 NoSQL。',
+  'days-pass':'日夜颠倒地学新东西，拼命把活干好，争取能留下来。',
   'raise-narrator':'入职两个月，加了两次薪。',
   'raise-boss':'努力工作的人一定会被看到的。',
   'manual-1':'努力工作的人一定会被看到的。',
@@ -62,8 +72,9 @@ test('hefei gates trial, day notes and night notes, and a repeat writes nothing'
   assert.equal(asked.snapshot.state,'interview');
   assert.equal(chapter.advance(asked.snapshot,'ask_for_chance').accepted,false);
   assert.equal(chapter.advance(asked.snapshot,'ask_for_chance').snapshot,asked.snapshot);
+  assert.equal(chapter.target(start),'面试：从门口走到老板桌前');
   const day=chapter.advance(asked.snapshot,'boss_lets_try').snapshot;
-  assert.equal(chapter.target(day),'去自己的工位，接过电脑上的任务');
+  assert.equal(chapter.target(day),'白天：去自己的工位开始干活');
   assert.equal(chapter.advance(day,'review_linux_git').accepted,false);
   const tasked=chapter.advance(day,'take_day_task').snapshot;
   assert.match(chapter.target(tasked),/白天 0\/2/);
@@ -143,7 +154,38 @@ test('hefei marker sits on my_pc, cards stay off the startup sheets, and the ais
   const night=presentCast(HEFEI,{state:'night_study'});
   assert.deepEqual(night.actors.map(a=>a.id),['player']);
   assert.ok(night.objects.some(o=>o.id==='db-screen'));
+  assert.ok(night.objects.some(o=>o.id==='java-book'));
   assert.equal(night.objects.some(o=>o.id==='linux-screen'),false);
+  assert.equal(night.objects.some(o=>o.id==='jquery-book'),false);
+  const pc=HEFEI.objects.find(o=>o.id==='my-pc');
+  const linux=HEFEI.objects.find(o=>o.id==='linux-screen');
+  const book=HEFEI.objects.find(o=>o.id==='jquery-book');
+  const shelf=HEFEI.objects.find(o=>o.id==='manual');
+  const java=HEFEI.objects.find(o=>o.id==='java-book');
+  const db=HEFEI.objects.find(o=>o.id==='db-screen');
+  const near=HEFEI.actors.find(a=>a.id==='colleague-b2');
+  const far=HEFEI.actors.find(a=>a.id==='colleague-b3');
+  assert.deepEqual([linux.x,linux.y],[pc.x,pc.y]);
+  assert.equal(linux.iconAfterFlag,'day_task_taken');
+  assert.ok(Math.hypot(linux.x-near.interaction.x,linux.y-near.interaction.y)>40);
+  assert.deepEqual([book.x,book.y],[shelf.x,shelf.y]);
+  assert.deepEqual(book.iconHiddenIn,['interview']);
+  assert.equal(book.glowUntilFlag,'frontend_reviewed');
+  assert.ok(Math.hypot(java.x-pc.x,java.y-pc.y)<24);
+  assert.ok(Math.hypot(db.x-pc.x,db.y-pc.y)<24);
+  assert.ok(Math.hypot(java.x-far.x,java.y-far.y)>40);
+  assert.equal(near.events,undefined);
+  assert.equal(far.events,undefined);
+  assert.equal(chapter.text(near.lines.interview),facts['colleague-near-interview']);
+  assert.notEqual(chapter.text(near.lines.interview),chapter.text(far.lines.interview));
+  assert.equal(chapter.actions(chapter.initial(),'jquery_book').length,0);
+  assert.equal(chapter.actions(day,'jquery_book').length,0);
+  assert.equal(chapter.actions(taken,'jquery_book')[0].event,'review_frontend');
+  assert.equal(chapter.actions(taken,'linux_screen')[0].event,'review_linux_git');
+  assert.equal(JSON.stringify(data).includes('回看'),false);
+  assert.equal(JSON.stringify(HEFEI).includes('回看'),false);
+  assert.equal(readFileSync(new URL('../main.mjs',import.meta.url),'utf8').includes('回看'),false);
+  assert.equal(HEFEI.actors.some(actor=>actor.readPages)||HEFEI.objects.some(object=>object.readPages),false);
   const start=HEFEI.entryPoints.interview;
   const seen=new Set();const queue=[[start.x,start.y]];
   while(queue.length){
