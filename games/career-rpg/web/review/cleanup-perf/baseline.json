@@ -1,0 +1,1898 @@
+{
+  "label": "baseline",
+  "measuredAt": "2026-11-06T05:19:32.850Z",
+  "git": "e61f8cc5b38b4814edc478b3266f48c31df9896a",
+  "page": "/games/career-rpg/web/?chapter=hefei",
+  "machine": {
+    "chrome": "Google Chrome 156.0.8078.47",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "cores": 4,
+    "platform": "linux"
+  },
+  "browserFlags": [
+    "--headless=new",
+    "--remote-debugging-port=0",
+    "--user-data-dir=PROFILE",
+    "--use-gl=angle",
+    "--use-angle=swiftshader-webgl",
+    "--enable-unsafe-swiftshader",
+    "--hide-scrollbars",
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
+    "--no-first-run",
+    "--disable-background-networking",
+    "--disable-extensions",
+    "--disable-sync",
+    "--autoplay-policy=no-user-gesture-required",
+    "--lang=zh-CN",
+    "--disable-translate",
+    "--window-size=1280,900"
+  ],
+  "viewport": {
+    "width": 1280,
+    "height": 900,
+    "deviceScaleFactor": 1
+  },
+  "cache": "disabled",
+  "webgl": {
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "vendor": "Google Inc. (Google)"
+  },
+  "method": {
+    "loadTimeMs": "performance.now() at the assignment of window.careerPrototype, installed with Object.defineProperty before Page.navigate. Counted only when #loading is absent, #manual is enabled, the stage canvas buffer width is > 0, #game-title is non-empty, and snapshot().state is not loading or error. timeOrigin is the navigation start of GET /games/career-rpg/web/?chapter=hefei on a fresh profile.",
+    "inpMs": "Max PerformanceEventTiming.duration among scored gestures in a run. Observer type \"event\"; durationThreshold is recorded per run (0 if accepted). Entries must have interactionId > 0 and startTime inside the gesture window (performance.now() just before the trusted CDP keydown, through 250ms after keyup). Gestures: walk-right, walk-left, walk-down, walk-up (80ms taps), walk-hold-right (400ms), handbook-m, dialogue-e (boss), skill-e (collect Linux). Reported value is the median of run INPs.",
+    "aggregation": "median across fresh-profile runs"
+  },
+  "runs": 5,
+  "loadTimeMs": {
+    "median": 455.9000000000233,
+    "min": 417.80000000004657,
+    "max": 533.6999999999534,
+    "samples": [
+      480.5999999999767,
+      417.80000000004657,
+      455.9000000000233,
+      443.0999999999767,
+      533.6999999999534
+    ]
+  },
+  "inpMs": {
+    "median": 32,
+    "min": 32,
+    "max": 40,
+    "samples": [
+      40,
+      40,
+      32,
+      32,
+      32
+    ]
+  },
+  "sessionMaxMs": {
+    "median": 40,
+    "samples": [
+      56,
+      40,
+      40,
+      40,
+      48
+    ]
+  },
+  "gestureMedians": {
+    "walk-right": 24,
+    "walk-left": 32,
+    "walk-down": 32,
+    "walk-up": 24,
+    "walk-hold-right": 32,
+    "handbook-m": 32,
+    "dialogue-e": 32,
+    "skill-e": 32
+  },
+  "results": [
+    {
+      "index": 1,
+      "wallMs": 13712,
+      "loadTimeMs": 480.5999999999767,
+      "readyState": "dialogue",
+      "title": "像素前端",
+      "heading": "合肥，争取一次机会",
+      "chapter": "interview",
+      "durationThreshold": 0,
+      "navigation": {
+        "responseEnd": 14.800000000046566,
+        "domContentLoaded": 105.59999999997672,
+        "loadEventEnd": 106.59999999997672,
+        "transferSize": 4334,
+        "type": "navigate"
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 104
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 104
+        }
+      ],
+      "longTasks": [
+        {
+          "start": 162.30000000004657,
+          "duration": 318,
+          "name": "self"
+        },
+        {
+          "start": 480.9000000000233,
+          "duration": 129,
+          "name": "self"
+        }
+      ],
+      "resources": [
+        {
+          "name": "web/style.css",
+          "type": "link",
+          "start": 20.699999999953434,
+          "duration": 7.200000000069849,
+          "transfer": 10430,
+          "decoded": 10130
+        },
+        {
+          "name": "web/main.mjs",
+          "type": "script",
+          "start": 20.900000000023283,
+          "duration": 7.199999999953434,
+          "transfer": 68009,
+          "decoded": 67709
+        },
+        {
+          "name": "web/world.mjs",
+          "type": "script",
+          "start": 83.5,
+          "duration": 4.900000000023283,
+          "transfer": 2723,
+          "decoded": 2423
+        },
+        {
+          "name": "web/story.mjs",
+          "type": "script",
+          "start": 83.5,
+          "duration": 6.199999999953434,
+          "transfer": 5639,
+          "decoded": 5339
+        },
+        {
+          "name": "web/scene-config.mjs",
+          "type": "script",
+          "start": 83.59999999997672,
+          "duration": 9.70000000006985,
+          "transfer": 18381,
+          "decoded": 18081
+        },
+        {
+          "name": "web/actors.mjs",
+          "type": "script",
+          "start": 83.59999999997672,
+          "duration": 13.70000000006985,
+          "transfer": 5954,
+          "decoded": 5654
+        },
+        {
+          "name": "web/title.mjs",
+          "type": "script",
+          "start": 83.69999999995343,
+          "duration": 14.400000000023283,
+          "transfer": 442,
+          "decoded": 142
+        },
+        {
+          "name": "web/cinematic.mjs",
+          "type": "script",
+          "start": 83.69999999995343,
+          "duration": 15.5,
+          "transfer": 10411,
+          "decoded": 10111
+        },
+        {
+          "name": "web/narrow-wrap.mjs",
+          "type": "script",
+          "start": 83.69999999995343,
+          "duration": 15.300000000046566,
+          "transfer": 8273,
+          "decoded": 7973
+        },
+        {
+          "name": "vendor/three.module.min.js",
+          "type": "script",
+          "start": 104.90000000002328,
+          "duration": 3.799999999930151,
+          "transfer": 339208,
+          "decoded": 338908
+        },
+        {
+          "name": "vendor/three.core.min.js",
+          "type": "script",
+          "start": 121.90000000002328,
+          "duration": 7.099999999976717,
+          "transfer": 381424,
+          "decoded": 381124
+        },
+        {
+          "name": "127.0.0.1:44107/favicon.ico",
+          "type": "other",
+          "start": 123.09999999997672,
+          "duration": 2.700000000069849,
+          "transfer": 300,
+          "decoded": 0
+        },
+        {
+          "name": "design/chapter-hefei.json",
+          "type": "fetch",
+          "start": 142,
+          "duration": 1.8000000000465661,
+          "transfer": 8798,
+          "decoded": 8498
+        },
+        {
+          "name": "hefei-office-day/day-384x216.png",
+          "type": "img",
+          "start": 142.19999999995343,
+          "duration": 1.8000000000465661,
+          "transfer": 24014,
+          "decoded": 23714
+        },
+        {
+          "name": "hefei-office-night/night-384x216.png",
+          "type": "img",
+          "start": 142.19999999995343,
+          "duration": 3.800000000046566,
+          "transfer": 25706,
+          "decoded": 25406
+        },
+        {
+          "name": "hefei-office-night/light-mask-384x216.png",
+          "type": "img",
+          "start": 142.30000000004657,
+          "duration": 4.5,
+          "transfer": 1324,
+          "decoded": 1024
+        },
+        {
+          "name": "art/player-walk-v2-sheet.png",
+          "type": "img",
+          "start": 142.30000000004657,
+          "duration": 5,
+          "transfer": 16210,
+          "decoded": 15910
+        },
+        {
+          "name": "art/npc-team-v1.png",
+          "type": "img",
+          "start": 142.40000000002328,
+          "duration": 11.5,
+          "transfer": 524618,
+          "decoded": 524318
+        },
+        {
+          "name": "art/typing-team-v1.png",
+          "type": "img",
+          "start": 142.40000000002328,
+          "duration": 13.29999999993015,
+          "transfer": 899122,
+          "decoded": 898822
+        },
+        {
+          "name": "art/player-emotions-v1.png",
+          "type": "img",
+          "start": 142.40000000002328,
+          "duration": 12.199999999953434,
+          "transfer": 786464,
+          "decoded": 786164
+        },
+        {
+          "name": "art/sit-back-hz-18x30.png",
+          "type": "img",
+          "start": 142.59999999997672,
+          "duration": 9.20000000006985,
+          "transfer": 705,
+          "decoded": 405
+        },
+        {
+          "name": "hefei-founder-emotions/emotions-strip-64x32.png",
+          "type": "img",
+          "start": 142.59999999997672,
+          "duration": 10.599999999976717,
+          "transfer": 1156,
+          "decoded": 856
+        },
+        {
+          "name": "hefei-founder-walk/walk-sheet-32x48.png",
+          "type": "img",
+          "start": 142.59999999997672,
+          "duration": 10.800000000046566,
+          "transfer": 6521,
+          "decoded": 6221
+        },
+        {
+          "name": "linux-git-screen/icon.png",
+          "type": "img",
+          "start": 142.59999999997672,
+          "duration": 13.400000000023283,
+          "transfer": 644,
+          "decoded": 344
+        },
+        {
+          "name": "frontend-jquery/icon.png",
+          "type": "img",
+          "start": 142.69999999995343,
+          "duration": 13.300000000046566,
+          "transfer": 801,
+          "decoded": 501
+        },
+        {
+          "name": "java-book/icon.png",
+          "type": "img",
+          "start": 142.69999999995343,
+          "duration": 14.100000000093132,
+          "transfer": 509,
+          "decoded": 209
+        },
+        {
+          "name": "db-nosql-screen/icon.png",
+          "type": "img",
+          "start": 142.80000000004657,
+          "duration": 14.099999999976717,
+          "transfer": 643,
+          "decoded": 343
+        },
+        {
+          "name": "linux-git-screen/icon-highlight.png",
+          "type": "img",
+          "start": 158.5,
+          "duration": 2.800000000046566,
+          "transfer": 703,
+          "decoded": 403
+        },
+        {
+          "name": "frontend-jquery/icon-highlight.png",
+          "type": "img",
+          "start": 158.59999999997672,
+          "duration": 2.800000000046566,
+          "transfer": 872,
+          "decoded": 572
+        },
+        {
+          "name": "java-book/icon-highlight.png",
+          "type": "img",
+          "start": 158.59999999997672,
+          "duration": 2.900000000023283,
+          "transfer": 567,
+          "decoded": 267
+        },
+        {
+          "name": "db-nosql-screen/icon-highlight.png",
+          "type": "img",
+          "start": 158.69999999995343,
+          "duration": 2.900000000023283,
+          "transfer": 746,
+          "decoded": 446
+        }
+      ],
+      "webgl": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)"
+      },
+      "gestures": [
+        {
+          "name": "walk-right",
+          "key": "ArrowRight",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226
+        },
+        {
+          "name": "walk-left",
+          "key": "ArrowLeft",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226
+        },
+        {
+          "name": "walk-down",
+          "key": "ArrowDown",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-up",
+          "key": "ArrowUp",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-hold-right",
+          "key": "ArrowRight",
+          "holdMs": 400,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0
+        },
+        {
+          "name": "handbook-m",
+          "key": "m",
+          "holdMs": 30,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 3.400000000023283
+        },
+        {
+          "name": "dialogue-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 3.300000000046566
+        },
+        {
+          "name": "skill-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 40,
+          "eventCount": 2,
+          "maxProcessing": 5
+        }
+      ],
+      "inpMs": 40,
+      "sessionMaxMs": 56
+    },
+    {
+      "index": 2,
+      "wallMs": 13560,
+      "loadTimeMs": 417.80000000004657,
+      "readyState": "dialogue",
+      "title": "像素前端",
+      "heading": "合肥，争取一次机会",
+      "chapter": "interview",
+      "durationThreshold": 0,
+      "navigation": {
+        "responseEnd": 6.699999999953434,
+        "domContentLoaded": 67.80000000004657,
+        "loadEventEnd": 68.19999999995343,
+        "transferSize": 4334,
+        "type": "navigate"
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 76
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 76
+        }
+      ],
+      "longTasks": [
+        {
+          "start": 115.40000000002328,
+          "duration": 302,
+          "name": "self"
+        },
+        {
+          "start": 418,
+          "duration": 120,
+          "name": "self"
+        }
+      ],
+      "resources": [
+        {
+          "name": "web/style.css",
+          "type": "link",
+          "start": 13.800000000046566,
+          "duration": 2.3999999999068677,
+          "transfer": 10430,
+          "decoded": 10130
+        },
+        {
+          "name": "web/main.mjs",
+          "type": "script",
+          "start": 14,
+          "duration": 2.699999999953434,
+          "transfer": 68009,
+          "decoded": 67709
+        },
+        {
+          "name": "web/world.mjs",
+          "type": "script",
+          "start": 21.599999999976717,
+          "duration": 3.400000000023283,
+          "transfer": 2723,
+          "decoded": 2423
+        },
+        {
+          "name": "web/story.mjs",
+          "type": "script",
+          "start": 21.599999999976717,
+          "duration": 3.5,
+          "transfer": 5639,
+          "decoded": 5339
+        },
+        {
+          "name": "web/scene-config.mjs",
+          "type": "script",
+          "start": 21.599999999976717,
+          "duration": 3.800000000046566,
+          "transfer": 18381,
+          "decoded": 18081
+        },
+        {
+          "name": "web/actors.mjs",
+          "type": "script",
+          "start": 21.699999999953434,
+          "duration": 7.200000000069849,
+          "transfer": 5954,
+          "decoded": 5654
+        },
+        {
+          "name": "web/title.mjs",
+          "type": "script",
+          "start": 21.699999999953434,
+          "duration": 8.300000000046566,
+          "transfer": 442,
+          "decoded": 142
+        },
+        {
+          "name": "web/narrow-wrap.mjs",
+          "type": "script",
+          "start": 21.800000000046566,
+          "duration": 8.399999999906868,
+          "transfer": 8273,
+          "decoded": 7973
+        },
+        {
+          "name": "web/cinematic.mjs",
+          "type": "script",
+          "start": 21.900000000023283,
+          "duration": 7.900000000023283,
+          "transfer": 10411,
+          "decoded": 10111
+        },
+        {
+          "name": "vendor/three.module.min.js",
+          "type": "script",
+          "start": 67.59999999997672,
+          "duration": 7.200000000069849,
+          "transfer": 339208,
+          "decoded": 338908
+        },
+        {
+          "name": "vendor/three.core.min.js",
+          "type": "script",
+          "start": 80.80000000004657,
+          "duration": 7.099999999976717,
+          "transfer": 381424,
+          "decoded": 381124
+        },
+        {
+          "name": "127.0.0.1:44107/favicon.ico",
+          "type": "other",
+          "start": 81,
+          "duration": 2,
+          "transfer": 300,
+          "decoded": 0
+        },
+        {
+          "name": "design/chapter-hefei.json",
+          "type": "fetch",
+          "start": 96.80000000004657,
+          "duration": 3.599999999976717,
+          "transfer": 8798,
+          "decoded": 8498
+        },
+        {
+          "name": "hefei-office-day/day-384x216.png",
+          "type": "img",
+          "start": 97.09999999997672,
+          "duration": 3.300000000046566,
+          "transfer": 24014,
+          "decoded": 23714
+        },
+        {
+          "name": "hefei-office-night/night-384x216.png",
+          "type": "img",
+          "start": 97.09999999997672,
+          "duration": 3.400000000023283,
+          "transfer": 25706,
+          "decoded": 25406
+        },
+        {
+          "name": "hefei-office-night/light-mask-384x216.png",
+          "type": "img",
+          "start": 97.09999999997672,
+          "duration": 3.099999999976717,
+          "transfer": 1324,
+          "decoded": 1024
+        },
+        {
+          "name": "art/player-walk-v2-sheet.png",
+          "type": "img",
+          "start": 97.30000000004657,
+          "duration": 5.599999999976717,
+          "transfer": 16210,
+          "decoded": 15910
+        },
+        {
+          "name": "art/sit-back-hz-18x30.png",
+          "type": "img",
+          "start": 97.30000000004657,
+          "duration": 8.399999999906868,
+          "transfer": 705,
+          "decoded": 405
+        },
+        {
+          "name": "art/npc-team-v1.png",
+          "type": "img",
+          "start": 97.30000000004657,
+          "duration": 9.599999999976717,
+          "transfer": 524618,
+          "decoded": 524318
+        },
+        {
+          "name": "art/player-emotions-v1.png",
+          "type": "img",
+          "start": 97.30000000004657,
+          "duration": 12.5,
+          "transfer": 786464,
+          "decoded": 786164
+        },
+        {
+          "name": "art/typing-team-v1.png",
+          "type": "img",
+          "start": 97.30000000004657,
+          "duration": 12.5,
+          "transfer": 899122,
+          "decoded": 898822
+        },
+        {
+          "name": "hefei-founder-emotions/emotions-strip-64x32.png",
+          "type": "img",
+          "start": 97.40000000002328,
+          "duration": 8.79999999993015,
+          "transfer": 1156,
+          "decoded": 856
+        },
+        {
+          "name": "hefei-founder-walk/walk-sheet-32x48.png",
+          "type": "img",
+          "start": 97.40000000002328,
+          "duration": 9,
+          "transfer": 6521,
+          "decoded": 6221
+        },
+        {
+          "name": "linux-git-screen/icon.png",
+          "type": "img",
+          "start": 97.40000000002328,
+          "duration": 11.900000000023283,
+          "transfer": 644,
+          "decoded": 344
+        },
+        {
+          "name": "frontend-jquery/icon.png",
+          "type": "img",
+          "start": 97.40000000002328,
+          "duration": 12,
+          "transfer": 801,
+          "decoded": 501
+        },
+        {
+          "name": "java-book/icon.png",
+          "type": "img",
+          "start": 97.5,
+          "duration": 12,
+          "transfer": 509,
+          "decoded": 209
+        },
+        {
+          "name": "db-nosql-screen/icon.png",
+          "type": "img",
+          "start": 97.5,
+          "duration": 12.099999999976717,
+          "transfer": 643,
+          "decoded": 343
+        },
+        {
+          "name": "linux-git-screen/icon-highlight.png",
+          "type": "img",
+          "start": 110.09999999997672,
+          "duration": 3.099999999976717,
+          "transfer": 703,
+          "decoded": 403
+        },
+        {
+          "name": "frontend-jquery/icon-highlight.png",
+          "type": "img",
+          "start": 111.40000000002328,
+          "duration": 2.900000000023283,
+          "transfer": 872,
+          "decoded": 572
+        },
+        {
+          "name": "java-book/icon-highlight.png",
+          "type": "img",
+          "start": 111.90000000002328,
+          "duration": 3.099999999976717,
+          "transfer": 567,
+          "decoded": 267
+        },
+        {
+          "name": "db-nosql-screen/icon-highlight.png",
+          "type": "img",
+          "start": 112,
+          "duration": 3,
+          "transfer": 746,
+          "decoded": 446
+        }
+      ],
+      "webgl": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)"
+      },
+      "gestures": [
+        {
+          "name": "walk-right",
+          "key": "ArrowRight",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-left",
+          "key": "ArrowLeft",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226
+        },
+        {
+          "name": "walk-down",
+          "key": "ArrowDown",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-up",
+          "key": "ArrowUp",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0
+        },
+        {
+          "name": "walk-hold-right",
+          "key": "ArrowRight",
+          "holdMs": 400,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0
+        },
+        {
+          "name": "handbook-m",
+          "key": "m",
+          "holdMs": 30,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 3.599999999976717
+        },
+        {
+          "name": "dialogue-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 2.900000000023283
+        },
+        {
+          "name": "skill-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 40,
+          "eventCount": 2,
+          "maxProcessing": 5.099999999976717
+        }
+      ],
+      "inpMs": 40,
+      "sessionMaxMs": 40
+    },
+    {
+      "index": 3,
+      "wallMs": 13585,
+      "loadTimeMs": 455.9000000000233,
+      "readyState": "dialogue",
+      "title": "像素前端",
+      "heading": "合肥，争取一次机会",
+      "chapter": "interview",
+      "durationThreshold": 0,
+      "navigation": {
+        "responseEnd": 4.099999999976717,
+        "domContentLoaded": 78.80000000004657,
+        "loadEventEnd": 80.69999999995343,
+        "transferSize": 4334,
+        "type": "navigate"
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 84
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 84
+        }
+      ],
+      "longTasks": [
+        {
+          "start": 133.30000000004657,
+          "duration": 322,
+          "name": "self"
+        },
+        {
+          "start": 456.19999999995343,
+          "duration": 117,
+          "name": "self"
+        }
+      ],
+      "resources": [
+        {
+          "name": "web/style.css",
+          "type": "link",
+          "start": 12.699999999953434,
+          "duration": 3.300000000046566,
+          "transfer": 10430,
+          "decoded": 10130
+        },
+        {
+          "name": "web/main.mjs",
+          "type": "script",
+          "start": 13.099999999976717,
+          "duration": 8.20000000006985,
+          "transfer": 68009,
+          "decoded": 67709
+        },
+        {
+          "name": "web/world.mjs",
+          "type": "script",
+          "start": 65,
+          "duration": 5.800000000046566,
+          "transfer": 2723,
+          "decoded": 2423
+        },
+        {
+          "name": "web/scene-config.mjs",
+          "type": "script",
+          "start": 65,
+          "duration": 6,
+          "transfer": 18381,
+          "decoded": 18081
+        },
+        {
+          "name": "web/story.mjs",
+          "type": "script",
+          "start": 65,
+          "duration": 6,
+          "transfer": 5639,
+          "decoded": 5339
+        },
+        {
+          "name": "web/actors.mjs",
+          "type": "script",
+          "start": 65.09999999997672,
+          "duration": 6,
+          "transfer": 5954,
+          "decoded": 5654
+        },
+        {
+          "name": "web/title.mjs",
+          "type": "script",
+          "start": 65.19999999995343,
+          "duration": 5.900000000023283,
+          "transfer": 442,
+          "decoded": 142
+        },
+        {
+          "name": "web/narrow-wrap.mjs",
+          "type": "script",
+          "start": 65.19999999995343,
+          "duration": 8.900000000023283,
+          "transfer": 8273,
+          "decoded": 7973
+        },
+        {
+          "name": "web/cinematic.mjs",
+          "type": "script",
+          "start": 65.19999999995343,
+          "duration": 9,
+          "transfer": 10411,
+          "decoded": 10111
+        },
+        {
+          "name": "vendor/three.module.min.js",
+          "type": "script",
+          "start": 78.69999999995343,
+          "duration": 6.700000000069849,
+          "transfer": 339208,
+          "decoded": 338908
+        },
+        {
+          "name": "vendor/three.core.min.js",
+          "type": "script",
+          "start": 90.80000000004657,
+          "duration": 8.5,
+          "transfer": 381424,
+          "decoded": 381124
+        },
+        {
+          "name": "127.0.0.1:44107/favicon.ico",
+          "type": "other",
+          "start": 93.90000000002328,
+          "duration": 3.799999999930151,
+          "transfer": 300,
+          "decoded": 0
+        },
+        {
+          "name": "design/chapter-hefei.json",
+          "type": "fetch",
+          "start": 110.69999999995343,
+          "duration": 3.300000000046566,
+          "transfer": 8798,
+          "decoded": 8498
+        },
+        {
+          "name": "hefei-office-day/day-384x216.png",
+          "type": "img",
+          "start": 110.80000000004657,
+          "duration": 4.299999999930151,
+          "transfer": 24014,
+          "decoded": 23714
+        },
+        {
+          "name": "hefei-office-night/light-mask-384x216.png",
+          "type": "img",
+          "start": 110.90000000002328,
+          "duration": 5.900000000023283,
+          "transfer": 1324,
+          "decoded": 1024
+        },
+        {
+          "name": "hefei-office-night/night-384x216.png",
+          "type": "img",
+          "start": 110.90000000002328,
+          "duration": 6.599999999976717,
+          "transfer": 25706,
+          "decoded": 25406
+        },
+        {
+          "name": "art/player-walk-v2-sheet.png",
+          "type": "img",
+          "start": 110.90000000002328,
+          "duration": 6.799999999930151,
+          "transfer": 16210,
+          "decoded": 15910
+        },
+        {
+          "name": "art/npc-team-v1.png",
+          "type": "img",
+          "start": 111.30000000004657,
+          "duration": 13.199999999953434,
+          "transfer": 524618,
+          "decoded": 524318
+        },
+        {
+          "name": "art/player-emotions-v1.png",
+          "type": "img",
+          "start": 111.30000000004657,
+          "duration": 15.5,
+          "transfer": 786464,
+          "decoded": 786164
+        },
+        {
+          "name": "art/sit-back-hz-18x30.png",
+          "type": "img",
+          "start": 111.40000000002328,
+          "duration": 10.199999999953434,
+          "transfer": 705,
+          "decoded": 405
+        },
+        {
+          "name": "hefei-founder-walk/walk-sheet-32x48.png",
+          "type": "img",
+          "start": 111.40000000002328,
+          "duration": 11.29999999993015,
+          "transfer": 6521,
+          "decoded": 6221
+        },
+        {
+          "name": "hefei-founder-emotions/emotions-strip-64x32.png",
+          "type": "img",
+          "start": 111.40000000002328,
+          "duration": 11.199999999953434,
+          "transfer": 1156,
+          "decoded": 856
+        },
+        {
+          "name": "linux-git-screen/icon.png",
+          "type": "img",
+          "start": 111.40000000002328,
+          "duration": 13.400000000023283,
+          "transfer": 644,
+          "decoded": 344
+        },
+        {
+          "name": "frontend-jquery/icon.png",
+          "type": "img",
+          "start": 111.40000000002328,
+          "duration": 13.900000000023283,
+          "transfer": 801,
+          "decoded": 501
+        },
+        {
+          "name": "java-book/icon.png",
+          "type": "img",
+          "start": 111.40000000002328,
+          "duration": 14,
+          "transfer": 509,
+          "decoded": 209
+        },
+        {
+          "name": "art/typing-team-v1.png",
+          "type": "img",
+          "start": 111.40000000002328,
+          "duration": 16.29999999993015,
+          "transfer": 899122,
+          "decoded": 898822
+        },
+        {
+          "name": "db-nosql-screen/icon.png",
+          "type": "img",
+          "start": 111.40000000002328,
+          "duration": 17.79999999993015,
+          "transfer": 643,
+          "decoded": 343
+        },
+        {
+          "name": "linux-git-screen/icon-highlight.png",
+          "type": "img",
+          "start": 125.90000000002328,
+          "duration": 3.400000000023283,
+          "transfer": 703,
+          "decoded": 403
+        },
+        {
+          "name": "frontend-jquery/icon-highlight.png",
+          "type": "img",
+          "start": 126,
+          "duration": 3.400000000023283,
+          "transfer": 872,
+          "decoded": 572
+        },
+        {
+          "name": "java-book/icon-highlight.png",
+          "type": "img",
+          "start": 126.40000000002328,
+          "duration": 3,
+          "transfer": 567,
+          "decoded": 267
+        },
+        {
+          "name": "db-nosql-screen/icon-highlight.png",
+          "type": "img",
+          "start": 129.90000000002328,
+          "duration": 3.099999999976717,
+          "transfer": 746,
+          "decoded": 446
+        }
+      ],
+      "webgl": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)"
+      },
+      "gestures": [
+        {
+          "name": "walk-right",
+          "key": "ArrowRight",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-left",
+          "key": "ArrowLeft",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.19999999995343387
+        },
+        {
+          "name": "walk-down",
+          "key": "ArrowDown",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-up",
+          "key": "ArrowUp",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-hold-right",
+          "key": "ArrowRight",
+          "holdMs": 400,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0
+        },
+        {
+          "name": "handbook-m",
+          "key": "m",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 2.900000000023283
+        },
+        {
+          "name": "dialogue-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 2.800000000046566
+        },
+        {
+          "name": "skill-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 4.099999999976717
+        }
+      ],
+      "inpMs": 32,
+      "sessionMaxMs": 40
+    },
+    {
+      "index": 4,
+      "wallMs": 13765,
+      "loadTimeMs": 443.0999999999767,
+      "readyState": "dialogue",
+      "title": "像素前端",
+      "heading": "合肥，争取一次机会",
+      "chapter": "interview",
+      "durationThreshold": 0,
+      "navigation": {
+        "responseEnd": 6.200000000069849,
+        "domContentLoaded": 86.59999999997672,
+        "loadEventEnd": 87.09999999997672,
+        "transferSize": 4334,
+        "type": "navigate"
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 84
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 84
+        }
+      ],
+      "longTasks": [
+        {
+          "start": 131.90000000002328,
+          "duration": 311,
+          "name": "self"
+        },
+        {
+          "start": 443.5,
+          "duration": 132,
+          "name": "self"
+        }
+      ],
+      "resources": [
+        {
+          "name": "web/style.css",
+          "type": "link",
+          "start": 15.099999999976717,
+          "duration": 5.700000000069849,
+          "transfer": 10430,
+          "decoded": 10130
+        },
+        {
+          "name": "web/main.mjs",
+          "type": "script",
+          "start": 15.20000000006985,
+          "duration": 8.899999999906868,
+          "transfer": 68009,
+          "decoded": 67709
+        },
+        {
+          "name": "web/world.mjs",
+          "type": "script",
+          "start": 69.70000000006985,
+          "duration": 3.5,
+          "transfer": 2723,
+          "decoded": 2423
+        },
+        {
+          "name": "web/story.mjs",
+          "type": "script",
+          "start": 69.80000000004657,
+          "duration": 5.5,
+          "transfer": 5639,
+          "decoded": 5339
+        },
+        {
+          "name": "web/scene-config.mjs",
+          "type": "script",
+          "start": 69.90000000002328,
+          "duration": 5.900000000023283,
+          "transfer": 18381,
+          "decoded": 18081
+        },
+        {
+          "name": "web/narrow-wrap.mjs",
+          "type": "script",
+          "start": 69.90000000002328,
+          "duration": 7.5,
+          "transfer": 8273,
+          "decoded": 7973
+        },
+        {
+          "name": "web/title.mjs",
+          "type": "script",
+          "start": 69.90000000002328,
+          "duration": 6.699999999953434,
+          "transfer": 442,
+          "decoded": 142
+        },
+        {
+          "name": "web/actors.mjs",
+          "type": "script",
+          "start": 69.90000000002328,
+          "duration": 6.5,
+          "transfer": 5954,
+          "decoded": 5654
+        },
+        {
+          "name": "web/cinematic.mjs",
+          "type": "script",
+          "start": 70,
+          "duration": 7.800000000046566,
+          "transfer": 10411,
+          "decoded": 10111
+        },
+        {
+          "name": "vendor/three.module.min.js",
+          "type": "script",
+          "start": 82.80000000004657,
+          "duration": 4.5,
+          "transfer": 339208,
+          "decoded": 338908
+        },
+        {
+          "name": "vendor/three.core.min.js",
+          "type": "script",
+          "start": 96.09999999997672,
+          "duration": 4.900000000023283,
+          "transfer": 381424,
+          "decoded": 381124
+        },
+        {
+          "name": "127.0.0.1:44107/favicon.ico",
+          "type": "other",
+          "start": 102.59999999997672,
+          "duration": 1.6000000000931323,
+          "transfer": 300,
+          "decoded": 0
+        },
+        {
+          "name": "design/chapter-hefei.json",
+          "type": "fetch",
+          "start": 113.59999999997672,
+          "duration": 2.900000000023283,
+          "transfer": 8798,
+          "decoded": 8498
+        },
+        {
+          "name": "hefei-office-day/day-384x216.png",
+          "type": "img",
+          "start": 113.70000000006985,
+          "duration": 6,
+          "transfer": 24014,
+          "decoded": 23714
+        },
+        {
+          "name": "hefei-office-night/night-384x216.png",
+          "type": "img",
+          "start": 113.70000000006985,
+          "duration": 6,
+          "transfer": 25706,
+          "decoded": 25406
+        },
+        {
+          "name": "hefei-office-night/light-mask-384x216.png",
+          "type": "img",
+          "start": 113.80000000004657,
+          "duration": 5.400000000023283,
+          "transfer": 1324,
+          "decoded": 1024
+        },
+        {
+          "name": "art/player-walk-v2-sheet.png",
+          "type": "img",
+          "start": 113.80000000004657,
+          "duration": 6.799999999930151,
+          "transfer": 16210,
+          "decoded": 15910
+        },
+        {
+          "name": "art/npc-team-v1.png",
+          "type": "img",
+          "start": 113.80000000004657,
+          "duration": 9.400000000023283,
+          "transfer": 524618,
+          "decoded": 524318
+        },
+        {
+          "name": "art/sit-back-hz-18x30.png",
+          "type": "img",
+          "start": 113.90000000002328,
+          "duration": 10.900000000023283,
+          "transfer": 705,
+          "decoded": 405
+        },
+        {
+          "name": "art/player-emotions-v1.png",
+          "type": "img",
+          "start": 113.90000000002328,
+          "duration": 11.300000000046566,
+          "transfer": 786464,
+          "decoded": 786164
+        },
+        {
+          "name": "art/typing-team-v1.png",
+          "type": "img",
+          "start": 113.90000000002328,
+          "duration": 13.900000000023283,
+          "transfer": 899122,
+          "decoded": 898822
+        },
+        {
+          "name": "hefei-founder-emotions/emotions-strip-64x32.png",
+          "type": "img",
+          "start": 114,
+          "duration": 11.400000000023283,
+          "transfer": 1156,
+          "decoded": 856
+        },
+        {
+          "name": "hefei-founder-walk/walk-sheet-32x48.png",
+          "type": "img",
+          "start": 114,
+          "duration": 12,
+          "transfer": 6521,
+          "decoded": 6221
+        },
+        {
+          "name": "linux-git-screen/icon.png",
+          "type": "img",
+          "start": 114,
+          "duration": 12.5,
+          "transfer": 644,
+          "decoded": 344
+        },
+        {
+          "name": "frontend-jquery/icon.png",
+          "type": "img",
+          "start": 114,
+          "duration": 14.900000000023283,
+          "transfer": 801,
+          "decoded": 501
+        },
+        {
+          "name": "java-book/icon.png",
+          "type": "img",
+          "start": 114,
+          "duration": 14.900000000023283,
+          "transfer": 509,
+          "decoded": 209
+        },
+        {
+          "name": "db-nosql-screen/icon.png",
+          "type": "img",
+          "start": 114.09999999997672,
+          "duration": 15.100000000093132,
+          "transfer": 643,
+          "decoded": 343
+        },
+        {
+          "name": "linux-git-screen/icon-highlight.png",
+          "type": "img",
+          "start": 126.80000000004657,
+          "duration": 3,
+          "transfer": 703,
+          "decoded": 403
+        },
+        {
+          "name": "frontend-jquery/icon-highlight.png",
+          "type": "img",
+          "start": 129.09999999997672,
+          "duration": 1.8000000000465661,
+          "transfer": 872,
+          "decoded": 572
+        },
+        {
+          "name": "java-book/icon-highlight.png",
+          "type": "img",
+          "start": 129.20000000006985,
+          "duration": 2.099999999976717,
+          "transfer": 567,
+          "decoded": 267
+        },
+        {
+          "name": "db-nosql-screen/icon-highlight.png",
+          "type": "img",
+          "start": 129.40000000002328,
+          "duration": 1.900000000023283,
+          "transfer": 746,
+          "decoded": 446
+        }
+      ],
+      "webgl": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)"
+      },
+      "gestures": [
+        {
+          "name": "walk-right",
+          "key": "ArrowRight",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-left",
+          "key": "ArrowLeft",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-down",
+          "key": "ArrowDown",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-up",
+          "key": "ArrowUp",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-hold-right",
+          "key": "ArrowRight",
+          "holdMs": 400,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "handbook-m",
+          "key": "m",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 7.099999999976717
+        },
+        {
+          "name": "dialogue-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 3.599999999976717
+        },
+        {
+          "name": "skill-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 7.200000000069849
+        }
+      ],
+      "inpMs": 32,
+      "sessionMaxMs": 40
+    },
+    {
+      "index": 5,
+      "wallMs": 13798,
+      "loadTimeMs": 533.6999999999534,
+      "readyState": "dialogue",
+      "title": "像素前端",
+      "heading": "合肥，争取一次机会",
+      "chapter": "interview",
+      "durationThreshold": 0,
+      "navigation": {
+        "responseEnd": 11.79999999993015,
+        "domContentLoaded": 98.5,
+        "loadEventEnd": 99.40000000002328,
+        "transferSize": 4334,
+        "type": "navigate"
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 96
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 96
+        }
+      ],
+      "longTasks": [
+        {
+          "start": 168.29999999993015,
+          "duration": 365,
+          "name": "self"
+        },
+        {
+          "start": 534,
+          "duration": 160,
+          "name": "self"
+        }
+      ],
+      "resources": [
+        {
+          "name": "web/style.css",
+          "type": "link",
+          "start": 16.29999999993015,
+          "duration": 6.400000000023283,
+          "transfer": 10430,
+          "decoded": 10130
+        },
+        {
+          "name": "web/main.mjs",
+          "type": "script",
+          "start": 16.5,
+          "duration": 10.5,
+          "transfer": 68009,
+          "decoded": 67709
+        },
+        {
+          "name": "web/world.mjs",
+          "type": "script",
+          "start": 74.59999999997672,
+          "duration": 7.400000000023283,
+          "transfer": 2723,
+          "decoded": 2423
+        },
+        {
+          "name": "web/scene-config.mjs",
+          "type": "script",
+          "start": 74.69999999995343,
+          "duration": 7.700000000069849,
+          "transfer": 18381,
+          "decoded": 18081
+        },
+        {
+          "name": "web/story.mjs",
+          "type": "script",
+          "start": 74.69999999995343,
+          "duration": 7.5,
+          "transfer": 5639,
+          "decoded": 5339
+        },
+        {
+          "name": "web/actors.mjs",
+          "type": "script",
+          "start": 74.79999999993015,
+          "duration": 9.70000000006985,
+          "transfer": 5954,
+          "decoded": 5654
+        },
+        {
+          "name": "web/title.mjs",
+          "type": "script",
+          "start": 74.90000000002328,
+          "duration": 10.79999999993015,
+          "transfer": 442,
+          "decoded": 142
+        },
+        {
+          "name": "web/narrow-wrap.mjs",
+          "type": "script",
+          "start": 74.90000000002328,
+          "duration": 11.5,
+          "transfer": 8273,
+          "decoded": 7973
+        },
+        {
+          "name": "web/cinematic.mjs",
+          "type": "script",
+          "start": 75,
+          "duration": 13.199999999953434,
+          "transfer": 10411,
+          "decoded": 10111
+        },
+        {
+          "name": "vendor/three.module.min.js",
+          "type": "script",
+          "start": 98.40000000002328,
+          "duration": 3,
+          "transfer": 339208,
+          "decoded": 338908
+        },
+        {
+          "name": "vendor/three.core.min.js",
+          "type": "script",
+          "start": 112,
+          "duration": 9.79999999993015,
+          "transfer": 381424,
+          "decoded": 381124
+        },
+        {
+          "name": "127.0.0.1:44107/favicon.ico",
+          "type": "other",
+          "start": 117.09999999997672,
+          "duration": 2.800000000046566,
+          "transfer": 300,
+          "decoded": 0
+        },
+        {
+          "name": "design/chapter-hefei.json",
+          "type": "fetch",
+          "start": 134.5,
+          "duration": 5.699999999953434,
+          "transfer": 8798,
+          "decoded": 8498
+        },
+        {
+          "name": "hefei-office-day/day-384x216.png",
+          "type": "img",
+          "start": 134.69999999995343,
+          "duration": 5.599999999976717,
+          "transfer": 24014,
+          "decoded": 23714
+        },
+        {
+          "name": "hefei-office-night/light-mask-384x216.png",
+          "type": "img",
+          "start": 134.79999999993015,
+          "duration": 5.700000000069849,
+          "transfer": 1324,
+          "decoded": 1024
+        },
+        {
+          "name": "hefei-office-night/night-384x216.png",
+          "type": "img",
+          "start": 134.79999999993015,
+          "duration": 7.100000000093132,
+          "transfer": 25706,
+          "decoded": 25406
+        },
+        {
+          "name": "art/player-walk-v2-sheet.png",
+          "type": "img",
+          "start": 134.79999999993015,
+          "duration": 7.200000000069849,
+          "transfer": 16210,
+          "decoded": 15910
+        },
+        {
+          "name": "art/npc-team-v1.png",
+          "type": "img",
+          "start": 134.90000000002328,
+          "duration": 13.199999999953434,
+          "transfer": 524618,
+          "decoded": 524318
+        },
+        {
+          "name": "art/player-emotions-v1.png",
+          "type": "img",
+          "start": 134.90000000002328,
+          "duration": 19,
+          "transfer": 786464,
+          "decoded": 786164
+        },
+        {
+          "name": "art/typing-team-v1.png",
+          "type": "img",
+          "start": 135,
+          "duration": 19.199999999953434,
+          "transfer": 899122,
+          "decoded": 898822
+        },
+        {
+          "name": "art/sit-back-hz-18x30.png",
+          "type": "img",
+          "start": 135.09999999997672,
+          "duration": 12.099999999976717,
+          "transfer": 705,
+          "decoded": 405
+        },
+        {
+          "name": "hefei-founder-walk/walk-sheet-32x48.png",
+          "type": "img",
+          "start": 135.09999999997672,
+          "duration": 12.400000000023283,
+          "transfer": 6521,
+          "decoded": 6221
+        },
+        {
+          "name": "hefei-founder-emotions/emotions-strip-64x32.png",
+          "type": "img",
+          "start": 135.09999999997672,
+          "duration": 12.800000000046566,
+          "transfer": 1156,
+          "decoded": 856
+        },
+        {
+          "name": "linux-git-screen/icon.png",
+          "type": "img",
+          "start": 135.09999999997672,
+          "duration": 17.900000000023283,
+          "transfer": 644,
+          "decoded": 344
+        },
+        {
+          "name": "frontend-jquery/icon.png",
+          "type": "img",
+          "start": 135.19999999995343,
+          "duration": 17.900000000023283,
+          "transfer": 801,
+          "decoded": 501
+        },
+        {
+          "name": "java-book/icon.png",
+          "type": "img",
+          "start": 135.19999999995343,
+          "duration": 18,
+          "transfer": 509,
+          "decoded": 209
+        },
+        {
+          "name": "db-nosql-screen/icon.png",
+          "type": "img",
+          "start": 135.19999999995343,
+          "duration": 18.099999999976717,
+          "transfer": 643,
+          "decoded": 343
+        },
+        {
+          "name": "linux-git-screen/icon-highlight.png",
+          "type": "img",
+          "start": 158,
+          "duration": 9,
+          "transfer": 703,
+          "decoded": 403
+        },
+        {
+          "name": "frontend-jquery/icon-highlight.png",
+          "type": "img",
+          "start": 159.59999999997672,
+          "duration": 7.800000000046566,
+          "transfer": 872,
+          "decoded": 572
+        },
+        {
+          "name": "java-book/icon-highlight.png",
+          "type": "img",
+          "start": 159.69999999995343,
+          "duration": 8,
+          "transfer": 567,
+          "decoded": 267
+        },
+        {
+          "name": "db-nosql-screen/icon-highlight.png",
+          "type": "img",
+          "start": 160,
+          "duration": 8,
+          "transfer": 746,
+          "decoded": 446
+        }
+      ],
+      "webgl": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)"
+      },
+      "gestures": [
+        {
+          "name": "walk-right",
+          "key": "ArrowRight",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0
+        },
+        {
+          "name": "walk-left",
+          "key": "ArrowLeft",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226
+        },
+        {
+          "name": "walk-down",
+          "key": "ArrowDown",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "walk-up",
+          "key": "ArrowUp",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0
+        },
+        {
+          "name": "walk-hold-right",
+          "key": "ArrowRight",
+          "holdMs": 400,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999997671694
+        },
+        {
+          "name": "handbook-m",
+          "key": "m",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 3.699999999953434
+        },
+        {
+          "name": "dialogue-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 3.800000000046566
+        },
+        {
+          "name": "skill-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 5.900000000023283
+        }
+      ],
+      "inpMs": 32,
+      "sessionMaxMs": 48
+    }
+  ]
+}
