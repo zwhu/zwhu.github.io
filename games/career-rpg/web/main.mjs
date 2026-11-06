@@ -1,10 +1,14 @@
-import {WORLD,nearbyAll,integrateWalk,MOVE_SPEED} from './world.mjs';
+import {WORLD,nearbyAll,integrateWalk,MOVE_SPEED,blocked} from './world.mjs';
 import {createChapter} from './story.mjs';
 import {OFFICE,HEFEI,HANGZHOU,actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './scene-config.mjs';
 import {createActor,atlasBounds,bubblePosition,seatedFrame,motionForRender,walkClock} from './actors.mjs';
 import {GAME_TITLE} from './title.mjs';
 import {wrapNarrow} from './narrow-wrap.mjs';
-const chapterKey=new URLSearchParams(location.search).get('chapter');
+import {sceneRequest,createDirector,validateScript,walkIntent} from './cinematic.mjs';
+const requested=sceneRequest(location.search);
+const cinematicName=requested.cinematic;
+const chapterKey=requested.chapter;
+const cinematicOn=!!cinematicName;
 const sceneConfig=chapterKey==='hangzhou'?HANGZHOU:chapterKey==='hefei'?HEFEI:OFFICE;
 document.title=GAME_TITLE;
 const gameTitle=document.querySelector('#game-title');if(gameTitle)gameTitle.textContent=GAME_TITLE;
@@ -38,6 +42,8 @@ let renderer,scene,camera,player,previous=0,walkRemainder=0,raf=0,choicesReady=0
 let lastUISnapshot=null,lastInteraction='',selectedTargetID='';
 let castSnapshot=null,castCache=sceneConfig;
 let transitionEvent=null,transitionStarted=0,transitionIndex=-1,awardOpen=false,awardFlashUntil=0,returnToJourney=false,journeyMode=null;
+let cinematicDirector=null,cinematicView=null,simFrame=0;
+function cinematicClock(){return Math.round(simFrame*1000/60);}
 let audioCtx=null;const skillAudioLog=[];
 function ensureAudio(){try{if(!audioCtx)audioCtx=new AudioContext();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}catch{return null;}}
 function playSkillDing(){
@@ -224,7 +230,7 @@ function applyBeat(beat){
 function beginTransition(event){
   if(transitionEvent)return;
   hideObjectCard();conversation.hidden=true;if(systemDialog.open)systemDialog.close();dialogueObject=null;
-  transitionEvent=event;transitionStarted=performance.now();transitionIndex=-1;setState('transition');
+  transitionEvent=event;transitionStarted=cinematicOn?cinematicClock():performance.now();transitionIndex=-1;setState('transition');
   if(!caption){caption=document.createElement('p');caption.id='transition-caption';stage.append(caption);}
   caption.textContent=chapter.text(sceneConfig.transitionLines[event]);caption.hidden=false;
   applyBeat(sceneConfig.transitionBeats[event][0]);
@@ -322,7 +328,7 @@ function finishSkillAward(){
 function showSkillAward(skill){
   returnToJourney=journeyMode==='chapter'||state==='journey';
   if(journeyPanel)journeyPanel.hidden=true;
-  awardOpen=true;awardFlashUntil=performance.now()+1600;playSkillDing();
+  awardOpen=true;awardFlashUntil=(cinematicOn?cinematicClock():performance.now())+1600;playSkillDing();
   show('获得技能',[`获得技能：${skill.name}`],[{label:'OK',id:'skill-ok',run:finishSkillAward}],false,'player',false);
   document.querySelector('#skill-award-icon')?.remove();
   const holder=document.createElement('span');
@@ -453,7 +459,7 @@ function paintJourney(now){
   journeyProgress=journeyArrived?1:Math.min(1,(now-journeyStarted)/duration);
   drawJourney(journeyProgress);
   if(journeyProgress>=1&&!journeyArrived){journeyArrived=true;ensureReact();}
-  if(!journeyArrived)journeyFrame=requestAnimationFrame(paintJourney);
+  if(!journeyArrived&&!cinematicOn)journeyFrame=requestAnimationFrame(paintJourney);
 }
 let journeyStarted=0,journeyPackStops=[];
 function ensureReact(){
@@ -482,11 +488,11 @@ async function openJourney(mode,resume=false){
   journeyPanel.dataset.artSlot=bridge?.artSlot||definition.artSlot||'hefei-nanjing';
   document.querySelector('#journey-slogan').textContent=GAME_TITLE;
   journeyPanel.hidden=false;conversation.hidden=true;
-  if(!resume||!journeyArrived){journeyArrived=false;journeyProgress=0;journeyStarted=performance.now();document.querySelector('#journey-copy').hidden=true;document.querySelector('#journey-choices').replaceChildren();}
+  if(!resume||!journeyArrived){journeyArrived=false;journeyProgress=0;journeyStarted=cinematicOn?cinematicClock():performance.now();document.querySelector('#journey-copy').hidden=true;document.querySelector('#journey-choices').replaceChildren();}
   setState('journey');
   cancelAnimationFrame(journeyFrame);
   if(journeyArrived){drawJourney(1);showJourneyChoices();}
-  else journeyFrame=requestAnimationFrame(paintJourney);
+  else if(!cinematicOn)journeyFrame=requestAnimationFrame(paintJourney);
 }
 function openConversation(){
   if(state!=='explore'||!active)return;
@@ -537,7 +543,12 @@ function isTyping(actor){const dialogue=state==='dialogue'||(state==='paused'&&p
 function renderPosition(actor){return isTyping(actor)?(actor.controllable?dialogueObject.seat:actor.seat||actor):(actor.controllable?position:actor);}
 function screenPoint(actor,head=true){
   const p=renderPosition(actor);
-  return {x:p.x/sceneConfig.width*stage.clientWidth,y:(p.y-(head?(isTyping(actor)?(actor.seatedHeight||40):actor.height):0))/sceneConfig.height*stage.clientHeight};
+  const gy=p.y-(head?(isTyping(actor)?(actor.seatedHeight||40):actor.height):0);
+  if(cinematicView){
+    const v=cinematicView;
+    return {x:(p.x-v.x)/v.size*stage.clientWidth,y:(gy-v.y)/v.size*stage.clientHeight};
+  }
+  return {x:p.x/sceneConfig.width*stage.clientWidth,y:gy/sceneConfig.height*stage.clientHeight};
 }
 function placeBubble(){
   if(conversation.hidden)return;
@@ -550,8 +561,9 @@ function updateMarkers(){
   for(const marker of pendingMarkers(visibleRoom(),chapter,snapshot)){
     const element=marker.sprite?document.createElement('img'):document.createElement('span');
     element.className='task-marker';element.dataset.object=marker.id;element.dataset.events=marker.events.join(' ');
-    if(marker.sprite){element.src=marker.sprite.url;element.alt='';element.style.width=`${marker.sprite.w/sceneConfig.width*100}%`;element.style.height=`${marker.sprite.h/sceneConfig.height*100}%`;}
+    if(marker.sprite){element.src=marker.sprite.url;element.alt='';element.style.width=`${marker.sprite.w/sceneConfig.width*100}%`;element.style.height=`${marker.sprite.h/sceneConfig.height*100}%`;element.dataset.ww=String(marker.sprite.w);element.dataset.wh=String(marker.sprite.h);}
     else element.textContent='!';
+    element.dataset.wx=String(marker.x);element.dataset.wy=String(marker.y-marker.offsetY);
     element.style.left=`${marker.x/sceneConfig.width*100}%`;element.style.top=`${(marker.y-marker.offsetY)/sceneConfig.height*100}%`;layer.append(element);
   }
 }
@@ -571,13 +583,17 @@ function positionEffects(){
     element.style.left=`${point.x+(actor.controllable?20:0)}px`;element.style.top=`${point.y-3}px`;
   }
 }
-function frame(now){
-  raf=requestAnimationFrame(frame);
-  const elapsed=previous?Math.min((now-previous)/1000,.1):0;previous=now;
+function frame(now,elapsedOverride){
+  if(!cinematicOn)raf=requestAnimationFrame(frame);
+  const elapsed=elapsedOverride!=null?elapsedOverride:(previous?Math.min((now-previous)/1000,.1):0);
+  if(!cinematicOn)previous=now;
   const oldX=position.x,oldY=position.y;let intent=false;
   if(state==='explore'){
     let dx=0,dy=0;
-    for(const key of keys){const delta=movement.get(key);if(delta){dx+=delta[0];dy+=delta[1];}}
+    if(cinematicOn){
+      const wish=cinematicDirector?.takeWish();
+      if(wish){dx=wish[0];dy=wish[1];}
+    }else for(const key of keys){const delta=movement.get(key);if(delta){dx+=delta[0];dy+=delta[1];}}
     intent=!!(dx||dy);
     if(dx||dy)facing=Math.abs(dx)>=Math.abs(dy)?(dx<0?'left':'right'):(dy<0?'up':'down');
     const step=integrateWalk(position,dx,dy,elapsed,sceneConfig,walkRemainder);
@@ -591,6 +607,7 @@ function frame(now){
     if(index!==transitionIndex){transitionIndex=index;applyBeat(beats[index]);}
     if(transitionFinished(beats.length,now-transitionStarted,sceneConfig.beatMs))finishTransition();
   }
+  if(cinematicOn&&state==='journey')paintJourney(now);
   for(let i=0;i<propViews.length;i++){
     const item=propViews[i];
     const show=!item.presentIn||item.presentIn.includes(snapshot.state)||readyRoles().has(item.role);
@@ -614,11 +631,112 @@ function frame(now){
     const sitStill=!!(pose&&pose.columns===1&&pose.rows===1);
     view.update(renderPosition(actor),actor.controllable?facing:'down',actor.controllable&&moving&&!sitStill,walkTime,pose?seatedFrame(pose,actor.typingColumn??0,now/1000,play&&!sitStill):null,actor.controllable&&(!typing||sitStill));
   }
+  let cinematicStill=null;
+  if(cinematicOn&&cinematicDirector){
+    const shot=cinematicDirector.beforeRender(position);
+    cinematicView=shot.view;
+    cinematicStill=shot.still;
+    applyCinematicCamera(cinematicView);
+  }
   drawSkillGlints(now);
-  positionEffects();placeBubble();updateUI();renderer.render(scene,camera);
+  positionEffects();placeBubble();updateUI();
+  if(cinematicOn)placeCinematicMarkers();
+  renderer.render(scene,camera);
+  if(cinematicOn&&cinematicDirector){
+    cinematicDirector.afterRender(cinematicApi(),simFrame);
+    if(cinematicStill)cinematicPendingStill=cinematicStill;
+  }
+}
+let cinematicPendingStill=null;
+function applyCinematicCamera(view){
+  camera.left=view.x;camera.right=view.x+view.size;
+  camera.top=sceneConfig.height-view.y;camera.bottom=camera.top-view.size;
+  camera.updateProjectionMatrix();
+  if(renderer.domElement.width!==view.size){renderer.setPixelRatio(1);renderer.setSize(view.size,view.size,false);}
+}
+function placeCinematicMarkers(){
+  if(!cinematicView)return;
+  const v=cinematicView,w=stage.clientWidth,h=stage.clientHeight;
+  for(const element of document.querySelectorAll('.task-marker')){
+    const wx=+element.dataset.wx,wy=+element.dataset.wy;
+    element.style.left=`${(wx-v.x)/v.size*w}px`;element.style.top=`${(wy-v.y)/v.size*h}px`;
+    if(element.dataset.ww){element.style.width=`${element.dataset.ww/v.size*w}px`;element.style.height=`${element.dataset.wh/v.size*h}px`;}
+  }
+}
+function cinematicButtons(){return [...document.querySelectorAll('#choices button, #journey-choices button')].map(button=>button.textContent);}
+function cinematicApi(){
+  return {
+    state:()=>state,
+    position:()=>({x:position.x,y:position.y}),
+    buttons:cinematicButtons,
+    focus(id){
+      updateUI();
+      const list=nearbyAll(position,visibleRoom());
+      if(!list.some(item=>item.id===id))return false;
+      selectedTargetID=id;updateUI();
+      return active?.id===id;
+    },
+    interact(){openConversation();},
+    choose(label){
+      const button=[...document.querySelectorAll('#choices button, #journey-choices button')].filter(item=>!item.disabled&&item.textContent.includes(label)&&item.getClientRects().length).sort((a,b)=>a.textContent.length-b.textContent.length)[0];
+      if(!button)return false;
+      button.click();
+      return true;
+    },
+    dismiss(){
+      const button=document.querySelector('#close-dialogue');
+      if(button){button.click();return true;}
+      if(state==='explore')return true;
+      if(dismissible&&state==='dialogue'){closeConversation();return true;}
+      return false;
+    },
+    manual(){manual();},
+    face(tx,ty){
+      const wish=walkIntent(position,[tx,ty],(x,y)=>blocked(x,y,sceneConfig));
+      if(!wish)return false;
+      facing=wish[0]?(wish[0]<0?'left':'right'):(wish[1]<0?'up':'down');
+      cinematicDirector.setWish(wish);
+      return true;
+    },
+  };
+}
+function cinematicTick(){
+  try{
+    if(cinematicDirector.poll(cinematicApi()))return {skip:true,frame:simFrame,done:false};
+    simFrame+=1;
+    cinematicPendingStill=null;
+    frame(cinematicClock(),1/60);
+    const still=cinematicPendingStill?{name:cinematicPendingStill,png:renderer.domElement.toDataURL('image/png'),width:renderer.domElement.width,height:renderer.domElement.height}:null;
+    cinematicPendingStill=null;
+    return {skip:false,done:cinematicDirector.phase==='done',frame:simFrame,shot:cinematicDirector.shotId,view:cinematicDirector.view,still,error:null,phase:cinematicDirector.phase,index:cinematicDirector.index};
+  }catch(error){
+    return {skip:false,done:false,error:String(error&&error.stack||error),frame:simFrame,phase:cinematicDirector?.phase,index:cinematicDirector?.index};
+  }
+}
+function drawCinematicGlints(now){
+  const view=cinematicView;
+  glintCanvas.style.zIndex=now<awardFlashUntil?'8':'2';
+  if(glintCanvas.width!==view.size||glintCanvas.height!==view.size){glintCanvas.width=view.size;glintCanvas.height=view.size;}
+  glintCtx.clearRect(0,0,view.size,view.size);
+  const slots=chapter.skillSlots(snapshot)||[];
+  glintCtx.imageSmoothingEnabled=false;
+  const ready=slots.filter(skill=>skill.status==='ready');
+  for(const skill of ready){
+    const object=sceneConfig.objects.find(item=>item.role===skill.role);
+    if(!object?.iconAt)continue;
+    const shared=ready.filter(item=>item.role===skill.role);
+    const index=shared.indexOf(skill);
+    const ox=object.iconAt.x+(shared.length>1?(index-(shared.length-1)/2)*12:0);
+    for(let i=0;i<8;i++){
+      const angle=now/420+i*Math.PI/4,x=ox+Math.cos(angle)*10-view.x,y=object.iconAt.y+Math.sin(angle)*8-view.y;
+      glintCtx.fillStyle=i%2?'#f4e35a':'#fffaf0';
+      glintCtx.fillRect(x|0,y|0,2,2);
+    }
+  }
 }
 function drawSkillGlints(now){
   if(!glintCtx||!chapter?.skillSlots)return;
+  if(cinematicView){drawCinematicGlints(now);return;}
   glintCanvas.style.zIndex=now<awardFlashUntil?'8':'2';
   glintCtx.clearRect(0,0,sceneConfig.width,sceneConfig.height);
   const slots=chapter.skillSlots(snapshot)||[];
@@ -659,12 +777,13 @@ async function start(){
   const roomURLs=sceneConfig.backgrounds?[sceneConfig.backgrounds.day,sceneConfig.backgrounds.night,sceneConfig.backgrounds.lightMask]:[sceneConfig.background];
   const props=sceneConfig.objects.filter(o=>o.icon);
   const loadProp=async object=>({base:await loadImage(object.icon),hi:await loadImage(object.iconHighlight||object.icon),lit:object.iconLit?await loadImage(object.iconLit):null});
-  const [roomImages,chapterData,atlasImages,propPacks]=await Promise.all([Promise.all(roomURLs.map(loadImage)),fetch(sceneConfig.chapter).then(r=>{if(!r.ok)throw new Error('章节资料加载失败');return r.json();}),Promise.all(atlasEntries.map(([,atlas])=>loadImage(atlas.url))),Promise.all(props.map(loadProp))]);
+  const cinematicPromise=cinematicOn?fetch(`./cinematic/${cinematicName}.json`).then(r=>{if(!r.ok)throw new Error('拍摄脚本加载失败');return r.json();}):null;
+  const [roomImages,chapterData,atlasImages,propPacks,cinematicScript]=await Promise.all([Promise.all(roomURLs.map(loadImage)),fetch(sceneConfig.chapter).then(r=>{if(!r.ok)throw new Error('章节资料加载失败');return r.json();}),Promise.all(atlasEntries.map(([,atlas])=>loadImage(atlas.url))),Promise.all(props.map(loadProp)),cinematicPromise]);
   atlasEntries.forEach(([id,atlas],i)=>atlasData[id]={image:atlasImages[i],frames:atlasBounds(atlasImages[i],atlas)});
   chapter=createChapter(chapterData);
   const bounds=atlasData.player.frames[0];
-  renderer=new THREE.WebGLRenderer({alpha:false,antialias:false,powerPreference:'low-power'});
-  renderer.setPixelRatio(2);renderer.setSize(WORLD.width,WORLD.height,false);renderer.setClearColor(0xe8dfc8);
+  renderer=new THREE.WebGLRenderer({alpha:false,antialias:false,powerPreference:'low-power',preserveDrawingBuffer:cinematicOn});
+  renderer.setPixelRatio(cinematicOn?1:2);renderer.setSize(WORLD.width,WORLD.height,false);renderer.setClearColor(0xe8dfc8);
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.domElement.setAttribute('aria-hidden','true');
   renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();showFailure('图形上下文已丢失，游戏已停止。可重新加载尝试恢复图形，或继续文字阅读。');});
@@ -704,6 +823,19 @@ async function start(){
   }
   glintCanvas=document.createElement('canvas');glintCanvas.id='skill-glints';glintCanvas.width=sceneConfig.width;glintCanvas.height=sceneConfig.height;glintCtx=glintCanvas.getContext('2d');stage.append(glintCanvas);
   loading.remove();pauseButton.disabled=false;document.querySelector('#manual').disabled=false;setState('explore');
+  if(cinematicOn){
+    cinematicDirector=createDirector(validateScript(cinematicScript));
+    document.documentElement.classList.add('cinematic');
+    document.documentElement.style.setProperty('--cinematic-size',`${cinematicScript.output}px`);
+    stage.style.width=`${cinematicScript.output}px`;stage.style.height=`${cinematicScript.output}px`;
+    saving=false;snapshot=chapter.initial();position={...sceneConfig.entryPoints[snapshot.state]};
+    enterScene();
+    window.careerCinematic={tick:cinematicTick,output:cinematicScript.output,report:()=>({played:cinematicDirector.played,stills:cinematicDirector.stills,phase:cinematicDirector.phase})};
+    if(window.__cinematicExternal!==true){
+      const loop=()=>{const report=cinematicTick();if(report.error){console.error(report.error);showFailure('拍摄中断。');return;}if(!report.done)raf=requestAnimationFrame(loop);};
+      raf=requestAnimationFrame(loop);
+    }
+  }else{
   let restored;try{storage=window.localStorage;restored=chapter.inspect(storage);}catch{restored={kind:'unavailable'};}
   snapshot=restored.snapshot||chapter.initial();position={...sceneConfig.entryPoints[snapshot.state]};
   if(restored.kind==='invalid')storageProblem('这份存档无法识别或已经损坏。它没有被覆盖。可以明确重新开始，或保留原存档仅在本次体验。',enterScene);
@@ -711,6 +843,7 @@ async function start(){
   else if(restored.kind==='fresh')persist(enterScene);
   else{document.querySelector('#save-status').textContent='已恢复上次确认的进度';enterScene();}
   raf=requestAnimationFrame(frame);
+  }
   // Read-only diagnostics support browser acceptance without changing game state.
   window.careerPrototype={snapshot:()=>({position:{...position},state,active:active?.id||null,chapter:structuredClone(snapshot),saving,saveKey:chapter.key,bounds,three:THREE.REVISION,facing,moving,walkTime,walkMetrics:actorViews.get('player').standing.metrics(),sit:actorViews.get('player').seated?.mesh.visible?actorViews.get('player').seated.metrics():null,actors:visibleRoom().actors.map(a=>({id:a.id,position:renderPosition(a),posture:isTyping(a)?'seatedTyping':'standing'})),frames:Object.fromEntries([...actorViews].map(([id,views])=>[id,(views.seated?.mesh.visible?views.seated:views.standing).frame()])),markers:pendingMarkers(visibleRoom(),chapter,snapshot),boardLit:propViews.some(item=>!!(item.lit&&item.mat.map===item.lit))})};
   window.addEventListener('pagehide',()=>{cancelAnimationFrame(raf);hideObjectCard();scene.traverse(o=>{o.geometry?.dispose();if(o.material){o.material.map?.dispose();o.material.alphaMap?.dispose();o.material.dispose();}});for(const tex of spareTextures)tex.dispose();renderer.dispose();},{once:true});
@@ -765,7 +898,7 @@ window.addEventListener('keydown',event=>{
 },true);
 window.addEventListener('keyup',event=>{const key=event.key.length===1?event.key.toLowerCase():event.key;keys.delete(key);if(confirmationKeys.has(key)){event.preventDefault();confirmationKeys.delete(key);}},true);
 document.addEventListener('focusin',event=>{if(event.target===stage||event.target.id==='dialogue'||event.target.matches('.game-shell button, .choices button'))lastGameFocus=event.target;});
-function loseWindowFocus(){clearInput();confirmationKeys.clear();pause();}
+function loseWindowFocus(){if(cinematicOn)return;clearInput();confirmationKeys.clear();pause();}
 window.addEventListener('blur',loseWindowFocus);
 window.addEventListener('focus',focusCurrentUI);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)loseWindowFocus();else focusCurrentUI();});
