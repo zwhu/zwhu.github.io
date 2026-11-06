@@ -1,0 +1,204 @@
+{
+  "chapter": "hefei",
+  "url": "?cinematic=hefei",
+  "command": "node games/career-rpg/web/tests/cinematic-record.mjs",
+  "frames": 3832,
+  "output": {
+    "width": 216,
+    "height": 216,
+    "duration": 63.866667,
+    "nbFrames": 3832
+  },
+  "shots": [
+    {
+      "id": "establish",
+      "type": "pull-out",
+      "frame": 1
+    },
+    {
+      "id": "pan-room",
+      "type": "pan",
+      "frame": 57
+    },
+    {
+      "id": "follow",
+      "type": "follow",
+      "frame": 106
+    },
+    {
+      "id": "boss",
+      "type": "push-in",
+      "frame": 294
+    },
+    {
+      "id": "travel-boss",
+      "type": "pull-out",
+      "frame": 558
+    },
+    {
+      "id": "follow",
+      "type": "follow",
+      "frame": 590
+    },
+    {
+      "id": "desk",
+      "type": "push-in",
+      "frame": 889
+    },
+    {
+      "id": "travel-desk",
+      "type": "pull-out",
+      "frame": 1037
+    },
+    {
+      "id": "follow",
+      "type": "follow",
+      "frame": 1069
+    },
+    {
+      "id": "linux",
+      "type": "push-in",
+      "frame": 1141
+    },
+    {
+      "id": "travel-linux",
+      "type": "pull-out",
+      "frame": 1335
+    },
+    {
+      "id": "follow",
+      "type": "follow",
+      "frame": 1367
+    },
+    {
+      "id": "jquery",
+      "type": "push-in",
+      "frame": 1415
+    },
+    {
+      "id": "travel-jquery",
+      "type": "pull-out",
+      "frame": 1789
+    },
+    {
+      "id": "follow",
+      "type": "follow",
+      "frame": 1821
+    },
+    {
+      "id": "java",
+      "type": "push-in",
+      "frame": 1974
+    },
+    {
+      "id": "travel-java",
+      "type": "pull-out",
+      "frame": 2168
+    },
+    {
+      "id": "follow",
+      "type": "follow",
+      "frame": 2200
+    },
+    {
+      "id": "db",
+      "type": "push-in",
+      "frame": 2237
+    },
+    {
+      "id": "travel-db",
+      "type": "pull-out",
+      "frame": 2651
+    },
+    {
+      "id": "follow",
+      "type": "follow",
+      "frame": 2683
+    },
+    {
+      "id": "raise",
+      "type": "push-in",
+      "frame": 2842
+    },
+    {
+      "id": "travel-raise",
+      "type": "pull-out",
+      "frame": 3223
+    },
+    {
+      "id": "follow",
+      "type": "follow",
+      "frame": 3255
+    },
+    {
+      "id": "manual",
+      "type": "push-in",
+      "frame": 3715
+    }
+  ],
+  "stills": [
+    {
+      "name": "boss",
+      "width": 96,
+      "height": 96,
+      "file": "games/career-rpg/web/review/cinematic/stills/boss.png"
+    },
+    {
+      "name": "desk",
+      "width": 96,
+      "height": 96,
+      "file": "games/career-rpg/web/review/cinematic/stills/desk.png"
+    },
+    {
+      "name": "linux",
+      "width": 96,
+      "height": 96,
+      "file": "games/career-rpg/web/review/cinematic/stills/linux.png"
+    },
+    {
+      "name": "jquery",
+      "width": 96,
+      "height": 96,
+      "file": "games/career-rpg/web/review/cinematic/stills/jquery.png"
+    },
+    {
+      "name": "java",
+      "width": 96,
+      "height": 96,
+      "file": "games/career-rpg/web/review/cinematic/stills/java.png"
+    },
+    {
+      "name": "db",
+      "width": 96,
+      "height": 96,
+      "file": "games/career-rpg/web/review/cinematic/stills/db.png"
+    },
+    {
+      "name": "raise",
+      "width": 96,
+      "height": 96,
+      "file": "games/career-rpg/web/review/cinematic/stills/raise.png"
+    },
+    {
+      "name": "manual",
+      "width": 96,
+      "height": 96,
+      "file": "games/career-rpg/web/review/cinematic/stills/manual.png"
+    }
+  ],
+  "video": "games/career-rpg/web/review/cinematic/hefei.mp4",
+  "normal": {
+    "title": "像素前端",
+    "position": {
+      "x": 190,
+      "y": 196
+    },
+    "moved": false,
+    "cinematic": false,
+    "screenshot": {
+      "width": 1280,
+      "height": 900,
+      "file": "games/career-rpg/web/review/cinematic/normal-hefei.png"
+    }
+  }
+}
