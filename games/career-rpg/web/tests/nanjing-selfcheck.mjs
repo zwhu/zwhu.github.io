@@ -64,7 +64,7 @@ const SNAP = `(() => {
   const convo = document.querySelector('#conversation');
   const journey = document.querySelector('#journey-map');
   const root = pause.open ? pause : dialog.open ? dialog : !journey.hidden ? journey : convo.hidden ? null : convo;
-  const buttons = root ? [...root.querySelectorAll('.choices button, #journey-choices button')].map(button => ({text: button.textContent, focused: document.activeElement === button})) : [];
+  const buttons = root ? [...root.querySelectorAll('.choices button, #journey-choices button')].map(button => ({text: button.textContent || button.getAttribute('aria-label') || '', id: button.id, caret: button.classList.contains('continue-caret'), focused: document.activeElement === button})) : [];
   const slots = [...document.querySelectorAll('#skill-slots figure')].map(figure => figure.textContent.replace(/\\s+/g, ' ').trim());
   return {position: s.position, state: s.state, active: s.active, chapter: s.chapter.state, skills: s.chapter.skills || null, speaker: document.querySelector('#speaker')?.textContent || '', dialogue: document.querySelector('#dialogue')?.textContent || '', hidden: convo.hidden, journey: !journey.hidden, slogan: document.querySelector('#journey-slogan')?.textContent || '', title: document.querySelector('#game-title')?.textContent || '', buttons, slots, copy: document.querySelector('#journey-copy')?.textContent || ''};
 })()`;
@@ -131,7 +131,20 @@ async function press(label) {
 async function dismiss() {
   const view = await snap();
   if (view.hidden && !view.journey && view.state === 'explore') return view;
-  await press(view.buttons.some(button => button.text === '继续探索') ? '继续探索' : '返回');
+  if (view.buttons.some(button => button.caret || button.id === 'close-dialogue')) {
+    for (let i = 0; i < 8; i++) {
+      const cur = await snap();
+      const focused = cur.buttons.find(button => button.focused);
+      if (focused && (focused.caret || focused.id === 'close-dialogue')) break;
+      await tap('ArrowRight');
+      await sleep(60);
+    }
+    await sleep(220);
+    await tap('Enter');
+    await sleep(350);
+    return snap();
+  }
+  await press(view.buttons.some(button => button.text === '返回') ? '返回' : '继续');
   return snap();
 }
 async function walkTo(tx, ty) {

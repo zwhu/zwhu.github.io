@@ -184,7 +184,16 @@ test('hefei marker sits on my_pc, cards stay off the startup sheets, and the ais
   assert.equal(chapter.actions(taken,'linux_screen')[0].event,'review_linux_git');
   assert.equal(JSON.stringify(data).includes('回看'),false);
   assert.equal(JSON.stringify(HEFEI).includes('回看'),false);
-  assert.equal(readFileSync(new URL('../main.mjs',import.meta.url),'utf8').includes('回看'),false);
+  const mainSource=readFileSync(new URL('../main.mjs',import.meta.url),'utf8');
+  const pageSource=readFileSync(new URL('../index.html',import.meta.url),'utf8');
+  const cssSource=readFileSync(new URL('../style.css',import.meta.url),'utf8');
+  assert.equal(mainSource.includes('回看'),false);
+  assert.equal(mainSource.includes('继续探索'),false);
+  assert.equal(pageSource.includes('继续探索'),false);
+  assert.equal(pageSource.includes('Shift+Tab 读正文'),false);
+  assert.equal(pageSource.includes('id="nameplate"'),true);
+  assert.equal(cssSource.includes('rgba(249,248,241,.8)'),true);
+  assert.equal(cssSource.includes('dialogue-caret'),true);
   assert.equal(HEFEI.actors.some(actor=>actor.readPages)||HEFEI.objects.some(object=>object.readPages),false);
   const start=HEFEI.entryPoints.interview;
   const seen=new Set();const queue=[[start.x,start.y]];

@@ -64,7 +64,7 @@ const SNAP = `(() => {
   const box = convo.getBoundingClientRect();
   const arrow = document.querySelector('#speaker-arrow');
   const ar = arrow.getBoundingClientRect();
-  const buttons = [...document.querySelectorAll('#conversation .choices button, #system-dialog .choices button')].filter(button => button.getClientRects().length).map(button => ({text: button.textContent, focused: document.activeElement === button}));
+  const buttons = [...document.querySelectorAll('#conversation .choices button, #system-dialog .choices button')].filter(button => button.getClientRects().length).map(button => ({text: button.textContent || button.getAttribute('aria-label') || '', id: button.id, caret: button.classList.contains('continue-caret'), focused: document.activeElement === button}));
   return {
     position: s.position, state: s.state, active: s.active, chapter: s.chapter.state, flags: s.chapter.flags, skills: s.chapter.skills || null,
     task: document.querySelector('#task')?.textContent || '',
@@ -73,8 +73,10 @@ const SNAP = `(() => {
     hidden: convo.hidden,
     docked: convo.classList.contains('docked'),
     narration: convo.classList.contains('narration'),
-    bottom: !convo.hidden && Math.abs(box.bottom - stage.bottom) < 3 && box.width > stage.width * 0.75 && box.top > stage.top + stage.height * 0.35,
+    bottom: !convo.hidden && box.bottom <= stage.bottom - stage.height * 0.01 && box.top > stage.top + stage.height * 0.45 && box.left > stage.left + 2 && box.right < stage.right - 2 && box.width > stage.width * 0.85 && box.width < stage.width * 0.99,
     buttons, reviewButton: buttons.some(button => button.text.includes('回看')),
+    continueExplore: buttons.some(button => button.text.includes('继续探索')),
+    hint: !!(document.querySelector('#reading-hint')?.textContent.includes('Shift+Tab') && document.querySelector('#reading-hint').getClientRects().length),
     pageReview: document.body.innerText.includes('回看'),
     arrowVisible: !arrow.hidden && ar.height > 0,
     arrowActor: arrow.dataset.actor || '',
@@ -138,7 +140,20 @@ async function press(label) {
 async function dismiss() {
   const view = await snap();
   if (view.hidden && view.state === 'explore') return view;
-  await press('继续探索');
+  if (view.buttons.some(button => button.caret || button.id === 'close-dialogue')) {
+    for (let i = 0; i < 8; i++) {
+      const cur = await snap();
+      const focused = cur.buttons.find(button => button.focused);
+      if (focused && (focused.caret || focused.id === 'close-dialogue')) break;
+      await tap('ArrowRight');
+      await sleep(50);
+    }
+    await sleep(200);
+    await tap('Enter');
+    await sleep(180);
+    return snap();
+  }
+  await press(view.buttons.some(button => button.text === '返回') ? '返回' : '继续');
   return snap();
 }
 async function waitExplore() {
@@ -187,6 +202,8 @@ async function record(id, file, expect = {}) {
   if (expect.arrow && view.arrowActor !== expect.arrow) throw new Error(id + ' arrow ' + view.arrowActor);
   if (expect.bottom && !view.bottom) throw new Error(id + ' dialogue is not docked to the bottom');
   if (view.reviewButton) throw new Error(id + ' showed 回看 ' + JSON.stringify(view.buttons));
+  if (view.continueExplore) throw new Error(id + ' showed 继续探索 ' + JSON.stringify(view.buttons));
+  if (view.hint) throw new Error(id + ' showed the reading hint');
   await shot(file);
   const step = {id, file, dialogue: view.dialogue, speaker: view.speaker, task: view.task, buttons: view.buttons.map(button => button.text), reviewButton: view.reviewButton, pageReview: view.pageReview, bottom: view.bottom, docked: view.docked, narration: view.narration, arrowVisible: view.arrowVisible, arrowActor: view.arrowActor, state: view.state, chapter: view.chapter, position: view.position, active: view.active, flags: view.flags};
   steps.push(step);
