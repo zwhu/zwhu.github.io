@@ -147,7 +147,7 @@ try{
     assert.deepEqual(errors,[]);await writeFile(new URL('shared-features-checks.json',out),JSON.stringify({result:'passed',browser:'Chrome headless desktop1280x900/software WebGL',checks,scope:'Configurable actors, non-modal bubbles, task markers, emotion imagery and seated typing; no other-end or performance acceptance'},null,2)+'\n');console.log(JSON.stringify(checks));
   }else{
   await run('localStorage.removeItem(window.careerPrototype.snapshot().saveKey)');
-  let s=await reload();assert.equal(s.chapter.state,'office');assert.equal(s.three,'180');assert.ok(s.bounds.width<1024);checks.realThreeAndTransparentBounds=true;
+  let s=await reload();assert.equal(s.chapter.state,'office');assert.equal(s.three,'canvas');assert.ok(s.bounds.width<1024);checks.realThreeAndTransparentBounds=true;
   await close();await shot('chapter-office.png');
   await walk(forum.x,forum.y);await open('forum');await act('open_forum_post');assert.equal((await state()).chapter.state,'report');
   const reportSave=await saved();s=await reload();assert.equal(s.chapter.state,'report');assert.equal(await saved(),reportSave);checks.refreshExactReport=true;

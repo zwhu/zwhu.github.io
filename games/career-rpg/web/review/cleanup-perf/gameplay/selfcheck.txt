@@ -1,0 +1,4 @@
+HEFEI SELF_CHECK_OK
+NANJING SELF_CHECK_OK
+HANGZHOU SELF_CHECK_OK
+cinematic ?cinematic=hefei tick phase=shot error=null (no mp4 written)
