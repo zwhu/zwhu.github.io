@@ -1,5 +1,11 @@
 # 《像素前端》交接
 
+## 当前恢复点（2026-11-06，主角六帧走路）
+
+三章主角改走 `web/art/player-walk-v2-sheet.png`（7 列 × 4 行，单格 28×44）。列是 idle、walk-01…walk-06，行是 down、up、left、right。站立只显示 idle。走路按 walk-01 到 walk-06 循环，不插入 idle。右向是单独画的，不是左向镜像。源文件在 `art/player-walk-v2/`，运行图与源图集字节相同。
+
+步速仍是 60px/s，整像素余数进位没改。姿态 10Hz：南京竖向最长直路约 140px，一轮 36px，这段路能看完三轮多。4Hz 一轮 90px，只能看完一轮多。坐姿仍是 `sit-back-hz-18x30.png`。老板的 3 列图集仍是 idle、步态 A、idle、步态 B。证据在 `web/review/walk-v2/`。
+
 ## 当前恢复点（2026-11-06，合肥宣传短片）
 
 方片在 `web/review/promo/hefei.mp4`，1080×1080，25 秒，30fps，自写 8-bit 配乐。剪自 `web/review/cinematic/hefei.mp4`。命令是 `python3 games/career-rpg/scripts/promo-hefei.py`。开头是《像素前端》和「合肥」，接着走到工位，四段技能，手册，然后旅程地图和「下一章：南京」。走路、坐姿、地名牌、窄槽换行、相机和玩法没改。

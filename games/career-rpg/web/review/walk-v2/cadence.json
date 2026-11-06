@@ -1,0 +1,207 @@
+{
+  "result": "passed",
+  "page": "games/career-rpg/web/",
+  "chapter": "nanjing",
+  "poseHz": 10,
+  "movementSpeed": 60,
+  "sequence": [
+    "walk-01",
+    "walk-02",
+    "walk-03",
+    "walk-04",
+    "walk-05",
+    "walk-06"
+  ],
+  "idleOnlyWhenStopped": true,
+  "runs": [
+    {
+      "direction": "right",
+      "frames": 66,
+      "cycles": 9.472222222222198,
+      "sequence": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "idleInCycle": false,
+      "speed": 59.85915492957747,
+      "distance": 340,
+      "seconds": 5.68,
+      "scale": {
+        "width": 19.904761904761905,
+        "height": 44
+      },
+      "foot": {
+        "meshPlusWorldY": 238,
+        "meshMinusWorldX": 0
+      },
+      "video": "games/career-rpg/web/review/walk-v2/right.mp4",
+      "start": {
+        "x": 13,
+        "y": 155
+      },
+      "end": {
+        "x": 353,
+        "y": 155
+      }
+    },
+    {
+      "direction": "left",
+      "frames": 66,
+      "cycles": 9.611111111111086,
+      "sequence": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "idleInCycle": false,
+      "speed": 59.85426786953504,
+      "distance": 345,
+      "seconds": 5.764,
+      "scale": {
+        "width": 20.952380952380953,
+        "height": 44
+      },
+      "foot": {
+        "meshPlusWorldY": 238,
+        "meshMinusWorldX": 0
+      },
+      "video": "games/career-rpg/web/review/walk-v2/left.mp4",
+      "start": {
+        "x": 357,
+        "y": 155
+      },
+      "end": {
+        "x": 12,
+        "y": 155
+      }
+    },
+    {
+      "direction": "down",
+      "frames": 24,
+      "cycles": 3.4166666666666625,
+      "sequence": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "idleInCycle": false,
+      "speed": 59.65770171149144,
+      "distance": 122,
+      "seconds": 2.045,
+      "scale": {
+        "width": 16.761904761904763,
+        "height": 44
+      },
+      "foot": {
+        "meshPlusWorldY": 238,
+        "meshMinusWorldX": 0
+      },
+      "video": "games/career-rpg/web/review/walk-v2/down.mp4",
+      "start": {
+        "x": 125,
+        "y": 75
+      },
+      "end": {
+        "x": 125,
+        "y": 197
+      }
+    },
+    {
+      "direction": "up",
+      "frames": 26,
+      "cycles": 3.5277777777777732,
+      "sequence": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "idleInCycle": false,
+      "speed": 59.68735196589294,
+      "distance": 126,
+      "seconds": 2.111,
+      "scale": {
+        "width": 17.80952380952381,
+        "height": 44
+      },
+      "foot": {
+        "meshPlusWorldY": 238,
+        "meshMinusWorldX": 0
+      },
+      "video": "games/career-rpg/web/review/walk-v2/up.mp4",
+      "start": {
+        "x": 125,
+        "y": 201
+      },
+      "end": {
+        "x": 125,
+        "y": 75
+      }
+    }
+  ],
+  "sit": {
+    "posture": "seatedTyping",
+    "height": 30,
+    "file": "games/career-rpg/web/review/walk-v2/stills/sit-nanjing.png"
+  }
+}

@@ -3,19 +3,33 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createChapter} from '../story.mjs';
 import {OFFICE,HEFEI,HANGZHOU,pendingMarkers,actionsFor,expressionFor} from '../scene-config.mjs';
-import {frameIndex,bubblePosition,typingFrame,seatedFrame,stableFrameRects,motionForRender,WALK_POSE_HZ,walkClock,placeActor,sheetAnchor} from '../actors.mjs';
+import {frameIndex,bubblePosition,typingFrame,seatedFrame,stableFrameRects,motionForRender,WALK_POSE_HZ,WALK_SEQUENCE,walkClock,placeActor,sheetAnchor} from '../actors.mjs';
 import {MOVE_SPEED} from '../world.mjs';
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-01.json',import.meta.url),'utf8')),chapter=createChapter(data);
 test('direction rows and idle/step frames remain distinct, including typing clips',()=>{
   const atlas=OFFICE.atlases.player;
-  assert.equal(frameIndex(atlas,'down',false,0),0);assert.equal(frameIndex(atlas,'up',false,0),3);assert.equal(frameIndex(atlas,'left',false,0),6);assert.equal(frameIndex(atlas,'right',false,0),9);
-  assert.equal(WALK_POSE_HZ,4);
-  assert.equal(frameIndex(atlas,'left',true,0),6);assert.equal(frameIndex(atlas,'left',true,.26),7);assert.equal(frameIndex(atlas,'left',true,.51),6);assert.equal(frameIndex(atlas,'left',true,.76),8);assert.equal(frameIndex(atlas,'left',false,.76),6);
+  assert.equal(atlas.url,'./art/player-walk-v2-sheet.png');
+  assert.equal(atlas.columns,7);assert.deepEqual(atlas.walkSequence,[1,2,3,4,5,6]);assert.equal(atlas.poseHz,10);
+  assert.equal(WALK_POSE_HZ,4);assert.deepEqual(WALK_SEQUENCE,[0,1,0,2]);
+  assert.equal(frameIndex(atlas,'down',false,0),0);assert.equal(frameIndex(atlas,'up',false,0),7);assert.equal(frameIndex(atlas,'left',false,0),14);assert.equal(frameIndex(atlas,'right',false,0),21);
+  for(const facing of atlas.directions){
+    const row=atlas.directions.indexOf(facing),base=row*atlas.columns;
+    const seen=[0,1,2,3,4,5].map(i=>frameIndex(atlas,facing,true,i/atlas.poseHz)-base);
+    assert.deepEqual(seen,[1,2,3,4,5,6]);
+    assert.equal(frameIndex(atlas,facing,true,6/atlas.poseHz),base+1);
+    assert.equal(frameIndex(atlas,facing,false,6/atlas.poseHz),base);
+  }
+  const boss=HEFEI.atlases.boss;
+  assert.deepEqual([0,.25,.5,.75].map(t=>frameIndex(boss,'left',true,t)),[6,7,6,8]);
   assert.equal(typingFrame(2,0,true),2);assert.equal(typingFrame(2,.4,true),6);assert.equal(typingFrame(2,.4,false),2);
   assert.equal(seatedFrame(OFFICE.atlases.typing,2,.4,true),6);
   assert.equal(seatedFrame(OFFICE.atlases.sit,0,.4,true),0);
 });
-test('the shared protagonist sits with the 18 by 30 back frame and the hip on the chair',()=>{
+test('the approved walk sheet is copied unchanged and the sit frame stays 18 by 30',()=>{
+  const runtime=readFileSync(new URL('../art/player-walk-v2-sheet.png',import.meta.url));
+  const source=readFileSync(new URL('../../art/player-walk-v2/sheets/player-walk-v2-sheet.png',import.meta.url));
+  assert.ok(runtime.equals(source));
+  assert.equal(runtime.readUInt32BE(16),196);assert.equal(runtime.readUInt32BE(20),176);
   const png=readFileSync(new URL('../art/sit-back-hz-18x30.png',import.meta.url));
   assert.equal(png.readUInt32BE(16),18);assert.equal(png.readUInt32BE(20),30);
   for(const config of [OFFICE,HEFEI,HANGZHOU]){
@@ -48,9 +62,9 @@ test('pose references keep one direction at a stable scale and align every visib
 test('walk phase follows distance and the standing sprite sits on whole pixels',()=>{
   const atlas=OFFICE.atlases.player;
   let time=walkClock(0,true,0,MOVE_SPEED);
-  assert.equal(frameIndex(atlas,'right',true,time),9);
-  time=walkClock(time,true,MOVE_SPEED/WALK_POSE_HZ,MOVE_SPEED);
-  assert.equal(frameIndex(atlas,'right',true,time),10);
+  assert.equal(frameIndex(atlas,'right',true,time),22);
+  time=walkClock(time,true,MOVE_SPEED/atlas.poseHz,MOVE_SPEED);
+  assert.equal(frameIndex(atlas,'right',true,time),23);
   assert.equal(walkClock(time,false,1,MOVE_SPEED),0);
   assert.deepEqual(placeActor(10.75,20,-0.25,44,216,true),{x:11,y:218});
   assert.deepEqual(placeActor(10.75,20,-0.25,44,216,false),{x:10.5,y:218});

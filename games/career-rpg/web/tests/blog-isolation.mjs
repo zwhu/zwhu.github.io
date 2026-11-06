@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 const repo=fileURLToPath(new URL('../../../../',import.meta.url));
 const hash=data=>createHash('sha256').update(data).digest('hex');
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const forbidden=url=>/career-rpg|(?:^|\/)three(?:\.core|\.module)?(?:\.min)?\.js(?:[?#]|$)|(?:^|\/)(?:world|story|actors|scene-config)\.mjs(?:[?#]|$)|(?:office-room-v2|player-walk-v1|npc-team-v1|player-emotions-v1|typing-team-v1)\.(?:png|webp)(?:[?#]|$)/i.test(url);
+const forbidden=url=>/career-rpg|(?:^|\/)three(?:\.core|\.module)?(?:\.min)?\.js(?:[?#]|$)|(?:^|\/)(?:world|story|actors|scene-config)\.mjs(?:[?#]|$)|(?:office-room-v2|player-walk-v1|player-walk-v2(?:-sheet)?|npc-team-v1|player-emotions-v1|typing-team-v1)\.(?:png|webp)(?:[?#]|$)/i.test(url);
 
 async function staticEvidence(out){
   const script=String.raw`import json,hashlib,re
@@ -24,7 +24,7 @@ class Page(HTMLParser):
   if tag=='object' and a.get('data'):self.refs.append(a['data'])
   if tag=='link' and any(x in a.get('rel','').split() for x in ['stylesheet','icon','apple-touch-icon','preload','modulepreload']) and a.get('href'):self.refs.append(a['href'])
   if a.get('srcset'):self.refs.extend(x.strip().split()[0] for x in a['srcset'].split(',') if x.strip())
-pattern=re.compile(r'career-rpg|(?:^|/)three(?:\.core|\.module)?(?:\.min)?\.js(?:[?#]|$)|(?:office-room-v2|player-walk-v1|npc-team-v1|player-emotions-v1|typing-team-v1)\.(?:png|webp)',re.I)
+pattern=re.compile(r'career-rpg|(?:^|/)three(?:\.core|\.module)?(?:\.min)?\.js(?:[?#]|$)|(?:office-room-v2|player-walk-v1|player-walk-v2(?:-sheet)?|npc-team-v1|player-emotions-v1|typing-team-v1)\.(?:png|webp)',re.I)
 rows=[]
 for p in sorted(docs.rglob('*.html')):
  data=p.read_bytes();page=Page(data.decode());refs=page.refs

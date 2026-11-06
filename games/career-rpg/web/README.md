@@ -1,6 +1,6 @@
 # 南京办公室 · 桌面开发入口
 
-当前方案见[technical-plan.md](../technical-plan.md)。保留现有Three.js二维贴图实现和本地浏览器预览，人物/表情采用image_gen，程序负责环境素材和压缩运行版。H5发布、移动端、触控、弱网及博客上线暂不实施，原生桌面包未选型。下文Web历史验收和手机计划按其原阶段理解；loop、TraeX后台任务和走路卡顿排查保持暂停，缺失人物素材准备是另行授权的单次工作。
+当前方案见[technical-plan.md](../technical-plan.md)。保留现有Three.js二维贴图实现和本地浏览器预览，人物/表情采用image_gen，程序负责环境素材和压缩运行版。H5发布、移动端、触控、弱网及博客上线暂不实施，原生桌面包未选型。下文Web历史验收和手机计划按其原阶段理解；loop、TraeX后台任务保持暂停，缺失人物素材准备是另行授权的单次工作。主角行走用 `player-walk-v2-sheet.png`：站立是 idle，走路循环是 walk-01 到 walk-06。
 
 > 2026-11-05：南京键盘缺口已小修，桌面Chrome定点16项自验通过，待监督者独立复验。原快捷键与头部气泡保留；走路卡顿性能排查继续暂停，最新坐姿／气泡完整视觉和真机等仍待验。唯一工作目录为 `/Users/bytedance/work/AI/zwhu.github.io`。
 
@@ -49,7 +49,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 黄色感叹号按尚未接受的语义事件生成；仅打开或靠近不消失，接受事件后移除对应标记，恢复和重玩重新计算。紧张/开心由剧情状态驱动，使用真实头像图显示在气泡与主角头边。NPC头像从自己的素材取头部，不误用主角头像。
 
-图集接口：player-walk-v1为3×4（down/up/left/right，每行idle/stepA/stepB）；npc-team-v1为3×1（CTO/绿衣/米色）；player-emotions-v1为3×1（normal/tense/happy）；typing-team-v1为4×2（player/CTO/绿衣/米色，A/B两行）。运行时只读取每格alpha包围，不改源图。
+图集接口：player-walk-v2-sheet为7×4（down/up/left/right，每行 idle 与 walk-01…walk-06；站立只用 idle，走路循环不插入 idle）；npc-team-v1为3×1（CTO/绿衣/米色）；player-emotions-v1为3×1（normal/tense/happy）；typing-team-v1为4×2（player/CTO/绿衣/米色，A/B两行）。运行时只读取每格alpha包围，不改源图。
 
 所有核心玩法以仅键盘可完成为标准，键盘专项命令：`node games/career-rpg/web/tests/browser.mjs --keyboard-only`。此模式用原生Tab/ShiftTab及Enter/Space执行选择，不调用按钮click；`--features-only`检查四向行走、NPC、气泡、坐姿、表情和任务标记。实际结论见review对应JSON，未执行的项不视为通过。
 
