@@ -1,5 +1,9 @@
 # 《像素前端》交接
 
+## 当前恢复点（2026-11-06，合肥宣传短片）
+
+方片在 `web/review/promo/hefei.mp4`，1080×1080，25 秒，30fps，自写 8-bit 配乐。剪自 `web/review/cinematic/hefei.mp4`。命令是 `python3 games/career-rpg/scripts/promo-hefei.py`。开头是《像素前端》和「合肥」，接着走到工位，四段技能，手册，然后旅程地图和「下一章：南京」。走路、坐姿、地名牌、窄槽换行、相机和玩法没改。
+
 ## 当前恢复点（2026-11-06，合肥拍摄模式）
 
 `?cinematic=hefei` 才进入拍摄：固定路线自动走路、自动拾取技能，镜头只按 `web/cinematic/hefei.json` 做推近、拉远、平移和跟随。推近按整像素插值。没有这个参数时不自动走、不改相机。无头录制命令是 `node games/career-rpg/web/tests/cinematic-record.mjs`，产物在 `web/review/cinematic/`。这不是宣传片，不加音乐，不剪辑。走路、坐姿、地名牌、窄槽换行、音效和界面文案没改。游戏名仍是《像素前端》。
