@@ -33,7 +33,7 @@ export async function serveCandidate(){
     if(url.searchParams.get('budget-probe')){body=Buffer.alloc(131072,97);headers['Content-Type']='application/octet-stream';kind='parallel-calibration';}
     else if(url.searchParams.has('budget-calibration')){
       kind='calibration-page';headers['Content-Type']='text/html';
-      body=Buffer.from('<!doctype html><html><head><link rel="icon" href="data:,"></head><body><button id="confirm">观察链确认</button><script>window.calibration={confirmed:false};document.querySelector("button").onclick=()=>window.calibration.confirmed=true;window.probe=Promise.all(["a","b"].map(x=>fetch("./art/player-walk-v1.png?budget-probe="+x).then(async r=>({bytes:(await r.arrayBuffer()).byteLength,status:r.status}))));</script></body></html>');
+      body=Buffer.from('<!doctype html><html><head><link rel="icon" href="data:,"></head><body><button id="confirm">观察链确认</button><script>window.calibration={confirmed:false};document.querySelector("button").onclick=()=>window.calibration.confirmed=true;window.probe=Promise.all(["a","b"].map(x=>fetch("./art/player-walk-v2-sheet.png?budget-probe="+x).then(async r=>({bytes:(await r.arrayBuffer()).byteLength,status:r.status}))));</script></body></html>');
     }
     const raw=body;
     if(kind!=='parallel-calibration'&&['.html','.css','.mjs','.js','.json'].includes(path.extname(file))){body=gzipSync(raw,{level:9});encoding='gzip';assert.deepEqual(gunzipSync(body),raw);headers['Content-Encoding']='gzip';headers.Vary='Accept-Encoding';}

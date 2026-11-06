@@ -193,7 +193,8 @@ async function gesture(session, key, holdMs, name) {
   const after = await session.run('performance.now()');
   const hits = await session.run(`window.__careerPerf.events.filter(entry => entry.interactionId && entry.startTime >= ${before} && entry.startTime <= ${after})`);
   const duration = hits.length ? Math.max(...hits.map(entry => entry.duration)) : null;
-  return {name, key, holdMs, duration, events: hits};
+  const worst = hits.reduce((best, entry) => entry.duration > (best?.duration || 0) ? entry : best, null);
+  return {name, key, holdMs, duration, events: hits, inputDelay: worst ? worst.processingStart - worst.startTime : null, processing: worst ? worst.processingEnd - worst.processingStart : null, presentation: worst ? worst.duration - (worst.processingEnd - worst.startTime) : null};
 }
 
 async function snap(session) {
@@ -408,7 +409,7 @@ async function oneRun(index) {
       longTasks: perf.longTasks,
       resources: perf.resources,
       webgl: perf.webgl,
-      gestures: gestures.map(({name, key, holdMs, duration, events}) => ({name, key, holdMs, duration, eventCount: events.length, maxProcessing: events.length ? Math.max(...events.map(entry => entry.processingEnd - entry.processingStart)) : null})),
+      gestures: gestures.map(({name, key, holdMs, duration, events, inputDelay, processing, presentation}) => ({name, key, holdMs, duration, eventCount: events.length, maxProcessing: events.length ? Math.max(...events.map(entry => entry.processingEnd - entry.processingStart)) : null, inputDelay, processing, presentation})),
       inpMs,
       sessionMaxMs,
     };

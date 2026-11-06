@@ -232,7 +232,7 @@ def main():
     enlarged = png(preview, pw, ph)
     (ROOT / 'preview.png').write_bytes(enlarged)
     references = []
-    for name in ('art/character-four-directions-v1.png', 'web/art/player-walk-v1.png'):
+    for name in ('art/character-four-directions-v1.png',):
         original_bytes = (GAME / name).read_bytes()  # For comparison HTML only. No PNG decoding.
         references.append({'file': name, 'sha256': hashlib.sha256(original_bytes).hexdigest(), 'uri': data_uri(original_bytes)})
     tiles = ''.join(f'<figure><img width="192" height="256" alt="{name}站姿实验" src="{data_uri(png(frame, W, H))}"><figcaption>{name} · 48×64 · 脚底 y=61</figcaption></figure>'

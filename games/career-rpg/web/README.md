@@ -1,6 +1,6 @@
 # 南京办公室 · 桌面开发入口
 
-当前方案见[technical-plan.md](../technical-plan.md)。保留现有Three.js二维贴图实现和本地浏览器预览，人物/表情采用image_gen，程序负责环境素材和压缩运行版。H5发布、移动端、触控、弱网及博客上线暂不实施，原生桌面包未选型。下文Web历史验收和手机计划按其原阶段理解；loop、TraeX后台任务保持暂停，缺失人物素材准备是另行授权的单次工作。主角行走用 `player-walk-v2-sheet.png`：站立是 idle，走路循环是 walk-01 到 walk-06。
+当前方案见[technical-plan.md](../technical-plan.md)。画面是一张最近邻的 2D canvas，不再在开局加载 Three.js。人物/表情采用image_gen，程序负责环境素材和压缩运行版。H5发布、移动端、触控、弱网及博客上线暂不实施，原生桌面包未选型。下文Web历史验收和手机计划按其原阶段理解；loop、TraeX后台任务保持暂停，缺失人物素材准备是另行授权的单次工作。主角行走用 `player-walk-v2-sheet.png`：站立是 idle，走路循环是 walk-01 到 walk-06。
 
 > 2026-11-05：南京键盘缺口已小修，桌面Chrome定点16项自验通过，待监督者独立复验。原快捷键与头部气泡保留；走路卡顿性能排查继续暂停，最新坐姿／气泡完整视觉和真机等仍待验。唯一工作目录为 `/Users/bytedance/work/AI/zwhu.github.io`。
 
@@ -18,12 +18,13 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 ## 文件与维护
 
-- `scene-config.mjs`：背景、碰撞、actor/NPC、对象、任务事件、情绪、座位、剧情入口和发言者映射。后续场景替换配置和素材，复用相同机制。当前五桌背景384×216，手工碰撞据该图对齐，不照搬旧设计地图。
-- `world.mjs`：脚底碰撞、移动和附近对象；`actors.mjs`：四向/打字帧、逐格alpha包围、气泡投影与边界避让。
-- `main.mjs`：Three.js 正交渲染、素材加载、固定步长更新和 DOM 输入状态。角色按 alpha >128 读取包围盒，再设置纹理 UV；不修改原始图片。站姿角色逻辑高42～44像素，坐姿按实图校准为40像素，位置指脚底。普通剧情气泡锚定发言者头部，旁白锚主角；暂停/存档异常/重玩确认才使用模态框。
+- `chapters/`：南京、合肥、杭州各自一份场景数据。`logic.mjs` 只查询标记、表情和过场。换一章的内容不用改引擎。`scene-config.mjs` 仍把三章一起导出，给测试用。
+- `engine/world.mjs`：脚底碰撞和移动，不引用某一章。`world.mjs` 只给旧调用补上南京默认房间。`actors.mjs`：四向/打字帧、逐格 alpha 包围、气泡位置。大图集在 `engine/atlas-worker.mjs` 里扫。
+- `engine/view.mjs`：最近邻画到一张 canvas。`main.mjs` 负责加载、输入和对话。不改原图像素。站姿逻辑高 42～44，坐姿 30，位置指脚底。普通剧情气泡锚定发言者头部，旁白锚主角。
+- `cinematic/director.mjs`：`?cinematic=hefei` 的拍摄。正常游玩不创建 director。
 - `style.css` / `index.html`：中文对话和暂停菜单。用系统字体独立呈现，不烘焙入画面。
 - `art/`：Codex 生成的 Web 原型素材。此处并非严格网格生产图集。
-- `vendor/`：本地 Three.js 0.180.0，仅保留 `three.module.min.js`、其依赖 `three.core.min.js` 和 MIT `LICENSE`。对应[官方 r180 发布源码](https://github.com/mrdoob/three.js/tree/r180/build)；浏览器不请求 CDN。由主 Agent 下载，固定版本随原型维护，不自动更新。
+- `vendor/`：Three.js 0.180.0 还在仓库里，页面不再请求它。生命周期脚本仍按这个路径包装。
 
 检查：`python3 scripts/verify.py`，已包含移动与剧情/存档的离线规则测试。只复验规则时可以执行 `node --test games/career-rpg/web/tests/world.test.mjs games/career-rpg/web/tests/story.test.mjs`。
 

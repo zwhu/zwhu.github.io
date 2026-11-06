@@ -1,0 +1,2283 @@
+{
+  "label": "after",
+  "measuredAt": "2026-11-06T05:34:46.154Z",
+  "git": "424c06e237546d869b3bc4ee07999eaf8acd9130",
+  "page": "/games/career-rpg/web/?chapter=hefei",
+  "machine": {
+    "chrome": "Google Chrome 156.0.8078.47",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "cores": 4,
+    "platform": "linux"
+  },
+  "browserFlags": [
+    "--headless=new",
+    "--remote-debugging-port=0",
+    "--user-data-dir=PROFILE",
+    "--use-gl=angle",
+    "--use-angle=swiftshader-webgl",
+    "--enable-unsafe-swiftshader",
+    "--hide-scrollbars",
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
+    "--no-first-run",
+    "--disable-background-networking",
+    "--disable-extensions",
+    "--disable-sync",
+    "--autoplay-policy=no-user-gesture-required",
+    "--lang=zh-CN",
+    "--disable-translate",
+    "--window-size=1280,900"
+  ],
+  "viewport": {
+    "width": 1280,
+    "height": 900,
+    "deviceScaleFactor": 1
+  },
+  "cache": "disabled",
+  "webgl": {
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "vendor": "Google Inc. (Google)"
+  },
+  "method": {
+    "loadTimeMs": "performance.now() at the assignment of window.careerPrototype, installed with Object.defineProperty before Page.navigate. Counted only when #loading is absent, #manual is enabled, the stage canvas buffer width is > 0, #game-title is non-empty, and snapshot().state is not loading or error. timeOrigin is the navigation start of GET /games/career-rpg/web/?chapter=hefei on a fresh profile.",
+    "inpMs": "Max PerformanceEventTiming.duration among scored gestures in a run. Observer type \"event\"; durationThreshold is recorded per run (0 if accepted). Entries must have interactionId > 0 and startTime inside the gesture window (performance.now() just before the trusted CDP keydown, through 250ms after keyup). Gestures: walk-right, walk-left, walk-down, walk-up (80ms taps), walk-hold-right (400ms), handbook-m, dialogue-e (boss), skill-e (collect Linux). Reported value is the median of run INPs.",
+    "aggregation": "median across fresh-profile runs"
+  },
+  "runs": 5,
+  "loadTimeMs": {
+    "median": 192,
+    "min": 186.69999999995343,
+    "max": 206,
+    "samples": [
+      186.69999999995343,
+      192,
+      205.19999999995343,
+      206,
+      190.80000000004657
+    ]
+  },
+  "inpMs": {
+    "median": 32,
+    "min": 32,
+    "max": 48,
+    "samples": [
+      48,
+      32,
+      32,
+      32,
+      48
+    ]
+  },
+  "sessionMaxMs": {
+    "median": 40,
+    "samples": [
+      48,
+      32,
+      40,
+      32,
+      48
+    ]
+  },
+  "gestureMedians": {
+    "walk-right": 32,
+    "walk-left": 24,
+    "walk-down": 24,
+    "walk-up": 32,
+    "walk-hold-right": 32,
+    "handbook-m": 32,
+    "dialogue-e": 32,
+    "skill-e": 32
+  },
+  "results": [
+    {
+      "index": 1,
+      "wallMs": 13768,
+      "loadTimeMs": 186.69999999995343,
+      "readyState": "dialogue",
+      "title": "像素前端",
+      "heading": "合肥，争取一次机会",
+      "chapter": "interview",
+      "durationThreshold": 0,
+      "navigation": {
+        "responseEnd": 5.199999999953434,
+        "domContentLoaded": 64.10000000009313,
+        "loadEventEnd": 64.19999999995343,
+        "transferSize": 4334,
+        "type": "navigate"
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 76
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 76
+        }
+      ],
+      "longTasks": [],
+      "resources": [
+        {
+          "name": "web/style.css",
+          "type": "link",
+          "start": 8.800000000046566,
+          "duration": 5.699999999953434,
+          "transfer": 10430,
+          "decoded": 10130
+        },
+        {
+          "name": "web/main.mjs",
+          "type": "script",
+          "start": 8.899999999906868,
+          "duration": 5.800000000046566,
+          "transfer": 65326,
+          "decoded": 65026
+        },
+        {
+          "name": "engine/world.mjs",
+          "type": "script",
+          "start": 17.300000000046566,
+          "duration": 5,
+          "transfer": 2538,
+          "decoded": 2238
+        },
+        {
+          "name": "web/story.mjs",
+          "type": "script",
+          "start": 17.399999999906868,
+          "duration": 5.100000000093132,
+          "transfer": 5639,
+          "decoded": 5339
+        },
+        {
+          "name": "chapters/logic.mjs",
+          "type": "script",
+          "start": 17.399999999906868,
+          "duration": 9.800000000046566,
+          "transfer": 2039,
+          "decoded": 1739
+        },
+        {
+          "name": "web/actors.mjs",
+          "type": "script",
+          "start": 17.5,
+          "duration": 10.399999999906868,
+          "transfer": 5964,
+          "decoded": 5664
+        },
+        {
+          "name": "engine/view.mjs",
+          "type": "script",
+          "start": 17.5,
+          "duration": 11.399999999906868,
+          "transfer": 2602,
+          "decoded": 2302
+        },
+        {
+          "name": "web/title.mjs",
+          "type": "script",
+          "start": 17.5,
+          "duration": 12.899999999906868,
+          "transfer": 442,
+          "decoded": 142
+        },
+        {
+          "name": "web/narrow-wrap.mjs",
+          "type": "script",
+          "start": 17.699999999953434,
+          "duration": 12.900000000139698,
+          "transfer": 8273,
+          "decoded": 7973
+        },
+        {
+          "name": "cinematic/director.mjs",
+          "type": "script",
+          "start": 17.800000000046566,
+          "duration": 12.899999999906868,
+          "transfer": 10411,
+          "decoded": 10111
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 59.5,
+          "duration": 2.6000000000931323,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "chapters/hefei.mjs",
+          "type": "script",
+          "start": 64.10000000009313,
+          "duration": 2,
+          "transfer": 7459,
+          "decoded": 7159
+        },
+        {
+          "name": "127.0.0.1:42061/favicon.ico",
+          "type": "other",
+          "start": 66.89999999990687,
+          "duration": 1.6000000000931323,
+          "transfer": 300,
+          "decoded": 0
+        },
+        {
+          "name": "chapters/nanjing.mjs",
+          "type": "script",
+          "start": 67,
+          "duration": 3.199999999953434,
+          "transfer": 4495,
+          "decoded": 4195
+        },
+        {
+          "name": "design/chapter-hefei.json",
+          "type": "fetch",
+          "start": 72.5,
+          "duration": 6,
+          "transfer": 8798,
+          "decoded": 8498
+        },
+        {
+          "name": "hefei-office-day/day-384x216.png",
+          "type": "img",
+          "start": 72.69999999995343,
+          "duration": 6.300000000046566,
+          "transfer": 24014,
+          "decoded": 23714
+        },
+        {
+          "name": "hefei-office-night/night-384x216.png",
+          "type": "img",
+          "start": 72.69999999995343,
+          "duration": 6.300000000046566,
+          "transfer": 25706,
+          "decoded": 25406
+        },
+        {
+          "name": "hefei-office-night/light-mask-384x216.png",
+          "type": "img",
+          "start": 72.80000000004657,
+          "duration": 6,
+          "transfer": 1324,
+          "decoded": 1024
+        },
+        {
+          "name": "art/player-walk-v2-sheet.png",
+          "type": "img",
+          "start": 72.80000000004657,
+          "duration": 6.300000000046566,
+          "transfer": 16210,
+          "decoded": 15910
+        },
+        {
+          "name": "art/npc-team-v1.png",
+          "type": "img",
+          "start": 72.80000000004657,
+          "duration": 11.899999999906868,
+          "transfer": 524618,
+          "decoded": 524318
+        },
+        {
+          "name": "art/typing-team-v1.png",
+          "type": "img",
+          "start": 72.80000000004657,
+          "duration": 21.5,
+          "transfer": 899122,
+          "decoded": 898822
+        },
+        {
+          "name": "art/player-emotions-v1.png",
+          "type": "img",
+          "start": 72.80000000004657,
+          "duration": 20.800000000046566,
+          "transfer": 786464,
+          "decoded": 786164
+        },
+        {
+          "name": "art/sit-back-hz-18x30.png",
+          "type": "img",
+          "start": 72.89999999990687,
+          "duration": 8.600000000093132,
+          "transfer": 705,
+          "decoded": 405
+        },
+        {
+          "name": "hefei-founder-walk/walk-sheet-32x48.png",
+          "type": "img",
+          "start": 72.89999999990687,
+          "duration": 9.100000000093132,
+          "transfer": 6521,
+          "decoded": 6221
+        },
+        {
+          "name": "hefei-founder-emotions/emotions-strip-64x32.png",
+          "type": "img",
+          "start": 72.89999999990687,
+          "duration": 11.600000000093132,
+          "transfer": 1156,
+          "decoded": 856
+        },
+        {
+          "name": "linux-git-screen/icon.png",
+          "type": "img",
+          "start": 72.89999999990687,
+          "duration": 17,
+          "transfer": 644,
+          "decoded": 344
+        },
+        {
+          "name": "frontend-jquery/icon.png",
+          "type": "img",
+          "start": 73,
+          "duration": 17.100000000093132,
+          "transfer": 801,
+          "decoded": 501
+        },
+        {
+          "name": "java-book/icon.png",
+          "type": "img",
+          "start": 73,
+          "duration": 18.100000000093132,
+          "transfer": 509,
+          "decoded": 209
+        },
+        {
+          "name": "db-nosql-screen/icon.png",
+          "type": "img",
+          "start": 73,
+          "duration": 18.100000000093132,
+          "transfer": 643,
+          "decoded": 343
+        },
+        {
+          "name": "linux-git-screen/icon-highlight.png",
+          "type": "img",
+          "start": 113.30000000004657,
+          "duration": 2.699999999953434,
+          "transfer": 703,
+          "decoded": 403
+        },
+        {
+          "name": "frontend-jquery/icon-highlight.png",
+          "type": "img",
+          "start": 113.39999999990687,
+          "duration": 2.9000000001396984,
+          "transfer": 872,
+          "decoded": 572
+        },
+        {
+          "name": "java-book/icon-highlight.png",
+          "type": "img",
+          "start": 113.39999999990687,
+          "duration": 3,
+          "transfer": 567,
+          "decoded": 267
+        },
+        {
+          "name": "db-nosql-screen/icon-highlight.png",
+          "type": "img",
+          "start": 113.5,
+          "duration": 3,
+          "transfer": 746,
+          "decoded": 446
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 144.30000000004657,
+          "duration": -32,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 144.80000000004657,
+          "duration": -15.900000000139698,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 144.80000000004657,
+          "duration": 1.1999999999534339,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 145.39999999990687,
+          "duration": 2.1000000000931323,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 147.19999999995343,
+          "duration": -4,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 147.80000000004657,
+          "duration": 0.8999999999068677,
+          "transfer": 1266,
+          "decoded": 966
+        }
+      ],
+      "webgl": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)"
+      },
+      "gestures": [
+        {
+          "name": "walk-right",
+          "key": "ArrowRight",
+          "holdMs": 80,
+          "duration": 40,
+          "eventCount": 2,
+          "maxProcessing": 0,
+          "inputDelay": 0.09999999986030161,
+          "processing": 0,
+          "presentation": 39.9000000001397
+        },
+        {
+          "name": "walk-left",
+          "key": "ArrowLeft",
+          "holdMs": 80,
+          "duration": 40,
+          "eventCount": 2,
+          "maxProcessing": 0,
+          "inputDelay": 0.10000000009313226,
+          "processing": 0,
+          "presentation": 39.89999999990687
+        },
+        {
+          "name": "walk-down",
+          "key": "ArrowDown",
+          "holdMs": 80,
+          "duration": 48,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999986030161,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0.09999999986030161,
+          "presentation": 47.700000000186265
+        },
+        {
+          "name": "walk-up",
+          "key": "ArrowUp",
+          "holdMs": 80,
+          "duration": 48,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226,
+          "inputDelay": 0.30000000004656613,
+          "processing": 0,
+          "presentation": 47.699999999953434
+        },
+        {
+          "name": "walk-hold-right",
+          "key": "ArrowRight",
+          "holdMs": 400,
+          "duration": 40,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226,
+          "inputDelay": 0.09999999986030161,
+          "processing": 0.10000000009313226,
+          "presentation": 39.800000000046566
+        },
+        {
+          "name": "handbook-m",
+          "key": "m",
+          "holdMs": 30,
+          "duration": 48,
+          "eventCount": 2,
+          "maxProcessing": 4,
+          "inputDelay": 0.19999999995343387,
+          "processing": 4,
+          "presentation": 43.800000000046566
+        },
+        {
+          "name": "dialogue-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 48,
+          "eventCount": 2,
+          "maxProcessing": 3.6000000000931323,
+          "inputDelay": 0.10000000009313226,
+          "processing": 3.6000000000931323,
+          "presentation": 44.299999999813735
+        },
+        {
+          "name": "skill-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 48,
+          "eventCount": 2,
+          "maxProcessing": 4.399999999906868,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0,
+          "presentation": 47.800000000046566
+        }
+      ],
+      "inpMs": 48,
+      "sessionMaxMs": 48
+    },
+    {
+      "index": 2,
+      "wallMs": 13438,
+      "loadTimeMs": 192,
+      "readyState": "dialogue",
+      "title": "像素前端",
+      "heading": "合肥，争取一次机会",
+      "chapter": "interview",
+      "durationThreshold": 0,
+      "navigation": {
+        "responseEnd": 3.800000000046566,
+        "domContentLoaded": 73,
+        "loadEventEnd": 73,
+        "transferSize": 4334,
+        "type": "navigate"
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 72
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 72
+        }
+      ],
+      "longTasks": [],
+      "resources": [
+        {
+          "name": "web/style.css",
+          "type": "link",
+          "start": 6.300000000046566,
+          "duration": 10,
+          "transfer": 10430,
+          "decoded": 10130
+        },
+        {
+          "name": "web/main.mjs",
+          "type": "script",
+          "start": 6.400000000139698,
+          "duration": 10,
+          "transfer": 65326,
+          "decoded": 65026
+        },
+        {
+          "name": "engine/world.mjs",
+          "type": "script",
+          "start": 55.4000000001397,
+          "duration": 8.5,
+          "transfer": 2538,
+          "decoded": 2238
+        },
+        {
+          "name": "web/story.mjs",
+          "type": "script",
+          "start": 55.5,
+          "duration": 8.699999999953434,
+          "transfer": 5639,
+          "decoded": 5339
+        },
+        {
+          "name": "chapters/logic.mjs",
+          "type": "script",
+          "start": 55.5,
+          "duration": 8.5,
+          "transfer": 2039,
+          "decoded": 1739
+        },
+        {
+          "name": "engine/view.mjs",
+          "type": "script",
+          "start": 55.5,
+          "duration": 8.600000000093132,
+          "transfer": 2602,
+          "decoded": 2302
+        },
+        {
+          "name": "web/actors.mjs",
+          "type": "script",
+          "start": 55.5,
+          "duration": 8.699999999953434,
+          "transfer": 5964,
+          "decoded": 5664
+        },
+        {
+          "name": "web/title.mjs",
+          "type": "script",
+          "start": 55.60000000009313,
+          "duration": 8.599999999860302,
+          "transfer": 442,
+          "decoded": 142
+        },
+        {
+          "name": "web/narrow-wrap.mjs",
+          "type": "script",
+          "start": 55.60000000009313,
+          "duration": 12.599999999860302,
+          "transfer": 8273,
+          "decoded": 7973
+        },
+        {
+          "name": "cinematic/director.mjs",
+          "type": "script",
+          "start": 55.699999999953434,
+          "duration": 12.600000000093132,
+          "transfer": 10411,
+          "decoded": 10111
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 67.69999999995343,
+          "duration": 3.1000000000931323,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "chapters/hefei.mjs",
+          "type": "script",
+          "start": 72.9000000001397,
+          "duration": 3.8999999999068677,
+          "transfer": 7459,
+          "decoded": 7159
+        },
+        {
+          "name": "chapters/nanjing.mjs",
+          "type": "script",
+          "start": 77.9000000001397,
+          "duration": 1.7999999998137355,
+          "transfer": 4495,
+          "decoded": 4195
+        },
+        {
+          "name": "127.0.0.1:42061/favicon.ico",
+          "type": "other",
+          "start": 80,
+          "duration": 8.300000000046566,
+          "transfer": 300,
+          "decoded": 0
+        },
+        {
+          "name": "design/chapter-hefei.json",
+          "type": "fetch",
+          "start": 82.10000000009313,
+          "duration": 8,
+          "transfer": 8798,
+          "decoded": 8498
+        },
+        {
+          "name": "hefei-office-day/day-384x216.png",
+          "type": "img",
+          "start": 82.30000000004657,
+          "duration": 7.699999999953434,
+          "transfer": 24014,
+          "decoded": 23714
+        },
+        {
+          "name": "hefei-office-night/night-384x216.png",
+          "type": "img",
+          "start": 82.4000000001397,
+          "duration": 7.7999999998137355,
+          "transfer": 25706,
+          "decoded": 25406
+        },
+        {
+          "name": "hefei-office-night/light-mask-384x216.png",
+          "type": "img",
+          "start": 82.4000000001397,
+          "duration": 7.399999999906868,
+          "transfer": 1324,
+          "decoded": 1024
+        },
+        {
+          "name": "art/player-walk-v2-sheet.png",
+          "type": "img",
+          "start": 82.4000000001397,
+          "duration": 7.899999999906868,
+          "transfer": 16210,
+          "decoded": 15910
+        },
+        {
+          "name": "art/typing-team-v1.png",
+          "type": "img",
+          "start": 82.5,
+          "duration": 19,
+          "transfer": 899122,
+          "decoded": 898822
+        },
+        {
+          "name": "art/npc-team-v1.png",
+          "type": "img",
+          "start": 82.5,
+          "duration": 15.300000000046566,
+          "transfer": 524618,
+          "decoded": 524318
+        },
+        {
+          "name": "art/player-emotions-v1.png",
+          "type": "img",
+          "start": 82.5,
+          "duration": 18,
+          "transfer": 786464,
+          "decoded": 786164
+        },
+        {
+          "name": "art/sit-back-hz-18x30.png",
+          "type": "img",
+          "start": 82.60000000009313,
+          "duration": 10.899999999906868,
+          "transfer": 705,
+          "decoded": 405
+        },
+        {
+          "name": "hefei-founder-walk/walk-sheet-32x48.png",
+          "type": "img",
+          "start": 82.60000000009313,
+          "duration": 12.599999999860302,
+          "transfer": 6521,
+          "decoded": 6221
+        },
+        {
+          "name": "hefei-founder-emotions/emotions-strip-64x32.png",
+          "type": "img",
+          "start": 82.60000000009313,
+          "duration": 12.199999999953434,
+          "transfer": 1156,
+          "decoded": 856
+        },
+        {
+          "name": "linux-git-screen/icon.png",
+          "type": "img",
+          "start": 83.4000000001397,
+          "duration": 12.899999999906868,
+          "transfer": 644,
+          "decoded": 344
+        },
+        {
+          "name": "frontend-jquery/icon.png",
+          "type": "img",
+          "start": 83.4000000001397,
+          "duration": 17.199999999953434,
+          "transfer": 801,
+          "decoded": 501
+        },
+        {
+          "name": "java-book/icon.png",
+          "type": "img",
+          "start": 83.5,
+          "duration": 17.300000000046566,
+          "transfer": 509,
+          "decoded": 209
+        },
+        {
+          "name": "db-nosql-screen/icon.png",
+          "type": "img",
+          "start": 83.5,
+          "duration": 17.9000000001397,
+          "transfer": 643,
+          "decoded": 343
+        },
+        {
+          "name": "linux-git-screen/icon-highlight.png",
+          "type": "img",
+          "start": 133.5,
+          "duration": 2.9000000001396984,
+          "transfer": 703,
+          "decoded": 403
+        },
+        {
+          "name": "frontend-jquery/icon-highlight.png",
+          "type": "img",
+          "start": 146.69999999995343,
+          "duration": 2.800000000046566,
+          "transfer": 872,
+          "decoded": 572
+        },
+        {
+          "name": "java-book/icon-highlight.png",
+          "type": "img",
+          "start": 146.69999999995343,
+          "duration": 3.2000000001862645,
+          "transfer": 567,
+          "decoded": 267
+        },
+        {
+          "name": "db-nosql-screen/icon-highlight.png",
+          "type": "img",
+          "start": 146.9000000001397,
+          "duration": 3.2999999998137355,
+          "transfer": 746,
+          "decoded": 446
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 149.60000000009313,
+          "duration": -25.199999999953434,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 150.10000000009313,
+          "duration": 1.3000000000465661,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 153.10000000009313,
+          "duration": -2.800000000046566,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 153.5,
+          "duration": 1.6999999999534339,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 154.10000000009313,
+          "duration": -18,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 154.5,
+          "duration": 2.1000000000931323,
+          "transfer": 1266,
+          "decoded": 966
+        }
+      ],
+      "webgl": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)"
+      },
+      "gestures": [
+        {
+          "name": "walk-right",
+          "key": "ArrowRight",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0,
+          "inputDelay": 0.09999999986030161,
+          "processing": 0,
+          "presentation": 31.9000000001397
+        },
+        {
+          "name": "walk-left",
+          "key": "ArrowLeft",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0.10000000009313226,
+          "presentation": 23.699999999953434
+        },
+        {
+          "name": "walk-down",
+          "key": "ArrowDown",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0.09999999986030161,
+          "presentation": 23.700000000186265
+        },
+        {
+          "name": "walk-up",
+          "key": "ArrowUp",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.19999999995343387,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0.10000000009313226,
+          "presentation": 31.699999999953434
+        },
+        {
+          "name": "walk-hold-right",
+          "key": "ArrowRight",
+          "holdMs": 400,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0,
+          "presentation": 31.800000000046566
+        },
+        {
+          "name": "handbook-m",
+          "key": "m",
+          "holdMs": 30,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 3,
+          "inputDelay": 0.2999999998137355,
+          "processing": 3,
+          "presentation": 20.700000000186265
+        },
+        {
+          "name": "dialogue-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 3.300000000046566,
+          "inputDelay": 0.09999999986030161,
+          "processing": 3.300000000046566,
+          "presentation": 20.600000000093132
+        },
+        {
+          "name": "skill-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 4.7000000001862645,
+          "inputDelay": 0.09999999986030161,
+          "processing": 4.7000000001862645,
+          "presentation": 27.199999999953434
+        }
+      ],
+      "inpMs": 32,
+      "sessionMaxMs": 32
+    },
+    {
+      "index": 3,
+      "wallMs": 13859,
+      "loadTimeMs": 205.19999999995343,
+      "readyState": "dialogue",
+      "title": "像素前端",
+      "heading": "合肥，争取一次机会",
+      "chapter": "interview",
+      "durationThreshold": 0,
+      "navigation": {
+        "responseEnd": 6.099999999860302,
+        "domContentLoaded": 82.89999999990687,
+        "loadEventEnd": 83,
+        "transferSize": 4334,
+        "type": "navigate"
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 92
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 92
+        }
+      ],
+      "longTasks": [],
+      "resources": [
+        {
+          "name": "web/style.css",
+          "type": "link",
+          "start": 11.399999999906868,
+          "duration": 11.600000000093132,
+          "transfer": 10430,
+          "decoded": 10130
+        },
+        {
+          "name": "web/main.mjs",
+          "type": "script",
+          "start": 13.399999999906868,
+          "duration": 14.5,
+          "transfer": 65326,
+          "decoded": 65026
+        },
+        {
+          "name": "engine/world.mjs",
+          "type": "script",
+          "start": 66,
+          "duration": 5.599999999860302,
+          "transfer": 2538,
+          "decoded": 2238
+        },
+        {
+          "name": "web/story.mjs",
+          "type": "script",
+          "start": 66.0999999998603,
+          "duration": 9.699999999953434,
+          "transfer": 5639,
+          "decoded": 5339
+        },
+        {
+          "name": "engine/view.mjs",
+          "type": "script",
+          "start": 66.0999999998603,
+          "duration": 9.600000000093132,
+          "transfer": 2602,
+          "decoded": 2302
+        },
+        {
+          "name": "web/actors.mjs",
+          "type": "script",
+          "start": 66.0999999998603,
+          "duration": 9.900000000139698,
+          "transfer": 5964,
+          "decoded": 5664
+        },
+        {
+          "name": "web/title.mjs",
+          "type": "script",
+          "start": 66.0999999998603,
+          "duration": 9.800000000046566,
+          "transfer": 442,
+          "decoded": 142
+        },
+        {
+          "name": "chapters/logic.mjs",
+          "type": "script",
+          "start": 66.0999999998603,
+          "duration": 9.5,
+          "transfer": 2039,
+          "decoded": 1739
+        },
+        {
+          "name": "web/narrow-wrap.mjs",
+          "type": "script",
+          "start": 66.19999999995343,
+          "duration": 9.899999999906868,
+          "transfer": 8273,
+          "decoded": 7973
+        },
+        {
+          "name": "cinematic/director.mjs",
+          "type": "script",
+          "start": 66.19999999995343,
+          "duration": 12.399999999906868,
+          "transfer": 10411,
+          "decoded": 10111
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 79.0999999998603,
+          "duration": 2.1000000000931323,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "chapters/hefei.mjs",
+          "type": "script",
+          "start": 82.79999999981374,
+          "duration": 1.9000000001396984,
+          "transfer": 7459,
+          "decoded": 7159
+        },
+        {
+          "name": "chapters/nanjing.mjs",
+          "type": "script",
+          "start": 85.5999999998603,
+          "duration": 2.199999999953434,
+          "transfer": 4495,
+          "decoded": 4195
+        },
+        {
+          "name": "127.0.0.1:42061/favicon.ico",
+          "type": "other",
+          "start": 85.69999999995343,
+          "duration": 1.8000000000465661,
+          "transfer": 300,
+          "decoded": 0
+        },
+        {
+          "name": "design/chapter-hefei.json",
+          "type": "fetch",
+          "start": 90.0999999998603,
+          "duration": 5.600000000093132,
+          "transfer": 8798,
+          "decoded": 8498
+        },
+        {
+          "name": "hefei-office-day/day-384x216.png",
+          "type": "img",
+          "start": 90.29999999981374,
+          "duration": 5.5,
+          "transfer": 24014,
+          "decoded": 23714
+        },
+        {
+          "name": "hefei-office-night/night-384x216.png",
+          "type": "img",
+          "start": 90.29999999981374,
+          "duration": 5.600000000093132,
+          "transfer": 25706,
+          "decoded": 25406
+        },
+        {
+          "name": "hefei-office-night/light-mask-384x216.png",
+          "type": "img",
+          "start": 90.39999999990687,
+          "duration": 5,
+          "transfer": 1324,
+          "decoded": 1024
+        },
+        {
+          "name": "art/player-walk-v2-sheet.png",
+          "type": "img",
+          "start": 90.39999999990687,
+          "duration": 5.800000000046566,
+          "transfer": 16210,
+          "decoded": 15910
+        },
+        {
+          "name": "art/npc-team-v1.png",
+          "type": "img",
+          "start": 90.89999999990687,
+          "duration": 7.800000000046566,
+          "transfer": 524618,
+          "decoded": 524318
+        },
+        {
+          "name": "art/player-emotions-v1.png",
+          "type": "img",
+          "start": 90.89999999990687,
+          "duration": 20.199999999953434,
+          "transfer": 786464,
+          "decoded": 786164
+        },
+        {
+          "name": "art/sit-back-hz-18x30.png",
+          "type": "img",
+          "start": 91,
+          "duration": 9.199999999953434,
+          "transfer": 705,
+          "decoded": 405
+        },
+        {
+          "name": "hefei-founder-walk/walk-sheet-32x48.png",
+          "type": "img",
+          "start": 91,
+          "duration": 10.299999999813735,
+          "transfer": 6521,
+          "decoded": 6221
+        },
+        {
+          "name": "art/typing-team-v1.png",
+          "type": "img",
+          "start": 91,
+          "duration": 21.899999999906868,
+          "transfer": 899122,
+          "decoded": 898822
+        },
+        {
+          "name": "hefei-founder-emotions/emotions-strip-64x32.png",
+          "type": "img",
+          "start": 91.0999999998603,
+          "duration": 9.5,
+          "transfer": 1156,
+          "decoded": 856
+        },
+        {
+          "name": "linux-git-screen/icon.png",
+          "type": "img",
+          "start": 91.0999999998603,
+          "duration": 10,
+          "transfer": 644,
+          "decoded": 344
+        },
+        {
+          "name": "frontend-jquery/icon.png",
+          "type": "img",
+          "start": 91.0999999998603,
+          "duration": 21.600000000093132,
+          "transfer": 801,
+          "decoded": 501
+        },
+        {
+          "name": "java-book/icon.png",
+          "type": "img",
+          "start": 91.0999999998603,
+          "duration": 21.699999999953434,
+          "transfer": 509,
+          "decoded": 209
+        },
+        {
+          "name": "db-nosql-screen/icon.png",
+          "type": "img",
+          "start": 91.0999999998603,
+          "duration": 21.699999999953434,
+          "transfer": 643,
+          "decoded": 343
+        },
+        {
+          "name": "linux-git-screen/icon-highlight.png",
+          "type": "img",
+          "start": 122.5,
+          "duration": 1.3999999999068677,
+          "transfer": 703,
+          "decoded": 403
+        },
+        {
+          "name": "frontend-jquery/icon-highlight.png",
+          "type": "img",
+          "start": 156.29999999981374,
+          "duration": 3.1000000000931323,
+          "transfer": 872,
+          "decoded": 572
+        },
+        {
+          "name": "java-book/icon-highlight.png",
+          "type": "img",
+          "start": 156.29999999981374,
+          "duration": 4.600000000093132,
+          "transfer": 567,
+          "decoded": 267
+        },
+        {
+          "name": "db-nosql-screen/icon-highlight.png",
+          "type": "img",
+          "start": 156.5,
+          "duration": 4.5,
+          "transfer": 746,
+          "decoded": 446
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 159.19999999995343,
+          "duration": -37.60000000009313,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 159.5999999998603,
+          "duration": 2.300000000046566,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 160.0999999998603,
+          "duration": -15.300000000046566,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 160.69999999995343,
+          "duration": 3.3999999999068677,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 165.19999999995343,
+          "duration": -4,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 166.0999999998603,
+          "duration": 1.1000000000931323,
+          "transfer": 1266,
+          "decoded": 966
+        }
+      ],
+      "webgl": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)"
+      },
+      "gestures": [
+        {
+          "name": "walk-right",
+          "key": "ArrowRight",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999986030161,
+          "inputDelay": 0.5,
+          "processing": 0,
+          "presentation": 31.5
+        },
+        {
+          "name": "walk-left",
+          "key": "ArrowLeft",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0,
+          "inputDelay": 0.30000000004656613,
+          "processing": 0,
+          "presentation": 23.699999999953434
+        },
+        {
+          "name": "walk-down",
+          "key": "ArrowDown",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226,
+          "inputDelay": 0.39999999990686774,
+          "processing": 0.10000000009313226,
+          "presentation": 23.5
+        },
+        {
+          "name": "walk-up",
+          "key": "ArrowUp",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999986030161,
+          "inputDelay": 0.4000000001396984,
+          "processing": 0.09999999986030161,
+          "presentation": 31.5
+        },
+        {
+          "name": "walk-hold-right",
+          "key": "ArrowRight",
+          "holdMs": 400,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999986030161,
+          "inputDelay": 0.30000000004656613,
+          "processing": 0,
+          "presentation": 31.699999999953434
+        },
+        {
+          "name": "handbook-m",
+          "key": "m",
+          "holdMs": 30,
+          "duration": 16,
+          "eventCount": 2,
+          "maxProcessing": 3.5,
+          "inputDelay": 0.19999999995343387,
+          "processing": 3.5,
+          "presentation": 12.300000000046566
+        },
+        {
+          "name": "dialogue-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 16,
+          "eventCount": 2,
+          "maxProcessing": 2.300000000046566,
+          "inputDelay": 0.10000000009313226,
+          "processing": 2.300000000046566,
+          "presentation": 13.599999999860302
+        },
+        {
+          "name": "skill-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 5,
+          "inputDelay": 0.10000000009313226,
+          "processing": 5,
+          "presentation": 18.899999999906868
+        }
+      ],
+      "inpMs": 32,
+      "sessionMaxMs": 40
+    },
+    {
+      "index": 4,
+      "wallMs": 13429,
+      "loadTimeMs": 206,
+      "readyState": "dialogue",
+      "title": "像素前端",
+      "heading": "合肥，争取一次机会",
+      "chapter": "interview",
+      "durationThreshold": 0,
+      "navigation": {
+        "responseEnd": 6,
+        "domContentLoaded": 73.19999999995343,
+        "loadEventEnd": 73.30000000004657,
+        "transferSize": 4334,
+        "type": "navigate"
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 84
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 84
+        }
+      ],
+      "longTasks": [],
+      "resources": [
+        {
+          "name": "web/style.css",
+          "type": "link",
+          "start": 11,
+          "duration": 3.5,
+          "transfer": 10430,
+          "decoded": 10130
+        },
+        {
+          "name": "web/main.mjs",
+          "type": "script",
+          "start": 11.100000000093132,
+          "duration": 3.5,
+          "transfer": 65326,
+          "decoded": 65026
+        },
+        {
+          "name": "engine/world.mjs",
+          "type": "script",
+          "start": 17.199999999953434,
+          "duration": 3.4000000001396984,
+          "transfer": 2538,
+          "decoded": 2238
+        },
+        {
+          "name": "web/story.mjs",
+          "type": "script",
+          "start": 17.300000000046566,
+          "duration": 6.699999999953434,
+          "transfer": 5639,
+          "decoded": 5339
+        },
+        {
+          "name": "web/actors.mjs",
+          "type": "script",
+          "start": 17.399999999906868,
+          "duration": 8.300000000046566,
+          "transfer": 5964,
+          "decoded": 5664
+        },
+        {
+          "name": "chapters/logic.mjs",
+          "type": "script",
+          "start": 17.399999999906868,
+          "duration": 8,
+          "transfer": 2039,
+          "decoded": 1739
+        },
+        {
+          "name": "engine/view.mjs",
+          "type": "script",
+          "start": 17.399999999906868,
+          "duration": 10.200000000186265,
+          "transfer": 2602,
+          "decoded": 2302
+        },
+        {
+          "name": "web/narrow-wrap.mjs",
+          "type": "script",
+          "start": 17.5,
+          "duration": 10,
+          "transfer": 8273,
+          "decoded": 7973
+        },
+        {
+          "name": "web/title.mjs",
+          "type": "script",
+          "start": 17.5,
+          "duration": 10.199999999953434,
+          "transfer": 442,
+          "decoded": 142
+        },
+        {
+          "name": "cinematic/director.mjs",
+          "type": "script",
+          "start": 17.5,
+          "duration": 11.699999999953434,
+          "transfer": 10411,
+          "decoded": 10111
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 68.30000000004657,
+          "duration": 2.199999999953434,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "chapters/hefei.mjs",
+          "type": "script",
+          "start": 73.19999999995343,
+          "duration": 2.300000000046566,
+          "transfer": 7459,
+          "decoded": 7159
+        },
+        {
+          "name": "127.0.0.1:42061/favicon.ico",
+          "type": "other",
+          "start": 77.19999999995343,
+          "duration": 1,
+          "transfer": 300,
+          "decoded": 0
+        },
+        {
+          "name": "chapters/nanjing.mjs",
+          "type": "script",
+          "start": 77.69999999995343,
+          "duration": 3.9000000001396984,
+          "transfer": 4495,
+          "decoded": 4195
+        },
+        {
+          "name": "design/chapter-hefei.json",
+          "type": "fetch",
+          "start": 84,
+          "duration": 5,
+          "transfer": 8798,
+          "decoded": 8498
+        },
+        {
+          "name": "hefei-office-day/day-384x216.png",
+          "type": "img",
+          "start": 84.19999999995343,
+          "duration": 5.100000000093132,
+          "transfer": 24014,
+          "decoded": 23714
+        },
+        {
+          "name": "hefei-office-night/night-384x216.png",
+          "type": "img",
+          "start": 84.19999999995343,
+          "duration": 5.199999999953434,
+          "transfer": 25706,
+          "decoded": 25406
+        },
+        {
+          "name": "hefei-office-night/light-mask-384x216.png",
+          "type": "img",
+          "start": 84.30000000004657,
+          "duration": 4.199999999953434,
+          "transfer": 1324,
+          "decoded": 1024
+        },
+        {
+          "name": "art/player-walk-v2-sheet.png",
+          "type": "img",
+          "start": 84.30000000004657,
+          "duration": 5.199999999953434,
+          "transfer": 16210,
+          "decoded": 15910
+        },
+        {
+          "name": "art/npc-team-v1.png",
+          "type": "img",
+          "start": 84.30000000004657,
+          "duration": 14.599999999860302,
+          "transfer": 524618,
+          "decoded": 524318
+        },
+        {
+          "name": "art/player-emotions-v1.png",
+          "type": "img",
+          "start": 84.30000000004657,
+          "duration": 20.0999999998603,
+          "transfer": 786464,
+          "decoded": 786164
+        },
+        {
+          "name": "art/typing-team-v1.png",
+          "type": "img",
+          "start": 84.30000000004657,
+          "duration": 20.199999999953434,
+          "transfer": 899122,
+          "decoded": 898822
+        },
+        {
+          "name": "art/sit-back-hz-18x30.png",
+          "type": "img",
+          "start": 84.39999999990687,
+          "duration": 14.300000000046566,
+          "transfer": 705,
+          "decoded": 405
+        },
+        {
+          "name": "hefei-founder-walk/walk-sheet-32x48.png",
+          "type": "img",
+          "start": 84.39999999990687,
+          "duration": 15.100000000093132,
+          "transfer": 6521,
+          "decoded": 6221
+        },
+        {
+          "name": "hefei-founder-emotions/emotions-strip-64x32.png",
+          "type": "img",
+          "start": 84.39999999990687,
+          "duration": 14.600000000093132,
+          "transfer": 1156,
+          "decoded": 856
+        },
+        {
+          "name": "linux-git-screen/icon.png",
+          "type": "img",
+          "start": 84.39999999990687,
+          "duration": 19.5,
+          "transfer": 644,
+          "decoded": 344
+        },
+        {
+          "name": "frontend-jquery/icon.png",
+          "type": "img",
+          "start": 84.39999999990687,
+          "duration": 19.800000000046566,
+          "transfer": 801,
+          "decoded": 501
+        },
+        {
+          "name": "java-book/icon.png",
+          "type": "img",
+          "start": 84.39999999990687,
+          "duration": 21.5,
+          "transfer": 509,
+          "decoded": 209
+        },
+        {
+          "name": "db-nosql-screen/icon.png",
+          "type": "img",
+          "start": 84.5,
+          "duration": 21.600000000093132,
+          "transfer": 643,
+          "decoded": 343
+        },
+        {
+          "name": "linux-git-screen/icon-highlight.png",
+          "type": "img",
+          "start": 128.5,
+          "duration": 1.8000000000465661,
+          "transfer": 703,
+          "decoded": 403
+        },
+        {
+          "name": "frontend-jquery/icon-highlight.png",
+          "type": "img",
+          "start": 144.5,
+          "duration": 2.5,
+          "transfer": 872,
+          "decoded": 572
+        },
+        {
+          "name": "java-book/icon-highlight.png",
+          "type": "img",
+          "start": 159.10000000009313,
+          "duration": 2.7999999998137355,
+          "transfer": 567,
+          "decoded": 267
+        },
+        {
+          "name": "db-nosql-screen/icon-highlight.png",
+          "type": "img",
+          "start": 159.19999999995343,
+          "duration": 3,
+          "transfer": 746,
+          "decoded": 446
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 162.30000000004657,
+          "duration": -33,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 162.80000000004657,
+          "duration": 0.8999999999068677,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 166.10000000009313,
+          "duration": -19.5,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 166.60000000009313,
+          "duration": 1.3999999999068677,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 166.69999999995343,
+          "duration": -4.300000000046566,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 167.30000000004657,
+          "duration": 1.5,
+          "transfer": 1266,
+          "decoded": 966
+        }
+      ],
+      "webgl": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)"
+      },
+      "gestures": [
+        {
+          "name": "walk-right",
+          "key": "ArrowRight",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0,
+          "presentation": 31.800000000046566
+        },
+        {
+          "name": "walk-left",
+          "key": "ArrowLeft",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0.10000000009313226,
+          "presentation": 23.699999999953434
+        },
+        {
+          "name": "walk-down",
+          "key": "ArrowDown",
+          "holdMs": 80,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226,
+          "inputDelay": 0.5,
+          "processing": 0,
+          "presentation": 23.5
+        },
+        {
+          "name": "walk-up",
+          "key": "ArrowUp",
+          "holdMs": 80,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 0,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0,
+          "presentation": 31.800000000046566
+        },
+        {
+          "name": "walk-hold-right",
+          "key": "ArrowRight",
+          "holdMs": 400,
+          "duration": 24,
+          "eventCount": 2,
+          "maxProcessing": 0,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0,
+          "presentation": 23.800000000046566
+        },
+        {
+          "name": "handbook-m",
+          "key": "m",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 3.199999999953434,
+          "inputDelay": 0.10000000009313226,
+          "processing": 3.199999999953434,
+          "presentation": 28.699999999953434
+        },
+        {
+          "name": "dialogue-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 2.5999999998603016,
+          "inputDelay": 0.10000000009313226,
+          "processing": 2.5999999998603016,
+          "presentation": 29.300000000046566
+        },
+        {
+          "name": "skill-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 32,
+          "eventCount": 2,
+          "maxProcessing": 4.300000000046566,
+          "inputDelay": 0.10000000009313226,
+          "processing": 4.300000000046566,
+          "presentation": 27.5999999998603
+        }
+      ],
+      "inpMs": 32,
+      "sessionMaxMs": 32
+    },
+    {
+      "index": 5,
+      "wallMs": 13882,
+      "loadTimeMs": 190.80000000004657,
+      "readyState": "dialogue",
+      "title": "像素前端",
+      "heading": "合肥，争取一次机会",
+      "chapter": "interview",
+      "durationThreshold": 0,
+      "navigation": {
+        "responseEnd": 6.399999999906868,
+        "domContentLoaded": 71,
+        "loadEventEnd": 71.30000000004657,
+        "transferSize": 4334,
+        "type": "navigate"
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 84
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 84
+        }
+      ],
+      "longTasks": [],
+      "resources": [
+        {
+          "name": "web/style.css",
+          "type": "link",
+          "start": 10.5,
+          "duration": 3.6000000000931323,
+          "transfer": 10430,
+          "decoded": 10130
+        },
+        {
+          "name": "web/main.mjs",
+          "type": "script",
+          "start": 11.699999999953434,
+          "duration": 5.400000000139698,
+          "transfer": 65326,
+          "decoded": 65026
+        },
+        {
+          "name": "engine/world.mjs",
+          "type": "script",
+          "start": 18.600000000093132,
+          "duration": 5.899999999906868,
+          "transfer": 2538,
+          "decoded": 2238
+        },
+        {
+          "name": "web/story.mjs",
+          "type": "script",
+          "start": 18.600000000093132,
+          "duration": 6,
+          "transfer": 5639,
+          "decoded": 5339
+        },
+        {
+          "name": "chapters/logic.mjs",
+          "type": "script",
+          "start": 18.699999999953434,
+          "duration": 11.900000000139698,
+          "transfer": 2039,
+          "decoded": 1739
+        },
+        {
+          "name": "web/actors.mjs",
+          "type": "script",
+          "start": 19.699999999953434,
+          "duration": 11.400000000139698,
+          "transfer": 5964,
+          "decoded": 5664
+        },
+        {
+          "name": "engine/view.mjs",
+          "type": "script",
+          "start": 19.699999999953434,
+          "duration": 11,
+          "transfer": 2602,
+          "decoded": 2302
+        },
+        {
+          "name": "web/title.mjs",
+          "type": "script",
+          "start": 19.800000000046566,
+          "duration": 11.099999999860302,
+          "transfer": 442,
+          "decoded": 142
+        },
+        {
+          "name": "web/narrow-wrap.mjs",
+          "type": "script",
+          "start": 19.800000000046566,
+          "duration": 11.300000000046566,
+          "transfer": 8273,
+          "decoded": 7973
+        },
+        {
+          "name": "cinematic/director.mjs",
+          "type": "script",
+          "start": 19.800000000046566,
+          "duration": 11.399999999906868,
+          "transfer": 10411,
+          "decoded": 10111
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 63.10000000009313,
+          "duration": 2.5999999998603016,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "chapters/hefei.mjs",
+          "type": "script",
+          "start": 71,
+          "duration": 3.3999999999068677,
+          "transfer": 7459,
+          "decoded": 7159
+        },
+        {
+          "name": "127.0.0.1:42061/favicon.ico",
+          "type": "other",
+          "start": 73.60000000009313,
+          "duration": 1.5999999998603016,
+          "transfer": 300,
+          "decoded": 0
+        },
+        {
+          "name": "chapters/nanjing.mjs",
+          "type": "script",
+          "start": 75.10000000009313,
+          "duration": 6.699999999953434,
+          "transfer": 4495,
+          "decoded": 4195
+        },
+        {
+          "name": "design/chapter-hefei.json",
+          "type": "fetch",
+          "start": 85,
+          "duration": 1.3000000000465661,
+          "transfer": 8798,
+          "decoded": 8498
+        },
+        {
+          "name": "hefei-office-day/day-384x216.png",
+          "type": "img",
+          "start": 85.19999999995343,
+          "duration": 1.6999999999534339,
+          "transfer": 24014,
+          "decoded": 23714
+        },
+        {
+          "name": "hefei-office-night/night-384x216.png",
+          "type": "img",
+          "start": 85.30000000004657,
+          "duration": 6,
+          "transfer": 25706,
+          "decoded": 25406
+        },
+        {
+          "name": "hefei-office-night/light-mask-384x216.png",
+          "type": "img",
+          "start": 85.30000000004657,
+          "duration": 9.5,
+          "transfer": 1324,
+          "decoded": 1024
+        },
+        {
+          "name": "art/player-walk-v2-sheet.png",
+          "type": "img",
+          "start": 85.30000000004657,
+          "duration": 10.199999999953434,
+          "transfer": 16210,
+          "decoded": 15910
+        },
+        {
+          "name": "art/player-emotions-v1.png",
+          "type": "img",
+          "start": 85.39999999990687,
+          "duration": 14.100000000093132,
+          "transfer": 786464,
+          "decoded": 786164
+        },
+        {
+          "name": "art/sit-back-hz-18x30.png",
+          "type": "img",
+          "start": 85.39999999990687,
+          "duration": 10,
+          "transfer": 705,
+          "decoded": 405
+        },
+        {
+          "name": "art/typing-team-v1.png",
+          "type": "img",
+          "start": 85.39999999990687,
+          "duration": 14.5,
+          "transfer": 899122,
+          "decoded": 898822
+        },
+        {
+          "name": "art/npc-team-v1.png",
+          "type": "img",
+          "start": 85.39999999990687,
+          "duration": 12.100000000093132,
+          "transfer": 524618,
+          "decoded": 524318
+        },
+        {
+          "name": "hefei-founder-walk/walk-sheet-32x48.png",
+          "type": "img",
+          "start": 85.39999999990687,
+          "duration": 12.600000000093132,
+          "transfer": 6521,
+          "decoded": 6221
+        },
+        {
+          "name": "hefei-founder-emotions/emotions-strip-64x32.png",
+          "type": "img",
+          "start": 85.5,
+          "duration": 13.300000000046566,
+          "transfer": 1156,
+          "decoded": 856
+        },
+        {
+          "name": "linux-git-screen/icon.png",
+          "type": "img",
+          "start": 85.5,
+          "duration": 13.5,
+          "transfer": 644,
+          "decoded": 344
+        },
+        {
+          "name": "frontend-jquery/icon.png",
+          "type": "img",
+          "start": 85.5,
+          "duration": 14,
+          "transfer": 801,
+          "decoded": 501
+        },
+        {
+          "name": "java-book/icon.png",
+          "type": "img",
+          "start": 85.5,
+          "duration": 14.300000000046566,
+          "transfer": 509,
+          "decoded": 209
+        },
+        {
+          "name": "db-nosql-screen/icon.png",
+          "type": "img",
+          "start": 85.60000000009313,
+          "duration": 16,
+          "transfer": 643,
+          "decoded": 343
+        },
+        {
+          "name": "linux-git-screen/icon-highlight.png",
+          "type": "img",
+          "start": 145.89999999990687,
+          "duration": 4.100000000093132,
+          "transfer": 703,
+          "decoded": 403
+        },
+        {
+          "name": "frontend-jquery/icon-highlight.png",
+          "type": "img",
+          "start": 146,
+          "duration": 4.199999999953434,
+          "transfer": 872,
+          "decoded": 572
+        },
+        {
+          "name": "java-book/icon-highlight.png",
+          "type": "img",
+          "start": 146.10000000009313,
+          "duration": 4.199999999953434,
+          "transfer": 567,
+          "decoded": 267
+        },
+        {
+          "name": "db-nosql-screen/icon-highlight.png",
+          "type": "img",
+          "start": 146.19999999995343,
+          "duration": 4.100000000093132,
+          "transfer": 746,
+          "decoded": 446
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 148.39999999990687,
+          "duration": -26.899999999906868,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 148.89999999990687,
+          "duration": 3.9000000001396984,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 149.19999999995343,
+          "duration": -13.599999999860302,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 149.80000000004657,
+          "duration": 3.8999999999068677,
+          "transfer": 1266,
+          "decoded": 966
+        },
+        {
+          "name": "engine/atlas-worker.mjs",
+          "type": "other",
+          "start": 152.89999999990687,
+          "duration": -2,
+          "transfer": 882,
+          "decoded": 582
+        },
+        {
+          "name": "engine/atlas-bounds.mjs",
+          "type": "script",
+          "start": 153.39999999990687,
+          "duration": 1,
+          "transfer": 1266,
+          "decoded": 966
+        }
+      ],
+      "webgl": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)"
+      },
+      "gestures": [
+        {
+          "name": "walk-right",
+          "key": "ArrowRight",
+          "holdMs": 80,
+          "duration": 48,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999986030161,
+          "inputDelay": 0.10000000009313226,
+          "processing": 0.09999999986030161,
+          "presentation": 47.800000000046566
+        },
+        {
+          "name": "walk-left",
+          "key": "ArrowLeft",
+          "holdMs": 80,
+          "duration": 48,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226,
+          "inputDelay": 0.10000000009313226,
+          "processing": 0.10000000009313226,
+          "presentation": 47.799999999813735
+        },
+        {
+          "name": "walk-down",
+          "key": "ArrowDown",
+          "holdMs": 80,
+          "duration": 48,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999986030161,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0,
+          "presentation": 47.800000000046566
+        },
+        {
+          "name": "walk-up",
+          "key": "ArrowUp",
+          "holdMs": 80,
+          "duration": 40,
+          "eventCount": 2,
+          "maxProcessing": 0.10000000009313226,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0,
+          "presentation": 39.800000000046566
+        },
+        {
+          "name": "walk-hold-right",
+          "key": "ArrowRight",
+          "holdMs": 400,
+          "duration": 40,
+          "eventCount": 2,
+          "maxProcessing": 0.09999999986030161,
+          "inputDelay": 0.19999999995343387,
+          "processing": 0,
+          "presentation": 39.800000000046566
+        },
+        {
+          "name": "handbook-m",
+          "key": "m",
+          "holdMs": 30,
+          "duration": 48,
+          "eventCount": 2,
+          "maxProcessing": 4.099999999860302,
+          "inputDelay": 0.10000000009313226,
+          "processing": 4.099999999860302,
+          "presentation": 43.800000000046566
+        },
+        {
+          "name": "dialogue-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 40,
+          "eventCount": 2,
+          "maxProcessing": 2.5999999998603016,
+          "inputDelay": 0.10000000009313226,
+          "processing": 2.5999999998603016,
+          "presentation": 37.300000000046566
+        },
+        {
+          "name": "skill-e",
+          "key": "e",
+          "holdMs": 30,
+          "duration": 48,
+          "eventCount": 2,
+          "maxProcessing": 7,
+          "inputDelay": 0.20000000018626451,
+          "processing": 7,
+          "presentation": 40.799999999813735
+        }
+      ],
+      "inpMs": 48,
+      "sessionMaxMs": 48
+    }
+  ]
+}

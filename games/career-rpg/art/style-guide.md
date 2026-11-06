@@ -9,7 +9,7 @@
 | 成品或设定 | 用途与保持项 |
 | --- | --- |
 | [office-room-v2](../web/art/office-room-v2.png) | 五工位：上三桌、下两桌，中间横走道与下中入口；暖木地板、宽窗、右书架、盆栽；正交俯视三分之四、轴向地面、桌椅尺度和细节密度 |
-| [player-walk-v1](../web/art/player-walk-v1.png) | 旧行走图，3列×4行，down/up/left/right，各行 idle/步态A/步态B。造型仍是蓬松黑发、简化五官、大头比例、红色长袖上衣与浅色领口、深蓝灰裤、深色靴、离散色块和轮廓 |
+| 旧行走图 | 运行目录里的 3 列×4 行 `player-walk-v1.png` 已删除，游戏不再加载。造型说明留在这里：蓬松黑发、简化五官、大头比例、红色长袖上衣与浅色领口、深蓝灰裤、深色靴。当前行走图是下一行的 v2 |
 | [player-walk-v2-sheet](../web/art/player-walk-v2-sheet.png) | 当前行走图，7列×4行，单格 28×44。行 down/up/left/right；列 idle、walk-01…walk-06。站立只用 idle，走路不插入 idle，右向单独绘制 |
 | [npc-team-v1](../web/art/npc-team-v1.png) | 方框眼镜与灰蓝外套 CTO、绿衣费翔🐘、米色同伴；共用人物尺度与画法，保留各自发型和衣色，不补真人外貌或职位 |
 | [player-emotions-v1](../web/art/player-emotions-v1.png) | 同一主角正常、紧张、开心三头像；发型、脸部比例、红衣领口不变，情绪差异可辨 |

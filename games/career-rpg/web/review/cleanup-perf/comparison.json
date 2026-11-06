@@ -1,0 +1,85 @@
+{
+  "baselineGit": "e61f8cc5b38b4814edc478b3266f48c31df9896a",
+  "afterGit": "424c06e237546d869b3bc4ee07999eaf8acd9130",
+  "afterNote": "after.json was recorded on the working tree after the baseline commit and before the implementation commit. Those sources are the implementation commit. The git field inside after.json is still the baseline commit because HEAD had not moved.",
+  "page": "/games/career-rpg/web/?chapter=hefei",
+  "machine": {
+    "chrome": "Google Chrome 156.0.8078.47",
+    "cpu": "Intel(R) Xeon(R) Processor",
+    "cores": 4,
+    "platform": "linux"
+  },
+  "webgl": {
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "vendor": "Google Inc. (Google)"
+  },
+  "aggregation": "median of 5 fresh-profile runs",
+  "method": {
+    "loadTimeMs": "performance.now() at the assignment of window.careerPrototype, installed with Object.defineProperty before Page.navigate. Counted only when #loading is absent, #manual is enabled, the stage canvas buffer width is > 0, #game-title is non-empty, and snapshot().state is not loading or error. timeOrigin is the navigation start of GET /games/career-rpg/web/?chapter=hefei on a fresh profile.",
+    "inpMs": "Max PerformanceEventTiming.duration among scored gestures in a run. Observer type \"event\"; durationThreshold is recorded per run (0 if accepted). Entries must have interactionId > 0 and startTime inside the gesture window (performance.now() just before the trusted CDP keydown, through 250ms after keyup). Gestures: walk-right, walk-left, walk-down, walk-up (80ms taps), walk-hold-right (400ms), handbook-m, dialogue-e (boss), skill-e (collect Linux). Reported value is the median of run INPs.",
+    "aggregation": "median across fresh-profile runs"
+  },
+  "loadTimeMs": {
+    "baseline": 455.9000000000233,
+    "after": 192,
+    "ratio": 0.42114498793592936,
+    "target": 0.5,
+    "halved": true,
+    "baselineSamples": [
+      480.5999999999767,
+      417.80000000004657,
+      455.9000000000233,
+      443.0999999999767,
+      533.6999999999534
+    ],
+    "afterSamples": [
+      186.69999999995343,
+      192,
+      205.19999999995343,
+      206,
+      190.80000000004657
+    ]
+  },
+  "inpMs": {
+    "baseline": 32,
+    "after": 32,
+    "ratio": 1.0,
+    "target": 0.5,
+    "halved": false,
+    "baselineSamples": [
+      40,
+      40,
+      32,
+      32,
+      32
+    ],
+    "afterSamples": [
+      48,
+      32,
+      32,
+      32,
+      48
+    ],
+    "baselineGestureMedians": {
+      "walk-right": 24,
+      "walk-left": 32,
+      "walk-down": 32,
+      "walk-up": 24,
+      "walk-hold-right": 32,
+      "handbook-m": 32,
+      "dialogue-e": 32,
+      "skill-e": 32
+    },
+    "afterGestureMedians": {
+      "walk-right": 32,
+      "walk-left": 24,
+      "walk-down": 24,
+      "walk-up": 32,
+      "walk-hold-right": 32,
+      "handbook-m": 32,
+      "dialogue-e": 32,
+      "skill-e": 32
+    }
+  },
+  "blocker": "INP did not fall. On both builds the key handler is under 6ms and input delay is under 1ms; Event Timing duration is the wait until the next paint, which stays in the 24\u201348ms band (median of run maxima 32ms) under headless Chrome with SwiftShader at 60Hz. desynchronized canvas, a 1x buffer, and painting inside the key task did not move that median to 16ms. Load time did fall below half."
+}

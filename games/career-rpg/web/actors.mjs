@@ -1,3 +1,5 @@
+import {boundsFromPixels} from './engine/atlas-bounds.mjs';
+
 // Frame selection and DOM placement are pure; atlas reading never changes the source image.
 // 3-column sheets keep idle, stride A, idle, stride B. A walkSequence lists only
 // the moving columns, so a standing pose is not inserted into the stride.
@@ -58,26 +60,31 @@ export function atlasBounds(image,atlas){
   const canvas=document.createElement('canvas');canvas.width=image.width;canvas.height=image.height;
   const context=canvas.getContext('2d',{willReadFrequently:true});context.drawImage(image,0,0);
   const rgba=context.getImageData(0,0,image.width,image.height).data;
-  const frames=[];
-  for(let row=0;row<atlas.rows;row++)for(let col=0;col<atlas.columns;col++){
-    const x0=Math.floor(col*image.width/atlas.columns),x1=Math.floor((col+1)*image.width/atlas.columns),y0=Math.floor(row*image.height/atlas.rows),y1=Math.floor((row+1)*image.height/atlas.rows);
-    let left=x1,top=y1,right=-1,bottom=-1;
-    for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++)if(rgba[(y*image.width+x)*4+3]>128){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
-    if(right<left)throw new Error(`角色图集第${frames.length+1}格没有可见像素`);
-    frames.push({left,top,right,bottom,width:right-left+1,height:bottom-top+1,cell:{left:x0,top:y0,width:x1-x0,height:y1-y0}});
-  }
-  return frames;
+  const pixels=new Uint32Array(rgba.buffer,rgba.byteOffset,rgba.length>>2);
+  return boundsFromPixels(pixels,image.width,image.height,atlas.columns,atlas.rows);
 }
-export function createActor(THREE,image,atlas,definition,worldHeight){
-  const frames=atlasBounds(image,atlas),references=stableFrameRects(frames,atlas),texture=new THREE.Texture(image);
-  texture.needsUpdate=true;texture.magFilter=texture.minFilter=THREE.NearestFilter;texture.generateMipmaps=false;texture.colorSpace=THREE.SRGBColorSpace;
-  const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:texture,transparent:true,alphaTest:.5,depthTest:false}));
+// Large sheets are scanned off the main thread. A worker failure falls back to the same bounds.
+const workerScan=250000;
+export function scanAtlas(image,atlas){
+  if(image.width*image.height<workerScan||typeof createImageBitmap!=='function'||typeof Worker==='undefined')return Promise.resolve(atlasBounds(image,atlas));
+  return createImageBitmap(image).then(bitmap=>new Promise((resolve,reject)=>{
+    const worker=new Worker(new URL('./engine/atlas-worker.mjs',import.meta.url),{type:'module'});
+    worker.onmessage=event=>{worker.terminate();resolve(event.data);};
+    worker.onerror=error=>{worker.terminate();reject(error);};
+    worker.postMessage({bitmap,columns:atlas.columns,rows:atlas.rows},[bitmap]);
+  })).catch(()=>atlasBounds(image,atlas));
+}
+export function createActor(image,atlas,definition,worldHeight,knownFrames){
+  const frames=knownFrames||atlasBounds(image,atlas),references=stableFrameRects(frames,atlas);
   const anchor=sheetAnchor(references.map(b=>b.centerOffset*definition.height/b.height));
-  let current=-1,offset=0;
-  return {mesh,frames,update(position,facing,moving,time,explicitFrame=null,snap=false){
+  let current=-1,offset=0,drawW=definition.height,drawH=definition.height,src=references[0];
+  const sprite={visible:false,feet:0,draw:null,frames,update(position,facing,moving,time,explicitFrame=null,snap=false){
     const next=explicitFrame??frameIndex(atlas,facing,moving,time,definition.column||0);
-    if(next!==current){const b=references[next];texture.repeat.set(b.width/image.width,b.height/image.height);texture.offset.set(b.left/image.width,1-(b.top+b.height)/image.height);mesh.scale.set(definition.height*b.width/b.height,definition.height,1);offset=b.centerOffset*definition.height/b.height;current=next;}
+    if(next!==current){src=references[next];drawW=definition.height*src.width/src.height;drawH=definition.height;offset=src.centerOffset*definition.height/src.height;current=next;}
     const placed=placeActor(position.x,position.y,snap?anchor:offset,definition.height,worldHeight,snap);
-    mesh.position.set(placed.x,placed.y,2);mesh.renderOrder=1+position.y;
-  },frame:()=>current,metrics:()=>({frame:current,width:mesh.scale.x,height:mesh.scale.y,offset,x:mesh.position.x,y:mesh.position.y,reference:references[current]})};
+    sprite.feet=position.y;
+    sprite.draw={image,sx:src.left,sy:src.top,sw:src.width,sh:src.height,dx:placed.x-drawW/2,dy:worldHeight-placed.y-drawH/2,dw:drawW,dh:drawH};
+    sprite.placed=placed;
+  },frame:()=>current,metrics:()=>({frame:current,width:drawW,height:drawH,offset,x:sprite.placed?.x??0,y:sprite.placed?.y??0,reference:references[current]})};
+  return sprite;
 }

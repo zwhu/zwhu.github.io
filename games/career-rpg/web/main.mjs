@@ -1,15 +1,19 @@
-import {WORLD,nearbyAll,integrateWalk,MOVE_SPEED,blocked} from './world.mjs';
+import {nearbyAll,integrateWalk,MOVE_SPEED,blocked} from './engine/world.mjs';
 import {createChapter} from './story.mjs';
-import {OFFICE,HEFEI,HANGZHOU,actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './scene-config.mjs';
-import {createActor,atlasBounds,bubblePosition,seatedFrame,motionForRender,walkClock} from './actors.mjs';
+import {actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './chapters/logic.mjs';
+import {createActor,bubblePosition,seatedFrame,motionForRender,walkClock,scanAtlas} from './actors.mjs';
+import {createView,maskedImage} from './engine/view.mjs';
 import {GAME_TITLE} from './title.mjs';
 import {wrapNarrow} from './narrow-wrap.mjs';
-import {sceneRequest,createDirector,validateScript,walkIntent} from './cinematic.mjs';
+import {sceneRequest,createDirector,validateScript,walkIntent} from './cinematic/director.mjs';
 const requested=sceneRequest(location.search);
 const cinematicName=requested.cinematic;
 const chapterKey=requested.chapter;
 const cinematicOn=!!cinematicName;
-const sceneConfig=chapterKey==='hangzhou'?HANGZHOU:chapterKey==='hefei'?HEFEI:OFFICE;
+// One chapter module. HANGZHOU, hefei and nanjing stay independent of the renderer.
+const chapterUrl=chapterKey==='hangzhou'?'./chapters/hangzhou.mjs':chapterKey==='hefei'?'./chapters/hefei.mjs':'./chapters/nanjing.mjs';
+const chapterModule=await import(chapterUrl);
+const sceneConfig=chapterModule.HANGZHOU||chapterModule.HEFEI||chapterModule.OFFICE;
 document.title=GAME_TITLE;
 const gameTitle=document.querySelector('#game-title');if(gameTitle)gameTitle.textContent=GAME_TITLE;
 
@@ -26,7 +30,7 @@ const failure=document.querySelector('#game-failure');
 function showFailure(message){
   setState('error');confirmationKeys.clear();moving=false;cancelAnimationFrame(raf);
   // A lost canvas can retain the browser's failure layer even after CSS hides it.
-  renderer?.domElement.remove();
+  view?.canvas.remove();
   conversation.hidden=true;if(systemDialog.open)systemDialog.close();if(pauseMenu.open)pauseMenu.close();
   pauseButton.disabled=true;document.querySelector('#manual').disabled=true;
   stage.removeAttribute('tabindex');stage.setAttribute('role','region');stage.setAttribute('aria-label','办公室暂不可用，请重试或继续文字阅读');
@@ -38,7 +42,7 @@ const actorViews=new Map(),atlasData={};
 let dialogueSpeaker='player',currentSpeaker='player',facing='down',walkTime=0,moving=false,dialogueObject=null,lastMovedAt=-Infinity;
 const keys=new Set();
 let position={x:172,y:154},state='loading',active=null,chapter,snapshot,storage,saving=true;
-let renderer,scene,camera,player,previous=0,walkRemainder=0,raf=0,choicesReady=0,dismissible=true;
+let player,previous=0,walkRemainder=0,raf=0,choicesReady=0,dismissible=true;
 let lastUISnapshot=null,lastInteraction='',selectedTargetID='';
 let castSnapshot=null,castCache=sceneConfig;
 let transitionEvent=null,transitionStarted=0,transitionIndex=-1,awardOpen=false,awardFlashUntil=0,returnToJourney=false,journeyMode=null;
@@ -58,8 +62,8 @@ function playSkillDing(){
   }
 }
 window.careerSkillAudio=()=>skillAudioLog.map(entry=>({...entry}));
-let roomMaterial,dayTexture,nightTexture,dimMesh,dimMaterial,lampMesh,card,cardImg,caption,glintCanvas,glintCtx;
-const propViews=[],spareTextures=[];
+let dayImage,nightImage,roomImage,lampImage,dimOpacity=0,lampOn=false,card,cardImg,caption,glintCanvas,glintCtx,view;
+const propViews=[];
 function readyRoles(){return new Set((chapter?.skillSlots?.(snapshot)||[]).filter(skill=>skill.status==='ready').map(skill=>skill.role));}
 function visibleRoom(){
   if(!snapshot)return sceneConfig;
@@ -221,11 +225,9 @@ function presentDialog(transition){
   show(eventTitle(transition.event)||transition.label,lines([transition.dialogue]),[{label:transition.label,event:transition.event,run}],false,dialogueSpeaker);
 }
 function applyBeat(beat){
-  const tex=beat.map==='night'?nightTexture:dayTexture;
-  if(roomMaterial&&roomMaterial.map!==tex)roomMaterial.map=tex;
-  const dim=beat.dim||0;
-  if(dimMesh){dimMesh.visible=dim>0;if(dimMaterial.opacity!==dim)dimMaterial.opacity=dim;}
-  if(lampMesh)lampMesh.visible=dim>0;
+  roomImage=beat.map==='night'?nightImage:dayImage;
+  dimOpacity=beat.dim||0;
+  lampOn=dimOpacity>0;
 }
 function beginTransition(event){
   if(transitionEvent)return;
@@ -241,8 +243,7 @@ function finishTransition(){
   if(caption)caption.hidden=true;
   const beats=sceneConfig.transitionBeats[event];
   applyBeat(beats[beats.length-1]);
-  if(dimMesh){dimMesh.visible=false;dimMaterial.opacity=0;}
-  if(lampMesh)lampMesh.visible=false;
+  dimOpacity=0;lampOn=false;
   accept(event);
 }
 function hideObjectCard(){if(!card)return;card.hidden=true;cardImg.removeAttribute('src');delete cardImg.dataset.src;}
@@ -272,10 +273,9 @@ function confirmReplay(){
   show('从办公室重玩',[saving?'这会替换本章已保存的进度，其他站点数据不会被清除。':'这会重新开始本次体验。原存档仍会保留，本次不会保存。'],[{label:'确认重新开始',id:'confirm-replay',run:()=>{snapshot=chapter.initial();position=chapterSpawn();persist(enterScene);}}],true,'player',true,{back:fromPause?()=>pause():parent?()=>restorePage(parent):null});
 }
 function enterHefei(){
-  if(nightTexture){
-    const tex=snapshot.state==='night_study'?nightTexture:dayTexture;
-    if(roomMaterial.map!==tex)roomMaterial.map=tex;
-    dimMesh.visible=false;lampMesh.visible=false;dimMaterial.opacity=0;
+  if(nightImage){
+    roomImage=snapshot.state==='night_study'?nightImage:dayImage;
+    dimOpacity=0;lampOn=false;
   }
   const dialog=chapter.actions(snapshot,'dialog');
   if(dialog.length){presentDialog(dialog[0]);return;}
@@ -611,25 +611,27 @@ function frame(now,elapsedOverride){
   for(let i=0;i<propViews.length;i++){
     const item=propViews[i];
     const show=!item.presentIn||item.presentIn.includes(snapshot.state)||readyRoles().has(item.role);
-    if(item.mesh.visible!==show)item.mesh.visible=show;
+    item.visible=show;
     if(!show)continue;
     const litOn=item.lit&&item.litWhen&&item.litWhen.every(flag=>chapter.has(snapshot,flag));
-    const map=litOn?item.lit:(state==='explore'&&active&&active.id===item.id?item.hi:item.base);
-    if(item.mat.map!==map)item.mat.map=map;
-    const opacity=item.nightDim&&snapshot.state==='night_study'?0.45:1;
-    if(item.mat.opacity!==opacity)item.mat.opacity=opacity;
+    item.image=litOn?item.lit:(state==='explore'&&active&&active.id===item.id?item.hi:item.base);
+    item.showing=litOn?'lit':item.image===item.hi?'hi':'base';
+    item.opacity=item.nightDim&&snapshot.state==='night_study'?0.45:1;
   }
   const here=visibleRoom(),hide=here!==sceneConfig;
+  const sprites=[];
   for(const actor of sceneConfig.actors){
     const views=actorViews.get(actor.id);
-    if(hide&&!here.actors.includes(actor)){views.standing.mesh.visible=false;if(views.seated)views.seated.mesh.visible=false;continue;}
-    const typing=isTyping(actor)&&!!views.seated;
-    views.standing.mesh.visible=!typing;if(views.seated)views.seated.mesh.visible=typing;
-    const view=typing?views.seated:views.standing;
+    const shown=!hide||here.actors.includes(actor);
+    const typing=shown&&isTyping(actor)&&!!views.seated;
+    views.standing.visible=shown&&!typing;if(views.seated)views.seated.visible=!!typing;
+    if(!shown)continue;
+    const sprite=typing?views.seated:views.standing;
     const play=state!=='paused'&&!(state==='dialogue'&&currentSpeaker===actor.id&&!actor.controllable);
     const pose=typing&&actor.sitAtlas?sceneConfig.atlases[actor.sitAtlas]:typing?sceneConfig.atlases.typing:null;
     const sitStill=!!(pose&&pose.columns===1&&pose.rows===1);
-    view.update(renderPosition(actor),actor.controllable?facing:'down',actor.controllable&&moving&&!sitStill,walkTime,pose?seatedFrame(pose,actor.typingColumn??0,now/1000,play&&!sitStill):null,actor.controllable&&(!typing||sitStill));
+    sprite.update(renderPosition(actor),actor.controllable?facing:'down',actor.controllable&&moving&&!sitStill,walkTime,pose?seatedFrame(pose,actor.typingColumn??0,now/1000,play&&!sitStill):null,actor.controllable&&(!typing||sitStill));
+    sprites.push(sprite);
   }
   let cinematicStill=null;
   if(cinematicOn&&cinematicDirector){
@@ -641,18 +643,16 @@ function frame(now,elapsedOverride){
   drawSkillGlints(now);
   positionEffects();placeBubble();updateUI();
   if(cinematicOn)placeCinematicMarkers();
-  renderer.render(scene,camera);
+  view.draw(roomImage,dimOpacity,lampOn?lampImage:null,propViews,sprites);
   if(cinematicOn&&cinematicDirector){
     cinematicDirector.afterRender(cinematicApi(),simFrame);
     if(cinematicStill)cinematicPendingStill=cinematicStill;
   }
 }
 let cinematicPendingStill=null;
-function applyCinematicCamera(view){
-  camera.left=view.x;camera.right=view.x+view.size;
-  camera.top=sceneConfig.height-view.y;camera.bottom=camera.top-view.size;
-  camera.updateProjectionMatrix();
-  if(renderer.domElement.width!==view.size){renderer.setPixelRatio(1);renderer.setSize(view.size,view.size,false);}
+function applyCinematicCamera(shot){
+  view.setPixelRatio(1);
+  view.setCamera({x:shot.x,y:shot.y,size:shot.size});
 }
 function placeCinematicMarkers(){
   if(!cinematicView)return;
@@ -706,7 +706,7 @@ function cinematicTick(){
     simFrame+=1;
     cinematicPendingStill=null;
     frame(cinematicClock(),1/60);
-    const still=cinematicPendingStill?{name:cinematicPendingStill,png:renderer.domElement.toDataURL('image/png'),width:renderer.domElement.width,height:renderer.domElement.height}:null;
+    const still=cinematicPendingStill?{name:cinematicPendingStill,png:view.canvas.toDataURL('image/png'),width:view.canvas.width,height:view.canvas.height}:null;
     cinematicPendingStill=null;
     return {skip:false,done:cinematicDirector.phase==='done',frame:simFrame,shot:cinematicDirector.shotId,view:cinematicDirector.view,still,error:null,phase:cinematicDirector.phase,index:cinematicDirector.index};
   }catch(error){
@@ -765,7 +765,6 @@ function drawSkillGlints(now){
 }
 function loadImage(url){return new Promise((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error(`无法加载素材 ${url}，请检查文件并刷新。`));image.src=url;});}
 async function start(){
-  const THREE=await import('./vendor/three.module.min.js');
   const atlasEntries=Object.entries(sceneConfig.atlases);
   if(sceneConfig.page){
     document.title=GAME_TITLE;
@@ -778,48 +777,32 @@ async function start(){
   const props=sceneConfig.objects.filter(o=>o.icon);
   const loadProp=async object=>({base:await loadImage(object.icon),hi:await loadImage(object.iconHighlight||object.icon),lit:object.iconLit?await loadImage(object.iconLit):null});
   const cinematicPromise=cinematicOn?fetch(`./cinematic/${cinematicName}.json`).then(r=>{if(!r.ok)throw new Error('拍摄脚本加载失败');return r.json();}):null;
-  const [roomImages,chapterData,atlasImages,propPacks,cinematicScript]=await Promise.all([Promise.all(roomURLs.map(loadImage)),fetch(sceneConfig.chapter).then(r=>{if(!r.ok)throw new Error('章节资料加载失败');return r.json();}),Promise.all(atlasEntries.map(([,atlas])=>loadImage(atlas.url))),Promise.all(props.map(loadProp)),cinematicPromise]);
-  atlasEntries.forEach(([id,atlas],i)=>atlasData[id]={image:atlasImages[i],frames:atlasBounds(atlasImages[i],atlas)});
+  const loadingAssets=Promise.all([
+    Promise.all(roomURLs.map(loadImage)),
+    fetch(sceneConfig.chapter).then(r=>{if(!r.ok)throw new Error('章节资料加载失败');return r.json();}),
+    Promise.all(atlasEntries.map(async([,atlas])=>{const image=await loadImage(atlas.url);return {image,frames:await scanAtlas(image,atlas)};})),
+    Promise.all(props.map(loadProp)),
+    cinematicPromise,
+  ]);
+  const [roomImages,chapterData,atlasPacks,propPacks,cinematicScript]=await loadingAssets;
+  atlasEntries.forEach(([id],i)=>atlasData[id]=atlasPacks[i]);
   chapter=createChapter(chapterData);
   const bounds=atlasData.player.frames[0];
-  renderer=new THREE.WebGLRenderer({alpha:false,antialias:false,powerPreference:'low-power',preserveDrawingBuffer:cinematicOn});
-  renderer.setPixelRatio(cinematicOn?1:2);renderer.setSize(WORLD.width,WORLD.height,false);renderer.setClearColor(0xe8dfc8);
-  renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.domElement.setAttribute('aria-hidden','true');
-  renderer.domElement.addEventListener('webglcontextlost',event=>{event.preventDefault();showFailure('图形上下文已丢失，游戏已停止。可重新加载尝试恢复图形，或继续文字阅读。');});
-  renderer.domElement.addEventListener('webglcontextrestored',()=>{if(state==='error')document.querySelector('#failure-message').textContent='图形上下文已恢复。请重新加载游戏以恢复到已保存的进度，或继续文字阅读。';});
-  stage.append(renderer.domElement);
-  scene=new THREE.Scene();camera=new THREE.OrthographicCamera(0,WORLD.width,WORLD.height,0,.1,20);camera.position.z=10;
-  const texture=image=>{const t=new THREE.Texture(image);t.needsUpdate=true;t.magFilter=t.minFilter=THREE.NearestFilter;t.generateMipmaps=false;t.colorSpace=THREE.SRGBColorSpace;return t;};
-  dayTexture=texture(roomImages[0]);
-  roomMaterial=new THREE.MeshBasicMaterial({map:dayTexture,depthTest:false});
-  const room=new THREE.Mesh(new THREE.PlaneGeometry(WORLD.width,WORLD.height),roomMaterial);
-  room.position.set(WORLD.width/2,WORLD.height/2,0);room.renderOrder=0;scene.add(room);
-  if(roomImages[1]){
-    nightTexture=texture(roomImages[1]);const mask=texture(roomImages[2]);spareTextures.push(nightTexture,mask);
-    dimMaterial=new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:0,depthTest:false});
-    dimMesh=new THREE.Mesh(new THREE.PlaneGeometry(WORLD.width,WORLD.height),dimMaterial);
-    dimMesh.position.set(WORLD.width/2,WORLD.height/2,0);dimMesh.renderOrder=.2;dimMesh.visible=false;scene.add(dimMesh);
-    lampMesh=new THREE.Mesh(new THREE.PlaneGeometry(WORLD.width,WORLD.height),new THREE.MeshBasicMaterial({map:dayTexture,alphaMap:mask,transparent:true,depthTest:false}));
-    lampMesh.position.set(WORLD.width/2,WORLD.height/2,0);lampMesh.renderOrder=.4;lampMesh.visible=false;scene.add(lampMesh);
-  }
-  if(props.length){
-    const iconGeometry=new THREE.PlaneGeometry(1,1);
-    props.forEach((object,i)=>{
-      const pack=propPacks[i],base=texture(pack.base),hi=texture(pack.hi),lit=pack.lit?texture(pack.lit):null;spareTextures.push(base,hi);if(lit)spareTextures.push(lit);
-      const mat=new THREE.MeshBasicMaterial({map:base,transparent:true,alphaTest:.5,depthTest:false});
-      const mesh=new THREE.Mesh(iconGeometry,mat);
-      mesh.scale.set(object.iconSize[0],object.iconSize[1],1);
-      mesh.position.set(object.iconAt.x,sceneConfig.height-object.iconAt.y,1);mesh.renderOrder=1;scene.add(mesh);
-      propViews.push({id:object.id,role:object.role,mesh,mat,base,hi,lit,litWhen:object.litWhen||null,presentIn:object.presentIn||null,nightDim:!!object.nightDim});
-    });
-  }
+  view=createView(stage,{width:sceneConfig.width,height:sceneConfig.height});
+  view.canvas.addEventListener('contextlost',event=>{event.preventDefault();showFailure('图形上下文已丢失，游戏已停止。可重新加载尝试恢复图形，或继续文字阅读。');});
+  if(cinematicOn)view.setPixelRatio(1);
+  dayImage=roomImages[0];roomImage=dayImage;
+  if(roomImages[1]){nightImage=roomImages[1];lampImage=maskedImage(dayImage,roomImages[2]);}
+  props.forEach((object,i)=>{
+    const pack=propPacks[i];
+    propViews.push({id:object.id,role:object.role,visible:true,image:pack.base,base:pack.base,hi:pack.hi,lit:pack.lit,showing:'base',x:object.iconAt.x,y:object.iconAt.y,w:object.iconSize[0],h:object.iconSize[1],opacity:1,litWhen:object.litWhen||null,presentIn:object.presentIn||null,nightDim:!!object.nightDim});
+  });
   for(const actor of sceneConfig.actors){
-    const data=atlasData[actor.atlas],standing=createActor(THREE,data.image,sceneConfig.atlases[actor.atlas],actor,sceneConfig.height);
+    const data=atlasData[actor.atlas],standing=createActor(data.image,sceneConfig.atlases[actor.atlas],actor,sceneConfig.height,data.frames);
     const sit=actor.sitAtlas&&sceneConfig.atlases[actor.sitAtlas];
-    const seatedSpec=sit?{image:atlasData[actor.sitAtlas].image,atlas:sit,column:0,height:actor.seatedHeight||30}:actor.typingColumn===undefined?null:{image:atlasData.typing.image,atlas:sceneConfig.atlases.typing,column:actor.typingColumn,height:actor.seatedHeight||40};
-    const seated=seatedSpec?createActor(THREE,seatedSpec.image,seatedSpec.atlas,{...actor,column:seatedSpec.column,height:seatedSpec.height},sceneConfig.height):null;
-    actorViews.set(actor.id,{standing,seated});scene.add(standing.mesh);if(seated)scene.add(seated.mesh);
+    const seatedSpec=sit?{image:atlasData[actor.sitAtlas].image,atlas:sit,frames:atlasData[actor.sitAtlas].frames,column:0,height:actor.seatedHeight||30}:actor.typingColumn===undefined?null:{image:atlasData.typing.image,atlas:sceneConfig.atlases.typing,frames:atlasData.typing.frames,column:actor.typingColumn,height:actor.seatedHeight||40};
+    const seated=seatedSpec?createActor(seatedSpec.image,seatedSpec.atlas,{...actor,column:seatedSpec.column,height:seatedSpec.height},sceneConfig.height,seatedSpec.frames):null;
+    actorViews.set(actor.id,{standing,seated});
   }
   glintCanvas=document.createElement('canvas');glintCanvas.id='skill-glints';glintCanvas.width=sceneConfig.width;glintCanvas.height=sceneConfig.height;glintCtx=glintCanvas.getContext('2d');stage.append(glintCanvas);
   loading.remove();pauseButton.disabled=false;document.querySelector('#manual').disabled=false;setState('explore');
@@ -845,8 +828,8 @@ async function start(){
   raf=requestAnimationFrame(frame);
   }
   // Read-only diagnostics support browser acceptance without changing game state.
-  window.careerPrototype={snapshot:()=>({position:{...position},state,active:active?.id||null,chapter:structuredClone(snapshot),saving,saveKey:chapter.key,bounds,three:THREE.REVISION,facing,moving,walkTime,walkMetrics:actorViews.get('player').standing.metrics(),sit:actorViews.get('player').seated?.mesh.visible?actorViews.get('player').seated.metrics():null,actors:visibleRoom().actors.map(a=>({id:a.id,position:renderPosition(a),posture:isTyping(a)?'seatedTyping':'standing'})),frames:Object.fromEntries([...actorViews].map(([id,views])=>[id,(views.seated?.mesh.visible?views.seated:views.standing).frame()])),markers:pendingMarkers(visibleRoom(),chapter,snapshot),boardLit:propViews.some(item=>!!(item.lit&&item.mat.map===item.lit))})};
-  window.addEventListener('pagehide',()=>{cancelAnimationFrame(raf);hideObjectCard();scene.traverse(o=>{o.geometry?.dispose();if(o.material){o.material.map?.dispose();o.material.alphaMap?.dispose();o.material.dispose();}});for(const tex of spareTextures)tex.dispose();renderer.dispose();},{once:true});
+  window.careerPrototype={snapshot:()=>({position:{...position},state,active:active?.id||null,chapter:structuredClone(snapshot),saving,saveKey:chapter.key,bounds,three:'canvas',facing,moving,walkTime,walkMetrics:actorViews.get('player').standing.metrics(),sit:actorViews.get('player').seated?.visible?actorViews.get('player').seated.metrics():null,actors:visibleRoom().actors.map(a=>({id:a.id,position:renderPosition(a),posture:isTyping(a)?'seatedTyping':'standing'})),frames:Object.fromEntries([...actorViews].map(([id,views])=>[id,(views.seated?.visible?views.seated:views.standing).frame()])),markers:pendingMarkers(visibleRoom(),chapter,snapshot),boardLit:propViews.some(item=>item.showing==='lit')})};
+  window.addEventListener('pagehide',()=>{cancelAnimationFrame(raf);hideObjectCard();},{once:true});
 }
 function navigateOption(key){
   const buttons=enabledOptions();if(!buttons.length)return;
