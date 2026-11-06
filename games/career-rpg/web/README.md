@@ -40,7 +40,7 @@ python3 -m http.server 8765 --bind 127.0.0.1
 
 桌面浏览器验收脚本为 `node games/career-rpg/web/tests/browser.mjs`，使用本机 Chrome，以1280×900桌面视口执行移动、桌子碰撞、对话与暂停检查，并将截图和结果保存到 `review/`。脚本需要 HTTP 服务以及本机 Chrome 启动权限；失焦检查针对 blur 事件处理，不冒充真机或其他端验收。
 
-素材或依赖缺失会显示可读错误，不用空白画面冒充成功。需要 HTTP 服务，不能用 `file://` 打开。未接入 `docs/`，未向博客发布。
+素材或依赖缺失会显示可读错误，不用空白画面冒充成功。需要 HTTP 服务，不能用 `file://` 打开。可玩副本由 `scripts/publish-career-rpg.py` 生成到 `docs/games/career-rpg/`，Pages 地址是 `https://zwhu.github.io/games/career-rpg/`。博客首页、导航和文章列表不添加入口。
 
 移动端、触控、真机性能和其他端验收在 Web 跑通后执行，本轮不声称通过。
 
