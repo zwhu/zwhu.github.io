@@ -22,6 +22,7 @@ verify 不更新页面、不生成图片、不请求网络。所有检查都会�
 | canonical、分享元数据、JSON-LD、sitemap、robots 与配置同步；发表日期、译文归属、公开验证标记及快照 noindex | `update-seo.py --check`、`test-seo.py` |
 | 评论按需加载、只初始化一次，主题地址和文章标识稳定 | `tests/comments.test.cjs` |
 | 南京RPG的移动碰撞、剧情前置与重复确认、合法存档恢复及损坏存档保留、角色方向/打字帧、气泡避让与任务标记 | `games/career-rpg/web/tests/world.test.mjs`、`games/career-rpg/web/tests/story.test.mjs`、`games/career-rpg/web/tests/scene.test.mjs` |
+| 像素前端可玩副本与源运行时一致，供 Pages 从 `docs/games/career-rpg/` 提供 | `scripts/publish-career-rpg.py --check` |
 | 检查失败、缺少执行程序时返回失败，后续检查仍执行 | `test-verify.py` |
 
 链接检查从 `docs/` 根目录正式 HTML 出发，继续检查它们引用的本地 HTML；校验 `href`、`src`、`poster`、`xlink:href` 和 `srcset`。canonical 允许正式绝对地址，搜索元数据由 SEO 检查负责；外部链接不联网探测，CSS／JavaScript 中动态生成的地址不在静态链接检查范围内。

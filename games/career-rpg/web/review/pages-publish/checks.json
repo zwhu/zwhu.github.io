@@ -1,0 +1,889 @@
+{
+  "origin": "http://127.0.0.1:41033",
+  "probes": [
+    {
+      "path": "/games/career-rpg/",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/games/career-rpg/?chapter=hefei",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/games/career-rpg/?chapter=nanjing",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/games/career-rpg/?chapter=hangzhou",
+      "status": 200,
+      "type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/games/career-rpg/main.mjs",
+      "status": 200,
+      "type": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/games/career-rpg/style.css",
+      "status": 200,
+      "type": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/games/career-rpg/design/chapter-01.json",
+      "status": 200,
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/games/career-rpg/design/chapter-hefei.json",
+      "status": 200,
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/games/career-rpg/design/chapter-hangzhou.json",
+      "status": 200,
+      "type": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/games/career-rpg/art/office-room-v2.png",
+      "status": 200,
+      "type": "image/png"
+    },
+    {
+      "path": "/games/career-rpg/art/player-walk-v2-sheet.png",
+      "status": 200,
+      "type": "image/png"
+    },
+    {
+      "path": "/games/career-rpg/art/hefei/hefei-office-day/day-384x216.png",
+      "status": 200,
+      "type": "image/png"
+    },
+    {
+      "path": "/games/career-rpg/art/hangzhou/hangzhou-office-day/day-384x216.png",
+      "status": 200,
+      "type": "image/png"
+    },
+    {
+      "path": "/games/career-rpg/engine/atlas-worker.mjs",
+      "status": 200,
+      "type": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/games/career-rpg/chapters/hefei.mjs",
+      "status": 200,
+      "type": "text/javascript; charset=utf-8"
+    }
+  ],
+  "chapters": [
+    {
+      "name": "default-nanjing",
+      "url": "http://127.0.0.1:41033/games/career-rpg/",
+      "responses": [
+        {
+          "url": "/games/career-rpg/",
+          "status": 200,
+          "type": "text/html"
+        },
+        {
+          "url": "/games/career-rpg/style.css",
+          "status": 200,
+          "type": "text/css"
+        },
+        {
+          "url": "/games/career-rpg/main.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/world.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/story.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/chapters/logic.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/view.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/title.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/narrow-wrap.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/actors.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/cinematic/director.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/atlas-bounds.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/chapters/nanjing.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/design/chapter-01.json",
+          "status": 200,
+          "type": "application/json"
+        },
+        {
+          "url": "/games/career-rpg/art/office-room-v2.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/player-walk-v2-sheet.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/npc-team-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/player-emotions-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/typing-team-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/sit-back-hz-18x30.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/favicon.ico",
+          "status": 200,
+          "type": "image/x-icon"
+        }
+      ],
+      "exceptions": [],
+      "console": [],
+      "dom": {
+        "title": "像素前端",
+        "heading": "南京，第一次上线",
+        "lead": "走进办公室，去电脑前看看。",
+        "noJs": false,
+        "fallbackDisplay": "none",
+        "fallbackTextPresent": true,
+        "loadingPresent": false,
+        "canvasWidth": 768,
+        "canvasHeight": 432,
+        "stageVisible": true,
+        "backBlog": "https://zwhu.github.io/",
+        "backBlogText": "回到博客",
+        "failureBlog": "https://zwhu.github.io/",
+        "robots": "noindex",
+        "failureHidden": true,
+        "failureText": ""
+      },
+      "snapshot": {
+        "state": "dialogue",
+        "moving": false,
+        "position": {
+          "x": 172,
+          "y": 154
+        },
+        "facing": "down",
+        "walkTime": 0,
+        "frame": 0,
+        "chapter": "nanjing-first-release",
+        "chapterState": "office"
+      },
+      "afterDismiss": {
+        "position": {
+          "x": 172,
+          "y": 154
+        },
+        "state": "explore",
+        "active": null,
+        "chapter": {
+          "schema": 1,
+          "chapter": "nanjing-first-release",
+          "state": "office",
+          "flags": [],
+          "skills": {
+            "fibjs": "none",
+            "cicd": "none",
+            "release": "none",
+            "failure": "none",
+            "react": "none"
+          }
+        },
+        "saving": true,
+        "saveKey": "career-rpg:nanjing:v1",
+        "bounds": {
+          "left": 6,
+          "top": 2,
+          "right": 21,
+          "bottom": 43,
+          "width": 16,
+          "height": 42,
+          "cell": {
+            "left": 0,
+            "top": 0,
+            "width": 28,
+            "height": 44
+          }
+        },
+        "three": "canvas",
+        "facing": "down",
+        "moving": false,
+        "walkTime": 0,
+        "walkMetrics": {
+          "frame": 0,
+          "width": 16.761904761904763,
+          "height": 44,
+          "offset": 0,
+          "x": 172,
+          "y": 84,
+          "reference": {
+            "left": 6,
+            "top": 2,
+            "width": 16,
+            "height": 42,
+            "centerOffset": 0
+          }
+        },
+        "sit": null,
+        "actors": [
+          {
+            "id": "player",
+            "position": {
+              "x": 172,
+              "y": 154
+            },
+            "posture": "standing"
+          },
+          {
+            "id": "cto",
+            "position": {
+              "x": 185,
+              "y": 108
+            },
+            "posture": "seatedTyping"
+          },
+          {
+            "id": "colleague-dev",
+            "position": {
+              "x": 296,
+              "y": 108
+            },
+            "posture": "seatedTyping"
+          },
+          {
+            "id": "colleague-team",
+            "position": {
+              "x": 82,
+              "y": 197
+            },
+            "posture": "seatedTyping"
+          }
+        ],
+        "frames": {
+          "player": 0,
+          "cto": 5,
+          "colleague-dev": 6,
+          "colleague-team": 7
+        },
+        "markers": [
+          {
+            "id": "forum",
+            "x": 82,
+            "y": 52,
+            "offsetY": 0,
+            "events": [
+              "open_forum_post"
+            ],
+            "actor": false,
+            "sprite": null
+          }
+        ],
+        "boardLit": false
+      },
+      "walk": {
+        "before": {
+          "x": 172,
+          "y": 154
+        },
+        "during": {
+          "x": 202,
+          "y": 154,
+          "moving": true,
+          "walkTime": 0.49999999999999994,
+          "frame": 26,
+          "facing": "right",
+          "state": "explore"
+        },
+        "focused": "stage"
+      },
+      "failed": []
+    },
+    {
+      "name": "nanjing",
+      "url": "http://127.0.0.1:41033/games/career-rpg/?chapter=nanjing",
+      "responses": [
+        {
+          "url": "/games/career-rpg/?chapter=nanjing",
+          "status": 200,
+          "type": "text/html"
+        },
+        {
+          "url": "/games/career-rpg/style.css",
+          "status": 200,
+          "type": "text/css"
+        },
+        {
+          "url": "/games/career-rpg/main.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/story.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/world.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/chapters/logic.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/view.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/title.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/actors.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/narrow-wrap.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/cinematic/director.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/atlas-bounds.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/chapters/nanjing.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/art/office-room-v2.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/design/chapter-01.json",
+          "status": 200,
+          "type": "application/json"
+        },
+        {
+          "url": "/games/career-rpg/art/player-walk-v2-sheet.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/npc-team-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/player-emotions-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/typing-team-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/sit-back-hz-18x30.png",
+          "status": 200,
+          "type": "image/png"
+        }
+      ],
+      "exceptions": [],
+      "console": [],
+      "dom": {
+        "title": "像素前端",
+        "heading": "南京，第一次上线",
+        "lead": "走进办公室，去电脑前看看。",
+        "noJs": false,
+        "fallbackDisplay": "none",
+        "fallbackTextPresent": true,
+        "loadingPresent": false,
+        "canvasWidth": 768,
+        "canvasHeight": 432,
+        "stageVisible": true,
+        "backBlog": "https://zwhu.github.io/",
+        "backBlogText": "回到博客",
+        "failureBlog": "https://zwhu.github.io/",
+        "robots": "noindex",
+        "failureHidden": true,
+        "failureText": ""
+      },
+      "snapshot": {
+        "state": "dialogue",
+        "moving": false,
+        "position": {
+          "x": 172,
+          "y": 154
+        },
+        "facing": "down",
+        "walkTime": 0,
+        "frame": 0,
+        "chapter": "nanjing-first-release",
+        "chapterState": "office"
+      },
+      "failed": []
+    },
+    {
+      "name": "hefei",
+      "url": "http://127.0.0.1:41033/games/career-rpg/?chapter=hefei",
+      "responses": [
+        {
+          "url": "/games/career-rpg/?chapter=hefei",
+          "status": 200,
+          "type": "text/html"
+        },
+        {
+          "url": "/games/career-rpg/style.css",
+          "status": 200,
+          "type": "text/css"
+        },
+        {
+          "url": "/games/career-rpg/main.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/world.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/story.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/chapters/logic.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/view.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/actors.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/title.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/narrow-wrap.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/cinematic/director.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/atlas-bounds.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/chapters/hefei.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/chapters/nanjing.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/design/chapter-hefei.json",
+          "status": 200,
+          "type": "application/json"
+        },
+        {
+          "url": "/games/career-rpg/art/player-walk-v2-sheet.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/npc-team-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/player-emotions-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/typing-team-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/sit-back-hz-18x30.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-office-day/day-384x216.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-office-night/night-384x216.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-office-night/light-mask-384x216.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-founder-walk/walk-sheet-32x48.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-founder-emotions/emotions-strip-64x32.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-props/linux-git-screen/icon.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-props/frontend-jquery/icon.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-props/java-book/icon.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-props/db-nosql-screen/icon.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-props/linux-git-screen/icon-highlight.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-props/frontend-jquery/icon-highlight.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-props/java-book/icon-highlight.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hefei/hefei-props/db-nosql-screen/icon-highlight.png",
+          "status": 200,
+          "type": "image/png"
+        }
+      ],
+      "exceptions": [],
+      "console": [],
+      "dom": {
+        "title": "像素前端",
+        "heading": "合肥，争取一次机会",
+        "lead": "合肥办公室。从门口走到老板桌前。同事沿用南京人物。",
+        "noJs": false,
+        "fallbackDisplay": "none",
+        "fallbackTextPresent": true,
+        "loadingPresent": false,
+        "canvasWidth": 768,
+        "canvasHeight": 432,
+        "stageVisible": true,
+        "backBlog": "https://zwhu.github.io/",
+        "backBlogText": "回到博客",
+        "failureBlog": "https://zwhu.github.io/",
+        "robots": "noindex",
+        "failureHidden": true,
+        "failureText": ""
+      },
+      "snapshot": {
+        "state": "dialogue",
+        "moving": false,
+        "position": {
+          "x": 190,
+          "y": 196
+        },
+        "facing": "down",
+        "walkTime": 0,
+        "frame": 0,
+        "chapter": "hefei-first-job",
+        "chapterState": "interview"
+      },
+      "failed": []
+    },
+    {
+      "name": "hangzhou",
+      "url": "http://127.0.0.1:41033/games/career-rpg/?chapter=hangzhou",
+      "responses": [
+        {
+          "url": "/games/career-rpg/?chapter=hangzhou",
+          "status": 200,
+          "type": "text/html"
+        },
+        {
+          "url": "/games/career-rpg/style.css",
+          "status": 200,
+          "type": "text/css"
+        },
+        {
+          "url": "/games/career-rpg/main.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/world.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/actors.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/story.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/title.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/chapters/logic.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/view.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/narrow-wrap.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/cinematic/director.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/engine/atlas-bounds.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/chapters/hangzhou.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/chapters/nanjing.mjs",
+          "status": 200,
+          "type": "text/javascript"
+        },
+        {
+          "url": "/games/career-rpg/design/chapter-hangzhou.json",
+          "status": 200,
+          "type": "application/json"
+        },
+        {
+          "url": "/games/career-rpg/art/player-walk-v2-sheet.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/npc-team-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/player-emotions-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/sit-back-hz-18x30.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/typing-team-v1.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hangzhou/hangzhou-office-day/day-384x216.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hangzhou/props/design-pattern-book/design-pattern-book-small-14x17.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hangzhou/props/webpack-screen/webpack-screen-small-26x13.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hangzhou/props/req-taobao/req-taobao-small-10x15.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hangzhou/props/req-tmall/req-tmall-small-10x15.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hangzhou/props/req-xianyu/req-xianyu-small-10x15.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hangzhou/props/req-fliggy/req-fliggy-small-10x14.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hangzhou/props/req-hema/req-hema-small-10x14.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hangzhou/props/whiteboard/whiteboard-unlit-small-53x42.png",
+          "status": 200,
+          "type": "image/png"
+        },
+        {
+          "url": "/games/career-rpg/art/hangzhou/props/whiteboard/whiteboard-lit-small-53x42.png",
+          "status": 200,
+          "type": "image/png"
+        }
+      ],
+      "exceptions": [],
+      "console": [],
+      "dom": {
+        "title": "像素前端",
+        "heading": "杭州，商品发布",
+        "lead": "杭州。先报到，再把商品发布这摊业务读懂。",
+        "noJs": false,
+        "fallbackDisplay": "none",
+        "fallbackTextPresent": true,
+        "loadingPresent": false,
+        "canvasWidth": 768,
+        "canvasHeight": 432,
+        "stageVisible": true,
+        "backBlog": "https://zwhu.github.io/",
+        "backBlogText": "回到博客",
+        "failureBlog": "https://zwhu.github.io/",
+        "robots": "noindex",
+        "failureHidden": true,
+        "failureText": ""
+      },
+      "snapshot": {
+        "state": "dialogue",
+        "moving": false,
+        "position": {
+          "x": 192,
+          "y": 196
+        },
+        "facing": "down",
+        "walkTime": 0,
+        "frame": 0,
+        "chapter": "hangzhou-publish",
+        "chapterState": "arrive"
+      },
+      "failed": []
+    }
+  ]
+}
