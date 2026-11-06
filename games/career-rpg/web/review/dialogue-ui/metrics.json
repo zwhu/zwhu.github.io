@@ -1,0 +1,78 @@
+{
+  "result": "passed",
+  "report": [
+    {
+      "id": "narration",
+      "plate": "",
+      "arrow": null,
+      "dialogue": "面试。原本录用的人嫌工资低，没来。",
+      "bg": "rgba(249, 248, 241, 0.8)",
+      "box": {
+        "x": 20.453125,
+        "y": 404.0625,
+        "w": 941.078125,
+        "h": 138.09375,
+        "bottomGap": 10.21875,
+        "rightGap": 20.46875
+      },
+      "stage": {
+        "w": 982,
+        "h": 552.375
+      },
+      "buttons": [
+        "继续"
+      ],
+      "caretOpacity": "1",
+      "speakerVisible": false
+    },
+    {
+      "id": "colleague",
+      "plate": "同事",
+      "arrow": "colleague-b2",
+      "dialogue": "你是来面试的吧？别在这儿站着，老板在右边茶桌等你。",
+      "bg": "rgba(249, 248, 241, 0.8)",
+      "box": {
+        "x": 20.453125,
+        "y": 404.0625,
+        "w": 941.078125,
+        "h": 138.09375,
+        "bottomGap": 10.21875,
+        "rightGap": 20.46875
+      },
+      "stage": {
+        "w": 982,
+        "h": 552.375
+      },
+      "buttons": [
+        "继续"
+      ],
+      "caretOpacity": "1",
+      "speakerVisible": false
+    },
+    {
+      "id": "boss",
+      "plate": "老板",
+      "arrow": "boss",
+      "dialogue": "你能力不行，来了也干不了活。",
+      "bg": "rgba(249, 248, 241, 0.8)",
+      "box": {
+        "x": 20.453125,
+        "y": 386.9375,
+        "w": 941.078125,
+        "h": 155.21875,
+        "bottomGap": 10.21875,
+        "rightGap": 20.46875
+      },
+      "stage": {
+        "w": 982,
+        "h": 552.375
+      },
+      "buttons": [
+        "我不要工资，让我来试试就行。",
+        "继续"
+      ],
+      "caretOpacity": "1",
+      "speakerVisible": false
+    }
+  ]
+}

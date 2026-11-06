@@ -115,7 +115,7 @@ const SNAP = `(() => {
   const pause = document.querySelector('#pause-menu');
   const convo = document.querySelector('#conversation');
   const root = pause.open ? pause : dialog.open ? dialog : convo.hidden ? null : convo;
-  const buttons = root ? [...root.querySelectorAll('.choices button')].map(button => ({text: button.textContent, focused: document.activeElement === button})) : [];
+  const buttons = root ? [...root.querySelectorAll('.choices button')].map(button => ({text: button.textContent || button.getAttribute('aria-label') || '', id: button.id, caret: button.classList.contains('continue-caret'), focused: document.activeElement === button})) : [];
   return {position: s.position, state: s.state, active: s.active, chapter: s.chapter.state, skills: s.chapter.skills || null, focus: document.activeElement && (document.activeElement.id || document.activeElement.textContent || ''), speaker: document.querySelector('#speaker')?.textContent || '', dialogue: document.querySelector('#dialogue')?.textContent || '', hidden: convo.hidden, buttons, title: document.querySelector('#game-title')?.textContent || ''};
 })()`;
 
@@ -237,7 +237,21 @@ async function press(session, labelText) {
 async function dismiss(session) {
   const view = await snap(session);
   if (view.hidden && view.state === 'explore') return view;
-  const labelText = view.buttons.some(button => button.text === '继续探索') ? '继续探索' : '返回';
+  if (view.buttons.some(button => button.caret || button.id === 'close-dialogue')) {
+    for (let i = 0; i < 8; i++) {
+      const cur = await snap(session);
+      const focused = cur.buttons.find(button => button.focused);
+      if (focused && (focused.caret || focused.id === 'close-dialogue')) break;
+      await session.send('Input.dispatchKeyEvent', {type: 'keyDown', key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39});
+      await session.send('Input.dispatchKeyEvent', {type: 'keyUp', key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39});
+      await sleep(40);
+    }
+    await session.send('Input.dispatchKeyEvent', {type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, text: '\r', unmodifiedText: '\r'});
+    await session.send('Input.dispatchKeyEvent', {type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13});
+    await sleep(80);
+    return snap(session);
+  }
+  const labelText = view.buttons.some(button => button.text === '返回') ? '返回' : '继续';
   await press(session, labelText);
   return snap(session);
 }

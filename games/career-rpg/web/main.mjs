@@ -139,8 +139,15 @@ function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeake
     if(choice.event)button.dataset.event=choice.event;if(choice.id)button.dataset.action=choice.id;
     // Key down/up isolation handles keyboard confirmation; a pointer double click still needs the short guard.
     button.addEventListener('click',event=>{if((event.detail>0&&performance.now()<choicesReady)||button.disabled||button.getAttribute('aria-disabled')==='true')return;choice.run();});container.append(button);}
-  if(canDismiss){const button=document.createElement('button');button.type='button';button.textContent=dialogueBack?'返回':'继续探索';button.id='close-dialogue';button.addEventListener('click',event=>{if(event.detail===0||performance.now()>=choicesReady)closeConversation();});container.append(button);}
+  if(canDismiss){
+    const button=document.createElement('button');button.type='button';button.id='close-dialogue';
+    if(system)button.textContent=dialogueBack?'返回':'继续';
+    else{button.className='continue-caret';button.setAttribute('aria-label',dialogueBack?'返回':'继续');}
+    button.addEventListener('click',event=>{if(event.detail===0||performance.now()>=choicesReady)closeConversation();});
+    container.append(button);
+  }
   choicesReady=performance.now()+180;
+  if(options.spoken)conversation.dataset.spoken='1';else delete conversation.dataset.spoken;
   if(system&&!systemDialog.open)systemDialog.showModal();
   renderSkillSlots(options.slots||null);
   repaintNarrow();
@@ -239,7 +246,7 @@ function accept(event){
 function presentDialog(transition){
   dialogueSpeaker=sceneConfig.eventSpeakers?.[transition.event]||'player';
   const run=sceneConfig.transitionLines?.[transition.event]?()=>beginTransition(transition.event):()=>accept(transition.event);
-  show(eventTitle(transition.event)||transition.label,lines([transition.dialogue]),[{label:transition.label,event:transition.event,run}],false,dialogueSpeaker);
+  show(eventTitle(transition.event)||transition.label,lines([transition.dialogue]),[{label:transition.label,event:transition.event,run}],false,dialogueSpeaker,false,{spoken:true});
 }
 function applyBeat(beat){
   roomImage=beat.map==='night'?nightImage:dayImage;
@@ -256,7 +263,7 @@ function showNarrationBar(text){
   const body=document.querySelector('#dialogue');body.replaceChildren();
   const paragraph=document.createElement('p');paragraph.dataset.narrow=text;paragraph.textContent=text;body.append(paragraph);
   document.querySelector('#choices').replaceChildren();
-  dismissible=false;repaintNarrow();placeBubble();
+  dismissible=false;delete conversation.dataset.spoken;repaintNarrow();placeBubble();
 }
 function settleExplore(){
   hideObjectCard();conversation.hidden=true;speakerArrow.hidden=true;dialogueObject=null;selectedTargetID='';
@@ -297,7 +304,7 @@ function confirmPage(transition,linkParent=true){
   const parent=linkParent?capturePage():null;
   dialogueSpeaker=sceneConfig.eventSpeakers?.[transition.event]||'player';
   const run=()=>sceneConfig.transitionLines?.[transition.event]?beginTransition(transition.event):accept(transition.event);
-  show(eventTitle(transition.event)||transition.label,lines(pageLines[transition.event]||[transition.dialogue]),[{label:transition.label,event:transition.event,run}],true,dialogueSpeaker,false,{back:parent?()=>restorePage(parent):null});
+  show(eventTitle(transition.event)||transition.label,lines(pageLines[transition.event]||[transition.dialogue]),[{label:transition.label,event:transition.event,run}],true,dialogueSpeaker,false,{back:parent?()=>restorePage(parent):null,spoken:true});
 }
 function manual(){
   dialogueSpeaker='player';
@@ -612,15 +619,21 @@ function screenPoint(actor,head=true){
   return {x:p.x/sceneConfig.width*stage.clientWidth,y:gy/sceneConfig.height*stage.clientHeight};
 }
 function placeBubble(){
-  if(conversation.hidden){speakerArrow.hidden=true;return;}
+  conversation.style.left='';conversation.style.right='';conversation.style.top='';conversation.style.bottom='';conversation.style.width='';
+  const plate=document.querySelector('#nameplate');
+  if(conversation.hidden){speakerArrow.hidden=true;if(plate)plate.hidden=true;return;}
   const actor=sceneConfig.actors.find(item=>item.id===currentSpeaker)||null;
   const narrating=!actor||currentSpeaker==='narrator';
   conversation.classList.add('docked');
   conversation.classList.toggle('narration',narrating);
   conversation.classList.remove('below');
   conversation.dataset.actor=narrating?'':actor.id;
-  conversation.style.left='0';conversation.style.right='0';conversation.style.top='auto';conversation.style.bottom='0';conversation.style.width='100%';
-  if(narrating){speakerArrow.hidden=true;delete speakerArrow.dataset.actor;return;}
+  const heading=document.querySelector('#speaker').textContent;
+  const spoken=conversation.dataset.spoken==='1';
+  const showPlate=!!actor&&!narrating&&(actor.id!=='player'||heading===actor.name||spoken);
+  if(plate){plate.textContent=showPlate?actor.name:'';plate.hidden=!showPlate;}
+  document.querySelector('#dialogue')?.setAttribute('aria-labelledby',showPlate?'nameplate':'speaker');
+  if(!showPlate){speakerArrow.hidden=true;delete speakerArrow.dataset.actor;return;}
   const point=screenPoint(actor);
   speakerArrow.hidden=false;speakerArrow.dataset.actor=actor.id;
   speakerArrow.style.left=`${point.x}px`;speakerArrow.style.top=`${point.y-18}px`;
