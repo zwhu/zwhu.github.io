@@ -70,6 +70,7 @@ export function createChapter(data){
     try{storage.setItem(key,JSON.stringify(snapshot));return true;}catch{return false;}
   }
   const text=id=>{const line=data.dialogues.find(d=>d.id===id);return line?(line.playerText??line.text):'';};
+  const nameplate=id=>{const line=data.dialogues.find(d=>d.id===id);return line&&typeof line.nameplate==='string'?line.nameplate:'';};
   const manualId=data.manualDialogue||'learning-manual-1';
   const has=(snapshot,flag)=>snapshot.flags.includes(flag);
   function target(snapshot){
@@ -89,5 +90,5 @@ export function createChapter(data){
     const targets=data.roleTargets?.[object];
     return targets?available.filter(t=>targets.includes(t.target)):[];
   }
-  return {key,initial,valid,advance,collect,inspect,save,text,target,actions,has,manualId,skillSlots,journey:data.journey||null};
+  return {key,initial,valid,advance,collect,inspect,save,text,nameplate,target,actions,has,manualId,skillSlots,journey:data.journey||null};
 }

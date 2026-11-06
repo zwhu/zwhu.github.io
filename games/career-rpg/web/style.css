@@ -28,6 +28,7 @@ html.cinematic #stage{width:var(--cinematic-size);height:var(--cinematic-size);a
 .speech-bubble.docked::after{display:none}
 .speech-bubble.docked #nameplate{position:absolute;z-index:4;left:calc(9 * var(--u));top:calc(2 * var(--u));transform:translateY(-100%);margin:0;padding:calc(1 * var(--u)) calc(6 * var(--u)) calc(2 * var(--u));background:#fff;color:#282622;border:calc(1 * var(--u)) solid #282622;font:600 calc(11 * var(--u))/1.15 "Noto Sans CJK SC","Noto Sans SC","Source Han Sans SC","PingFang SC","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;letter-spacing:0}
 .speech-bubble.docked #nameplate[hidden],.speech-bubble.narration #nameplate{display:none}
+.speech-bubble.docked.scene-title #nameplate:not([hidden]){display:block}
 .speech-bubble.docked #speaker{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0}
 .speech-bubble.docked #portrait{display:none}
 .speech-bubble.docked #dialogue-content{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;gap:calc(4 * var(--u));padding:calc(10 * var(--u)) calc(16 * var(--u)) calc(12 * var(--u)) calc(10 * var(--u));grid-template-columns:none;grid-template-rows:none;overflow:hidden}

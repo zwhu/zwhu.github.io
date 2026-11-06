@@ -156,7 +156,7 @@
     }
   ],
   "dialogues": [
-    {"id": "interview-narrator", "state": "interview", "speaker": "narrator", "basis": "fact_paraphrase", "text": "面试。原本录用的人嫌工资低，没来。"},
+    {"id": "interview-narrator", "state": "interview", "speaker": "narrator", "basis": "fact_paraphrase", "nameplate": "面试", "text": "原本录用的人嫌工资低，没来。"},
     {"id": "interview-boss-1", "state": "interview", "speaker": "boss", "basis": "fact", "text": "你能力不行，来了也干不了活。"},
     {"id": "interview-player", "state": "interview", "speaker": "player", "basis": "fact", "text": "我不要工资，让我来试试就行。"},
     {"id": "interview-boss-2", "state": "interview", "speaker": "boss", "basis": "fact", "text": "行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。"},

@@ -1,5 +1,9 @@
 # 《像素前端》交接
 
+## 当前恢复点（2026-11-06，合肥面试开场名牌）
+
+合肥开场 `interview-narrator` 仍是旁白。名牌写「面试」，正文是「原本录用的人嫌工资低，没来。」没有头像、红箭头和「旁白」标签。其他对白和米色窗没改。证据在 `web/review/hefei-interview-nameplate/`。
+
 ## 当前恢复点（2026-11-06，主角六帧走路）
 
 三章主角改走 `web/art/player-walk-v2-sheet.png`（7 列 × 4 行，单格 28×44）。列是 idle、walk-01…walk-06，行是 down、up、left、right。站立只显示 idle。走路按 walk-01 到 walk-06 循环，不插入 idle。右向是单独画的，不是左向镜像。源文件在 `art/player-walk-v2/`，运行图与源图集字节相同。
