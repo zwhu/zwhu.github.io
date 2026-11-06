@@ -65,9 +65,9 @@ const SNAP = `(() => {
   const journey = document.querySelector('#journey-map');
   const root = pause.open ? pause : dialog.open ? dialog : journey && !journey.hidden ? journey : convo.hidden ? null : convo;
   const buttons = root ? [...root.querySelectorAll('.choices button, #journey-choices button')].map(button => ({text: button.textContent, focused: document.activeElement === button})) : [];
-  const slots = [...document.querySelectorAll('#skill-slots figure')].map(figure => figure.innerText.replace(/\\s+/g, ' ').trim());
+  const slots = [...document.querySelectorAll('#skill-slots figure')].map(figure => figure.textContent.replace(/\\s+/g, ' ').trim());
   const images = [...document.querySelectorAll('#skill-slots img, #skill-award-icon')].map(img => img.currentSrc || img.src);
-  return {position: s.position, state: s.state, active: s.active, chapter: s.chapter.state, skills: s.chapter.skills || null, flags: s.chapter.flags, speaker: document.querySelector('#speaker')?.textContent || '', dialogue: document.querySelector('#dialogue')?.innerText || '', hidden: convo.hidden, journey: journey ? !journey.hidden : false, slogan: document.querySelector('#journey-slogan')?.textContent || '', title: document.querySelector('#game-title')?.textContent || '', buttons, slots, images, focus: document.activeElement && (document.activeElement.id || document.activeElement.textContent)};
+  return {position: s.position, state: s.state, active: s.active, chapter: s.chapter.state, skills: s.chapter.skills || null, flags: s.chapter.flags, speaker: document.querySelector('#speaker')?.textContent || '', dialogue: document.querySelector('#dialogue')?.textContent || '', hidden: convo.hidden, journey: journey ? !journey.hidden : false, slogan: document.querySelector('#journey-slogan')?.textContent || '', title: document.querySelector('#game-title')?.textContent || '', buttons, slots, images, focus: document.activeElement && (document.activeElement.id || document.activeElement.textContent)};
 })()`;
 async function snap() {
   const started = Date.now();
@@ -110,7 +110,7 @@ async function waitText(part) {
   let last = null;
   while (Date.now() - started < 8000) {
     last = await snap();
-    const blob = `${last.title}\n${last.dialogue}\n${last.slogan}\n${last.speaker}`;
+    const blob = `${last.title}\n${last.dialogue}\n${last.slogan}\n${last.speaker}\n${(last.slots || []).join('\n')}`;
     if (blob.includes(part) || last.buttons.some(button => button.text.includes(part))) return last;
     await sleep(80);
   }

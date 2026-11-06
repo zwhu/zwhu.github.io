@@ -3,6 +3,7 @@ import {createChapter} from './story.mjs';
 import {OFFICE,HEFEI,HANGZHOU,actionsFor,pendingMarkers,expressionFor,sceneTarget,presentCast,transitionBeat,transitionFinished} from './scene-config.mjs';
 import {createActor,atlasBounds,bubblePosition,seatedFrame,motionForRender,walkClock} from './actors.mjs';
 import {GAME_TITLE} from './title.mjs';
+import {wrapNarrow} from './narrow-wrap.mjs';
 const chapterKey=new URLSearchParams(location.search).get('chapter');
 const sceneConfig=chapterKey==='hangzhou'?HANGZHOU:chapterKey==='hefei'?HEFEI:OFFICE;
 document.title=GAME_TITLE;
@@ -114,7 +115,7 @@ function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeake
   setState('dialogue');dismissible=canDismiss;
   document.querySelector('#speaker').textContent=title;
   const body=document.querySelector('#dialogue');body.replaceChildren();
-  for(const text of paragraphs){const p=document.createElement('p');p.textContent=text;body.append(p);}
+  for(const text of paragraphs){const p=document.createElement('p');p.dataset.narrow=text;p.textContent=text;body.append(p);}
   const container=document.querySelector('#choices');container.replaceChildren();
   for(const choice of choices){const button=document.createElement('button');button.type='button';button.textContent=choice.label;
     button.disabled=choice.disabled===true;
@@ -126,8 +127,36 @@ function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeake
   if(system&&!systemDialog.open)systemDialog.showModal();
   drawPortrait(document.querySelector('#portrait'),currentSpeaker);
   renderSkillSlots(options.slots||null);
+  repaintNarrow();
   placeBubble();enabledOptions()[0]?.focus();updateUI();
 }
+let measureCanvas;
+function measureSlot(text,font){
+  if(!measureCanvas)measureCanvas=document.createElement('canvas');
+  const pen=measureCanvas.getContext('2d');
+  pen.imageSmoothingEnabled=false;
+  pen.font=font;
+  return Math.ceil(pen.measureText(text||' ').width);
+}
+function paintNarrow(el,text){
+  if(!el)return;
+  el.dataset.narrow=text;
+  const style=getComputedStyle(el);
+  const slot=el.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);
+  if(!(slot>0)){if(!el.querySelector('.narrow-line'))el.textContent=text;return;}
+  const font=style.font;
+  if(measureSlot(text,font)<=slot+1){el.textContent=text;return;}
+  const lines=wrapNarrow(text,slot,sample=>measureSlot(sample,font));
+  if(lines.length<=1||lines.join('')!==text){el.textContent=text;return;}
+  // Plain text plus breaks. No extra spans: a nowrap span changes how fullwidth punctuation sits.
+  el.replaceChildren();
+  for(let i=0;i<lines.length;i++){
+    el.append(document.createTextNode(lines[i]));
+    if(i<lines.length-1)el.append(document.createElement('br'));
+  }
+}
+function repaintNarrow(){for(const el of document.querySelectorAll('[data-narrow]'))paintNarrow(el,el.dataset.narrow);}
+window.addEventListener('resize',repaintNarrow);
 function skillVisual(skill){return skill?.icon||sceneConfig.objects.find(item=>item.role===skill?.role)?.icon||'';}
 function placeSkillIcon(parent,src,alt){
   if(!src)return;
@@ -137,13 +166,16 @@ function placeSkillIcon(parent,src,alt){
 }
 function renderSkillSlots(slots){
   let row=document.querySelector('#skill-slots');
+  const host=document.querySelector('#dialogue-content');
   if(!slots){if(row)row.hidden=true;return;}
-  if(!row){row=document.createElement('div');row.id='skill-slots';document.querySelector('#dialogue').append(row);}
+  if(!row){row=document.createElement('div');row.id='skill-slots';host.append(row);}
+  else if(row.parentElement!==host)host.append(row);
   row.hidden=false;row.replaceChildren();row.style.gridTemplateColumns=`repeat(${slots.length},minmax(0,1fr))`;
   for(const skill of slots){
     const figure=document.createElement('figure'),caption=document.createElement('figcaption');
-    if(skill.status==='got'){placeSkillIcon(figure,skillVisual(skill),skill.name);caption.textContent=skill.name;}
-    else caption.textContent='???';
+    const label=skill.status==='got'?skill.name:'???';
+    if(skill.status==='got')placeSkillIcon(figure,skillVisual(skill),skill.name);
+    caption.dataset.narrow=label;caption.textContent=label;
     figure.append(caption);row.append(figure);
   }
 }
@@ -403,7 +435,8 @@ function journeyButton(label,id,run){
 function showJourneyChoices(){
   const copy=document.querySelector('#journey-copy'),choices=document.querySelector('#journey-choices');
   const stops=(journeyMode==='bridge'?journeyPackStops.filter(stop=>!stop.skill):journeyPackStops);
-  copy.hidden=false;copy.textContent=stops.map(stop=>stop.text).join('');
+  const journeyText=stops.map(stop=>stop.text).join('');
+  copy.hidden=false;paintNarrow(copy,journeyText);
   choices.replaceChildren();
   if(journeyMode==='bridge')choices.append(journeyButton('走到南京','journey-arrive',closeJourney));
   else if(journeyMode==='to-hangzhou')choices.append(journeyButton('走到杭州','journey-arrive',closeJourney));

@@ -22,7 +22,7 @@ def checks():
         ('SEO metadata', [python, 'scripts/update-seo.py', '--check']),
         ('SEO contracts', [python, 'scripts/test-seo.py']),
         ('Comment behavior', ['node', '--test', 'tests/comments.test.cjs']),
-        ('Career RPG chapter rules', ['node', '--test', 'games/career-rpg/web/tests/world.test.mjs', 'games/career-rpg/web/tests/story.test.mjs', 'games/career-rpg/web/tests/scene.test.mjs', 'games/career-rpg/web/tests/hefei.test.mjs', 'games/career-rpg/web/tests/nanjing-skills.test.mjs', 'games/career-rpg/web/tests/hefei-skills.test.mjs', 'games/career-rpg/web/tests/hangzhou-skills.test.mjs']),
+        ('Career RPG chapter rules', ['node', '--test', 'games/career-rpg/web/tests/world.test.mjs', 'games/career-rpg/web/tests/story.test.mjs', 'games/career-rpg/web/tests/scene.test.mjs', 'games/career-rpg/web/tests/hefei.test.mjs', 'games/career-rpg/web/tests/nanjing-skills.test.mjs', 'games/career-rpg/web/tests/hefei-skills.test.mjs', 'games/career-rpg/web/tests/hangzhou-skills.test.mjs', 'games/career-rpg/web/tests/narrow-wrap.test.mjs']),
         ('Verify runner tests', [python, 'scripts/test-verify.py']),
     ]
 

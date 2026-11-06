@@ -65,8 +65,8 @@ const SNAP = `(() => {
   const journey = document.querySelector('#journey-map');
   const root = pause.open ? pause : dialog.open ? dialog : !journey.hidden ? journey : convo.hidden ? null : convo;
   const buttons = root ? [...root.querySelectorAll('.choices button, #journey-choices button')].map(button => ({text: button.textContent, focused: document.activeElement === button})) : [];
-  const slots = [...document.querySelectorAll('#skill-slots figure')].map(figure => figure.innerText.replace(/\\s+/g, ' ').trim());
-  return {position: s.position, state: s.state, active: s.active, chapter: s.chapter.state, skills: s.chapter.skills || null, speaker: document.querySelector('#speaker')?.textContent || '', dialogue: document.querySelector('#dialogue')?.innerText || '', hidden: convo.hidden, journey: !journey.hidden, slogan: document.querySelector('#journey-slogan')?.textContent || '', title: document.querySelector('#game-title')?.textContent || '', buttons, slots, copy: document.querySelector('#journey-copy')?.innerText || ''};
+  const slots = [...document.querySelectorAll('#skill-slots figure')].map(figure => figure.textContent.replace(/\\s+/g, ' ').trim());
+  return {position: s.position, state: s.state, active: s.active, chapter: s.chapter.state, skills: s.chapter.skills || null, speaker: document.querySelector('#speaker')?.textContent || '', dialogue: document.querySelector('#dialogue')?.textContent || '', hidden: convo.hidden, journey: !journey.hidden, slogan: document.querySelector('#journey-slogan')?.textContent || '', title: document.querySelector('#game-title')?.textContent || '', buttons, slots, copy: document.querySelector('#journey-copy')?.textContent || ''};
 })()`;
 async function snap() {
   const started = Date.now();
@@ -109,7 +109,7 @@ async function waitText(part) {
   let last = null;
   while (Date.now() - started < 8000) {
     last = await snap();
-    const blob = `${last.title}\n${last.dialogue}\n${last.slogan}\n${last.copy}\n${last.speaker}`;
+    const blob = `${last.title}\n${last.dialogue}\n${last.slogan}\n${last.copy}\n${last.speaker}\n${(last.slots || []).join('\n')}`;
     if (blob.includes(part) || last.buttons.some(button => button.text.includes(part))) return last;
     await sleep(80);
   }
