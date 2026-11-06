@@ -350,41 +350,44 @@ async function oneRun(index) {
     for (const point of [{x: 270, y: 196}, {x: 270, y: 128}, {x: 310, y: 128}]) await walkTo(session, point.x, point.y);
     await focusObject(session, 'boss');
     gestures.push(await gesture(session, 'e', 30, 'dialogue-e'));
-    await waitText(session, '听老板说');
-    await press(session, '听老板说');
     await waitText(session, '你能力不行');
     await press(session, '我不要工资');
     await waitText(session, '我不要工资，让我来试试就行');
-    await dismiss(session);
-    await focusObject(session, 'boss');
-    await session.send('Input.dispatchKeyEvent', {type: 'keyDown', key: 'e', code: 'KeyE', windowsVirtualKeyCode: 69, text: 'e', unmodifiedText: 'e'});
-    await session.send('Input.dispatchKeyEvent', {type: 'keyUp', key: 'e', code: 'KeyE', windowsVirtualKeyCode: 69});
-    await sleep(80);
-    await press(session, '继续听');
+    await press(session, '继续');
     await waitText(session, '行，那你想试试我也不拦你');
     await press(session, '继续');
-    await waitText(session, '第一次用 Linux');
-    await dismiss(session);
+    await waitText(session, '就这样留下了');
+    const left = Date.now();
+    while (Date.now() - left < 8000) {
+      const view = await snap(session);
+      if (view.state === 'explore' && view.hidden) break;
+      await sleep(40);
+    }
     for (const point of [{x: 270, y: 128}, {x: 270, y: 192}, {x: 75, y: 192}]) await walkTo(session, point.x, point.y);
     await focusObject(session, 'my-pc');
     await session.send('Input.dispatchKeyEvent', {type: 'keyDown', key: 'e', code: 'KeyE', windowsVirtualKeyCode: 69, text: 'e', unmodifiedText: 'e'});
     await session.send('Input.dispatchKeyEvent', {type: 'keyUp', key: 'e', code: 'KeyE', windowsVirtualKeyCode: 69});
     await sleep(80);
-    await press(session, '接任务');
     await waitText(session, '我在自己的工位坐下');
     await press(session, '接任务');
-    await waitText(session, '白天');
-    await dismiss(session);
-    await walkTo(session, 147, 192);
+    const tasked = Date.now();
+    while (Date.now() - tasked < 8000) {
+      const view = await snap(session);
+      if (view.state === 'explore' && view.hidden) break;
+      await sleep(40);
+    }
     await focusObject(session, 'linux-screen');
     await session.send('Input.dispatchKeyEvent', {type: 'keyDown', key: 'e', code: 'KeyE', windowsVirtualKeyCode: 69, text: 'e', unmodifiedText: 'e'});
     await session.send('Input.dispatchKeyEvent', {type: 'keyUp', key: 'e', code: 'KeyE', windowsVirtualKeyCode: 69});
     await sleep(80);
+    await waitText(session, '第一次用 Linux');
     await press(session, '记下来');
-    await waitText(session, '这一屏是 Linux');
-    await press(session, '记下来');
-    await waitText(session, '白天 1/2');
-    await dismiss(session);
+    const learned = Date.now();
+    while (Date.now() - learned < 8000) {
+      const view = await snap(session);
+      if (view.state === 'explore' && view.hidden) break;
+      await sleep(40);
+    }
     const ready = await snap(session);
     if (ready.skills?.linux !== 'ready') throw new Error('linux not ready ' + JSON.stringify(ready.skills));
     await focusObject(session, 'linux-screen');

@@ -1,0 +1,687 @@
+{
+  "result": "passed",
+  "browser": "Chrome headless 1400x1100 software WebGL",
+  "url": "/games/career-rpg/web/?chapter=hefei",
+  "noReviewButton": true,
+  "dialogueDockedToBottom": true,
+  "targets": {
+    "objects": {
+      "my-pc": {
+        "x": 75,
+        "y": 192,
+        "role": "my_pc",
+        "iconAt": null
+      },
+      "linux-screen": {
+        "x": 75,
+        "y": 192,
+        "role": "linux_screen",
+        "iconAt": {
+          "x": 75,
+          "y": 130
+        }
+      },
+      "jquery-book": {
+        "x": 24,
+        "y": 90,
+        "role": "jquery_book",
+        "iconAt": {
+          "x": 20,
+          "y": 46
+        }
+      },
+      "java-book": {
+        "x": 75,
+        "y": 192,
+        "role": "java_book",
+        "iconAt": {
+          "x": 62,
+          "y": 128
+        }
+      },
+      "db-screen": {
+        "x": 84,
+        "y": 192,
+        "role": "db_screen",
+        "iconAt": {
+          "x": 90,
+          "y": 130
+        }
+      },
+      "manual": {
+        "x": 24,
+        "y": 90,
+        "role": "manual",
+        "iconAt": null
+      }
+    },
+    "actors": {
+      "boss": {
+        "x": 310,
+        "y": 128
+      },
+      "colleague-b2": {
+        "x": 147,
+        "y": 192
+      },
+      "colleague-b3": {
+        "x": 215,
+        "y": 192
+      }
+    }
+  },
+  "steps": [
+    {
+      "id": "interview-narration",
+      "file": "01-interview-narration.png",
+      "dialogue": "面试。原本录用的人嫌工资低，没来。",
+      "speaker": "旁白",
+      "task": "面试：从门口走到老板桌前",
+      "buttons": [
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": true,
+      "arrowVisible": false,
+      "arrowActor": "",
+      "state": "dialogue",
+      "chapter": "interview",
+      "position": {
+        "x": 190,
+        "y": 196
+      },
+      "active": null,
+      "flags": []
+    },
+    {
+      "id": "colleague-near-interview",
+      "file": "02-colleague-near-interview.png",
+      "dialogue": "你是来面试的吧？别在这儿站着，老板在右边茶桌等你。",
+      "speaker": "同事",
+      "task": "面试：从门口走到老板桌前",
+      "buttons": [
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "colleague-b2",
+      "state": "dialogue",
+      "chapter": "interview",
+      "position": {
+        "x": 148,
+        "y": 196
+      },
+      "active": null,
+      "flags": []
+    },
+    {
+      "id": "colleague-far-interview",
+      "file": "03-colleague-far-interview.png",
+      "dialogue": "招人的事别问我，找老板。他在茶桌那边坐着。",
+      "speaker": "同事",
+      "task": "面试：从门口走到老板桌前",
+      "buttons": [
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "colleague-b3",
+      "state": "dialogue",
+      "chapter": "interview",
+      "position": {
+        "x": 214,
+        "y": 196
+      },
+      "active": null,
+      "flags": []
+    },
+    {
+      "id": "shelf-interview",
+      "file": "04-shelf-interview.png",
+      "dialogue": "现在先去找老板面试。",
+      "speaker": "旁白",
+      "task": "面试：从门口走到老板桌前",
+      "buttons": [
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": true,
+      "arrowVisible": false,
+      "arrowActor": "",
+      "state": "dialogue",
+      "chapter": "interview",
+      "position": {
+        "x": 27,
+        "y": 93
+      },
+      "active": null,
+      "flags": []
+    },
+    {
+      "id": "boss-line",
+      "file": "05-boss-line.png",
+      "dialogue": "你能力不行，来了也干不了活。",
+      "speaker": "听老板说",
+      "task": "面试：从门口走到老板桌前",
+      "buttons": [
+        "我不要工资，让我来试试就行。",
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "boss",
+      "state": "dialogue",
+      "chapter": "interview",
+      "position": {
+        "x": 303,
+        "y": 130
+      },
+      "active": null,
+      "flags": []
+    },
+    {
+      "id": "player-line",
+      "file": "06-player-line.png",
+      "dialogue": "我不要工资，让我来试试就行。",
+      "speaker": "我",
+      "task": "面试：从门口走到老板桌前",
+      "buttons": [
+        "继续",
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "player",
+      "state": "dialogue",
+      "chapter": "interview",
+      "position": {
+        "x": 303,
+        "y": 130
+      },
+      "active": null,
+      "flags": [
+        "asked"
+      ]
+    },
+    {
+      "id": "boss-reply",
+      "file": "07-boss-reply.png",
+      "dialogue": "行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。",
+      "speaker": "继续听",
+      "task": "面试：从门口走到老板桌前",
+      "buttons": [
+        "继续",
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "boss",
+      "state": "dialogue",
+      "chapter": "interview",
+      "position": {
+        "x": 303,
+        "y": 130
+      },
+      "active": null,
+      "flags": [
+        "asked"
+      ]
+    },
+    {
+      "id": "stayed",
+      "file": "08-stayed.png",
+      "dialogue": "就这样留下了。",
+      "speaker": "旁白",
+      "task": "白天：去自己的工位开始干活",
+      "buttons": [],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": true,
+      "arrowVisible": false,
+      "arrowActor": "",
+      "state": "transition",
+      "chapter": "day_tasks",
+      "position": {
+        "x": 303,
+        "y": 130
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial"
+      ]
+    },
+    {
+      "id": "day-taskbar",
+      "file": "09-day-taskbar.png",
+      "dialogue": "",
+      "speaker": "",
+      "task": "白天：去自己的工位开始干活",
+      "buttons": [],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": false,
+      "docked": true,
+      "narration": true,
+      "arrowVisible": false,
+      "arrowActor": "",
+      "state": "explore",
+      "chapter": "day_tasks",
+      "position": {
+        "x": 303,
+        "y": 130
+      },
+      "active": "boss",
+      "flags": [
+        "asked",
+        "hired_trial"
+      ]
+    },
+    {
+      "id": "colleague-near-day",
+      "file": "10-colleague-near-day.png",
+      "dialogue": "好饿啊，搞完这点要不去吃面？",
+      "speaker": "同事",
+      "task": "白天：去自己的工位开始干活",
+      "buttons": [
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "colleague-b2",
+      "state": "dialogue",
+      "chapter": "day_tasks",
+      "position": {
+        "x": 152,
+        "y": 190
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial"
+      ]
+    },
+    {
+      "id": "colleague-far-day",
+      "file": "11-colleague-far-day.png",
+      "dialogue": "没事，熬过星期三就是星期五。",
+      "speaker": "同事",
+      "task": "白天：去自己的工位开始干活",
+      "buttons": [
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "colleague-b3",
+      "state": "dialogue",
+      "chapter": "day_tasks",
+      "position": {
+        "x": 212,
+        "y": 190
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial"
+      ]
+    },
+    {
+      "id": "take-task",
+      "file": "12-take-task.png",
+      "dialogue": "我在自己的工位坐下，接过电脑上的任务。",
+      "speaker": "接任务",
+      "task": "白天：去自己的工位开始干活",
+      "buttons": [
+        "接任务",
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "player",
+      "state": "dialogue",
+      "chapter": "day_tasks",
+      "position": {
+        "x": 80,
+        "y": 190
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial"
+      ]
+    },
+    {
+      "id": "linux",
+      "file": "13-linux.png",
+      "dialogue": "第一次用 Linux 开发机，第一次用 Git。不会的就 Google。",
+      "speaker": "记下来",
+      "task": "白天 0/2 · 自己的电脑学 Linux／Git，左边书架拿《锋利的 jQuery》",
+      "buttons": [
+        "记下来",
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "player",
+      "state": "dialogue",
+      "chapter": "day_tasks",
+      "position": {
+        "x": 80,
+        "y": 190
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial",
+        "day_task_taken"
+      ]
+    },
+    {
+      "id": "jquery-found",
+      "file": "14-jquery-found.png",
+      "dialogue": "书架上夹着一本《锋利的 jQuery》。",
+      "speaker": "旁白",
+      "task": "白天 1/2 · 自己的电脑学 Linux／Git，左边书架拿《锋利的 jQuery》",
+      "buttons": [
+        "拿下来",
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": true,
+      "arrowVisible": false,
+      "arrowActor": "",
+      "state": "dialogue",
+      "chapter": "day_tasks",
+      "position": {
+        "x": 31,
+        "y": 93
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial",
+        "day_task_taken",
+        "linux_git_reviewed"
+      ]
+    },
+    {
+      "id": "jquery-learn",
+      "file": "15-jquery-learn.png",
+      "dialogue": "第一次写前端，手边是《锋利的 jQuery》。还第一次写了 E2E 测试。",
+      "speaker": "记下来",
+      "task": "白天 1/2 · 自己的电脑学 Linux／Git，左边书架拿《锋利的 jQuery》",
+      "buttons": [
+        "记下来",
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "player",
+      "state": "dialogue",
+      "chapter": "day_tasks",
+      "position": {
+        "x": 31,
+        "y": 93
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial",
+        "day_task_taken",
+        "linux_git_reviewed"
+      ]
+    },
+    {
+      "id": "night-falls",
+      "file": "16-night-falls.png",
+      "dialogue": "白天的活告一段落。天黑了，我还没走。",
+      "speaker": "旁白",
+      "task": "深夜 0/2 · 自己工位上看 Java，还有数据库和 NoSQL",
+      "buttons": [],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": true,
+      "arrowVisible": false,
+      "arrowActor": "",
+      "state": "transition",
+      "chapter": "night_study",
+      "position": {
+        "x": 31,
+        "y": 93
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial",
+        "day_task_taken",
+        "linux_git_reviewed",
+        "frontend_reviewed",
+        "day_done"
+      ]
+    },
+    {
+      "id": "java",
+      "file": "17-java.png",
+      "dialogue": "晚上对着 Java 往下啃。",
+      "speaker": "记下来",
+      "task": "深夜 0/2 · 自己工位上看 Java，还有数据库和 NoSQL",
+      "buttons": [
+        "记下来",
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "player",
+      "state": "dialogue",
+      "chapter": "night_study",
+      "position": {
+        "x": 73,
+        "y": 189
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial",
+        "day_task_taken",
+        "linux_git_reviewed",
+        "frontend_reviewed",
+        "day_done"
+      ]
+    },
+    {
+      "id": "db",
+      "file": "18-db.png",
+      "dialogue": "再学数据库和 NoSQL。",
+      "speaker": "记下来",
+      "task": "深夜 1/2 · 自己工位上看 Java，还有数据库和 NoSQL",
+      "buttons": [
+        "记下来",
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "player",
+      "state": "dialogue",
+      "chapter": "night_study",
+      "position": {
+        "x": 73,
+        "y": 189
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial",
+        "day_task_taken",
+        "linux_git_reviewed",
+        "frontend_reviewed",
+        "day_done",
+        "java_studied"
+      ]
+    },
+    {
+      "id": "days-pass",
+      "file": "19-days-pass.png",
+      "dialogue": "日夜颠倒地学新东西，拼命把活干好，争取能留下来。",
+      "speaker": "旁白",
+      "task": "走到老板桌前",
+      "buttons": [],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": true,
+      "arrowVisible": false,
+      "arrowActor": "",
+      "state": "transition",
+      "chapter": "raise",
+      "position": {
+        "x": 73,
+        "y": 189
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial",
+        "day_task_taken",
+        "linux_git_reviewed",
+        "frontend_reviewed",
+        "day_done",
+        "java_studied",
+        "db_nosql_studied",
+        "nights_done"
+      ]
+    },
+    {
+      "id": "raise-narration",
+      "file": "20-raise-narration.png",
+      "dialogue": "入职两个月，加了两次薪。",
+      "speaker": "旁白",
+      "task": "走到老板桌前",
+      "buttons": [
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": true,
+      "arrowVisible": false,
+      "arrowActor": "",
+      "state": "dialogue",
+      "chapter": "raise",
+      "position": {
+        "x": 73,
+        "y": 189
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial",
+        "day_task_taken",
+        "linux_git_reviewed",
+        "frontend_reviewed",
+        "day_done",
+        "java_studied",
+        "db_nosql_studied",
+        "nights_done"
+      ]
+    },
+    {
+      "id": "boss-raise",
+      "file": "21-boss-raise.png",
+      "dialogue": "努力工作的人一定会被看到的。",
+      "speaker": "听老板说",
+      "task": "走到老板桌前",
+      "buttons": [
+        "收起",
+        "继续探索"
+      ],
+      "reviewButton": false,
+      "pageReview": false,
+      "bottom": true,
+      "docked": true,
+      "narration": false,
+      "arrowVisible": true,
+      "arrowActor": "boss",
+      "state": "dialogue",
+      "chapter": "raise",
+      "position": {
+        "x": 307,
+        "y": 125
+      },
+      "active": null,
+      "flags": [
+        "asked",
+        "hired_trial",
+        "day_task_taken",
+        "linux_git_reviewed",
+        "frontend_reviewed",
+        "day_done",
+        "java_studied",
+        "db_nosql_studied",
+        "nights_done"
+      ]
+    }
+  ]
+}
