@@ -74,7 +74,7 @@
       "requires": [],
       "effects": ["day_task_taken"],
       "target": "my_pc",
-      "label": "接任务",
+      "label": "确定",
       "dialogue": "day-task"
     },
     {
@@ -85,7 +85,7 @@
       "requires": ["day_task_taken"],
       "effects": ["linux_git_reviewed"],
       "target": "linux_screen",
-      "label": "记下来",
+      "label": "确定",
       "dialogue": "day-linux"
     },
     {
@@ -96,7 +96,7 @@
       "requires": ["day_task_taken"],
       "effects": ["frontend_reviewed"],
       "target": "jquery_book",
-      "label": "记下来",
+      "label": "确定",
       "dialogue": "day-jquery"
     },
     {
@@ -118,7 +118,7 @@
       "requires": [],
       "effects": ["java_studied"],
       "target": "java_book",
-      "label": "记下来",
+      "label": "确定",
       "dialogue": "night-java"
     },
     {
@@ -129,7 +129,7 @@
       "requires": [],
       "effects": ["db_nosql_studied"],
       "target": "db_screen",
-      "label": "记下来",
+      "label": "确定",
       "dialogue": "night-db"
     },
     {
@@ -156,7 +156,7 @@
     }
   ],
   "dialogues": [
-    {"id": "interview-narrator", "state": "interview", "speaker": "narrator", "basis": "fact_paraphrase", "nameplate": "面试", "text": "原本录用的人嫌工资低，没来。"},
+    {"id": "interview-narrator", "state": "interview", "speaker": "narrator", "basis": "fact_paraphrase", "nameplate": "面试", "text": "原本录用的人嫌工资低，没来。我鼓起勇气，毛遂自荐。"},
     {"id": "interview-boss-1", "state": "interview", "speaker": "boss", "basis": "fact", "text": "你能力不行，来了也干不了活。"},
     {"id": "interview-player", "state": "interview", "speaker": "player", "basis": "fact", "text": "我不要工资，让我来试试就行。"},
     {"id": "interview-boss-2", "state": "interview", "speaker": "boss", "basis": "fact", "text": "行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。"},
@@ -166,10 +166,10 @@
     {"id": "colleague-far-interview", "state": "interview", "speaker": "colleague", "basis": "staging", "text": "招人的事别问我，找老板。他在茶桌那边坐着。"},
     {"id": "colleague-near-day", "state": "day_tasks", "speaker": "colleague", "basis": "staging", "text": "好饿啊，搞完这点要不去吃面？"},
     {"id": "colleague-far-day", "state": "day_tasks", "speaker": "colleague", "basis": "staging", "text": "没事，熬过星期三就是星期五。"},
-    {"id": "day-task", "state": "day_tasks", "speaker": "player", "basis": "staging", "text": "我在自己的工位坐下，接过电脑上的任务。"},
+    {"id": "day-task", "state": "day_tasks", "speaker": "player", "basis": "staging", "text": "开始今天的需求"},
     {"id": "day-linux", "state": "day_tasks", "speaker": "player", "basis": "fact_paraphrase", "text": "第一次用 Linux 开发机，第一次用 Git。不会的就 Google。"},
     {"id": "jquery-found", "state": "day_tasks", "speaker": "narrator", "basis": "staging", "text": "书架上夹着一本《锋利的 jQuery》。"},
-    {"id": "day-jquery", "state": "day_tasks", "speaker": "player", "basis": "fact_paraphrase", "text": "第一次写前端，手边是《锋利的 jQuery》。还第一次写了 E2E 测试。"},
+    {"id": "day-jquery", "state": "day_tasks", "speaker": "player", "basis": "fact_paraphrase", "text": "获得技能书「锋利的 jQuery」"},
     {"id": "night-falls", "state": "day_tasks", "speaker": "narrator", "basis": "staging", "text": "白天的活告一段落。天黑了，我还没走。"},
     {"id": "night-java", "state": "night_study", "speaker": "player", "basis": "staging", "text": "晚上对着 Java 往下啃。"},
     {"id": "night-db", "state": "night_study", "speaker": "player", "basis": "staging", "text": "再学数据库和 NoSQL。"},

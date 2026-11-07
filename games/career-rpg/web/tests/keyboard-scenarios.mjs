@@ -12,6 +12,8 @@ export async function serveSite({repository=false,delivery=null}={}){
   const server=http.createServer(async(req,res)=>{
     try{
       const requested=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
+      // Chrome asks for this implicit root resource even though the game does not.
+      if(repository&&requested==='/favicon.ico'){res.writeHead(204);res.end();return;}
       // The FALLBACK fixture mounts real development URLs, never .git or other workspaces.
       if(repository&&!['/games/career-rpg/','/docs/'].some(prefix=>requested.startsWith(prefix))){res.writeHead(403);res.end();return;}
       const file=path.resolve(base,'.'+requested+(requested.endsWith('/')?'index.html':''));

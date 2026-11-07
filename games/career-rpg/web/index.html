@@ -14,17 +14,16 @@
     <p class="script-fallback note">游戏脚本尚未启动；若已关闭 JavaScript 或脚本无法加载，可继续阅读下方经历摘要，或回到博客。恢复脚本后可刷新本页重试。</p>
     <p id="save-status" class="note" role="status"></p>
     <section class="game-shell" aria-label="南京办公室游戏">
-      <div id="stage" tabindex="0" role="application" aria-label="办公室，方向键或 WASD 移动，E 或 Enter 交互，Esc 暂停"><p id="loading" role="status">正在走进办公室…</p><div id="actor-effects" aria-hidden="true"></div><div id="task-markers" aria-hidden="true"></div><section id="conversation" class="speech-bubble" role="dialog" aria-label="角色对话" hidden><p id="nameplate" hidden></p><div id="dialogue-content"><canvas id="portrait" width="64" height="64" aria-hidden="true"></canvas><p id="speaker" class="eyebrow"></p><div id="dialogue" tabindex="0" role="region" aria-labelledby="speaker"></div><p id="reading-hint" class="reading-hint" hidden></p><div id="choices" class="choices"></div></div><span id="dialogue-caret" class="dialogue-caret" aria-hidden="true"></span></section></div>
+      <div id="stage" tabindex="0" role="application" aria-label="办公室，方向键或 WASD 移动，E 或 Enter 交互，Esc 返回"><p id="loading" role="status">正在走进办公室…</p><div id="actor-effects" aria-hidden="true"></div><div id="task-markers" aria-hidden="true"></div><section id="conversation" class="speech-bubble" role="dialog" aria-label="角色对话" hidden><p id="nameplate" hidden></p><div id="dialogue-content"><canvas id="portrait" width="64" height="64" aria-hidden="true"></canvas><p id="speaker" class="eyebrow"></p><div id="dialogue" tabindex="0" role="region" aria-labelledby="speaker"></div><p id="reading-hint" class="reading-hint" hidden></p><div id="choices" class="choices"></div></div><span id="dialogue-caret" class="dialogue-caret" aria-hidden="true"></span></section></div>
       <section id="game-failure" aria-labelledby="failure-title" hidden><h2 id="failure-title">办公室暂未打开</h2><p id="failure-message" role="status"></p><p>文字摘要仍可阅读。重试会重新加载本页，回到上次已确认的存档；未确认的操作不会保留。若仍无法打开，请继续文字阅读。</p><p class="failure-actions"><button id="retry-game" type="button">重新加载游戏</button> <a id="failure-read" href="#chapter-summary">继续文字阅读</a> <a id="failure-blog" href="../../../docs/index.html">回到博客</a></p><p class="note">Tab / Shift+Tab 选择入口 · Enter 确认</p></section>
-      <div class="hud"><p id="task" aria-live="polite">目标：走到左侧电脑前</p><div><button id="manual" type="button" disabled>手册</button> <button id="pause" type="button" disabled>暂停</button></div></div>
+      <div class="hud"><p id="task" aria-live="polite">目标：走到左侧电脑前</p><div><button id="manual" type="button" disabled>手册</button></div></div>
       <p id="interaction" class="interaction" aria-live="polite"></p>
     </section>
-    <p class="controls">探索：方向键 / WASD 移动 · E / Enter 交互 · Q 切换对象 · M 手册 · Esc 暂停<br>对话与菜单：方向键选择 · Enter / Space 确认 · Esc 返回 · Tab / Shift+Tab 切换焦点</p>
+    <p class="controls">探索：方向键 / WASD 移动 · E / Enter 交互 · Q 切换对象 · M 手册 · 状态自动保存<br>对话与菜单：方向键选择 · Enter / Space 确认 · Esc 返回 · Tab / Shift+Tab 切换焦点</p>
     <p class="note">场景与外观为游戏设定，剧情据作者回忆改写；事故根因没有被编造成技术谜题。角色支持四向移动和行走姿态。</p>
     <section id="chapter-summary" tabindex="0" aria-labelledby="summary-title"><h2 id="summary-title">这一章的经历</h2><p>在南京第一次做 C 端上线，用户在论坛反馈无法登录。故障大约两小时后恢复。CTO 带大家排查，同事过来安抚。事后补测试、写注释，把这次失败记下来。</p></section>
   </main>
   <dialog id="system-dialog" aria-label="存档或重玩确认"></dialog>
-  <dialog id="pause-menu"><h2>稍作停留</h2><p>暂停时角色不会移动，已确认的进度会保留。</p><div class="choices"><button id="resume" type="button">继续</button><button id="pause-manual" type="button">查看手册</button><button id="restart" type="button">从办公室重玩</button></div></dialog>
   <script type="module" src="./main.mjs"></script>
 </body>
 </html>

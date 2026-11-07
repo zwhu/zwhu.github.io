@@ -16,7 +16,7 @@ export const observation = `(() => {
   return {...s, dialogue: body.textContent.trim(), nameplate: document.querySelector('#nameplate')?.textContent || '',
     conversationVisible: !!conversation.getClientRects().length && style.display!=='none' && style.visibility!=='hidden',
     conversationHiddenAttr: conversation.hidden, conversationDisplay: style.display,
-    paused: document.querySelector('#pause-menu').open,
+    paused: document.querySelector('#pause-menu')?.open || false,
     task: document.querySelector('#task').textContent, focus: document.activeElement.id || document.activeElement.tagName,
     fontSize: parseFloat(getComputedStyle(body).fontSize),
     buttons: buttons.map(b => ({label:b.textContent.trim(), action:b.dataset.action || b.dataset.event || b.id,

@@ -41,6 +41,7 @@ export const HEFEI={
   follow:{ask_for_chance:{title:'我',lines:['interview-player'],speaker:'player',continueEvent:'boss_lets_try',continueRole:'boss'}},
   chainDialog:true,
   directTalk:true,
+  instantSkills:['review_linux_git'],
   transitionLines:{boss_lets_try:'stayed',night_falls:'night-falls',days_pass:'days-pass'},
   transitionBeats:{
     boss_lets_try:[{map:'day',dim:0},{map:'day',dim:0},{map:'day',dim:0},{map:'day',dim:0},{map:'day',dim:0}],
