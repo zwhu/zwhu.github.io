@@ -62,7 +62,7 @@ async function walkTo(ctx,x,y) {
   const b=ctx.browser;
   for(let i=0;i<100;i++){
     const s=await b.snap();if(s.state!=='explore')throw Error('Cannot walk in '+s.state);
-    const dx=x-s.position.x,dy=y-s.position.y;if(Math.hypot(dx,dy)<=1)return;
+    const dx=x-s.position.x,dy=y-s.position.y;if(Math.max(Math.abs(dx),Math.abs(dy))<=1)return;
     const horizontal=Math.abs(dx)>=Math.abs(dy),key=horizontal?(dx>0?'ArrowRight':'ArrowLeft'):(dy>0?'ArrowDown':'ArrowUp');
     await b.key(key,Math.max(40,Math.min(350,Math.abs(horizontal?dx:dy)/60*1000-35)));
     const after=await b.snap();
