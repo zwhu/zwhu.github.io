@@ -188,7 +188,7 @@ async function collect(ctx,id,skill) {
       award=true;const before=s.position;
       await check(ctx,skill+'-award-open','技能获得页显示统一确认按钮',['F10','F12'],next=>next.conversationVisible&&next.buttons.some(button=>button.label==='确定'));
       if(skill==='linux')await check(ctx,skill+'-chair','电脑技能获得页保持主角坐在自己的椅背内',['F15'],next=>seatedBehindChair(next,'sit-back'));
-      if(['java','db'].includes(skill))await check(ctx,skill+'-standing','获得页站立人物画在椅背前，不被椅背挡住',['F15'],next=>{const draws=next.worldFrame.spriteDraws,person=draws.find(d=>d.src.includes('player-walk-v2-sheet'));return !!person&&next.actors[0].posture==='standing'&&draws.some((d,i)=>i<draws.indexOf(person)&&d.src.includes('/hefei-office-night/')&&d.args.length===8);});
+      if(['java','db'].includes(skill))await check(ctx,skill+'-standing','获得页站立人物画在椅背前，不被椅背挡住',['F15'],next=>{const draws=next.worldFrame.spriteDraws,person=draws.find(d=>d.src.includes('player-walk-v2-sheet'));return !!person&&next.actors[0].posture==='standing'&&draws.some((d,i)=>i<draws.indexOf(person)&&d.src.includes('/hefei-office-')&&d.args.length===8);});
       await b.key('Enter');
       await check(ctx,skill+'-award','获得提示可回车收起，角色不误动',['F10','F12'],next=>next.state==='explore'&&!next.conversationVisible&&next.position.x===before.x&&next.position.y===before.y);
       continue;
