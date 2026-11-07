@@ -60,6 +60,12 @@ export function createView(stage,world){
       for(const sprite of ordered){
         const d=sprite.draw;
         ctx.drawImage(d.image,d.sx,d.sy,d.sw,d.sh,d.dx,d.dy,d.dw,d.dh);
+        if(sprite.rect){
+          // Foreground furniture is part of the room, including its fade and lamp layer.
+          const r=sprite.rect;
+          if(dim>0){ctx.save();ctx.globalAlpha=dim;ctx.fillStyle='#000';ctx.fillRect(r.x,r.y,r.w,r.h);ctx.restore();}
+          if(lamp)ctx.drawImage(lamp,r.x*lamp.width/world.width,r.y*lamp.height/world.height,r.w*lamp.width/world.width,r.h*lamp.height/world.height,r.x,r.y,r.w,r.h);
+        }
       }
     },
   };

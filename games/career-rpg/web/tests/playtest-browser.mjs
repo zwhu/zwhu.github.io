@@ -71,12 +71,12 @@ export async function openBrowser(url, out) {
     await send('Runtime.enable');await send('Page.enable');await send('Network.enable');
     await send('Emulation.setDeviceMetricsOverride',{width:1280,height:960,deviceScaleFactor:1,mobile:false});
     await send('Page.addScriptToEvaluateOnNewDocument',{source:`window.__playtestDocument=crypto.randomUUID();window.__playtestInput=[];for(const type of ['keydown','keyup','pointerdown'])window.addEventListener(type,e=>window.__playtestInput.push({type,key:e.key||'',trusted:e.isTrusted,repeat:e.repeat||false,focus:document.activeElement.id||document.activeElement.tagName}),true);
-      window.__playtestWorld={frames:0,props:[]};
+      window.__playtestWorld={frames:0,props:[],spriteDraws:[]};
       const clear=CanvasRenderingContext2D.prototype.clearRect,fill=CanvasRenderingContext2D.prototype.fillRect,draw=CanvasRenderingContext2D.prototype.drawImage;
       const main=ctx=>ctx.canvas.parentElement?.id==='stage'&&!ctx.canvas.id;
-      CanvasRenderingContext2D.prototype.clearRect=function(...args){if(main(this)){window.__playtestWorld.frames++;window.__playtestWorld.props=[];}return Reflect.apply(clear,this,args);};
-      CanvasRenderingContext2D.prototype.fillRect=function(...args){if(main(this)&&args[2]>=300&&args[3]>=200){window.__playtestWorld.frames++;window.__playtestWorld.props=[];}return Reflect.apply(fill,this,args);};
-      CanvasRenderingContext2D.prototype.drawImage=function(source,...args){const src=source?.currentSrc||source?.src||'';if(main(this)&&src.includes('/hefei-props/')&&window.__playtestWorld.props.length<16)window.__playtestWorld.props.push({src,args,opacity:this.globalAlpha});return Reflect.apply(draw,this,[source,...args]);};`});
+      CanvasRenderingContext2D.prototype.clearRect=function(...args){if(main(this)){window.__playtestWorld.frames++;window.__playtestWorld.props=[];window.__playtestWorld.spriteDraws=[];}return Reflect.apply(clear,this,args);};
+      CanvasRenderingContext2D.prototype.fillRect=function(...args){if(main(this)&&args[2]>=300&&args[3]>=200){window.__playtestWorld.frames++;window.__playtestWorld.props=[];window.__playtestWorld.spriteDraws=[];}return Reflect.apply(fill,this,args);};
+      CanvasRenderingContext2D.prototype.drawImage=function(source,...args){const src=source?.currentSrc||source?.src||'';if(main(this)&&/(hefei-office-(day|night)|typing-team-v1|sit-back|player-walk-v2-sheet)/.test(src)&&window.__playtestWorld.spriteDraws.length<20)window.__playtestWorld.spriteDraws.push({src,args,opacity:this.globalAlpha});if(main(this)&&src.includes('/hefei-props/')&&window.__playtestWorld.props.length<16)window.__playtestWorld.props.push({src,args,opacity:this.globalAlpha});return Reflect.apply(draw,this,[source,...args]);};`});
     await send('Page.navigate',{url});await send('Page.bringToFront');
     const snap = () => read(observation);
     const until = async (predicate,timeout=5000) => {

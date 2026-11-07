@@ -16,7 +16,7 @@ await mkdir(out,{recursive:true});
 try{await readFile(path.join(out,'result.json'));throw Error('Output already contains a report; choose a new directory');}catch(error){if(error.code!=='ENOENT')throw error;}
 const hash=async file=>createHash('sha256').update(await readFile(path.join(ROOT,file))).digest('hex');
 const report={mode,commit:execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim(),
-  productionHashes:Object.fromEntries(await Promise.all(['games/career-rpg/web/main.mjs','games/career-rpg/web/style.css','games/career-rpg/design/chapter-hefei.json'].map(async file=>[file,await hash(file)]))),
+  productionHashes:Object.fromEntries(await Promise.all(['games/career-rpg/web/main.mjs','games/career-rpg/web/style.css','games/career-rpg/web/chapters/hefei.mjs','games/career-rpg/web/engine/view.mjs','games/career-rpg/design/chapter-hefei.json'].map(async file=>[file,await hash(file)]))),
   environment:'Chrome headless, 1280x960, desktop; actual CDP key/pointer events; no performance or phone acceptance',
   scope:'Hefei main flow and feedback contracts. Visual screenshots require author review. Baseline mode may use explicitly recorded legacy UI labels; it never makes a failed contract pass.',cases:[]};
 const site=await startBrowserSite();report.localURL=site.url+'?chapter=hefei';console.log('Local game:',report.localURL);
@@ -26,12 +26,49 @@ function scenario(id,title,run,chapter='hefei'){cases.push({id,title,run,chapter
 async function check(ctx,id,title,feedback,predicate) {
   const state=await ctx.browser.snap(), passed=await predicate(state);
   const row={id,title,feedback,status:passed?'passed':'failed',state,screenshot:await ctx.browser.shot(`${ctx.row.id}-${id}.png`)};
+  if(feedback.includes('F15')&&id.includes('chair')){
+    row.worldScreenshot=`${ctx.row.id}-${id}-world.png`;
+    const png=await ctx.browser.read(`document.querySelector('#stage > canvas:not([id])').toDataURL('image/png').split(',')[1]`);
+    await writeFile(path.join(out,row.worldScreenshot),Buffer.from(png,'base64'));
+  }
   ctx.row.steps.push(row);console.log(row.status.toUpperCase(),ctx.row.id,id,title);return passed;
 }
 async function explore(ctx) {
   for(let i=0;i<8;i++){const s=await ctx.browser.snap();if(s.state==='explore'&&(!s.conversationVisible||mode==='baseline'))return s;await ctx.browser.key('Enter');await delay(80);}
   throw Error('Keyboard could not return to exploration');
 }
+
+function seatedBehindChair(state,kind){
+  const draws=state.worldFrame?.spriteDraws||[],people=draws.filter(d=>d.src.includes(kind));
+  if(!people.length)return false;
+  return people.every(person=>draws.some((chair,index)=>index>draws.indexOf(person)&&chair.src.includes('/hefei-office-')&&chair.args.length===8&&
+    Math.abs(chair.args[4]+chair.args[6]/2-(person.args[4]+person.args[6]/2))<=5&&person.args[5]+person.args[7]/2<=chair.args[5]));
+}
+scenario('hefei-chair-depth','合肥同事坐在椅背内，头部保持可见',async ctx=>{
+  await ctx.browser.key('Enter');await delay(120);
+  await check(ctx,'npc-chairs','两位 NPC 的椅背实际绘制在人物之后，遮住下半身',['F15'],s=>s.actors.filter(a=>a.posture==='seatedTyping').length===2&&seatedBehindChair(s,'typing-team-v1'));
+});
+
+scenario('hefei-player-chair','合肥主角办公坐姿按臀部锚点放置',async ctx=>{
+  const b=ctx.browser;await b.key('Enter');await explore(ctx);
+  await route(ctx,[[270,196],[270,128],[310,128]]);await object(ctx,'boss');await b.key('e');
+  await b.key('Enter');await b.key('Enter');await b.until(s=>s.chapter.state==='day_tasks'&&s.state==='explore',8000);
+  await route(ctx,[[270,128],[270,196],[75,196]]);await object(ctx,'my-pc');await b.key('e');
+  await check(ctx,'player-chair','自己的椅背挡住下半身，主角头部保持可见',['F15'],s=>seatedBehindChair(s,'sit-back'));
+});
+
+scenario('hefei-chair-fade','椅背前景与场景一起变暗',async ctx=>{
+  const probe=await ctx.browser.read(`(async()=>{
+    const {createView}=await import('./engine/view.mjs'),{HEFEI}=await import('./chapters/hefei.mjs');
+    const room=new Image();room.src=HEFEI.background;await room.decode();
+    const bare=createView(document.createElement('div'),{width:384,height:216}),layered=createView(document.createElement('div'),HEFEI);
+    bare.setPixelRatio(1);layered.setPixelRatio(1);bare.draw(room,.7,null,[],[]);layered.draw(room,.7,null,[],[]);
+    const pixel=view=>[...view.canvas.getContext('2d').getImageData(75,163,1,1).data];
+    return {bare:pixel(bare),layered:pixel(layered)};
+  })()`);
+  ctx.row.rendererProbe=probe;
+  await check(ctx,'fade','实际渲染椅背像素与同位置背景保持相同转场亮度',['F15'],()=>JSON.stringify(probe.bare)===JSON.stringify(probe.layered));
+});
 
 scenario('dialogue-focus','对话开启后，焦点离开按钮仍可回车推进',async ctx=>{
   const b=ctx.browser, box=await b.read(`(()=>{const r=document.querySelector('#stage').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/3};})()`);
@@ -129,12 +166,13 @@ scenario('legacy-selected-reply','恢复旧存档中已删除的重复回应页'
   await check(ctx,'migrated','旧重复页恢复时直接进入老板答复，剧情与位置保持',['F03'],async s=>await b.read('window.__legacyReplyApplied===true')&&s.dialogue==='行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。'&&JSON.stringify(s.chapter)===JSON.stringify(before.chapter)&&JSON.stringify(s.position)===JSON.stringify(before.position));
 });
 async function collect(ctx,id,skill) {
-  const b=ctx.browser;let described=false,award=false,obsoleteLinux=false;
+  const b=ctx.browser;let described=false,award=false,obsoleteLinux=false,readingChair=false;
   for(let i=0;i<12;i++){
     let s=await b.snap();
     if(s.state==='transition'){await b.key('Enter');continue;}
     if(s.state==='explore'){
       if(s.chapter.skills[skill]==='got'){
+        if(['java','db'].includes(skill)&&!readingChair)await check(ctx,skill+'-reading-chair','电脑阅读阶段确实检查过坐姿',['F15'],()=>false);
         if(skill==='linux'&&!obsoleteLinux)await check(ctx,'linux-no-extra','直接获得 Linux 技能，没有额外说明确认页',['F09'],()=>award);
         if(skill==='jquery'&&!described)await check(ctx,'jquery-book','必须展示获得技能书文案',['F11'],()=>false);
         return;
@@ -142,12 +180,15 @@ async function collect(ctx,id,skill) {
       await object(ctx,id);await b.key('e');continue;
     }
     if(s.state!=='dialogue')throw Error('Unexpected collect state '+s.state);
+    if(['java','db'].includes(skill)&&s.sit&&!readingChair){readingChair=true;await check(ctx,skill+'-reading-chair','夜间阅读电脑内容时坐在自己的椅背内',['F15'],next=>seatedBehindChair(next,'sit-back'));}
     if(skill==='jquery'&&!s.dialogue.includes('书架上夹着')&&!described){
       described=true;await check(ctx,'jquery-book','jQuery 学习提示为获得技能书',['F11'],next=>/获得技能书.*锋利的\s*jQuery/.test(next.dialogue));
     }
     if(s.dialogue.includes('获得技能')&&s.chapter.skills[skill]==='got'){
       award=true;const before=s.position;
       await check(ctx,skill+'-award-open','技能获得页显示统一确认按钮',['F10','F12'],next=>next.conversationVisible&&next.buttons.some(button=>button.label==='确定'));
+      if(skill==='linux')await check(ctx,skill+'-chair','电脑技能获得页保持主角坐在自己的椅背内',['F15'],next=>seatedBehindChair(next,'sit-back'));
+      if(['java','db'].includes(skill))await check(ctx,skill+'-standing','获得页站立人物画在椅背前，不被椅背挡住',['F15'],next=>{const draws=next.worldFrame.spriteDraws,person=draws.find(d=>d.src.includes('player-walk-v2-sheet'));return !!person&&next.actors[0].posture==='standing'&&draws.some((d,i)=>i<draws.indexOf(person)&&d.src.includes('/hefei-office-night/')&&d.args.length===8);});
       await b.key('Enter');
       await check(ctx,skill+'-award','获得提示可回车收起，角色不误动',['F10','F12'],next=>next.state==='explore'&&!next.conversationVisible&&next.position.x===before.x&&next.position.y===before.y);
       continue;
@@ -169,6 +210,7 @@ async function mainFlow(ctx,day,night) {
   const b=ctx.browser;
   await check(ctx,'opening','面试开场文案完整',['F02'],s=>s.dialogue==='原本录用的人嫌工资低，没来。我鼓起勇气，毛遂自荐。');
   await b.key('Enter');await check(ctx,'opening-close','末句回车后窗口实际消失',['F01','F03'],s=>s.state==='explore'&&!s.conversationVisible);await explore(ctx);
+  await check(ctx,'npc-chairs','两位 NPC 坐在椅背内，头部不被遮挡',['F15'],s=>seatedBehindChair(s,'typing-team-v1'));
   for(const [id,x] of [['colleague-b2',147],['colleague-b3',215]]){
     await route(ctx,[[x,196]]);await object(ctx,id);await b.key('e');
     await check(ctx,id,'可选同事对话不推进面试事件',['F03'],s=>s.chapter.state==='interview'&&!s.chapter.flags.includes('asked'));
@@ -184,6 +226,7 @@ async function mainFlow(ctx,day,night) {
   await check(ctx,'direct-reply','选择玩家回应后直接读老板答复，不再重复展示所选台词',['F03'],s=>s.dialogue==='行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。'&&s.chapter.flags.includes('asked')&&!s.chapter.flags.includes('hired_trial'));
   for(let i=0;i<8;i++){const s=await b.snap();if(s.chapter.state==='day_tasks'&&s.state==='explore')break;await b.key('Enter');await delay(80);}
   await explore(ctx);await route(ctx,[[270,128],[270,196],[75,196]]);await object(ctx,'my-pc');await b.key('e');
+  await check(ctx,'player-chair','主角在自己的工位坐在椅背内，臀部高度正确',['F15'],s=>seatedBehindChair(s,'sit-back'));
   const menu=await b.snap();
   const newMenu=await check(ctx,'demand-entry','需求入口只呈现开始需求与两种选择',['F07','F08'],s=>s.dialogue.includes('开始今天的需求')&&['确定','继续探索办公室'].every(label=>s.buttons.some(button=>button.label===label))&&!s.buttons.some(button=>button.label==='接任务'));
   if(newMenu){
@@ -206,6 +249,7 @@ async function mainFlow(ctx,day,night) {
   await check(ctx,'night','白天完成后进入夜间，日间技能已获得',['F05'],s=>s.chapter.state==='night_study'&&s.chapter.skills.linux==='got'&&s.chapter.skills.jquery==='got');
   await check(ctx,'night-hint','夜间学习在现有电脑上显示闪点',['F13','F14'],s=>s.learningHints.computer>0&&s.learningHints.book===0);
   await check(ctx,'night-world','夜间实际绘制没有半透明道具屏幕重影',['F13','F14'],s=>s.worldFrame?.frames>0&&s.worldFrame.props.length===0);
+  await check(ctx,'night-chairs','夜间椅背使用夜景裁切，未出现白昼椅背',['F15'],s=>s.worldFrame.spriteDraws.filter(d=>d.src.includes('/hefei-office-night/')&&d.args.length===8).length===3);
   await explore(ctx);await route(ctx,[[24,196],[75,196]]);
   for(const skill of night){const id=skill==='java'?'java-book':'db-screen';await object(ctx,id);await b.key('e');await collect(ctx,id,skill);await explore(ctx);}
   await check(ctx,'all-skills','四个技能都通过实际交互获得',['F05','F10','F12'],s=>['linux','jquery','java','db'].every(skill=>s.chapter.skills[skill]==='got'));
