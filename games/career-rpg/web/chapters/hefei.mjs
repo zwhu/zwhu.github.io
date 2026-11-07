@@ -38,7 +38,7 @@ export const HEFEI={
   entryPoints:{interview:{x:190,y:196},day_tasks:{x:120,y:192},night_study:{x:75,y:192},raise:{x:190,y:196},complete:{x:24,y:90}},
   eventSpeakers:{ask_for_chance:'boss',boss_lets_try:'boss',raise_read:'boss',take_day_task:'player',review_linux_git:'player',review_frontend:'player',study_java:'player',study_db_nosql:'player'},
   actionTitles:{ask_for_chance:'听老板说',boss_lets_try:'继续听',take_day_task:'接任务',review_linux_git:'记下来',review_frontend:'记下来',study_java:'记下来',study_db_nosql:'记下来',raise_read:'听老板说',night_falls:'天黑了',days_pass:'日夜交替'},
-  follow:{ask_for_chance:{title:'我',lines:['interview-player'],speaker:'player',continueEvent:'boss_lets_try',continueRole:'boss'}},
+  follow:{ask_for_chance:{continueEvent:'boss_lets_try',continueRole:'boss'}},
   chainDialog:true,
   directTalk:true,
   instantSkills:['review_linux_git'],

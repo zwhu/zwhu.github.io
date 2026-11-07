@@ -102,6 +102,32 @@ async function press(ctx,label) {
   }
   throw Error('Directions could not select '+label);
 }
+scenario('replay-award','技能获得页中取消重玩和刷新恢复',async ctx=>{
+  const b=ctx.browser;await b.key('Enter');await explore(ctx);
+  await route(ctx,[[270,196],[270,128],[310,128]]);await object(ctx,'boss');await b.key('e');
+  for(let index=0;index<10;index++){
+    const s=await b.snap();if(s.chapter.state==='day_tasks'&&s.state==='explore')break;await b.key('Enter');
+  }
+  await explore(ctx);await route(ctx,[[270,128],[270,196],[75,196]]);await object(ctx,'my-pc');await b.key('e');await press(ctx,'确定');
+  await object(ctx,'linux-screen');await b.key('e');const award=await b.snap();
+  await b.key('r');await b.key('Escape');
+  await check(ctx,'cancel','取消重玩恢复技能提示与图标，尚未收起获得页',['F10'],async s=>s.dialogue===award.dialogue&&s.conversationVisible&&await b.read(`Boolean(document.querySelector('#skill-award-icon'))`));
+  await b.key('r');await b.reload();await b.key('Escape');
+  await check(ctx,'reload-cancel','重玩确认中刷新后仍可返回原技能页',['F05','F10'],async s=>s.dialogue===award.dialogue&&JSON.stringify(s.chapter)===JSON.stringify(award.chapter)&&await b.read(`Boolean(document.querySelector('#skill-award-icon'))`));
+  await b.key('Enter');await check(ctx,'finish','返回技能页后 Enter 正常收起',['F10'],s=>s.state==='explore'&&!s.conversationVisible&&s.chapter.skills.linux==='got');
+});
+scenario('legacy-selected-reply','恢复旧存档中已删除的重复回应页',async ctx=>{
+  const b=ctx.browser;await b.key('Enter');await explore(ctx);
+  await route(ctx,[[270,196],[270,128],[310,128]]);await object(ctx,'boss');await b.key('e');await b.key('Enter');
+  const before=await b.snap();
+  ctx.row.input='Real keyboard reaches asked state; legacy fixture changes only saved UI page metadata, preserving story and position';
+  await b.read(`(()=>{const key=window.careerPrototype.snapshot().saveKey,saved=JSON.parse(localStorage.getItem(key));
+    saved.play.page={...saved.play.page,title:'我',speaker:'player',paragraphs:['我不要工资，让我来试试就行。'],paragraphIds:['interview-player'],
+      choices:[{label:'继续',id:'continue-line',event:'',disabled:false}],selectedIndex:0,parent:null};
+    localStorage.setItem(key,JSON.stringify(saved));})()`);
+  await b.reload();
+  await check(ctx,'migrated','旧重复页恢复时直接进入老板答复，剧情与位置保持',['F03'],s=>s.dialogue==='行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。'&&JSON.stringify(s.chapter)===JSON.stringify(before.chapter)&&JSON.stringify(s.position)===JSON.stringify(before.position));
+});
 async function collect(ctx,id,skill) {
   const b=ctx.browser;let described=false,award=false,obsoleteLinux=false;
   for(let i=0;i<12;i++){
@@ -155,6 +181,7 @@ async function mainFlow(ctx,day,night) {
   await check(ctx,'boss-choice','老板对话出现玩家争取机会的选项',['F03'],s=>s.buttons.some(button=>button.label==='我不要工资，让我来试试就行。'));
   const pair=await b.holdEnter();
   await check(ctx,'hold-enter','按住 Enter 不连续推进新对话',['F03'],()=>pair.first.dialogue===pair.repeated.dialogue&&JSON.stringify(pair.first.chapter)===JSON.stringify(pair.repeated.chapter));
+  await check(ctx,'direct-reply','选择玩家回应后直接读老板答复，不再重复展示所选台词',['F03'],s=>s.dialogue==='行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。'&&s.chapter.flags.includes('asked')&&!s.chapter.flags.includes('hired_trial'));
   for(let i=0;i<8;i++){const s=await b.snap();if(s.chapter.state==='day_tasks'&&s.state==='explore')break;await b.key('Enter');await delay(80);}
   await explore(ctx);await route(ctx,[[270,128],[270,196],[75,196]]);await object(ctx,'my-pc');await b.key('e');
   const menu=await b.snap();

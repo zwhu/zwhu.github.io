@@ -176,6 +176,12 @@ function restoredChoice(choice){
   return Object.hasOwn(actions,choice.id)?{...choice,label:choice.id==='skill-ok'?'确定':choice.label,run:actions[choice.id]}:null;
 }
 function restoreSavedPage(page){
+  // Older saves can be on the removed page that repeated the selected reply.
+  if(sceneConfig.id==='hefei-office'&&page.choices.some(choice=>choice.id==='continue-line')&&
+    (page.paragraphIds?.includes('interview-player')||page.paragraphs.includes(chapter.text('interview-player')))){
+    const next=chapter.actions(snapshot,'boss').find(item=>item.event==='boss_lets_try');
+    if(next){confirmPage(next,false);return true;}
+  }
   const choices=page.choices.map(restoredChoice);if(choices.some(choice=>!choice))return false;
   dialogueObject=[...sceneConfig.objects,...sceneConfig.actors].find(object=>object.id===page.objectId)||null;
   const paragraphs=page.paragraphs.map((text,index)=>page.paragraphIds?.[index]?chapter.text(page.paragraphIds[index])||text:text);
@@ -287,12 +293,8 @@ function accept(event){
     if(event==='open_journey'){openJourney('chapter');return;}
     const follow=sceneConfig.follow?.[event];
     if(follow){
-      const choices=[];
-      if(follow.continueEvent)choices.push({label:'继续',id:'continue-line',run:()=>{
-        const transition=chapter.actions(snapshot,follow.continueRole||'boss').find(item=>item.event===follow.continueEvent);
-        if(transition)confirmPage(transition,false);
-      }});
-      show(follow.title,lines(follow.lines),choices,true,follow.speaker||'player');return;
+      const transition=chapter.actions(snapshot,follow.continueRole||'boss').find(item=>item.event===follow.continueEvent);
+      if(transition){confirmPage(transition,false);return;}
     }
     if(changed){enterScene();return;}
     if(sceneConfig.chainDialog){
