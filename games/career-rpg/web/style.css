@@ -52,5 +52,6 @@ html.cinematic #stage{width:var(--cinematic-size);height:var(--cinematic-size);a
 .speech-bubble.docked #choices button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;background:#fff6df}
 #system-dialog .choices button{font-size:14px;min-height:34px;padding:6px 12px;line-height:1.4;border-radius:0;border:1px solid #282622;background:#fffef8}
 #system-dialog .choices button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;background:#fff6df}
+.hud-actions{display:flex;gap:6px;flex-shrink:0}
 @keyframes dialogue-caret{0%,62%{opacity:1}63%,100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.speech-bubble.docked .continue-caret::after,.speech-bubble.docked .dialogue-caret::after{animation:none;opacity:1}}

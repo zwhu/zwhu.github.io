@@ -35,6 +35,7 @@ function showFailure(message){
   view?.canvas.remove();
   conversation.hidden=true;if(systemDialog.open)systemDialog.close();
   document.querySelector('#manual').disabled=true;
+  document.querySelector('#replay-button').disabled=true;
   stage.removeAttribute('tabindex');stage.setAttribute('role','region');stage.setAttribute('aria-label','办公室暂不可用，请重试或继续文字阅读');
   stage.closest('.game-shell').classList.add('has-failure');failure.hidden=false;
   document.querySelector('#failure-message').textContent=message;
@@ -106,6 +107,9 @@ function restorePage(page){
   dialogueObject=page.object;selectedTargetID=page.targetID;
   show(page.title,page.paragraphs,page.choices,page.canDismiss,page.speaker,page.system,{back:page.back,returnFocus:page.returnFocus,plate:page.plate||'',parent:page.parent,slots:page.slots,spoken:page.spoken});
   focusElement(enabledOptions()[Math.max(0,page.selectedIndex)]);
+  if(awardOpen&&page.choices.some(choice=>choice.id==='skill-ok')){
+    const skill=chapter.skillSlots(snapshot).find(item=>item.id===currentAward);if(skill)paintAwardIcon(skill);
+  }
 }
 function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeaker,system=false,options={}){
   const content=document.querySelector('#dialogue-content');
@@ -162,7 +166,7 @@ function restoredChoice(choice){
   const actions={
     'continue-line':()=>{const next=chapter.actions(snapshot,'boss').find(item=>item.event==='boss_lets_try');if(next)confirmPage(next,false);},
     'skill-ok':finishSkillAward,'replay':confirmReplay,'explore-office':settleExplore,
-    'confirm-replay':()=>{snapshot=chapter.initial();position=chapterSpawn();currentAward='';awardOpen=false;persist(enterScene);},
+    'confirm-replay':restartChapter,
     'journey':()=>openJourney('bridge'),'bridge-hangzhou':()=>openJourney('to-hangzhou')
   };
   if(choice.id.startsWith('preface-')){
@@ -179,6 +183,9 @@ function restoreSavedPage(page){
     parent:page.parent,back:page.parent?()=>restoreSavedPage(page.parent):null,slots:page.manual?chapter.skillSlots(snapshot):null,returnFocus:stage});
   focusElement(enabledOptions()[Math.max(0,page.selectedIndex)]);
   if(dialogueObject)showObjectCard(dialogueObject);
+  if(awardOpen&&page.choices.some(choice=>choice.id==='skill-ok')){
+    const skill=chapter.skillSlots(snapshot).find(item=>item.id===currentAward);if(skill)paintAwardIcon(skill);
+  }
   return true;
 }
 async function restorePlayState(saved){
@@ -191,7 +198,7 @@ async function restorePlayState(saved){
       currentAward=play.award||'';awardOpen=!!currentAward;
       returnToJourney=!!play.returnToJourney;
       if(returnToJourney&&play.journey){journeyMode=play.journey.mode;journeyArrived=!!play.journey.arrived;journeyProgress=play.journey.progress||0;}
-      if(awardOpen){const skill=chapter.skillSlots(snapshot).find(item=>item.id===currentAward);if(skill)paintAwardIcon(skill);}
+      if(awardOpen&&play.page.choices.some(choice=>choice.id==='skill-ok')){const skill=chapter.skillSlots(snapshot).find(item=>item.id===currentAward);if(skill)paintAwardIcon(skill);}
     }else if(play.state==='transition'&&sceneConfig.transitionBeats?.[play.transition]){
       transitionEvent=play.transition;transitionIndex=-1;
       const index=Math.min(play.index,sceneConfig.transitionBeats[transitionEvent].length-1);
@@ -372,8 +379,15 @@ function manual(){
   show('工作手册',written?lines([chapter.manualId]):['这页还没有写完。',chapter.target(snapshot)],snapshot.state==='complete'?[{label:'从办公室重玩',id:'replay',run:confirmReplay}]:[],true,'player',false,{slots});
 }
 function confirmReplay(){
-  const parent=capturePage();
-  show('从办公室重玩',[saving?'这会替换本章已保存的进度，其他站点数据不会被清除。':'这会重新开始本次体验。原存档仍会保留，本次不会保存。'],[{label:'确认重新开始',id:'confirm-replay',run:()=>{snapshot=chapter.initial();position=chapterSpawn();currentAward='';awardOpen=false;persist(enterScene);}}],true,'player',true,{back:parent?()=>restorePage(parent):null,parent});
+  const parent=state==='dialogue'?capturePage():null;
+  show('从办公室重玩',[saving?'这会替换本章已保存的进度，其他站点数据不会被清除。':'这会重新开始本次体验。原存档仍会保留，本次不会保存。'],[{label:'确认重新开始',id:'confirm-replay',run:restartChapter}],true,'player',true,{back:parent?()=>restorePage(parent):null,parent,returnFocus:stage});
+}
+function restartChapter(){
+  snapshot=chapter.initial();position=chapterSpawn();facing='down';walkTime=0;
+  currentAward='';awardOpen=false;awardFlashUntil=0;returnToJourney=false;queuedAward=null;
+  transitionEvent=null;transitionIndex=-1;journeyMode=null;journeyArrived=false;journeyProgress=0;
+  cancelAnimationFrame(journeyFrame);journeyPanel.hidden=true;hideObjectCard();dialogueObject=null;selectedTargetID='';
+  persist(enterScene);
 }
 function enterHefei(){
   if(nightImage){
@@ -669,6 +683,7 @@ function prefaceText(object){
   return lineText(object,id);
 }
 function updateUI(){
+  document.querySelector('#replay-button').disabled=!['explore','dialogue'].includes(state)||systemDialog.open;
   const candidates=state==='explore'?nearbyAll(position,visibleRoom()):[];
   active=candidates.find(o=>o.id===selectedTargetID)||candidates.find(o=>actionsFor(chapter,snapshot,o).length)||candidates.find(o=>readySkill(o))||candidates[0]||null;
   const hint=active?`E / Enter · ${readySkill(active)&&!actionsFor(chapter,snapshot,active).length?'拾取':active.name}${candidates.length>1?' · Q 切换对象':''}`:'';
@@ -1022,6 +1037,7 @@ window.addEventListener('keydown',event=>{
   ensureAudio();
   const key=event.key.length===1?event.key.toLowerCase():event.key;
   if(state==='error'||state==='loading'){if(event.repeat&&(key==='Enter'||key===' '))event.preventDefault();return;}
+  if(key==='r'&&!event.repeat&&!systemDialog.open&&['explore','dialogue'].includes(state)){event.preventDefault();confirmReplay();return;}
   if(state==='transition'){event.preventDefault();if(!event.repeat&&(key==='Enter'||key===' '||key==='Escape'))finishTransition();return;}
   const scope=optionScope(),focused=document.activeElement,inScope=scope?.contains(focused),inOptions=inScope&&focused.matches('.choices button');
   // Route confirmation by the active UI, even after a scene/pointer focus change.
@@ -1057,7 +1073,7 @@ window.addEventListener('keydown',event=>{
   if(event.repeat){if(state!=='explore')event.preventDefault();return;}
   if(key==='m'&&state==='explore'&&document.activeElement===stage){event.preventDefault();manual();return;}
   if(key==='q'&&state==='explore'&&document.activeElement===stage){const list=nearbyAll(position,visibleRoom());if(list.length>1){event.preventDefault();selectedTargetID=list[(list.findIndex(o=>o.id===active?.id)+1)%list.length].id;updateUI();}return;}
-  if(awardOpen&&key==='Escape'){event.preventDefault();finishSkillAward();return;}
+  if(awardOpen&&!systemDialog.open&&key==='Escape'){event.preventDefault();finishSkillAward();return;}
   if(state==='journey'&&key==='Escape'){event.preventDefault();return;}
   if(key==='Escape'){
     event.preventDefault();
@@ -1081,6 +1097,7 @@ window.addEventListener('focus',regainWindowFocus);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)loseWindowFocus();else regainWindowFocus();});
 stage.addEventListener('blur',clearInput);stage.addEventListener('pointerdown',()=>{if(state==='explore')stage.focus({preventScroll:true});});
 document.querySelector('#manual').addEventListener('click',()=>{if(state==='explore')manual();});
+document.querySelector('#replay-button').addEventListener('click',()=>{if(!systemDialog.open&&['explore','dialogue'].includes(state))confirmReplay();});
 systemDialog.addEventListener('cancel',event=>{event.preventDefault();closeConversation();});
 new ResizeObserver(()=>{placeBubble();positionEffects();}).observe(stage);
 // Retrying from text reading must not restore the summary fragment over the game's focus.

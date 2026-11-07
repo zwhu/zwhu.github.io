@@ -58,6 +58,25 @@ scenario('automatic-resume','独立检查取消暂停和角色位置持久化',a
   await check(ctx,'position','刷新后保留已移动的位置',['F05'],s=>Math.hypot(s.position.x-before.position.x,s.position.y-before.position.y)<=1);
 });
 
+for(const chapter of ['hefei','nanjing','hangzhou'])scenario('replay-entry-'+chapter,'右上角重玩按钮与 R 快捷键',async ctx=>{
+  const b=ctx.browser,initial=await b.snap();
+  await check(ctx,'visible','开场即可看到重玩入口',[],async()=>await b.read(`(()=>{const button=document.querySelector('#replay-button');return !!button?.getClientRects().length&&!button.disabled;})()`));
+  await b.key('r');
+  await check(ctx,'dialogue-confirm','R 从对话打开重玩确认，进度保持',[],async s=>await b.read(`document.querySelector('#system-dialog').open`)&&JSON.stringify(s.chapter)===JSON.stringify(initial.chapter));
+  await b.key('Escape');
+  await check(ctx,'dialogue-cancel','取消重玩恢复原对话',[],s=>s.dialogue===initial.dialogue&&s.state==='dialogue'&&s.conversationVisible);
+  await b.key('Enter');await explore(ctx);await b.key('ArrowLeft',140);const moved=await b.snap();
+  const button=await b.read(`(()=>{const r=document.querySelector('#replay-button').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2};})()`);
+  await b.pointer(button.x,button.y);
+  await check(ctx,'pointer-confirm','鼠标点击重玩打开确认',[],async()=>await b.read(`document.querySelector('#system-dialog').open`));
+  await b.key('Escape');
+  await check(ctx,'explore-cancel','取消重玩保持位置并恢复角色键盘焦点',[],s=>s.state==='explore'&&s.focus==='stage'&&JSON.stringify(s.position)===JSON.stringify(moved.position));
+  await b.key('r');await b.key('Enter');
+  await check(ctx,'restart','确认后回到本章新开局，存档与界面同步',[],s=>s.state==='dialogue'&&s.dialogue===initial.dialogue&&JSON.stringify(s.position)===JSON.stringify(initial.position)&&s.chapter.flags.length===0&&Object.values(s.chapter.skills||{}).every(value=>value==='none')&&JSON.parse(s.storage).state===initial.chapter.state);
+  await b.reload();
+  await check(ctx,'reload','重玩后刷新仍是新开局',[],s=>s.dialogue===initial.dialogue&&JSON.stringify(s.position)===JSON.stringify(initial.position)&&s.chapter.flags.length===0);
+},chapter);
+
 async function walkTo(ctx,x,y) {
   const b=ctx.browser;
   for(let i=0;i<100;i++){
