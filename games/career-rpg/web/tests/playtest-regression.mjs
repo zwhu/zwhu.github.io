@@ -121,12 +121,12 @@ scenario('legacy-selected-reply','恢复旧存档中已删除的重复回应页'
   await route(ctx,[[270,196],[270,128],[310,128]]);await object(ctx,'boss');await b.key('e');await b.key('Enter');
   const before=await b.snap();
   ctx.row.input='Real keyboard reaches asked state; legacy fixture changes only saved UI page metadata, preserving story and position';
-  await b.read(`(()=>{const key=window.careerPrototype.snapshot().saveKey,saved=JSON.parse(localStorage.getItem(key));
+  const injected=await b.send('Page.addScriptToEvaluateOnNewDocument',{source:`(()=>{const key='career-rpg:hefei:v1',saved=JSON.parse(localStorage.getItem(key));
     saved.play.page={...saved.play.page,title:'我',speaker:'player',paragraphs:['我不要工资，让我来试试就行。'],paragraphIds:['interview-player'],
       choices:[{label:'继续',id:'continue-line',event:'',disabled:false}],selectedIndex:0,parent:null};
-    localStorage.setItem(key,JSON.stringify(saved));})()`);
-  await b.reload();
-  await check(ctx,'migrated','旧重复页恢复时直接进入老板答复，剧情与位置保持',['F03'],s=>s.dialogue==='行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。'&&JSON.stringify(s.chapter)===JSON.stringify(before.chapter)&&JSON.stringify(s.position)===JSON.stringify(before.position));
+    localStorage.setItem(key,JSON.stringify(saved));window.__legacyReplyApplied=true;})()`});
+  await b.reload();await b.send('Page.removeScriptToEvaluateOnNewDocument',{identifier:injected.identifier});
+  await check(ctx,'migrated','旧重复页恢复时直接进入老板答复，剧情与位置保持',['F03'],async s=>await b.read('window.__legacyReplyApplied===true')&&s.dialogue==='行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。'&&JSON.stringify(s.chapter)===JSON.stringify(before.chapter)&&JSON.stringify(s.position)===JSON.stringify(before.position));
 });
 async function collect(ctx,id,skill) {
   const b=ctx.browser;let described=false,award=false,obsoleteLinux=false;

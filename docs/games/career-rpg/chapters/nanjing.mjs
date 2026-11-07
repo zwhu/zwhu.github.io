@@ -19,12 +19,12 @@ export const OFFICE={
   expressions:{normal:0,tense:1,happy:2},
   actors:[
     {id:'player',name:'我',atlas:'player',height:44,controllable:true,typingColumn:0,sitAtlas:'sit',seatedHeight:30,expressionByState:{report:'tense',incident:'tense',investigation:'tense',restored:'happy',complete:'happy'}},
-    {id:'cto',name:'CTO',role:'cto',atlas:'team',column:0,typingColumn:1,height:44,x:185,y:108,seat:{x:185,y:108},interaction:{x:215,y:127},posture:'seatedTyping',events:['cto_rallies_team','resume_narrative'],marker:true,dialogue:{default:'CTO 在工位旁。这次上线，用户已经在用。',restored:'问题恢复后，CTO、老板和同事过来安抚。',learning:'测试和注释里记下了这次失败。'}},
-    {id:'colleague-dev',name:'费翔🐘',atlas:'team',column:1,typingColumn:2,height:42,x:296,y:108,seat:{x:296,y:108},interaction:{x:326,y:127},posture:'seatedTyping',dialogue:{default:'同伴也在办公室。出了问题，先看用户反馈。',restored:'同事们告诉我，没关系，大家都经历过。',complete:'这次经历留在了手册里，测试和注释也留给后来改代码的人。'}},
+    {id:'cto',name:'CTO',role:'cto',atlas:'team',column:0,typingColumn:1,height:44,x:185,y:108,seat:{x:185,y:108},interaction:{x:215,y:127},posture:'seatedTyping',events:['cto_rallies_team','resume_narrative'],marker:true,dialogue:{default:'CTO 在工位旁。这次上线，用户已经在用。',restored:'问题恢复后，CTO、老板和同事过来安抚。',learning:'测试和注释里记下了这次失败。',journey:'后来补了测试，也用注释记下踩坑原因。'}},
+    {id:'colleague-dev',name:'费翔🐘',atlas:'team',column:1,typingColumn:2,height:42,x:296,y:108,seat:{x:296,y:108},interaction:{x:326,y:127},posture:'seatedTyping',dialogue:{default:'同伴也在办公室。出了问题，先看用户反馈。',investigation:'排查时先止血、保存现场、排查日志，别忘了安抚用户。',journey:'后来补了测试，也用注释记下踩坑原因。',restored:'同事们告诉我，没关系，大家都经历过。',complete:'这次经历留在了手册里，测试和注释也留给后来改代码的人。'}},
     {id:'colleague-team',name:'同伴 · 协作',atlas:'team',column:2,typingColumn:3,height:42,x:82,y:197,seat:{x:82,y:197},interaction:{x:125,y:190},posture:'seatedTyping',dialogue:{default:'出了问题，先止血、保存现场、排查日志，别忘了安抚用户。',restored:'同事过来安抚。这次失败，要补进测试和注释。',complete:'往后还有新的学习，也会遇到新的问题。'}},
   ],
   objects:[
-    {id:'forum',role:'forum',markerPosition:{x:82,y:52},name:'我的电脑 · 论坛',x:82,y:127,seat:{x:82,y:108},iconAt:{x:82,y:70},glintAt:{x:82,y:63},events:['open_forum_post','analyze_server_logs'],marker:true},
+    {id:'forum',role:'forum',markerPosition:{x:82,y:52},name:'我的电脑',x:82,y:127,seat:{x:82,y:108},iconAt:{x:82,y:70},glintAt:{x:82,y:63},events:['open_forum_post','analyze_server_logs'],marker:true},
     {id:'manual',role:'manual',name:'书架 · 工作手册',x:344,y:86,iconAt:{x:357,y:43},glintAt:{x:357,y:43},events:[],marker:true},
   ],
   entryPoints:{office:{x:172,y:154},report:{x:82,y:127},incident:{x:82,y:127},investigation:{x:215,y:127},restored:{x:215,y:127},learning:{x:215,y:127},journey:{x:215,y:127},complete:{x:215,y:127}},

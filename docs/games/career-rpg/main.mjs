@@ -393,7 +393,7 @@ function manual(){
   dialogueSpeaker='player';
   const written=chapter.has(snapshot,'manual_entry_written')||snapshot.state==='complete';
   const slots=chapter.skillSlots?.(snapshot)||null;
-  show('工作手册',written?lines([chapter.manualId]):['这页还没有写完。',chapter.target(snapshot)],snapshot.state==='journey'&&sceneConfig.id==='nanjing-office'?[{label:'完成南京篇',id:'finish-nanjing',run:()=>accept('finish_nanjing_chapter')}]:snapshot.state==='complete'?[{label:'从办公室重玩',id:'replay',run:confirmReplay}]:[],true,'player',false,{slots});
+  show('工作手册',written?lines([chapter.manualId]):['这页还没有写完。',chapter.target(snapshot)],snapshot.state==='journey'&&sceneConfig.id==='nanjing-office'?[{label:'完成南京篇',id:'finish-nanjing',run:()=>accept('finish_nanjing_chapter')}]:snapshot.state==='complete'?[...(sceneConfig.id==='nanjing-office'?[{label:'从南京走到杭州',id:'bridge-hangzhou',run:()=>openJourney('to-hangzhou')}]:[]),{label:'从办公室重玩',id:'replay',run:confirmReplay}]:[],true,'player',false,{slots});
 }
 function confirmReplay(){
   const parent=state==='dialogue'?capturePage():null;

@@ -1,5 +1,5 @@
 // Confirmed Nanjing flow, actual furniture draws, optional branches and legacy UI migration.
-// Actual keyboard and observed draw order; this does not mutate the story.
+// New playthroughs use real keyboard; legacy fixtures are explicitly separated below.
 import assert from 'node:assert/strict';
 import {mkdir,mkdtemp,writeFile,readFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
@@ -29,7 +29,7 @@ async function capture(id,title,feedback,predicate){
   return passed;
 }
 async function explore(){
-  for(let i=0;i<8;i++){if((await b.snap()).state==='explore')return;await b.key('Enter');}
+  for(let i=0;i<8;i++){if((await b.snap()).state==='explore')return;await b.key('Escape');if((await b.snap()).state!=='explore')await b.key('Enter');}
   throw Error('Cannot reach exploration');
 }
 async function walk(tx,ty){
@@ -108,6 +108,16 @@ try{
     const people=draws.filter(d=>d.src.includes('typing-team-v1'));
     return people.length===3&&people.every(person=>draws.some((d,index)=>index>draws.indexOf(person)&&d.src.includes('office-room-v2')&&d.args.length===8&&Math.abs(d.args[4]+d.args[6]/2-(person.args[4]+person.args[6]/2))<8));
   });
+  await open('colleague-dev');
+  await capture('colleague-dev','费翔椅旁对话，不重叠人物',['N02'],s=>s.position.x===326&&s.actors.find(a=>a.id==='colleague-dev').posture==='seatedTyping');await explore();
+  await open('colleague-team');
+  await capture('colleague-team','下排同伴椅旁对话',['N02','N17'],s=>s.position.x===125&&s.dialogue.includes('别忘了安抚用户'));await explore();await b.key('ArrowRight',180);
+  await walk(240,180);await b.key('ArrowRight',350);
+  await capture('desk-left-side','从桌左侧接近显示器，不穿进桌面',['N03'],s=>s.position.x<=253);await b.key('ArrowLeft',240);
+  await walk(350,180);await b.key('ArrowLeft',300);
+  await capture('desk-right-side','从桌右侧接近显示器，不穿进桌面',['N03'],s=>s.position.x>=341);await b.key('ArrowRight',240);
+  await walk(296,211);await b.key('ArrowUp',260);
+  await capture('desk-front','从桌前接近椅子，不穿进工位',['N03'],s=>s.position.y>=205);await b.key('ArrowDown',240);
   await walk(296,140);await b.key('ArrowDown',260);
   await capture('desk-collision','站立角色不能走到右下工位的显示器上',['N03'],s=>s.position.y<=147);
   if(!visualOnly){
@@ -146,12 +156,18 @@ try{
     await b.key('r');await b.key('Escape');
     await capture('complete-replay-cancel','章末取消重玩保留成果',['N21'],s=>s.chapter.state==='complete'&&s.buttons.some(o=>o.action==='bridge-hangzhou'));
     await select('bridge-hangzhou');await b.until(s=>s.state==='journey');
-    await b.shot('bridge-start.png');await delay(1700);await b.shot('bridge-middle.png');
+    report.bridgeScreenshots=[await b.shot('bridge-start.png')];await delay(1700);report.bridgeScreenshots.push(await b.shot('bridge-middle.png'));
     for(let i=0;i<60&&!await b.read('window.careerJourney().arrived');i++)await delay(100);
-    assert.ok(await b.read('window.careerJourney().arrived'));await b.shot('bridge-arrived.png');
+    assert.ok(await b.read('window.careerJourney().arrived'));report.bridgeScreenshots.push(await b.shot('bridge-arrived.png'));
     // Journey buttons use the same direction/Enter handler, outside #choices.
     await b.key('Enter');await b.until(s=>s.saveKey==='career-rpg:hangzhou:v1',15000);
     await capture('hangzhou-entry','地图确认真正进入杭州并保留南京存档',['N21'],async s=>s.chapter.state==='arrive'&&await b.read(`JSON.parse(localStorage.getItem('career-rpg:nanjing:v1')).state==='complete'`));
+    await b.key('Enter');await b.key('m');const hangzhouPage=await b.snap();
+    await b.send('Page.navigate',{url:site.url+'?chapter=nanjing'});await b.until(s=>s.saveKey==='career-rpg:nanjing:v1',15000);
+    if((await b.snap()).state==='explore')await b.key('m');
+    await select('bridge-hangzhou');for(let i=0;i<60&&!await b.read('window.careerJourney().arrived');i++)await delay(100);
+    await b.key('Enter');await b.until(s=>s.saveKey==='career-rpg:hangzhou:v1',15000);
+    await capture('hangzhou-existing-save','再次进杭州恢复已有手册与位置',['N21'],s=>s.dialogue===hangzhouPage.dialogue&&s.chapter.state===hangzhouPage.chapter.state&&JSON.stringify(s.position)===JSON.stringify(hangzhouPage.position));
     report.mainErrors=[...b.errors];assert.deepEqual(b.errors,[]);await b.close();
     b=await openBrowser(site.url+'?chapter=nanjing',out);
     await remainingFlow();
@@ -163,10 +179,13 @@ try{
     let index=0;
     for(const [stage,sets] of Object.entries(definition.legalSnapshots))for(const flags of sets){
       const fixture={schema:1,chapter:definition.id,state:stage,flags,play:{version:1,state:'dialogue',position:{x:294,y:155},facing:'down',page:{title:'旧任务',paragraphs:['这轮排查先到这里，笔记本还有没记下的。'],choices:[{label:'过去看看',event:'view_confirm_recheck_visited',id:''}],selectedIndex:0,speaker:'player',canDismiss:true,system:false,objectId:'cto-pc'}}};
-      await b.read(`localStorage.setItem('career-rpg:nanjing:v1',${JSON.stringify(JSON.stringify(fixture))})`);await b.reload();
-      await capture('legacy-'+(++index)+'-'+stage,'旧存档 '+stage+' 接续（显式夹具）',['N18','N21'],s=>flags.every(f=>s.chapter.flags.includes(f))&&!s.dialogue.includes('笔记本')&&s.position.y<=147&&!s.buttons.some(o=>o.action.includes('confirm_recheck')));
-      await remainingFlow();assert.equal((await b.snap()).chapter.state,'complete');
-      await b.shot('legacy-'+index+'-complete.png');
+      const injected=await b.send('Page.addScriptToEvaluateOnNewDocument',{source:`(()=>{localStorage.setItem('career-rpg:nanjing:v1',${JSON.stringify(JSON.stringify(fixture))});window.__legacyNanjing=${JSON.stringify(stage)};})()`});
+      await b.reload();await b.send('Page.removeScriptToEvaluateOnNewDocument',{identifier:injected.identifier});
+      await capture('legacy-'+(++index)+'-'+stage,'旧存档 '+stage+' 接续（显式夹具）',['N18','N21'],async s=>await b.read('window.__legacyNanjing')===stage&&s.chapter.state===({report:'incident',learning:'journey'}[stage]||stage)&&flags.every(f=>s.chapter.flags.includes(f))&&!s.dialogue.includes('笔记本')&&s.position.x===294&&s.position.y===147&&!s.buttons.some(o=>o.action.includes('confirm_recheck')));
+      assert.equal(await b.read('window.__legacyNanjing'),stage);
+      assert.equal((await b.snap()).chapter.state,({report:'incident',learning:'journey'}[stage]||stage));
+      await b.key('ArrowUp',200);await remainingFlow();assert.equal((await b.snap()).chapter.state,'complete');
+      await capture('legacy-'+index+'-complete','旧 '+stage+' 进度实际接续到章末（夹具）',['N21'],s=>s.chapter.state==='complete');
     }
 
   }
@@ -177,6 +196,7 @@ finally{
   await writeFile(path.join(out,'result.json'),JSON.stringify(report,null,2)+'\n');
   const md=['# 南京试玩反馈回归','',`版本：${report.commit}；结果：${report.result}`,'',report.environment,''];
   for(const s of report.steps)md.push(`## ${s.id}：${s.title}`,'',`${s.status} · ${s.feedback.join('、')}`,'',`正文：${s.state.dialogue}`,`按钮：${s.state.buttons.map(o=>o.label||o.action).join(' / ')}`,'',`![${s.title}](${s.screenshot})`,'');
+  for(const shot of report.bridgeScreenshots||[])md.push('![南京到杭州]('+shot+')','');
   if(report.error)md.push(report.error,'');await writeFile(path.join(out,'report.md'),md.join('\n'));
   console.log('Report:',path.join(out,'report.md'));
 }
