@@ -101,7 +101,9 @@ async function collect(ctx,id,skill) {
       described=true;await check(ctx,'jquery-book','jQuery 学习提示为获得技能书',['F11'],next=>/获得技能书.*锋利的\s*jQuery/.test(next.dialogue));
     }
     if(s.dialogue.includes('获得技能')&&s.chapter.skills[skill]==='got'){
-      award=true;const before=s.position;await b.key('Enter');
+      award=true;const before=s.position;
+      await check(ctx,skill+'-award-open','技能获得页显示统一确认按钮',['F10','F12'],next=>next.conversationVisible&&next.buttons.some(button=>button.label==='确定'));
+      await b.key('Enter');
       await check(ctx,skill+'-award','获得提示可回车收起，角色不误动',['F10','F12'],next=>next.state==='explore'&&!next.conversationVisible&&next.position.x===before.x&&next.position.y===before.y);
       continue;
     }

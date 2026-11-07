@@ -106,6 +106,14 @@ async function capture(port, base, page, width, section) {
     const loaded = tab.once('Page.loadEventFired');
     await tab.send('Page.navigate', { url: `${base}/${page}` });
     await loaded;
+    if (await tab.evaluate("Boolean(document.querySelector('.game-shell #stage'))")) {
+      await tab.evaluate(`(async()=>{const deadline=Date.now()+15000;while(Date.now()<deadline){
+        const state=window.careerPrototype?.snapshot().state;
+        if(state&&state!=='loading'&&state!=='error')return;
+        if(document.querySelector('#game-failure')?.hidden===false)throw Error('Game failed before screenshot');
+        await new Promise(resolve=>setTimeout(resolve,100));
+      }throw Error('Game did not become ready before screenshot');})()`);
+    }
     let clip = null;
     if (section) {
       clip = await tab.evaluate(sectionClip(section));
