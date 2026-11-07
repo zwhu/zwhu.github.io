@@ -13,6 +13,8 @@ export const observation = `(() => {
   const buttons = [...document.querySelectorAll('#choices button')].filter(b => b.getClientRects().length && !b.disabled);
   const body = document.querySelector('#dialogue');
   const style = getComputedStyle(conversation);
+  const glintContext=document.querySelector('#skill-glints')?.getContext('2d');
+  const litPixels=(x,y)=>{if(!glintContext)return 0;const pixels=glintContext.getImageData(x,y,22,22).data;let count=0;for(let i=3;i<pixels.length;i+=4)if(pixels[i])count++;return count;};
   return {...s, dialogue: body.textContent.trim(), nameplate: document.querySelector('#nameplate')?.textContent || '',
     conversationVisible: !!conversation.getClientRects().length && style.display!=='none' && style.visibility!=='hidden',
     conversationHiddenAttr: conversation.hidden, conversationDisplay: style.display,
@@ -21,6 +23,7 @@ export const observation = `(() => {
     fontSize: parseFloat(getComputedStyle(body).fontSize),
     buttons: buttons.map(b => ({label:b.textContent.trim(), action:b.dataset.action || b.dataset.event || b.id,
       caret:b.classList.contains('continue-caret'), selected:b===document.activeElement})),
+    learningHints:{book:litPixels(14,38),computer:litPixels(65,114)},
     storage: localStorage.getItem(s.saveKey), worldFrame:window.__playtestWorld || null,
     inputCount:window.__playtestInput?.length || 0, input: (window.__playtestInput || []).slice(-80)};
 })()`;
@@ -67,7 +70,7 @@ export async function openBrowser(url, out) {
     };
     await send('Runtime.enable');await send('Page.enable');await send('Network.enable');
     await send('Emulation.setDeviceMetricsOverride',{width:1280,height:960,deviceScaleFactor:1,mobile:false});
-    await send('Page.addScriptToEvaluateOnNewDocument',{source:`window.__playtestInput=[];for(const type of ['keydown','keyup','pointerdown'])window.addEventListener(type,e=>window.__playtestInput.push({type,key:e.key||'',trusted:e.isTrusted,repeat:e.repeat||false,focus:document.activeElement.id||document.activeElement.tagName}),true);
+    await send('Page.addScriptToEvaluateOnNewDocument',{source:`window.__playtestDocument=crypto.randomUUID();window.__playtestInput=[];for(const type of ['keydown','keyup','pointerdown'])window.addEventListener(type,e=>window.__playtestInput.push({type,key:e.key||'',trusted:e.isTrusted,repeat:e.repeat||false,focus:document.activeElement.id||document.activeElement.tagName}),true);
       window.__playtestWorld={frames:0,props:[]};
       const clear=CanvasRenderingContext2D.prototype.clearRect,fill=CanvasRenderingContext2D.prototype.fillRect,draw=CanvasRenderingContext2D.prototype.drawImage;
       const main=ctx=>ctx.canvas.parentElement?.id==='stage'&&!ctx.canvas.id;
@@ -82,6 +85,16 @@ export async function openBrowser(url, out) {
       throw Error('Browser condition timeout: '+JSON.stringify(value&&{state:value.state,chapter:value.chapter.state,dialogue:value.dialogue,buttons:value.buttons,position:value.position}));
     };
     await until(s => s.state!=='loading',15000);
+    const reload = async () => {
+      const previous=await read('window.__playtestDocument');
+      await send('Page.reload',{ignoreCache:true});
+      const deadline=Date.now()+15000;
+      while(Date.now()<deadline){
+        try{if(await read('window.__playtestDocument')!==previous&&await read('Boolean(window.__playtestDocument&&window.careerPrototype)')){await until(s=>s.state!=='loading',15000);return;}}catch(error){if(!/context|Cannot find/i.test(error.message))throw error;}
+        await delay(60);
+      }
+      throw Error('Reload did not produce a new ready document');
+    };
     const codes={Enter:13,Escape:27,ArrowLeft:37,ArrowUp:38,ArrowRight:39,ArrowDown:40,Tab:9,' ':32};
     const keyParams = key => ({key,code:key===' '?'Space':key.length===1?'Key'+key.toUpperCase():key,
       windowsVirtualKeyCode:codes[key]||key.toUpperCase().charCodeAt(0),...(key==='Enter'?{text:'\r',unmodifiedText:'\r'}:{})});
@@ -114,7 +127,7 @@ export async function openBrowser(url, out) {
       const ended=new Promise(resolve => chrome.once('exit',resolve));chrome.kill();await Promise.race([ended,delay(2000)]);
       await rm(profile,{recursive:true,force:true,maxRetries:3,retryDelay:100});
     };
-    return {send,read,snap,until,key,holdEnter,pointer,shot,errors,responses,inputRequests,close,profile,port};
+    return {send,read,snap,until,reload,key,holdEnter,pointer,shot,errors,responses,inputRequests,close,profile,port};
   } catch(error) {
     socket?.close();chrome.kill();await rm(profile,{recursive:true,force:true,maxRetries:3,retryDelay:100});throw error;
   }

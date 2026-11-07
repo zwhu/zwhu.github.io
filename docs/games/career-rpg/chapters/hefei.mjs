@@ -29,10 +29,10 @@ export const HEFEI={
   ],
   objects:[
     {id:'my-pc',role:'my_pc',markerPosition:{x:75,y:124},markerSprite:true,name:'我的电脑',x:75,y:192,seat:{x:75,y:176},events:['take_day_task'],marker:true,presentIn:['day_tasks']},
-    {id:'linux-screen',role:'linux_screen',name:'Linux / Git',x:75,y:192,seat:{x:75,y:176},iconAt:{x:75,y:130},iconSize:[28,25],icon:`${H}/hefei-props/linux-git-screen/icon.png`,iconHighlight:`${H}/hefei-props/linux-git-screen/icon-highlight.png`,card:`${H}/hefei-props/linux-git-screen/card-192.png`,events:['review_linux_git'],presentIn:['day_tasks'],iconAfterFlag:'day_task_taken'},
-    {id:'jquery-book',role:'jquery_book',name:'《锋利的 jQuery》',x:24,y:90,iconAt:{x:20,y:46},iconSize:[34,29],icon:`${H}/hefei-props/frontend-jquery/icon.png`,iconHighlight:`${H}/hefei-props/frontend-jquery/icon-highlight.png`,card:`${H}/hefei-props/frontend-jquery/card-192.png`,events:['review_frontend'],presentIn:['interview','day_tasks'],iconHiddenIn:['interview'],glowUntilFlag:'frontend_reviewed',cardIn:['day_tasks'],lines:{interview:'shelf-interview',day:'jquery-found'},lineIds:true,preface:{day_tasks:'jquery-found'},prefaceAction:'拿下来'},
-    {id:'java-book',role:'java_book',name:'Java',x:75,y:192,seat:{x:75,y:176},iconAt:{x:62,y:128},iconSize:[17,18],icon:`${H}/hefei-props/java-book/icon.png`,iconHighlight:`${H}/hefei-props/java-book/icon-highlight.png`,card:`${H}/hefei-props/java-book/card-192.png`,events:['study_java'],presentIn:['night_study'],nightDim:true},
-    {id:'db-screen',role:'db_screen',name:'数据库和 NoSQL',x:84,y:192,seat:{x:75,y:176},iconAt:{x:90,y:130},iconSize:[32,24],icon:`${H}/hefei-props/db-nosql-screen/icon.png`,iconHighlight:`${H}/hefei-props/db-nosql-screen/icon-highlight.png`,card:`${H}/hefei-props/db-nosql-screen/card-192.png`,events:['study_db_nosql'],presentIn:['night_study'],nightDim:true},
+    {id:'linux-screen',glintAt:{x:75,y:124},role:'linux_screen',name:'Linux / Git',x:75,y:192,seat:{x:75,y:176},iconAt:{x:75,y:130},iconSize:[28,25],icon:`${H}/hefei-props/linux-git-screen/icon.png`,iconHighlight:`${H}/hefei-props/linux-git-screen/icon-highlight.png`,card:`${H}/hefei-props/linux-git-screen/card-192.png`,events:['review_linux_git'],presentIn:['day_tasks'],iconAfterFlag:'day_task_taken'},
+    {id:'jquery-book',glintAt:{x:24,y:48},role:'jquery_book',name:'《锋利的 jQuery》',x:24,y:90,iconAt:{x:20,y:46},iconSize:[34,29],icon:`${H}/hefei-props/frontend-jquery/icon.png`,iconHighlight:`${H}/hefei-props/frontend-jquery/icon-highlight.png`,card:`${H}/hefei-props/frontend-jquery/card-192.png`,events:['review_frontend'],presentIn:['interview','day_tasks'],iconHiddenIn:['interview'],glowUntilFlag:'frontend_reviewed',cardIn:['day_tasks'],lines:{interview:'shelf-interview',day:'jquery-found'},lineIds:true,preface:{day_tasks:'jquery-found'},prefaceAction:'拿下来'},
+    {id:'java-book',glintAt:{x:75,y:124},role:'java_book',name:'Java',x:75,y:192,seat:{x:75,y:176},iconAt:{x:62,y:128},iconSize:[17,18],icon:`${H}/hefei-props/java-book/icon.png`,iconHighlight:`${H}/hefei-props/java-book/icon-highlight.png`,card:`${H}/hefei-props/java-book/card-192.png`,events:['study_java'],presentIn:['night_study'],nightDim:true},
+    {id:'db-screen',glintAt:{x:75,y:124},role:'db_screen',name:'数据库和 NoSQL',x:84,y:192,seat:{x:75,y:176},iconAt:{x:90,y:130},iconSize:[32,24],icon:`${H}/hefei-props/db-nosql-screen/icon.png`,iconHighlight:`${H}/hefei-props/db-nosql-screen/icon-highlight.png`,card:`${H}/hefei-props/db-nosql-screen/card-192.png`,events:['study_db_nosql'],presentIn:['night_study'],nightDim:true},
     {id:'manual',role:'manual',name:'书架 · 工作手册',x:24,y:90,events:[],marker:false},
   ],
   entryPoints:{interview:{x:190,y:196},day_tasks:{x:120,y:192},night_study:{x:75,y:192},raise:{x:190,y:196},complete:{x:24,y:90}},
@@ -42,6 +42,7 @@ export const HEFEI={
   chainDialog:true,
   directTalk:true,
   instantSkills:['review_linux_git'],
+  learningGlints:true,
   transitionLines:{boss_lets_try:'stayed',night_falls:'night-falls',days_pass:'days-pass'},
   transitionBeats:{
     boss_lets_try:[{map:'day',dim:0},{map:'day',dim:0},{map:'day',dim:0},{map:'day',dim:0},{map:'day',dim:0}],

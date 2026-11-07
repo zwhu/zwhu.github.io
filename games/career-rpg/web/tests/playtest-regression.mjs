@@ -1,4 +1,4 @@
-// Acceptance of the author's 2026-11-07 feedback; deliberately red until fixed.
+// Acceptance of the author's 2026-11-07 feedback using real browser input.
 import {mkdir, mkdtemp, readFile, writeFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
@@ -46,7 +46,7 @@ scenario('opening-and-resume','开场文案、正常回车、位置保存和无�
   await check(ctx,'close','无文本选项时 Enter 收起末句',['F01','F03'],s=>s.state==='explore'&&!s.conversationVisible);
   await explore(ctx);await b.key('ArrowLeft',180);const before=await b.snap();
   await b.key('Escape');await check(ctx,'no-pause','Esc 不弹稍作停留菜单',['F05'],s=>!s.paused);
-  await b.send('Page.reload',{ignoreCache:true});await b.until(s=>s.state!=='loading',15000);
+  await b.reload();
   await check(ctx,'restore','刷新恢复角色位置和已确认进度',['F05'],s=>Math.hypot(s.position.x-before.position.x,s.position.y-before.position.y)<=1&&JSON.stringify(s.chapter.flags)===JSON.stringify(before.chapter.flags));
 });
 
@@ -54,7 +54,7 @@ scenario('automatic-resume','独立检查取消暂停和角色位置持久化',a
   const b=ctx.browser;await b.key('Enter');await b.until(s=>s.state==='explore');
   await b.key('ArrowLeft',200);const before=await b.snap();
   await b.key('Escape');await check(ctx,'no-pause','探索状态不进入稍作停留弹窗',['F05'],s=>!s.paused);
-  await b.send('Page.reload',{ignoreCache:true});await b.until(s=>s.state!=='loading',15000);
+  await b.reload();
   await check(ctx,'position','刷新后保留已移动的位置',['F05'],s=>Math.hypot(s.position.x-before.position.x,s.position.y-before.position.y)<=1);
 });
 
@@ -84,26 +84,31 @@ async function press(ctx,label) {
   throw Error('Directions could not select '+label);
 }
 async function collect(ctx,id,skill) {
-  const b=ctx.browser;let described=false,award=false;
+  const b=ctx.browser;let described=false,award=false,obsoleteLinux=false;
   for(let i=0;i<12;i++){
     let s=await b.snap();
     if(s.state==='transition'){await b.key('Enter');continue;}
     if(s.state==='explore'){
-      if(s.chapter.skills[skill]==='got')return;
+      if(s.chapter.skills[skill]==='got'){
+        if(skill==='linux'&&!obsoleteLinux)await check(ctx,'linux-no-extra','直接获得 Linux 技能，没有额外说明确认页',['F09'],()=>award);
+        if(skill==='jquery'&&!described)await check(ctx,'jquery-book','必须展示获得技能书文案',['F11'],()=>false);
+        return;
+      }
       await object(ctx,id);await b.key('e');continue;
     }
     if(s.state!=='dialogue')throw Error('Unexpected collect state '+s.state);
+    if(skill==='jquery'&&!s.dialogue.includes('书架上夹着')&&!described){
+      described=true;await check(ctx,'jquery-book','jQuery 学习提示为获得技能书',['F11'],next=>/获得技能书.*锋利的\s*jQuery/.test(next.dialogue));
+    }
     if(s.dialogue.includes('获得技能')&&s.chapter.skills[skill]==='got'){
       award=true;const before=s.position;await b.key('Enter');
       await check(ctx,skill+'-award','获得提示可回车收起，角色不误动',['F10','F12'],next=>next.state==='explore'&&!next.conversationVisible&&next.position.x===before.x&&next.position.y===before.y);
       continue;
     }
     if(skill==='linux'&&s.dialogue.includes('第一次用 Linux')){
+      obsoleteLinux=true;
       await check(ctx,'linux-no-extra','不出现被要求删除的 Linux/Git 说明确认页',['F09'],()=>false);
       if(mode==='acceptance')throw Error('Obsolete Linux/Git confirmation page blocks the new contract');
-    }
-    if(skill==='jquery'&&!s.dialogue.includes('书架上夹着')&&!described){
-      described=true;await check(ctx,'jquery-book','jQuery 学习提示为获得技能书',['F11'],next=>/获得技能书.*锋利的\s*jQuery/.test(next.dialogue));
     }
     const named=s.buttons.find(button=>!button.caret);
     if(named){
@@ -143,6 +148,7 @@ async function mainFlow(ctx,day,night) {
     ctx.row.legacyActions.push({action:'接任务',reason:'Baseline capture only; new demand branches are unavailable'});await press(ctx,'接任务');
   }
   await check(ctx,'demand-result','接取后无空对话或残留接任务按钮',['F08'],s=>s.state==='explore'&&!s.conversationVisible);await explore(ctx);
+  await check(ctx,'learning-hints','待学习的书架和现有电脑显示闪点',['F06','F13'],s=>s.learningHints.book>0&&s.learningHints.computer>0);
   await check(ctx,'day-world','白天实际绘制没有叠加道具屏幕和书架电脑',['F06','F13'],s=>s.worldFrame?.frames>0&&s.worldFrame.props.length===0);
   for(const skill of day){
     if(skill==='jquery')await route(ctx,[[24,196],[24,90]]);else await route(ctx,[[24,196],[75,196]]);
@@ -150,6 +156,7 @@ async function mainFlow(ctx,day,night) {
   }
   if((await b.snap()).state==='transition')await b.key('Enter');
   await check(ctx,'night','白天完成后进入夜间，日间技能已获得',['F05'],s=>s.chapter.state==='night_study'&&s.chapter.skills.linux==='got'&&s.chapter.skills.jquery==='got');
+  await check(ctx,'night-hint','夜间学习在现有电脑上显示闪点',['F13','F14'],s=>s.learningHints.computer>0&&s.learningHints.book===0);
   await check(ctx,'night-world','夜间实际绘制没有半透明道具屏幕重影',['F13','F14'],s=>s.worldFrame?.frames>0&&s.worldFrame.props.length===0);
   await explore(ctx);await route(ctx,[[24,196],[75,196]]);
   for(const skill of night){const id=skill==='java'?'java-book':'db-screen';await object(ctx,id);await b.key('e');await collect(ctx,id,skill);await explore(ctx);}
@@ -161,7 +168,7 @@ async function mainFlow(ctx,day,night) {
   await check(ctx,'complete','合法主流程到达章末',['F03'],s=>s.chapter.state==='complete');
   await b.key('Escape');await b.key('m');
   await check(ctx,'handbook','手册展示四项已获得技能',['F05'],async s=>Object.values(s.chapter.skills).every(value=>value==='got')&&await b.read(`document.querySelector('#skill-slots')?.getClientRects().length>0`));
-  const saved=await b.snap();await b.send('Page.reload',{ignoreCache:true});await b.until(s=>s.state!=='loading',15000);
+  const saved=await b.snap();await b.reload();
   await check(ctx,'reload-complete','章末刷新保持章节和收集结果',['F05'],s=>s.chapter.state==='complete'&&JSON.stringify(s.chapter.skills)===JSON.stringify(saved.chapter.skills));
   await press(ctx,'从办公室重玩');await b.key('Escape');
   await check(ctx,'replay-cancel','取消重玩保持章末进度',['F05'],s=>s.chapter.state==='complete'&&JSON.stringify(s.chapter.skills)===JSON.stringify(saved.chapter.skills));
@@ -180,7 +187,7 @@ scenario('restore-dialogue','刷新恢复正在进行的对话与选项',async c
   const b=ctx.browser;await b.key('Enter');await b.until(s=>s.state==='explore');
   await route(ctx,[[270,196],[270,128],[310,128]]);await object(ctx,'boss');await b.key('e');await b.key('Enter');await b.key('ArrowRight');
   const before=await b.snap();await check(ctx,'before','记录刷新前的对话和选择',['F05'],()=>true);
-  await b.send('Page.reload',{ignoreCache:true});await b.until(s=>s.state!=='loading',15000);
+  await b.reload();
   await check(ctx,'after','刷新后保留对话内容、选择和角色位置',['F05'],s=>s.dialogue===before.dialogue&&s.buttons.find(button=>button.selected)?.label===before.buttons.find(button=>button.selected)?.label&&Math.hypot(s.position.x-before.position.x,s.position.y-before.position.y)<=1);
 });
 scenario('actual-blur','真实切换标签页后自动恢复，按住的移动键被清除',async ctx=>{

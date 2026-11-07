@@ -884,22 +884,33 @@ function cinematicTick(){
     return {skip:false,done:false,error:String(error&&error.stack||error),frame:simFrame,phase:cinematicDirector?.phase,index:cinematicDirector?.index};
   }
 }
+let glintSnapshot=null,glintPoints=[];
+function skillGlintPoints(){
+  if(glintSnapshot===snapshot)return glintPoints;
+  glintSnapshot=snapshot;
+  const ready=(chapter.skillSlots(snapshot)||[]).filter(skill=>skill.status==='ready');
+  const points=ready.flatMap(skill=>{
+    const object=sceneConfig.objects.find(item=>item.role===skill.role);
+    if(!object?.iconAt)return [];
+    const shared=ready.filter(item=>item.role===skill.role),index=shared.indexOf(skill);
+    return [{x:object.glintAt?.x??object.iconAt.x+(shared.length>1?(index-(shared.length-1)/2)*12:0),y:object.glintAt?.y??object.iconAt.y}];
+  });
+  // Learning hints stay on the furniture even when its card art is not a world sprite.
+  if(sceneConfig.learningGlints)for(const object of visibleRoom().objects){
+    if(object.glintAt&&actionsFor(chapter,snapshot,object).length)points.push(object.glintAt);
+  }
+  glintPoints=points.filter((point,index)=>points.findIndex(other=>other.x===point.x&&other.y===point.y)===index);
+  return glintPoints;
+}
 function drawCinematicGlints(now){
   const view=cinematicView;
   glintCanvas.style.zIndex=now<awardFlashUntil?'8':'2';
   if(glintCanvas.width!==view.size||glintCanvas.height!==view.size){glintCanvas.width=view.size;glintCanvas.height=view.size;}
   glintCtx.clearRect(0,0,view.size,view.size);
-  const slots=chapter.skillSlots(snapshot)||[];
   glintCtx.imageSmoothingEnabled=false;
-  const ready=slots.filter(skill=>skill.status==='ready');
-  for(const skill of ready){
-    const object=sceneConfig.objects.find(item=>item.role===skill.role);
-    if(!object?.iconAt)continue;
-    const shared=ready.filter(item=>item.role===skill.role);
-    const index=shared.indexOf(skill);
-    const ox=object.iconAt.x+(shared.length>1?(index-(shared.length-1)/2)*12:0);
+  for(const point of skillGlintPoints()){
     for(let i=0;i<8;i++){
-      const angle=now/420+i*Math.PI/4,x=ox+Math.cos(angle)*10-view.x,y=object.iconAt.y+Math.sin(angle)*8-view.y;
+      const angle=now/420+i*Math.PI/4,x=point.x+Math.cos(angle)*10-view.x,y=point.y+Math.sin(angle)*8-view.y;
       glintCtx.fillStyle=i%2?'#f4e35a':'#fffaf0';
       glintCtx.fillRect(x|0,y|0,2,2);
     }
@@ -910,17 +921,10 @@ function drawSkillGlints(now){
   if(cinematicView){drawCinematicGlints(now);return;}
   glintCanvas.style.zIndex=now<awardFlashUntil?'8':'2';
   glintCtx.clearRect(0,0,sceneConfig.width,sceneConfig.height);
-  const slots=chapter.skillSlots(snapshot)||[];
   glintCtx.imageSmoothingEnabled=false;
-  const ready=slots.filter(skill=>skill.status==='ready');
-  for(const skill of ready){
-    const object=sceneConfig.objects.find(item=>item.role===skill.role);
-    if(!object?.iconAt)continue;
-    const shared=ready.filter(item=>item.role===skill.role);
-    const index=shared.indexOf(skill);
-    const ox=object.iconAt.x+(shared.length>1?(index-(shared.length-1)/2)*12:0);
+  for(const point of skillGlintPoints()){
     for(let i=0;i<8;i++){
-      const angle=now/420+i*Math.PI/4,x=ox+Math.cos(angle)*10,y=object.iconAt.y+Math.sin(angle)*8;
+      const angle=now/420+i*Math.PI/4,x=point.x+Math.cos(angle)*10,y=point.y+Math.sin(angle)*8;
       glintCtx.fillStyle=i%2?'#f4e35a':'#fffaf0';
       glintCtx.fillRect(x|0,y|0,2,2);
     }

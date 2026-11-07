@@ -11,7 +11,7 @@ const nanjing=createChapter(nanjingData);
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-hefei.json',import.meta.url),'utf8'));
 const chapter=createChapter(data);
 const facts={
-  'interview-narrator':'原本录用的人嫌工资低，没来。',
+  'interview-narrator':'原本录用的人嫌工资低，没来。我鼓起勇气，毛遂自荐。',
   'interview-boss-1':'你能力不行，来了也干不了活。',
   'interview-player':'我不要工资，让我来试试就行。',
   'interview-boss-2':'行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。',
@@ -23,7 +23,7 @@ const facts={
   'colleague-near-day':'好饿啊，搞完这点要不去吃面？',
   'colleague-far-day':'没事，熬过星期三就是星期五。',
   'day-linux':'第一次用 Linux 开发机，第一次用 Git。不会的就 Google。',
-  'day-jquery':'第一次写前端，手边是《锋利的 jQuery》。还第一次写了 E2E 测试。',
+  'day-jquery':'获得技能书「锋利的 jQuery」',
   'night-falls':'白天的活告一段落。天黑了，我还没走。',
   'night-java':'晚上对着 Java 往下啃。',
   'night-db':'再学数据库和 NoSQL。',
@@ -192,7 +192,7 @@ test('hefei marker sits on my_pc, cards stay off the startup sheets, and the ais
   const pageSource=readFileSync(new URL('../index.html',import.meta.url),'utf8');
   const cssSource=readFileSync(new URL('../style.css',import.meta.url),'utf8');
   assert.equal(mainSource.includes('回看'),false);
-  assert.equal(mainSource.includes('继续探索'),false);
+  assert.equal(mainSource.includes("label:'继续探索办公室'"),true);
   assert.equal(pageSource.includes('继续探索'),false);
   assert.equal(pageSource.includes('Shift+Tab 读正文'),false);
   assert.equal(pageSource.includes('id="nameplate"'),true);
