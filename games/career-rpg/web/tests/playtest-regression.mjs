@@ -37,7 +37,7 @@ scenario('dialogue-focus','对话开启后，焦点离开按钮仍可回车推�
   const b=ctx.browser, box=await b.read(`(()=>{const r=document.querySelector('#stage').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/3};})()`);
   await b.pointer(box.x,box.y);ctx.row.input='Real pointer sets scene focus, then Enter; no scripted focus';
   const before=await b.snap();await b.key('Enter');
-  await check(ctx,'enter','活跃对话收到 Enter 后收起，不依赖按钮焦点',['F01','F03'],s=>(chapter==='nanjing'||before.conversationVisible)&&s.state==='explore'&&!s.conversationVisible);
+  await check(ctx,'enter','活跃对话收到 Enter 后收起，不依赖按钮焦点',['F01','F03'],s=>before.conversationVisible&&s.state==='explore'&&!s.conversationVisible);
 });
 scenario('opening-and-resume','开场文案、正常回车、位置保存和无暂停弹窗',async ctx=>{
   const b=ctx.browser;
