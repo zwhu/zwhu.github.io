@@ -1,5 +1,14 @@
 # 2026-11-08 首批试玩修复结果
 
+## 追加：重玩入口与重复回应修复
+
+作者追加「重玩」按钮和面试对话重复反馈。已增加右上角重玩入口与 R 快捷键；取消保持原位置/对话，确认重新开始当前章节。选择「我不要工资，让我来试试就行」后直接进入老板答复，移除重复主角台词页；旧 UI 存档恢复时也进入老板答复，不提前确认录用事件。
+
+运行代码 `0b336f8`；正式回归 16 场景、173 检查通过，包含四条完整路径、三章重玩、技能页返回和旧 UI 迁移；全仓 14 组及 46 个游戏离线测试通过。最新图文报告在仓库外 `/Users/bytedance/work/AI/game-reports/career-rpg/2026-11-08-direct-reply/delivery.md`，逐步截图见同目录 `report.md`。本节是最新结果，下方保留首批交付版本记录。
+
+## 首批交付（运行版本 cbfba12）
+
+
 带原图的交付文档与可筛选分支图库在仓库外：`/Users/bytedance/work/AI/game-reports/career-rpg/2026-11-08-final/delivery.md`、`/Users/bytedance/work/AI/game-reports/career-rpg/2026-11-08-final/delivery.html`。下方截图文件名均相对于该报告目录。
 首批 14 条反馈已逐项修改，BUG-001～BUG-007 的修复及本地复验已完成。PR：[zwhu.github.io #48](https://github.com/zwhu/zwhu.github.io/pull/48)，分支 `test/career-rpg-playtest-regression`。运行代码版本 `cbfba12`，源码 hash 见各 `result.json`；后续提交仅补测试工具与交付文档。
 
