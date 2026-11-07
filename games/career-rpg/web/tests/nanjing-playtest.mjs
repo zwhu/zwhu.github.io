@@ -13,7 +13,7 @@ import {blocked} from '../engine/world.mjs';
 const root=path.resolve(import.meta.dirname,'../../../..');
 const arg=name=>process.argv.find(value=>value.startsWith('--'+name+'='))?.slice(name.length+3);
 const out=arg('out')?path.resolve(arg('out')):await mkdtemp(path.join(os.tmpdir(),'nanjing-playtest-'));
-const visualOnly=arg('case')==='visual';
+const mode=arg('case')||'full',visualOnly=mode==='visual',legacyOnly=mode==='legacy';
 if(out===root||out.startsWith(root+path.sep))throw Error('Store evidence outside Git');
 await mkdir(out,{recursive:true});
 try{await readFile(path.join(out,'result.json'));throw Error('Choose a new output directory');}catch(error){if(error.code!=='ENOENT')throw error;}
@@ -120,11 +120,15 @@ try{
   await capture('desk-front','从桌前接近椅子，不穿进工位',['N03'],s=>s.position.y>=205);await b.key('ArrowDown',240);
   await walk(296,140);await b.key('ArrowDown',260);
   await capture('desk-collision','站立角色不能走到右下工位的显示器上',['N03'],s=>s.position.y<=147);
-  if(!visualOnly){
+  if(mode==='seating'){
+    await b.key('ArrowUp',240);await walk(82,127);await object('forum');
+    await capture('player-head','主角臀部锚点与椅背高度匹配，头部不被椅背挡住',['N01'],(s,draws)=>{const sit=draws.find(d=>d.src.includes('sit-back'));const chair=draws.find(d=>d.src.includes('office-room-v2')&&d.args.length===8&&d.args[4]===69);return !!sit&&!!chair&&sit.args[5]+sit.args[7]/2<=chair.args[5];});
+  }
+  if(!visualOnly&&!legacyOnly&&mode!=='seating'){
     await b.key('ArrowUp',240);
     await walk(82,127);await object('forum');
     await capture('forum-direct','电脑直接打开反馈，不先展示选择说明',['N04'],s=>s.dialogue==='论坛里，有用户说无法登录。这是我第一次面对真实的线上 C 端用户。'&&!s.dialogue.includes('选择一项'));
-    await capture('player-seated','主角办公坐在自己的椅背内',['N01'],(s,draws)=>draws.some(d=>d.src.includes('sit-back'))&&draws.some(d=>d.src.includes('office-room-v2')&&d.args.length===8&&d.args[4]===69));
+    await capture('player-seated','主角办公坐在自己的椅背内',['N01'],(s,draws)=>{const sit=draws.find(d=>d.src.includes('sit-back'));const chair=draws.find(d=>d.src.includes('office-room-v2')&&d.args.length===8&&d.args[4]===69);return !!sit&&!!chair&&sit.args[5]+sit.args[7]/2<=chair.args[5];});
     const atForum=(await b.snap()).position;await b.key('ArrowLeft',150);
     await capture('dialogue-lock','对话方向键不移动角色',['N01'],s=>JSON.stringify(s.position)===JSON.stringify(atForum));
     await b.reload();await capture('forum-reload','论坛正文刷新可恢复',['N04'],s=>s.dialogue.includes('论坛里')&&s.buttons.some(o=>o.action==='open_forum_post'));
@@ -175,17 +179,21 @@ try{
     await b.key('r');await b.key('Enter');
     await capture('replay-confirm','确认重玩回到办公室，无旧开场对白',['N04'],s=>s.chapter.state==='office'&&s.state==='explore'&&s.chapter.flags.length===0);
     await b.reload();await capture('replay-reload','重玩后的新开局可恢复',['N04'],s=>s.chapter.state==='office'&&s.state==='explore');
+
+  }
+  if(!visualOnly&&mode!=='main'&&mode!=='seating'){
     // Explicit legacy fixtures: only this section seeds old snapshots and obsolete page metadata.
     let index=0;
     for(const [stage,sets] of Object.entries(definition.legalSnapshots))for(const flags of sets){
+      if(arg('legacy-index')&&Number(arg('legacy-index'))!==index+1){index++;continue;}
       const fixture={schema:1,chapter:definition.id,state:stage,flags,play:{version:1,state:'dialogue',position:{x:294,y:155},facing:'down',page:{title:'旧任务',paragraphs:['这轮排查先到这里，笔记本还有没记下的。'],choices:[{label:'过去看看',event:'view_confirm_recheck_visited',id:''}],selectedIndex:0,speaker:'player',canDismiss:true,system:false,objectId:'cto-pc'}}};
       const injected=await b.send('Page.addScriptToEvaluateOnNewDocument',{source:`(()=>{localStorage.setItem('career-rpg:nanjing:v1',${JSON.stringify(JSON.stringify(fixture))});window.__legacyNanjing=${JSON.stringify(stage)};})()`});
       await b.reload();await b.send('Page.removeScriptToEvaluateOnNewDocument',{identifier:injected.identifier});
       await capture('legacy-'+(++index)+'-'+stage,'旧存档 '+stage+' 接续（显式夹具）',['N18','N21'],async s=>await b.read('window.__legacyNanjing')===stage&&s.chapter.state===({report:'incident',learning:'journey'}[stage]||stage)&&flags.every(f=>s.chapter.flags.includes(f))&&!s.dialogue.includes('笔记本')&&s.position.x===294&&s.position.y===147&&!s.buttons.some(o=>o.action.includes('confirm_recheck')));
       assert.equal(await b.read('window.__legacyNanjing'),stage);
       assert.equal((await b.snap()).chapter.state,({report:'incident',learning:'journey'}[stage]||stage));
-      await b.key('ArrowUp',200);await remainingFlow();assert.equal((await b.snap()).chapter.state,'complete');
-      await capture('legacy-'+index+'-complete','旧 '+stage+' 进度实际接续到章末（夹具）',['N21'],s=>s.chapter.state==='complete');
+      await explore();await b.key('ArrowUp',200);await remainingFlow();assert.equal((await b.snap()).chapter.state,'complete');
+      await capture('legacy-'+index+'-finished','旧 '+stage+' 进度实际接续到章末（夹具）',['N21'],s=>s.chapter.state==='complete');
     }
 
   }
