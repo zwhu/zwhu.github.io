@@ -10,7 +10,8 @@
   "terminal": "complete",
   "roleTargets": {
     "forum": [
-      "forum_pc"
+      "forum_pc",
+      "server_logs"
     ],
     "cto": [
       "cto_pc",
@@ -25,46 +26,28 @@
     ],
     "journey_map": [
       "journey_map"
+    ],
+    "review": [
+      "nanjing_review"
     ]
   },
   "objectives": {
     "office": "去左侧电脑，打开用户论坛",
-    "report": "读完用户反馈，继续",
-    "incident": "去右侧电脑，和 CTO 一起排查",
+    "report": "用户反馈无法登录",
+    "incident": "CTO 叫我过去 · 走到 CTO 身边",
     "investigation": {
       "count": [
         "feedback_reviewed",
         "recheck_visited",
         "impact_confirmed"
       ],
-      "pending": "排查 {n}/3 · {next}",
-      "steps": [
-        {
-          "unless": "recheck_visited",
-          "text": "右侧电脑：查看排查记录"
-        },
-        {
-          "unless": "impact_confirmed",
-          "text": "右侧电脑：确认影响到谁"
-        },
-        {
-          "unless": "feedback_reviewed",
-          "text": "左侧电脑：重读论坛反馈"
-        }
-      ],
-      "elseStep": "右侧电脑：结束这轮排查"
+      "pending": "回自己的电脑，查询、分析服务器日志",
+      "done": "日志查询完成 · 回到 CTO 身边"
     },
-    "restored": "两小时后，读完同事们的宽慰",
-    "learning": {
-      "count": [
-        "test_reviewed",
-        "comment_reviewed"
-      ],
-      "pending": "看过 {n}/2 · 右侧电脑：分别查看测试和坑点注释",
-      "done": "看过 2/2 · 去右侧书架，把这一页写进手册"
-    },
-    "complete": "南京这一章完成 · 手册可以随时回看",
-    "journey": "手册写好了。去通道里的旅程地图，看从合肥走到南京"
+    "restored": "整整两小时后恢复 · 继续复盘",
+    "learning": "复盘记入手册",
+    "complete": "南京本章完成 · 可继续探索或走到杭州",
+    "journey": "复盘已记入手册 · M 查看手册或完成南京篇"
   },
   "savePolicy": {
     "id": "atomic-per-event",
@@ -99,8 +82,8 @@
     },
     "acceptedEvent": "被接受的确认项才写：先 state = 转移的 to，再 flags = 旧 flags ∪ 选项 effects（并集，不删任何标记），最后把 {schema, chapter, state, flags} 作为同一个 JSON 值一次写入；一次事件只写一次，snapshot.state 就是写完后的当前状态。",
     "ignored": "未接受的事件不改 state、不改 flags、不写入任何快照：只读页与关闭；requires 不满足；effects 已全部在 flags 里（已在 investigation 或 learning 写过同一标记后的再次确认，只显示该项只读页）；交互点或朝向不对。",
-    "restore": "读档只读这一个快照，按 snapshot.state 与 snapshot.flags 原样恢复（exact snapshot）；state 与 flags 必须构成该状态的一个合法快照才算有效，不另存旧检查点状态，也不迁移旧格式。",
-    "replay": "恢复后按 entryPlacement 把玩家摆到该状态入口格，并重播该状态的页面内短演出（见 replayLines：论坛开场、反应、呆住与 CTO 招呼、排查开场、宽慰）；重播里每句仍要玩家确认，不自动推进状态、不自动写快照。对象页只在玩家走到交互点时由玩家交互打开，恢复后不自动弹出。",
+    "restore": "保持 schema=1 与原键；旧合法剧情快照继续可用。界面 play.chapterUI=2，旧菜单按当前阶段重建；report 与 learning 正常转换到新主线，不保留已删除的重复确认。",
+    "replay": "恢复合法位置、朝向、对话、选择与技能；新碰撞范围内的旧位置移动到最近可走点。当前南京直接复盘并结束，不重播旧合肥→南京任务。",
     "invalid": "state 不在七个状态内、flags 不是该状态的合法组合、schema 或 chapter 不符、JSON 损坏、或存储写入失败：不迁移也不修补，按损坏存档处理，提供“重新开始”（写 chapter_start 快照）或“本次继续，不保存”（本会话可玩，重新载入即回到损坏提示）。第一版没有既有用户存档，不写任何迁移代码。",
     "entryPlacement": {
       "office": [
@@ -1093,7 +1076,8 @@
           "dialogue": "office-reopen"
         }
       ],
-      "readPage": "office-reopen"
+      "readPage": "office-reopen",
+      "legacyAvailable": true
     },
     {
       "id": "T02",
@@ -1111,7 +1095,8 @@
       "label": "继续",
       "dialogue": "report-reaction",
       "playerFeedback": "反应读完后，玩家仍在 [9,4]，进入 incident。",
-      "effectMode": "add"
+      "effectMode": "add",
+      "legacyAvailable": true
     },
     {
       "id": "T03",
@@ -1156,7 +1141,8 @@
           "dialogue": "incident-rally"
         }
       ],
-      "readPage": "incident-rally"
+      "readPage": "incident-rally",
+      "legacyAvailable": true
     },
     {
       "id": "T04",
@@ -1203,7 +1189,8 @@
           "dialogue": "investigation-feedback-copy"
         }
       ],
-      "readPage": "investigation-feedback-copy"
+      "readPage": "investigation-feedback-copy",
+      "legacyAvailable": true
     },
     {
       "id": "T06",
@@ -1250,7 +1237,8 @@
           "dialogue": "investigation-recheck-copy"
         }
       ],
-      "readPage": "investigation-recheck-copy"
+      "readPage": "investigation-recheck-copy",
+      "legacyAvailable": true
     },
     {
       "id": "T05",
@@ -1299,7 +1287,8 @@
           "dialogue": "investigation-cto-pc-first"
         }
       ],
-      "readPage": "investigation-cto-pc-first"
+      "readPage": "investigation-cto-pc-first",
+      "legacyAvailable": true
     },
     {
       "id": "T07",
@@ -1352,7 +1341,8 @@
           "dialogue": "investigation-pending"
         }
       ],
-      "readPage": "investigation-pending"
+      "readPage": "investigation-pending",
+      "legacyAvailable": true
     },
     {
       "id": "T08",
@@ -1373,10 +1363,11 @@
       ],
       "target": "dialog",
       "choice": "confirm",
-      "label": "收起",
+      "label": "继续",
       "dialogue": "restored-closing",
       "playerFeedback": "宽慰收起，进入 learning，任务条“看过 0/2”。",
-      "effectMode": "add"
+      "effectMode": "add",
+      "legacyAvailable": true
     },
     {
       "id": "T09",
@@ -1431,7 +1422,8 @@
           "dialogue": "learning-test-copy"
         }
       ],
-      "readPage": "learning-test-copy"
+      "readPage": "learning-test-copy",
+      "legacyAvailable": true
     },
     {
       "id": "T10",
@@ -1486,7 +1478,8 @@
           "dialogue": "learning-comment-copy"
         }
       ],
-      "readPage": "learning-comment-copy"
+      "readPage": "learning-comment-copy",
+      "legacyAvailable": true
     },
     {
       "id": "T11",
@@ -1545,7 +1538,8 @@
           "dialogue": "learning-pending"
         }
       ],
-      "readPage": "learning-pending"
+      "readPage": "learning-pending",
+      "legacyAvailable": true
     },
     {
       "id": "T12",
@@ -1563,7 +1557,8 @@
       "label": "打开这段路程",
       "dialogue": "journey-open",
       "playerFeedback": "旅程地图展开，从合肥走到南京。",
-      "effectMode": "add"
+      "effectMode": "add",
+      "legacyAvailable": true
     },
     {
       "id": "T13",
@@ -1581,7 +1576,8 @@
       "label": "看见下一章",
       "dialogue": "journey-next",
       "playerFeedback": "React／Webpack 出现在下一站，可以拾取。",
-      "effectMode": "add"
+      "effectMode": "add",
+      "legacyAvailable": true
     },
     {
       "id": "T14",
@@ -1599,7 +1595,71 @@
       "label": "这段路程看完了",
       "dialogue": "journey-done",
       "playerFeedback": "旅程结束，本章完成。没拾取的技能记入手册。",
-      "effectMode": "add"
+      "effectMode": "add",
+      "legacyAvailable": true
+    },
+    {
+      "id": "NJ15",
+      "event": "analyze_server_logs",
+      "from": "investigation",
+      "to": "investigation",
+      "requires": [
+        "report_read",
+        "incident_started",
+        "incident_seen"
+      ],
+      "effects": [
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed"
+      ],
+      "target": "server_logs",
+      "label": "查询、分析服务器日志",
+      "dialogue": "server-log-analysis",
+      "basis": "author_2026_11_08"
+    },
+    {
+      "id": "NJ16",
+      "event": "prepare_nanjing_review",
+      "from": "learning",
+      "to": "journey",
+      "requires": [
+        "report_read",
+        "incident_started",
+        "incident_seen",
+        "feedback_reviewed",
+        "recheck_visited",
+        "impact_confirmed",
+        "outage_over",
+        "comfort_read"
+      ],
+      "effects": [
+        "test_reviewed",
+        "comment_reviewed",
+        "manual_entry_written"
+      ],
+      "target": "nanjing_review",
+      "label": "复盘",
+      "dialogue": "learning-n1",
+      "note": "复盘自动记入手册并解锁技能，不要求补测 0/2 和书架跑腿。保留旧 journey 状态作为存档兼容。"
+    },
+    {
+      "id": "NJ17",
+      "event": "finish_nanjing_chapter",
+      "from": "journey",
+      "to": "complete",
+      "requires": [
+        "manual_entry_written"
+      ],
+      "effects": [
+        "journey_opened",
+        "react_noticed",
+        "journey_finished"
+      ],
+      "target": "nanjing_review",
+      "label": "完成南京篇",
+      "dialogue": "learning-manual-1",
+      "note": "旧旅程终态标记用于存档兼容；新主线直接结束南京，不播放合肥→南京过场。"
     }
   ],
   "legalSnapshots": {
@@ -1873,7 +1933,8 @@
       "state": "office",
       "speaker": "player",
       "basis": "staging",
-      "text": "（以前只在书上读过“线上用户”，现在他们就在这条帖子里。）"
+      "text": "（以前只在书上读过“线上用户”，现在他们就在这条帖子里。）",
+      "legacyOnly": true
     },
     {
       "id": "office-reopen",
@@ -1912,22 +1973,25 @@
       "speaker": "narrator",
       "basis": "fact_paraphrase",
       "text": "屏幕上的反馈还在。这是我第一次面对真实的线上 C 端用户。",
-      "note": "事实转述，演出暂停。"
+      "note": "事实转述，演出暂停。",
+      "legacyOnly": true
     },
     {
       "id": "report-player-1",
       "state": "report",
       "speaker": "player",
       "basis": "staging",
-      "text": "（……）"
+      "text": "（……）",
+      "legacyOnly": true
     },
     {
       "id": "incident-freeze",
       "state": "incident",
       "speaker": "narrator",
       "basis": "fact_paraphrase",
-      "text": "我盯着登录框，一动没动。",
-      "note": "事实：作者第一反应是呆住。登录示意不是技术复现，不显示报错、日志或按钮状态。"
+      "text": "我盯着登录框不知所措，这时 CTO 把我叫了过去。",
+      "note": "事实：作者第一反应是呆住。登录示意不是技术复现，不显示报错、日志或按钮状态。",
+      "updateBasis": "作者 2026-11-08 试玩反馈及主线确认"
     },
     {
       "id": "incident-cto-1",
@@ -1943,14 +2007,16 @@
       "speaker": "narrator",
       "basis": "fact_paraphrase",
       "text": "CTO 带着大家排查。",
-      "note": "事实：CTO 带大家排查；具体分工未确认，不出现。"
+      "note": "事实：CTO 带大家排查；具体分工未确认，不出现。",
+      "legacyOnly": true
     },
     {
       "id": "investigation-n1",
       "state": "investigation",
       "speaker": "narrator",
       "basis": "staging",
-      "text": "先做我能确认的事：再读一遍反馈，看看 CTO 电脑上的记录，记下这次影响到谁。"
+      "text": "在 CTO 排查的时候，我开始去查日志，看看今天有哪些用户出现问题。",
+      "updateBasis": "作者 2026-11-08 试玩反馈及主线确认"
     },
     {
       "id": "investigation-cto-prompt",
@@ -1964,7 +2030,8 @@
       "state": "investigation",
       "speaker": "narrator",
       "basis": "staging",
-      "text": "反馈上写的还是“无法登录”。我把这句记下来。"
+      "text": "反馈上写的还是“无法登录”。我把这句记下来。",
+      "legacyOnly": true
     },
     {
       "id": "investigation-feedback-copy",
@@ -1986,7 +2053,8 @@
       "speaker": "narrator",
       "basis": "staging",
       "text": "屏幕上是这段时间排查用的记录。我把这页抄进笔记本，没有急着下结论。",
-      "note": "记录内容为演出装置：不含真实报错、日志、根因。"
+      "note": "记录内容为演出装置：不含真实报错、日志、根因。",
+      "legacyOnly": true
     },
     {
       "id": "investigation-recheck-copy",
@@ -2001,7 +2069,8 @@
       "speaker": "narrator",
       "basis": "fact_paraphrase",
       "text": "笔记本上写着：这次影响到的是真实用户。",
-      "note": "事实范围只到“真实用户受到影响”，不写人数和具体症状。"
+      "note": "事实范围只到“真实用户受到影响”，不写人数和具体症状。",
+      "legacyOnly": true
     },
     {
       "id": "investigation-impact-copy",
@@ -2015,7 +2084,8 @@
       "state": "investigation",
       "speaker": "narrator",
       "basis": "staging",
-      "text": "笔记本上还有没记下的，先把能确认的写完。"
+      "text": "笔记本上还有没记下的，先把能确认的写完。",
+      "legacyOnly": true
     },
     {
       "id": "investigation-handoff",
@@ -2029,9 +2099,10 @@
       "state": "restored",
       "speaker": "narrator",
       "basis": "fact_paraphrase",
-      "text": "画面压暗。整整两小时后，问题恢复了。",
-      "playerText": "整整两小时后，问题恢复了。",
-      "note": "事实：登录框故障整整两小时。转场为演出，不做真实等待。"
+      "text": "整整两小时后，问题才恢复。",
+      "playerText": "整整两小时后，问题才恢复。",
+      "note": "事实：登录框故障整整两小时。转场为演出，不做真实等待。",
+      "updateBasis": "作者 2026-11-08 试玩反馈及主线确认"
     },
     {
       "id": "restored-cto-1",
@@ -2128,8 +2199,9 @@
       "state": "learning",
       "speaker": "narrator",
       "basis": "staging",
-      "text": "工作手册翻到新的一页：“第一次做 C 端，用户先说无法登录。失败留在这页：补测试，写清楚坑；上线前先准备灰度、观测和回滚。”",
-      "note": "工作手册是游戏机制，不是确认的历史行为。"
+      "text": "工作手册记下这次经历：第一次做 C 端，用户反馈无法登录。事故处理要先止血、保存现场、排查日志，别忘了安抚用户。后来补了测试，也用注释说明了踩坑原因。",
+      "note": "工作手册是游戏机制，不是确认的历史行为。",
+      "updateBasis": "作者 2026-11-08 试玩反馈及主线确认"
     },
     {
       "id": "complete-n1",
@@ -2152,7 +2224,8 @@
       "speaker": "narrator",
       "basis": "staging",
       "text": "工位上开着 fibjs 和 nodejs。全栈的日常，就是这两样。",
-      "note": "技能节点演出，不是确认的历史工具清单。"
+      "note": "技能节点演出，不是确认的历史工具清单。",
+      "legacyOnly": true
     },
     {
       "id": "restored-awe",
@@ -2185,6 +2258,30 @@
       "basis": "staging",
       "text": "这段路看完了。南京这一章停在这里。",
       "note": "过场结束。"
+    },
+    {
+      "id": "server-log-analysis",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "fact_paraphrase",
+      "text": "我在自己的电脑上查询、分析系统日志，查看今天出现登录问题的用户。",
+      "note": "作者 2026-11-08 补充；未提供具体止血方式、日志内容或用户数量。"
+    },
+    {
+      "id": "incident-principles",
+      "state": "investigation",
+      "speaker": "narrator",
+      "basis": "lesson",
+      "text": "事故处理：先止血、保存现场、排查日志，同时安抚用户。",
+      "note": "作者 2026-11-08 补充；未提供具体止血方式、日志内容或用户数量。"
+    },
+    {
+      "id": "nanjing-recap",
+      "state": "journey",
+      "speaker": "narrator",
+      "basis": "fact_paraphrase",
+      "text": "后来，我们补了测试，也补了注释，说明这里为什么会踩坑。",
+      "note": "作者 2026-11-08 补充；未提供具体止血方式、日志内容或用户数量。"
     }
   ],
   "assets": [
@@ -2876,14 +2973,14 @@
       "name": "CI/CD 做集成测试",
       "event": "review_test_plan",
       "flag": "test_reviewed",
-      "role": "ci_desk"
+      "role": "forum"
     },
     {
       "id": "release",
       "name": "对上线要有敬畏之心（灰度、观测、回滚）",
       "event": "comfort_read",
       "flag": "comfort_read",
-      "role": "recovery"
+      "role": "forum"
     },
     {
       "id": "failure",
@@ -2947,5 +3044,23 @@
       ]
     },
     "map": "./art/transition-map/transition-map.json"
+  },
+  "currentFlow": {
+    "version": 2,
+    "confirmed": "2026-11-08",
+    "logComputer": "forum",
+    "events": [
+      "open_forum_post",
+      "read_feedback",
+      "cto_rallies_team",
+      "analyze_server_logs",
+      "resume_narrative",
+      "comfort_read",
+      "prepare_nanjing_review",
+      "finish_nanjing_chapter"
+    ],
+    "optionalSkills": true,
+    "nextChapter": "hangzhou",
+    "compatibility": "旧事件、合法快照和终态标记保留；新界面不暴露三项排查、两项补测、写手册与回看来时路任务。"
   }
 }

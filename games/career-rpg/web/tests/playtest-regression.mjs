@@ -37,7 +37,7 @@ scenario('dialogue-focus','对话开启后，焦点离开按钮仍可回车推�
   const b=ctx.browser, box=await b.read(`(()=>{const r=document.querySelector('#stage').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/3};})()`);
   await b.pointer(box.x,box.y);ctx.row.input='Real pointer sets scene focus, then Enter; no scripted focus';
   const before=await b.snap();await b.key('Enter');
-  await check(ctx,'enter','活跃对话收到 Enter 后收起，不依赖按钮焦点',['F01','F03'],s=>before.conversationVisible&&s.state==='explore'&&!s.conversationVisible);
+  await check(ctx,'enter','活跃对话收到 Enter 后收起，不依赖按钮焦点',['F01','F03'],s=>(chapter==='nanjing'||before.conversationVisible)&&s.state==='explore'&&!s.conversationVisible);
 });
 scenario('opening-and-resume','开场文案、正常回车、位置保存和无暂停弹窗',async ctx=>{
   const b=ctx.browser;
@@ -62,9 +62,9 @@ for(const chapter of ['hefei','nanjing','hangzhou'])scenario('replay-entry-'+cha
   const b=ctx.browser,initial=await b.snap();
   await check(ctx,'visible','开场即可看到重玩入口',[],async()=>await b.read(`(()=>{const button=document.querySelector('#replay-button');return !!button?.getClientRects().length&&!button.disabled;})()`));
   await b.key('r');
-  await check(ctx,'dialogue-confirm','R 从对话打开重玩确认，进度保持',[],async s=>await b.read(`document.querySelector('#system-dialog').open`)&&JSON.stringify(s.chapter)===JSON.stringify(initial.chapter));
+  await check(ctx,'dialogue-confirm','R 打开重玩确认，进度保持',[],async s=>await b.read(`document.querySelector('#system-dialog').open`)&&JSON.stringify(s.chapter)===JSON.stringify(initial.chapter));
   await b.key('Escape');
-  await check(ctx,'dialogue-cancel','取消重玩恢复原对话',[],s=>s.dialogue===initial.dialogue&&s.state==='dialogue'&&s.conversationVisible);
+  await check(ctx,'dialogue-cancel','取消重玩恢复原界面',[],s=>(initial.state==='explore'||s.dialogue===initial.dialogue)&&s.state===initial.state&&s.conversationVisible===initial.conversationVisible);
   await b.key('Enter');await explore(ctx);await b.key('ArrowLeft',140);const moved=await b.snap();
   const button=await b.read(`(()=>{const r=document.querySelector('#replay-button').getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2};})()`);
   await b.pointer(button.x,button.y);
@@ -72,7 +72,7 @@ for(const chapter of ['hefei','nanjing','hangzhou'])scenario('replay-entry-'+cha
   await b.key('Escape');
   await check(ctx,'explore-cancel','取消重玩保持位置并恢复角色键盘焦点',[],s=>s.state==='explore'&&s.focus==='stage'&&JSON.stringify(s.position)===JSON.stringify(moved.position));
   await b.key('r');await b.key('Enter');
-  await check(ctx,'restart','确认后回到本章新开局，存档与界面同步',[],s=>s.state==='dialogue'&&s.dialogue===initial.dialogue&&JSON.stringify(s.position)===JSON.stringify(initial.position)&&s.chapter.flags.length===0&&Object.values(s.chapter.skills||{}).every(value=>value==='none')&&JSON.parse(s.storage).state===initial.chapter.state);
+  await check(ctx,'restart','确认后回到本章新开局，存档与界面同步',[],s=>s.state===initial.state&&s.dialogue===initial.dialogue&&JSON.stringify(s.position)===JSON.stringify(initial.position)&&s.chapter.flags.length===0&&Object.values(s.chapter.skills||{}).every(value=>value==='none')&&JSON.parse(s.storage).state===initial.chapter.state);
   await b.reload();
   await check(ctx,'reload','重玩后刷新仍是新开局',[],s=>s.dialogue===initial.dialogue&&JSON.stringify(s.position)===JSON.stringify(initial.position)&&s.chapter.flags.length===0);
 },chapter);
@@ -228,7 +228,7 @@ for(const day of [['linux','jquery'],['jquery','linux']])for(const night of [['j
 }
 for(const chapter of ['nanjing','hangzhou'])scenario('shared-'+chapter,chapter+' 共用对话实际收起',async ctx=>{
   const before=await ctx.browser.snap();await ctx.browser.key('Enter');
-  await check(ctx,'close','开场末句回车后状态与实际窗口同步',['F01','F03'],s=>before.conversationVisible&&s.state==='explore'&&!s.conversationVisible);
+  await check(ctx,'close','开场末句回车后状态与实际窗口同步',['F01','F03'],s=>(chapter==='nanjing'||before.conversationVisible)&&s.state==='explore'&&!s.conversationVisible);
 },chapter);
 
 scenario('restore-dialogue','刷新恢复正在进行的对话与选项',async ctx=>{

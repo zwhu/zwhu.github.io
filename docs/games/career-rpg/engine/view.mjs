@@ -16,6 +16,8 @@ export function createView(stage,world){
   canvas.setAttribute('aria-hidden','true');
   const ctx=canvas.getContext('2d',{alpha:false,desynchronized:true});
   if(!ctx)throw new Error('无法创建图形上下文');
+  let foregroundRoom=null;
+  const foregrounds=(world.foregrounds||[]).map(part=>({visible:false,feet:part.depth,rect:part.rect,draw:{}}));
   let ratio=2,camera=null;
   const fit=()=>{
     const w=camera?camera.size:world.width,h=camera?camera.size:world.height;
@@ -44,7 +46,17 @@ export function createView(stage,world){
         ctx.drawImage(prop.image,prop.x-prop.w/2,prop.y-prop.h/2,prop.w,prop.h);
         ctx.restore();
       }
-      const ordered=sprites.filter(sprite=>sprite.visible&&sprite.draw).sort((a,b)=>a.feet-b.feet);
+      if(room!==foregroundRoom){
+        foregroundRoom=room;
+        for(const part of foregrounds){
+          const r=part.rect;
+          part.visible=!!room;
+          if(!room){part.draw=null;continue;}
+          part.draw={image:room,sx:r.x*room.width/world.width,sy:r.y*room.height/world.height,sw:r.w*room.width/world.width,sh:r.h*room.height/world.height,dx:r.x,dy:r.y,dw:r.w,dh:r.h};
+        }
+      }
+      // Furniture copied from the original room participates in the same depth order.
+      const ordered=[...sprites,...foregrounds].filter(sprite=>sprite.visible&&sprite.draw).sort((a,b)=>a.feet-b.feet);
       for(const sprite of ordered){
         const d=sprite.draw;
         ctx.drawImage(d.image,d.sx,d.sy,d.sw,d.sh,d.dx,d.dy,d.dw,d.dh);

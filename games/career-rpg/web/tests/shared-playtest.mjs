@@ -94,7 +94,7 @@ async function run(chapter,config,flow){
       await record('award-'+skill);await b.key('Enter');await settle();
     };
     await b.key('Enter');await settle();await record('opening-close');
-    await flow({b,record,select,settle,act,pickup});
+    await flow({b,record,select,settle,act,pickup,open});
     assert.equal((await b.snap()).chapter.state,'complete');
     const before=await b.snap();await b.reload();
     assert.deepEqual((await b.snap()).chapter.skills,before.chapter.skills);
@@ -107,17 +107,15 @@ async function run(chapter,config,flow){
 }
 
 try{
-  await run('nanjing',OFFICE,async({b,record,select,settle,act})=>{
-    await act('forum','open_forum_post');await select('[data-event="read_feedback"]');await record('read-feedback');
-    await act('cto','cto_rallies_team');
-    await act('forum','confirm_feedback_reviewed');
-    await act('cto-pc','confirm_recheck_visited');await act('cto-pc','confirm_impact_scope');
-    await act('cto','resume_narrative');await select('[data-event="comfort_read"]');await record('comfort-read');
-    await act('cto-pc','review_test_plan');await act('cto-pc','review_trap_comment');
-    await act('manual','write_manual_entry');await act('journey-map','open_journey');
-    for(let index=0;index<80&&!await b.read('window.careerJourney().arrived');index++)await delay(100);
-    assert.ok(await b.read('window.careerJourney().arrived'));
-    await select('[data-action="journey-finish"]');await record('journey-complete');
+  await run('nanjing',OFFICE,async({b,record,select,settle,act,open})=>{
+    await act('forum','open_forum_post');
+    assert.match((await b.snap()).dialogue,/我盯着登录框不知所措/);await settle();
+    // CTO actions advance directly; the resulting narrative replaces the old confirmation.
+    await open('cto');await record('cto-rallies-team');await settle();
+    await act('forum','analyze_server_logs');
+    await open('cto');assert.match((await b.snap()).dialogue,/整整两小时后，问题才恢复/);await record('restored');
+    await select('[data-event="comfort_read"]');await record('recap');
+    await select('[data-action="finish-nanjing"]');await record('chapter-complete');
     await settle();await b.key('m');await record('manual-complete');
   });
   await run('hangzhou',HANGZHOU,async({b,record,select,settle,act,pickup})=>{

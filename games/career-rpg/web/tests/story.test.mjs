@@ -6,7 +6,7 @@ import {createChapter} from '../story.mjs';
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-01.json',import.meta.url),'utf8'));
 const chapter=createChapter(data);
 test('restoration prose preserves the two hours without exposing the stage direction',()=>{
-  assert.equal(chapter.text('restored-n1'),'整整两小时后，问题恢复了。');
+  assert.equal(chapter.text('restored-n1'),'整整两小时后，问题才恢复。');
 });
 const prefix=['open_forum_post','read_feedback','cto_rallies_team','confirm_recheck_visited','confirm_impact_scope','confirm_feedback_reviewed','resume_narrative','comfort_read'];
 function apply(events){return events.reduce((s,e)=>{const r=chapter.advance(s,e);assert.equal(r.accepted,true,e);return r.snapshot;},chapter.initial());}
@@ -88,7 +88,7 @@ test('identical semantic journeys replay equally across independent instances an
     }
     recover();const final=view(left,a);assert.equal(final.snapshot.state,'complete');assert.equal(final.manual.written,true);
     assert.equal(final.manual.text,data.dialogues.find(d=>d.id==='learning-manual-1').text);
-    assert.match(final.manual.text,/补测试/);
+    assert.match(final.manual.text,/补了测试/);
     assert.equal(/有人扛|一起扛|一起承担/.test(final.manual.text),false);
     runs.push({learningOrder:order,initial,trace,recoveries,final});
   }

@@ -150,7 +150,7 @@ function show(title,paragraphs,choices=[],canDismiss=true,speaker=dialogueSpeake
 }
 function savePlayState(){
   if(!playSavingReady||!saving||restoringPlay||cinematicOn||!snapshot||!['explore','dialogue','transition','journey'].includes(state))return;
-  const play={version:1,state,position:{...position},facing,
+  const play={version:1,chapterUI:sceneConfig.id==='nanjing-office'?2:1,state,position:{...position},facing,
     page:state==='dialogue'?encodePage(capturePage()):null,award:awardOpen?currentAward:'',returnToJourney,
     transition:transitionEvent,index:Math.max(0,transitionIndex),queuedAward:queuedAward?.id||'',
     journey:state==='journey'||returnToJourney?{mode:journeyMode,progress:journeyProgress,arrived:journeyArrived,selection:Math.max(0,enabledOptions().indexOf(document.activeElement))}:null};
@@ -166,7 +166,7 @@ function restoredChoice(choice){
   const actions={
     'continue-line':()=>{const next=chapter.actions(snapshot,'boss').find(item=>item.event==='boss_lets_try');if(next)confirmPage(next,false);},
     'skill-ok':finishSkillAward,'replay':confirmReplay,'explore-office':settleExplore,
-    'confirm-replay':restartChapter,
+    'confirm-replay':restartChapter,'finish-nanjing':()=>accept('finish_nanjing_chapter'),
     'journey':()=>openJourney('bridge'),'bridge-hangzhou':()=>openJourney('to-hangzhou')
   };
   if(choice.id.startsWith('preface-')){
@@ -195,7 +195,20 @@ function restoreSavedPage(page){
   return true;
 }
 async function restorePlayState(saved){
-  const play=inspectPlay(saved,sceneConfig.bounds);if(!play||blocked(play.position.x,play.position.y,sceneConfig))return false;
+  const play=inspectPlay(saved,sceneConfig.bounds);if(!play)return false;
+  if(blocked(play.position.x,play.position.y,sceneConfig)){
+    if(sceneConfig.id!=='nanjing-office')return false;
+    // Furniture bounds changed; retain chapter progress and move the old position locally.
+    let nearest=null,distance=Infinity;
+    for(let y=sceneConfig.bounds.top;y<=sceneConfig.bounds.bottom;y++)for(let x=sceneConfig.bounds.left;x<=sceneConfig.bounds.right;x++){
+      const d=Math.hypot(x-play.position.x,y-play.position.y);
+      if(d<distance&&!blocked(x,y,sceneConfig)){nearest={x,y};distance=d;}
+    }
+    if(!nearest)return false;play.position=nearest;
+  }
+  if(sceneConfig.id==='nanjing-office'&&saved.chapterUI!==2){
+    position={...play.position};facing=play.facing;enterNanjing();return true;
+  }
   restoringPlay=true;
   try{
     position={...play.position};facing=play.facing;
@@ -290,6 +303,8 @@ function accept(event){
   const next=chapter.advance(snapshot,event);if(!next.accepted)return;
   const changed=next.snapshot.state!==snapshot.state;snapshot=next.snapshot;
   persist(()=>{
+    if(sceneConfig.id==='nanjing-office'&&event==='open_forum_post'){accept('read_feedback');return;}
+    if(sceneConfig.id==='nanjing-office'&&event==='analyze_server_logs'){settleExplore();return;}
     if(event==='open_journey'){openJourney('chapter');return;}
     const follow=sceneConfig.follow?.[event];
     if(follow){
@@ -372,13 +387,13 @@ function confirmPage(transition,linkParent=true){
   const parent=linkParent?capturePage():null;
   dialogueSpeaker=sceneConfig.eventSpeakers?.[transition.event]||'player';
   const run=()=>sceneConfig.transitionLines?.[transition.event]?beginTransition(transition.event):accept(transition.event);
-  show(eventTitle(transition.event)||transition.label,lines(pageLines[transition.event]||[transition.dialogue]),[{label:transition.label,event:transition.event,run}],true,dialogueSpeaker,false,{back:parent?()=>restorePage(parent):null,parent,spoken:true});
+  show(eventTitle(transition.event)||transition.label,lines(sceneConfig.pageLines?.[transition.event]||pageLines[transition.event]||[transition.dialogue]),[{label:transition.label,event:transition.event,run}],true,dialogueSpeaker,false,{back:parent?()=>restorePage(parent):null,parent,spoken:true});
 }
 function manual(){
   dialogueSpeaker='player';
   const written=chapter.has(snapshot,'manual_entry_written')||snapshot.state==='complete';
   const slots=chapter.skillSlots?.(snapshot)||null;
-  show('工作手册',written?lines([chapter.manualId]):['这页还没有写完。',chapter.target(snapshot)],snapshot.state==='complete'?[{label:'从办公室重玩',id:'replay',run:confirmReplay}]:[],true,'player',false,{slots});
+  show('工作手册',written?lines([chapter.manualId]):['这页还没有写完。',chapter.target(snapshot)],snapshot.state==='journey'&&sceneConfig.id==='nanjing-office'?[{label:'完成南京篇',id:'finish-nanjing',run:()=>accept('finish_nanjing_chapter')}]:snapshot.state==='complete'?[{label:'从办公室重玩',id:'replay',run:confirmReplay}]:[],true,'player',false,{slots});
 }
 function confirmReplay(){
   const parent=state==='dialogue'?capturePage():null;
@@ -420,20 +435,22 @@ function enterHangzhou(){
   }[snapshot.state];
   show(copy.title,lines(copy.lines).concat(copy.extra),copy.choices||[],true);
 }
+function enterNanjing(){
+  if(snapshot.state==='report'){accept('read_feedback');return;}
+  if(snapshot.state==='learning'){accept('prepare_nanjing_review');return;}
+  if(snapshot.state==='incident')show('我',lines(['incident-freeze']),[],true,'player');
+  else if(snapshot.state==='investigation')show('旁白',lines(['investigation-n1','incident-principles']),[],true,'narrator');
+  else if(snapshot.state==='restored')show('旁白',lines(['restored-n1','restored-n3']),[{label:'继续',event:'comfort_read',run:()=>accept('comfort_read')}],false,'narrator');
+  else if(snapshot.state==='journey')show('复盘',lines(['nanjing-recap']),[{label:'完成南京篇',id:'finish-nanjing',run:()=>accept('finish_nanjing_chapter')}],true,'narrator');
+  else if(snapshot.state==='complete')show('南京 · 本章完成',lines(['nanjing-recap']),[{label:'从南京走到杭州',id:'bridge-hangzhou',run:()=>openJourney('to-hangzhou')},{label:'从办公室重玩',id:'replay',run:confirmReplay}],true,'narrator');
+  else settleExplore();
+}
 function enterScene(){
   dialogueSpeaker='player';
   document.querySelector('.game-shell').classList.toggle('two-hours',snapshot.state==='restored');
-  if(sceneConfig.id==='hefei-office'){enterHefei();return;}
-  if(sceneConfig.id==='hangzhou-office'){enterHangzhou();return;}
-  const available=chapter.actions(snapshot,'dialog');
-  if(snapshot.state==='report')show('读到反馈',lines(['report-reaction','report-player-1']),available.map(t=>({label:t.label,event:t.event,run:()=>accept(t.event)})),false);
-  else if(snapshot.state==='incident')show('我呆住了',lines(['incident-freeze']).concat('随后，CTO 开始排查。走到 CTO 身边看看。'));
-  else if(snapshot.state==='investigation')show('排查',lines(['investigation-n1']));
-  else if(snapshot.state==='restored')show('整整两小时后',lines(['restored-n1','restored-n3','restored-awe']),available.map(t=>({label:t.label,event:t.event,run:()=>accept(t.event)})),false);
-  else if(snapshot.state==='learning')show('留下这次教训',lines(['learning-n1']).concat('去中间的排查电脑，分别看看补测清单和坑点注释；两项都看过后，到右侧书架写下这页手册。'));
-  else if(snapshot.state==='journey'){if(chapter.has(snapshot,'journey_opened'))openJourney('chapter');else show('手册写好了',lines(['learning-manual-1']).concat('书架上会留下这次学到的东西。通道里有一张从合肥走到南京的地图。'));}
-  else if(snapshot.state==='complete')show('南京 · 本章完成',lines(['learning-manual-1','complete-n1','complete-n2']).concat('这次记住的，是第一次把 C 端交给真实用户，以及从失败里写下的测试和注释。'),[{label:'从南京走到杭州',id:'bridge-hangzhou',run:()=>openJourney('to-hangzhou')},{label:'从办公室重玩',id:'replay',run:confirmReplay}]);
-  else show('南京的办公室',lines(['office-n1','office-daily']).concat('这是我第一次做 C 端。走到左侧电脑，看看论坛。'));
+  if(sceneConfig.id==='hefei-office')enterHefei();
+  else if(sceneConfig.id==='hangzhou-office')enterHangzhou();
+  else enterNanjing();
   updateUI();
 }
 function finishSkillAward(){
@@ -598,6 +615,10 @@ function finishJourney(){
 }
 function closeJourney(){
   const mode=journeyMode;
+  if(mode==='to-hangzhou'&&journeyArrived){
+    settleExplore();savePlayState();
+    const next=new URL(location.href);next.searchParams.set('chapter','hangzhou');location.assign(next.href);return;
+  }
   cancelAnimationFrame(journeyFrame);journeyMode=null;journeyPanel.hidden=true;
   setState('explore');
   if(sceneConfig.id==='hefei-office'){enterHefei();return;}
@@ -624,12 +645,14 @@ function openConversation(){
   const pending=actionsFor(chapter,snapshot,active);
   const skill=readySkill(active);
   if(skill&&!pending.length){collectSkill(skill);return;}
+  if(sceneConfig.id==='nanjing-office'&&active.atlas&&active.interaction){position={...active.interaction};}
   dialogueObject=active;showObjectCard(active);
   dialogueSpeaker=active.atlas?active.id:'player';
   const object=active.id;
   if(object==='journey-map'&&snapshot.state==='journey'&&chapter.has(snapshot,'journey_opened')){openJourney('chapter');return;}
   if(snapshot.state==='complete'&&!active.atlas){manual();return;}
   const available=actionsFor(chapter,snapshot,active);
+  if(sceneConfig.id==='nanjing-office'&&['cto_rallies_team','resume_narrative'].includes(available[0]?.event)){accept(available[0].event);return;}
   if(sceneConfig.id==='hefei-office'&&available[0]?.event==='take_day_task'){
     const transition=available[0];
     show('我',['开始今天的需求'],[
@@ -981,7 +1004,7 @@ async function start(){
   atlasEntries.forEach(([id],i)=>atlasData[id]=atlasPacks[i]);
   chapterDefinition=chapterData;chapter=createChapter(chapterData);
   const bounds=atlasData.player.frames[0];
-  view=createView(stage,{width:sceneConfig.width,height:sceneConfig.height});
+  view=createView(stage,sceneConfig);
   view.canvas.addEventListener('contextlost',event=>{event.preventDefault();showFailure('图形上下文已丢失，游戏已停止。可重新加载尝试恢复图形，或继续文字阅读。');});
   if(cinematicOn)view.setPixelRatio(1);
   dayImage=roomImages[0];roomImage=dayImage;

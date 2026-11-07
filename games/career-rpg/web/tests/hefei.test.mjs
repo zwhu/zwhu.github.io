@@ -35,21 +35,21 @@ const facts={
 function play(events,api=chapter){return events.reduce((s,e)=>{const r=api.advance(s,e);assert.equal(r.accepted,true,e);return r.snapshot;},api.initial());}
 
 test('nanjing copy and object roles still come from chapter data',()=>{
-  assert.equal(nanjing.text('restored-n1'),'整整两小时后，问题恢复了。');
+  assert.equal(nanjing.text('restored-n1'),'整整两小时后，问题才恢复。');
   assert.equal(nanjing.text('restored-n1').includes('画面压暗'),false);
   assert.equal(nanjing.target(nanjing.initial()),'去左侧电脑，打开用户论坛');
   const asked=play(['open_forum_post','read_feedback','cto_rallies_team'],nanjing);
-  assert.equal(nanjing.target(asked),'排查 0/3 · 右侧电脑：查看排查记录');
+  assert.equal(nanjing.target(asked),'回自己的电脑，查询、分析服务器日志');
   const recheck=nanjing.advance(asked,'confirm_recheck_visited').snapshot;
-  assert.equal(nanjing.target(recheck),'排查 1/3 · 右侧电脑：确认影响到谁');
+  assert.equal(nanjing.target(recheck),'回自己的电脑，查询、分析服务器日志');
   const impact=nanjing.advance(recheck,'confirm_impact_scope').snapshot;
-  assert.equal(nanjing.target(impact),'排查 2/3 · 左侧电脑：重读论坛反馈');
+  assert.equal(nanjing.target(impact),'回自己的电脑，查询、分析服务器日志');
   const done=nanjing.advance(impact,'confirm_feedback_reviewed').snapshot;
-  assert.equal(nanjing.target(done),'排查 3/3 · 右侧电脑：结束这轮排查');
+  assert.equal(nanjing.target(done),'日志查询完成 · 回到 CTO 身边');
   const learning=play(['open_forum_post','read_feedback','cto_rallies_team','confirm_recheck_visited','confirm_impact_scope','confirm_feedback_reviewed','resume_narrative','comfort_read'],nanjing);
-  assert.equal(nanjing.target(learning),'看过 0/2 · 右侧电脑：分别查看测试和坑点注释');
+  assert.equal(nanjing.target(learning),'复盘记入手册');
   const both=play(['open_forum_post','read_feedback','cto_rallies_team','confirm_recheck_visited','confirm_impact_scope','confirm_feedback_reviewed','resume_narrative','comfort_read','review_test_plan','review_trap_comment'],nanjing);
-  assert.equal(nanjing.target(both),'看过 2/2 · 去右侧书架，把这一页写进手册');
+  assert.equal(nanjing.target(both),'复盘记入手册');
   assert.equal(nanjing.actions(nanjing.initial(),'forum')[0].event,'open_forum_post');
   assert.equal(OFFICE.entryPoints.office.x,172);
 });
