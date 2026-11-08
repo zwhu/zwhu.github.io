@@ -11,7 +11,7 @@ const nanjing=createChapter(nanjingData);
 const data=JSON.parse(readFileSync(new URL('../../design/chapter-hefei.json',import.meta.url),'utf8'));
 const chapter=createChapter(data);
 const facts={
-  'interview-narrator':'原本录用的人嫌工资低，没来。',
+  'interview-narrator':'原本录用的人嫌工资低，没来。我鼓起勇气，毛遂自荐。',
   'interview-boss-1':'你能力不行，来了也干不了活。',
   'interview-player':'我不要工资，让我来试试就行。',
   'interview-boss-2':'行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。',
@@ -23,7 +23,7 @@ const facts={
   'colleague-near-day':'好饿啊，搞完这点要不去吃面？',
   'colleague-far-day':'没事，熬过星期三就是星期五。',
   'day-linux':'第一次用 Linux 开发机，第一次用 Git。不会的就 Google。',
-  'day-jquery':'第一次写前端，手边是《锋利的 jQuery》。还第一次写了 E2E 测试。',
+  'day-jquery':'获得技能书「锋利的 jQuery」',
   'night-falls':'白天的活告一段落。天黑了，我还没走。',
   'night-java':'晚上对着 Java 往下啃。',
   'night-db':'再学数据库和 NoSQL。',
@@ -35,21 +35,21 @@ const facts={
 function play(events,api=chapter){return events.reduce((s,e)=>{const r=api.advance(s,e);assert.equal(r.accepted,true,e);return r.snapshot;},api.initial());}
 
 test('nanjing copy and object roles still come from chapter data',()=>{
-  assert.equal(nanjing.text('restored-n1'),'整整两小时后，问题恢复了。');
+  assert.equal(nanjing.text('restored-n1'),'整整两小时后，问题才恢复。');
   assert.equal(nanjing.text('restored-n1').includes('画面压暗'),false);
   assert.equal(nanjing.target(nanjing.initial()),'去左侧电脑，打开用户论坛');
   const asked=play(['open_forum_post','read_feedback','cto_rallies_team'],nanjing);
-  assert.equal(nanjing.target(asked),'排查 0/3 · 右侧电脑：查看排查记录');
+  assert.equal(nanjing.target(asked),'回自己的电脑，查询、分析服务器日志');
   const recheck=nanjing.advance(asked,'confirm_recheck_visited').snapshot;
-  assert.equal(nanjing.target(recheck),'排查 1/3 · 右侧电脑：确认影响到谁');
+  assert.equal(nanjing.target(recheck),'回自己的电脑，查询、分析服务器日志');
   const impact=nanjing.advance(recheck,'confirm_impact_scope').snapshot;
-  assert.equal(nanjing.target(impact),'排查 2/3 · 左侧电脑：重读论坛反馈');
+  assert.equal(nanjing.target(impact),'回自己的电脑，查询、分析服务器日志');
   const done=nanjing.advance(impact,'confirm_feedback_reviewed').snapshot;
-  assert.equal(nanjing.target(done),'排查 3/3 · 右侧电脑：结束这轮排查');
+  assert.equal(nanjing.target(done),'日志查询完成 · 回到 CTO 身边');
   const learning=play(['open_forum_post','read_feedback','cto_rallies_team','confirm_recheck_visited','confirm_impact_scope','confirm_feedback_reviewed','resume_narrative','comfort_read'],nanjing);
-  assert.equal(nanjing.target(learning),'看过 0/2 · 右侧电脑：分别查看测试和坑点注释');
+  assert.equal(nanjing.target(learning),'复盘记入手册');
   const both=play(['open_forum_post','read_feedback','cto_rallies_team','confirm_recheck_visited','confirm_impact_scope','confirm_feedback_reviewed','resume_narrative','comfort_read','review_test_plan','review_trap_comment'],nanjing);
-  assert.equal(nanjing.target(both),'看过 2/2 · 去右侧书架，把这一页写进手册');
+  assert.equal(nanjing.target(both),'复盘记入手册');
   assert.equal(nanjing.actions(nanjing.initial(),'forum')[0].event,'open_forum_post');
   assert.equal(OFFICE.entryPoints.office.x,172);
 });
@@ -192,7 +192,7 @@ test('hefei marker sits on my_pc, cards stay off the startup sheets, and the ais
   const pageSource=readFileSync(new URL('../index.html',import.meta.url),'utf8');
   const cssSource=readFileSync(new URL('../style.css',import.meta.url),'utf8');
   assert.equal(mainSource.includes('回看'),false);
-  assert.equal(mainSource.includes('继续探索'),false);
+  assert.equal(mainSource.includes("label:'继续探索办公室'"),true);
   assert.equal(pageSource.includes('继续探索'),false);
   assert.equal(pageSource.includes('Shift+Tab 读正文'),false);
   assert.equal(pageSource.includes('id="nameplate"'),true);

@@ -9,7 +9,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE_ROOT = path.join(ROOT, 'docs');
 const BRANCH = 'pr-screenshots', START = '<!-- pr-screenshots:start -->', END = '<!-- pr-screenshots:end -->';
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const MIME = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png',
+const MIME = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png',
   '.jpg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.json': 'application/json', '.mp4': 'video/mp4' };
 
 function args() {
@@ -106,6 +106,14 @@ async function capture(port, base, page, width, section) {
     const loaded = tab.once('Page.loadEventFired');
     await tab.send('Page.navigate', { url: `${base}/${page}` });
     await loaded;
+    if (await tab.evaluate("Boolean(document.querySelector('.game-shell #stage'))")) {
+      await tab.evaluate(`(async()=>{const deadline=Date.now()+15000;while(Date.now()<deadline){
+        const state=window.careerPrototype?.snapshot().state;
+        if(state&&state!=='loading'&&state!=='error')return;
+        if(document.querySelector('#game-failure')?.hidden===false)throw Error('Game failed before screenshot');
+        await new Promise(resolve=>setTimeout(resolve,100));
+      }throw Error('Game did not become ready before screenshot');})()`);
+    }
     let clip = null;
     if (section) {
       clip = await tab.evaluate(sectionClip(section));
@@ -177,7 +185,7 @@ async function main() {
     for (const page of pages) for (const where of ['top', ...opt.sections]) for (const width of opt.widths) {
       const data = await capture(port, base, page, width, where === 'top' ? null : where);
       if (!data) continue;
-      const name = `${page.replace(/\.html$/, '')}-${where}-${width}.png`;
+      const name = `${page.replace(/\.html(?=$|\?)/, '').replace(/[^a-zA-Z0-9_.-]/g, '-')}-${where}-${width}.png`;
       fs.writeFileSync(path.join(opt.out, name), data);
       shots.push({ page, where, width, name });
       console.log(`Captured ${name}`);

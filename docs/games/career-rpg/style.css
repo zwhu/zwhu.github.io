@@ -44,5 +44,14 @@ html.cinematic #stage{width:var(--cinematic-size);height:var(--cinematic-size);a
 .speech-bubble.docked .continue-caret:focus-visible::after{box-shadow:0 calc(3 * var(--u)) 0 0 var(--accent)}
 .speech-bubble.docked .continue-caret::after,.speech-bubble.docked .dialogue-caret::after{content:"";display:block;width:calc(5 * var(--u));height:calc(3 * var(--u));margin:calc(4 * var(--u)) auto 0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='3' shape-rendering='crispEdges'%3E%3Crect width='5' height='1' fill='%23282622'/%3E%3Crect x='1' y='1' width='3' height='1' fill='%23282622'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23282622'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;image-rendering:pixelated;animation:dialogue-caret 1s steps(1,end) infinite}
 .game-shell:has(#conversation:not([hidden])) .interaction{visibility:hidden}
+.speech-bubble.docked[hidden]{display:none}
+.speech-bubble.docked{font-size:clamp(14px,calc(7 * var(--u)),18px);line-height:1.5}
+.speech-bubble.docked #dialogue{font-size:clamp(14px,calc(7 * var(--u)),18px);line-height:1.5}
+.speech-bubble.docked #nameplate{font-size:clamp(15px,calc(7 * var(--u)),20px)}
+.speech-bubble.docked #choices button:not(.continue-caret){font-size:clamp(13px,calc(6 * var(--u)),16px);padding:6px 12px;min-height:34px;line-height:1.4}
+.speech-bubble.docked #choices button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;background:#fff6df}
+#system-dialog .choices button{font-size:14px;min-height:34px;padding:6px 12px;line-height:1.4;border-radius:0;border:1px solid #282622;background:#fffef8}
+#system-dialog .choices button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;background:#fff6df}
+.hud-actions{display:flex;gap:6px;flex-shrink:0}
 @keyframes dialogue-caret{0%,62%{opacity:1}63%,100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.speech-bubble.docked .continue-caret::after,.speech-bubble.docked .dialogue-caret::after{animation:none;opacity:1}}

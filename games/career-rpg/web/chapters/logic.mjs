@@ -13,6 +13,7 @@ export function pendingMarkers(config,chapter,snapshot){return [...config.object
   return object.marker&&events.length?[{id:object.id,x:object.markerPosition?.x??object.x,y:object.markerPosition?.y??object.y,offsetY:object.markerPosition?0:object.atlas?48:28,events,actor:!!object.atlas,sprite:object.markerSprite?config.marker:null}]:[];
 });}
 export function sceneTarget(config,chapter,snapshot){
+  if(config.id==='nanjing-office')return chapter.target(snapshot);
   if(snapshot.state==='incident')return '去 CTO 身边，看这轮排查';
   if(snapshot.state==='investigation'&&chapter.has(snapshot,'feedback_reviewed')&&chapter.has(snapshot,'recheck_visited')&&chapter.has(snapshot,'impact_confirmed'))return '排查 3/3 · 回到 CTO 身边';
   return chapter.target(snapshot).replaceAll('右侧电脑','中间的排查电脑');
