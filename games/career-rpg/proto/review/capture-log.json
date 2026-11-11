@@ -1,0 +1,37 @@
+{
+  "origin": "http://127.0.0.1:42427/games/career-rpg/proto/index.html",
+  "loss": {
+    "file": "games/career-rpg/proto/review/loss.mp4",
+    "frames": 23
+  },
+  "win": {
+    "file": "games/career-rpg/proto/review/win.mp4",
+    "frames": 89
+  },
+  "remembered": "留下来，还被老板记住了。文件数据库交上去了。",
+  "barely": "勉强留下来。人留下了。文件数据库还没写完。",
+  "lossText": "第 1 周周五，老板好感 0，低于本周线 30，被劝退。",
+  "skills": {
+    "linux": [
+      "games/career-rpg/proto/review/skills/linux-before.png",
+      "games/career-rpg/proto/review/skills/linux-after.png"
+    ],
+    "git": [
+      "games/career-rpg/proto/review/skills/git-before.png",
+      "games/career-rpg/proto/review/skills/git-after.png"
+    ],
+    "database": [
+      "games/career-rpg/proto/review/skills/database-before.png",
+      "games/career-rpg/proto/review/skills/database-after.png"
+    ],
+    "java": [
+      "games/career-rpg/proto/review/skills/java-before.png",
+      "games/career-rpg/proto/review/skills/java-after.png"
+    ],
+    "jquery": [
+      "games/career-rpg/proto/review/skills/jquery-before.png",
+      "games/career-rpg/proto/review/skills/jquery-after.png"
+    ]
+  },
+  "consoleErrors": []
+}

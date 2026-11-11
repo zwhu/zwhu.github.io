@@ -23,6 +23,7 @@ def checks():
         ('SEO contracts', [python, 'scripts/test-seo.py']),
         ('Comment behavior', ['node', '--test', 'tests/comments.test.cjs']),
         ('Career RPG chapter rules', ['node', '--test', 'games/career-rpg/web/tests/world.test.mjs', 'games/career-rpg/web/tests/story.test.mjs', 'games/career-rpg/web/tests/scene.test.mjs', 'games/career-rpg/web/tests/hefei.test.mjs', 'games/career-rpg/web/tests/nanjing-skills.test.mjs', 'games/career-rpg/web/tests/hefei-skills.test.mjs', 'games/career-rpg/web/tests/hangzhou-skills.test.mjs', 'games/career-rpg/web/tests/narrow-wrap.test.mjs', 'games/career-rpg/web/tests/cinematic.test.mjs']),
+        ('Hefei block prototype', ['node', '--test', 'games/career-rpg/proto/tests/rules.test.mjs', 'games/career-rpg/proto/tests/dota.test.mjs']),
         ('Career RPG Pages publish', [python, 'scripts/publish-career-rpg.py', '--check']),
         ('Verify runner tests', [python, 'scripts/test-verify.py']),
     ]
