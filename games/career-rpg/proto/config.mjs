@@ -1,4 +1,6 @@
-// 文档写明的初始值。没写死的奖惩也放在这里，方便试玩后只改这一处。
+// 文档里的数是初始值，试玩后可以只改这里。
+// 已调：好感上限 100→200，文件数据库奖励 30→100，第 4 周线 60→130。
+// 第 1–3 周线仍是 30 起、每周 +10。吃面回 3，比休息多 1。
 export const CONFIG = Object.freeze({
   weeks: 4,
   daysPerWeek: 5,
@@ -11,11 +13,13 @@ export const CONFIG = Object.freeze({
   overnightName: '打 Dota',
   dotaWinStamina: 2,
   restStamina: 2,
+  noodleStamina: 3,
   favorStart: 40,
   favorMin: 0,
-  favorMax: 100,
+  favorMax: 200,
   weekLineBase: 30,
   weekLineStep: 10,
+  weekLineFinal: 130,
   spawnMin: 1,
   spawnMax: 2,
   deadlineMin: 2,
@@ -35,7 +39,7 @@ export const CONFIG = Object.freeze({
   linuxServerCost: 1,
   skillDiscount: 1,
   fileDbCost: 8,
-  fileDbReward: 30,
+  fileDbReward: 100,
   fileDbJavaBonus: 1,
   fileDbWeek: 2,
   fileDbTitle: '写一个文件数据库',

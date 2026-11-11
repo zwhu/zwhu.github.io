@@ -5,7 +5,10 @@ import { CONFIG, ENDINGS, SKILL_IDS } from '../config.mjs';
 import { BARELY_ACTIONS, BARELY_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from '../line.mjs';
 import {
   applyAction,
+  bossFavorLine,
+  coworkerLine,
   createGame,
+  forecastTomorrow,
   present,
   replay,
   snapshot,
@@ -14,6 +17,7 @@ import {
   workStep,
   weekLine,
 } from '../rules.mjs';
+import { ratesOnly, runStrategies } from '../sim.mjs';
 
 const rulesSource = readFileSync(new URL('../rules.mjs', import.meta.url), 'utf8');
 
@@ -51,7 +55,12 @@ test('documented starting numbers live in one config', () => {
   assert.equal(weekLine(1), 30);
   assert.equal(weekLine(2), 40);
   assert.equal(weekLine(3), 50);
-  assert.equal(weekLine(4), 60);
+  assert.equal(weekLine(4), 130);
+  assert.equal(CONFIG.weekLineFinal, 130);
+  assert.equal(CONFIG.favorMax, 200);
+  assert.equal(CONFIG.fileDbReward, 100);
+  assert.equal(CONFIG.noodleStamina, 3);
+  assert.equal(CONFIG.noodleStamina, CONFIG.restStamina + 1);
   for (const skill of Object.values(CONFIG.skills)) assert.ok(skill.cost >= 2 && skill.cost <= 4);
   assert.equal(rulesSource.includes('document'), false);
   assert.equal(rulesSource.includes('window'), false);
@@ -236,7 +245,7 @@ test('Java is night-only and the file database stays shut until 数据库', () =
   const file = present(state).tickets.find(ticket => ticket.mainline);
   assert.equal(file.title, '写一个文件数据库');
   assert.equal(file.locked, true);
-  assert.equal(file.reward, 30);
+  assert.equal(file.reward, 100);
   assert.equal(applyAction(state, { type: 'work', ticketId: file.id }), state);
   while (!state.learned.database) {
     state = applyAction(state, state.ap > 0 ? { type: 'study', skill: 'database' } : { type: 'sleep' });
@@ -269,6 +278,150 @@ test('the two cleared endings replace the probation reminder', () => {
   assert.equal(ENDINGS.remembered.title, '留下来，还被老板记住了');
   assert.equal(ENDINGS.barely.title, '勉强留下来');
   assert.equal(`${ENDINGS.remembered.title}${ENDINGS.remembered.text}${ENDINGS.barely.title}${ENDINGS.barely.text}`.includes('争取'), false);
+});
+
+function interviewed(seed) {
+  return applyAction(createGame(seed), { type: 'talk', person: 'boss' });
+}
+
+test('before the interview everyone only sends you to the boss', () => {
+  const night = applyAction(createGame('gate'), { type: 'night' });
+  assert.equal(night.interviewed, false);
+  for (const person of ['lunch', 'neighbor', 'party']) {
+    const line = coworkerLine(night, person);
+    assert.equal(line.visible, true);
+    assert.match(line.text, /先去找老板/);
+    assert.equal(line.choices.length, 0);
+    assert.equal(applyAction(night, { type: 'talk', person, choice: 'accept' }), night);
+  }
+  assert.equal(night.ap, CONFIG.dailyAp);
+  assert.equal(night.stamina, CONFIG.staminaStart);
+  assert.equal(night.dotaPending, false);
+  const hired = applyAction(night, { type: 'talk', person: 'boss' });
+  assert.equal(hired.interviewed, true);
+  assert.match(coworkerLine(hired, 'lunch').text, /好饿，去吃面/);
+  assert.doesNotMatch(coworkerLine(hired, 'lunch').text, /找老板/);
+  assert.match(coworkerLine(hired, 'neighbor').text, /明天会来/);
+  assert.match(coworkerLine(hired, 'party').text, /Dota/);
+});
+
+test('each coworker can be talked to once a day, and the next day is a different line', () => {
+  let state = interviewed('once');
+  const first = coworkerLine(state, 'lunch').text;
+  const talked = applyAction(state, { type: 'talk', person: 'neighbor' });
+  assert.notEqual(talked, state);
+  assert.equal(applyAction(talked, { type: 'talk', person: 'neighbor' }), talked);
+  assert.equal(coworkerLine(talked, 'neighbor').text, '今天说过了。');
+  while (state.ap > 0) state = applyAction(state, { type: 'rest' });
+  state = applyAction(state, { type: 'sleep' });
+  assert.equal(state.talked.neighbor, false);
+  assert.notEqual(coworkerLine(state, 'lunch').text, first);
+  assert.match(coworkerLine(state, 'lunch').text, /好饿，去吃面/);
+  const again = applyAction(state, { type: 'talk', person: 'neighbor' });
+  assert.notEqual(again.log[0], talked.log[0]);
+});
+
+test('noodles cost 1 AP and restore 3 stamina, one more than resting', () => {
+  let state = applyAction(interviewed('noodles'), { type: 'overnight' });
+  assert.equal(state.stamina, 7);
+  assert.equal(state.ap, 4);
+  const declined = applyAction(state, { type: 'talk', person: 'lunch', choice: 'decline' });
+  assert.equal(declined.ap, 4);
+  assert.equal(declined.stamina, 7);
+  let fresh = applyAction(interviewed('noodles-yes'), { type: 'overnight' });
+  fresh = applyAction(fresh, { type: 'talk', person: 'lunch', choice: 'accept' });
+  assert.equal(fresh.ap, 3);
+  assert.equal(fresh.stamina, 10);
+  assert.equal(fresh.stamina - 7, CONFIG.restStamina + 1);
+  assert.match(fresh.log[0], /体力 \+3，现在 10/);
+  assert.equal(applyAction(fresh, { type: 'talk', person: 'lunch', choice: 'accept' }), fresh);
+  let dry = interviewed('noodles-dry');
+  while (dry.ap > 0) dry = applyAction(dry, { type: 'rest' });
+  assert.equal(applyAction(dry, { type: 'talk', person: 'lunch', choice: 'accept' }), dry);
+});
+
+test('the neighbor names the ticket that arrives the next morning and teaches nothing', () => {
+  const seen = new Set();
+  for (const seed of ['hefei', 'nanjing', 's1', 'forecast-seed']) seen.add(JSON.stringify(forecastTomorrow(createGame(seed))));
+  assert.ok(seen.size > 1);
+
+  let state = interviewed('forecast-seed');
+  const forecast = forecastTomorrow(state);
+  assert.deepEqual(forecastTomorrow(applyAction(state, { type: 'rest' })), forecast);
+  const said = applyAction(state, { type: 'talk', person: 'neighbor' });
+  assert.equal(said.learned.linux, false);
+  assert.equal(said.learned.database, false);
+  assert.equal(said.skills.java, 0);
+  assert.match(said.log[0], /明天会来「/);
+  assert.ok(said.log[0].includes(forecast.title));
+  assert.ok(said.log[0].includes(`${forecast.difficulty} 点`));
+  assert.ok(said.log[0].includes(`期限 ${forecast.dueIn} 天`));
+  assert.doesNotMatch(said.log[0], /学会/);
+  const before = new Set(said.tickets.map(ticket => ticket.id));
+  let spent = said;
+  while (spent.ap > 0) spent = applyAction(spent, { type: 'rest' });
+  const morning = applyAction(spent, { type: 'sleep' });
+  const arrived = morning.tickets.find(ticket => !before.has(ticket.id)
+    && ticket.kind === forecast.kind
+    && ticket.title === forecast.title
+    && ticket.difficulty === forecast.difficulty
+    && ticket.dueIn === forecast.dueIn);
+  assert.ok(arrived);
+  assert.deepEqual(forecastTomorrow(createGame('forecast-seed')), forecast);
+});
+
+test('friday lines change with favor, and the teammate only plays Dota at night', () => {
+  assert.notEqual(bossFavorLine(50, 30), bossFavorLine(35, 30));
+  assert.notEqual(bossFavorLine(35, 30), bossFavorLine(10, 30));
+  assert.match(bossFavorLine(50, 30), /高出一截/);
+  assert.match(bossFavorLine(35, 30), /刚过/);
+  assert.match(bossFavorLine(10, 30), /没到/);
+  const fired = restOnly('favor-line').state;
+  assert.match(fired.log[0], /没到本周线 30/);
+  assert.equal(fired.settlementLine, fired.log[0]);
+
+  const day = interviewed('party-day');
+  assert.equal(coworkerLine(day, 'party').visible, false);
+  assert.equal(applyAction(day, { type: 'talk', person: 'party', choice: 'accept' }), day);
+  const night = applyAction(day, { type: 'night' });
+  const declined = applyAction(night, { type: 'talk', person: 'party', choice: 'decline' });
+  assert.equal(declined.ap, night.ap);
+  assert.equal(declined.stamina, night.stamina);
+  assert.equal(declined.dotaPending, false);
+  assert.equal(declined.overnightUsed, false);
+  const accepted = applyAction(night, { type: 'talk', person: 'party', choice: 'accept' });
+  assert.equal(accepted.ap, night.ap + 1);
+  assert.equal(accepted.stamina, night.stamina - 3);
+  assert.equal(accepted.dotaPending, true);
+  assert.equal(applyAction(accepted, { type: 'talk', person: 'party', choice: 'accept' }), accepted);
+});
+
+test('week 2 Monday the boss assigns the file database', () => {
+  let state = interviewed('assign');
+  let guard = 0;
+  while (state.phase === 'play' && !(state.week === 2 && state.day === 1) && guard < 400) {
+    const due = state.tickets.find(ticket => !ticket.mainline && ticket.dueIn <= 1);
+    state = applyAction(state, state.ap === 0 ? { type: 'sleep' } : (due ? { type: 'work', ticketId: due.id } : { type: 'rest' }));
+    guard += 1;
+  }
+  assert.match(coworkerLine(state, 'boss').text, /写一个文件数据库/);
+  const told = applyAction(state, { type: 'talk', person: 'boss' });
+  assert.match(told.log[0], /写一个文件数据库/);
+  assert.equal(told.ap, state.ap);
+});
+
+test('three fixed strategies stay inside the tuned rates', () => {
+  const report = ratesOnly(runStrategies());
+  const saved = JSON.parse(readFileSync(new URL('../review/strategies.json', import.meta.url), 'utf8'));
+  assert.equal(saved.seedCount, 240);
+  assert.equal(report.seeds, 240);
+  assert.equal(report.greedy.won, saved.strategies.greedy.won);
+  assert.equal(report.planned.remembered, saved.strategies.planned.remembered);
+  assert.equal(report.random.won, saved.strategies.random.won);
+  assert.ok(report.greedy.passRate >= 0.4 && report.greedy.passRate <= 0.6);
+  assert.equal(report.greedy.goodEndingRate, 0);
+  assert.ok(report.planned.goodEndingRate >= 0.4);
+  assert.ok(report.random.passRate <= 0.15);
 });
 
 test('fixed lines reproduce a remembered win and a bare survival', () => {

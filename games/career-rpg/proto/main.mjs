@@ -12,6 +12,7 @@ let state = createGame(readSeed());
 let dota = null;
 let dotaTick = 0;
 let dotaResult = 0;
+let dialogue = null;
 
 function clearDotaTimers() {
   if (dotaTick) clearInterval(dotaTick);
@@ -36,11 +37,8 @@ function showDotaResult() {
   dotaResult = setTimeout(closeDota, 1800);
 }
 
-function openDota() {
-  if (dota) return;
-  const next = applyAction(state, { type: 'overnight' });
-  if (next === state) return;
-  state = next;
+function startDota() {
+  if (dota || !state.dotaPending) return;
   dota = { match: createMatch(state.seed, state.rng), mode: 'play' };
   render();
   dotaTick = setInterval(() => {
@@ -84,6 +82,7 @@ function pips(filled, total) {
 
 function act(action) {
   state = applyAction(state, action);
+  if (action && action.type === 'sleep') dialogue = null;
   render();
 }
 
@@ -94,7 +93,45 @@ function start(seed) {
   history.replaceState(null, '', url);
   clearDotaTimers();
   dota = null;
+  dialogue = null;
   state = createGame(next);
+  render();
+}
+
+function sentence(line) {
+  const mark = line.indexOf('：');
+  return mark === -1 ? line : line.slice(mark + 1);
+}
+
+function openPerson(id) {
+  const line = present(state).coworkers.find(item => item.id === id);
+  if (!line || !line.visible) return;
+  if (!line.commit || line.talked) {
+    dialogue = { person: id, name: line.name, text: line.text, choices: line.choices, forecast: line.forecast };
+    render();
+    return;
+  }
+  const next = applyAction(state, { type: 'talk', person: id });
+  if (next === state) return;
+  state = next;
+  dialogue = { person: id, name: line.name, text: sentence(state.log[0]), choices: [], forecast: line.forecast };
+  render();
+}
+
+function chooseLine(choice) {
+  if (!dialogue) return;
+  const person = dialogue.person;
+  const name = dialogue.name;
+  const pending = state.dotaPending;
+  const next = applyAction(state, { type: 'talk', person, choice });
+  if (next === state) return;
+  state = next;
+  if (!pending && state.dotaPending) {
+    dialogue = null;
+    startDota();
+    return;
+  }
+  dialogue = { person, name, text: sentence(state.log[0]), choices: [], forecast: null };
   render();
 }
 
@@ -204,6 +241,51 @@ function skillCard(skill) {
   return el('article', { class: 'card', 'data-skill': skill.id, 'data-progress': skill.progress, 'data-learned': skill.learned ? '1' : '0' }, body);
 }
 
+function office(view) {
+  const spots = view.coworkers.filter(person => person.visible).map(person => {
+    const speaking = dialogue && dialogue.person === person.id;
+    const button = el('button', { type: 'button', class: 'figure', 'data-person': person.id }, [
+      el('i', { class: `body ${person.id}` }),
+      el('span', {}, [person.name]),
+    ]);
+    button.addEventListener('click', () => openPerson(person.id));
+    const prop = person.id === 'boss' ? 'table' : (person.id === 'party' ? 'door' : 'desk');
+    return el('div', { class: speaking ? 'spot speaking' : 'spot', 'data-spot': person.id }, [
+      el('i', { class: 'arrow', 'data-arrow': speaking ? person.id : '' }),
+      button,
+      el('i', { class: `prop ${prop}` }),
+    ]);
+  });
+  return el('section', { class: view.night ? 'office night' : 'office', id: 'office' }, spots);
+}
+
+function dialogueBox(view) {
+  if (!dialogue) return null;
+  const choices = dialogue.choices.map(choice => {
+    const button = el('button', { type: 'button', 'data-choice': choice.id }, [choice.label]);
+    if (choice.id === 'accept' && dialogue.person === 'lunch' && view.ap <= 0) button.disabled = true;
+    button.addEventListener('click', () => chooseLine(choice.id));
+    return button;
+  });
+  const close = el('button', { type: 'button', 'data-dialogue': 'close' }, ['关上']);
+  close.addEventListener('click', () => {
+    dialogue = null;
+    render();
+  });
+  const attrs = { class: 'dialogue', id: 'dialogue' };
+  if (dialogue.forecast) {
+    attrs['data-forecast-title'] = dialogue.forecast.title;
+    attrs['data-forecast-kind'] = dialogue.forecast.kind;
+    attrs['data-forecast-difficulty'] = dialogue.forecast.difficulty;
+    attrs['data-forecast-due'] = dialogue.forecast.dueIn;
+  }
+  return el('section', attrs, [
+    el('div', { class: 'nameplate', id: 'nameplate' }, [dialogue.name]),
+    el('p', { id: 'dialogue-text' }, [dialogue.text]),
+    el('div', { class: 'dialogue-actions' }, choices.concat(close)),
+  ]);
+}
+
 function actionBar(view) {
   const bar = el('div', { class: 'actions' });
   if (view.canRest) {
@@ -211,11 +293,9 @@ function actionBar(view) {
     rest.addEventListener('click', () => act({ type: 'rest' }));
     bar.append(rest);
   }
-  if (view.canOvernight) {
-    const night = el('button', { type: 'button', 'data-action': 'overnight' }, [`${CONFIG.overnightName} +${CONFIG.overnightAp} 点 / -${CONFIG.overnightStaminaCost} 体力，赢了 +${CONFIG.dotaWinStamina}`]);
-    night.addEventListener('click', () => openDota());
-    bar.append(night);
-  }
+  const time = el('button', { type: 'button', 'data-action': view.night ? 'day' : 'night' }, [view.night ? '回白天' : '入夜']);
+  time.addEventListener('click', () => act({ type: view.night ? 'day' : 'night' }));
+  bar.append(time);
   if (view.canSleep) {
     const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉，进入下一天']);
     sleep.addEventListener('click', () => act({ type: 'sleep' }));
@@ -234,6 +314,7 @@ function ending(view) {
   return el('section', { class: 'ending', id: 'ending' }, [
     el('h2', {}, [won ? view.victoryTitle : '被劝退']),
     el('p', { id: 'ending-text' }, [won ? `${view.victoryTitle}。${view.victoryText}` : view.failReason]),
+    ...(view.settlementLine ? [el('p', { id: 'settlement' }, [view.settlementLine])] : []),
     el('dl', {}, [
       el('dt', {}, ['周次']), el('dd', {}, [`第 ${view.week} 周 ${view.dayName}`]),
       el('dt', {}, ['好感']), el('dd', { id: 'end-favor' }, [String(view.favor)]),
@@ -333,6 +414,7 @@ function render() {
   const view = present(state);
   const parts = [header(view), status(view)];
   if (view.phase === 'play') {
+    parts.push(office(view));
     parts.push(el('div', { class: 'board' }, [
       el('section', {}, [el('h2', {}, ['需求单']), el('div', { class: 'stack', id: 'tickets' }, view.tickets.map(ticketCard))]),
       el('section', {}, [
@@ -347,6 +429,9 @@ function render() {
     parts.push(ending(view));
   }
   parts.push(logList(view));
+  if (dialogue) parts.push(el('div', { class: 'dialogue-spacer' }));
+  const box = dialogueBox(view);
+  if (box) parts.push(box);
   if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
 }

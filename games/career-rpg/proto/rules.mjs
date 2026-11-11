@@ -32,7 +32,25 @@ function clamp(value, min, max) {
 }
 
 export function weekLine(week, config = CONFIG) {
+  if (week === config.weeks && config.weekLineFinal != null) return config.weekLineFinal;
   return config.weekLineBase + (week - 1) * config.weekLineStep;
+}
+
+export const PERSON_IDS = Object.freeze(['boss', 'lunch', 'neighbor', 'party']);
+
+const PEOPLE = Object.freeze({
+  boss: Object.freeze({ name: '老板', nightOnly: false }),
+  lunch: Object.freeze({ name: '饭搭子', nightOnly: false }),
+  neighbor: Object.freeze({ name: '隔壁工位老哥', nightOnly: false }),
+  party: Object.freeze({ name: '开黑队友', nightOnly: true }),
+});
+
+const LUNCH_DISHES = Object.freeze(['牛肉面', '辣面', '清汤面', '鸡蛋面', '番茄面']);
+
+export function bossFavorLine(favor, line) {
+  if (favor >= line + 10) return `好感 ${favor}，比本周线 ${line} 高出一截。`;
+  if (favor >= line) return `好感 ${favor}，刚过本周线 ${line}。`;
+  return `好感 ${favor}，没到本周线 ${line}。`;
 }
 
 export function isEvent(ticket) {
@@ -151,33 +169,78 @@ function fileDbTicket(state, id) {
   };
 }
 
-function spawnMorning(state) {
+function takeMorning(state) {
   const config = state.config;
   let rng = state.rng;
   const count = rngInt(rng, config.spawnMin, config.spawnMax);
   rng = count.state;
-  const tickets = state.tickets.slice();
+  const spawned = [];
   let nextId = state.nextId;
   for (let i = 0; i < count.value; i += 1) {
     const kindRoll = rngNext(rng);
     const made = makeTicket(kindRoll.value, kindRoll.state, nextId, config);
     rng = made.rng;
     nextId += 1;
-    tickets.push(made.ticket);
+    spawned.push(made.ticket);
   }
-  let next = { ...state, rng, nextId, tickets };
-  let note = `早上新到 ${count.value} 张单。`;
+  let fileDb = null;
   if (state.week === config.fileDbWeek && state.day === 1 && !state.fileDbAssigned) {
-    const mainline = fileDbTicket(next, next.nextId);
-    next = {
-      ...next,
-      nextId: next.nextId + 1,
-      fileDbAssigned: true,
-      tickets: [mainline].concat(next.tickets),
-    };
-    note = `${note}老板派下「${config.fileDbTitle}」，第 ${config.weeks} 周周五前。`;
+    fileDb = fileDbTicket(state, nextId);
+    nextId += 1;
   }
-  return withLog(next, note);
+  return { rng, nextId, count: count.value, spawned, fileDb };
+}
+
+function spawnMorning(state) {
+  const rolled = takeMorning(state);
+  let tickets = state.tickets.concat(rolled.spawned);
+  let note = `早上新到 ${rolled.count} 张单。`;
+  let fileDbAssigned = state.fileDbAssigned;
+  if (rolled.fileDb) {
+    tickets = [rolled.fileDb].concat(tickets);
+    fileDbAssigned = true;
+    note = `${note}老板派下「${state.config.fileDbTitle}」，第 ${state.config.weeks} 周周五前。`;
+  }
+  return withLog({
+    ...state,
+    rng: rolled.rng,
+    nextId: rolled.nextId,
+    fileDbAssigned,
+    tickets,
+  }, note);
+}
+
+function nextMorningState(state) {
+  const config = state.config;
+  if (state.week >= config.weeks && state.day >= config.daysPerWeek) return null;
+  if (state.day >= config.daysPerWeek) return { ...state, week: state.week + 1, day: 1 };
+  return { ...state, day: state.day + 1 };
+}
+
+export function forecastTomorrow(state) {
+  const morning = nextMorningState(state);
+  if (!morning) return null;
+  const rolled = takeMorning(morning);
+  const ticket = rolled.spawned[0];
+  if (!ticket) return null;
+  return {
+    kind: ticket.kind,
+    title: ticket.title,
+    difficulty: ticket.difficulty,
+    dueIn: ticket.dueIn,
+  };
+}
+
+function freshTalked() {
+  return { boss: false, lunch: false, neighbor: false, party: false };
+}
+
+function dayIndex(state) {
+  return (state.week - 1) * state.config.daysPerWeek + (state.day - 1);
+}
+
+function dayStamp(state) {
+  return `第 ${state.week} 周${DAY_NAMES[state.day]}`;
 }
 
 export function createGame(seed, config = CONFIG) {
@@ -193,6 +256,10 @@ export function createGame(seed, config = CONFIG) {
     favor: config.favorStart,
     overnightUsed: false,
     dotaPending: false,
+    interviewed: false,
+    night: false,
+    talked: freshTalked(),
+    settlementLine: '',
     skills: { linux: 0, git: 0, database: 0, java: 0, jquery: 0 },
     learned: { linux: false, git: false, database: false, java: false, jquery: false },
     tickets: [],
@@ -320,6 +387,136 @@ function dotaResult(state, won) {
   return withLog({ ...state, stamina, dotaPending: false }, note);
 }
 
+function markTalked(state, person, line) {
+  return withLog({
+    ...state,
+    talked: { ...state.talked, [person]: true },
+  }, line);
+}
+
+function bossText(state) {
+  const config = state.config;
+  if (!state.interviewed) {
+    const opening = '先做个面试。试用期四周，周五看老板好感。';
+    if (state.week === config.fileDbWeek && state.day === 1) return `${opening}这周写${config.fileDbTitle}。`;
+    return opening;
+  }
+  if (state.week === config.fileDbWeek && state.day === 1) {
+    return `这周的大单是${config.fileDbTitle}。先学会数据库才能开工。`;
+  }
+  if (state.day === config.daysPerWeek) return bossFavorLine(state.favor, weekLine(state.week, config));
+  const notes = ['接口的错码写清楚。', '导库别放在中午。', '日志看完再重启。', '改表先跟我说。', '演示前把数对上。'];
+  return `${dayStamp(state)}，${notes[dayIndex(state) % notes.length]}`;
+}
+
+function lunchText(state) {
+  const dish = LUNCH_DISHES[dayIndex(state) % LUNCH_DISHES.length];
+  return `好饿，去吃面。${dayStamp(state)}想吃${dish}。`;
+}
+
+function neighborText(state) {
+  const forecast = forecastTomorrow(state);
+  const flavor = state.day === 3
+    ? `第 ${state.week} 周，熬过星期三就是星期五。`
+    : `${dayStamp(state)}，隔座先说一声。`;
+  if (!forecast) return `${flavor}明天没有新单了。`;
+  return `${flavor}明天会来「${forecast.title}」，${forecast.difficulty} 点，期限 ${forecast.dueIn} 天。`;
+}
+
+function partyText(state) {
+  return `${dayStamp(state)}，来打一把 Dota？`;
+}
+
+function talkBoss(state) {
+  const text = bossText(state);
+  return markTalked({ ...state, interviewed: true }, 'boss', `老板：${text}`);
+}
+
+function talkLunch(state, choice) {
+  if (choice !== 'accept' && choice !== 'decline') return state;
+  if (choice === 'decline') return markTalked(state, 'lunch', '饭搭子：那我自己去。');
+  if (state.ap <= 0) return state;
+  const stamina = Math.min(state.config.staminaMax, state.stamina + state.config.noodleStamina);
+  const gained = stamina - state.stamina;
+  const note = gained > 0 ? `吃了面，体力 +${gained}，现在 ${stamina}` : '吃了面，体力已经满了';
+  return markTalked({ ...state, ap: state.ap - 1, stamina }, 'lunch', `饭搭子：${note}`);
+}
+
+function talkNeighbor(state) {
+  return markTalked(state, 'neighbor', `隔壁工位老哥：${neighborText(state)}`);
+}
+
+function talkParty(state, choice) {
+  if (choice !== 'accept' && choice !== 'decline') return state;
+  if (choice === 'decline') return markTalked(state, 'party', '开黑队友：那今晚不打。');
+  if (state.overnightUsed) return markTalked(state, 'party', '开黑队友：今晚已经打过了。');
+  const stayed = overnight(state);
+  return {
+    ...stayed,
+    talked: { ...stayed.talked, party: true },
+  };
+}
+
+function talk(state, action) {
+  const person = action.person;
+  if (!PEOPLE[person] || state.phase !== 'play' || state.talked[person]) return state;
+  if (person === 'party' && !state.night) return state;
+  if (person !== 'boss' && !state.interviewed) return state;
+  if (person === 'boss') return talkBoss(state);
+  if (person === 'lunch') return talkLunch(state, action.choice);
+  if (person === 'neighbor') return talkNeighbor(state);
+  return talkParty(state, action.choice);
+}
+
+function setNight(state, night) {
+  if (state.phase !== 'play' || state.night === night) return state;
+  return { ...state, night };
+}
+
+export function coworkerLine(state, person) {
+  const spec = PEOPLE[person];
+  if (!spec) return null;
+  const visible = !spec.nightOnly || state.night;
+  const base = {
+    id: person,
+    name: spec.name,
+    visible,
+    talked: Boolean(state.talked[person]),
+    gate: false,
+    commit: false,
+    text: '',
+    choices: [],
+    forecast: null,
+  };
+  if (!visible) return base;
+  if (state.talked[person]) return { ...base, text: '今天说过了。' };
+  if (person !== 'boss' && !state.interviewed) {
+    return { ...base, gate: true, text: '先去找老板。' };
+  }
+  if (person === 'boss') return { ...base, commit: true, text: bossText(state) };
+  if (person === 'neighbor') {
+    return { ...base, commit: true, text: neighborText(state), forecast: forecastTomorrow(state) };
+  }
+  if (person === 'lunch') {
+    return {
+      ...base,
+      text: lunchText(state),
+      choices: [
+        { id: 'accept', label: '去吃面' },
+        { id: 'decline', label: '不去' },
+      ],
+    };
+  }
+  return {
+    ...base,
+    text: partyText(state),
+    choices: [
+      { id: 'accept', label: '打' },
+      { id: 'decline', label: '不打' },
+    ],
+  };
+}
+
 function resolveDeadlines(state) {
   const config = state.config;
   const kept = [];
@@ -360,6 +557,8 @@ function sleep(state) {
   let next = resolveDeadlines({ ...state, dotaPending: false });
   if (next.day === next.config.daysPerWeek) {
     const line = weekLine(next.week, next.config);
+    const remark = `老板：${bossFavorLine(next.favor, line)}`;
+    next = { ...withLog(next, remark), settlementLine: remark };
     if (next.favor < line) {
       return {
         ...next,
@@ -381,6 +580,8 @@ function sleep(state) {
     ...next,
     ap,
     overnightUsed: false,
+    night: false,
+    talked: freshTalked(),
   }, `第 ${next.week} 周${DAY_NAMES[next.day]}，行动点 ${ap}${exhausted ? '（体力见底）' : ''}。`);
   return spawnMorning(next);
 }
@@ -393,6 +594,9 @@ export function applyAction(state, action) {
   if (action.type === 'overnight') return overnight(state);
   if (action.type === 'dota') return dotaResult(state, action.won === true);
   if (action.type === 'sleep') return sleep(state);
+  if (action.type === 'night') return setNight(state, true);
+  if (action.type === 'day') return setNight(state, false);
+  if (action.type === 'talk') return talk(state, action);
   return state;
 }
 
@@ -440,6 +644,9 @@ export function present(state) {
     victoryTitle: ENDINGS[state.ending]?.title || '',
     victoryText: ENDINGS[state.ending]?.text || '',
     fileDbDone: state.fileDbDone,
+    interviewed: state.interviewed,
+    night: state.night,
+    settlementLine: state.settlementLine,
     log: state.log,
     stats: {
       ...state.stats,
@@ -483,6 +690,7 @@ export function present(state) {
     }).sort((a, b) => Number(b.mainline) - Number(a.mainline)),
     skills: SKILL_IDS.map(id => skillStatus(state, id)),
     shelf: skillStatus(state, 'jquery'),
+    coworkers: PERSON_IDS.map(id => coworkerLine(state, id)),
   };
 }
 

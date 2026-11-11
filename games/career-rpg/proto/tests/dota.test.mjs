@@ -243,5 +243,6 @@ test('screen copy does not print the raze keys', () => {
   assert.equal(mainSource.includes('toUpperCase'), false);
   assert.match(mainSource, /createMatch\(state\.seed, state\.rng\)/);
   assert.equal(mainSource.includes('${raze.key'), false);
+  assert.equal(mainSource.includes('快捷键'), false);
   assert.match(mainSource, /\[raze\.name\]/);
 });
