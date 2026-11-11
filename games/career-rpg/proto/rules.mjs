@@ -1,21 +1,31 @@
 import {
+  BACKEND_TICKETS,
   CONFIG,
   DAY_NAMES,
-  FULLSTACK_TITLES,
+  ENDINGS,
+  EVENT_TICKETS,
   PAGE_TITLES,
   SKILL_IDS,
-  VICTORY_TEXT,
 } from './config.mjs';
 import { hashSeed, rngInt, rngNext } from './rng.mjs';
 
-export { CONFIG, DAY_NAMES, VICTORY_TEXT };
+export { CONFIG, DAY_NAMES, ENDINGS };
 
 const KIND_LABEL = {
+  api: '接口',
+  data: '导数据',
+  schema: '改表',
+  log: '服务器',
+  cron: '定时任务',
   page: '页面',
-  server: '服务器事件',
+  disk: '服务器事件',
+  rollback: '回滚事件',
   demo: '演示事件',
-  fullstack: '全栈',
+  filedb: '主线',
 };
+
+const EVENT_KINDS = new Set(['disk', 'rollback', 'demo']);
+const SERVER_KINDS = new Set(['log', 'cron', 'disk']);
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -26,23 +36,33 @@ export function weekLine(week, config = CONFIG) {
 }
 
 export function isEvent(ticket) {
-  return ticket.kind === 'server' || ticket.kind === 'demo';
+  return EVENT_KINDS.has(ticket.kind);
+}
+
+export function isServerTicket(ticket) {
+  return SERVER_KINDS.has(ticket.kind) || isEvent(ticket);
 }
 
 export function ticketWorkCost(ticket, learned, config = CONFIG) {
-  if (ticket.kind === 'server') return learned.linux ? config.linuxServerCost : ticket.difficulty;
-  if (ticket.kind === 'fullstack') return config.fullstackDifficulty;
-  if (ticket.kind === 'page' && learned.jquery) {
-    return Math.max(1, ticket.difficulty - config.jqueryPageDiscount);
+  if (ticket.mainline) return config.fileDbCost;
+  if (isServerTicket(ticket) && learned.linux) return config.linuxServerCost;
+  if ((ticket.kind === 'data' || ticket.kind === 'schema') && learned.database) {
+    return Math.max(1, ticket.difficulty - config.skillDiscount);
   }
+  if (ticket.kind === 'api' && learned.java) return Math.max(1, ticket.difficulty - config.skillDiscount);
+  if (ticket.kind === 'page' && learned.jquery) return Math.max(1, ticket.difficulty - config.skillDiscount);
   return ticket.difficulty;
 }
 
+export function workStep(ticket, learned, config = CONFIG) {
+  if (ticket.mainline && learned.java) return 1 + config.fileDbJavaBonus;
+  return 1;
+}
+
 export function ticketReward(ticket, config = CONFIG) {
+  if (ticket.mainline) return config.fileDbReward;
   if (isEvent(ticket)) return config.eventFavorComplete;
-  const difficulty = ticket.kind === 'fullstack' ? config.fullstackDifficulty : ticket.difficulty;
-  const base = config.favorPerDifficulty * difficulty;
-  return ticket.kind === 'fullstack' ? base * config.fullstackFavorMultiplier : base;
+  return config.favorPerDifficulty * ticket.difficulty;
 }
 
 export function ticketPenalty(ticket, learned, config = CONFIG) {
@@ -58,61 +78,76 @@ function withLog(state, line) {
   return { ...state, log: [line, ...state.log].slice(0, 8) };
 }
 
-function pickKind(roll, learned, config) {
-  if (learned.java && roll < config.fullstackChance) return 'fullstack';
-  const eventCut = (learned.java ? config.fullstackChance : 0) + config.eventChance;
-  if (roll < eventCut) return 'event';
-  return 'page';
-}
-
-function makeTicket(kind, rng, id, config) {
-  if (kind === 'event') {
-    const side = rngNext(rng);
-    const server = side.value < 0.5;
+function makeTicket(roll, rng, id, config) {
+  if (roll < config.eventChance) {
+    const pick = rngInt(rng, 0, EVENT_TICKETS.length - 1);
+    const spec = EVENT_TICKETS[pick.value];
     return {
-      rng: side.state,
+      rng: pick.state,
       ticket: {
         id,
-        kind: server ? 'server' : 'demo',
-        title: server ? '线上页面白屏' : '老板临时要演示',
+        kind: spec.kind,
+        title: spec.title,
         difficulty: config.eventDifficulty,
         dueIn: config.eventDeadline,
         progress: 0,
         late: false,
+        mainline: false,
       },
     };
   }
-  if (kind === 'fullstack') {
-    const due = rngInt(rng, config.deadlineMin, config.deadlineMax);
-    const title = rngInt(due.state, 0, FULLSTACK_TITLES.length - 1);
+  if (roll < config.eventChance + config.pageChance) {
+    const difficultyRoll = rngInt(rng, 0, config.difficultyTable.length - 1);
+    const due = rngInt(difficultyRoll.state, config.deadlineMin, config.deadlineMax);
+    const title = rngInt(due.state, 0, PAGE_TITLES.length - 1);
     return {
       rng: title.state,
       ticket: {
         id,
-        kind: 'fullstack',
-        title: FULLSTACK_TITLES[title.value],
-        difficulty: config.fullstackDifficulty,
+        kind: 'page',
+        title: PAGE_TITLES[title.value],
+        difficulty: config.difficultyTable[difficultyRoll.value],
         dueIn: due.value,
         progress: 0,
         late: false,
+        mainline: false,
       },
     };
   }
-  const difficultyRoll = rngInt(rng, 0, config.difficultyTable.length - 1);
-  const difficulty = { state: difficultyRoll.state, value: config.difficultyTable[difficultyRoll.value] };
-  const due = rngInt(difficulty.state, config.deadlineMin, config.deadlineMax);
-  const title = rngInt(due.state, 0, PAGE_TITLES.length - 1);
+  const pick = rngInt(rng, 0, BACKEND_TICKETS.length - 1);
+  const spec = BACKEND_TICKETS[pick.value];
+  const difficultyRoll = rngInt(pick.state, 0, config.difficultyTable.length - 1);
+  const due = rngInt(difficultyRoll.state, config.deadlineMin, config.deadlineMax);
   return {
-    rng: title.state,
+    rng: due.state,
     ticket: {
       id,
-      kind: 'page',
-      title: PAGE_TITLES[title.value],
-      difficulty: difficulty.value,
+      kind: spec.kind,
+      title: spec.title,
+      difficulty: config.difficultyTable[difficultyRoll.value],
       dueIn: due.value,
       progress: 0,
       late: false,
+      mainline: false,
     },
+  };
+}
+
+function fileDbDueIn(state) {
+  const config = state.config;
+  return (config.weeks - state.week) * config.daysPerWeek + (config.daysPerWeek - state.day) + 1;
+}
+
+function fileDbTicket(state, id) {
+  return {
+    id,
+    kind: 'filedb',
+    title: state.config.fileDbTitle,
+    difficulty: state.config.fileDbCost,
+    dueIn: fileDbDueIn(state),
+    progress: 0,
+    late: false,
+    mainline: true,
   };
 }
 
@@ -125,16 +160,24 @@ function spawnMorning(state) {
   let nextId = state.nextId;
   for (let i = 0; i < count.value; i += 1) {
     const kindRoll = rngNext(rng);
-    const kind = pickKind(kindRoll.value, state.learned, config);
-    const made = makeTicket(kind, kindRoll.state, nextId, config);
+    const made = makeTicket(kindRoll.value, kindRoll.state, nextId, config);
     rng = made.rng;
     nextId += 1;
     tickets.push(made.ticket);
   }
-  return withLog(
-    { ...state, rng, nextId, tickets },
-    `早上新到 ${count.value} 张单。`,
-  );
+  let next = { ...state, rng, nextId, tickets };
+  let note = `早上新到 ${count.value} 张单。`;
+  if (state.week === config.fileDbWeek && state.day === 1 && !state.fileDbAssigned) {
+    const mainline = fileDbTicket(next, next.nextId);
+    next = {
+      ...next,
+      nextId: next.nextId + 1,
+      fileDbAssigned: true,
+      tickets: [mainline].concat(next.tickets),
+    };
+    note = `${note}老板派下「${config.fileDbTitle}」，第 ${config.weeks} 周周五前。`;
+  }
+  return withLog(next, note);
 }
 
 export function createGame(seed, config = CONFIG) {
@@ -149,13 +192,16 @@ export function createGame(seed, config = CONFIG) {
     stamina: config.staminaStart,
     favor: config.favorStart,
     overnightUsed: false,
-    skills: { linux: 0, git: 0, jquery: 0, java: 0 },
-    learned: { linux: false, git: false, jquery: false, java: false },
+    skills: { linux: 0, git: 0, database: 0, java: 0, jquery: 0 },
+    learned: { linux: false, git: false, database: false, java: false, jquery: false },
     tickets: [],
     nextId: 1,
+    fileDbAssigned: false,
+    fileDbDone: false,
     log: [`第 1 周周一。好感 ${config.favorStart}，本周线 ${weekLine(1, config)}。`],
     stats: blankStats(),
     failReason: '',
+    ending: '',
     config,
   };
   return spawnMorning(state);
@@ -183,29 +229,13 @@ function completeTicket(state, ticketId, note) {
   }, `${note}${gain}`);
 }
 
-function sweepLearned(state, skillId) {
+function sweepLearned(state) {
   let next = state;
-  const ready = [];
-  for (const ticket of next.tickets) {
-    const cost = ticketWorkCost(ticket, next.learned, next.config);
-    if (ticket.progress >= cost) ready.push(ticket);
-  }
+  const ready = next.tickets.filter(ticket => !ticket.mainline && ticket.progress >= ticketWorkCost(ticket, next.learned, next.config));
   for (const ticket of ready) {
-    const why = skillId === 'linux' ? 'Linux 生效，这张服务器单已经做完。' : 'jQuery 生效，这张页面单已经做完。';
-    next = completeTicket(next, ticket.id, `${ticket.title}：${why}`);
+    next = completeTicket(next, ticket.id, `${ticket.title}：技能生效，这张已经做完。`);
   }
   return next;
-}
-
-function unlockFullstack(state) {
-  const config = state.config;
-  const made = makeTicket('fullstack', state.rng, state.nextId, config);
-  return withLog({
-    ...state,
-    rng: made.rng,
-    nextId: state.nextId + 1,
-    tickets: state.tickets.concat(made.ticket),
-  }, `${made.ticket.title}（全栈）解锁，做完 +${ticketReward(made.ticket, config)}。`);
 }
 
 function canStudy(state, skillId) {
@@ -231,25 +261,29 @@ function study(state, skillId) {
   };
   if (!learnedNow) return withLog(next, `${spec.name} ${progress}/${spec.cost}`);
   next = withLog(next, `${spec.name} 学成，立刻生效：${spec.effect}`);
-  if (skillId === 'linux' || skillId === 'jquery') next = sweepLearned(next, skillId);
-  if (skillId === 'java') next = unlockFullstack(next);
-  return next;
+  return sweepLearned(next);
 }
 
 function work(state, ticketId) {
   if (state.phase !== 'play' || state.ap <= 0) return state;
   const ticket = state.tickets.find(item => item.id === ticketId);
   if (!ticket) return state;
+  if (ticket.mainline && !state.learned.database) return state;
   const cost = ticketWorkCost(ticket, state.learned, state.config);
-  const progress = ticket.progress + 1;
+  const step = workStep(ticket, state.learned, state.config);
+  const progress = Math.min(cost, ticket.progress + step);
   const tickets = state.tickets.map(item => (item.id === ticketId ? { ...item, progress } : item));
   const next = {
     ...state,
     ap: state.ap - 1,
     tickets,
   };
-  if (progress < cost) return withLog(next, `${ticket.title} ${progress}/${cost}`);
-  return completeTicket(next, ticketId, `${ticket.title} 做完，`);
+  if (progress < cost) {
+    const extra = step > 1 ? `+${step}，` : '';
+    return withLog(next, `${ticket.title} ${extra}${progress}/${cost}`);
+  }
+  const done = completeTicket(next, ticketId, `${ticket.title} 做完，`);
+  return ticket.mainline ? { ...done, fileDbDone: true } : done;
 }
 
 function rest(state) {
@@ -280,6 +314,10 @@ function resolveDeadlines(state) {
   const kept = [];
   let next = state;
   for (const ticket of state.tickets) {
+    if (ticket.mainline) {
+      kept.push({ ...ticket, dueIn: Math.max(0, ticket.dueIn - 1) });
+      continue;
+    }
     if (!ticket.late) {
       const dueIn = ticket.dueIn - 1;
       if (dueIn > 0) {
@@ -318,7 +356,10 @@ function sleep(state) {
         failReason: `第 ${next.week} 周周五，老板好感 ${next.favor}，低于本周线 ${line}，被劝退。`,
       };
     }
-    if (next.week >= next.config.weeks) return { ...next, phase: 'won' };
+    if (next.week >= next.config.weeks) {
+      const ending = next.fileDbDone ? 'remembered' : 'barely';
+      return { ...next, phase: 'won', ending };
+    }
     next = { ...next, week: next.week + 1, day: 1 };
   } else {
     next = { ...next, day: next.day + 1 };
@@ -383,31 +424,43 @@ export function present(state) {
     line: weekLine(state.week, config),
     overnightUsed: state.overnightUsed,
     failReason: state.failReason,
-    victoryText: VICTORY_TEXT,
+    ending: state.ending,
+    victoryTitle: ENDINGS[state.ending]?.title || '',
+    victoryText: ENDINGS[state.ending]?.text || '',
+    fileDbDone: state.fileDbDone,
     log: state.log,
     stats: {
       ...state.stats,
       skills: SKILL_IDS.filter(id => state.learned[id]).map(id => config.skills[id].name),
+      fileDb: state.fileDbDone ? '做完' : '没做完',
     },
     canRest: state.phase === 'play' && state.ap > 0,
     canOvernight: state.phase === 'play' && !state.overnightUsed,
     canSleep: state.phase === 'play' && state.ap === 0,
     tickets: state.tickets.map(ticket => {
       const cost = ticketWorkCost(ticket, learned, config);
-      const penalty = ticketPenalty(ticket, learned, config);
+      const step = workStep(ticket, learned, config);
+      const penalty = ticket.mainline ? 0 : ticketPenalty(ticket, learned, config);
       let costNote = '';
-      if (ticket.kind === 'server' && learned.linux) costNote = 'Linux';
+      if (isServerTicket(ticket) && learned.linux && !ticket.mainline) costNote = 'Linux';
+      if ((ticket.kind === 'data' || ticket.kind === 'schema') && learned.database && cost < ticket.difficulty) costNote = '数据库';
+      if (ticket.kind === 'api' && learned.java && cost < ticket.difficulty) costNote = 'Java';
       if (ticket.kind === 'page' && learned.jquery && cost < ticket.difficulty) costNote = 'jQuery';
+      if (ticket.mainline && learned.java) costNote = 'Java，这次 +2';
       return {
         id: ticket.id,
         kind: ticket.kind,
         kindLabel: KIND_LABEL[ticket.kind],
         title: ticket.title,
+        mainline: Boolean(ticket.mainline),
+        locked: Boolean(ticket.mainline && !learned.database),
         difficulty: ticket.difficulty,
         dueIn: ticket.dueIn,
+        dueLabel: ticket.mainline ? `第 ${config.weeks} 周周五前` : '',
         late: ticket.late,
         progress: ticket.progress,
         cost,
+        step,
         left: Math.max(0, cost - ticket.progress),
         reward: ticketReward(ticket, config),
         penalty,
@@ -415,8 +468,9 @@ export function present(state) {
         costNote,
         penaltyNote: isEvent(ticket) && learned.git ? 'Git' : '',
       };
-    }),
+    }).sort((a, b) => Number(b.mainline) - Number(a.mainline)),
     skills: SKILL_IDS.map(id => skillStatus(state, id)),
+    shelf: skillStatus(state, 'jquery'),
   };
 }
 

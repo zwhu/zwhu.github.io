@@ -2,91 +2,91 @@ TAP version 13
 # Subtest: three razes hit only their own distance
 ok 1 - three razes hit only their own distance
   ---
-  duration_ms: 1.186643
+  duration_ms: 1.518171
   type: 'test'
   ...
 # Subtest: the same seed spawns the same creeps
 ok 2 - the same seed spawns the same creeps
   ---
-  duration_ms: 1.65018
+  duration_ms: 1.913344
   type: 'test'
   ...
 # Subtest: documented starting numbers live in one config
 ok 3 - documented starting numbers live in one config
   ---
-  duration_ms: 0.734646
+  duration_ms: 0.730749
   type: 'test'
   ...
 # Subtest: same seed and actions reproduce the same game
 ok 4 - same seed and actions reproduce the same game
   ---
-  duration_ms: 1.67105
+  duration_ms: 1.697548
   type: 'test'
   ...
 # Subtest: a different seed deals different tickets
 ok 5 - a different seed deals different tickets
   ---
-  duration_ms: 0.168916
+  duration_ms: 0.19123
   type: 'test'
   ...
 # Subtest: resting through week 1 is a firing on Friday
 ok 6 - resting through week 1 is a firing on Friday
   ---
-  duration_ms: 1.24061
+  duration_ms: 0.599317
   type: 'test'
   ...
 # Subtest: overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
 ok 7 - overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
   ---
-  duration_ms: 0.557043
+  duration_ms: 0.719448
   type: 'test'
   ...
 # Subtest: rest restores 2 stamina and does not pass 10
 ok 8 - rest restores 2 stamina and does not pass 10
   ---
-  duration_ms: 0.116341
+  duration_ms: 0.1087
   type: 'test'
   ...
-# Subtest: Linux cuts a server ticket from 3 points to 1
-ok 9 - Linux cuts a server ticket from 3 points to 1
+# Subtest: Linux cuts a server or incident ticket to 1 point
+ok 9 - Linux cuts a server or incident ticket to 1 point
   ---
-  duration_ms: 0.523228
+  duration_ms: 0.467958
   type: 'test'
   ...
 # Subtest: Git cuts an event penalty from 18 to 8
 ok 10 - Git cuts an event penalty from 18 to 8
   ---
-  duration_ms: 0.185731
+  duration_ms: 0.200941
   type: 'test'
   ...
 # Subtest: jQuery stays shut in week 1 and then saves a point on page tickets
 ok 11 - jQuery stays shut in week 1 and then saves a point on page tickets
   ---
-  duration_ms: 0.291375
+  duration_ms: 0.301207
   type: 'test'
   ...
-# Subtest: Java can only be studied at night and unlocks a double-favor fullstack ticket
-ok 12 - Java can only be studied at night and unlocks a double-favor fullstack ticket
+# Subtest: Java is night-only and the file database stays shut until 数据库
+ok 12 - Java is night-only and the file database stays shut until 数据库
   ---
-  duration_ms: 0.41213
+  duration_ms: 0.706156
   type: 'test'
   ...
 # Subtest: illegal actions leave the state untouched
 ok 13 - illegal actions leave the state untouched
   ---
-  duration_ms: 0.181891
+  duration_ms: 0.734583
   type: 'test'
   ...
-# Subtest: victory line is the handoff sentence
-ok 14 - victory line is the handoff sentence
+# Subtest: the two cleared endings replace the probation reminder
+ok 14 - the two cleared endings replace the probation reminder
   ---
-  duration_ms: 0.052295
+  duration_ms: 0.091378
   type: 'test'
   ...
-# Subtest: the fixed line survives four weeks and jQuery changes a live ticket
-ok 15 - the fixed line survives four weeks and jQuery changes a live ticket
+# Subtest: fixed lines reproduce a remembered win and a bare survival
+ok 15 - fixed lines reproduce a remembered win and a bare survival
   ---
-  duration_ms: 1.462305
+  duration_ms: 0.630701
   type: 'test'
   ...
 1..15
@@ -97,5 +97,4 @@ ok 15 - the fixed line survives four weeks and jQuery changes a live ticket
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 59.446923
-EXIT:0
+# duration_ms 62.38816

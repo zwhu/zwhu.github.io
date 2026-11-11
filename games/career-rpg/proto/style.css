@@ -130,9 +130,13 @@ h2 {
 }
 
 .mark.page { background: #2f5d50; }
-.mark.server { background: #8a3b12; }
+.mark.api, .mark.cron { background: #243056; }
+.mark.data, .mark.schema, .mark.rollback { background: #1d4e89; }
+.mark.log, .mark.disk { background: #8a3b12; }
 .mark.demo { background: #a16207; }
-.mark.fullstack { background: #243056; }
+.mark.filedb { background: #111; }
+.card.mainline { border-width: 2px; }
+.shelf-title { margin-top: 16px; }
 
 .meta { margin: 4px 0; color: #1a1a1a; }
 

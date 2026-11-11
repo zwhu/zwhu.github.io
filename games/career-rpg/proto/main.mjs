@@ -131,27 +131,14 @@ function status(view) {
 }
 
 function ticketCard(ticket) {
-  const due = ticket.late ? '已延期' : `剩 ${ticket.dueIn} 天`;
-  const costText = ticket.costNote ? `${ticket.cost} 点（${ticket.costNote}）` : `${ticket.cost} 点`;
-  const penaltyText = ticket.penaltyNote
+  const due = ticket.dueLabel || (ticket.late ? '已延期' : `剩 ${ticket.dueIn} 天`);
+  const costText = ticket.mainline
+    ? `${ticket.cost} 点${ticket.costNote ? `（${ticket.costNote}）` : ''}`
+    : (ticket.costNote ? `${ticket.cost} 点（${ticket.costNote}）` : `${ticket.cost} 点`);
+  const penaltyText = ticket.mainline ? '不做完，结局不同' : (ticket.penaltyNote
     ? `-${ticket.penalty}（${ticket.penaltyNote}，否则 -${ticket.fullPenalty}）`
-    : `-${ticket.penalty}`;
-  const button = el('button', {
-    type: 'button',
-    'data-action': 'work',
-    'data-id': ticket.id,
-    'data-cost': ticket.cost,
-    'data-penalty': ticket.penalty,
-  }, [`做 · 还差 ${ticket.left} 点`]);
-  button.addEventListener('click', () => act({ type: 'work', ticketId: ticket.id }));
-  return el('article', {
-    class: 'card',
-    'data-kind': ticket.kind,
-    'data-ticket': ticket.id,
-    'data-cost': ticket.cost,
-    'data-penalty': ticket.penalty,
-    'data-reward': ticket.reward,
-  }, [
+    : `-${ticket.penalty}`);
+  const body = [
     el('div', { class: 'ticket-top' }, [
       el('strong', {}, [el('i', { class: `mark ${ticket.kind}` }), ticket.title]),
       el('span', { class: ticket.late ? 'late' : '' }, [due]),
@@ -160,10 +147,32 @@ function ticketCard(ticket) {
     el('p', { class: 'nums' }, [
       el('span', { class: 'left' }, [`进度 ${ticket.progress}/${ticket.cost}`]),
       el('span', { class: 'reward' }, [`做完 +${ticket.reward}`]),
-      el('span', { class: ticket.late ? 'late' : '' }, [`逾期 ${penaltyText}`]),
+      el('span', { class: ticket.late ? 'late' : '' }, [ticket.mainline ? penaltyText : `逾期 ${penaltyText}`]),
     ]),
-    button,
-  ]);
+  ];
+  if (ticket.locked) {
+    body.push(el('p', { class: 'blocked', 'data-locked': '1' }, ['先学数据库']));
+  } else {
+    const label = ticket.step > 1 ? `做 · 这次 +${ticket.step}，还差 ${ticket.left} 点` : `做 · 还差 ${ticket.left} 点`;
+    const button = el('button', {
+      type: 'button',
+      'data-action': 'work',
+      'data-id': ticket.id,
+      'data-cost': ticket.cost,
+      'data-penalty': ticket.penalty,
+    }, [label]);
+    button.addEventListener('click', () => act({ type: 'work', ticketId: ticket.id }));
+    body.push(button);
+  }
+  return el('article', {
+    class: ticket.mainline ? 'card mainline' : 'card',
+    'data-kind': ticket.kind,
+    'data-ticket': ticket.id,
+    'data-cost': ticket.cost,
+    'data-penalty': ticket.penalty,
+    'data-reward': ticket.reward,
+    'data-locked': ticket.locked ? '1' : '0',
+  }, body);
 }
 
 function skillCard(skill) {
@@ -213,8 +222,8 @@ function ending(view) {
   fresh.addEventListener('click', () => start(`h${Date.now().toString(36)}`));
   const stats = view.stats;
   return el('section', { class: 'ending', id: 'ending' }, [
-    el('h2', {}, [won ? '留下来了' : '被劝退']),
-    el('p', { id: 'ending-text' }, [won ? view.victoryText : view.failReason]),
+    el('h2', {}, [won ? view.victoryTitle : '被劝退']),
+    el('p', { id: 'ending-text' }, [won ? `${view.victoryTitle}。${view.victoryText}` : view.failReason]),
     el('dl', {}, [
       el('dt', {}, ['周次']), el('dd', {}, [`第 ${view.week} 周 ${view.dayName}`]),
       el('dt', {}, ['好感']), el('dd', { id: 'end-favor' }, [String(view.favor)]),
@@ -226,6 +235,7 @@ function ending(view) {
       el('dt', {}, ['好感减少']), el('dd', {}, [String(stats.favorLost)]),
       el('dt', {}, [CONFIG.overnightName]), el('dd', {}, [String(stats.overnights)]),
       el('dt', {}, ['学会']), el('dd', {}, [stats.skills.length ? stats.skills.join('、') : '无']),
+      el('dt', {}, ['文件数据库']), el('dd', {}, [stats.fileDb]),
     ]),
     el('div', { class: 'actions' }, [again, fresh]),
   ]);
@@ -297,7 +307,12 @@ function render() {
   if (view.phase === 'play') {
     parts.push(el('div', { class: 'board' }, [
       el('section', {}, [el('h2', {}, ['需求单']), el('div', { class: 'stack', id: 'tickets' }, view.tickets.map(ticketCard))]),
-      el('section', {}, [el('h2', {}, ['学习']), el('div', { class: 'stack', id: 'skills' }, view.skills.map(skillCard))]),
+      el('section', {}, [
+        el('h2', {}, ['学习']),
+        el('div', { class: 'stack', id: 'skills' }, view.skills.map(skillCard)),
+        el('h2', { class: 'shelf-title' }, ['书架']),
+        el('div', { class: 'stack', id: 'shelf' }, [skillCard(view.shelf)]),
+      ]),
     ]));
     parts.push(actionBar(view));
   } else {

@@ -30,20 +30,24 @@ export const CONFIG = Object.freeze({
   eventFavorFail: 18,
   eventFavorFailWithGit: 8,
   eventChance: 0.22,
-  fullstackChance: 0.28,
+  pageChance: 0.3,
   linuxServerCost: 1,
-  jqueryPageDiscount: 1,
-  fullstackDifficulty: 3,
-  fullstackFavorMultiplier: 2,
+  skillDiscount: 1,
+  fileDbCost: 8,
+  fileDbReward: 30,
+  fileDbJavaBonus: 1,
+  fileDbWeek: 2,
+  fileDbTitle: '写一个文件数据库',
   skills: Object.freeze({
-    linux: Object.freeze({ id: 'linux', name: 'Linux', cost: 2, minWeek: 1, nightOnly: false, effect: '服务器类事件单只要 1 点' }),
-    git: Object.freeze({ id: 'git', name: 'Git', cost: 3, minWeek: 1, nightOnly: false, effect: '事件单逾期不再一次性扣满' }),
-    jquery: Object.freeze({ id: 'jquery', name: 'jQuery', book: '锋利的 jQuery', cost: 3, minWeek: 2, nightOnly: false, effect: '页面类需求单少用 1 点' }),
-    java: Object.freeze({ id: 'java', name: 'Java + 数据库', cost: 4, minWeek: 1, nightOnly: true, effect: '解锁全栈单，好感翻倍，难度 3' }),
+    linux: Object.freeze({ id: 'linux', name: 'Linux', cost: 2, minWeek: 1, nightOnly: false, easterEgg: false, effect: '服务器类单子和事件单只要 1 点' }),
+    git: Object.freeze({ id: 'git', name: 'Git', cost: 3, minWeek: 1, nightOnly: false, easterEgg: false, effect: '事件单逾期不再一次性扣满' }),
+    database: Object.freeze({ id: 'database', name: '数据库', cost: 3, minWeek: 1, nightOnly: false, easterEgg: false, effect: '导数据、改表结构少 1 点，解锁文件数据库' }),
+    java: Object.freeze({ id: 'java', name: 'Java', cost: 4, minWeek: 1, nightOnly: true, easterEgg: false, effect: '接口单少 1 点，文件数据库每次多算 1 点' }),
+    jquery: Object.freeze({ id: 'jquery', name: 'jQuery', book: '锋利的 jQuery', cost: 3, minWeek: 2, nightOnly: false, easterEgg: true, effect: '页面单少用 1 点' }),
   }),
 });
 
-export const SKILL_IDS = Object.freeze(['linux', 'git', 'jquery', 'java']);
+export const SKILL_IDS = Object.freeze(['linux', 'git', 'database', 'java']);
 
 export const PAGE_TITLES = Object.freeze([
   '首页改一版',
@@ -56,12 +60,23 @@ export const PAGE_TITLES = Object.freeze([
   '详情页分享',
 ]);
 
-export const FULLSTACK_TITLES = Object.freeze([
-  '报名接口入库',
-  '订单表对上页面',
-  '后台检索加索引',
+export const BACKEND_TICKETS = Object.freeze([
+  Object.freeze({ kind: 'api', title: '写接口' }),
+  Object.freeze({ kind: 'data', title: '导数据' }),
+  Object.freeze({ kind: 'schema', title: '改表结构' }),
+  Object.freeze({ kind: 'log', title: '排查服务器日志' }),
+  Object.freeze({ kind: 'cron', title: '写定时任务' }),
+]);
+
+export const EVENT_TICKETS = Object.freeze([
+  Object.freeze({ kind: 'disk', title: '服务器磁盘满了' }),
+  Object.freeze({ kind: 'rollback', title: '数据导错了要回滚' }),
+  Object.freeze({ kind: 'demo', title: '老板临时要演示' }),
 ]);
 
 export const DAY_NAMES = Object.freeze(['', '周一', '周二', '周三', '周四', '周五']);
 
-export const VICTORY_TEXT = '日夜颠倒地学新东西，拼命把活干好，争取能留下来。';
+export const ENDINGS = Object.freeze({
+  remembered: Object.freeze({ title: '留下来，还被老板记住了', text: '文件数据库交上去了。' }),
+  barely: Object.freeze({ title: '勉强留下来', text: '人留下了。文件数据库还没写完。' }),
+});

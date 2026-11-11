@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { CONFIG, VICTORY_TEXT } from '../config.mjs';
-import { WIN_ACTIONS, WIN_SEED } from '../line.mjs';
+import { CONFIG, ENDINGS, SKILL_IDS } from '../config.mjs';
+import { BARELY_ACTIONS, BARELY_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from '../line.mjs';
 import {
   applyAction,
   createGame,
@@ -10,8 +10,8 @@ import {
   replay,
   snapshot,
   ticketPenalty,
-  ticketReward,
   ticketWorkCost,
+  workStep,
   weekLine,
 } from '../rules.mjs';
 
@@ -103,22 +103,30 @@ test('overnight adds one point, costs 3 stamina, and empty stamina leaves 1 poin
   assert.equal(CONFIG.overnightName, '打 Dota');
   assert.equal(state.log[0], '打 Dota，行动点 +1，体力 7');
   assert.deepEqual(snapshot(fresh), before);
-  const tired = [];
-  let probe = createGame('burn');
-  for (let day = 0; day < 4; day += 1) {
-    probe = applyAction(probe, { type: 'overnight' });
-    while (probe.ap > 0) {
-      const studied = applyAction(probe, { type: 'study', skill: 'java' });
-      if (studied !== probe) probe = studied;
-      else if (probe.tickets.length) probe = applyAction(probe, { type: 'work', ticketId: probe.tickets[0].id });
-      else probe = applyAction(probe, { type: 'rest' });
+  let drained = null;
+  for (let n = 0; n < 30 && !drained; n += 1) {
+    let probe = createGame(`burn${n}`);
+    const tired = [];
+    let rested = false;
+    for (let day = 0; day < 4 && !rested; day += 1) {
+      probe = applyAction(probe, { type: 'overnight' });
+      while (probe.ap > 0 && !rested) {
+        const skill = ['java', 'linux', 'git', 'database'].find(id => !probe.learned[id]);
+        const studied = skill ? applyAction(probe, { type: 'study', skill }) : probe;
+        if (studied !== probe) probe = studied;
+        else {
+          const ticket = probe.tickets.find(item => !item.mainline);
+          const worked = ticket ? applyAction(probe, { type: 'work', ticketId: ticket.id }) : probe;
+          if (worked === probe) rested = true;
+          else probe = worked;
+        }
+      }
+      tired.push(probe.stamina);
+      if (!rested) probe = applyAction(probe, { type: 'sleep' });
     }
-    tired.push(probe.stamina);
-    probe = applyAction(probe, { type: 'sleep' });
+    if (!rested && tired[3] === 0 && probe.ap === 1) drained = tired;
   }
-  assert.deepEqual(tired, [7, 4, 1, 0]);
-  assert.equal(probe.ap, 1);
-  assert.equal(probe.stamina, 0);
+  assert.deepEqual(drained, [7, 4, 1, 0]);
 });
 
 test('rest restores 2 stamina and does not pass 10', () => {
@@ -133,26 +141,28 @@ test('rest restores 2 stamina and does not pass 10', () => {
   assert.equal(state.stamina, 10);
 });
 
-test('Linux cuts a server ticket from 3 points to 1', () => {
-  let state = createGame('s29');
-  assert.equal(state.tickets.some(ticket => ticket.kind === 'server'), true);
-  const server = present(state).tickets.find(ticket => ticket.kind === 'server');
-  assert.equal(server.cost, 3);
+test('Linux cuts a server or incident ticket to 1 point', () => {
+  let state = createGame('s1');
+  const server = present(state).tickets.find(ticket => ['log', 'cron', 'disk', 'rollback', 'demo'].includes(ticket.kind) && ticket.cost > 1);
+  assert.ok(server);
+  const before = server.cost;
   state = applyAction(state, { type: 'study', skill: 'linux' });
-  assert.equal(present(state).tickets.find(ticket => ticket.id === server.id).cost, 3);
   state = applyAction(state, { type: 'study', skill: 'linux' });
   const after = present(state).tickets.find(ticket => ticket.id === server.id);
   assert.equal(state.learned.linux, true);
   assert.equal(after.cost, 1);
+  assert.ok(after.cost < before);
   assert.equal(after.costNote, 'Linux');
-  assert.equal(ticketWorkCost({ kind: 'server', difficulty: 3 }, { linux: false }), 3);
-  assert.equal(ticketWorkCost({ kind: 'server', difficulty: 3 }, { linux: true }), 1);
+  assert.equal(ticketWorkCost({ kind: 'log', difficulty: 3 }, { linux: false }), 3);
+  assert.equal(ticketWorkCost({ kind: 'disk', difficulty: 3 }, { linux: true }), 1);
+  assert.equal(ticketWorkCost({ kind: 'demo', difficulty: 3 }, { linux: true }), 1);
 });
 
 test('Git cuts an event penalty from 18 to 8', () => {
   let state = createGame('s3');
-  const event = present(state).tickets.find(ticket => ticket.kind === 'server' || ticket.kind === 'demo');
+  const event = present(state).tickets.find(ticket => ['disk', 'rollback', 'demo'].includes(ticket.kind));
   assert.ok(event);
+  assert.equal(state.tickets.length, 1);
   assert.equal(event.penalty, 18);
   for (let i = 0; i < 3; i += 1) state = applyAction(state, { type: 'study', skill: 'git' });
   const after = present(state).tickets.find(ticket => ticket.id === event.id);
@@ -172,7 +182,8 @@ test('jQuery stays shut in week 1 and then saves a point on page tickets', () =>
   const untouched = snapshot(blocked);
   assert.equal(applyAction(blocked, { type: 'study', skill: 'jquery' }), blocked);
   assert.deepEqual(snapshot(blocked), untouched);
-  assert.equal(present(blocked).skills.find(skill => skill.id === 'jquery').blocked, '第 2 周开放');
+  assert.equal(present(blocked).shelf.blocked, '第 2 周开放');
+  assert.deepEqual(SKILL_IDS.includes('jquery'), false);
 
   const page = { kind: 'page', difficulty: 3 };
   assert.equal(ticketWorkCost(page, { jquery: false }), 3);
@@ -180,25 +191,42 @@ test('jQuery stays shut in week 1 and then saves a point on page tickets', () =>
   assert.equal(ticketWorkCost({ kind: 'page', difficulty: 1 }, { jquery: true }), 1);
 });
 
-test('Java can only be studied at night and unlocks a double-favor fullstack ticket', () => {
-  let state = createGame('java');
-  const before = snapshot(state);
+test('Java is night-only and the file database stays shut until 数据库', () => {
+  let state = createGame('hefei');
   assert.equal(applyAction(state, { type: 'study', skill: 'java' }), state);
-  assert.deepEqual(snapshot(state), before);
   assert.equal(present(state).skills.find(skill => skill.id === 'java').blocked, '只能夜里学');
-  state = applyAction(state, { type: 'overnight' });
-  for (let i = 0; i < 3; i += 1) state = applyAction(state, { type: 'study', skill: 'java' });
-  assert.equal(state.learned.java, false);
+  assert.equal(ticketWorkCost({ kind: 'api', difficulty: 3 }, { java: false }), 3);
+  assert.equal(ticketWorkCost({ kind: 'api', difficulty: 3 }, { java: true }), 2);
+  assert.equal(workStep({ mainline: true }, { java: false }), 1);
+  assert.equal(workStep({ mainline: true }, { java: true }), 2);
+  let guard = 0;
+  while (state.phase === 'play' && !(state.week === 2 && state.day === 1) && guard < 400) {
+    const due = state.tickets.find(ticket => !ticket.mainline && ticket.dueIn <= 1);
+    const action = state.ap === 0 ? { type: 'sleep' } : (due ? { type: 'work', ticketId: due.id } : { type: 'rest' });
+    state = applyAction(state, action);
+    guard += 1;
+  }
+  const file = present(state).tickets.find(ticket => ticket.mainline);
+  assert.equal(file.title, '写一个文件数据库');
+  assert.equal(file.locked, true);
+  assert.equal(file.reward, 30);
+  assert.equal(applyAction(state, { type: 'work', ticketId: file.id }), state);
+  while (!state.learned.database) {
+    state = applyAction(state, state.ap > 0 ? { type: 'study', skill: 'database' } : { type: 'sleep' });
+  }
+  if (state.ap === 0) state = applyAction(state, { type: 'sleep' });
+  state = applyAction(state, { type: 'work', ticketId: file.id });
+  assert.equal(present(state).tickets.find(ticket => ticket.mainline).progress, 1);
+  while (!state.learned.java && state.phase === 'play') {
+    if (state.ap === 0) state = applyAction(state, { type: 'sleep' });
+    else if (!state.overnightUsed) state = applyAction(state, { type: 'overnight' });
+    else state = applyAction(state, { type: 'study', skill: 'java' });
+  }
+  if (state.ap === 0) state = applyAction(state, { type: 'sleep' });
+  const progress = present(state).tickets.find(ticket => ticket.mainline).progress;
+  state = applyAction(state, { type: 'work', ticketId: file.id });
+  assert.equal(present(state).tickets.find(ticket => ticket.mainline).progress, progress + 2);
   assert.equal(state.tickets.some(ticket => ticket.kind === 'fullstack'), false);
-  state = applyAction(state, { type: 'study', skill: 'java' });
-  assert.equal(state.learned.java, true);
-  const fullstack = present(state).tickets.find(ticket => ticket.kind === 'fullstack');
-  assert.ok(fullstack);
-  assert.equal(fullstack.cost, 3);
-  assert.equal(fullstack.reward, 18);
-  const normal = ticketReward({ kind: 'page', difficulty: 3 });
-  assert.equal(ticketReward({ kind: 'fullstack', difficulty: 3 }), normal * 2);
-  assert.equal(normal, 9);
 });
 
 test('illegal actions leave the state untouched', () => {
@@ -210,32 +238,24 @@ test('illegal actions leave the state untouched', () => {
   assert.equal(applyAction(done.state, { type: 'rest' }), done.state);
 });
 
-test('victory line is the handoff sentence', () => {
-  assert.equal(VICTORY_TEXT, '日夜颠倒地学新东西，拼命把活干好，争取能留下来。');
+test('the two cleared endings replace the probation reminder', () => {
+  assert.equal(ENDINGS.remembered.title, '留下来，还被老板记住了');
+  assert.equal(ENDINGS.barely.title, '勉强留下来');
+  assert.equal(`${ENDINGS.remembered.title}${ENDINGS.remembered.text}${ENDINGS.barely.title}${ENDINGS.barely.text}`.includes('争取'), false);
 });
 
-test('the fixed line survives four weeks and jQuery changes a live ticket', () => {
-  const won = replay(WIN_SEED, WIN_ACTIONS);
-  assert.equal(won.phase, 'won');
-  assert.equal(won.week, 4);
-  assert.equal(won.day, 5);
-  assert.ok(won.favor >= weekLine(4));
-  assert.deepEqual(won.learned, { linux: true, git: true, jquery: true, java: true });
-  assert.deepEqual(snapshot(replay(WIN_SEED, WIN_ACTIONS)), snapshot(won));
+test('fixed lines reproduce a remembered win and a bare survival', () => {
+  const remembered = replay(REMEMBERED_SEED, REMEMBERED_ACTIONS);
+  assert.equal(remembered.phase, 'won');
+  assert.equal(remembered.ending, 'remembered');
+  assert.equal(remembered.fileDbDone, true);
+  assert.equal(present(remembered).victoryTitle, '留下来，还被老板记住了');
+  assert.deepEqual(snapshot(replay(REMEMBERED_SEED, REMEMBERED_ACTIONS)), snapshot(remembered));
 
-  let state = createGame(WIN_SEED);
-  let dropped = false;
-  for (const action of WIN_ACTIONS) {
-    const before = present(state);
-    state = applyAction(state, action);
-    if (action.type === 'study' && action.skill === 'jquery' && state.learned.jquery) {
-      const page = before.tickets.find(ticket => ticket.kind === 'page' && ticket.difficulty >= 2);
-      const after = present(state).tickets.find(ticket => ticket.id === page.id);
-      assert.equal(after.cost, page.cost - 1);
-      assert.equal(after.costNote, 'jQuery');
-      dropped = true;
-    }
-  }
-  assert.equal(dropped, true);
-  assert.equal(state.phase, 'won');
+  const barely = replay(BARELY_SEED, BARELY_ACTIONS);
+  assert.equal(barely.phase, 'won');
+  assert.equal(barely.ending, 'barely');
+  assert.equal(barely.fileDbDone, false);
+  assert.equal(present(barely).victoryTitle, '勉强留下来');
+  assert.ok(barely.favor >= weekLine(4));
 });
