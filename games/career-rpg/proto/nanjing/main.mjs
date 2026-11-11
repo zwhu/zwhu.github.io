@@ -559,6 +559,7 @@ function render() {
     const away = offstage(view, here);
     if (away) screen.append(away);
     if (boss) screen.append(boss);
+    screen.append(actionBar(view));
     screen.append(el('div', { class: 'board' }, [
       el('section', {}, [el('h2', {}, ['需求单']), el('div', { class: 'stack', id: 'tickets' }, tickets)]),
       el('section', {}, [
@@ -566,7 +567,6 @@ function render() {
         el('div', { class: 'stack', id: 'skills' }, view.skills.map(skillCard).concat(failureCard(view.failureSkill))),
       ]),
     ]));
-    screen.append(actionBar(view));
     parts.push(screen);
   } else {
     const { stage } = sceneStage(view);

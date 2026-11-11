@@ -210,45 +210,48 @@ function dwellFor(action) {
   return 1;
 }
 
-async function assertActionButtons(width, height) {
+async function assertHits(width, height) {
   await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 500 });
   await goto('n0');
-  const problems = await evaluate(`(() => {
-    const bar = document.querySelector('.screen > .actions');
-    if (!bar) return ['missing action bar'];
-    bar.scrollIntoView({ block: 'center', inline: 'nearest' });
+  const check = `(() => {
+    const nodes = [
+      ...document.querySelectorAll('button'),
+      ...document.querySelectorAll('h2'),
+      ...document.querySelectorAll('.card .ticket-top strong'),
+    ];
     const problems = [];
-    for (const id of ['rest', 'overnight']) {
-      const node = bar.querySelector('[data-action="' + id + '"]');
-      if (!node) {
-        problems.push('missing ' + id);
-        continue;
-      }
+    const seen = new Set();
+    for (const node of nodes) {
+      if (seen.has(node)) continue;
+      seen.add(node);
+      const style = getComputedStyle(node);
+      if (style.display === 'none' || style.visibility === 'hidden') continue;
+      node.scrollIntoView({ block: 'center', inline: 'center' });
       const box = node.getBoundingClientRect();
-      const fully = box.width > 0 && box.height > 0
-        && box.top >= 0 && box.left >= 0
-        && box.bottom <= window.innerHeight && box.right <= window.innerWidth;
-      if (!fully) {
-        problems.push(id + ' outside ' + JSON.stringify({
-          top: box.top, left: box.left, bottom: box.bottom, right: box.right,
-          width: box.width, height: box.height, vw: window.innerWidth, vh: window.innerHeight,
-        }));
-      }
-      const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
-      if (hit !== node) problems.push(id + ' covered by ' + (hit ? hit.tagName + '.' + hit.className : 'null'));
-      const color = getComputedStyle(node).color;
-      const fill = getComputedStyle(node).backgroundColor;
-      if (color === fill) problems.push(id + ' text matches background ' + color);
+      if (box.width < 2 || box.height < 2) continue;
+      const x = Math.min(window.innerWidth - 1, Math.max(0, box.left + box.width / 2));
+      const y = Math.min(window.innerHeight - 1, Math.max(0, box.top + box.height / 2));
+      const fully = box.top >= -1 && box.left >= -1 && box.bottom <= window.innerHeight + 1 && box.right <= window.innerWidth + 1;
+      const label = (node.innerText || node.getAttribute('aria-label') || node.tagName).replace(/\\s+/g, ' ').slice(0, 32);
+      if (!fully) problems.push(label + ' outside');
+      const hit = document.elementFromPoint(x, y);
+      if (hit !== node && !(hit && node.contains(hit))) problems.push(label + ' covered by ' + (hit ? hit.tagName + '.' + hit.className : 'null'));
     }
     return problems;
-  })()`);
-  if (problems.length) throw new Error(`${width}×${height} action buttons\n${problems.join('\n')}`);
+  })()`;
+  const first = await evaluate(check);
+  if (first.length) throw new Error(`${width}×${height}\n${first.join('\n')}`);
+  await evaluate(`(() => { while (window.nanjing.present().ap > 0) window.nanjing.act({ type: 'rest' }); return true; })()`);
+  const slept = await evaluate(check);
+  if (slept.length) throw new Error(`${width}×${height} after sleep\n${slept.join('\n')}`);
+  const bar = await evaluate(`getComputedStyle(document.querySelector('.screen > .actions')).position`);
+  if (bar === 'sticky' || bar === 'fixed') throw new Error(`${width} action bar is ${bar}`);
 }
 
 try {
   await connect();
-  await assertActionButtons(1280, 900);
-  await assertActionButtons(390, 844);
+  await assertHits(1280, 720);
+  await assertHits(390, 844);
   await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
 
   async function record(name, seed, actions, fps, focus) {

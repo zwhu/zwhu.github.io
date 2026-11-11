@@ -195,15 +195,21 @@
 .screen .boss-card h2 { color: #1a1a1a; }
 
 .screen .board,
-.screen > .actions,
 .screen .offstage { padding: 0 8px; }
 
+.screen .actions {
+  position: static;
+  bottom: auto;
+  z-index: auto;
+}
+
 .screen > .actions {
-  position: sticky;
-  bottom: 0;
-  z-index: 3;
-  background: #141210;
-  padding: 8px;
+  position: static;
+  bottom: auto;
+  z-index: auto;
+  margin: 4px 8px 8px;
+  padding: 0;
+  background: transparent;
 }
 
 .screen > .actions button,
