@@ -1,0 +1,481 @@
+
+[Shared HTML and catalogs] /usr/bin/python3 scripts/render-site.py --check
+Checked shared HTML and catalogs for 64 pages (0 changed).
+
+[Site generation contracts] /usr/bin/python3 scripts/test-site-generation.py
+........
+----------------------------------------------------------------------
+Ran 8 tests in 1.053s
+
+OK
+
+[Local links and anchors] /usr/bin/python3 scripts/check-links.py
+Checked relative page/resource URLs, local targets, srcset and HTML anchors.
+
+[Link checker tests] /usr/bin/python3 scripts/test-links.py
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.004s
+
+OK
+
+[Learning style ownership] /usr/bin/python3 scripts/check-learning-styles.py
+Checked 6 lessons: style ownership, scopes, semantic variables and stylesheet order.
+
+[Loading budgets and analytics] /usr/bin/python3 scripts/check-performance.py
+Loading budgets passed: HTML, responsive images, preserved originals, dimensions and asynchronous analytics.
+
+[Share images] /usr/bin/python3 scripts/render-og-images.py --check
+Checked 5 share images (1200×630).
+
+[About ability map] /usr/bin/python3 scripts/render-about-map.py --check
+About map is up to date.
+
+[SEO metadata] /usr/bin/python3 scripts/update-seo.py --check
+Checked SEO metadata, snapshots and sitemap (0 changed files).
+
+[SEO contracts] /usr/bin/python3 scripts/test-seo.py
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 0.481s
+
+OK
+
+[Comment behavior] node --test tests/comments.test.cjs
+TAP version 13
+# Subtest: local preview at 127.0.0.1 uses the publicly reachable HTTPS theme
+ok 1 - local preview at 127.0.0.1 uses the publicly reachable HTTPS theme
+  ---
+  duration_ms: 1.537815
+  type: 'test'
+  ...
+# Subtest: local preview at localhost uses the publicly reachable HTTPS theme
+ok 2 - local preview at localhost uses the publicly reachable HTTPS theme
+  ---
+  duration_ms: 0.503525
+  type: 'test'
+  ...
+# Subtest: local preview at [::1] uses the publicly reachable HTTPS theme
+ok 3 - local preview at [::1] uses the publicly reachable HTTPS theme
+  ---
+  duration_ms: 0.574506
+  type: 'test'
+  ...
+# Subtest: an HTTPS localhost still cannot supply CSS to the remote iframe
+ok 4 - an HTTPS localhost still cannot supply CSS to the remote iframe
+  ---
+  duration_ms: 1.342168
+  type: 'test'
+  ...
+# Subtest: public HTTPS sites keep their own relative theme and article mapping
+ok 5 - public HTTPS sites keep their own relative theme and article mapping
+  ---
+  duration_ms: 0.546331
+  type: 'test'
+  ...
+# Subtest: comments wait for the section to approach the viewport and load exactly once
+ok 6 - comments wait for the section to approach the viewport and load exactly once
+  ---
+  duration_ms: 0.669134
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 46.458818
+
+[Career RPG chapter rules] node --test games/career-rpg/web/tests/world.test.mjs games/career-rpg/web/tests/story.test.mjs games/career-rpg/web/tests/scene.test.mjs games/career-rpg/web/tests/hefei.test.mjs games/career-rpg/web/tests/nanjing-skills.test.mjs games/career-rpg/web/tests/hefei-skills.test.mjs games/career-rpg/web/tests/hangzhou-skills.test.mjs games/career-rpg/web/tests/narrow-wrap.test.mjs games/career-rpg/web/tests/cinematic.test.mjs
+TAP version 13
+# Subtest: cinematic query is the only switch
+ok 1 - cinematic query is the only switch
+  ---
+  duration_ms: 1.182474
+  type: 'test'
+  ...
+# Subtest: push-in interpolation stays on whole pixels and never reverses
+ok 2 - push-in interpolation stays on whole pixels and never reverses
+  ---
+  duration_ms: 0.337246
+  type: 'test'
+  ...
+# Subtest: follow steps at most one pixel and holds still
+ok 3 - follow steps at most one pixel and holds still
+  ---
+  duration_ms: 0.248004
+  type: 'test'
+  ...
+# Subtest: hefei script uses only the four shots and walks the office
+ok 4 - hefei script uses only the four shots and walks the office
+  ---
+  duration_ms: 11.459511
+  type: 'test'
+  ...
+# Subtest: unknown shot types are rejected
+ok 5 - unknown shot types are rejected
+  ---
+  duration_ms: 0.367188
+  type: 'test'
+  ...
+# Subtest: hangzhou lists five skills and does not replace hefei or nanjing
+ok 6 - hangzhou lists five skills and does not replace hefei or nanjing
+  ---
+  duration_ms: 1.343669
+  type: 'test'
+  ...
+# Subtest: each beat readies only its skill, and a second collect does nothing
+ok 7 - each beat readies only its skill, and a second collect does nothing
+  ---
+  duration_ms: 0.5413
+  type: 'test'
+  ...
+# Subtest: the whiteboard skill waits on five sheets, and the chapter grants anything still uncollected
+ok 8 - the whiteboard skill waits on five sheets, and the chapter grants anything still uncollected
+  ---
+  duration_ms: 1.609267
+  type: 'test'
+  ...
+# Subtest: legacy saves stay valid, replay starts empty, and a collected skill survives a save
+ok 9 - legacy saves stay valid, replay starts empty, and a collected skill survives a save
+  ---
+  duration_ms: 0.506232
+  type: 'test'
+  ...
+# Subtest: every designed snapshot is reachable and the placeholder room can reach each stop
+ok 10 - every designed snapshot is reachable and the placeholder room can reach each stop
+  ---
+  duration_ms: 26.877758
+  type: 'test'
+  ...
+# Subtest: nanjing still walks hefei to nanjing, and the new bridge walks nanjing to hangzhou
+ok 11 - nanjing still walks hefei to nanjing, and the new bridge walks nanjing to hangzhou
+  ---
+  duration_ms: 1.329525
+  type: 'test'
+  ...
+# Subtest: hefei lists four skills and does not replace the nanjing list
+ok 12 - hefei lists four skills and does not replace the nanjing list
+  ---
+  duration_ms: 1.192472
+  type: 'test'
+  ...
+# Subtest: finishing a task makes that skill ready and a second collect does nothing
+ok 13 - finishing a task makes that skill ready and a second collect does nothing
+  ---
+  duration_ms: 0.411022
+  type: 'test'
+  ...
+# Subtest: chapter completion grants every skill that was not picked up
+ok 14 - chapter completion grants every skill that was not picked up
+  ---
+  duration_ms: 1.094606
+  type: 'test'
+  ...
+# Subtest: legacy saves stay valid and derive ready or granted skills without rewriting the stored value
+ok 15 - legacy saves stay valid and derive ready or granted skills without rewriting the stored value
+  ---
+  duration_ms: 0.326186
+  type: 'test'
+  ...
+# Subtest: replay starts empty and a collected skill survives a save round trip
+ok 16 - replay starts empty and a collected skill survives a save round trip
+  ---
+  duration_ms: 0.273981
+  type: 'test'
+  ...
+# Subtest: nanjing copy and object roles still come from chapter data
+ok 17 - nanjing copy and object roles still come from chapter data
+  ---
+  duration_ms: 1.292215
+  type: 'test'
+  ...
+# Subtest: hefei keeps five states, ten events and the author wording
+ok 18 - hefei keeps five states, ten events and the author wording
+  ---
+  duration_ms: 0.71704
+  type: 'test'
+  ...
+# Subtest: hefei gates trial, day notes and night notes, and a repeat writes nothing
+ok 19 - hefei gates trial, day notes and night notes, and a repeat writes nothing
+  ---
+  duration_ms: 1.040092
+  type: 'test'
+  ...
+# Subtest: either order reaches the same manual and every snapshot restores on the hefei key only
+ok 20 - either order reaches the same manual and every snapshot restores on the hefei key only
+  ---
+  duration_ms: 2.238662
+  type: 'test'
+  ...
+# Subtest: hefei marker sits on my_pc, cards stay off the startup sheets, and the aisle reaches each point
+ok 21 - hefei marker sits on my_pc, cards stay off the startup sheets, and the aisle reaches each point
+  ---
+  duration_ms: 28.184241
+  type: 'test'
+  ...
+# Subtest: nanjing lists five skills
+ok 22 - nanjing lists five skills
+  ---
+  duration_ms: 1.912525
+  type: 'test'
+  ...
+# Subtest: each task readies only its skill, and a second collect does nothing
+ok 23 - each task readies only its skill, and a second collect does nothing
+  ---
+  duration_ms: 0.739815
+  type: 'test'
+  ...
+# Subtest: the manual skill waits on the journey, and the chapter grants anything still uncollected
+ok 24 - the manual skill waits on the journey, and the chapter grants anything still uncollected
+  ---
+  duration_ms: 1.576364
+  type: 'test'
+  ...
+# Subtest: legacy saves stay valid, replay starts empty, and a collected skill survives a save
+ok 25 - legacy saves stay valid, replay starts empty, and a collected skill survives a save
+  ---
+  duration_ms: 0.387384
+  type: 'test'
+  ...
+# Subtest: narrow copy from all three chapters stays inside the slot
+ok 26 - narrow copy from all three chapters stays inside the slot
+  ---
+  duration_ms: 15.156467
+  type: 'test'
+  ...
+# Subtest: skill names break around product words instead of through them
+ok 27 - skill names break around product words instead of through them
+  ---
+  duration_ms: 1.270031
+  type: 'test'
+  ...
+# Subtest: direction rows and idle/step frames remain distinct, including typing clips
+ok 28 - direction rows and idle/step frames remain distinct, including typing clips
+  ---
+  duration_ms: 1.188379
+  type: 'test'
+  ...
+# Subtest: the approved walk sheet is copied unchanged and the sit frame stays 18 by 30
+ok 29 - the approved walk sheet is copied unchanged and the sit frame stays 18 by 30
+  ---
+  duration_ms: 0.453948
+  type: 'test'
+  ...
+# Subtest: pose references keep one direction at a stable scale and align every visible sole
+ok 30 - pose references keep one direction at a stable scale and align every visible sole
+  ---
+  duration_ms: 1.209839
+  type: 'test'
+  ...
+# Subtest: walk phase follows distance and the standing sprite sits on whole pixels
+ok 31 - walk phase follows distance and the standing sprite sits on whole pixels
+  ---
+  duration_ms: 0.214555
+  type: 'test'
+  ...
+# Subtest: render frames without a fixed physics tick do not reset walking, but key release does
+ok 32 - render frames without a fixed physics tick do not reset walking, but key release does
+  ---
+  duration_ms: 0.166455
+  type: 'test'
+  ...
+# Subtest: bubble placement stays inside every viewport edge and changes side when needed
+ok 33 - bubble placement stays inside every viewport edge and changes side when needed
+  ---
+  duration_ms: 0.152675
+  type: 'test'
+  ...
+# Subtest: task marker survives opening a page and disappears only after accepted event
+ok 34 - task marker survives opening a page and disappears only after accepted event
+  ---
+  duration_ms: 0.649053
+  type: 'test'
+  ...
+# Subtest: CTO is an interactable actor, both companions exist, and expressions follow story state
+ok 35 - CTO is an interactable actor, both companions exist, and expressions follow story state
+  ---
+  duration_ms: 0.154939
+  type: 'test'
+  ...
+# Subtest: restoration prose preserves the two hours without exposing the stage direction
+ok 36 - restoration prose preserves the two hours without exposing the stage direction
+  ---
+  duration_ms: 0.510899
+  type: 'test'
+  ...
+# Subtest: both learning orders complete only after both reviews and manual confirmation
+ok 37 - both learning orders complete only after both reviews and manual confirmation
+  ---
+  duration_ms: 2.036993
+  type: 'test'
+  ...
+# Subtest: prerequisites and duplicate confirmations cannot advance, remove flags or shadow later actions
+ok 38 - prerequisites and duplicate confirmations cannot advance, remove flags or shadow later actions
+  ---
+  duration_ms: 0.595719
+  type: 'test'
+  ...
+# Subtest: every designed legal configuration restores exactly through a single atomic value
+ok 39 - every designed legal configuration restores exactly through a single atomic value
+  ---
+  duration_ms: 1.182763
+  type: 'test'
+  ...
+# Subtest: damaged, old and impossible snapshots are preserved and reported, never silently reset
+ok 40 - damaged, old and impossible snapshots are preserved and reported, never silently reset
+  ---
+  duration_ms: 0.308147
+  type: 'test'
+  ...
+# Subtest: runtime maps both learning items to the right computer, while manual remains separate
+ok 41 - runtime maps both learning items to the right computer, while manual remains separate
+  ---
+  duration_ms: 0.328785
+  type: 'test'
+  ...
+# Subtest: identical semantic journeys replay equally across independent instances and stable saves
+ok 42 - identical semantic journeys replay equally across independent instances and stable saves
+  ---
+  duration_ms: 17.793149
+  type: 'test'
+  ...
+# Subtest: feet cannot cross desk collision or room edges
+ok 43 - feet cannot cross desk collision or room edges
+  ---
+  duration_ms: 3.076991
+  type: 'test'
+  ...
+# Subtest: diagonal movement has the same speed as a cardinal direction
+ok 44 - diagonal movement has the same speed as a cardinal direction
+  ---
+  duration_ms: 0.108999
+  type: 'test'
+  ...
+# Subtest: interaction is local and long frame stalls do not teleport
+ok 45 - interaction is local and long frame stalls do not teleport
+  ---
+  duration_ms: 0.190177
+  type: 'test'
+  ...
+# Subtest: a stable 60Hz frame steps one whole pixel, including the first frame
+ok 46 - a stable 60Hz frame steps one whole pixel, including the first frame
+  ---
+  duration_ms: 0.234086
+  type: 'test'
+  ...
+1..46
+# tests 46
+# suites 0
+# pass 46
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 196.384771
+
+[Hefei block prototype] node --test games/career-rpg/proto/tests/rules.test.mjs
+TAP version 13
+# Subtest: documented starting numbers live in one config
+ok 1 - documented starting numbers live in one config
+  ---
+  duration_ms: 0.706961
+  type: 'test'
+  ...
+# Subtest: same seed and actions reproduce the same game
+ok 2 - same seed and actions reproduce the same game
+  ---
+  duration_ms: 1.737624
+  type: 'test'
+  ...
+# Subtest: a different seed deals different tickets
+ok 3 - a different seed deals different tickets
+  ---
+  duration_ms: 0.169261
+  type: 'test'
+  ...
+# Subtest: resting through week 1 is a firing on Friday
+ok 4 - resting through week 1 is a firing on Friday
+  ---
+  duration_ms: 1.180416
+  type: 'test'
+  ...
+# Subtest: overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
+ok 5 - overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
+  ---
+  duration_ms: 0.510948
+  type: 'test'
+  ...
+# Subtest: rest restores 2 stamina and does not pass 10
+ok 6 - rest restores 2 stamina and does not pass 10
+  ---
+  duration_ms: 0.102723
+  type: 'test'
+  ...
+# Subtest: Linux cuts a server ticket from 3 points to 1
+ok 7 - Linux cuts a server ticket from 3 points to 1
+  ---
+  duration_ms: 0.454965
+  type: 'test'
+  ...
+# Subtest: Git cuts an event penalty from 18 to 8
+ok 8 - Git cuts an event penalty from 18 to 8
+  ---
+  duration_ms: 0.191398
+  type: 'test'
+  ...
+# Subtest: jQuery stays shut in week 1 and then saves a point on page tickets
+ok 9 - jQuery stays shut in week 1 and then saves a point on page tickets
+  ---
+  duration_ms: 0.286328
+  type: 'test'
+  ...
+# Subtest: Java can only be studied at night and unlocks a double-favor fullstack ticket
+ok 10 - Java can only be studied at night and unlocks a double-favor fullstack ticket
+  ---
+  duration_ms: 0.40282
+  type: 'test'
+  ...
+# Subtest: illegal actions leave the state untouched
+ok 11 - illegal actions leave the state untouched
+  ---
+  duration_ms: 0.161415
+  type: 'test'
+  ...
+# Subtest: victory line is the handoff sentence
+ok 12 - victory line is the handoff sentence
+  ---
+  duration_ms: 0.050065
+  type: 'test'
+  ...
+# Subtest: the fixed line survives four weeks and jQuery changes a live ticket
+ok 13 - the fixed line survives four weeks and jQuery changes a live ticket
+  ---
+  duration_ms: 1.44999
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 54.444282
+
+[Career RPG Pages publish] /usr/bin/python3 scripts/publish-career-rpg.py --check
+Checked Career RPG publish tree (70 files).
+
+[Verify runner tests] /usr/bin/python3 scripts/test-verify.py
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.051s
+
+OK
+
+Verification passed (15 checks).
+EXIT:0

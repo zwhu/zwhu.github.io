@@ -110,7 +110,8 @@ h2 {
   font-weight: 650;
 }
 
-.stack { display: flex; flex-direction: column; gap: 8px; max-height: 460px; overflow: auto; }
+.stack { display: flex; flex-direction: column; gap: 8px; }
+#tickets { max-height: 560px; overflow: auto; }
 
 .card header, .ticket-top {
   display: flex;

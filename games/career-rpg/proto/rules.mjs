@@ -174,12 +174,13 @@ function shiftFavor(state, delta) {
 function completeTicket(state, ticketId, note) {
   const ticket = state.tickets.find(item => item.id === ticketId);
   const shifted = shiftFavor(state, ticketReward(ticket, state.config));
+  const gain = shifted.applied > 0 ? `好感 +${shifted.applied}` : '好感已经满了';
   return withLog({
     ...state,
     favor: shifted.favor,
     stats: { ...shifted.stats, completed: state.stats.completed + 1 },
     tickets: state.tickets.filter(item => item.id !== ticketId),
-  }, `${note}好感 +${shifted.applied}`);
+  }, `${note}${gain}`);
 }
 
 function sweepLearned(state, skillId) {
@@ -288,16 +289,18 @@ function resolveDeadlines(state) {
     }
     const loss = ticketPenalty(ticket, next.learned, config);
     const shifted = shiftFavor(next, -loss);
+    const lost = -shifted.applied;
     next = { ...next, favor: shifted.favor, stats: { ...shifted.stats, lateCount: next.stats.lateCount + 1 } };
+    const amount = lost > 0 ? `好感 -${lost}` : '好感已经是 0';
     if (isEvent(ticket)) {
       const full = config.eventFavorFail;
       const line = next.learned.git
-        ? `${ticket.title} 没接住。Git 回滚，好感 -${-shifted.applied}（否则 -${full}）。`
-        : `${ticket.title} 没处理，好感 -${-shifted.applied}。`;
+        ? `${ticket.title} 没接住。Git 回滚，${amount}（否则 -${full}）。`
+        : `${ticket.title} 没处理，${amount}。`;
       next = withLog(next, line);
     } else {
       kept.push({ ...ticket, dueIn: 0, late: true });
-      next = withLog(next, `${ticket.title} 延期，好感 -${-shifted.applied}，单子还在。`);
+      next = withLog(next, `${ticket.title} 延期，${amount}，单子还在。`);
     }
   }
   return { ...next, tickets: kept };

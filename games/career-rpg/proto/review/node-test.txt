@@ -1,0 +1,89 @@
+TAP version 13
+# Subtest: documented starting numbers live in one config
+ok 1 - documented starting numbers live in one config
+  ---
+  duration_ms: 0.749296
+  type: 'test'
+  ...
+# Subtest: same seed and actions reproduce the same game
+ok 2 - same seed and actions reproduce the same game
+  ---
+  duration_ms: 1.696565
+  type: 'test'
+  ...
+# Subtest: a different seed deals different tickets
+ok 3 - a different seed deals different tickets
+  ---
+  duration_ms: 0.18055
+  type: 'test'
+  ...
+# Subtest: resting through week 1 is a firing on Friday
+ok 4 - resting through week 1 is a firing on Friday
+  ---
+  duration_ms: 1.258757
+  type: 'test'
+  ...
+# Subtest: overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
+ok 5 - overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
+  ---
+  duration_ms: 0.534689
+  type: 'test'
+  ...
+# Subtest: rest restores 2 stamina and does not pass 10
+ok 6 - rest restores 2 stamina and does not pass 10
+  ---
+  duration_ms: 0.120411
+  type: 'test'
+  ...
+# Subtest: Linux cuts a server ticket from 3 points to 1
+ok 7 - Linux cuts a server ticket from 3 points to 1
+  ---
+  duration_ms: 0.532134
+  type: 'test'
+  ...
+# Subtest: Git cuts an event penalty from 18 to 8
+ok 8 - Git cuts an event penalty from 18 to 8
+  ---
+  duration_ms: 0.185464
+  type: 'test'
+  ...
+# Subtest: jQuery stays shut in week 1 and then saves a point on page tickets
+ok 9 - jQuery stays shut in week 1 and then saves a point on page tickets
+  ---
+  duration_ms: 0.292987
+  type: 'test'
+  ...
+# Subtest: Java can only be studied at night and unlocks a double-favor fullstack ticket
+ok 10 - Java can only be studied at night and unlocks a double-favor fullstack ticket
+  ---
+  duration_ms: 0.409181
+  type: 'test'
+  ...
+# Subtest: illegal actions leave the state untouched
+ok 11 - illegal actions leave the state untouched
+  ---
+  duration_ms: 0.163357
+  type: 'test'
+  ...
+# Subtest: victory line is the handoff sentence
+ok 12 - victory line is the handoff sentence
+  ---
+  duration_ms: 0.072584
+  type: 'test'
+  ...
+# Subtest: the fixed line survives four weeks and jQuery changes a live ticket
+ok 13 - the fixed line survives four weeks and jQuery changes a live ticket
+  ---
+  duration_ms: 1.497779
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 57.347441
+EXIT:0

@@ -1,0 +1,32 @@
+{
+  "origin": "http://127.0.0.1:37531/games/career-rpg/proto/index.html",
+  "loss": {
+    "file": "games/career-rpg/proto/review/loss.mp4",
+    "frames": 23
+  },
+  "win": {
+    "file": "games/career-rpg/proto/review/win.mp4",
+    "frames": 91
+  },
+  "victory": "日夜颠倒地学新东西，拼命把活干好，争取能留下来。",
+  "lossText": "第 1 周周五，老板好感 0，低于本周线 30，被劝退。",
+  "skills": {
+    "linux": [
+      "games/career-rpg/proto/review/skills/linux-before.png",
+      "games/career-rpg/proto/review/skills/linux-after.png"
+    ],
+    "git": [
+      "games/career-rpg/proto/review/skills/git-before.png",
+      "games/career-rpg/proto/review/skills/git-after.png"
+    ],
+    "jquery": [
+      "games/career-rpg/proto/review/skills/jquery-before.png",
+      "games/career-rpg/proto/review/skills/jquery-after.png"
+    ],
+    "java": [
+      "games/career-rpg/proto/review/skills/java-before.png",
+      "games/career-rpg/proto/review/skills/java-after.png"
+    ]
+  },
+  "consoleErrors": []
+}
