@@ -1,4 +1,4 @@
-import { castRaze, createMatch, MATCH_TICKS, RAZES, tickMatch, TICK_MS } from './dota.mjs';
+import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from './dota.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
 
 const app = document.querySelector('#app');
@@ -30,6 +30,7 @@ function showDotaResult() {
   if (!dota || dota.mode === 'result') return;
   if (dotaTick) clearInterval(dotaTick);
   dotaTick = 0;
+  state = applyAction(state, { type: 'dota', won: dota.match.won === true });
   dota = { ...dota, mode: 'result' };
   render();
   dotaResult = setTimeout(closeDota, 1800);
@@ -40,20 +41,29 @@ function openDota() {
   const next = applyAction(state, { type: 'overnight' });
   if (next === state) return;
   state = next;
-  dota = { match: createMatch(state.seed), mode: 'play' };
+  dota = { match: createMatch(state.seed, state.rng), mode: 'play' };
   render();
   dotaTick = setInterval(() => {
     if (!dota || dota.mode !== 'play') return;
-    dota = { ...dota, match: tickMatch(dota.match) };
-    if (dota.match.over) showDotaResult();
+    const match = tickMatch(dota.match);
+    dota = { ...dota, match };
+    if (match.over) showDotaResult();
     else render();
   }, TICK_MS);
 }
 
+function abandonDota() {
+  if (!dota || dota.mode !== 'play') return;
+  dota = { ...dota, match: { ...dota.match, over: true, won: false } };
+  showDotaResult();
+}
+
 function pressRaze(id) {
   if (!dota || dota.mode !== 'play') return;
-  dota = { ...dota, match: castRaze(dota.match, id) };
-  render();
+  const match = castRaze(dota.match, id);
+  dota = { ...dota, match };
+  if (match.over) showDotaResult();
+  else render();
 }
 
 function el(tag, attrs, children) {
@@ -202,7 +212,7 @@ function actionBar(view) {
     bar.append(rest);
   }
   if (view.canOvernight) {
-    const night = el('button', { type: 'button', 'data-action': 'overnight' }, [`${CONFIG.overnightName} +${CONFIG.overnightAp} 点 / -${CONFIG.overnightStaminaCost} 体力`]);
+    const night = el('button', { type: 'button', 'data-action': 'overnight' }, [`${CONFIG.overnightName} +${CONFIG.overnightAp} 点 / -${CONFIG.overnightStaminaCost} 体力，赢了 +${CONFIG.dotaWinStamina}`]);
     night.addEventListener('click', () => openDota());
     bar.append(night);
   }
@@ -241,18 +251,30 @@ function ending(view) {
   ]);
 }
 
+function dotaResultTitle(match) {
+  if (match.won) return '补刀够了';
+  if (match.hp <= 0) return '影魔倒下了';
+  if (match.tick >= MATCH_TICKS) return '时间到了';
+  return '这局没打完';
+}
+
 function dotaLane(match) {
-  const cells = [el('div', { class: 'cell sf' }, ['影魔'])];
+  const sfClass = match.hurt ? 'cell sf hurt' : 'cell sf';
+  const cells = [el('div', { class: sfClass, id: 'dota-hp', 'data-hp': match.hp }, ['影魔', String(match.hp)])];
   for (let pos = 1; pos <= 7; pos += 1) {
     const raze = RAZES.find(item => item.distance === pos);
     const hot = match.lastRaze && raze && raze.id === match.lastRaze;
     const creeps = match.creeps.filter(creep => creep.pos === pos);
+    const face = pos <= THREAT_POS && creeps.length > 0;
     const body = creeps.map(creep => el('span', { class: 'creep-wrap', 'data-creep': creep.id, 'data-pos': String(pos) }, [
       el('i', { class: 'creep' }),
       creep.name,
     ]));
     if (raze) body.push(el('span', {}, [raze.name]));
-    cells.push(el('div', { class: hot ? 'cell hot' : 'cell', 'data-cell': pos }, body));
+    let cellClass = 'cell';
+    if (hot) cellClass = 'cell hot';
+    else if (face) cellClass = 'cell face';
+    cells.push(el('div', { class: cellClass, 'data-cell': pos }, body));
   }
   return el('div', { class: 'lane' }, cells);
 }
@@ -262,31 +284,37 @@ function dotaOverlay() {
   if (dota.mode === 'result') {
     const back = el('button', { type: 'button', 'data-dota': 'back' }, ['回到试用期']);
     back.addEventListener('click', () => closeDota());
+    const detail = match.won
+      ? `补刀 ${match.kills}，体力 +${CONFIG.dotaWinStamina}`
+      : `补刀 ${match.kills}/${LAST_HITS}，体力不返还`;
     return el('div', { class: 'dota', id: 'dota' }, [
-      el('div', { class: 'dota-panel' }, [
-        el('h2', {}, ['这局打完了']),
-        el('p', { id: 'dota-kills' }, [`击杀 ${match.kills}`]),
+      el('div', { class: 'dota-panel', 'data-result': match.won ? 'win' : 'loss' }, [
+        el('h2', {}, [dotaResultTitle(match)]),
+        el('p', { id: 'dota-kills' }, [detail]),
         back,
       ]),
     ]);
   }
   const seconds = Math.max(0, Math.ceil((MATCH_TICKS - match.tick) * TICK_MS / 1000));
   const skip = el('button', { type: 'button', 'data-dota': 'skip' }, ['跳过']);
-  skip.addEventListener('click', () => showDotaResult());
+  skip.addEventListener('click', () => abandonDota());
   const buttons = RAZES.map(raze => {
-    const button = el('button', { type: 'button', 'data-dota': raze.id }, [`${raze.name} ${raze.key.toUpperCase()}`]);
+    const button = el('button', {
+      type: 'button',
+      'data-dota': raze.id,
+      'data-distance': raze.distance,
+      disabled: match.cooldown > 0 ? '' : null,
+    }, [raze.name]);
     button.addEventListener('click', () => pressRaze(raze.id));
     return button;
   });
   return el('div', { class: 'dota', id: 'dota' }, [
     el('div', { class: 'dota-panel' }, [
       el('div', { class: 'dota-top' }, [
+        el('h2', {}, ['打 Dota']),
         el('div', {}, [
-          el('h2', {}, ['打 Dota']),
-          el('p', { class: 'meta' }, ['影魔，三个影压']),
-        ]),
-        el('div', {}, [
-          el('strong', { id: 'dota-kills' }, [`击杀 ${match.kills}`]),
+          el('strong', { id: 'dota-kills' }, [`补刀 ${match.kills}/${LAST_HITS}`]),
+          el('div', {}, [`血 ${match.hp}`]),
           el('div', {}, [`还剩 ${seconds} 秒`]),
         ]),
         skip,

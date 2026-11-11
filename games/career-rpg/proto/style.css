@@ -220,6 +220,18 @@ dd { margin: 0; }
 
 .cell.sf, .cell.hot { background: #1a1a1a; color: #fffdf8; }
 
+.cell.sf.hurt { background: #8a3b12; }
+
+.cell.face { background: #f3d2c4; }
+
+.dota button:disabled,
+.dota button:disabled:hover {
+  background: #fffdf8;
+  color: #1a1a1a;
+  opacity: 0.4;
+  cursor: default;
+}
+
 .creep-wrap {
   display: flex;
   flex-direction: column;

@@ -9,6 +9,7 @@ export const CONFIG = Object.freeze({
   overnightAp: 1,
   overnightStaminaCost: 3,
   overnightName: '打 Dota',
+  dotaWinStamina: 2,
   restStamina: 2,
   favorStart: 40,
   favorMin: 0,

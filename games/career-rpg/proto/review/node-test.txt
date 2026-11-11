@@ -2,99 +2,135 @@ TAP version 13
 # Subtest: three razes hit only their own distance
 ok 1 - three razes hit only their own distance
   ---
-  duration_ms: 1.081219
+  duration_ms: 1.637291
+  type: 'test'
+  ...
+# Subtest: creeps reposition, and melee hits can down shadow fiend
+ok 2 - creeps reposition, and melee hits can down shadow fiend
+  ---
+  duration_ms: 0.398942
+  type: 'test'
+  ...
+# Subtest: last hits win inside the limit and a timeout loses
+ok 3 - last hits win inside the limit and a timeout loses
+  ---
+  duration_ms: 0.296058
   type: 'test'
   ...
 # Subtest: the same seed spawns the same creeps
-ok 2 - the same seed spawns the same creeps
+ok 4 - the same seed spawns the same creeps
   ---
-  duration_ms: 2.017131
+  duration_ms: 0.714262
+  type: 'test'
+  ...
+# Subtest: the run rng reproduces a match without changing the run
+ok 5 - the run rng reproduces a match without changing the run
+  ---
+  duration_ms: 2.468783
+  type: 'test'
+  ...
+# Subtest: accurate distances can win, and standing still loses the same seed
+ok 6 - accurate distances can win, and standing still loses the same seed
+  ---
+  duration_ms: 0.282776
+  type: 'test'
+  ...
+# Subtest: screen copy does not print the raze keys
+ok 7 - screen copy does not print the raze keys
+  ---
+  duration_ms: 0.255981
   type: 'test'
   ...
 # Subtest: documented starting numbers live in one config
-ok 3 - documented starting numbers live in one config
+ok 8 - documented starting numbers live in one config
   ---
-  duration_ms: 0.906326
+  duration_ms: 1.051264
   type: 'test'
   ...
 # Subtest: same seed and actions reproduce the same game
-ok 4 - same seed and actions reproduce the same game
+ok 9 - same seed and actions reproduce the same game
   ---
-  duration_ms: 1.821142
+  duration_ms: 2.728483
   type: 'test'
   ...
 # Subtest: a different seed deals different tickets
-ok 5 - a different seed deals different tickets
+ok 10 - a different seed deals different tickets
   ---
-  duration_ms: 0.184791
+  duration_ms: 1.273144
   type: 'test'
   ...
 # Subtest: resting through week 1 is a firing on Friday
-ok 6 - resting through week 1 is a firing on Friday
+ok 11 - resting through week 1 is a firing on Friday
   ---
-  duration_ms: 1.368742
+  duration_ms: 0.694731
   type: 'test'
   ...
 # Subtest: overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
-ok 7 - overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
+ok 12 - overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
   ---
-  duration_ms: 0.716597
+  duration_ms: 0.827899
+  type: 'test'
+  ...
+# Subtest: winning dota refunds 2 stamina and losing refunds none
+ok 13 - winning dota refunds 2 stamina and losing refunds none
+  ---
+  duration_ms: 0.45615
   type: 'test'
   ...
 # Subtest: rest restores 2 stamina and does not pass 10
-ok 8 - rest restores 2 stamina and does not pass 10
+ok 14 - rest restores 2 stamina and does not pass 10
   ---
-  duration_ms: 0.112127
+  duration_ms: 0.159162
   type: 'test'
   ...
 # Subtest: Linux cuts a server or incident ticket to 1 point
-ok 9 - Linux cuts a server or incident ticket to 1 point
+ok 15 - Linux cuts a server or incident ticket to 1 point
   ---
-  duration_ms: 0.51817
+  duration_ms: 0.24377
   type: 'test'
   ...
 # Subtest: Git cuts an event penalty from 18 to 8
-ok 10 - Git cuts an event penalty from 18 to 8
+ok 16 - Git cuts an event penalty from 18 to 8
   ---
-  duration_ms: 0.230529
+  duration_ms: 0.344508
   type: 'test'
   ...
 # Subtest: jQuery stays shut in week 1 and then saves a point on page tickets
-ok 11 - jQuery stays shut in week 1 and then saves a point on page tickets
+ok 17 - jQuery stays shut in week 1 and then saves a point on page tickets
   ---
-  duration_ms: 0.3123
+  duration_ms: 0.483303
   type: 'test'
   ...
 # Subtest: Java is night-only and the file database stays shut until 数据库
-ok 12 - Java is night-only and the file database stays shut until 数据库
+ok 18 - Java is night-only and the file database stays shut until 数据库
   ---
-  duration_ms: 0.785722
+  duration_ms: 1.56516
   type: 'test'
   ...
 # Subtest: illegal actions leave the state untouched
-ok 13 - illegal actions leave the state untouched
+ok 19 - illegal actions leave the state untouched
   ---
-  duration_ms: 0.665482
+  duration_ms: 0.150244
   type: 'test'
   ...
 # Subtest: the two cleared endings replace the probation reminder
-ok 14 - the two cleared endings replace the probation reminder
+ok 20 - the two cleared endings replace the probation reminder
   ---
-  duration_ms: 0.101241
+  duration_ms: 0.061927
   type: 'test'
   ...
 # Subtest: fixed lines reproduce a remembered win and a bare survival
-ok 15 - fixed lines reproduce a remembered win and a bare survival
+ok 21 - fixed lines reproduce a remembered win and a bare survival
   ---
-  duration_ms: 0.682558
+  duration_ms: 1.241641
   type: 'test'
   ...
-1..15
-# tests 15
+1..21
+# tests 21
 # suites 0
-# pass 15
+# pass 21
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 62.258947
+# duration_ms 86.580174
