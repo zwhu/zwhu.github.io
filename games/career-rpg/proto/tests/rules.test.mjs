@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { CONFIG, ENDINGS, SKILL_IDS } from '../config.mjs';
-import { BARELY_ACTIONS, BARELY_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from '../line.mjs';
+import { BARELY_ACTIONS, BARELY_SEED, LOSS_ACTIONS, LOSS_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from '../line.mjs';
 import {
   applyAction,
   bossFavorLine,
@@ -56,8 +56,8 @@ test('documented starting numbers live in one config', () => {
   assert.equal(weekLine(1), 30);
   assert.equal(weekLine(2), 40);
   assert.equal(weekLine(3), 50);
-  assert.equal(weekLine(4), 130);
-  assert.equal(CONFIG.weekLineFinal, 130);
+  assert.equal(weekLine(4), 111);
+  assert.equal(CONFIG.weekLineFinal, 111);
   assert.equal(CONFIG.favorMax, 200);
   assert.equal(CONFIG.fileDbReward, 50);
   assert.equal(CONFIG.goodFavor, 200);
@@ -429,17 +429,23 @@ test('three fixed strategies stay inside the tuned rates', () => {
     assert.equal(report[name].remembered, saved.strategies[name].remembered);
     assert.equal(report[name].barely, saved.strategies[name].barely);
   }
-  assert.ok(report.greedy.passRate >= 0.4 && report.greedy.passRate <= 0.6);
+  assert.ok(report.greedy.passRate >= 0.55 && report.greedy.passRate <= 0.65);
   assert.ok(report.greedy.goodEndingRate <= 0.05);
   assert.ok(report.greedy.won === 0 || report.greedy.barely / report.greedy.won >= 0.9);
-  assert.ok(report.planned.passRate >= 0.6);
   assert.ok(report.planned.passRate >= report.greedy.passRate);
-  assert.ok(report.planned.goodEndingRate >= 0.4);
-  assert.ok(report.random.passRate <= 0.15);
+  assert.ok(report.planned.goodEndingRate >= 0.45);
+  assert.ok(report.random.passRate <= 0.18);
   assert.ok(report.random.goodEndingRate <= 0.03);
 });
 
-test('fixed lines reproduce a remembered win and a bare survival', () => {
+test('fixed lines reproduce a firing, a bare survival, and a remembered win', () => {
+  const lost = replay(LOSS_SEED, LOSS_ACTIONS);
+  assert.equal(lost.phase, 'lost');
+  assert.equal(lost.week, 1);
+  assert.equal(lost.day, 5);
+  assert.match(lost.failReason, /第 1 周周五/);
+  assert.match(lost.failReason, /低于本周线 30/);
+
   const remembered = replay(REMEMBERED_SEED, REMEMBERED_ACTIONS);
   assert.equal(remembered.phase, 'won');
   assert.equal(remembered.ending, 'remembered');

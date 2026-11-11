@@ -1,6 +1,7 @@
 // 文档里的数是初始值，试玩后可以只改这里。
-// 好感上限 100→200。文件数据库奖励 30→50（中间曾到 100）。第 4 周过线 60→130。
-// 被记住要文件数据库做完，并且好感到 200。第 1–3 周线仍是 30、40、50。吃面回 3。
+// 好感上限 100→200。文件数据库奖励 30→50（中间曾到 100）。
+// 第 4 周过线 60→111（c8f9574 是 130）。被记住仍要文件数据库做完并且好感到 200。
+// 第 1–3 周线仍是 30、40、50。吃面回 3。
 export const CONFIG = Object.freeze({
   weeks: 4,
   daysPerWeek: 5,
@@ -19,7 +20,7 @@ export const CONFIG = Object.freeze({
   favorMax: 200,
   weekLineBase: 30,
   weekLineStep: 10,
-  weekLineFinal: 130,
+  weekLineFinal: 111,
   goodFavor: 200,
   spawnMin: 1,
   spawnMax: 2,
