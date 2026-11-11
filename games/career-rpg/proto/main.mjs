@@ -1,6 +1,6 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from './dota.mjs';
 import { CONFIG, SCRIPT, applyAction, createGame, present } from './rules.mjs';
-import { frameIndex, resolveSprite } from './walk-sprites.mjs';
+import { spritePose } from './walk-sprites.mjs';
 import { WALK_GRID, facingOf, findPath, resolveClick } from './walk.mjs';
 
 const app = document.querySelector('#app');
@@ -46,8 +46,18 @@ function resetWalker() {
   walker.walkMs = 0;
 }
 
+function currentPose() {
+  return spritePose(walkSprites, {
+    facing: walker.facing,
+    moving: walker.path.length > 0 && walker.pose !== 'seated',
+    seated: walker.pose === 'seated',
+    elapsedMs: walker.walkMs,
+  });
+}
+
 function walkerElement() {
-  if (walker.pose === 'seated') {
+  const pose = currentPose();
+  if (pose.kind === 'seated') {
     const seat = WALK_GRID.seat;
     return el('img', {
       id: 'walker',
@@ -57,11 +67,10 @@ function walkerElement() {
       style: `left:${(seat.x / 384) * 100}%;top:${(seat.y / 216) * 100}%;width:${(seat.w / 384) * 100}%;height:${(seat.h / 216) * 100}%`,
     });
   }
-  const pose = resolveSprite(walkSprites, walker.facing);
-  const index = walker.path.length ? frameIndex(pose, walker.walkMs) : 0;
-  const frame = pose.frames[index];
-  const left = walker.x - pose.anchor.x;
-  const top = walker.y - pose.anchor.y;
+  const frame = pose.frame;
+  const anchor = frame.anchor || pose.anchor;
+  const left = walker.x - anchor.x;
+  const top = walker.y - anchor.y;
   const box = [
     `left:${(left / 384) * 100}%`,
     `top:${(top / 216) * 100}%`,
@@ -87,9 +96,10 @@ function paintWalker() {
   current.replaceWith(walkerElement());
   const spot = document.querySelector('[data-spot="player"]');
   if (!spot) return;
-  const box = walker.pose === 'seated'
+  const pose = currentPose();
+  const box = pose.kind === 'seated'
     ? [63, 134, 88, 163]
-    : [walker.x - 10, walker.y - 44, walker.x + 10, walker.y - 16];
+    : [walker.x - 12, walker.y - pose.anchor.y, walker.x + 12, walker.y - pose.anchor.y + 18];
   spot.style.cssText = spotStyle(box);
 }
 
@@ -582,9 +592,10 @@ function office(view) {
   const speaker = dialogue && !dialogue.narrator ? dialogue.speaker : '';
   const boxes = view.night ? NIGHT_BOXES : DAY_BOXES;
   const spots = [];
-  const playerBox = walker.pose === 'seated'
+  const standing = currentPose();
+  const playerBox = standing.kind === 'seated'
     ? boxes.player
-    : [walker.x - 10, walker.y - 44, walker.x + 10, walker.y - 16];
+    : [walker.x - 12, walker.y - standing.anchor.y, walker.x + 12, walker.y - standing.anchor.y + 18];
   if (playerBox) {
     spots.push(el('div', {
       class: speaker === 'player' ? 'spot speaking' : 'spot',

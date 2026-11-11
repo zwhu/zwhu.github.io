@@ -23,8 +23,8 @@ import {
 } from '../rules.mjs';
 import { ratesOnly, runStrategies } from '../sim.mjs';
 import { WALK_GRID, commitArrival, findPath, pointBlocked, resolveClick } from '../walk.mjs';
-import { convertMeta } from '../walk/build-sprites.mjs';
-import { frameIndex, resolveSprite } from '../walk-sprites.mjs';
+import { convertMeta, pngSize } from '../walk/build-sprites.mjs';
+import { frameIndex, resolveSprite, spritePose } from '../walk-sprites.mjs';
 
 const rulesSource = readFileSync(new URL('../rules.mjs', import.meta.url), 'utf8');
 
@@ -586,22 +586,21 @@ test('scene clicks use the same actions as the buttons', () => {
   assert.equal(/position:\s*(?:sticky|fixed)/.test(actionCss), false);
 });
 
-test('walk sprites come from walk.sprites.json and every direction is drawn', () => {
+test('walk sprites come from the generated sheet and match the designer meta', () => {
   const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
   const meta = JSON.parse(readFileSync(new URL('../walk/meta.json', import.meta.url), 'utf8'));
-  assert.deepEqual(sheet, convertMeta(meta));
-  const images = [];
-  for (const facing of ['down', 'up', 'left', 'right']) {
+  const image = 'player-walk-hefei.png';
+  const imageSize = pngSize(fileURLToPath(new URL(`../walk/${image}`, import.meta.url)));
+  assert.deepEqual(sheet, convertMeta(meta, { image, imageSize }));
+  for (const facing of meta.rows) {
     const sprite = resolveSprite(sheet, facing);
-    assert.ok(sprite.frames.length >= 1, facing);
+    assert.equal(sprite.frames.length, meta.cycles.walk6.length, facing);
     assert.equal(sprite.mirror, false, facing);
-    assert.equal(sprite.anchor.y, 43);
-    assert.equal(sprite.frameMs, 160);
-    images.push(sprite.image);
+    assert.deepEqual([sprite.anchor.x, sprite.anchor.y], meta.foot_anchor);
+    assert.equal(sprite.frameMs, meta.frame_ms.walk6);
+    assert.deepEqual([sprite.idle.x, sprite.idle.y, sprite.idle.w, sprite.idle.h], meta.frames[facing].idle.rect);
+    assert.equal(sprite.image, `./walk/${image}`);
   }
-  assert.equal(new Set(images).size, 4);
-  assert.equal(images.includes('./walk/left.png'), true);
-  assert.equal(images.includes('./walk/right.png'), true);
   const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
   const loaderSource = readFileSync(new URL('../walk-sprites.mjs', import.meta.url), 'utf8');
   assert.equal(mainSource.includes('meta.json'), false);
@@ -610,17 +609,30 @@ test('walk sprites come from walk.sprites.json and every direction is drawn', ()
   const check = spawnSync(process.execPath, ['games/career-rpg/proto/walk/build-sprites.mjs', '--check'], {
     cwd: fileURLToPath(new URL('../../../..', import.meta.url)),
   });
-  assert.equal(check.status, 0);
+  assert.equal(check.status, 0, check.stderr?.toString());
 });
 
 test('a missing walk direction falls back without mirroring', () => {
   const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
   delete sheet.directions.left;
   const sprite = resolveSprite(sheet, 'left');
-  assert.equal(sprite.image, './walk/down.png');
+  assert.deepEqual(sprite.frames, resolveSprite(sheet, 'down').frames);
   assert.equal(sprite.mirror, false);
-  assert.ok(sprite.frames.length >= 1);
   assert.equal(resolveSprite({}, 'up').frames.length, 1);
+});
+
+test('walking changes frames, stopping shows the stand pose, and sitting leaves the walk sheet', () => {
+  const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
+  const started = spritePose(sheet, { facing: 'left', moving: true, seated: false, elapsedMs: 0 });
+  const stepped = spritePose(sheet, { facing: 'left', moving: true, seated: false, elapsedMs: sheet.frameMs });
+  const stopped = spritePose(sheet, { facing: 'left', moving: false, seated: false, elapsedMs: sheet.frameMs });
+  const seated = spritePose(sheet, { facing: 'left', moving: false, seated: true, elapsedMs: 0 });
+  assert.equal(started.kind, 'walk');
+  assert.notEqual(started.frame.x, stepped.frame.x);
+  assert.equal(stopped.kind, 'stand');
+  assert.deepEqual(stopped.frame, resolveSprite(sheet, 'left').idle);
+  assert.equal(seated.kind, 'seated');
+  assert.equal(seated.frame, undefined);
 });
 
 test('walk frames advance when a direction has more than one frame', () => {

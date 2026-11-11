@@ -15,6 +15,7 @@ function normalize(entry, sheet) {
     anchor: entry.anchor || { x: 14, y: 43 },
     imageSize: entry.imageSize || { w: first.w, h: first.h },
     frameMs: entry.frameMs || sheet.frameMs || 160,
+    idle: entry.idle || first,
     frames,
   };
 }
@@ -45,4 +46,12 @@ export function frameIndex(sprite, elapsedMs) {
   if (count <= 1) return 0;
   const ms = sprite.frameMs > 0 ? sprite.frameMs : 160;
   return Math.floor(Math.max(0, elapsedMs) / ms) % count;
+}
+
+export function spritePose(sheet, state) {
+  if (state.seated) return { kind: 'seated' };
+  const sprite = resolveSprite(sheet, state.facing);
+  if (!state.moving) return { kind: 'stand', ...sprite, frame: sprite.idle };
+  const index = frameIndex(sprite, state.elapsedMs || 0);
+  return { kind: 'walk', ...sprite, index, frame: sprite.frames[index] };
 }
