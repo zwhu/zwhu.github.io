@@ -111,19 +111,30 @@ function selector(action) {
   return `[data-action="${action.type}"]`;
 }
 async function click(action) {
-  const found = await evaluate(`(() => {
-    const node = document.querySelector(${JSON.stringify(selector(action))});
-    if (!node) return false;
-    node.scrollIntoView({ block: 'center' });
-    node.click();
-    return true;
-  })()`);
-  if (!found) throw new Error('missing button ' + JSON.stringify(action));
+  if (action.type !== 'overnight') {
+    const found = await evaluate(`(() => {
+      const node = document.querySelector(${JSON.stringify(selector(action))});
+      if (!node) return false;
+      node.scrollIntoView({ block: 'center' });
+      node.click();
+      return true;
+    })()`);
+    if (!found) throw new Error('missing button ' + JSON.stringify(action));
+  }
   if (action.type === 'overnight') {
     await evaluate(`(() => {
-      if (!window.hefei.present().interviewed) document.querySelector('[data-person="boss"]')?.click();
+      let guard = 0;
+      while (!window.hefei.present().interviewed && guard < 8) {
+        const next = document.querySelector('[data-dialogue="next"]');
+        if (next) next.click();
+        else document.querySelector('[data-person="boss"]')?.click();
+        guard += 1;
+      }
       document.querySelector('[data-dialogue="close"]')?.click();
+      document.querySelector('[data-dialogue="next"]')?.click();
       document.querySelector('[data-action="night"]')?.click();
+      document.querySelector('[data-dialogue="next"]')?.click();
+      document.querySelector('[data-dialogue="close"]')?.click();
       document.querySelector('[data-person="party"]')?.click();
       document.querySelector('[data-choice="accept"]')?.click();
     })()`);
@@ -162,9 +173,18 @@ async function recordMinigame(name, seed, play) {
   if (before !== '10') throw new Error(name + ' stamina before ' + before);
   for (let i = 0; i < 4; i += 1) await save();
   const opened = await evaluate(`(() => {
-    if (!window.hefei.present().interviewed) document.querySelector('[data-person="boss"]')?.click();
+    let guard = 0;
+    while (!window.hefei.present().interviewed && guard < 8) {
+      const next = document.querySelector('[data-dialogue="next"]');
+      if (next) next.click();
+      else document.querySelector('[data-person="boss"]')?.click();
+      guard += 1;
+    }
     document.querySelector('[data-dialogue="close"]')?.click();
+    document.querySelector('[data-dialogue="next"]')?.click();
     document.querySelector('[data-action="night"]')?.click();
+    document.querySelector('[data-dialogue="next"]')?.click();
+    document.querySelector('[data-dialogue="close"]')?.click();
     document.querySelector('[data-person="party"]')?.click();
     const accept = document.querySelector('[data-choice="accept"]');
     if (!accept) return false;

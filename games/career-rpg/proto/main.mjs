@@ -1,5 +1,5 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from './dota.mjs';
-import { CONFIG, applyAction, createGame, present } from './rules.mjs';
+import { CONFIG, SCRIPT, applyAction, createGame, present } from './rules.mjs';
 
 const app = document.querySelector('#app');
 
@@ -13,6 +13,8 @@ let dota = null;
 let dotaTick = 0;
 let dotaResult = 0;
 let dialogue = null;
+let toldNight = '';
+let toldWeek = 0;
 
 function clearDotaTimers() {
   if (dotaTick) clearInterval(dotaTick);
@@ -81,8 +83,34 @@ function pips(filled, total) {
 }
 
 function act(action) {
+  const before = state;
   state = applyAction(state, action);
-  if (action && action.type === 'sleep') dialogue = null;
+  if (action && action.type === 'sleep') {
+    dialogue = null;
+    toldNight = '';
+    if (state.phase === 'play' && state.day === 1 && state.interviewed) {
+      openNarration([SCRIPT.weekOpen[state.week - 1]]);
+      return;
+    }
+  }
+  if (action && action.type === 'night' && state.night && !before.night) {
+    const key = `${state.week}-${state.day}`;
+    if (toldNight !== key) {
+      toldNight = key;
+      const lines = [SCRIPT.nightFalls];
+      if (toldWeek !== state.week) {
+        toldWeek = state.week;
+        lines.push(SCRIPT.daysPass);
+      }
+      openNarration(lines);
+      return;
+    }
+  }
+  if (action && action.type === 'study' && before.overnightUsed && toldWeek !== state.week && state.phase === 'play') {
+    toldWeek = state.week;
+    openNarration([SCRIPT.daysPass]);
+    return;
+  }
   render();
 }
 
@@ -94,6 +122,8 @@ function start(seed) {
   clearDotaTimers();
   dota = null;
   dialogue = null;
+  toldNight = '';
+  toldWeek = 0;
   state = createGame(next);
   render();
 }
@@ -103,18 +133,63 @@ function sentence(line) {
   return mark === -1 ? line : line.slice(mark + 1);
 }
 
+function lineBox(line) {
+  return {
+    person: line.id,
+    name: line.name,
+    text: line.text,
+    choices: line.choices,
+    forecast: line.forecast,
+    speaker: line.speaker,
+    narrator: line.narrator,
+    advance: line.interview ? 'interview' : '',
+    queue: [],
+  };
+}
+
+function openNarration(lines) {
+  const pending = lines.filter(Boolean);
+  const text = pending.shift();
+  if (!text) {
+    render();
+    return;
+  }
+  dialogue = {
+    person: '',
+    name: '',
+    text,
+    choices: [],
+    forecast: null,
+    speaker: 'narrator',
+    narrator: true,
+    advance: pending.length ? 'queue' : '',
+    queue: pending,
+  };
+  render();
+}
+
 function openPerson(id) {
   const line = present(state).coworkers.find(item => item.id === id);
   if (!line || !line.visible) return;
   if (!line.commit || line.talked) {
-    dialogue = { person: id, name: line.name, text: line.text, choices: line.choices, forecast: line.forecast };
+    dialogue = lineBox(line);
     render();
     return;
   }
   const next = applyAction(state, { type: 'talk', person: id });
   if (next === state) return;
   state = next;
-  dialogue = { person: id, name: line.name, text: sentence(state.log[0]), choices: [], forecast: line.forecast };
+  dialogue = {
+    person: id,
+    name: line.name,
+    text: state.say || sentence(state.log[0]),
+    choices: [],
+    forecast: line.forecast,
+    speaker: line.speaker,
+    narrator: false,
+    advance: '',
+    queue: [],
+  };
   render();
 }
 
@@ -122,6 +197,7 @@ function chooseLine(choice) {
   if (!dialogue) return;
   const person = dialogue.person;
   const name = dialogue.name;
+  const speaker = dialogue.speaker;
   const pending = state.dotaPending;
   const next = applyAction(state, { type: 'talk', person, choice });
   if (next === state) return;
@@ -131,7 +207,47 @@ function chooseLine(choice) {
     startDota();
     return;
   }
-  dialogue = { person, name, text: sentence(state.log[0]), choices: [], forecast: null };
+  dialogue = {
+    person,
+    name,
+    text: state.say || sentence(state.log[0]),
+    choices: [],
+    forecast: null,
+    speaker,
+    narrator: false,
+    advance: '',
+    queue: [],
+  };
+  render();
+}
+
+function continueDialogue() {
+  if (!dialogue) return;
+  if (dialogue.advance === 'interview') {
+    const next = applyAction(state, { type: 'talk', person: 'boss' });
+    if (next === state) return;
+    state = next;
+    if (!state.interviewed) {
+      const line = present(state).coworkers.find(item => item.id === 'boss');
+      dialogue = lineBox(line);
+      render();
+      return;
+    }
+    dialogue = null;
+    if (state.phase === 'play' && state.week === 1 && state.day === 1) {
+      openNarration([SCRIPT.weekOpen[0]]);
+      return;
+    }
+    render();
+    return;
+  }
+  if (dialogue.advance === 'queue' && dialogue.queue.length) {
+    const text = dialogue.queue.shift();
+    dialogue = { ...dialogue, text, advance: dialogue.queue.length ? 'queue' : '' };
+    render();
+    return;
+  }
+  dialogue = null;
   render();
 }
 
@@ -242,22 +358,65 @@ function skillCard(skill) {
   return el('article', { class: 'card', 'data-skill': skill.id, 'data-progress': skill.progress, 'data-learned': skill.learned ? '1' : '0' }, body);
 }
 
+const SPOTS = {
+  player: { x: 61, y: 124, w: 28, h: 52 },
+  neighbor: { x: 133, y: 124, w: 28, h: 52 },
+  lunch: { x: 248, y: 128, w: 36, h: 52 },
+  boss: { x: 306, y: 74, w: 36, h: 56 },
+  party: { x: 88, y: 150, w: 36, h: 52 },
+};
+
+function spotStyle(box) {
+  return `left:${(box.x / 384) * 100}%;top:${(box.y / 216) * 100}%;width:${(box.w / 384) * 100}%;height:${(box.h / 216) * 100}%`;
+}
+
+function hotspot(person, speaking) {
+  const button = el('button', {
+    type: 'button',
+    class: 'figure',
+    'data-person': person.id,
+    'aria-label': person.name,
+  }, [el('i', { class: 'body' })]);
+  button.addEventListener('click', () => openPerson(person.id));
+  return el('div', {
+    class: speaking ? 'spot speaking' : 'spot',
+    'data-spot': person.id,
+    style: spotStyle(SPOTS[person.id]),
+  }, [
+    el('i', { class: 'arrow', 'data-arrow': speaking ? person.id : '' }),
+    button,
+  ]);
+}
+
 function office(view) {
-  const spots = view.coworkers.filter(person => person.visible).map(person => {
-    const speaking = dialogue && dialogue.person === person.id;
-    const button = el('button', { type: 'button', class: 'figure', 'data-person': person.id }, [
-      el('i', { class: `body ${person.id}` }),
-      el('span', {}, [person.name]),
-    ]);
-    button.addEventListener('click', () => openPerson(person.id));
-    const prop = person.id === 'boss' ? 'table' : (person.id === 'party' ? 'door' : 'desk');
-    return el('div', { class: speaking ? 'spot speaking' : 'spot', 'data-spot': person.id }, [
-      el('i', { class: 'arrow', 'data-arrow': speaking ? person.id : '' }),
-      button,
-      el('i', { class: `prop ${prop}` }),
-    ]);
-  });
-  return el('section', { class: view.night ? 'office night' : 'office', id: 'office' }, spots);
+  const speaker = dialogue && !dialogue.narrator ? dialogue.speaker : '';
+  const spots = view.coworkers.filter(person => person.visible).map(person => hotspot(person, speaker === person.id));
+  const player = el('div', {
+    class: speaker === 'player' ? 'spot speaking' : 'spot',
+    'data-spot': 'player',
+    style: spotStyle(SPOTS.player),
+  }, [
+    el('i', { class: 'arrow' }),
+    el('i', { class: 'body' }),
+  ]);
+  const chip = el('p', { class: 'week-chip', id: 'scene-when' }, [
+    `第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`,
+  ]);
+  const cast = el('div', { class: 'night-cast', 'aria-hidden': 'true' }, [
+    el('span', { class: 'cast-clip neighbor' }, [el('img', { src: './art/07-seated-sprites.png', alt: '' })]),
+    el('span', { class: 'cast-clip lunch' }, [el('img', { src: './art/07-seated-sprites.png', alt: '' })]),
+    el('img', { class: 'cast-boss', src: './art/boss-down.png', alt: '' }),
+  ]);
+  return el('section', { class: view.night ? 'office night' : 'office', id: 'office' }, [
+    el('img', {
+      class: 'scene-img',
+      alt: '',
+      src: view.night ? './art/02-main-night.png' : './art/01-main-day.png',
+    }),
+    chip,
+    cast,
+    el('div', { class: 'spots' }, [player, ...spots]),
+  ]);
 }
 
 function dialogueBox(view) {
@@ -268,22 +427,22 @@ function dialogueBox(view) {
     button.addEventListener('click', () => chooseLine(choice.id));
     return button;
   });
-  const close = el('button', { type: 'button', 'data-dialogue': 'close' }, ['关上']);
-  close.addEventListener('click', () => {
-    dialogue = null;
-    render();
-  });
+  const advancing = dialogue.advance === 'interview' || dialogue.advance === 'queue';
+  const dismiss = el('button', { type: 'button', 'data-dialogue': advancing ? 'next' : 'close' }, [advancing ? '继续' : '关上']);
+  dismiss.addEventListener('click', () => continueDialogue());
   const attrs = { class: 'dialogue', id: 'dialogue' };
+  if (dialogue.narrator) attrs['data-narrator'] = '1';
   if (dialogue.forecast) {
     attrs['data-forecast-title'] = dialogue.forecast.title;
     attrs['data-forecast-kind'] = dialogue.forecast.kind;
     attrs['data-forecast-difficulty'] = dialogue.forecast.difficulty;
     attrs['data-forecast-due'] = dialogue.forecast.dueIn;
   }
+  const head = dialogue.name ? [el('div', { class: 'nameplate', id: 'nameplate' }, [dialogue.name])] : [];
   return el('section', attrs, [
-    el('div', { class: 'nameplate', id: 'nameplate' }, [dialogue.name]),
+    ...head,
     el('p', { id: 'dialogue-text' }, [dialogue.text]),
-    el('div', { class: 'dialogue-actions' }, choices.concat(close)),
+    el('div', { class: 'dialogue-actions' }, choices.concat(dismiss)),
   ]);
 }
 
@@ -305,6 +464,12 @@ function actionBar(view) {
   return bar;
 }
 
+function endingCard(view) {
+  if (view.phase === 'won' && view.ending === 'remembered') return './art/05-ending-remembered.png';
+  if (view.phase === 'won') return './art/04-ending-stay.png';
+  return './art/03-ending-quit.png';
+}
+
 function ending(view) {
   const won = view.phase === 'won';
   const again = el('button', { type: 'button', 'data-action': 'restart' }, ['再来一局']);
@@ -312,9 +477,15 @@ function ending(view) {
   const fresh = el('button', { type: 'button', 'data-action': 'new-seed' }, ['换个种子']);
   fresh.addEventListener('click', () => start(`h${Date.now().toString(36)}`));
   const stats = view.stats;
+  const picture = el('div', { class: 'ending-picture' }, [
+    el('img', { src: endingCard(view), alt: '' }),
+  ]);
   return el('section', { class: 'ending', id: 'ending' }, [
-    el('h2', {}, [won ? view.victoryTitle : '被劝退']),
-    el('p', { id: 'ending-text' }, [won ? `${view.victoryTitle}。${view.victoryText}` : view.failReason]),
+    el('div', { class: 'ending-layout' }, [
+      picture,
+      el('div', {}, [
+        el('h2', {}, [won ? view.victoryTitle : '被劝退']),
+        el('p', { id: 'ending-text' }, [won ? `${view.victoryTitle}。${view.victoryText}` : `${view.failReason}${view.failText}`]),
     ...(view.settlementLine ? [el('p', { id: 'settlement' }, [view.settlementLine])] : []),
     el('dl', {}, [
       el('dt', {}, ['周次']), el('dd', {}, [`第 ${view.week} 周 ${view.dayName}`]),
@@ -329,7 +500,9 @@ function ending(view) {
       el('dt', {}, ['学会']), el('dd', {}, [stats.skills.length ? stats.skills.join('、') : '无']),
       el('dt', {}, ['文件数据库']), el('dd', {}, [stats.fileDb]),
     ]),
-    el('div', { class: 'actions' }, [again, fresh]),
+        el('div', { class: 'actions' }, [again, fresh]),
+      ]),
+    ]),
   ]);
 }
 
@@ -342,7 +515,11 @@ function dotaResultTitle(match) {
 
 function dotaLane(match) {
   const sfClass = match.hurt ? 'cell sf hurt' : 'cell sf';
-  const cells = [el('div', { class: sfClass, id: 'dota-hp', 'data-hp': match.hp }, ['影魔', String(match.hp)])];
+  const cells = [el('div', { class: sfClass, id: 'dota-hp', 'data-hp': match.hp }, [
+    el('img', { class: 'sf-sprite', src: './art/sf.png', alt: '' }),
+    el('span', {}, ['影魔']),
+    String(match.hp),
+  ])];
   for (let pos = 1; pos <= 7; pos += 1) {
     const raze = RAZES.find(item => item.distance === pos);
     const hot = match.lastRaze && raze && raze.id === match.lastRaze;
@@ -394,6 +571,7 @@ function dotaOverlay() {
     el('div', { class: 'dota-panel' }, [
       el('div', { class: 'dota-top' }, [
         el('h2', {}, ['打 Dota']),
+        el('p', { class: 'dota-who' }, ['影魔，三个影压']),
         el('div', {}, [
           el('strong', { id: 'dota-kills' }, [`补刀 ${match.kills}/${LAST_HITS}`]),
           el('div', {}, [`血 ${match.hp}`]),

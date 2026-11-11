@@ -11,6 +11,7 @@ import {
   createGame,
   forecastTomorrow,
   present,
+  SCRIPT,
   replay,
   snapshot,
   ticketPenalty,
@@ -286,12 +287,53 @@ test('the good ending needs both the file database and the remember line', () =>
 test('the two cleared endings replace the probation reminder', () => {
   assert.equal(ENDINGS.remembered.title, '留下来，还被老板记住了');
   assert.equal(ENDINGS.barely.title, '勉强留下来');
-  assert.equal(`${ENDINGS.remembered.title}${ENDINGS.remembered.text}${ENDINGS.barely.title}${ENDINGS.barely.text}`.includes('争取'), false);
+  const bodies = [
+    ENDINGS.remembered.title,
+    ENDINGS.remembered.text,
+    ENDINGS.barely.title,
+    ENDINGS.barely.text,
+    ENDINGS.barely.fileDbDone,
+    ENDINGS.lost.text,
+  ].join('');
+  assert.equal(bodies.includes('争取'), false);
+  assert.match(SCRIPT.daysPass, /争取能留下来/);
+  assert.equal(bodies.includes(SCRIPT.daysPass), false);
 });
 
 function interviewed(seed) {
-  return applyAction(createGame(seed), { type: 'talk', person: 'boss' });
+  let state = createGame(seed);
+  let guard = 0;
+  while (!state.interviewed && guard < 8) {
+    state = applyAction(state, { type: 'talk', person: 'boss' });
+    guard += 1;
+  }
+  return state;
 }
+
+test('the opening interview is five lines and the first nameplate is 面试', () => {
+  let state = createGame('intro');
+  const lines = [];
+  const names = [];
+  while (!state.interviewed) {
+    const line = coworkerLine(state, 'boss');
+    lines.push(line.text);
+    names.push(line.name);
+    const next = applyAction(state, { type: 'talk', person: 'boss' });
+    assert.equal(next.ap, state.ap);
+    assert.equal(next.interviewed, lines.length === 5);
+    state = next;
+  }
+  assert.deepEqual(names, ['面试', '老板', '我', '老板', '']);
+  assert.deepEqual(lines, [
+    '原本录用的人嫌工资低，没来。',
+    '你能力不行，来了也干不了活。',
+    '我不要工资，让我来试试就行。',
+    '行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。',
+    '就这样留下了。',
+  ]);
+  assert.equal(coworkerLine(createGame('intro'), 'boss').narrator, true);
+  assert.equal(coworkerLine(state, 'boss').text, '今天说过了。');
+});
 
 test('before the interview everyone only sends you to the boss', () => {
   const night = applyAction(createGame('gate'), { type: 'night' });
@@ -306,8 +348,10 @@ test('before the interview everyone only sends you to the boss', () => {
   assert.equal(night.ap, CONFIG.dailyAp);
   assert.equal(night.stamina, CONFIG.staminaStart);
   assert.equal(night.dotaPending, false);
-  const hired = applyAction(night, { type: 'talk', person: 'boss' });
+  let hired = night;
+  while (!hired.interviewed) hired = applyAction(hired, { type: 'talk', person: 'boss' });
   assert.equal(hired.interviewed, true);
+  assert.equal(hired.night, true);
   assert.match(coworkerLine(hired, 'lunch').text, /好饿，去吃面吗？/);
   assert.doesNotMatch(coworkerLine(hired, 'lunch').text, /找老板/);
   assert.match(coworkerLine(hired, 'neighbor').text, /明天会来/);
@@ -343,6 +387,7 @@ test('noodles cost 1 AP and restore 3 stamina, one more than resting', () => {
   assert.equal(fresh.stamina, 10);
   assert.equal(fresh.stamina - 7, CONFIG.restStamina + 1);
   assert.match(fresh.log[0], /体力 \+3，现在 10/);
+  assert.equal(fresh.say, '走，就对面那家。');
   assert.equal(applyAction(fresh, { type: 'talk', person: 'lunch', choice: 'accept' }), fresh);
   let dry = interviewed('noodles-dry');
   while (dry.ap > 0) dry = applyAction(dry, { type: 'rest' });

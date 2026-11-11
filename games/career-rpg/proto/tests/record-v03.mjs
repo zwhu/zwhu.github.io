@@ -13,7 +13,7 @@ const TALK_SEED = 'hefei';
 const FORECAST_SEED = 'forecast-seed';
 mkdirSync(OUT, { recursive: true });
 
-const mime = { '.html': 'text/html; charset=utf-8', '.mjs': 'text/javascript', '.css': 'text/css' };
+const mime = { '.html': 'text/html; charset=utf-8', '.mjs': 'text/javascript', '.css': 'text/css', '.png': 'image/png' };
 const server = http.createServer((req, res) => {
   const url = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
   const file = path.resolve(ROOT, '.' + (url.endsWith('/') ? url + 'index.html' : url));
@@ -182,8 +182,30 @@ try {
     const dayPeople = await evaluate(`[...document.querySelectorAll('[data-person]')].map(node => node.getAttribute('data-person')).join(',')`);
     if (dayPeople !== 'boss,lunch,neighbor') throw new Error('day people ' + dayPeople);
     await save(3);
+    await evaluate(`document.querySelector('[data-person="boss"]').click()`);
+    await save(4);
+    const intro = await evaluate(sceneScript());
+    if (intro.name !== '面试') throw new Error('interview nameplate ' + intro.name);
+    if (intro.text !== '原本录用的人嫌工资低，没来。') throw new Error('interview line ' + intro.text);
+    if (intro.arrowVisible) throw new Error('narrator has an arrow');
+    if (intro.hint) throw new Error('interview shows a shortcut hint');
+    const hired = await evaluate(`(() => {
+      let guard = 0;
+      while (!window.hefei.present().interviewed && guard < 8) {
+        const next = document.querySelector('[data-dialogue="next"]');
+        if (next) next.click();
+        else document.querySelector('[data-person="boss"]')?.click();
+        guard += 1;
+      }
+      document.querySelector('[data-dialogue="close"]')?.click();
+      return window.hefei.present().interviewed;
+    })()`);
+    if (!hired) throw new Error('interview did not finish');
+    await save(2);
     const night = await evaluate(`(() => { document.querySelector('[data-action="night"]').click(); return [...document.querySelectorAll('[data-person]')].map(node => node.getAttribute('data-person')).join(','); })()`);
     if (night !== 'boss,lunch,neighbor,party') throw new Error('night people ' + night);
+    const nightLine = await evaluate(`document.querySelector('#dialogue-text')?.textContent || ''`);
+    if (nightLine !== '白天的活告一段落。天黑了，我还没走。') throw new Error('night line ' + nightLine);
     await save(3);
 
     async function speak(person, name) {
@@ -202,7 +224,7 @@ try {
     }
 
     const boss = await speak('boss', '老板');
-    if (!boss.text.includes('面试')) throw new Error('boss line ' + boss.text);
+    if (boss.text.includes('面试')) throw new Error('boss line still the interview ' + boss.text);
     await evaluate(`document.querySelector('[data-dialogue="close"]').click()`);
     await save(2);
 
@@ -235,7 +257,7 @@ try {
     const after = await evaluate(sceneScript());
     if (after.stamina !== '10') throw new Error('stamina after noodles ' + after.stamina);
     if (after.ap !== '3') throw new Error('ap after noodles ' + after.ap);
-    if (!after.text.includes('体力 +3，现在 10')) throw new Error('noodle result ' + after.text);
+    if (after.text !== '走，就对面那家。') throw new Error('noodle result ' + after.text);
     if (after.name !== '饭搭子' || !after.arrowVisible || after.boxColor !== 'rgb(243, 230, 196)') {
       throw new Error('noodle scene ' + JSON.stringify(after));
     }
@@ -262,9 +284,19 @@ try {
     };
     await goto(FORECAST_SEED);
     await evaluate('window.scrollTo(0, 0)');
-    await evaluate(`document.querySelector('[data-person="boss"]').click()`);
+    const hiredForecast = await evaluate(`(() => {
+      let guard = 0;
+      while (!window.hefei.present().interviewed && guard < 8) {
+        const next = document.querySelector('[data-dialogue="next"]');
+        if (next) next.click();
+        else document.querySelector('[data-person="boss"]')?.click();
+        guard += 1;
+      }
+      document.querySelector('[data-dialogue="close"]')?.click();
+      return window.hefei.present().interviewed;
+    })()`);
+    if (!hiredForecast) throw new Error('forecast interview did not finish');
     await save(2);
-    await evaluate(`document.querySelector('[data-dialogue="close"]').click()`);
     await evaluate(`document.querySelector('[data-person="neighbor"]').click()`);
     await save(6);
     const scene = await evaluate(sceneScript());
@@ -310,6 +342,16 @@ try {
 
   await send('Emulation.setDeviceMetricsOverride', { width: 375, height: 812, deviceScaleFactor: 1, mobile: true });
   await goto(TALK_SEED);
+  await evaluate(`(() => {
+    let guard = 0;
+    while (!window.hefei.present().interviewed && guard < 8) {
+      const next = document.querySelector('[data-dialogue="next"]');
+      if (next) next.click();
+      else document.querySelector('[data-person="boss"]')?.click();
+      guard += 1;
+    }
+    document.querySelector('[data-dialogue="close"]')?.click();
+  })()`);
   await evaluate(`document.querySelector('[data-action="night"]').click()`);
   await evaluate(`document.querySelector('[data-person="boss"]').click()`);
   await shot(path.join(stills, 'mobile-dialogue.png'));

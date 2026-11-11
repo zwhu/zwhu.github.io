@@ -1,14 +1,14 @@
 {
-  "origin": "http://127.0.0.1:42289/games/career-rpg/proto/index.html",
+  "origin": "http://127.0.0.1:46771/games/career-rpg/proto/index.html",
   "talkSeed": "hefei",
   "forecastSeed": "forecast-seed",
   "talks": {
     "file": "games/career-rpg/proto/review/coworkers.mp4",
-    "frames": 41,
-    "boss": "先做个面试。试用期四周，周五看老板好感。",
-    "teammate": "第 1 周周一，来打一把 Dota？",
-    "neighbor": "第 1 周周一，隔座先说一声。明天会来「改表结构」，1 点，期限 3 天。",
-    "lunch": "好饿，去吃面。第 1 周周一想吃牛肉面。",
+    "frames": 47,
+    "boss": "今天说过了。",
+    "teammate": "还没走？来打一把 Dota。",
+    "neighbor": "周一啊。咖啡凉了还在喝。明天会来「改表结构」，1 点，期限 3 天。",
+    "lunch": "好饿，去吃面吗？想吃牛肉面。",
     "after": {
       "people": [
         "boss",
@@ -17,7 +17,7 @@
         "party"
       ],
       "name": "饭搭子",
-      "text": "吃了面，体力 +3，现在 10",
+      "text": "走，就对面那家。",
       "stamina": "10",
       "ap": "3",
       "arrowVisible": true,
@@ -36,13 +36,13 @@
   "forecast": {
     "file": "games/career-rpg/proto/review/forecast.mp4",
     "frames": 14,
-    "said": "第 1 周周一，隔座先说一声。明天会来「banner 换季」，2 点，期限 4 天。",
+    "said": "周一啊。咖啡凉了还在喝。明天会来「banner 换季」，2 点，期限 4 天。",
     "morning": {
       "week": 1,
       "day": "周二",
       "found": true,
       "card": "banner 换季\n剩 4 天\n\n页面 · 2 点\n\n进度 0/2\n做完 +6\n逾期 -4\n\n做 · 还差 2 点",
-      "log": "早上新到 2 张单。 | 第 1 周周二，行动点 3。 | 休息，体力 10 | 休息，体力 10 | 休息，体力 10 | 隔壁工位老哥：第 1 周周一，隔座先说一声。明天会来「banner 换季」，2 点，期限 4 天。 | 老板：先做个面试。试用期四周，周五看老板好感。 | 早上新到 1 张单。"
+      "log": "早上新到 2 张单。 | 第 1 周周二，行动点 3。 | 休息，体力 10 | 休息，体力 10 | 休息，体力 10 | 隔壁工位老哥：周一啊。咖啡凉了还在喝。明天会来「banner 换季」，2 点，期限 4 天。 | 旁白：就这样留下了。 | 老板：行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。"
     }
   },
   "mobile": {
@@ -53,7 +53,7 @@
       "party"
     ],
     "name": "老板",
-    "text": "先做个面试。试用期四周，周五看老板好感。",
+    "text": "今天说过了。",
     "stamina": "10",
     "ap": "3",
     "arrowVisible": true,
