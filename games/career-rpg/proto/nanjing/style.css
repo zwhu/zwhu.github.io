@@ -1,0 +1,75 @@
+.status { grid-template-columns: repeat(5, 1fr); }
+
+.banner, .boss-card {
+  background: #fffdf8;
+  border: 1px solid #1a1a1a;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.boss-card { border-width: 2px; }
+
+.prob { font-variant-numeric: tabular-nums; }
+
+.people {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 12px;
+  flex-wrap: wrap;
+}
+
+.person {
+  width: 108px;
+  text-align: center;
+  padding: 8px;
+}
+
+.person .sq {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 6px;
+  border: 1px solid #1a1a1a;
+  display: block;
+}
+
+.person.pm .sq { background: #a16207; }
+.person.qa .sq { background: #2f5d50; }
+.person.mod .sq { background: #1d4e89; }
+.person.boss .sq { background: #8a3b12; }
+
+.person .badge {
+  display: block;
+  margin-top: 4px;
+  color: #8a3b12;
+  font-size: 13px;
+}
+
+.mark.front { background: #243056; }
+.mark.back { background: #1d4e89; }
+.mark.data { background: #8a3b12; }
+
+.talk {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  background: #faf8f3;
+  border-top: 1px solid #1a1a1a;
+  padding: 12px 16px 16px;
+}
+
+.talk .who {
+  margin: 0;
+  font-size: 13px;
+  color: #5c564c;
+}
+
+.talk p { margin: 4px 0 0; }
+
+#app { padding-bottom: 168px; }
+
+@media (max-width: 720px) {
+  .status { display: grid; grid-template-columns: 1fr 1fr; }
+  .person { width: calc(50% - 4px); }
+}
