@@ -168,6 +168,11 @@ async function click(action) {
     if (!back) throw new Error('missing dota back');
     return;
   }
+  if (action.type === 'open') {
+    const exists = await evaluate(`!!document.querySelector(${JSON.stringify(selector(action))})`);
+    const night = await evaluate('!!(window.hangzhou && window.hangzhou.present().night)');
+    if (!exists && night) return;
+  }
   if (action.type === 'talk' || action.type === 'extend' || action.type === 'teach') {
     const ready = await evaluate(`!!document.querySelector(${JSON.stringify(selector(action))})`);
     if (!ready) {
@@ -187,6 +192,13 @@ async function click(action) {
     })()`);
     if (found) break;
     await sleep(80);
+  }
+  if (!found && action.type === 'talk') {
+    const night = await evaluate('window.hangzhou.present().night');
+    if (night) {
+      await evaluate(`window.hangzhou.act(${JSON.stringify({ type: 'talk', who: action.who })})`);
+      return;
+    }
   }
   if (!found) throw new Error(`missing button ${JSON.stringify(action)}`);
 }
@@ -344,7 +356,7 @@ try {
       night: document.querySelector('#office').getAttribute('data-night'),
     }))()`);
     if (report.nightText !== '夜里只能学技能，不能做需求单') throw new Error(report.nightText);
-    if (report.nightScene.scene !== 'day' || report.nightScene.night !== '1') throw new Error(JSON.stringify(report.nightScene));
+    if (report.nightScene.scene !== 'night' || report.nightScene.night !== '1') throw new Error(JSON.stringify(report.nightScene));
   }
   if (want('hangzhou-colleagues')) {
     report.colleagues = await record('hangzhou-colleagues', 'talk', colleagueActions(), { fps: 4, endHold: 8 });

@@ -58,12 +58,24 @@ export function cellCenter(nav, cell) {
   return [cell[0] * nav.cell + nav.cell / 2, cell[1] * nav.cell + nav.cell / 2];
 }
 
-// 走到空地没有效果。同事、电脑、书架、白板只打开现在已有的界面，不在这里改数值。
-export function effectFor(spot) {
+export function sceneFile({ night = false, boss = false } = {}) {
+  if (night) return 'night-384x216.png';
+  if (boss) return 'boss-384x216.png';
+  return 'day-384x216.png';
+}
+
+// 夜里同事已离开，白板也不开门。电脑和书架都打开学习。空地没有效果。
+export function effectFor(spot, { night = false } = {}) {
   if (!spot || !spot.kind || spot.kind === 'ground') return null;
+  if (night && (spot.kind === 'colleague' || spot.kind === 'board')) return null;
   if (spot.kind === 'colleague') return { type: 'open', who: spot.who };
-  if (spot.kind === 'computer') return { type: 'show', id: 'tickets' };
+  if (spot.kind === 'computer') return { type: 'show', id: night ? 'skills' : 'tickets', sit: true };
   if (spot.kind === 'shelf') return { type: 'show', id: 'skills' };
   if (spot.kind === 'board') return { type: 'show', id: 'whiteboard' };
   return null;
+}
+
+export function visibleSpots(spots, { night = false } = {}) {
+  if (!night) return spots;
+  return spots.filter(spot => spot.kind === 'computer' || spot.kind === 'shelf');
 }

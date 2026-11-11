@@ -1,7 +1,7 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from '../dota.mjs';
 import { NAV } from './nav.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
-import { cellCenter, effectFor, findPath, nearestWalkable } from './walk.mjs';
+import { cellCenter, effectFor, findPath, nearestWalkable, sceneFile, visibleSpots } from './walk.mjs';
 
 const app = document.querySelector('#app');
 
@@ -51,6 +51,7 @@ let route = [];
 let routeIndex = 0;
 let pending = null;
 let sawBoss = false;
+let sawNight = false;
 let walkerLoop = 0;
 let walkerStamp = 0;
 
@@ -227,7 +228,7 @@ function beginWalk(spot) {
   if (!cells) return;
   route = cells.map(cell => cellCenter(NAV, cell));
   routeIndex = 0;
-  pending = effectFor(spot);
+  pending = effectFor(spot, { night: present(state).night });
   seated = false;
   const here = route[0];
   if (route.length === 1 && Math.hypot(foot.x - here[0], foot.y - here[1]) < 6) {
@@ -252,7 +253,7 @@ function arrive() {
     render();
     return;
   }
-  if (effect.id === 'tickets') {
+  if (effect.sit) {
     foot.x = NAV.seat.stand[0];
     foot.y = NAV.seat.stand[1];
     seated = true;
@@ -302,8 +303,10 @@ function drawWalker() {
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, SCENE.w, SCENE.h);
-  const boss = present(state).bossOn;
-  if (seated && !route.length && !boss) {
+  const view = present(state);
+  if (seated && !route.length && !view.bossOn) {
+    // 夜景底图已经叠好显示器和坐姿，头发压在屏幕下沿。再画一张白天坐姿会重影。
+    if (view.night) return;
     ctx.drawImage(sitImage, NAV.seat.sit[0], NAV.seat.sit[1]);
     return;
   }
@@ -325,6 +328,17 @@ function drawWalker() {
 
 function placeForBoss() {
   const view = present(state);
+  if (view.night && !sawNight) {
+    sawNight = true;
+    foot.x = 82;
+    foot.y = 177;
+    seated = true;
+    facing = 'up';
+    route = [];
+    pending = null;
+  }
+  if (!view.night) sawNight = false;
+  if (view.night) return;
   if (view.bossOn && !sawBoss) {
     sawBoss = true;
     const cell = nearestWalkable(NAV, NAV.bossStand[0], NAV.bossStand[1]);
@@ -367,7 +381,7 @@ function talkBox(name, lines, buttons, onContinue) {
 
 function office(view, talk) {
   const boss = view.bossOn;
-  const actors = NAV.spots.map(spot => {
+  const actors = visibleSpots(NAV.spots, { night: view.night }).map(spot => {
     const person = spot.who ? view.colleagues.find(item => item.who === spot.who) : null;
     const speaking = spot.who && talkWho === spot.who;
     const attrs = {
@@ -393,10 +407,10 @@ function office(view, talk) {
     });
     return button;
   });
-  const scene = boss ? 'boss' : 'day';
+  const scene = view.night ? 'night' : (boss ? 'boss' : 'day');
   const picture = el('img', {
     class: 'scene',
-    src: `./art/${scene}-384x216.png`,
+    src: `./art/${sceneFile({ night: view.night, boss })}`,
     width: String(SCENE.w),
     height: String(SCENE.h),
     alt: '',
@@ -413,7 +427,6 @@ function office(view, talk) {
     'data-night': view.night ? '1' : '0',
   }, [
     picture,
-    view.night ? el('div', { class: 'dim', 'aria-hidden': 'true' }) : '',
     el('canvas', { id: 'walker', width: String(SCENE.w), height: String(SCENE.h) }),
     ...actors,
     talk || '',

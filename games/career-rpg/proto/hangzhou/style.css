@@ -4,6 +4,10 @@ body {
 
 #app { max-width: 1100px; }
 
+.actions {
+  position: static;
+}
+
 .stage {
   position: relative;
   width: min(100%, 768px);
@@ -33,14 +37,6 @@ body {
   image-rendering: pixelated;
   pointer-events: none;
   z-index: 2;
-}
-
-.stage .dim {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  background: rgba(12, 16, 32, 0.45);
-  pointer-events: none;
 }
 
 .stage .actor {
@@ -253,6 +249,5 @@ body {
 
 @media (max-width: 720px) {
   .slots { grid-template-columns: 1fr; }
-  .actions { position: static; }
   .stage .actor { min-height: 0; }
 }
