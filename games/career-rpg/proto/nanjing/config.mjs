@@ -24,15 +24,14 @@ export const INCIDENTS = Object.freeze([
   Object.freeze({ id: 'spam', title: '灌水机器人刷屏', omen: '版里全是灌水' }),
 ]);
 
-// stage 是这一步在第几段才算走对。-1 永远是弯路。skip 是问对人时少走的步数。
+// stage 是这一步在第几段才算走对。-1 永远是弯路。skip 是看对老用户的帖子时少走的步数。
 export const BOSS_OPTIONS = Object.freeze([
   Object.freeze({ id: 'monitor', label: '看监控', stage: -1 }),
-  Object.freeze({ id: 'posts', label: '看老用户的帖子', stage: 0 }),
+  Object.freeze({ id: 'posts', label: '看老用户的帖子', stage: 0, skip: 1 }),
   Object.freeze({ id: 'logs', label: '查日志', stage: 1 }),
   Object.freeze({ id: 'recent', label: '看最近上线', stage: -1 }),
   Object.freeze({ id: 'db', label: '查数据库连接', stage: -1 }),
   Object.freeze({ id: 'config', label: '改配置', stage: 2 }),
-  Object.freeze({ id: 'askQa', label: '问测试同事', stage: 0, skip: 1 }),
   Object.freeze({ id: 'rollback', label: '回滚', stage: -1, stopBleed: true }),
 ]);
 
@@ -64,7 +63,7 @@ export const CONFIG = Object.freeze({
   // 下面是文档没写死、用来对齐三种打法的数。
   dauBase: 8,
   dauStep: 4,
-  dauTargets: Object.freeze([24, 64, 110, 160]),
+  dauTargets: Object.freeze([30, 64, 110, 160]),
   dauDropRate: 0.2,
   incidentRep: 3,
   incidentDaily: 3,
@@ -74,9 +73,9 @@ export const CONFIG = Object.freeze({
   pmExtraRatio: 0.5,
   spawnMin: 1,
   spawnMax: 1,
-  deadlineMin: 3,
-  deadlineMax: 5,
-  difficultyTable: Object.freeze([1, 2, 2, 2, 3]),
+  deadlineMin: 4,
+  deadlineMax: 6,
+  difficultyTable: Object.freeze([1, 1, 2, 2, 3]),
   skillDiscount: 1,
   chanceCap: 90,
   tickets: TICKETS,
@@ -96,10 +95,9 @@ export const ENDINGS = Object.freeze({
 });
 
 export const PEOPLE = Object.freeze([
-  Object.freeze({ id: 'pm', name: '产品经理' }),
-  Object.freeze({ id: 'qa', name: '测试' }),
+  Object.freeze({ id: 'pm', name: '催上线的创始人' }),
   Object.freeze({ id: 'mod', name: '版主' }),
-  Object.freeze({ id: 'boss', name: '老板' }),
+  Object.freeze({ id: 'boss', name: '管事的创始人' }),
 ]);
 
 export const PM_TAILS = Object.freeze([
@@ -119,33 +117,10 @@ export const PM_TAILS = Object.freeze([
   '晚一天少一天量。',
   '这张不大，先上。',
   '出问题我帮你挡一下。',
-  '别等测试排期。',
+  '别再拖了。',
   '用户路径就差这一下。',
   '今天能看的就这张。',
   '上了才有数。',
-]);
-
-export const QA_TAILS = Object.freeze([
-  '我看一眼用例。',
-  '这周就帮这一张。',
-  '你点头我就补上。',
-  '省下的点留着救火。',
-  '不补的话，概率还是原来那样。',
-  '线上的坑我见过。',
-  '用例不用写长。',
-  '补完你再点上线。',
-  '这张我可以现在看。',
-  '你要是自己补，也是 1 点。',
-  '我只看待上线的。',
-  '灰度我帮不上，测试可以。',
-  '炸过一次的，用例里补一条。',
-  '先补难的那张。',
-  '下午我还有回归。',
-  '你把单子留在待上线就行。',
-  '我补完，概率数字会变。',
-  '别把没测的直接推给运营。',
-  '这周名额还在。',
-  '你忙排查的时候我也能补。',
 ]);
 
 export const MOD_TAILS = Object.freeze([

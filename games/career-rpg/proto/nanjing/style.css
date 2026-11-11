@@ -19,7 +19,8 @@
 }
 
 .person {
-  width: 108px;
+  width: auto;
+  min-width: 132px;
   text-align: center;
   padding: 8px;
 }
@@ -33,7 +34,6 @@
 }
 
 .person.pm .sq { background: #a16207; }
-.person.qa .sq { background: #2f5d50; }
 .person.mod .sq { background: #1d4e89; }
 .person.boss .sq { background: #8a3b12; }
 

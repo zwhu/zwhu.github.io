@@ -10,14 +10,13 @@ import {
   createGame,
   pmOffer,
   present,
-  qaOffer,
   weekTarget,
 } from './rules.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 
-export const GREEDY_METHOD = '每个行动点只做最急的事：首页登不上时按排查选项从上到下试，试过的不重复；否则事故先定位再修复；然后做期限最短的单，做完立刻单张上线。不补测试，不灰度，不攒批，不学习，不熬夜，不答应产品经理，不请测试同事，不复盘。没单可做才休息。';
-export const PLANNED_METHOD = '先学 fibjs / Node.js 和集成测试，第 2 周学敬畏上线。每周让测试同事免费补一张测试。难单补测试再上，当天到期的直接上。不急的单攒到两张一起上，学会灰度后上线走灰度。事故先定位再修复，只剩 1 点且会回滚时才回滚普通事故。Boss 先回滚止血，再问测试同事、改配置，然后复盘。日活过线后学 React / Webpack。';
+export const GREEDY_METHOD = '每个行动点只做最急的事：首页登不上时按排查选项从上到下试，试过的不重复；否则事故先定位再修复；然后做期限最短的单，做完立刻单张上线。不补测试，不灰度，不攒批，不学习，不熬夜，不答应催上线的创始人，不复盘。没单可做才休息。';
+export const PLANNED_METHOD = '先学 fibjs / Node.js 和集成测试，第 2 周学敬畏上线。难单自己补测试再上，当天到期的直接上。不急的单攒到两张一起上，学会灰度后上线走灰度。事故先定位再修复，只剩 1 点且会回滚时才回滚普通事故。Boss 先回滚止血，再看老用户的帖子、改配置，然后复盘。日活过线后学 React / Webpack。';
 export const RANDOM_METHOD = '每个行动点在当前合法操作里均匀随机，包括干活、补测试、上线、一起上、学习、休息、熬夜、事故、Boss 排查和复盘。随机数由种子单独引出。熬夜之后记一场没打过的 Dota，体力不返还。';
 
 function dueTickets(state) {
@@ -91,8 +90,8 @@ function choosePlanned(state, demo) {
     if (state.boss.bleed && state.learned.release && !state.boss.tried.includes('rollback')) {
       return { type: 'boss', option: 'rollback' };
     }
-    const ask = choices.find(choice => choice.id === 'askQa' && choice.correct);
-    if (ask) return { type: 'boss', option: 'askQa' };
+    const posts = choices.find(choice => choice.id === 'posts' && choice.correct);
+    if (posts) return { type: 'boss', option: 'posts' };
     const correct = choices.find(choice => choice.correct);
     if (correct) return { type: 'boss', option: correct.id };
     const next = choices.find(choice => !state.boss.tried.includes(choice.id)) || choices[0];
@@ -108,10 +107,6 @@ function choosePlanned(state, demo) {
     }
     return { type: 'fix', incidentId: incident.id };
   }
-
-  const qa = qaOffer(state);
-  if (qa && !state.talked.qa) return { type: 'talk', person: 'qa' };
-  if (qa && state.dialogue?.person === 'qa') return { type: 'qa-yes', ticketId: qa.ticketId };
 
   if (!state.learned.fibjs && canStudy(state, 'fibjs')) return { type: 'study', skill: 'fibjs' };
   if (state.tickets.some(ticket => ticket.dueIn <= 1)) return workTarget(state);
@@ -173,9 +168,6 @@ function legalActions(state) {
   const offer = pmOffer(state);
   if (offer && !state.talked.pm) actions.push({ type: 'talk', person: 'pm' });
   if (offer && (state.dialogue?.person === 'pm' || !state.talked.pm)) actions.push({ type: 'pm-yes' });
-  const qa = qaOffer(state);
-  if (qa && !state.talked.qa) actions.push({ type: 'talk', person: 'qa' });
-  if (qa && (state.dialogue?.person === 'qa' || !state.talked.qa)) actions.push({ type: 'qa-yes', ticketId: qa.ticketId });
   return actions;
 }
 

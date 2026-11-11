@@ -8,7 +8,6 @@ import {
   MOD_TAILS,
   PEOPLE,
   PM_TAILS,
-  QA_TAILS,
   SKILL_IDS,
 } from './config.mjs';
 
@@ -50,7 +49,6 @@ function blankStats() {
     rests: 0,
     overnights: 0,
     pmAccepts: 0,
-    qaHelps: 0,
     reputationLost: 0,
     dauGained: 0,
   };
@@ -61,7 +59,7 @@ function blankBoss() {
 }
 
 function blankTalked() {
-  return { pm: false, qa: false, mod: false, boss: false };
+  return { pm: false, mod: false, boss: false };
 }
 
 export function buildCost(ticket, state) {
@@ -113,17 +111,6 @@ export function pmOffer(state) {
   const after = shipChance(ticket, state, { rushed: true });
   const parts = shipDauParts(ticket, state, { rushed: true });
   return { ticketId: ticket.id, title: ticket.title, before, after, extra: parts.extra, total: parts.total };
-}
-
-export function qaOffer(state) {
-  if (state.phase !== 'play' || state.qaWeek === state.week) return null;
-  const ticket = state.tickets
-    .filter(item => item.status === 'ready' && !item.tested)
-    .sort((a, b) => b.difficulty - a.difficulty || a.id - b.id)[0];
-  if (!ticket) return null;
-  const before = shipChance(ticket, state);
-  const after = shipChance({ ...ticket, tested: true }, state);
-  return { ticketId: ticket.id, title: ticket.title, before, after };
 }
 
 export function bossChoices(state) {
@@ -252,7 +239,6 @@ export function createGame(seed, config = CONFIG) {
     boss: blankBoss(),
     talked: blankTalked(),
     dialogue: null,
-    qaWeek: 0,
     pmDay: 0,
     lastShip: null,
     log: [`第 1 周周一。日活 0，目标 ${resolved.dauTargets[0]}。口碑 ${resolved.reputationStart}。`],
@@ -300,41 +286,23 @@ function work(state, ticketId) {
   return withLog(next, note);
 }
 
-function testTicket(state, ticketId, by) {
+function testTicket(state, ticketId) {
   const ticket = state.tickets.find(item => item.id === ticketId && item.status === 'ready' && !item.tested);
   if (!ticket) return state;
-  const free = by === 'qa';
-  if (free && state.qaWeek === state.week) return state;
-  let ap = state.ap;
-  let reputation = state.reputation;
-  let stats = state.stats;
-  let bleed = 0;
-  if (!free) {
-    const spent = spendAp(state);
-    if (!spent) return state;
-    ap = spent.ap;
-    reputation = spent.reputation;
-    stats = spent.stats;
-    bleed = spent.bleed;
-  } else {
-    stats = { ...stats, qaHelps: stats.qaHelps + 1 };
-  }
-  const updated = { ...ticket, tested: true, testedBy: free ? 'qa' : 'self' };
+  const spent = spendAp(state);
+  if (!spent) return state;
+  const updated = { ...ticket, tested: true, testedBy: 'self' };
   const before = shipChance(ticket, state);
   const after = shipChance(updated, state);
-  const bleedNote = bleed ? `口碑 -${bleed}。` : '';
-  const note = free
-    ? `测试同事给「${ticket.title}」补了测试，省 1 点。事故概率 ${formatPct(before)} → ${formatPct(after)}。`
-    : `「${ticket.title}」补了测试。事故概率 ${formatPct(before)} → ${formatPct(after)}。${bleedNote}`;
+  const bleedNote = spent.bleed ? `口碑 -${spent.bleed}。` : '';
   return withLog({
     ...state,
-    ap,
-    reputation,
-    stats,
-    qaWeek: free ? state.week : state.qaWeek,
+    ap: spent.ap,
+    reputation: spent.reputation,
+    stats: spent.stats,
     dialogue: null,
     tickets: state.tickets.map(item => (item.id === ticketId ? updated : item)),
-  }, note);
+  }, `「${ticket.title}」补了测试。事故概率 ${formatPct(before)} → ${formatPct(after)}。${bleedNote}`);
 }
 
 function ship(state, ticketIds, opts = {}) {
@@ -410,7 +378,7 @@ function ship(state, ticketIds, opts = {}) {
   const chanceText = rushed
     ? `事故概率 ${formatPct(from)} → ${formatPct(chance)}`
     : `事故概率 ${formatPct(chance)}`;
-  let note = `${rushed ? '答应产品经理，' : ''}${titles}上线，${chanceText}，日活 +${dauGain}`;
+  let note = `${rushed ? '答应催上线的创始人，' : ''}${titles}上线，${chanceText}，日活 +${dauGain}`;
   if (extra) note += `（催上线多 ${extra}）`;
   if (canary) note += '，灰度，出事损失减半';
   note += '。';
@@ -596,10 +564,9 @@ function review(state, target) {
 }
 
 const BOSS_RIGHT = {
-  posts: '老用户写着登录卡，从昨天开始的。',
+  posts: '老用户写着登录卡，从昨天开始的。少走了一步。',
   logs: '日志里是数据库连接打满。',
   config: '连接池改好了，首页恢复。',
-  askQa: '测试同事说：别看监控了，日志里是连接数，直接改配置。少走了一步。',
 };
 
 function chooseBoss(state, optionId) {
@@ -713,7 +680,7 @@ function talkFailText(item, line) {
   const bits = [];
   if (!item.dauOk) bits.push(`日活 ${item.dau}，目标 ${item.target}`);
   if (!item.repOk) bits.push(`口碑 ${item.reputation}，低于 ${line}`);
-  return `第 ${item.week} 周周五，${bits.join('，')}，约谈。`;
+  return `第 ${item.week} 周周五，${bits.join('，')}，创始人约谈。`;
 }
 
 function applyFriday(state) {
@@ -760,7 +727,7 @@ function sleep(state) {
 export function applyAction(state, action) {
   if (!action || state.phase !== 'play') return state;
   if (action.type === 'work') return work(state, action.ticketId);
-  if (action.type === 'test') return testTicket(state, action.ticketId, 'self');
+  if (action.type === 'test') return testTicket(state, action.ticketId);
   if (action.type === 'ship') return ship(state, action.ticketIds, { canary: action.canary === true });
   if (action.type === 'study') return study(state, action.skill);
   if (action.type === 'rest') return rest(state);
@@ -774,7 +741,6 @@ export function applyAction(state, action) {
   if (action.type === 'boss') return chooseBoss(state, action.option);
   if (action.type === 'talk') return talk(state, action.person);
   if (action.type === 'pm-yes') return acceptPm(state);
-  if (action.type === 'qa-yes') return testTicket(state, action.ticketId, 'qa');
   if (action.type === 'close') return state.dialogue ? { ...state, dialogue: null } : state;
   return state;
 }
@@ -799,18 +765,6 @@ function colleagueScript(state, person) {
     }
     return ['做完就上，别压在本地。', tail];
   }
-  if (person === 'qa') {
-    const offer = qaOffer(state);
-    const tail = QA_TAILS[index % QA_TAILS.length];
-    if (offer) {
-      return [
-        `「${offer.title}」我可以补测试，省 1 个行动点。事故概率 ${formatPct(offer.before)} 到 ${formatPct(offer.after)}。`,
-        tail,
-      ];
-    }
-    if (state.qaWeek === state.week) return ['这周名额用过了。', tail];
-    return ['这周我能帮一张待上线的单补测试。', tail];
-  }
   if (person === 'mod') {
     if (state.week === 4 && state.day === 1) {
       return ['有人回帖说登录有点卡。', '首页出事前，一般都是这句。'];
@@ -826,7 +780,7 @@ function colleagueScript(state, person) {
     return ['好了没。', second];
   }
   if (state.day === state.config.daysPerWeek) {
-    return ['今天对日活和口碑。', '过不了线就要约谈。'];
+    return ['今天对日活和口碑。', '过不了线就要创始人约谈。'];
   }
   return [BOSS_TAILS[index % BOSS_TAILS.length], '我只看结果。'];
 }
@@ -937,7 +891,6 @@ export function present(state) {
       lines: colleagueScript(state, person.id),
     })),
     pm: pmOffer(state),
-    qa: qaOffer(state),
     boss: {
       started: state.boss.started,
       active: state.boss.active,

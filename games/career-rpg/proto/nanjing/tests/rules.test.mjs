@@ -113,8 +113,9 @@ test('testing, ci, and the pm rush change the visible accident chance', () => {
   assert.match(state.log[0], /30% → 45%/);
 });
 
-test('the qa colleague tests one ticket a week without spending an action', () => {
-  let state = createGame('qa', { lateRep: 0, incidentDaily: 0, bossNightRep: 0, dauTargets: [0, 0, 0, 0] });
+test('testing is done by yourself and costs one action', () => {
+  let state = createGame('selftest', { lateRep: 0, incidentDaily: 0, bossNightRep: 0, dauTargets: [0, 0, 0, 0] });
+  assert.equal(present(state).colleagues.some(person => person.id === 'qa'), false);
   const id = state.tickets[0].id;
   let guard = 0;
   while (state.tickets.some(item => item.id === id && item.status === 'build') && guard < 20) {
@@ -122,13 +123,12 @@ test('the qa colleague tests one ticket a week without spending an action', () =
     guard += 1;
   }
   const ap = state.ap;
-  state = applyAction(state, { type: 'qa-yes', ticketId: id });
-  assert.equal(state.ap, ap);
+  state = applyAction(state, { type: 'test', ticketId: id });
+  assert.equal(state.ap, ap - 1);
   const ticket = state.tickets.find(item => item.id === id);
-  assert.equal(ticket.testedBy, 'qa');
+  assert.equal(ticket.testedBy, 'self');
   assert.equal(shipChance(ticket, state), 15);
-  assert.match(state.log[0], /省 1 点/);
-  assert.equal(applyAction(state, { type: 'qa-yes', ticketId: id }), state);
+  assert.match(state.log[0], /补了测试/);
 });
 
 test('fibjs discounts front and back tickets and not data tickets', () => {
@@ -192,7 +192,7 @@ test('homepage login breaks on week 4 tuesday and a wrong step costs reputation'
   assert.equal(missed.boss.stage, 0);
   assert.equal(missed.reputation, tuesday.reputation - 5);
   assert.match(missed.log[0], /对不上/);
-  const asked = applyAction(missed, { type: 'boss', option: 'askQa' });
+  const asked = applyAction(missed, { type: 'boss', option: 'posts' });
   assert.equal(asked.boss.stage, 2);
   assert.match(asked.log[0], /少走了一步/);
 });
@@ -258,7 +258,8 @@ test('react waits until week 4 and colleagues say different things', () => {
 
   const view = present(createGame('talk'));
   const lines = view.colleagues.map(person => person.lines.join('|'));
-  assert.equal(new Set(lines).size, 4);
+  assert.equal(new Set(lines).size, 3);
+  assert.deepEqual(view.colleagues.map(person => person.name), ['催上线的创始人', '版主', '管事的创始人']);
   const tomorrow = until('talk', quiet, state => state.day === 2);
   for (const person of view.colleagues) {
     const next = present(tomorrow).colleagues.find(item => item.id === person.id);
@@ -291,7 +292,7 @@ test('the recorded lines win, lose, and show both boss paths', () => {
   const demo = play('n0', 'demo');
   assert.equal(demo.state.phase, 'won');
   const options = demo.actions.filter(action => action.type === 'boss').map(action => action.option);
-  assert.deepEqual(options.slice(0, 4), ['monitor', 'rollback', 'askQa', 'config']);
+  assert.deepEqual(options.slice(0, 4), ['monitor', 'rollback', 'posts', 'config']);
   let state = createGame('n0');
   for (const action of demo.actions) {
     state = applyAction(state, action);

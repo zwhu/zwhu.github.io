@@ -150,7 +150,6 @@ function selector(action) {
   if (action.type === 'review') return `[data-action="review"][data-target="${action.target}"]`;
   if (action.type === 'boss') return `[data-action="boss"][data-option="${action.option}"]`;
   if (action.type === 'talk') return `[data-person="${action.person}"]`;
-  if (action.type === 'qa-yes') return '[data-action="qa-yes"]';
   if (action.type === 'ship') {
     const canary = action.canary ? '1' : '0';
     if (action.ticketIds.length > 1) return `[data-action="ship-batch"][data-canary="${canary}"]`;
@@ -260,17 +259,17 @@ try {
     report.win = { file: win.file, frames: win.frames, ending: win.ending, extra: win.extra, seed: 'n0' };
   }
   if (want('alive')) {
-    const alive = await record('nanjing-alive', 'n1', play('n1', 'planned').actions, 5);
+    const alive = await record('nanjing-alive', 'n2', play('n2', 'planned').actions, 5);
     if (!alive.ending.includes('论坛还活着，你也还在') || !alive.ending.includes('口碑还没到 34') || alive.ending.includes('扛住了')) {
       throw new Error(`alive ending ${alive.ending}`);
     }
-    report.alive = { file: alive.file, frames: alive.frames, ending: alive.ending, seed: 'n1' };
+    report.alive = { file: alive.file, frames: alive.frames, ending: alive.ending, seed: 'n2' };
   }
   if (want('boss')) {
     const boss = await record('nanjing-boss', 'n0', play('n0', 'demo').actions, 3, true);
     const blob = boss.texts.join('\n');
     const shown = boss.onScreen.join('\n');
-    for (const phrase of ['产品经理', '30% 变成 45%', '30% → 45%', '首页登不上', '好了没', '对不上', '少走了一步']) {
+    for (const phrase of ['催上线的创始人', '30% 变成 45%', '30% → 45%', '首页登不上', '好了没', '对不上', '少走了一步']) {
       if (!blob.includes(phrase)) throw new Error(`boss video missed ${phrase}`);
       if (!shown.includes(phrase)) throw new Error(`boss video phrase off screen ${phrase}`);
     }

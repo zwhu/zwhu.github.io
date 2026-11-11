@@ -153,7 +153,7 @@ function status(view) {
     ]),
     ]),
     el('article', {}, [
-      el('div', {}, ['约谈']),
+      el('div', {}, ['创始人约谈']),
       el('strong', { id: 'talks' }, [`${view.talks}/${view.talksToFail}`]),
     ]),
   ]);
@@ -179,7 +179,6 @@ function people(view) {
       person.name,
     ]);
     if (person.id === 'pm' && view.pm) button.append(el('span', { class: 'badge' }, ['催上线']));
-    if (person.id === 'qa' && view.qa) button.append(el('span', { class: 'badge' }, ['可补测试']));
     if (person.id === 'boss' && view.boss.active) button.append(el('span', { class: 'badge', id: 'boss-nag' }, ['好了没']));
     if (person.id === 'mod' && view.week === 4 && view.day === 1) button.append(el('span', { class: 'badge' }, ['登录卡']));
     button.addEventListener('click', () => act({ type: 'talk', person: person.id }));
@@ -193,7 +192,7 @@ function bossCard(view) {
   const body = [
     el('h2', {}, ['首页登不上']),
     el('p', { id: 'boss-pressure' }, [
-      boss.bleed ? `老板站在后面：好了没。口碑每个行动点 -${boss.perAp}，现在 ${view.reputation}。` : '血先止住了。老板还在后面：好了没。',
+      boss.bleed ? `管事的创始人站在后面：好了没。口碑每个行动点 -${boss.perAp}，现在 ${view.reputation}。` : '血先止住了。管事的创始人还在后面：好了没。',
     ]),
   ];
   const buttons = boss.choices.map(choice => {
@@ -260,7 +259,7 @@ function ticketCard(view, ticket) {
     button.addEventListener('click', () => act({ type: 'work', ticketId: ticket.id }));
     body.push(button);
   } else {
-    const tested = ticket.tested ? (ticket.testedBy === 'qa' ? '测试同事省下 1 点 · ' : '已补测试 · ') : '';
+    const tested = ticket.tested ? '已补测试 · ' : '';
     body.push(el('p', { class: 'nums' }, [
       el('span', { class: 'prob', 'data-chance': ticket.chance }, [`${tested}事故概率 ${ticket.chanceText}`]),
       el('span', {}, [`出事口碑 -${ticket.damage}${view.canCanary ? `，灰度 -${ticket.damageCanary}` : ''}`]),
@@ -381,11 +380,6 @@ function dialogue(view) {
     yes.addEventListener('click', () => act({ type: 'pm-yes' }));
     choices.append(yes);
   }
-  if (person.id === 'qa' && view.qa) {
-    const yes = el('button', { type: 'button', 'data-action': 'qa-yes', 'data-id': view.qa.ticketId }, ['帮这张补测试']);
-    yes.addEventListener('click', () => act({ type: 'qa-yes', ticketId: view.qa.ticketId }));
-    choices.append(yes);
-  }
   const close = el('button', { type: 'button', 'data-action': 'close' }, ['先这样']);
   close.addEventListener('click', () => act({ type: 'close' }));
   choices.append(close);
@@ -402,7 +396,7 @@ function ending(view) {
   const skills = view.skills.filter(skill => skill.learned).map(skill => skill.name);
   if (view.failureSkill.learned) skills.push(view.failureSkill.name);
   const blocks = [
-    el('h2', {}, [won ? view.victoryTitle : '被约谈两次']),
+    el('h2', {}, [won ? view.victoryTitle : '被创始人约谈两次']),
     el('p', { id: 'ending-text' }, [won ? `${view.victoryTitle}。${view.victoryText}` : view.failReason]),
   ];
   if (view.reactText) blocks.push(el('p', { id: 'to-hangzhou' }, [view.reactText]));
@@ -410,7 +404,7 @@ function ending(view) {
     el('dt', {}, ['周次']), el('dd', {}, [`第 ${view.week} 周 ${view.dayName}`]),
     el('dt', {}, ['日活']), el('dd', {}, [`${view.dau} / 目标 ${view.dauTarget}`]),
     el('dt', {}, ['口碑']), el('dd', {}, [String(view.reputation)]),
-    el('dt', {}, ['约谈']), el('dd', {}, [`${view.talks}/${view.talksToFail}`]),
+    el('dt', {}, ['创始人约谈']), el('dd', {}, [`${view.talks}/${view.talksToFail}`]),
     el('dt', {}, ['上线']), el('dd', {}, [String(view.stats.shipped)]),
     el('dt', {}, ['事故']), el('dd', {}, [String(view.stats.incidents)]),
     el('dt', {}, ['延期']), el('dd', {}, [String(view.stats.lateCount)]),
