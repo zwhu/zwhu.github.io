@@ -117,8 +117,8 @@ test('sitting at the desk uses the sit sprite, not the front stand', () => {
   assert.equal(playerPoseKind({ sitting: false, moving: true }), 'walk');
   assert.equal(playerPoseKind({ sitting: false, moving: false }), 'stand');
   const seat = seatedSprite(table);
-  assert.equal(seat.pose, 'seat_back_on_chair');
-  assert.deepEqual(seat.origin, table.cells.player.seat_back_on_chair.origin);
+  assert.equal(seat.pose, 'seat_back_body');
+  assert.deepEqual(seat.origin, table.cells.player.seat_back_body.origin);
   assert.notDeepEqual(seat.origin, table.cells.player.stand_front.origin);
   console.log(`sit ${seat.pose} ${seat.origin.join(',')} stand_front ${seat.standOrigin.join(',')}`);
 });

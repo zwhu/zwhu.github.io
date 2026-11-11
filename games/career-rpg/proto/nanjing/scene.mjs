@@ -9,6 +9,10 @@ let grid = null;
 let walkData = null;
 let walkImage = null;
 let walkSprites = null;
+let doors = null;
+
+// 门的排序值用顶边 176。先于人物画，站在脚垫上的人不会被地垫盖住。
+const DOOR_SORT_Y = 176;
 
 const SPEED = 72;
 
@@ -34,14 +38,14 @@ function loadImage(src) {
   });
 }
 
-// 坐回自己工位时用坐姿格，不用正面站姿。
+// 坐回自己工位时用坐姿。椅背那一格把红衣服挡住了，用还能看见衣服的背面坐姿。
 export function seatedSprite(table) {
   const player = table?.cells?.player;
-  const seat = player?.seat_back_on_chair;
+  const seat = player?.seat_back_body;
   const stand = player?.stand_front;
   if (!seat || seat.empty || !Array.isArray(seat.origin)) return null;
   return {
-    pose: 'seat_back_on_chair',
+    pose: 'seat_back_body',
     origin: seat.origin,
     w: 56,
     h: 56,
@@ -59,11 +63,13 @@ export function poseName(id, pose) {
 
 export async function loadArt() {
   if (plates) return;
-  const [day, night, boss, sprites, table, walk, walkSheet] = await Promise.all([
+  const [day, night, boss, sprites, doorDay, doorNight, table, walk, walkSheet] = await Promise.all([
     loadImage('./art/day.png'),
     loadImage('./art/night.png'),
     loadImage('./art/boss.png'),
     loadImage('./art/sprites.png'),
+    loadImage('./art/door-day.png'),
+    loadImage('./art/door-night.png'),
     fetch('./art/sprites.meta.json').then(response => {
       if (!response.ok) throw new Error('sprites.meta.json');
       return response.json();
@@ -78,6 +84,7 @@ export async function loadArt() {
     }),
   ]);
   plates = { day, night, boss };
+  doors = { day: doorDay, night: doorNight };
   sheet = sprites;
   meta = table;
   walkData = walk;
@@ -235,6 +242,8 @@ export function drawScene(canvas, mode) {
   const plate = plates?.[mode];
   if (!plate) return;
   ctx.drawImage(plate, 0, 0);
+  const door = mode === 'night' ? doors?.night : doors?.day;
+  if (door) ctx.drawImage(door, 160, DOOR_SORT_Y);
   if (!sheet || !meta) return;
   for (const stamp of STAMPS[mode] || []) {
     const pose = poseName(stamp.id, stamp.pose);

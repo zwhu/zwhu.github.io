@@ -24,6 +24,10 @@ let dotaTick = 0;
 let dotaResult = 0;
 let deskPage = null;
 let doorChoice = false;
+let ticketIndex = 0;
+let seenLog = null;
+let toast = null;
+let toastTimer = 0;
 
 function clearDotaTimers() {
   if (dotaTick) clearInterval(dotaTick);
@@ -106,6 +110,11 @@ function start(seed) {
   dota = null;
   deskPage = null;
   doorChoice = false;
+  ticketIndex = 0;
+  seenLog = null;
+  toast = null;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = 0;
   state = createGame(next);
   render();
 }
@@ -189,7 +198,7 @@ function sceneStage(view) {
       style: spotStyle(spot),
     };
     if (spot.person) attrs['data-person'] = spot.person;
-    const button = el('button', attrs, spot.id === 'door' ? ['门'] : []);
+    const button = el('button', attrs);
     button.addEventListener('click', event => {
       event.stopPropagation();
       startWalk(spot.id, mode);
@@ -412,11 +421,11 @@ function dock(view) {
     play.addEventListener('click', () => playDota());
     bar.append(play);
   }
-  if (view.canSleep) {
+  if (view.canSleep || (view.phase === 'play' && view.overnightUsed)) {
     const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉']);
     sleep.addEventListener('click', () => {
       doorChoice = false;
-      act({ type: 'sleep' });
+      if (present(state).canSleep) act({ type: 'sleep' });
     });
     bar.append(sleep);
   }
@@ -432,18 +441,33 @@ function deskWindow(view) {
   const close = el('button', { type: 'button', 'data-action': 'close-desk' }, ['关闭']);
   close.addEventListener('click', () => { deskPage = null; render(); });
   const pages = el('div', { class: 'desk-tabs' }, [tickets, skills, close]);
-  const body = el('div', { class: deskPage === 'skills' ? 'stack' : 'stack', id: deskPage === 'skills' ? 'skills' : 'tickets' });
+  const body = el('div', { class: 'stack', id: deskPage === 'skills' ? 'skills' : 'tickets' });
   if (deskPage === 'skills') {
     body.append(...view.skills.map(skillCard), failureCard(view.failureSkill));
   } else {
     const cards = view.incidents.map(incident => incidentCard(view, incident)).concat(view.tickets.map(ticket => ticketCard(view, ticket)));
     if (!cards.length) body.append(el('p', { class: 'meta' }, ['今天没有单。']));
-    else body.append(...cards);
+    else {
+      ticketIndex = Math.min(ticketIndex, cards.length - 1);
+      body.append(cards[ticketIndex]);
+      if (cards.length > 1) {
+        const prev = el('button', { type: 'button', 'data-desk': 'prev' }, ['上一张']);
+        const next = el('button', { type: 'button', 'data-desk': 'next' }, ['下一张']);
+        prev.disabled = ticketIndex === 0;
+        next.disabled = ticketIndex === cards.length - 1;
+        prev.addEventListener('click', () => { ticketIndex -= 1; render(); });
+        next.addEventListener('click', () => { ticketIndex += 1; render(); });
+        body.append(el('div', { class: 'pager' }, [
+          prev,
+          el('span', {}, [`${ticketIndex + 1}/${cards.length}`]),
+          next,
+        ]));
+      }
+    }
     const extra = batchActions(view);
     if (extra) body.append(extra);
   }
-  const log = el('ol', { class: 'log', id: 'log' }, view.log.map(line => el('li', {}, [line])));
-  return el('section', { class: 'desk', id: 'desk', 'data-page': deskPage }, [pages, body, log]);
+  return el('section', { class: 'desk', id: 'desk', 'data-page': deskPage }, [pages, body]);
 }
 
 function doorPrompt() {
@@ -590,15 +614,53 @@ function paint() {
   if (canvas && stage) drawScene(canvas, stage.dataset.scene);
 }
 
+function syncToast(view) {
+  const line = view.log[0] || '';
+  if (seenLog === null) {
+    seenLog = line;
+    return;
+  }
+  if (line === seenLog) return;
+  seenLog = line;
+  toast = line;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast = null;
+    toastTimer = 0;
+    render();
+  }, 3000);
+}
+
+function nightNote(view) {
+  let text = toast;
+  if (!text) {
+    const open = view.incidents.filter(item => item.stage !== 'resolved');
+    text = open.length
+      ? `事故还在：${open.map(item => item.title).join('、')}。每天口碑 -${open[0].daily}`
+      : chanceBanner(view).textContent;
+  }
+  if (!text) return null;
+  return el('p', { class: 'ribbon night-note', id: 'chance-banner' }, [text]);
+}
+
 function render() {
   const view = present(state);
   const { stage, here } = sceneStage(view);
-  const top = el('div', { class: 'topbar' }, [meter(view), chanceBanner(view)]);
-  const incidents = incidentRibbon(view);
-  if (incidents) top.append(incidents);
+  const night = sceneMode(view) === 'night';
+  syncToast(view);
+  const top = el('div', { class: 'topbar' }, [meter(view)]);
+  if (deskPage) stage.dataset.open = 'desk';
+  else if (night) {
+    const note = nightNote(view);
+    if (note) stage.append(note);
+  } else {
+    top.append(chanceBanner(view));
+    const incidents = incidentRibbon(view);
+    if (incidents) top.append(incidents);
+  }
   stage.append(top);
   if (view.phase === 'play') {
-    const away = offstage(view, here);
+    const away = sceneMode(view) === 'night' ? null : offstage(view, here);
     if (away) stage.append(away);
     const boss = bossCard(view);
     if (boss) stage.append(boss);

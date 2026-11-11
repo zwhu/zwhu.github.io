@@ -275,24 +275,37 @@
 
 .meter, .ribbon {
   margin: 0;
-  padding: 2px 6px;
-  font-size: 12px;
-  line-height: 1.25;
+  padding: 3px 6px;
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 .meter {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 8px;
-  overflow-x: auto;
+  flex-wrap: wrap;
+  gap: 2px 8px;
 }
 
 .meter span { flex: 0 0 auto; white-space: nowrap; }
 
 .ribbon {
+  position: absolute;
+  left: 42%;
+  right: 4px;
+  top: 50px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+.topbar .ribbon + .ribbon { top: 76px; }
+
+.night-note {
+  z-index: 4;
+  top: 50px;
+  bottom: auto;
+  max-width: none;
 }
 
 .meter strong { font-variant-numeric: tabular-nums; }
@@ -313,16 +326,22 @@
 .desk {
   position: absolute;
   z-index: 6;
-  left: calc(46 * var(--u));
-  top: calc(34 * var(--u));
-  right: calc(6 * var(--u));
-  bottom: calc(42 * var(--u));
+  left: 8px;
+  top: 36px;
+  right: 84px;
+  bottom: 8px;
   display: flex;
   flex-direction: column;
-  gap: calc(4 * var(--u));
+  gap: 4px;
   margin: 0;
-  padding: calc(6 * var(--u));
+  padding: 6px;
   overflow: auto;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .desk-tabs { display: flex; flex-wrap: wrap; gap: calc(4 * var(--u)); }
@@ -331,13 +350,7 @@
 
 .desk .stack { gap: calc(4 * var(--u)); }
 .desk #tickets, .desk #skills { max-height: none; }
-.desk .card { margin: 0; padding: calc(4 * var(--u)) calc(6 * var(--u)); }
-.desk .log {
-  max-height: calc(52 * var(--u));
-  margin: 0;
-  padding-left: 1.2em;
-  overflow: auto;
-}
+.desk .card { margin: 0; padding: 6px 8px; }
 
 .door-prompt {
   left: auto;
@@ -400,25 +413,12 @@
   font-size: max(13px, calc(10 * var(--u)));
 }
 
-.hotspot[data-target="door"] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  background: rgba(249, 248, 241, 0.92);
-  color: #282622;
-  border: calc(1 * var(--u)) solid #282622;
-  font-size: max(13px, calc(11 * var(--u)));
-  font-weight: 650;
-}
-
 .desk button,
 .dock button,
 .stage .boss-card button,
 .stage .ending button,
 .stage .offstage button,
-.stage .dota button,
-.hotspot[data-target="door"] {
+.stage .dota button {
   min-height: 0;
   padding: calc(2 * var(--u)) calc(6 * var(--u));
   border: calc(1 * var(--u)) solid #282622;
@@ -434,8 +434,7 @@
 .stage .boss-card button:hover,
 .stage .ending button:hover,
 .stage .offstage button:hover,
-.stage .dota button:hover,
-.hotspot[data-target="door"]:hover {
+.stage .dota button:hover {
   background: #282622;
   color: #fffef8;
 }
@@ -459,6 +458,5 @@
   #app { padding-left: 0; padding-right: 0; }
   .screen { max-width: none; }
   #seed-form { padding: 0 8px; }
-  .desk { top: 28px; bottom: 26px; left: 40px; }
-  .desk .log { max-height: 2.4em; }
+  .desk { top: 58px; left: 4px; right: 84px; bottom: 4px; }
 }
