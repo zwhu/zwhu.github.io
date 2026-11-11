@@ -244,7 +244,7 @@ async function assertHits(width, height) {
   await evaluate(`(() => { while (window.nanjing.present().ap > 0) window.nanjing.act({ type: 'rest' }); return true; })()`);
   const slept = await evaluate(check);
   if (slept.length) throw new Error(`${width}×${height} after sleep\n${slept.join('\n')}`);
-  const bar = await evaluate(`getComputedStyle(document.querySelector('.screen > .actions')).position`);
+  const bar = await evaluate(`(() => { const node = document.querySelector('.dock'); return node ? getComputedStyle(node).position : ''; })()`);
   if (bar === 'sticky' || bar === 'fixed') throw new Error(`${width} action bar is ${bar}`);
 }
 

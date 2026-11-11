@@ -93,7 +93,7 @@ export function bindWalk(hooks) {
 
 export function sceneMode(view) {
   if (view.phase === 'play' && view.boss.active) return 'boss';
-  if (view.ap === 0) return 'night';
+  if (view.ap === 0 || view.overnightUsed) return 'night';
   return 'day';
 }
 

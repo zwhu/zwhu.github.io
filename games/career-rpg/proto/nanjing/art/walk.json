@@ -195,6 +195,18 @@
     "effect": {
      "kind": "visit"
     }
+   },
+   "water": {
+    "name": "饮水机",
+    "hit": [6, 34, 38, 102],
+    "tile": [6, 16],
+    "effect": { "kind": "water" }
+   },
+   "door": {
+    "name": "门口",
+    "hit": [160, 176, 224, 216],
+    "tile": [23, 24],
+    "effect": { "kind": "door" }
    }
   },
   "night": {
@@ -276,6 +288,18 @@
     "effect": {
      "kind": "visit"
     }
+   },
+   "water": {
+    "name": "饮水机",
+    "hit": [6, 34, 38, 102],
+    "tile": [6, 16],
+    "effect": { "kind": "water" }
+   },
+   "door": {
+    "name": "门口",
+    "hit": [160, 176, 224, 216],
+    "tile": [23, 24],
+    "effect": { "kind": "door" }
    }
   },
   "boss": {
@@ -439,6 +463,18 @@
     "effect": {
      "kind": "visit"
     }
+   },
+   "water": {
+    "name": "饮水机",
+    "hit": [6, 34, 38, 102],
+    "tile": [6, 16],
+    "effect": { "kind": "water" }
+   },
+   "door": {
+    "name": "门口",
+    "hit": [160, 176, 224, 216],
+    "tile": [23, 24],
+    "effect": { "kind": "door" }
    }
   }
  }

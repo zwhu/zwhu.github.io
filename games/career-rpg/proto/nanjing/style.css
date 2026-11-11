@@ -253,6 +253,199 @@
 
 #app { padding-bottom: 24px; }
 
+.topbar {
+  position: absolute;
+  z-index: 4;
+  left: 4px;
+  right: 4px;
+  top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.meter, .ribbon, .desk, .dock, .stage .boss-card, .stage .ending, .stage .offstage {
+  background: rgba(249, 248, 241, 0.92);
+  color: #282622;
+  border: calc(2 * var(--u)) solid #282622;
+  box-shadow: inset 0 0 0 calc(1 * var(--u)) #fffef8, inset 0 0 0 calc(2 * var(--u)) #282622;
+  font-size: max(13px, calc(10 * var(--u)));
+  line-height: 1.35;
+}
+
+.meter, .ribbon {
+  margin: 0;
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.meter {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.meter span { flex: 0 0 auto; white-space: nowrap; }
+
+.ribbon {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meter strong { font-variant-numeric: tabular-nums; }
+
+.stage .offstage {
+  position: absolute;
+  z-index: 4;
+  left: calc(4 * var(--u));
+  top: calc(36 * var(--u));
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(3 * var(--u));
+  max-width: calc(150 * var(--u));
+  margin: 0;
+  padding: calc(3 * var(--u));
+}
+
+.desk {
+  position: absolute;
+  z-index: 6;
+  left: calc(46 * var(--u));
+  top: calc(34 * var(--u));
+  right: calc(6 * var(--u));
+  bottom: calc(42 * var(--u));
+  display: flex;
+  flex-direction: column;
+  gap: calc(4 * var(--u));
+  margin: 0;
+  padding: calc(6 * var(--u));
+  overflow: auto;
+}
+
+.desk-tabs { display: flex; flex-wrap: wrap; gap: calc(4 * var(--u)); }
+.desk[data-page="tickets"] [data-desk="tickets"],
+.desk[data-page="skills"] [data-desk="skills"] { background: #282622; color: #fffef8; }
+
+.desk .stack { gap: calc(4 * var(--u)); }
+.desk #tickets, .desk #skills { max-height: none; }
+.desk .card { margin: 0; padding: calc(4 * var(--u)) calc(6 * var(--u)); }
+.desk .log {
+  max-height: calc(52 * var(--u));
+  margin: 0;
+  padding-left: 1.2em;
+  overflow: auto;
+}
+
+.door-prompt {
+  left: auto;
+  top: auto;
+  right: calc(8 * var(--u));
+  bottom: calc(46 * var(--u));
+  width: calc(168 * var(--u));
+  height: auto;
+  overflow: visible;
+}
+
+.dock {
+  position: absolute;
+  z-index: 5;
+  right: calc(4 * var(--u));
+  bottom: calc(4 * var(--u));
+  display: flex;
+  flex-direction: column;
+  gap: calc(3 * var(--u));
+  margin: 0;
+  padding: calc(3 * var(--u));
+  background: rgba(249, 248, 241, 0.92);
+}
+
+.stage .boss-card {
+  position: absolute;
+  z-index: 5;
+  left: calc(8 * var(--u));
+  right: calc(78 * var(--u));
+  bottom: calc(42 * var(--u));
+  max-height: calc(110 * var(--u));
+  margin: 0;
+  overflow: auto;
+}
+
+.stage .ending {
+  position: absolute;
+  z-index: 7;
+  left: calc(8 * var(--u));
+  right: calc(8 * var(--u));
+  top: calc(32 * var(--u));
+  bottom: calc(8 * var(--u));
+  margin: 0;
+  overflow: auto;
+}
+
+.stage .dota {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  padding: calc(8 * var(--u));
+  background: rgba(249, 248, 241, 0.94);
+}
+
+.stage .dota-panel {
+  width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  color: #282622;
+  font-size: max(13px, calc(10 * var(--u)));
+}
+
+.hotspot[data-target="door"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: rgba(249, 248, 241, 0.92);
+  color: #282622;
+  border: calc(1 * var(--u)) solid #282622;
+  font-size: max(13px, calc(11 * var(--u)));
+  font-weight: 650;
+}
+
+.desk button,
+.dock button,
+.stage .boss-card button,
+.stage .ending button,
+.stage .offstage button,
+.stage .dota button,
+.hotspot[data-target="door"] {
+  min-height: 0;
+  padding: calc(2 * var(--u)) calc(6 * var(--u));
+  border: calc(1 * var(--u)) solid #282622;
+  border-radius: 0;
+  background: #fffef8;
+  color: #282622;
+  font-size: max(13px, calc(10 * var(--u)));
+  line-height: 1.3;
+}
+
+.desk button:hover,
+.dock button:hover,
+.stage .boss-card button:hover,
+.stage .ending button:hover,
+.stage .offstage button:hover,
+.stage .dota button:hover,
+.hotspot[data-target="door"]:hover {
+  background: #282622;
+  color: #fffef8;
+}
+
+#seed-form {
+  max-width: 768px;
+  margin: 12px auto 0;
+  justify-content: center;
+}
+
 @media (max-width: 720px) {
   #app { padding-left: 8px; padding-right: 8px; }
   .screen .status { display: grid; grid-template-columns: 1fr 1fr; }
@@ -260,4 +453,12 @@
   .hotspot,
   .talk .caret,
   .offstage button { min-height: 0; }
+}
+
+@media (max-width: 480px) {
+  #app { padding-left: 0; padding-right: 0; }
+  .screen { max-width: none; }
+  #seed-form { padding: 0 8px; }
+  .desk { top: 28px; bottom: 26px; left: 40px; }
+  .desk .log { max-height: 2.4em; }
 }

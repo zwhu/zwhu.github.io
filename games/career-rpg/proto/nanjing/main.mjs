@@ -22,6 +22,8 @@ let state = createGame(readSeed());
 let dota = null;
 let dotaTick = 0;
 let dotaResult = 0;
+let deskPage = null;
+let doorChoice = false;
 
 function clearDotaTimers() {
   if (dotaTick) clearInterval(dotaTick);
@@ -46,11 +48,10 @@ function showDotaResult() {
   dotaResult = setTimeout(closeDota, 1800);
 }
 
-function openDota() {
-  if (dota) return;
-  const next = applyAction(state, { type: 'overnight' });
-  if (next === state) return;
-  state = next;
+function playDota() {
+  if (dota || !state.dotaPending) return;
+  deskPage = null;
+  doorChoice = false;
   dota = { match: createMatch(state.seed, state.rng), mode: 'play' };
   render();
   dotaTick = setInterval(() => {
@@ -91,12 +92,6 @@ function pct(value) {
   return `${text}%`;
 }
 
-function pips(filled, total) {
-  const wrap = el('span', { class: 'pips', 'aria-hidden': 'true' });
-  for (let i = 0; i < total; i += 1) wrap.append(el('i', { class: i < filled ? 'pip on' : 'pip' }));
-  return wrap;
-}
-
 function act(action) {
   state = applyAction(state, action);
   render();
@@ -109,11 +104,13 @@ function start(seed) {
   history.replaceState(null, '', url);
   clearDotaTimers();
   dota = null;
+  deskPage = null;
+  doorChoice = false;
   state = createGame(next);
   render();
 }
 
-function header(view) {
+function seedBar(view) {
   const form = el('form', { id: 'seed-form' }, [
     el('label', { for: 'seed-input' }, ['种子']),
     el('input', { id: 'seed-input', name: 'seed', value: view.seed, autocomplete: 'off', maxlength: '64' }),
@@ -123,49 +120,24 @@ function header(view) {
     event.preventDefault();
     start(form.seed.value);
   });
-  return el('header', {}, [
-    el('div', {}, [
-      el('h1', {}, ['南京上线']),
-      el('p', { class: 'when', id: 'when' }, [`第 ${view.week} 周 · ${view.dayName}`]),
-    ]),
-    form,
-  ]);
+  return form;
 }
 
-function status(view) {
-  const apMax = Math.max(view.ap, 3);
-  return el('section', { class: 'status' }, [
-    el('article', {}, [
-      el('div', {}, ['行动点']),
-      el('strong', { id: 'ap' }, [String(view.ap)]),
-      document.createTextNode(' '),
-      pips(view.ap, apMax),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['体力']),
-      el('strong', { id: 'stamina' }, [String(view.stamina)]),
-      document.createTextNode(' '),
-      pips(view.stamina, view.staminaMax),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['日活']),
-      el('strong', { id: 'dau' }, [String(view.dau)]),
-      el('div', {}, ['本周目标 ', el('strong', { id: 'dau-target' }, [String(view.dauTarget)])]),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['口碑']),
+function meter(view) {
+  return el('div', { class: 'meter' }, [
+    el('span', { id: 'when' }, [`第 ${view.week} 周 ${view.dayName}`]),
+    el('span', {}, ['行动 ', el('strong', { id: 'ap' }, [String(view.ap)])]),
+    el('span', {}, ['体力 ', el('strong', { id: 'stamina' }, [String(view.stamina)]), '/', String(view.staminaMax)]),
+    el('span', {}, ['日活 ', el('strong', { id: 'dau' }, [String(view.dau)]), '/', el('strong', { id: 'dau-target' }, [String(view.dauTarget)])]),
+    el('span', {}, [
+      '口碑 ',
       el('strong', { id: 'rep' }, [String(view.reputation)]),
-      el('div', {}, [
-      '周五线 ',
+      ' 线 ',
       el('strong', { id: 'rep-line' }, [String(view.reputationLine)]),
-      ' · 好结局 ',
+      ' 好 ',
       el('strong', { id: 'good-line' }, [String(view.goodReputation)]),
     ]),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['创始人约谈']),
-      el('strong', { id: 'talks' }, [`${view.talks}/${view.talksToFail}`]),
-    ]),
+    el('span', {}, ['约谈 ', el('strong', { id: 'talks' }, [`${view.talks}/${view.talksToFail}`])]),
   ]);
 }
 
@@ -179,7 +151,16 @@ function chanceBanner(view) {
     if (last.canary) text += ' · 灰度，损失减半';
     text += last.incident ? ` · 炸了：${last.incident}，口碑 -${last.incidentLoss}` : ' · 没炸';
   }
-  return el('p', { class: 'banner', id: 'chance-banner', 'data-from': last ? last.from : '', 'data-to': last ? last.to : '' }, [text]);
+  return el('p', { class: 'ribbon', id: 'chance-banner', 'data-from': last ? last.from : '', 'data-to': last ? last.to : '' }, [text]);
+}
+
+function incidentRibbon(view) {
+  const open = view.incidents.filter(item => item.stage !== 'resolved');
+  if (!open.length) return null;
+  const daily = open[0].daily;
+  return el('p', { class: 'ribbon', id: 'incident-banner' }, [
+    `事故还在：${open.map(item => item.title).join('、')}。每天口碑 -${daily}`,
+  ]);
 }
 
 function spotStyle(spot) {
@@ -208,7 +189,7 @@ function sceneStage(view) {
       style: spotStyle(spot),
     };
     if (spot.person) attrs['data-person'] = spot.person;
-    const button = el('button', attrs);
+    const button = el('button', attrs, spot.id === 'door' ? ['门'] : []);
     button.addEventListener('click', event => {
       event.stopPropagation();
       startWalk(spot.id, mode);
@@ -370,7 +351,8 @@ function failureCard(skill) {
   ].filter(Boolean));
 }
 
-function actionBar(view) {
+function batchActions(view) {
+  if (!view.batch && !(view.boss.resolved && !view.boss.reviewed)) return null;
   const bar = el('div', { class: 'actions' });
   if (view.batch) {
     const batch = el('button', {
@@ -395,22 +377,87 @@ function actionBar(view) {
     review.addEventListener('click', () => act({ type: 'review', target: 'boss' }));
     bar.append(review);
   }
+  return bar;
+}
+
+function useDoor() {
+  const view = present(state);
+  if (view.canOvernight && view.canSleep) {
+    doorChoice = true;
+    render();
+    return;
+  }
+  doorChoice = false;
+  if (view.canSleep) act({ type: 'sleep' });
+  else if (view.canOvernight) act({ type: 'overnight' });
+}
+
+function dock(view) {
+  const bar = el('div', { class: 'dock' });
   if (view.canRest) {
-    const rest = el('button', { type: 'button', 'data-action': 'rest' }, [`休息 +${CONFIG.restStamina} 体力`]);
+    const rest = el('button', { type: 'button', 'data-action': 'rest' }, ['休息']);
     rest.addEventListener('click', () => act({ type: 'rest' }));
     bar.append(rest);
   }
   if (view.canOvernight) {
-    const night = el('button', { type: 'button', 'data-action': 'overnight' }, [`${CONFIG.overnightName} +${CONFIG.overnightAp} 点 / -${CONFIG.overnightStaminaCost} 体力，赢了 +${CONFIG.dotaWinStamina}`]);
-    night.addEventListener('click', () => openDota());
+    const night = el('button', { type: 'button', 'data-action': 'overnight' }, ['进入夜里']);
+    night.addEventListener('click', () => {
+      doorChoice = false;
+      act({ type: 'overnight' });
+    });
     bar.append(night);
   }
+  if (state.dotaPending) {
+    const play = el('button', { type: 'button', 'data-action': 'play-dota' }, ['打 Dota']);
+    play.addEventListener('click', () => playDota());
+    bar.append(play);
+  }
   if (view.canSleep) {
-    const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉，进入下一天']);
-    sleep.addEventListener('click', () => act({ type: 'sleep' }));
+    const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉']);
+    sleep.addEventListener('click', () => {
+      doorChoice = false;
+      act({ type: 'sleep' });
+    });
     bar.append(sleep);
   }
   return bar;
+}
+
+function deskWindow(view) {
+  if (!deskPage || view.dialogue) return null;
+  const tickets = el('button', { type: 'button', 'data-desk': 'tickets' }, ['需求单']);
+  const skills = el('button', { type: 'button', 'data-desk': 'skills' }, ['学习']);
+  tickets.addEventListener('click', () => { deskPage = 'tickets'; render(); });
+  skills.addEventListener('click', () => { deskPage = 'skills'; render(); });
+  const close = el('button', { type: 'button', 'data-action': 'close-desk' }, ['关闭']);
+  close.addEventListener('click', () => { deskPage = null; render(); });
+  const pages = el('div', { class: 'desk-tabs' }, [tickets, skills, close]);
+  const body = el('div', { class: deskPage === 'skills' ? 'stack' : 'stack', id: deskPage === 'skills' ? 'skills' : 'tickets' });
+  if (deskPage === 'skills') {
+    body.append(...view.skills.map(skillCard), failureCard(view.failureSkill));
+  } else {
+    const cards = view.incidents.map(incident => incidentCard(view, incident)).concat(view.tickets.map(ticket => ticketCard(view, ticket)));
+    if (!cards.length) body.append(el('p', { class: 'meta' }, ['今天没有单。']));
+    else body.append(...cards);
+    const extra = batchActions(view);
+    if (extra) body.append(extra);
+  }
+  const log = el('ol', { class: 'log', id: 'log' }, view.log.map(line => el('li', {}, [line])));
+  return el('section', { class: 'desk', id: 'desk', 'data-page': deskPage }, [pages, body, log]);
+}
+
+function doorPrompt() {
+  if (!doorChoice) return null;
+  const night = el('button', { type: 'button', 'data-action': 'overnight' }, ['进入夜里']);
+  night.addEventListener('click', () => { doorChoice = false; act({ type: 'overnight' }); });
+  const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉']);
+  sleep.addEventListener('click', () => { doorChoice = false; act({ type: 'sleep' }); });
+  const close = el('button', { type: 'button', 'data-action': 'close-door' }, ['先不走']);
+  close.addEventListener('click', () => { doorChoice = false; render(); });
+  return el('section', { class: 'desk door-prompt', id: 'door-prompt' }, [
+    el('p', {}, ['门口']),
+    el('div', { class: 'actions' }, [night, sleep, close]),
+  ]);
 }
 
 function dialogue(view) {
@@ -545,36 +592,28 @@ function paint() {
 
 function render() {
   const view = present(state);
-  const parts = [header(view)];
+  const { stage, here } = sceneStage(view);
+  const top = el('div', { class: 'topbar' }, [meter(view), chanceBanner(view)]);
+  const incidents = incidentRibbon(view);
+  if (incidents) top.append(incidents);
+  stage.append(top);
   if (view.phase === 'play') {
-    const { stage, here } = sceneStage(view);
-    const boss = bossCard(view);
-    const tickets = view.incidents.map(incident => incidentCard(view, incident)).concat(view.tickets.map(ticket => ticketCard(view, ticket)));
-    if (!tickets.length) tickets.push(el('p', { class: 'meta' }, ['今天没有单。']));
-    const screen = el('div', { class: 'screen' }, [
-      stage,
-      el('div', { class: 'hud' }, [status(view)]),
-      chanceBanner(view),
-    ]);
     const away = offstage(view, here);
-    if (away) screen.append(away);
-    if (boss) screen.append(boss);
-    screen.append(actionBar(view));
-    screen.append(el('div', { class: 'board' }, [
-      el('section', {}, [el('h2', {}, ['需求单']), el('div', { class: 'stack', id: 'tickets' }, tickets)]),
-      el('section', {}, [
-        el('h2', {}, ['学习']),
-        el('div', { class: 'stack', id: 'skills' }, view.skills.map(skillCard).concat(failureCard(view.failureSkill))),
-      ]),
-    ]));
-    parts.push(screen);
+    if (away) stage.append(away);
+    const boss = bossCard(view);
+    if (boss) stage.append(boss);
+    const desk = deskWindow(view);
+    if (desk) stage.append(desk);
+    const prompt = doorPrompt();
+    if (prompt) stage.append(prompt);
+    stage.append(dock(view));
   } else {
-    const { stage } = sceneStage(view);
-    parts.push(el('div', { class: 'screen' }, [stage, ending(view)]));
+    const done = ending(view);
+    done.append(el('ol', { class: 'log', id: 'log' }, view.log.map(line => el('li', {}, [line]))));
+    stage.append(done);
   }
-  parts.push(el('ol', { class: 'log', id: 'log' }, view.log.map(line => el('li', {}, [line]))));
-  if (dota) parts.push(dotaOverlay());
-  app.replaceChildren(...parts);
+  if (dota) stage.append(dotaOverlay());
+  app.replaceChildren(el('div', { class: 'screen' }, [stage]), seedBar(view));
   paint();
 }
 
@@ -597,11 +636,33 @@ bindWalk({
   onArrive(effect) {
     if (!effect) return;
     if (effect.kind === 'talk') {
+      deskPage = null;
+      doorChoice = false;
       act({ type: 'talk', person: effect.person });
       return;
     }
-    const target = effect.kind === 'shelf' ? '#skills' : (effect.kind === 'computer' || effect.kind === 'seat' ? '#tickets' : '');
-    if (target) document.querySelector(target)?.scrollIntoView({ block: 'nearest' });
+    if (effect.kind === 'water') {
+      act({ type: 'rest' });
+      return;
+    }
+    if (effect.kind === 'door') {
+      useDoor();
+      return;
+    }
+    if (effect.kind === 'shelf') {
+      deskPage = 'skills';
+      doorChoice = false;
+      render();
+      return;
+    }
+    if (effect.kind === 'computer' || effect.kind === 'seat') {
+      doorChoice = false;
+      if (state.dotaPending) playDota();
+      else {
+        deskPage = 'tickets';
+        render();
+      }
+    }
   },
   paint,
 });
