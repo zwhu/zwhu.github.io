@@ -135,7 +135,47 @@ function week4Extract(state) {
   return null;
 }
 
+function todayKey(state) {
+  return state.week * 10 + state.day;
+}
+
+function sisterTaught(state) {
+  return state.sisterWeek === state.week ? state.sisterTeaches : 0;
+}
+
+function extendTarget(state) {
+  if (state.plusWeek === state.week || state.talked.plus === todayKey(state)) return null;
+  if (state.day >= 5) return null;
+  const open = state.tickets.filter(ticket => !ticket.late && slackOf(state, ticket) < 0);
+  if (!open.length) return null;
+  open.sort((a, b) => slackOf(state, a) - slackOf(state, b) || a.dueIn - b.dueIn || a.id - b.id);
+  return open[0];
+}
+
+function colleagueAction(state) {
+  const key = todayKey(state);
+  if (state.day === 3 && state.talked.tea !== key) return { type: 'talk', who: 'tea' };
+  if (state.neighborChats < 3 && state.talked.neighbor !== key) return { type: 'talk', who: 'neighbor' };
+  const extend = extendTarget(state);
+  if (extend) return { type: 'extend', ticketId: extend.id };
+  if (
+    state.week < 4
+    && !state.night
+    && state.ap > 0
+    && sisterTaught(state) < 1
+    && state.talked.sister !== key
+    && state.debt >= 16
+    && !state.learned.babel
+    && minFeasibleSlack(state) >= 2
+  ) {
+    return { type: 'teach' };
+  }
+  return null;
+}
+
 function week4(state) {
+  const social = colleagueAction(state);
+  if (social) return social;
   const placed = placeAction(state);
   if (placed) return placed;
   if (state.ap === 0) return { type: 'sleep' };
@@ -170,6 +210,8 @@ export function greedyAction(state) {
 export function plannedAction(state) {
   if (state.phase !== 'play') return null;
   if (state.dotaPending) return { type: 'dota', won: false };
+  const social = colleagueAction(state);
+  if (social) return social;
   if (state.week >= 4 || state.bossOn) return week4(state);
   if (state.ap === 0) {
     const canNight = !state.overnightUsed && !state.night && state.stamina >= 6;
@@ -205,6 +247,18 @@ export function legalActions(state) {
   if (state.phase !== 'play') return [];
   if (state.dotaPending) return [{ type: 'dota', won: false }, { type: 'dota', won: true }];
   const actions = [];
+  const key = state.week * 10 + state.day;
+  if (state.talked.plus !== key && state.plusWeek !== state.week) {
+    for (const ticket of state.tickets) {
+      if (!ticket.late) actions.push({ type: 'extend', ticketId: ticket.id });
+    }
+  }
+  for (const who of ['plus', 'sister', 'neighbor', 'tea']) {
+    if (state.talked[who] !== key) actions.push({ type: 'talk', who });
+  }
+  if (!state.night && state.ap > 0 && state.talked.sister !== key && (state.sisterWeek === state.week ? state.sisterTeaches : 0) < 2) {
+    actions.push({ type: 'teach' });
+  }
   if (state.ap > 0 && !state.night) {
     for (const ticket of state.tickets) actions.push({ type: 'work', ticketId: ticket.id });
     for (const field of FIELD_IDS) {
@@ -289,9 +343,9 @@ export function runStrategy(strategy, seeds = SEEDS, config) {
 }
 
 const METHODS = {
-  greedy: '每个行动点硬写期限最短的未延期单（期限相同则难度高的优先）。做不完也继续硬写。不抽模块，不学技能，不熬夜。夜里或没有未延期的单就休息。行动点用完就睡觉。',
-  planned: '先保期限还来得及的单。有余量就先学业务和 Webpack，再抽能覆盖 Boss 字段、以及下一周字段的模块；设计模式要抽的种类不少于 3 种才学，技术债到 16 就学 Babel。模块抽完前，如果体力还够，收工后熬夜学技能（先还债，否则先把抽模块从 3 点降到 2 点）。第 4 周把模块拼上白板，按期做完五张大单；缺的字段只在省下的点数够付硬写时才补抽。模拟里熬夜后的 Dota 按没打过算。',
-  random: '每个行动点在当前能点的按钮里均匀随机选一个，包括硬写、抽模块、学习、休息、熬夜和拼白板。行动点用完就睡觉。熬夜后的 Dota 输赢也随机。',
+  greedy: '每个行动点硬写期限最短的未延期单（期限相同则难度高的优先）。做不完也继续硬写。不抽模块，不学技能，不熬夜，不找同事。夜里或没有未延期的单就休息。行动点用完就睡觉。',
+  planned: '先保期限还来得及的单。每天先处理同事：周三喝下午茶，Webpack 没聊满 3 天就听一句，工作日里有单子确定来不及做完才让 +1 延一天，技术债到 16、Babel 还没学会、而且余量够，才花 1 点教师妹，Boss 周不再教。有余量就先学业务和 Webpack，再抽能覆盖 Boss 字段、以及下一周字段的模块；设计模式要抽的种类不少于 3 种才学，技术债到 16 就学 Babel。模块抽完前，如果体力还够，收工后熬夜学技能（先还债，否则先把抽模块从 3 点降到 2 点）。第 4 周把模块拼上白板，按期做完五张大单；缺的字段只在省下的点数够付硬写时才补抽。模拟里熬夜后的 Dota 按没打过算。',
+  random: '每个行动点在当前能点的按钮里均匀随机选一个，包括硬写、抽模块、学习、休息、熬夜、拼白板、找同事说话、让 +1 延期限和教师妹。行动点用完就睡觉。熬夜后的 Dota 输赢也随机。',
 };
 
 export function runReport(seeds = SEEDS, config) {

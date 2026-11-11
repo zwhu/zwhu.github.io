@@ -9,6 +9,7 @@ function readSeed() {
 }
 
 let state = createGame(readSeed());
+let talkWho = null;
 let dota = null;
 let dotaTick = 0;
 let dotaResult = 0;
@@ -95,6 +96,7 @@ function start(seed) {
   history.replaceState(null, '', url);
   clearDotaTimers();
   dota = null;
+  talkWho = null;
   state = createGame(next);
   render();
 }
@@ -146,6 +148,78 @@ function status(view) {
         view.surcharge ? `所有单子 +${view.surcharge} 点` : '未满 25，不加价',
       ]),
     ]),
+  ]);
+}
+
+function peopleRow(view) {
+  return el('section', { class: 'people', id: 'people' }, view.colleagues.map(person => {
+    const button = el('button', {
+      type: 'button',
+      'data-colleague': person.who,
+      'data-talked': person.talked ? '1' : '0',
+    }, [el('i', { class: `person ${person.who}` }), person.name]);
+    button.addEventListener('click', () => {
+      talkWho = person.who;
+      render();
+    });
+    return button;
+  }));
+}
+
+function talkBar(view) {
+  if (view.crowd) {
+    const close = el('button', { type: 'button', 'data-talk': 'crowd' }, ['先看白板']);
+    close.addEventListener('click', () => {
+      talkWho = null;
+      act({ type: 'crowd' });
+    });
+    return el('aside', { class: 'talk', id: 'talk' }, [
+      el('strong', {}, ['四个人围过来']),
+      ...view.crowdLines.map(item => el('p', {}, [`${item.name}：${item.line}`])),
+      close,
+    ]);
+  }
+  if (!talkWho) return null;
+  const person = view.colleagues.find(item => item.who === talkWho);
+  if (!person) return null;
+  const close = el('button', { type: 'button', 'data-talk': 'close' }, ['先这样']);
+  close.addEventListener('click', () => {
+    if (!person.talked) act({ type: 'talk', who: person.who });
+    talkWho = null;
+    render();
+  });
+  const buttons = [];
+  if (!person.talked && person.canExtend) {
+    for (const ticket of view.extendable) {
+      const button = el('button', {
+        type: 'button',
+        'data-action': 'extend',
+        'data-id': ticket.id,
+      }, [`${ticket.title} · 剩 ${ticket.dueIn} 天 · 期限 +1`]);
+      button.addEventListener('click', () => act({ type: 'extend', ticketId: ticket.id }));
+      buttons.push(button);
+    }
+  }
+  if (!person.talked && person.canTeach) {
+    const button = el('button', { type: 'button', 'data-action': 'teach' }, ['教她 · 1 点 · 技术债 -4']);
+    button.addEventListener('click', () => act({ type: 'teach' }));
+    buttons.push(button);
+  }
+  if (!person.talked && person.canTea) {
+    const button = el('button', { type: 'button', 'data-action': 'talk', 'data-who': 'tea' }, ['喝一杯 · 体力 +1']);
+    button.addEventListener('click', () => act({ type: 'talk', who: 'tea' }));
+    buttons.push(button);
+  }
+  if (!person.talked && person.who === 'neighbor' && person.chats < 3) {
+    const button = el('button', { type: 'button', 'data-action': 'talk', 'data-who': 'neighbor' }, [`听一句 · ${person.chats}/3`]);
+    button.addEventListener('click', () => act({ type: 'talk', who: 'neighbor' }));
+    buttons.push(button);
+  }
+  buttons.push(close);
+  return el('aside', { class: 'talk', id: 'talk' }, [
+    el('strong', {}, [person.name]),
+    el('p', { id: 'talk-line' }, [person.talked ? view.log[0] : person.line]),
+    el('div', { class: 'actions' }, buttons),
   ]);
 }
 
@@ -409,6 +483,7 @@ function render() {
   const view = present(state);
   const parts = [header(view), status(view)];
   if (view.phase === 'play') {
+    parts.push(peopleRow(view));
     if (view.nightLock) parts.push(el('p', { class: 'night', id: 'night-lock' }, [view.nightLock]));
     if (view.forecast) parts.push(el('p', { class: 'forecast', id: 'forecast' }, [`下一周字段：${view.forecastText}`]));
     if (view.bossOn) parts.push(whiteboard(view));
@@ -425,6 +500,8 @@ function render() {
     parts.push(ending(view));
   }
   parts.push(logList(view));
+  const talk = talkBar(view);
+  if (talk) parts.push(talk);
   if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
 }

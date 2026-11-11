@@ -203,8 +203,51 @@ test('boss week opens on Monday and two complaints end the run', () => {
   assert.equal(LINES.map(line => line.name).join(','), '淘宝,天猫,闲鱼,飞猪,盒马');
 });
 
+test('colleagues change deadline, debt, webpack cost and stamina', () => {
+  let state = createGame('talk');
+  const ticket = state.tickets[0];
+  const due = ticket.dueIn;
+  state = applyAction(state, { type: 'extend', ticketId: ticket.id });
+  assert.equal(state.tickets.find(item => item.id === ticket.id).dueIn, due + 1);
+  assert.equal(applyAction(state, { type: 'extend', ticketId: ticket.id }), state);
+  state = finish(state, ticket.id);
+  assert.equal(state.debt, 8);
+  while (state.ap === 0) state = applyAction(state, { type: 'sleep' });
+  const beforeAp = state.ap;
+  state = applyAction(state, { type: 'teach' });
+  assert.equal(state.debt, 4);
+  assert.equal(state.ap, beforeAp - 1);
+  while (state.ap > 0) state = applyAction(state, { type: 'rest' });
+  state = applyAction(state, { type: 'sleep' });
+  state = applyAction(state, { type: 'teach' });
+  assert.equal(state.sisterTeaches, 2);
+  assert.equal(applyAction(state, { type: 'teach' }), state);
+  state = createGame('plugin');
+  state = applyAction(state, { type: 'talk', who: 'neighbor' });
+  state = applyAction(state, { type: 'sleep' });
+  state = applyAction(state, { type: 'rest' });
+  state = applyAction(state, { type: 'rest' });
+  state = applyAction(state, { type: 'rest' });
+  state = applyAction(state, { type: 'sleep' });
+  state = applyAction(state, { type: 'talk', who: 'neighbor' });
+  state = applyAction(state, { type: 'sleep' });
+  while (state.ap > 0) state = applyAction(state, { type: 'rest' });
+  state = applyAction(state, { type: 'sleep' });
+  assert.equal(state.day, 3);
+  const stamina = state.stamina;
+  state = applyAction(state, { type: 'overnight' });
+  state = applyAction(state, { type: 'dota', won: false });
+  const dropped = state.stamina;
+  state = applyAction(state, { type: 'talk', who: 'tea' });
+  assert.equal(state.stamina, Math.min(10, dropped + 1));
+  assert.notEqual(state.stamina, stamina);
+  state = applyAction(state, { type: 'talk', who: 'neighbor' });
+  assert.equal(state.neighborCut, true);
+  assert.equal(present(state).skills.find(skill => skill.id === 'webpack').cost, 2);
+});
+
 test('the two wins and the boss debt step are reachable', () => {
-  const win = play('planned', 'h0').state;
+  const win = play('planned', 'h5').state;
   assert.equal(win.phase, 'won');
   assert.equal(win.ending, 'architecture');
   assert.equal(win.learned.architecture, true);

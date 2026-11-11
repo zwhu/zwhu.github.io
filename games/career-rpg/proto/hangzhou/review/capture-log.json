@@ -30,5 +30,15 @@
       "模块 1 + 技术债 1 = 2 点",
       "硬写 4 + 技术债 1 = 5 点"
     ]
+  },
+  "colleagues": {
+    "file": "games/career-rpg/proto/hangzhou/review/hangzhou-colleagues.mp4",
+    "frames": 68
+  },
+  "colleagueView": {
+    "debt": "4",
+    "stamina": "8",
+    "webpack": "0/2",
+    "talk": "聊满 3 天，学 Webpack 少 1 点，只要 2 点"
   }
 }

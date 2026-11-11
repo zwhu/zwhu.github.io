@@ -142,6 +142,11 @@ function selector(action) {
   if (action.type === 'study') return `[data-action="study"][data-skill="${action.skill}"]`;
   if (action.type === 'extract') return `[data-action="extract"][data-field="${action.field}"]`;
   if (action.type === 'place') return `[data-action="place"][data-field="${action.field}"]`;
+  if (action.type === 'open') return `[data-colleague="${action.who}"]`;
+  if (action.type === 'talk') return `[data-action="talk"][data-who="${action.who}"]`;
+  if (action.type === 'extend') return `[data-action="extend"][data-id="${action.ticketId}"]`;
+  if (action.type === 'teach') return `[data-action="teach"]`;
+  if (action.type === 'crowd') return `[data-talk="crowd"]`;
   return `[data-action="${action.type}"]`;
 }
 async function click(action) {
@@ -163,6 +168,14 @@ async function click(action) {
     if (!back) throw new Error('missing dota back');
     return;
   }
+  if (action.type === 'talk' || action.type === 'extend' || action.type === 'teach') {
+    const ready = await evaluate(`!!document.querySelector(${JSON.stringify(selector(action))})`);
+    if (!ready) {
+      const who = action.type === 'extend' ? 'plus' : action.type === 'teach' ? 'sister' : action.who;
+      await click({ type: 'open', who });
+      await sleep(40);
+    }
+  }
   const found = await evaluate(`(() => {
     const node = document.querySelector(${JSON.stringify(selector(action))});
     if (!node) return false;
@@ -182,6 +195,59 @@ async function encode(framesDir, file, fps) {
     encoder.stderr.on('data', chunk => { err += chunk; });
     encoder.on('exit', code => (code === 0 ? resolve() : reject(new Error(err.slice(-600)))));
   });
+}
+
+function colleagueActions() {
+  let state = createGame('talk');
+  const actions = [];
+  const push = (action) => {
+    const next = applyAction(state, action);
+    if (next === state) throw new Error(`colleague stuck ${JSON.stringify(action)} week ${state.week} day ${state.day}`);
+    actions.push(action);
+    state = next;
+  };
+  const open = (who) => actions.push({ type: 'open', who });
+  const ticket = state.tickets[0];
+  open('plus');
+  push({ type: 'extend', ticketId: ticket.id, hold: 10 });
+  open('neighbor');
+  push({ type: 'talk', who: 'neighbor' });
+  let guard = 0;
+  while (state.tickets.some(item => item.id === ticket.id) && guard < 40) {
+    guard += 1;
+    if (state.ap > 0 && !state.night) push({ type: 'work', ticketId: ticket.id });
+    else if (state.ap === 0) push({ type: 'sleep' });
+    else push({ type: 'rest' });
+  }
+  guard = 0;
+  while ((state.night || state.ap === 0) && guard < 20) {
+    guard += 1;
+    if (state.ap > 0) push({ type: 'rest' });
+    else push({ type: 'sleep' });
+  }
+  open('sister');
+  push({ type: 'teach', hold: 10 });
+  guard = 0;
+  while (state.week === 1 && state.day < 3 && guard < 30) {
+    guard += 1;
+    const key = state.week * 10 + state.day;
+    if (state.talked.neighbor !== key) {
+      open('neighbor');
+      push({ type: 'talk', who: 'neighbor' });
+    }
+    if (state.ap > 0) push({ type: 'rest' });
+    else push({ type: 'sleep' });
+  }
+  push({ type: 'overnight' });
+  push({ type: 'dota', won: false });
+  open('tea');
+  push({ type: 'talk', who: 'tea', hold: 10 });
+  open('neighbor');
+  push({ type: 'talk', who: 'neighbor', hold: 12 });
+  if (state.debt !== 4 || state.stamina !== 8 || !state.neighborCut || state.day !== 3) {
+    throw new Error(`colleague demo debt ${state.debt} stamina ${state.stamina} cut ${state.neighborCut} day ${state.day}`);
+  }
+  return actions;
 }
 
 function lossActions() {
@@ -217,7 +283,7 @@ async function record(name, seed, actions, { fps = 4, tail = 0, tailCopies = 1, 
   await save();
   for (let i = 0; i < actions.length; i += 1) {
     await click(actions[i]);
-    const copies = i >= actions.length - tail ? tailCopies : 1;
+    const copies = actions[i].hold || (i >= actions.length - tail ? tailCopies : 1);
     await save(copies);
   }
   await save(endHold);
@@ -252,6 +318,19 @@ try {
     report.debt = await record('hangzhou-debt', 'h1', play('greedy', 'h1').actions, { fps: 4, endHold: 8 });
     report.debtText = await evaluate('document.querySelector("#ending-text").textContent');
     if (!report.debtText.includes('需求做完了，债也欠下了')) throw new Error(`debt ${report.debtText}`);
+  }
+  if (want('hangzhou-colleagues')) {
+    report.colleagues = await record('hangzhou-colleagues', 'talk', colleagueActions(), { fps: 4, endHold: 8 });
+    report.colleagueView = await evaluate(`(() => ({
+      debt: document.querySelector('#debt').textContent,
+      stamina: document.querySelector('#stamina').textContent,
+      webpack: document.querySelector('#skill-webpack').textContent,
+      talk: document.querySelector('#talk-line') ? document.querySelector('#talk-line').textContent : '',
+    }))()`);
+    if (report.colleagueView.debt !== '4') throw new Error(`debt ${report.colleagueView.debt}`);
+    if (report.colleagueView.stamina !== '8') throw new Error(`stamina ${report.colleagueView.stamina}`);
+    if (report.colleagueView.webpack !== '0/2') throw new Error(`webpack ${report.colleagueView.webpack}`);
+    if (!report.colleagueView.talk.includes('只要 2 点')) throw new Error(report.colleagueView.talk);
   }
   if (want('hangzhou-boss')) {
     report.boss = await record('hangzhou-boss', 'h2', bossReviewActions('h2'), { fps: 4, tail: 2, tailCopies: 8, endHold: 12 });

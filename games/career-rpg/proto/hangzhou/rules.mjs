@@ -157,7 +157,11 @@ function spawnMorning(state) {
       next = made.state;
       tickets.push(made.ticket);
     }
-    return withLog({ ...next, tickets: tickets.concat(next.tickets) }, '五条业务线同时砸下五张大单，期限周五。白板打开了。');
+    return withLog({
+      ...next,
+      crowd: true,
+      tickets: tickets.concat(next.tickets),
+    }, '五条业务线同时砸下五张大单，期限周五。白板打开了。');
   }
   if (state.week >= config.bossWeek) return state;
   const specs = state.schedule[state.week - 1][state.day - 1];
@@ -192,6 +196,13 @@ export function createGame(seed, config = CONFIG) {
     dotaPending: false,
     skills: { biz: 0, patterns: 0, webpack: 0, babel: 0 },
     learned: { biz: false, patterns: false, webpack: false, babel: false, architecture: false },
+    talked: { plus: 0, sister: 0, neighbor: 0, tea: 0 },
+    plusWeek: 0,
+    sisterWeek: 0,
+    sisterTeaches: 0,
+    neighborChats: 0,
+    neighborCut: false,
+    crowd: false,
     modules: [],
     extractProgress: blankProgress(),
     placed: [],
@@ -264,6 +275,13 @@ function sweepReady(state) {
   return next;
 }
 
+export function skillStudyCost(state, skillId) {
+  const spec = state.config.skills[skillId];
+  if (!spec || spec.granted) return 0;
+  if (skillId === 'webpack' && state.neighborCut) return Math.max(1, spec.cost - 1);
+  return spec.cost;
+}
+
 function canStudy(state, skillId) {
   const spec = state.config.skills[skillId];
   if (!spec || spec.granted || state.phase !== 'play' || state.ap <= 0) return false;
@@ -276,16 +294,17 @@ function canStudy(state, skillId) {
 function study(state, skillId) {
   if (!canStudy(state, skillId)) return state;
   const spec = state.config.skills[skillId];
+  const cost = skillStudyCost(state, skillId);
   const progress = state.skills[skillId] + 1;
-  const learnedNow = progress >= spec.cost;
+  const learnedNow = progress >= cost;
   let next = {
     ...state,
     ap: state.ap - 1,
-    skills: { ...state.skills, [skillId]: Math.min(progress, spec.cost) },
+    skills: { ...state.skills, [skillId]: Math.min(progress, cost) },
     learned: learnedNow ? { ...state.learned, [skillId]: true } : state.learned,
     stats: { ...state.stats, studies: state.stats.studies + 1 },
   };
-  if (!learnedNow) return withLog(next, `${spec.name} ${progress}/${spec.cost}`);
+  if (!learnedNow) return withLog(next, `${spec.name} ${progress}/${cost}`);
   next = withLog(next, `${spec.name} 学成：${spec.effect}`);
   if (skillId === 'patterns') {
     for (const field of FIELD_IDS) {
@@ -465,10 +484,193 @@ function sleep(state) {
   return spawnMorning(next);
 }
 
+function todayKey(state) {
+  return state.week * 10 + state.day;
+}
+
+function talkedToday(state, who) {
+  return state.talked[who] === todayKey(state);
+}
+
+function sisterTaught(state) {
+  return state.sisterWeek === state.week ? state.sisterTeaches : 0;
+}
+
+const TALK_LINES = {
+  plus: [
+    '业务方又在催。你点一张，我去谈一天。',
+    '这身西装不是摆设。延期我去说。',
+    '别硬扛。选一张，我帮你挡一天。',
+    '他们要演示，我去改口风。',
+    '周五前的单，你点最急的那张。',
+    '新的一周。我这周还能帮你谈一次。',
+    '口径我来圆，你把单子指给我。',
+    '业务方认我。你选，我去谈。',
+    '别同时延两张，这周就这一次。',
+    '我先去倒杯咖啡，你决定延哪张。',
+    '第三周了。还是那句话，一周一次。',
+    '你抽模块的时候，我去拖一天。',
+    '这张要是今天到期，就点它。',
+    '我说话他们听。你负责选。',
+    '周末没有。这周的额度还在的话，今天用。',
+    '最后一周。五张大单，我只能帮一张。',
+    '白板看着吓人。延一天是一天。',
+    '你拼模块，我去跟业务方喝茶。',
+    '还没选的话，今天还能谈。',
+    '周五了。这周没谈过，就剩现在。',
+  ],
+  sister: [
+    '这个字段……怎么说？我可以问吗？',
+    'SKU 是很多个吗？你教我，我帮你看代码。',
+    '中文很难。表单也很难。可是我想学。',
+    '你忙的话，我先自己看。看不懂再问。',
+    '周五的单好急。我能整理一点吗？',
+    '新的一周。我又有两个问题。',
+    '日期区间，是开始和结束？',
+    '上传图片，要几种尺寸？',
+    '你教一次，我帮你收一点技术债。',
+    '这周我还能再问一次。',
+    '联动是点了以后另一个也变？',
+    '校验是告诉用户哪里错了？',
+    '我把重复的代码标出来了。你看对不对。',
+    '谢谢你上次教我。今天也可以问吗？',
+    '周五。我这周的问题还没问完。',
+    '五张大单。我看得懂标题，看不懂字段。',
+    '你要是教我，我去把硬写的地方理一理。',
+    '白板好大。我站远一点。',
+    '我今天的中文练这个：技术债。',
+    '最后一天。我想再帮你收一次。',
+  ],
+  neighbor: [
+    '插件这东西，钩子挂对了就不用复制粘贴。',
+    'Webpack 的 loader 和 plugin，不是一回事。',
+    '你那个字段，做成插件就能复用。',
+    '我昨天把一个 if 收成了 tapable。',
+    '先聊着。聊满三天，你学这个能少花一点。',
+    '新的一周。插件名单我又加了一条。',
+    '相近的字段，一个插件盖两个。',
+    '别每个业务线复制一份配置。',
+    '我可以讲到你点头为止。',
+    '第三天到了的话，你就少学一点。',
+    '编译期就把差异收掉，运行时就轻。',
+    '你要是已经在学，我这条算你少一点。',
+    '插件顺序别乱。先校验，再联动。',
+    '我工位的贴纸都是 loader 名。',
+    '周五。三天聊满没有？',
+    '五条线一起上，就靠插件位。',
+    '白板左边那些，都能挂同一个钩子。',
+    '硬写的那格，以后也能补成插件。',
+    '我再讲最后一句：少写一份，少欠一份。',
+    '学完记得自己挂上。我只负责讲。',
+  ],
+  tea: [
+    '周一不发奶茶。周三你记得来。',
+    '昨天的杯子我洗了。你要喝水跟我说。',
+    '周三。奶茶到了，点一下，回 1 体力。',
+    '周四了。茶没了，人还在。',
+    '周五辛苦。下周三还有。',
+    '这周的单子很多。周三我再请一次。',
+    '糖度我按上次的。周三见。',
+    '奶茶在桌上。喝了体力 +1。',
+    '喝完把杯子放回去就行。',
+    '这周的茶份结束了。',
+    '第三周。口味要不要换？',
+    '我帮你占了位子。人来了再喝。',
+    '周三限定。过了今天就凉了。',
+    '你看起来挺累。可惜今天不是周三。',
+    '周五。茶歇到此为止。',
+    '大单周。奶茶照旧，周三。',
+    '白板那边人多。茶我放你手边。',
+    '喝一口。就 1 体力，不多。',
+    '杯子上写了名字？没有，大家随便拿。',
+    '这季度最后一杯。周三如果还没到，就等下周吧。',
+  ],
+};
+
+function dayIndex(state) {
+  return (state.week - 1) * 5 + (state.day - 1);
+}
+
+function markTalked(state, who) {
+  return { ...state.talked, [who]: todayKey(state) };
+}
+
+function extend(state, ticketId) {
+  if (state.phase !== 'play' || talkedToday(state, 'plus') || state.plusWeek === state.week) return state;
+  const ticket = state.tickets.find(item => item.id === ticketId && !item.late);
+  if (!ticket) return state;
+  const dueIn = ticket.dueIn + 1;
+  return withLog({
+    ...state,
+    tickets: state.tickets.map(item => (item.id === ticketId ? { ...item, dueIn } : item)),
+    talked: markTalked(state, 'plus'),
+    plusWeek: state.week,
+  }, `${ticket.title} 期限 +1 天，还剩 ${dueIn} 天`);
+}
+
+function teach(state) {
+  if (state.phase !== 'play' || state.night || state.ap <= 0 || talkedToday(state, 'sister')) return state;
+  if (sisterTaught(state) >= 2) return state;
+  const debt = Math.max(0, state.debt - 4);
+  const spent = state.debt - debt;
+  const before = debtSurcharge(state.debt, state.config);
+  const after = debtSurcharge(debt, state.config);
+  let next = withLog({
+    ...state,
+    ap: state.ap - 1,
+    debt,
+    sisterWeek: state.week,
+    sisterTeaches: sisterTaught(state) + 1,
+    talked: markTalked(state, 'sister'),
+  }, spent > 0 ? `教了师妹，技术债 -${spent}，现在 ${debt}` : '教了师妹，技术债已经是 0');
+  if (after < before) next = withLog(next, `技术债降下来，所有单子少 ${before - after} 个行动点`);
+  return sweepReady(next);
+}
+
+function talk(state, who) {
+  if (state.phase !== 'play' || !TALK_LINES[who] || talkedToday(state, who)) return state;
+  const line = TALK_LINES[who][dayIndex(state)] || TALK_LINES[who][0];
+  if (who === 'tea' && state.day === 3) {
+    const stamina = Math.min(state.config.staminaMax, state.stamina + 1);
+    const gained = stamina - state.stamina;
+    const note = gained > 0 ? `下午茶，体力 +${gained}，现在 ${stamina}` : '下午茶，体力已经满了';
+    return withLog({ ...state, stamina, talked: markTalked(state, 'tea') }, note);
+  }
+  if (who === 'neighbor') {
+    const chats = state.neighborChats + 1;
+    let next = { ...state, neighborChats: chats, talked: markTalked(state, 'neighbor') };
+    if (chats >= 3 && !state.neighborCut) {
+      next = { ...next, neighborCut: true };
+      const cost = skillStudyCost(next, 'webpack');
+      next = withLog(next, `聊满 3 天，学 Webpack 少 1 点，只要 ${cost} 点`);
+      if (!next.learned.webpack && next.skills.webpack >= cost) {
+        const spec = next.config.skills.webpack;
+        next = withLog({
+          ...next,
+          learned: { ...next.learned, webpack: true },
+          skills: { ...next.skills, webpack: cost },
+        }, `${spec.name} 学成：${spec.effect}`);
+      }
+      return next;
+    }
+    return withLog(next, `${line}（${chats}/3）`);
+  }
+  return withLog({ ...state, talked: markTalked(state, who) }, line);
+}
+
+function dismissCrowd(state) {
+  if (!state.crowd) return state;
+  return { ...state, crowd: false };
+}
+
 export function applyAction(state, action) {
   if (!action || state.phase !== 'play') return state;
   if (action.type === 'work') return work(state, action.ticketId);
   if (action.type === 'study') return study(state, action.skill);
+  if (action.type === 'talk') return talk(state, action.who);
+  if (action.type === 'extend') return extend(state, action.ticketId);
+  if (action.type === 'teach') return teach(state);
+  if (action.type === 'crowd') return dismissCrowd(state);
   if (action.type === 'extract') return extract(state, action.field);
   if (action.type === 'place') return place(state, action.field);
   if (action.type === 'rest') return rest(state);
@@ -505,7 +707,7 @@ function skillStatus(state, skillId) {
     id: skillId,
     name: spec.name,
     effect: spec.effect,
-    cost: spec.cost,
+    cost: skillStudyCost(state, skillId),
     progress: state.skills[skillId],
     learned: state.learned[skillId],
     blocked,
@@ -551,6 +753,34 @@ export function present(state) {
     forecastText: forecastFields
       ? (forecastFields.length ? forecastFields.map(id => fieldById(id).name).join('、') : '没有下一周了')
       : '',
+    neighborCut: state.neighborCut,
+    crowd: state.crowd,
+    crowdLines: state.crowd ? [
+      { who: 'plus', name: '+1', line: '五条线一起上。模块你来摆，业务方我去挡。' },
+      { who: 'sister', name: '师妹', line: '这五张，是同一个表单吗？' },
+      { who: 'neighbor', name: '隔壁工位', line: '插件位够不够，看这一眼就知道。' },
+      { who: 'tea', name: '下午茶', line: '先看白板。奶茶我放这儿。' },
+    ] : [],
+    colleagues: ['plus', 'sister', 'neighbor', 'tea'].map(who => {
+      const names = { plus: '+1', sister: '师妹', neighbor: '隔壁工位', tea: '下午茶' };
+      const taught = sisterTaught(state);
+      return {
+        who,
+        name: names[who],
+        line: TALK_LINES[who][dayIndex(state)] || TALK_LINES[who][0],
+        talked: talkedToday(state, who),
+        canExtend: who === 'plus' && !talkedToday(state, 'plus') && state.plusWeek !== state.week,
+        canTeach: who === 'sister' && !talkedToday(state, 'sister') && !state.night && state.ap > 0 && taught < 2,
+        canTea: who === 'tea' && !talkedToday(state, 'tea') && state.day === 3,
+        teaches: taught,
+        chats: state.neighborChats,
+      };
+    }),
+    extendable: state.tickets.filter(ticket => !ticket.late).map(ticket => ({
+      id: ticket.id,
+      title: ticket.title,
+      dueIn: ticket.dueIn,
+    })),
     modules: state.modules.map(id => ({
       id,
       name: fieldById(id).name,
