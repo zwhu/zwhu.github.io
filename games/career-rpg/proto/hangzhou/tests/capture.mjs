@@ -306,18 +306,40 @@ try {
 
   if (want('hangzhou-loss')) {
     report.loss = await record('hangzhou-loss', 'loss', lossActions(), { fps: 4, endHold: 6 });
+    report.lossTitle = await evaluate('document.querySelector("#ending-title").textContent');
     report.lossText = await evaluate('document.querySelector("#ending-text").textContent');
+    if (report.lossTitle !== '被业务方投诉') throw new Error(`loss title ${report.lossTitle}`);
     if (!report.lossText.includes('被业务方投诉两次')) throw new Error(`loss ${report.lossText}`);
+    if (report.lossText.startsWith(`${report.lossTitle}。`)) throw new Error(`loss joined ${report.lossText}`);
   }
   if (want('hangzhou-win')) {
-    report.win = await record('hangzhou-win', 'h0', play('planned', 'h0').actions, { fps: 4, endHold: 8 });
+    report.win = await record('hangzhou-win', 'h3', play('planned', 'h3').actions, { fps: 4, endHold: 8 });
+    report.winTitle = await evaluate('document.querySelector("#ending-title").textContent');
     report.winText = await evaluate('document.querySelector("#ending-text").textContent');
-    if (!report.winText.includes('一套架构，撑起五条业务线')) throw new Error(`win ${report.winText}`);
+    if (report.winTitle !== '一套架构，撑起五条业务线') throw new Error(`win title ${report.winTitle}`);
+    if (!report.winText.includes('五张大单都按期交付')) throw new Error(`win ${report.winText}`);
+    if (report.winText.startsWith(`${report.winTitle}。`)) throw new Error(`win joined ${report.winText}`);
   }
   if (want('hangzhou-debt')) {
     report.debt = await record('hangzhou-debt', 'h1', play('greedy', 'h1').actions, { fps: 4, endHold: 8 });
+    report.debtTitle = await evaluate('document.querySelector("#ending-title").textContent');
     report.debtText = await evaluate('document.querySelector("#ending-text").textContent');
-    if (!report.debtText.includes('需求做完了，债也欠下了')) throw new Error(`debt ${report.debtText}`);
+    if (report.debtTitle !== '需求做完了，债也欠下了') throw new Error(`debt title ${report.debtTitle}`);
+    if (!report.debtText.includes('四周撑过来了')) throw new Error(`debt ${report.debtText}`);
+    if (report.debtText.startsWith(`${report.debtTitle}。`)) throw new Error(`debt joined ${report.debtText}`);
+  }
+  if (want('hangzhou-night')) {
+    report.night = await record('hangzhou-night', 'night', [
+      { type: 'overnight', hold: 2 },
+      { type: 'dota', won: false, hold: 8 },
+    ], { fps: 4, endHold: 8 });
+    report.nightText = await evaluate('document.querySelector("#night-lock").textContent');
+    report.nightScene = await evaluate(`(() => ({
+      scene: document.querySelector('#office').getAttribute('data-scene'),
+      night: document.querySelector('#office').getAttribute('data-night'),
+    }))()`);
+    if (report.nightText !== '夜里只能学技能，不能做需求单') throw new Error(report.nightText);
+    if (report.nightScene.scene !== 'day' || report.nightScene.night !== '1') throw new Error(JSON.stringify(report.nightScene));
   }
   if (want('hangzhou-colleagues')) {
     report.colleagues = await record('hangzhou-colleagues', 'talk', colleagueActions(), { fps: 4, endHold: 8 });

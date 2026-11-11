@@ -3,6 +3,50 @@ import { CONFIG, applyAction, createGame, present } from './rules.mjs';
 
 const app = document.querySelector('#app');
 
+// 短字是画面上的缩写。悬停展开的原文来自 proto/hangzhou/README.md 技能一节。
+const SKILL_COPY = Object.freeze({
+  biz: Object.freeze({
+    short: '读懂业务',
+    brief: '下周字段，提前显示',
+    full: '读懂商品发布这摊业务：开局就能学，学会后需求单显示下一周会来的字段类型，方便提前抽模块。',
+  }),
+  patterns: Object.freeze({
+    short: '设计模式',
+    brief: '抽模块，3 点变 2 点',
+    full: '精读 23 种设计模式：抽模块从 3 点变 2 点。',
+  }),
+  webpack: Object.freeze({
+    short: 'Webpack',
+    brief: '模块覆盖相近字段',
+    full: '吃透 Webpack 插件机制：模块能做成插件，一个模块可以覆盖两种相近的字段类型。',
+  }),
+  babel: Object.freeze({
+    short: 'Babel',
+    brief: '每周一清债 10 点',
+    full: '吃透 Babel 插件机制：每周一自动清掉 10 点技术债。',
+  }),
+  architecture: Object.freeze({
+    short: '一套表单架构',
+    brief: '撑起五条业务线',
+    full: '一套表单架构，撑起五条业务线：只能在 Boss 关通关后获得，是本章的高潮。',
+  }),
+});
+
+const SCENE = Object.freeze({ w: 384, h: 216 });
+// 脚底锚点见素材说明。坐姿只露出椅背以上的头肩，点击范围落到整张椅子。
+const DAY_ACTORS = Object.freeze([
+  Object.freeze({ who: 'neighbor', x: 133, y: 133, w: 18, h: 44 }),
+  Object.freeze({ who: 'sister', x: 192, y: 133, w: 21, h: 44 }),
+  Object.freeze({ who: 'plus', x: 222, y: 90, w: 19, h: 46 }),
+  Object.freeze({ who: 'tea', x: 108, y: 152, w: 21, h: 46 }),
+]);
+const BOSS_ACTORS = Object.freeze([
+  Object.freeze({ who: 'plus', x: 298, y: 102, w: 19, h: 46 }),
+  Object.freeze({ who: 'neighbor', x: 355, y: 104, w: 18, h: 46 }),
+  Object.freeze({ who: 'sister', x: 330, y: 112, w: 21, h: 46 }),
+  Object.freeze({ who: 'tea', x: 312, y: 128, w: 21, h: 46 }),
+]);
+
 function readSeed() {
   const value = new URLSearchParams(location.search).get('seed');
   return value ? value.slice(0, 64) : 'hangzhou';
@@ -151,43 +195,106 @@ function status(view) {
   ]);
 }
 
-function peopleRow(view) {
-  return el('section', { class: 'people', id: 'people' }, view.colleagues.map(person => {
+function named(who) {
+  return who === 'plus' || who === 'sister';
+}
+
+function actorBox(box) {
+  return [
+    `left:${(box.x / SCENE.w) * 100}%`,
+    `top:${(box.y / SCENE.h) * 100}%`,
+    `width:${(box.w / SCENE.w) * 100}%`,
+    `height:${(box.h / SCENE.h) * 100}%`,
+  ].join(';');
+}
+
+function continueMark(onContinue) {
+  const button = el('button', { type: 'button', class: 'caret', 'data-continue': '1' }, ['▼']);
+  button.addEventListener('click', onContinue);
+  return button;
+}
+
+function talkBox(name, lines, buttons, onContinue) {
+  const box = el('div', { class: 'talkbox', id: 'talk' }, [
+    ...lines,
+    el('div', { class: 'talk-actions' }, buttons),
+    continueMark(onContinue),
+  ]);
+  const kids = [];
+  if (name) kids.push(el('div', { class: 'nameplate', id: 'nameplate' }, [name]));
+  kids.push(box);
+  return el('div', { class: 'talk-anchor' }, kids);
+}
+
+function office(view, talk) {
+  const boss = view.bossOn;
+  const spots = boss ? BOSS_ACTORS : DAY_ACTORS;
+  const actors = spots.map(box => {
+    const person = view.colleagues.find(item => item.who === box.who);
+    const speaking = talkWho === box.who;
     const button = el('button', {
       type: 'button',
-      'data-colleague': person.who,
-      'data-talked': person.talked ? '1' : '0',
-    }, [el('i', { class: `person ${person.who}` }), person.name]);
+      class: speaking ? 'actor speaking' : 'actor',
+      style: actorBox(box),
+      'data-colleague': box.who,
+      'data-talked': person?.talked ? '1' : '0',
+      'aria-label': named(box.who) ? person.name : '……',
+    }, [
+      view.crowd ? '' : el('span', { class: 'bubble', 'aria-hidden': 'true' }, ['…']),
+      el('i', { class: 'arrow', 'aria-hidden': 'true' }),
+    ]);
     button.addEventListener('click', () => {
-      talkWho = person.who;
+      talkWho = box.who;
       render();
     });
     return button;
-  }));
+  });
+  const scene = boss ? 'boss' : 'day';
+  return el('section', {
+    class: 'stage',
+    id: 'office',
+    'data-scene': scene,
+    'data-night': view.night ? '1' : '0',
+  }, [
+    el('img', {
+      class: 'scene',
+      src: `./art/${scene}-384x216.png`,
+      width: String(SCENE.w),
+      height: String(SCENE.h),
+      alt: '',
+      draggable: 'false',
+    }),
+    view.night ? el('div', { class: 'dim', 'aria-hidden': 'true' }) : '',
+    ...actors,
+    talk || '',
+  ]);
 }
 
 function talkBar(view) {
-  if (view.crowd) {
+  if (view.crowd && !talkWho) {
     const close = el('button', { type: 'button', 'data-talk': 'crowd' }, ['先看白板']);
-    close.addEventListener('click', () => {
+    const dismiss = () => {
       talkWho = null;
       act({ type: 'crowd' });
-    });
-    return el('aside', { class: 'talk', id: 'talk' }, [
-      el('strong', {}, ['四个人围过来']),
-      ...view.crowdLines.map(item => el('p', {}, [`${item.name}：${item.line}`])),
-      close,
-    ]);
+    };
+    close.addEventListener('click', dismiss);
+    return talkBox(
+      '四个人围过来',
+      view.crowdLines.map(item => el('p', {}, [named(item.who) ? `${item.name}：${item.line}` : item.line])),
+      [close],
+      dismiss,
+    );
   }
   if (!talkWho) return null;
   const person = view.colleagues.find(item => item.who === talkWho);
   if (!person) return null;
-  const close = el('button', { type: 'button', 'data-talk': 'close' }, ['先这样']);
-  close.addEventListener('click', () => {
+  const dismiss = () => {
     if (!person.talked) act({ type: 'talk', who: person.who });
     talkWho = null;
     render();
-  });
+  };
+  const close = el('button', { type: 'button', 'data-talk': 'close' }, ['先这样']);
+  close.addEventListener('click', dismiss);
   const buttons = [];
   if (!person.talked && person.canExtend) {
     for (const ticket of view.extendable) {
@@ -216,11 +323,12 @@ function talkBar(view) {
     buttons.push(button);
   }
   buttons.push(close);
-  return el('aside', { class: 'talk', id: 'talk' }, [
-    el('strong', {}, [person.name]),
-    el('p', { id: 'talk-line' }, [person.talked ? view.log[0] : person.line]),
-    el('div', { class: 'actions' }, buttons),
-  ]);
+  return talkBox(
+    named(person.who) ? person.name : '',
+    [el('p', { id: 'talk-line' }, [person.talked ? view.log[0] : person.line])],
+    buttons,
+    dismiss,
+  );
 }
 
 function debtBanner(view) {
@@ -230,20 +338,34 @@ function debtBanner(view) {
   return el('p', { class: 'debt-banner', id: 'debt-banner', 'data-surcharge': view.surcharge }, [text]);
 }
 
+function boardShort(slot) {
+  if (slot.status === 'done') return '已按期交付';
+  if (slot.status === 'late') return '已延期';
+  return slot.covered ? '模块' : `硬写 ${slot.base}`;
+}
+
+function boardFull(slot) {
+  const title = `${slot.lineName} · ${slot.example}`;
+  if (slot.status === 'done') return `${title}。已按期交付。`;
+  if (slot.status === 'late') return `${title}。已延期。延期不加分。`;
+  const left = Math.max(0, slot.cost - slot.progress);
+  return `${title}。${slot.label}。做 · 还差 ${left} 点。按期 +${CONFIG.onTimeReward}。`;
+}
+
 function whiteboard(view) {
   const slots = view.whiteboard.map(slot => el('article', {
-    class: `slot ${slot.status === 'open' && slot.covered ? 'covered' : ''} ${slot.status === 'open' && !slot.covered ? 'hard' : ''} ${slot.status === 'done' ? 'done' : ''}`,
+    class: `slot expand ${slot.status === 'open' && slot.covered ? 'covered' : ''} ${slot.status === 'open' && !slot.covered ? 'hard' : ''} ${slot.status === 'done' ? 'done' : ''}`,
     'data-slot': slot.field,
     'data-cost': slot.cost,
     'data-surcharge': slot.surcharge,
     'data-status': slot.status,
     'data-label': slot.label,
+    tabindex: '0',
   }, [
     el('strong', {}, [el('i', { class: `mark ${slot.field}` }), slot.lineName]),
     el('div', {}, [slot.example]),
-    el('p', { class: 'label' }, [slot.status === 'open' && slot.surcharge > 0
-      ? `${slot.covered ? '模块' : '硬写'} ${slot.base} + 技术债 ${slot.surcharge} = ${slot.cost} 点`
-      : slot.label]),
+    el('p', { class: 'label' }, [boardShort(slot)]),
+    el('p', { class: 'full' }, [boardFull(slot)]),
     slot.status === 'open' ? el('div', {}, [`进度 ${slot.progress}/${slot.cost}`]) : '',
   ]));
   return el('section', { id: 'whiteboard' }, [
@@ -293,13 +415,15 @@ function ticketCard(ticket) {
 }
 
 function skillCard(skill) {
+  const copy = SKILL_COPY[skill.id];
   const progress = skill.learned ? '已学会' : (skill.cost ? `${skill.progress}/${skill.cost}` : '未获得');
   const body = [
     el('div', { class: 'ticket-top' }, [
-      el('strong', {}, [skill.name]),
+      el('strong', {}, [copy.short]),
       el('span', { id: `skill-${skill.id}` }, [progress]),
     ]),
-    el('p', { class: 'meta' }, [skill.effect]),
+    el('p', { class: 'meta' }, [copy.brief]),
+    el('p', { class: 'full' }, [copy.full]),
   ];
   if (skill.blocked) body.push(el('p', { class: 'blocked', id: `skill-${skill.id}-lock` }, [skill.blocked]));
   if (skill.canStudy) {
@@ -308,10 +432,11 @@ function skillCard(skill) {
     body.push(button);
   }
   return el('article', {
-    class: 'card',
+    class: 'card expand',
     'data-skill': skill.id,
     'data-progress': skill.progress,
     'data-learned': skill.learned ? '1' : '0',
+    tabindex: '0',
   }, body);
 }
 
@@ -379,8 +504,8 @@ function ending(view) {
   fresh.addEventListener('click', () => start(`h${Date.now().toString(36)}`));
   const stats = view.stats;
   return el('section', { class: 'ending', id: 'ending', 'data-ending': view.ending || 'lost' }, [
-    el('h2', {}, [won ? view.victoryTitle : '被业务方投诉']),
-    el('p', { id: 'ending-text' }, [won ? `${view.victoryTitle}。${view.victoryText}` : view.failReason]),
+    el('h2', { id: 'ending-title' }, [won ? view.victoryTitle : '被业务方投诉']),
+    el('p', { id: 'ending-text' }, [won ? view.victoryText : view.failReason]),
     el('dl', {}, [
       el('dt', {}, ['周次']), el('dd', {}, [`第 ${view.week} 周 ${view.dayName}`]),
       el('dt', {}, ['交付']), el('dd', { id: 'end-delivery' }, [String(view.delivery)]),
@@ -482,8 +607,9 @@ function logList(view) {
 function render() {
   const view = present(state);
   const parts = [header(view), status(view)];
+  const talk = view.phase === 'play' ? talkBar(view) : null;
   if (view.phase === 'play') {
-    parts.push(peopleRow(view));
+    parts.push(office(view, talk));
     if (view.nightLock) parts.push(el('p', { class: 'night', id: 'night-lock' }, [view.nightLock]));
     if (view.forecast) parts.push(el('p', { class: 'forecast', id: 'forecast' }, [`下一周字段：${view.forecastText}`]));
     if (view.bossOn) parts.push(whiteboard(view));
@@ -500,8 +626,6 @@ function render() {
     parts.push(ending(view));
   }
   parts.push(logList(view));
-  const talk = talkBar(view);
-  if (talk) parts.push(talk);
   if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
 }
