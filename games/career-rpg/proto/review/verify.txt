@@ -3,21 +3,11 @@
 Checked shared HTML and catalogs for 64 pages (0 changed).
 
 [Site generation contracts] /usr/bin/python3 scripts/test-site-generation.py
-........
-----------------------------------------------------------------------
-Ran 8 tests in 0.994s
-
-OK
 
 [Local links and anchors] /usr/bin/python3 scripts/check-links.py
 Checked relative page/resource URLs, local targets, srcset and HTML anchors.
 
 [Link checker tests] /usr/bin/python3 scripts/test-links.py
-....
-----------------------------------------------------------------------
-Ran 4 tests in 0.004s
-
-OK
 
 [Learning style ownership] /usr/bin/python3 scripts/check-learning-styles.py
 Checked 6 lessons: style ownership, scopes, semantic variables and stylesheet order.
@@ -35,48 +25,43 @@ About map is up to date.
 Checked SEO metadata, snapshots and sitemap (0 changed files).
 
 [SEO contracts] /usr/bin/python3 scripts/test-seo.py
-.........
-----------------------------------------------------------------------
-Ran 9 tests in 0.483s
-
-OK
 
 [Comment behavior] node --test tests/comments.test.cjs
 TAP version 13
 # Subtest: local preview at 127.0.0.1 uses the publicly reachable HTTPS theme
 ok 1 - local preview at 127.0.0.1 uses the publicly reachable HTTPS theme
   ---
-  duration_ms: 1.572015
+  duration_ms: 1.753417
   type: 'test'
   ...
 # Subtest: local preview at localhost uses the publicly reachable HTTPS theme
 ok 2 - local preview at localhost uses the publicly reachable HTTPS theme
   ---
-  duration_ms: 0.655018
+  duration_ms: 0.517708
   type: 'test'
   ...
 # Subtest: local preview at [::1] uses the publicly reachable HTTPS theme
 ok 3 - local preview at [::1] uses the publicly reachable HTTPS theme
   ---
-  duration_ms: 0.583238
+  duration_ms: 0.597796
   type: 'test'
   ...
 # Subtest: an HTTPS localhost still cannot supply CSS to the remote iframe
 ok 4 - an HTTPS localhost still cannot supply CSS to the remote iframe
   ---
-  duration_ms: 1.254395
+  duration_ms: 1.490396
   type: 'test'
   ...
 # Subtest: public HTTPS sites keep their own relative theme and article mapping
 ok 5 - public HTTPS sites keep their own relative theme and article mapping
   ---
-  duration_ms: 0.569947
+  duration_ms: 0.611786
   type: 'test'
   ...
 # Subtest: comments wait for the section to approach the viewport and load exactly once
 ok 6 - comments wait for the section to approach the viewport and load exactly once
   ---
-  duration_ms: 0.699211
+  duration_ms: 0.71015
   type: 'test'
   ...
 1..6
@@ -87,284 +72,284 @@ ok 6 - comments wait for the section to approach the viewport and load exactly o
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 49.741243
+# duration_ms 51.000997
 
 [Career RPG chapter rules] node --test games/career-rpg/web/tests/world.test.mjs games/career-rpg/web/tests/story.test.mjs games/career-rpg/web/tests/scene.test.mjs games/career-rpg/web/tests/hefei.test.mjs games/career-rpg/web/tests/nanjing-skills.test.mjs games/career-rpg/web/tests/hefei-skills.test.mjs games/career-rpg/web/tests/hangzhou-skills.test.mjs games/career-rpg/web/tests/narrow-wrap.test.mjs games/career-rpg/web/tests/cinematic.test.mjs
 TAP version 13
 # Subtest: cinematic query is the only switch
 ok 1 - cinematic query is the only switch
   ---
-  duration_ms: 1.407782
+  duration_ms: 1.516497
   type: 'test'
   ...
 # Subtest: push-in interpolation stays on whole pixels and never reverses
 ok 2 - push-in interpolation stays on whole pixels and never reverses
   ---
-  duration_ms: 0.36035
+  duration_ms: 0.382097
   type: 'test'
   ...
 # Subtest: follow steps at most one pixel and holds still
 ok 3 - follow steps at most one pixel and holds still
   ---
-  duration_ms: 0.253939
+  duration_ms: 0.313316
   type: 'test'
   ...
 # Subtest: hefei script uses only the four shots and walks the office
 ok 4 - hefei script uses only the four shots and walks the office
   ---
-  duration_ms: 8.505103
+  duration_ms: 11.956025
   type: 'test'
   ...
 # Subtest: unknown shot types are rejected
 ok 5 - unknown shot types are rejected
   ---
-  duration_ms: 0.361874
+  duration_ms: 0.466338
   type: 'test'
   ...
 # Subtest: hangzhou lists five skills and does not replace hefei or nanjing
 ok 6 - hangzhou lists five skills and does not replace hefei or nanjing
   ---
-  duration_ms: 3.067472
+  duration_ms: 2.739343
   type: 'test'
   ...
 # Subtest: each beat readies only its skill, and a second collect does nothing
 ok 7 - each beat readies only its skill, and a second collect does nothing
   ---
-  duration_ms: 0.573654
+  duration_ms: 0.589109
   type: 'test'
   ...
 # Subtest: the whiteboard skill waits on five sheets, and the chapter grants anything still uncollected
 ok 8 - the whiteboard skill waits on five sheets, and the chapter grants anything still uncollected
   ---
-  duration_ms: 1.460969
+  duration_ms: 1.509625
   type: 'test'
   ...
 # Subtest: legacy saves stay valid, replay starts empty, and a collected skill survives a save
 ok 9 - legacy saves stay valid, replay starts empty, and a collected skill survives a save
   ---
-  duration_ms: 0.443728
+  duration_ms: 0.489361
   type: 'test'
   ...
 # Subtest: every designed snapshot is reachable and the placeholder room can reach each stop
 ok 10 - every designed snapshot is reachable and the placeholder room can reach each stop
   ---
-  duration_ms: 31.656732
+  duration_ms: 31.543903
   type: 'test'
   ...
 # Subtest: nanjing still walks hefei to nanjing, and the new bridge walks nanjing to hangzhou
 ok 11 - nanjing still walks hefei to nanjing, and the new bridge walks nanjing to hangzhou
   ---
-  duration_ms: 2.404879
+  duration_ms: 1.426668
   type: 'test'
   ...
 # Subtest: hefei lists four skills and does not replace the nanjing list
 ok 12 - hefei lists four skills and does not replace the nanjing list
   ---
-  duration_ms: 1.230639
+  duration_ms: 1.364969
   type: 'test'
   ...
 # Subtest: finishing a task makes that skill ready and a second collect does nothing
 ok 13 - finishing a task makes that skill ready and a second collect does nothing
   ---
-  duration_ms: 0.493853
+  duration_ms: 0.461009
   type: 'test'
   ...
 # Subtest: chapter completion grants every skill that was not picked up
 ok 14 - chapter completion grants every skill that was not picked up
   ---
-  duration_ms: 1.622025
+  duration_ms: 1.412919
   type: 'test'
   ...
 # Subtest: legacy saves stay valid and derive ready or granted skills without rewriting the stored value
 ok 15 - legacy saves stay valid and derive ready or granted skills without rewriting the stored value
   ---
-  duration_ms: 0.323696
+  duration_ms: 0.315949
   type: 'test'
   ...
 # Subtest: replay starts empty and a collected skill survives a save round trip
 ok 16 - replay starts empty and a collected skill survives a save round trip
   ---
-  duration_ms: 0.247801
+  duration_ms: 0.290514
   type: 'test'
   ...
 # Subtest: nanjing copy and object roles still come from chapter data
 ok 17 - nanjing copy and object roles still come from chapter data
   ---
-  duration_ms: 1.296596
+  duration_ms: 1.540735
   type: 'test'
   ...
 # Subtest: hefei keeps five states, ten events and the author wording
 ok 18 - hefei keeps five states, ten events and the author wording
   ---
-  duration_ms: 0.866111
+  duration_ms: 0.804491
   type: 'test'
   ...
 # Subtest: hefei gates trial, day notes and night notes, and a repeat writes nothing
 ok 19 - hefei gates trial, day notes and night notes, and a repeat writes nothing
   ---
-  duration_ms: 1.099681
+  duration_ms: 1.40004
   type: 'test'
   ...
 # Subtest: either order reaches the same manual and every snapshot restores on the hefei key only
 ok 20 - either order reaches the same manual and every snapshot restores on the hefei key only
   ---
-  duration_ms: 3.137956
+  duration_ms: 2.580253
   type: 'test'
   ...
 # Subtest: hefei marker sits on my_pc, cards stay off the startup sheets, and the aisle reaches each point
 ok 21 - hefei marker sits on my_pc, cards stay off the startup sheets, and the aisle reaches each point
   ---
-  duration_ms: 30.004859
+  duration_ms: 32.102574
   type: 'test'
   ...
 # Subtest: nanjing lists five skills
 ok 22 - nanjing lists five skills
   ---
-  duration_ms: 1.883262
+  duration_ms: 2.103948
   type: 'test'
   ...
 # Subtest: each task readies only its skill, and a second collect does nothing
 ok 23 - each task readies only its skill, and a second collect does nothing
   ---
-  duration_ms: 0.679526
+  duration_ms: 1.013516
   type: 'test'
   ...
 # Subtest: the manual skill waits on the journey, and the chapter grants anything still uncollected
 ok 24 - the manual skill waits on the journey, and the chapter grants anything still uncollected
   ---
-  duration_ms: 1.616721
+  duration_ms: 2.070931
   type: 'test'
   ...
 # Subtest: legacy saves stay valid, replay starts empty, and a collected skill survives a save
 ok 25 - legacy saves stay valid, replay starts empty, and a collected skill survives a save
   ---
-  duration_ms: 0.421341
+  duration_ms: 0.464401
   type: 'test'
   ...
 # Subtest: narrow copy from all three chapters stays inside the slot
 ok 26 - narrow copy from all three chapters stays inside the slot
   ---
-  duration_ms: 13.618762
+  duration_ms: 15.695963
   type: 'test'
   ...
 # Subtest: skill names break around product words instead of through them
 ok 27 - skill names break around product words instead of through them
   ---
-  duration_ms: 1.244277
+  duration_ms: 1.635295
   type: 'test'
   ...
 # Subtest: direction rows and idle/step frames remain distinct, including typing clips
 ok 28 - direction rows and idle/step frames remain distinct, including typing clips
   ---
-  duration_ms: 1.423228
+  duration_ms: 1.404446
   type: 'test'
   ...
 # Subtest: the approved walk sheet is copied unchanged and the sit frame stays 18 by 30
 ok 29 - the approved walk sheet is copied unchanged and the sit frame stays 18 by 30
   ---
-  duration_ms: 0.666428
+  duration_ms: 0.578746
   type: 'test'
   ...
 # Subtest: pose references keep one direction at a stable scale and align every visible sole
 ok 30 - pose references keep one direction at a stable scale and align every visible sole
   ---
-  duration_ms: 1.516281
+  duration_ms: 0.342838
   type: 'test'
   ...
 # Subtest: walk phase follows distance and the standing sprite sits on whole pixels
 ok 31 - walk phase follows distance and the standing sprite sits on whole pixels
   ---
-  duration_ms: 0.17839
+  duration_ms: 0.255445
   type: 'test'
   ...
 # Subtest: render frames without a fixed physics tick do not reset walking, but key release does
 ok 32 - render frames without a fixed physics tick do not reset walking, but key release does
   ---
-  duration_ms: 0.15584
+  duration_ms: 0.180327
   type: 'test'
   ...
 # Subtest: bubble placement stays inside every viewport edge and changes side when needed
 ok 33 - bubble placement stays inside every viewport edge and changes side when needed
   ---
-  duration_ms: 0.173111
+  duration_ms: 0.162837
   type: 'test'
   ...
 # Subtest: task marker survives opening a page and disappears only after accepted event
 ok 34 - task marker survives opening a page and disappears only after accepted event
   ---
-  duration_ms: 0.787958
+  duration_ms: 0.74251
   type: 'test'
   ...
 # Subtest: CTO is an interactable actor, both companions exist, and expressions follow story state
 ok 35 - CTO is an interactable actor, both companions exist, and expressions follow story state
   ---
-  duration_ms: 0.153836
+  duration_ms: 0.149447
   type: 'test'
   ...
 # Subtest: restoration prose preserves the two hours without exposing the stage direction
 ok 36 - restoration prose preserves the two hours without exposing the stage direction
   ---
-  duration_ms: 0.517798
+  duration_ms: 0.565418
   type: 'test'
   ...
 # Subtest: both learning orders complete only after both reviews and manual confirmation
 ok 37 - both learning orders complete only after both reviews and manual confirmation
   ---
-  duration_ms: 2.095551
+  duration_ms: 2.078269
   type: 'test'
   ...
 # Subtest: prerequisites and duplicate confirmations cannot advance, remove flags or shadow later actions
 ok 38 - prerequisites and duplicate confirmations cannot advance, remove flags or shadow later actions
   ---
-  duration_ms: 0.657702
+  duration_ms: 0.670315
   type: 'test'
   ...
 # Subtest: every designed legal configuration restores exactly through a single atomic value
 ok 39 - every designed legal configuration restores exactly through a single atomic value
   ---
-  duration_ms: 1.333267
+  duration_ms: 1.380759
   type: 'test'
   ...
 # Subtest: damaged, old and impossible snapshots are preserved and reported, never silently reset
 ok 40 - damaged, old and impossible snapshots are preserved and reported, never silently reset
   ---
-  duration_ms: 0.286028
+  duration_ms: 0.308142
   type: 'test'
   ...
 # Subtest: runtime maps both learning items to the right computer, while manual remains separate
 ok 41 - runtime maps both learning items to the right computer, while manual remains separate
   ---
-  duration_ms: 0.339414
+  duration_ms: 0.375803
   type: 'test'
   ...
 # Subtest: identical semantic journeys replay equally across independent instances and stable saves
 ok 42 - identical semantic journeys replay equally across independent instances and stable saves
   ---
-  duration_ms: 19.203617
+  duration_ms: 19.137267
   type: 'test'
   ...
 # Subtest: feet cannot cross desk collision or room edges
 ok 43 - feet cannot cross desk collision or room edges
   ---
-  duration_ms: 3.373141
+  duration_ms: 3.536927
   type: 'test'
   ...
 # Subtest: diagonal movement has the same speed as a cardinal direction
 ok 44 - diagonal movement has the same speed as a cardinal direction
   ---
-  duration_ms: 0.110592
+  duration_ms: 0.136406
   type: 'test'
   ...
 # Subtest: interaction is local and long frame stalls do not teleport
 ok 45 - interaction is local and long frame stalls do not teleport
   ---
-  duration_ms: 0.199506
+  duration_ms: 0.211831
   type: 'test'
   ...
 # Subtest: a stable 60Hz frame steps one whole pixel, including the first frame
 ok 46 - a stable 60Hz frame steps one whole pixel, including the first frame
   ---
-  duration_ms: 0.240928
+  duration_ms: 0.254382
   type: 'test'
   ...
 1..46
@@ -375,119 +360,149 @@ ok 46 - a stable 60Hz frame steps one whole pixel, including the first frame
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 215.404177
+# duration_ms 230.379069
 
 [Hefei block prototype] node --test games/career-rpg/proto/tests/rules.test.mjs games/career-rpg/proto/tests/dota.test.mjs
 TAP version 13
 # Subtest: three razes hit only their own distance
 ok 1 - three razes hit only their own distance
   ---
-  duration_ms: 1.051044
+  duration_ms: 1.284461
+  type: 'test'
+  ...
+# Subtest: creeps reposition, and melee hits can down shadow fiend
+ok 2 - creeps reposition, and melee hits can down shadow fiend
+  ---
+  duration_ms: 0.368452
+  type: 'test'
+  ...
+# Subtest: last hits win inside the limit and a timeout loses
+ok 3 - last hits win inside the limit and a timeout loses
+  ---
+  duration_ms: 0.282931
   type: 'test'
   ...
 # Subtest: the same seed spawns the same creeps
-ok 2 - the same seed spawns the same creeps
+ok 4 - the same seed spawns the same creeps
   ---
-  duration_ms: 1.673432
+  duration_ms: 0.622835
+  type: 'test'
+  ...
+# Subtest: the run rng reproduces a match without changing the run
+ok 5 - the run rng reproduces a match without changing the run
+  ---
+  duration_ms: 2.041708
+  type: 'test'
+  ...
+# Subtest: accurate distances can win, and standing still loses the same seed
+ok 6 - accurate distances can win, and standing still loses the same seed
+  ---
+  duration_ms: 0.302409
+  type: 'test'
+  ...
+# Subtest: screen copy does not print the raze keys
+ok 7 - screen copy does not print the raze keys
+  ---
+  duration_ms: 0.228448
   type: 'test'
   ...
 # Subtest: documented starting numbers live in one config
-ok 3 - documented starting numbers live in one config
+ok 8 - documented starting numbers live in one config
   ---
-  duration_ms: 0.804992
+  duration_ms: 0.791498
   type: 'test'
   ...
 # Subtest: same seed and actions reproduce the same game
-ok 4 - same seed and actions reproduce the same game
+ok 9 - same seed and actions reproduce the same game
   ---
-  duration_ms: 1.880042
+  duration_ms: 1.89562
   type: 'test'
   ...
 # Subtest: a different seed deals different tickets
-ok 5 - a different seed deals different tickets
+ok 10 - a different seed deals different tickets
   ---
-  duration_ms: 0.176506
+  duration_ms: 0.905642
   type: 'test'
   ...
 # Subtest: resting through week 1 is a firing on Friday
-ok 6 - resting through week 1 is a firing on Friday
+ok 11 - resting through week 1 is a firing on Friday
   ---
-  duration_ms: 1.359886
+  duration_ms: 0.617499
   type: 'test'
   ...
 # Subtest: overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
-ok 7 - overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
+ok 12 - overnight adds one point, costs 3 stamina, and empty stamina leaves 1 point
   ---
-  duration_ms: 0.712617
+  duration_ms: 0.701741
+  type: 'test'
+  ...
+# Subtest: winning dota refunds 2 stamina and losing refunds none
+ok 13 - winning dota refunds 2 stamina and losing refunds none
+  ---
+  duration_ms: 0.389271
   type: 'test'
   ...
 # Subtest: rest restores 2 stamina and does not pass 10
-ok 8 - rest restores 2 stamina and does not pass 10
+ok 14 - rest restores 2 stamina and does not pass 10
   ---
-  duration_ms: 0.11075
+  duration_ms: 0.134891
   type: 'test'
   ...
 # Subtest: Linux cuts a server or incident ticket to 1 point
-ok 9 - Linux cuts a server or incident ticket to 1 point
+ok 15 - Linux cuts a server or incident ticket to 1 point
   ---
-  duration_ms: 0.496545
+  duration_ms: 0.254694
   type: 'test'
   ...
 # Subtest: Git cuts an event penalty from 18 to 8
-ok 10 - Git cuts an event penalty from 18 to 8
+ok 16 - Git cuts an event penalty from 18 to 8
   ---
-  duration_ms: 0.215648
+  duration_ms: 0.415211
   type: 'test'
   ...
 # Subtest: jQuery stays shut in week 1 and then saves a point on page tickets
-ok 11 - jQuery stays shut in week 1 and then saves a point on page tickets
+ok 17 - jQuery stays shut in week 1 and then saves a point on page tickets
   ---
-  duration_ms: 0.339415
+  duration_ms: 0.379855
   type: 'test'
   ...
 # Subtest: Java is night-only and the file database stays shut until 数据库
-ok 12 - Java is night-only and the file database stays shut until 数据库
+ok 18 - Java is night-only and the file database stays shut until 数据库
   ---
-  duration_ms: 0.847619
+  duration_ms: 1.26819
   type: 'test'
   ...
 # Subtest: illegal actions leave the state untouched
-ok 13 - illegal actions leave the state untouched
+ok 19 - illegal actions leave the state untouched
   ---
-  duration_ms: 0.770377
+  duration_ms: 0.143432
   type: 'test'
   ...
 # Subtest: the two cleared endings replace the probation reminder
-ok 14 - the two cleared endings replace the probation reminder
+ok 20 - the two cleared endings replace the probation reminder
   ---
-  duration_ms: 0.090385
+  duration_ms: 0.106682
   type: 'test'
   ...
 # Subtest: fixed lines reproduce a remembered win and a bare survival
-ok 15 - fixed lines reproduce a remembered win and a bare survival
+ok 21 - fixed lines reproduce a remembered win and a bare survival
   ---
-  duration_ms: 0.719409
+  duration_ms: 0.658245
   type: 'test'
   ...
-1..15
-# tests 15
+1..21
+# tests 21
 # suites 0
-# pass 15
+# pass 21
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 66.242519
+# duration_ms 62.188762
 
 [Career RPG Pages publish] /usr/bin/python3 scripts/publish-career-rpg.py --check
 Checked Career RPG publish tree (70 files).
 
 [Verify runner tests] /usr/bin/python3 scripts/test-verify.py
-...
-----------------------------------------------------------------------
-Ran 3 tests in 0.057s
-
-OK
 
 Verification passed (15 checks).
-VERIFY:0

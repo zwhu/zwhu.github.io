@@ -192,11 +192,14 @@ async function recordMinigame(name, seed, play) {
   await evaluate(`document.querySelector('[data-dota="back"]')?.click()`);
   await sleep(80);
   for (let i = 0; i < 6; i += 1) await save();
-  const after = await evaluate(`(() => ({
-    stamina: document.querySelector('#stamina').textContent,
-    log: document.querySelector('.log')?.innerText || '',
-    dota: !!document.querySelector('#dota'),
-  }))()`);
+  const after = await evaluate(`(() => {
+    const view = window.hefei.present();
+    return {
+      stamina: document.querySelector('#stamina').textContent,
+      log: view.log.join(' | '),
+      dota: !!document.querySelector('#dota'),
+    };
+  })()`);
   if (after.dota) throw new Error(name + ' overlay still open');
   const file = path.join(OUT, name + '.mp4');
   await encode(dir, file, 2);
@@ -232,6 +235,7 @@ try {
   await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
 
   if (process.argv.includes('dota')) {
+    await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 1280, deviceScaleFactor: 1, mobile: false });
     const win = await recordMinigame('dota-win', 's1', AIM);
     if (win.after.stamina !== '9' || !win.after.log.includes('体力 +2，现在 9')) {
       throw new Error('win stamina ' + JSON.stringify(win.after));
