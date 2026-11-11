@@ -145,7 +145,12 @@ function status(view) {
     el('article', {}, [
       el('div', {}, ['口碑']),
       el('strong', { id: 'rep' }, [String(view.reputation)]),
-      el('div', {}, ['周五线 ', el('strong', { id: 'rep-line' }, [String(view.reputationLine)])]),
+      el('div', {}, [
+      '周五线 ',
+      el('strong', { id: 'rep-line' }, [String(view.reputationLine)]),
+      ' · 好结局 ',
+      el('strong', { id: 'good-line' }, [String(view.goodReputation)]),
+    ]),
     ]),
     el('article', {}, [
       el('div', {}, ['约谈']),

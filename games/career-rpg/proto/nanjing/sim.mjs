@@ -268,10 +268,12 @@ export function rateProblems(report) {
   const random = report.random;
   if (greedy.clearRate < 0.4 || greedy.clearRate > 0.6) problems.push(`贪心过关率 ${greedy.clearRate}`);
   if (greedy.goodRate > 0.05) problems.push(`贪心好结局率 ${greedy.goodRate}`);
-  if (planned.clearRate < 0.6) problems.push(`有规划过关率 ${planned.clearRate}`);
-  if (planned.goodRate < 0.4) problems.push(`有规划好结局率 ${planned.goodRate}`);
+  if (planned.clearRate < 0.7 || planned.clearRate > 0.85) problems.push(`有规划过关率 ${planned.clearRate}`);
+  if (planned.goodRate < 0.4 || planned.goodRate > 0.6) problems.push(`有规划好结局率 ${planned.goodRate}`);
+  if (planned.clearRate < planned.goodRate + 0.15) problems.push(`有规划过关率没有明显高于好结局率 ${planned.clearRate} / ${planned.goodRate}`);
   if (planned.clearRate < greedy.clearRate) problems.push('有规划过关率低于贪心');
   if (random.clearRate > 0.15) problems.push(`随机过关率 ${random.clearRate}`);
+  if (random.goodRate > 0.03) problems.push(`随机好结局率 ${random.goodRate}`);
   return problems;
 }
 

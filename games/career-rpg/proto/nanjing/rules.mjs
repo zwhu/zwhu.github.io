@@ -741,8 +741,12 @@ function applyFriday(state) {
   return enterMorning({ ...next, week: state.week + 1, day: 1 });
 }
 
+function handledBoss(state) {
+  return state.boss.resolved && state.boss.reviewed;
+}
+
 function finishWin(state) {
-  const good = state.boss.resolved && state.boss.reviewed;
+  const good = handledBoss(state) && state.reputation >= state.config.goodReputation;
   return { ...state, phase: 'won', ending: good ? 'learned' : 'alive' };
 }
 
@@ -882,11 +886,12 @@ function presentTicket(state, ticket) {
 
 export function present(state) {
   const config = state.config;
-  const good = state.boss.resolved && state.boss.reviewed;
+  const good = handledBoss(state) && state.reputation >= config.goodReputation;
   const ending = ENDINGS[state.ending];
   let victoryText = ending?.text || '';
   if (state.ending === 'alive' && !state.boss.resolved) victoryText = '四周撑过来了。首页那次没查完。';
-  if (state.ending === 'alive' && state.boss.resolved) victoryText = '四周撑过来了。复盘没写。';
+  else if (state.ending === 'alive' && !state.boss.reviewed) victoryText = '四周撑过来了。复盘没写。';
+  else if (state.ending === 'alive') victoryText = `四周撑过来了。复盘写了，口碑还没到 ${config.goodReputation}。`;
   const react = state.learned.react && state.phase === 'won';
   const ready = state.tickets.filter(ticket => ticket.status === 'ready');
   const batchChance = ready.length ? Math.max(...ready.map(ticket => shipChance(ticket, state))) : 0;
@@ -903,6 +908,7 @@ export function present(state) {
     dauTarget: weekTarget(state),
     reputation: state.reputation,
     reputationLine: config.reputationLine,
+    goodReputation: config.goodReputation,
     talks: state.talks,
     talksToFail: config.talksToFail,
     overnightUsed: state.overnightUsed,

@@ -58,6 +58,8 @@ test('shared stamina rules and the documented nanjing numbers stay put', () => {
   assert.equal(CONFIG.testedChance, 15);
   assert.equal(CONFIG.pmChanceAdd, 15);
   assert.equal(CONFIG.bossRepPerAp, 5);
+  assert.equal(CONFIG.lateRep, 4);
+  assert.equal(CONFIG.goodReputation, 34);
   assert.equal(rulesSource.includes('document'), false);
   assert.equal(rulesSource.includes('window'), false);
 });
@@ -232,6 +234,18 @@ test('reviewing the boss is the good ending and skipping it is the other', () =>
   assert.equal(barely.phase, 'won');
   assert.equal(barely.ending, 'alive');
   assert.match(present(barely).victoryText, /没查完/);
+
+  let short = until('short', { ...quiet, goodReputation: 100 }, state => state.boss.active);
+  for (const option of ['posts', 'logs', 'config']) {
+    if (short.ap === 0) short = applyAction(short, { type: 'sleep' });
+    short = applyAction(short, { type: 'boss', option });
+  }
+  if (short.ap === 0) short = applyAction(short, { type: 'sleep' });
+  short = applyAction(short, { type: 'review', target: 'boss' });
+  short = untilAlive(short);
+  assert.equal(short.phase, 'won');
+  assert.equal(short.ending, 'alive');
+  assert.match(present(short).victoryText, /口碑还没到 100/);
 });
 
 test('react waits until week 4 and colleagues say different things', () => {

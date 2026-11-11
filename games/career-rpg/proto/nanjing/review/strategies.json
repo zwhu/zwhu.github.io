@@ -18,13 +18,13 @@
     "method": "先学 fibjs / Node.js 和集成测试，第 2 周学敬畏上线。每周让测试同事免费补一张测试。难单补测试再上，当天到期的直接上。不急的单攒到两张一起上，学会灰度后上线走灰度。事故先定位再修复，只剩 1 点且会回滚时才回滚普通事故。Boss 先回滚止血，再问测试同事、改配置，然后复盘。日活过线后学 React / Webpack。",
     "seeds": "n0–n239",
     "games": 240,
-    "clears": 208,
-    "goodEndings": 208,
-    "clearRate": 0.8667,
-    "goodRate": 0.8667,
+    "clears": 202,
+    "goodEndings": 102,
+    "clearRate": 0.8417,
+    "goodRate": 0.425,
     "lossWeeks": {
-      "3": 7,
-      "4": 25
+      "3": 8,
+      "4": 30
     }
   },
   "random": {
@@ -32,14 +32,14 @@
     "method": "每个行动点在当前合法操作里均匀随机，包括干活、补测试、上线、一起上、学习、休息、熬夜、事故、Boss 排查和复盘。随机数由种子单独引出。熬夜之后记一场没打过的 Dota，体力不返还。",
     "seeds": "n0–n239",
     "games": 240,
-    "clears": 25,
-    "goodEndings": 3,
-    "clearRate": 0.1042,
-    "goodRate": 0.0125,
+    "clears": 21,
+    "goodEndings": 0,
+    "clearRate": 0.0875,
+    "goodRate": 0,
     "lossWeeks": {
-      "2": 39,
-      "3": 118,
-      "4": 58
+      "2": 47,
+      "3": 119,
+      "4": 53
     }
   }
 }

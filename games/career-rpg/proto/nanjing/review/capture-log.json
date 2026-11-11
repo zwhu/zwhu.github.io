@@ -2,7 +2,7 @@
   "loss": {
     "file": "games/career-rpg/proto/nanjing/review/nanjing-loss.mp4",
     "frames": 125,
-    "ending": "第 3 周周五，口碑 17，低于 30，约谈。第 4 周周五，日活 68，目标 160，口碑 0，低于 30，约谈。"
+    "ending": "第 3 周周五，口碑 14，低于 30，约谈。第 4 周周五，日活 57，目标 160，口碑 0，低于 30，约谈。"
   },
   "win": {
     "file": "games/career-rpg/proto/nanjing/review/nanjing-win.mp4",
@@ -13,7 +13,8 @@
   "boss": {
     "file": "games/career-rpg/proto/nanjing/review/nanjing-boss.mp4",
     "frames": 146,
-    "rep": "REP 40 -> 35"
+    "rep": "REP 40 -> 35",
+    "note": "这次没重录。走错看监控仍是口碑 40 到 35，产品经理仍是 30% 到 45%。"
   },
   "consoleErrors": []
 }

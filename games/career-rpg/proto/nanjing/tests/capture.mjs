@@ -220,27 +220,32 @@ try {
     return { file: path.relative(ROOT, file), frames: index, ending, extra, texts };
   }
 
+  const endingsOnly = process.argv.includes('endings');
   const lossPlay = play('n0', 'greedy');
   const winPlay = play('n0', 'planned');
-  const bossPlay = play('n0', 'demo');
+  const bossPlay = endingsOnly ? null : play('n0', 'demo');
   const loss = await record('nanjing-loss', 'n0', lossPlay.actions, 5);
   if (!loss.ending.includes('约谈')) throw new Error(`loss ending ${loss.ending}`);
   const win = await record('nanjing-win', 'n0', winPlay.actions, 5);
   if (!win.ending.includes('扛住了，也学会了怎么扛') || !win.extra.includes('去杭州') || !win.extra.includes('去阿里')) {
     throw new Error(`win ending ${win.ending} ${win.extra}`);
   }
-  const boss = await record('nanjing-boss', 'n0', bossPlay.actions, 4);
-  const blob = boss.texts.join('\n');
-  for (const phrase of ['产品经理', '30% 变成 45%', '30% → 45%', '首页登不上', '好了没', '对不上', '少走了一步']) {
-    if (!blob.includes(phrase)) throw new Error(`boss video missed ${phrase}`);
+  let boss = null;
+  if (!endingsOnly) {
+    boss = await record('nanjing-boss', 'n0', bossPlay.actions, 4);
+    const blob = boss.texts.join('\n');
+    for (const phrase of ['产品经理', '30% 变成 45%', '30% → 45%', '首页登不上', '好了没', '对不上', '少走了一步']) {
+      if (!blob.includes(phrase)) throw new Error(`boss video missed ${phrase}`);
+    }
+    const repChange = blob.match(/REP (\d+) -> (\d+)/);
+    if (!repChange || Number(repChange[2]) >= Number(repChange[1])) throw new Error(`boss rep did not drop ${repChange}`);
+    boss = { file: boss.file, frames: boss.frames, rep: repChange[0] };
   }
-  const repChange = blob.match(/REP (\d+) -> (\d+)/);
-  if (!repChange || Number(repChange[2]) >= Number(repChange[1])) throw new Error(`boss rep did not drop ${repChange}`);
   if (errors.length) throw new Error(`console errors\n${errors.join('\n')}`);
   const report = {
     loss: { file: loss.file, frames: loss.frames, ending: loss.ending },
     win: { file: win.file, frames: win.frames, ending: win.ending, extra: win.extra },
-    boss: { file: boss.file, frames: boss.frames, rep: repChange[0] },
+    boss,
     consoleErrors: errors,
   };
   writeFileSync(path.join(OUT, 'capture-log.json'), `${JSON.stringify(report, null, 2)}\n`);
