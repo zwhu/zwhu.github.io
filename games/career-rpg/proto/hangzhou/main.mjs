@@ -1,5 +1,7 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from '../dota.mjs';
+import { NAV } from './nav.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
+import { cellCenter, effectFor, findPath, nearestWalkable } from './walk.mjs';
 
 const app = document.querySelector('#app');
 
@@ -33,19 +35,24 @@ const SKILL_COPY = Object.freeze({
 });
 
 const SCENE = Object.freeze({ w: 384, h: 216 });
-// 脚底锚点见素材说明。坐姿只露出椅背以上的头肩，点击范围落到整张椅子。
-const DAY_ACTORS = Object.freeze([
-  Object.freeze({ who: 'neighbor', x: 133, y: 133, w: 18, h: 44 }),
-  Object.freeze({ who: 'sister', x: 192, y: 133, w: 21, h: 44 }),
-  Object.freeze({ who: 'plus', x: 222, y: 90, w: 19, h: 46 }),
-  Object.freeze({ who: 'tea', x: 108, y: 152, w: 21, h: 46 }),
-]);
-const BOSS_ACTORS = Object.freeze([
-  Object.freeze({ who: 'plus', x: 298, y: 102, w: 19, h: 46 }),
-  Object.freeze({ who: 'neighbor', x: 355, y: 104, w: 18, h: 46 }),
-  Object.freeze({ who: 'sister', x: 330, y: 112, w: 21, h: 46 }),
-  Object.freeze({ who: 'tea', x: 312, y: 128, w: 21, h: 46 }),
-]);
+const WALK_SPEED = 140;
+
+const walkSheet = new Image();
+walkSheet.src = './art/player-walk.png';
+const sitImage = new Image();
+sitImage.src = './art/player-sit.png';
+
+let foot = { x: NAV.seat.stand[0], y: NAV.seat.stand[1] };
+let seated = true;
+let facing = 'down';
+let frame = 0;
+let frameTime = 0;
+let route = [];
+let routeIndex = 0;
+let pending = null;
+let sawBoss = false;
+let walkerLoop = 0;
+let walkerStamp = 0;
 
 function readSeed() {
   const value = new URLSearchParams(location.search).get('seed');
@@ -201,11 +208,143 @@ function named(who) {
 
 function actorBox(box) {
   return [
-    `left:${(box.x / SCENE.w) * 100}%`,
-    `top:${(box.y / SCENE.h) * 100}%`,
-    `width:${(box.w / SCENE.w) * 100}%`,
-    `height:${(box.h / SCENE.h) * 100}%`,
+    `left:${(box[0] / SCENE.w) * 100}%`,
+    `top:${(box[1] / SCENE.h) * 100}%`,
+    `width:${(box[2] / SCENE.w) * 100}%`,
+    `height:${(box[3] / SCENE.h) * 100}%`,
   ].join(';');
+}
+
+function spotHit(spot, boss) {
+  return boss ? spot.boss : spot.day;
+}
+
+function beginWalk(spot) {
+  const goal = spot.at;
+  const start = nearestWalkable(NAV, foot.x, foot.y);
+  const end = nearestWalkable(NAV, goal[0], goal[1]);
+  const cells = findPath(NAV, start, end);
+  if (!cells) return;
+  route = cells.map(cell => cellCenter(NAV, cell));
+  routeIndex = 0;
+  pending = effectFor(spot);
+  seated = false;
+  const here = route[0];
+  if (route.length === 1 && Math.hypot(foot.x - here[0], foot.y - here[1]) < 6) {
+    arrive();
+    return;
+  }
+  if (!walkerLoop) walkerLoop = requestAnimationFrame(stepWalker);
+}
+
+function arrive() {
+  route = [];
+  routeIndex = 0;
+  frame = 0;
+  const effect = pending;
+  pending = null;
+  if (!effect) {
+    drawWalker();
+    return;
+  }
+  if (effect.type === 'open') {
+    talkWho = effect.who;
+    render();
+    return;
+  }
+  if (effect.id === 'tickets') {
+    foot.x = NAV.seat.stand[0];
+    foot.y = NAV.seat.stand[1];
+    seated = true;
+    facing = 'up';
+  }
+  render();
+  const node = document.getElementById(effect.id);
+  if (node) node.scrollIntoView({ block: 'nearest' });
+}
+
+function stepWalker(now) {
+  const dt = Math.min(0.05, walkerStamp ? (now - walkerStamp) / 1000 : 0);
+  walkerStamp = now;
+  if (route.length) {
+    const target = route[routeIndex];
+    const dx = target[0] - foot.x;
+    const dy = target[1] - foot.y;
+    const distance = Math.hypot(dx, dy);
+    const step = WALK_SPEED * dt;
+    if (distance <= step || distance < 0.4) {
+      foot.x = target[0];
+      foot.y = target[1];
+      routeIndex += 1;
+      if (routeIndex >= route.length) arrive();
+    } else {
+      foot.x += (dx / distance) * step;
+      foot.y += (dy / distance) * step;
+      facing = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
+      frameTime += dt;
+      if (frameTime > 0.12) {
+        frameTime = 0;
+        frame = (frame + 1) % 6;
+      }
+    }
+  }
+  drawWalker();
+  if (route.length) walkerLoop = requestAnimationFrame(stepWalker);
+  else {
+    walkerLoop = 0;
+    walkerStamp = 0;
+  }
+}
+
+function drawWalker() {
+  const canvas = document.querySelector('#walker');
+  if (!canvas || !walkSheet.complete || !sitImage.complete) return;
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0, 0, SCENE.w, SCENE.h);
+  const boss = present(state).bossOn;
+  if (seated && !route.length && !boss) {
+    ctx.drawImage(sitImage, NAV.seat.sit[0], NAV.seat.sit[1]);
+    return;
+  }
+  const { w, h, directions } = NAV.frame;
+  const col = route.length ? 1 + (frame % 6) : 0;
+  const row = Math.max(0, directions.indexOf(facing));
+  ctx.drawImage(
+    walkSheet,
+    col * w,
+    row * h,
+    w,
+    h,
+    Math.round(foot.x - w / 2),
+    Math.round(foot.y - h),
+    w,
+    h,
+  );
+}
+
+function placeForBoss() {
+  const view = present(state);
+  if (view.bossOn && !sawBoss) {
+    sawBoss = true;
+    const cell = nearestWalkable(NAV, NAV.bossStand[0], NAV.bossStand[1]);
+    const [x, y] = cellCenter(NAV, cell);
+    foot.x = x;
+    foot.y = y;
+    seated = false;
+    facing = 'down';
+    route = [];
+    pending = null;
+  }
+  if (!view.bossOn) sawBoss = false;
+}
+
+function scenePoint(event) {
+  const rect = event.currentTarget.getBoundingClientRect();
+  return {
+    x: ((event.clientX - rect.left) / rect.width) * SCENE.w,
+    y: ((event.clientY - rect.top) / rect.height) * SCENE.h,
+  };
 }
 
 function continueMark(onContinue) {
@@ -228,43 +367,54 @@ function talkBox(name, lines, buttons, onContinue) {
 
 function office(view, talk) {
   const boss = view.bossOn;
-  const spots = boss ? BOSS_ACTORS : DAY_ACTORS;
-  const actors = spots.map(box => {
-    const person = view.colleagues.find(item => item.who === box.who);
-    const speaking = talkWho === box.who;
-    const button = el('button', {
+  const actors = NAV.spots.map(spot => {
+    const person = spot.who ? view.colleagues.find(item => item.who === spot.who) : null;
+    const speaking = spot.who && talkWho === spot.who;
+    const attrs = {
       type: 'button',
       class: speaking ? 'actor speaking' : 'actor',
-      style: actorBox(box),
-      'data-colleague': box.who,
-      'data-talked': person?.talked ? '1' : '0',
-      'aria-label': named(box.who) ? person.name : '……',
-    }, [
+      style: actorBox(spotHit(spot, boss)),
+      'data-spot': spot.id,
+    };
+    if (spot.who) {
+      attrs['data-colleague'] = spot.who;
+      attrs['data-talked'] = person?.talked ? '1' : '0';
+      attrs['aria-label'] = named(spot.who) ? person.name : '……';
+    } else {
+      attrs['aria-label'] = { computer: '电脑', shelf: '书架', board: '白板' }[spot.kind];
+    }
+    const button = el('button', attrs, spot.who ? [
       view.crowd ? '' : el('span', { class: 'bubble', 'aria-hidden': 'true' }, ['…']),
       el('i', { class: 'arrow', 'aria-hidden': 'true' }),
-    ]);
-    button.addEventListener('click', () => {
-      talkWho = box.who;
-      render();
+    ] : []);
+    button.addEventListener('click', event => {
+      event.stopPropagation();
+      beginWalk(spot);
     });
     return button;
   });
   const scene = boss ? 'boss' : 'day';
+  const picture = el('img', {
+    class: 'scene',
+    src: `./art/${scene}-384x216.png`,
+    width: String(SCENE.w),
+    height: String(SCENE.h),
+    alt: '',
+    draggable: 'false',
+  });
+  picture.addEventListener('click', event => {
+    const point = scenePoint(event);
+    beginWalk({ kind: 'ground', at: [point.x, point.y] });
+  });
   return el('section', {
     class: 'stage',
     id: 'office',
     'data-scene': scene,
     'data-night': view.night ? '1' : '0',
   }, [
-    el('img', {
-      class: 'scene',
-      src: `./art/${scene}-384x216.png`,
-      width: String(SCENE.w),
-      height: String(SCENE.h),
-      alt: '',
-      draggable: 'false',
-    }),
+    picture,
     view.night ? el('div', { class: 'dim', 'aria-hidden': 'true' }) : '',
+    el('canvas', { id: 'walker', width: String(SCENE.w), height: String(SCENE.h) }),
     ...actors,
     talk || '',
   ]);
@@ -605,6 +755,7 @@ function logList(view) {
 }
 
 function render() {
+  placeForBoss();
   const view = present(state);
   const parts = [header(view), status(view)];
   const talk = view.phase === 'play' ? talkBar(view) : null;
@@ -628,6 +779,7 @@ function render() {
   parts.push(logList(view));
   if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
+  drawWalker();
 }
 
 window.addEventListener('keydown', event => {
@@ -640,8 +792,16 @@ window.addEventListener('keydown', event => {
 
 render();
 
+walkSheet.addEventListener('load', () => drawWalker());
+sitImage.addEventListener('load', () => drawWalker());
+
 window.hangzhou = {
   present() { return present(state); },
+  walking() { return route.length > 0; },
+  foot() { return { x: foot.x, y: foot.y, seated }; },
+  clickScene(x, y) {
+    beginWalk({ kind: 'ground', at: [x, y] });
+  },
   act(action) {
     if (action?.type === 'overnight') openDota();
     else if (action?.type === 'dota') {

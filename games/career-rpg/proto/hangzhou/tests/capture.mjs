@@ -176,13 +176,18 @@ async function click(action) {
       await sleep(40);
     }
   }
-  const found = await evaluate(`(() => {
-    const node = document.querySelector(${JSON.stringify(selector(action))});
-    if (!node) return false;
-    node.scrollIntoView({ block: 'center' });
-    node.click();
-    return true;
-  })()`);
+  let found = false;
+  for (let i = 0; i < 80; i += 1) {
+    found = await evaluate(`(() => {
+      const node = document.querySelector(${JSON.stringify(selector(action))});
+      if (!node) return false;
+      node.scrollIntoView({ block: 'center' });
+      node.click();
+      return true;
+    })()`);
+    if (found) break;
+    await sleep(80);
+  }
   if (!found) throw new Error(`missing button ${JSON.stringify(action)}`);
 }
 async function encode(framesDir, file, fps) {
