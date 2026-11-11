@@ -77,13 +77,53 @@ export function planClick(grid, targets, from, pixel, tile = 8) {
   return { path, effect };
 }
 
-// 精灵表只有正面和背面站姿，没有左右，也没有迈步帧。
-export const WALK_FRAME = {
-  up: { pose: 'stand_back', flip: false },
-  down: { pose: 'stand_front', flip: false },
-  left: { pose: 'stand_front', flip: true },
-  right: { pose: 'stand_front', flip: false },
-};
+const DIRECTIONS = ['up', 'down', 'left', 'right'];
+
+function normalizeDirection(spec) {
+  if (!spec) return null;
+  const frames = (spec.frames || []).map(frame => ({
+    x: frame.x,
+    y: frame.y,
+    w: frame.w,
+    h: frame.h,
+  })).filter(frame => frame.w > 0 && frame.h > 0);
+  if (!frames.length) return null;
+  const anchor = Array.isArray(spec.anchor) && spec.anchor.length === 2
+    ? spec.anchor
+    : [frames[0].w / 2, frames[0].h - 2];
+  return {
+    frames,
+    count: frames.length,
+    duration: Number(spec.duration) > 0 ? Number(spec.duration) : 160,
+    anchor,
+    mirror: Boolean(spec.mirror),
+  };
+}
+
+// 数据里缺某个方向时才用：左=下的镜像，右=下，上=下。有写出来的方向原样用。
+export function resolveDirections(data) {
+  const raw = data?.directions || {};
+  const directions = {};
+  for (const name of DIRECTIONS) {
+    const spec = normalizeDirection(raw[name]);
+    if (spec) directions[name] = spec;
+  }
+  const down = directions.down || directions.right || directions.left || directions.up;
+  if (!down) return directions;
+  if (!directions.down) directions.down = { ...down, mirror: false };
+  if (!directions.right) directions.right = { ...directions.down, mirror: false };
+  if (!directions.left) directions.left = { ...directions.down, mirror: true };
+  if (!directions.up) directions.up = { ...directions.down, mirror: false };
+  return directions;
+}
+
+export function frameAt(spec, elapsedMs) {
+  const frames = spec.frames;
+  if (frames.length <= 1) return { index: 0, frame: frames[0] };
+  const duration = spec.duration > 0 ? spec.duration : 160;
+  const index = Math.floor(Math.max(0, elapsedMs) / duration) % frames.length;
+  return { index, frame: frames[index] };
+}
 
 export function facingOf(dx, dy) {
   if (Math.abs(dx) > Math.abs(dy)) return dx < 0 ? 'left' : 'right';

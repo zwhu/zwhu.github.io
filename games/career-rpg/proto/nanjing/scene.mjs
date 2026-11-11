@@ -1,13 +1,14 @@
-// 场景板是去掉主角之后的底图。主角在运行时画：坐着用坐姿，走开用站姿。
-// 左右没有侧面帧，左行把正面水平翻转，右行用正面。上用背面，下用正面。没有迈步帧。
+// 场景板是去掉主角之后的底图。主角坐姿仍用精灵表。走路的方向和迈步帧从 walk/walk.sprites.json 读。
 
-import { WALK_FRAME, facingOf, findPath, parseGrid, planClick } from './walk.mjs';
+import { facingOf, findPath, frameAt, parseGrid, planClick, resolveDirections } from './walk.mjs';
 
 let meta = null;
 let plates = null;
 let sheet = null;
 let grid = null;
 let walkData = null;
+let walkImage = null;
+let walkSprites = null;
 
 const MISSING_BACK = ['cto', 'feixiang', 'beige', 'newbie'];
 const SPEED = 72;
@@ -18,6 +19,7 @@ const mover = {
   path: [],
   effect: null,
   facing: 'down',
+  elapsed: 0,
 };
 
 let frame = 0;
@@ -43,7 +45,7 @@ export function poseName(id, pose) {
 
 export async function loadArt() {
   if (plates) return;
-  const [day, night, boss, sprites, table, walk] = await Promise.all([
+  const [day, night, boss, sprites, table, walk, walkSheet] = await Promise.all([
     loadImage('./art/day.png'),
     loadImage('./art/night.png'),
     loadImage('./art/boss.png'),
@@ -56,12 +58,18 @@ export async function loadArt() {
       if (!response.ok) throw new Error('walk.json');
       return response.json();
     }),
+    fetch('./walk/walk.sprites.json').then(response => {
+      if (!response.ok) throw new Error('walk.sprites.json');
+      return response.json();
+    }),
   ]);
   plates = { day, night, boss };
   sheet = sprites;
   meta = table;
   walkData = walk;
   grid = parseGrid(walk.rows);
+  walkSprites = resolveDirections(walkSheet);
+  walkImage = await loadImage(`./walk/${walkSheet.image}`);
   for (const id of MISSING_BACK) {
     if (poseName(id, 'stand_back') !== 'stand_front') throw new Error(`背面缺失未替换 ${id}`);
   }
@@ -136,16 +144,23 @@ function step(now) {
     const dx = next.x - mover.foot.x;
     const dy = next.y - mover.foot.y;
     const dist = Math.hypot(dx, dy);
+    if (dist > 0.01) {
+      const facing = facingOf(dx, dy);
+      if (facing !== mover.facing) {
+        mover.facing = facing;
+        mover.elapsed = 0;
+      }
+    }
     if (dist < 0.01 || dist <= left) {
       mover.foot = { x: next.x, y: next.y };
       mover.path.shift();
       left -= dist;
     } else {
-      mover.facing = facingOf(dx, dy);
       mover.foot = { x: mover.foot.x + (dx / dist) * left, y: mover.foot.y + (dy / dist) * left };
       left = 0;
     }
   }
+  mover.elapsed += dt * 1000;
   if (!mover.path.length) {
     finish();
     return;
@@ -160,6 +175,7 @@ function arm(cells, effect) {
   if (!mover.foot) mover.foot = { ...points[0] };
   mover.path = points;
   mover.effect = effect;
+  mover.elapsed = 0;
   if (points.length <= 1 && Math.hypot(mover.foot.x - points[0].x, mover.foot.y - points[0].y) < 1) {
     finish();
     return;
@@ -185,21 +201,20 @@ export function clickGround(x, y, mode) {
   arm(plan.path, plan.effect);
 }
 
-function drawSprite(ctx, id, pose, footX, footY, flip) {
-  const cell = meta.cells[id][pose];
-  if (!cell || cell.empty) return;
-  const [sx, sy] = cell.origin;
-  const anchor = cell.foot || [28, 54];
-  const dx = footX - anchor[0];
-  const dy = footY - anchor[1];
-  if (!flip) {
-    ctx.drawImage(sheet, sx, sy, 56, 56, dx, dy, 56, 56);
+function drawWalkFrame(ctx, spec, elapsed) {
+  if (!walkImage || !spec) return;
+  const { frame } = frameAt(spec, elapsed);
+  const anchor = spec.anchor;
+  const dx = mover.foot.x - anchor[0];
+  const dy = mover.foot.y - anchor[1];
+  if (!spec.mirror) {
+    ctx.drawImage(walkImage, frame.x, frame.y, frame.w, frame.h, dx, dy, frame.w, frame.h);
     return;
   }
   ctx.save();
-  ctx.translate(dx + 56, dy);
+  ctx.translate(dx + frame.w, dy);
   ctx.scale(-1, 1);
-  ctx.drawImage(sheet, sx, sy, 56, 56, 0, 0, 56, 56);
+  ctx.drawImage(walkImage, frame.x, frame.y, frame.w, frame.h, 0, 0, frame.w, frame.h);
   ctx.restore();
 }
 
@@ -223,7 +238,5 @@ export function drawScene(canvas, mode) {
     ctx.drawImage(sheet, sx, sy, 56, 56, 54, 62, 56, 56);
     return;
   }
-  const frameSpec = WALK_FRAME[mover.facing] || WALK_FRAME.down;
-  const pose = poseName('player', frameSpec.pose);
-  drawSprite(ctx, 'player', pose, mover.foot.x, mover.foot.y, frameSpec.flip);
+  drawWalkFrame(ctx, walkSprites?.[mover.facing] || walkSprites?.down, mover.elapsed);
 }
