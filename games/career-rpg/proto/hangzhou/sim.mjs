@@ -317,33 +317,63 @@ export function runReport(seeds = SEEDS, config) {
   };
 }
 
-export function bossReviewActions(seed = 'h1') {
+function coveredTicket(state) {
+  const open = state.tickets.filter(ticket => !ticket.late && moduleCovers(state.modules, state.learned, ticket.field));
+  open.sort((a, b) => a.dueIn - b.dueIn || a.id - b.id);
+  return open[0] || null;
+}
+
+function nextExtractField(state) {
+  const wanted = BOSS_FIELDS.filter(field => !moduleCovers(state.modules, state.learned, field));
+  let best = '';
+  let bestScore = -1;
+  for (const field of FIELD_IDS) {
+    if (state.modules.includes(field)) continue;
+    const gain = [field];
+    if (state.learned.webpack) gain.push(SIMILAR[field]);
+    const score = gain.filter(id => wanted.includes(id)).length + (state.extractProgress[field] > 0 ? 0.5 : 0);
+    if (score > bestScore) {
+      bestScore = score;
+      best = field;
+    }
+  }
+  return best;
+}
+
+export function bossReviewActions(seed = 'h0') {
   let state = createGame(seed);
   const actions = [];
-  let hard = 0;
-  let guard = 0;
-  while (state.phase === 'play' && state.week < 4 && guard < 800) {
-    let action;
-    if (hard < 3) action = greedyAction(state);
-    else {
-      action = plannedAction(state);
-      const uncovered = action?.type === 'work' && state.tickets.some(ticket => ticket.id === action.ticketId && !moduleCovers(state.modules, state.learned, ticket.field));
-      if (uncovered || (action?.type === 'extract' && state.modules.length >= 2)) {
-        if (state.night && state.ap > 0) action = { type: 'rest' };
-        else if (state.ap === 0) action = { type: 'sleep' };
-        else {
-          const covered = state.tickets.filter(ticket => !ticket.late && moduleCovers(state.modules, state.learned, ticket.field));
-          covered.sort((a, b) => a.dueIn - b.dueIn || a.id - b.id);
-          action = covered[0] ? { type: 'work', ticketId: covered[0].id } : { type: 'rest' };
-        }
-      }
-    }
+  const push = (action) => {
     const next = applyAction(state, action);
-    if (next === state) throw new Error(`boss review stuck ${JSON.stringify(action)}`);
-    hard = next.stats.hardCompletes;
+    if (next === state) throw new Error(`boss review stuck ${JSON.stringify(action)} on ${seed}`);
     actions.push(action);
     state = next;
+  };
+  let guard = 0;
+  while (state.phase === 'play' && state.week < 4 && guard < 800) {
     guard += 1;
+    if (state.ap === 0) { push({ type: 'sleep' }); continue; }
+    if (state.night) { push({ type: 'rest' }); continue; }
+    const hard = state.stats.hardCompletes;
+    const urgent = state.tickets.filter(ticket => !ticket.late && ticket.dueIn <= 1)
+      .sort((a, b) => a.id - b.id)[0];
+    if (urgent && (hard >= 3 || !moduleCovers(state.modules, state.learned, urgent.field))) {
+      if (hard < 3 || moduleCovers(state.modules, state.learned, urgent.field)) {
+        push({ type: 'work', ticketId: urgent.id });
+        continue;
+      }
+    }
+    if (hard < 3) {
+      const ticket = state.tickets.filter(item => !item.late).sort((a, b) => a.dueIn - b.dueIn || a.id - b.id)[0];
+      if (ticket) { push({ type: 'work', ticketId: ticket.id }); continue; }
+    }
+    const covered = coveredTicket(state);
+    if (covered) { push({ type: 'work', ticketId: covered.id }); continue; }
+    if (state.modules.length < 2) {
+      const field = nextExtractField(state);
+      if (field) { push({ type: 'extract', field }); continue; }
+    }
+    push({ type: 'rest' });
   }
   if (state.week !== 4 || state.day !== 1 || state.phase !== 'play') {
     throw new Error(`boss review did not reach week 4 on ${seed}`);
@@ -357,18 +387,15 @@ export function bossReviewActions(seed = 'h1') {
   const open = state.tickets.find(ticket => ticket.boss && !bossFieldCovered(state, ticket.field) && !ticket.late);
   if (!open) throw new Error(`boss review has no uncovered ticket on ${seed}`);
   let safety = 0;
-  while (state.phase === 'play' && safety < 12) {
+  let crossed = false;
+  while (state.phase === 'play' && safety < 16) {
     const before = debtSurchargeOf(state);
-    if (state.ap === 0) {
-      actions.push({ type: 'sleep' });
-      state = applyAction(state, { type: 'sleep' });
-    } else {
-      actions.push({ type: 'work', ticketId: open.id });
-      state = applyAction(state, { type: 'work', ticketId: open.id });
-    }
-    if (debtSurchargeOf(state) > before) break;
+    if (state.ap === 0) push({ type: 'sleep' });
+    else push({ type: 'work', ticketId: open.id });
+    if (debtSurchargeOf(state) > before) { crossed = true; break; }
     safety += 1;
   }
+  if (!crossed) throw new Error(`boss review did not cross a debt step on ${seed}`);
   return actions;
 }
 

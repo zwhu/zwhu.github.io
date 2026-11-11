@@ -1,11 +1,11 @@
 {
-  "origin": "http://127.0.0.1:38253/games/career-rpg/proto/hangzhou/index.html",
+  "origin": "http://127.0.0.1:43209/games/career-rpg/proto/hangzhou/index.html",
   "consoleErrors": [],
   "loss": {
     "file": "games/career-rpg/proto/hangzhou/review/hangzhou-loss.mp4",
     "frames": 47
   },
-  "lossText": "第 2 周周五，交付 0，低于本周线 55。被业务方投诉两次，本局结束。",
+  "lossText": "第 2 周周五，交付 0，低于本周线 64。被业务方投诉两次，本局结束。",
   "win": {
     "file": "games/career-rpg/proto/hangzhou/review/hangzhou-win.mp4",
     "frames": 98
@@ -15,5 +15,20 @@
     "file": "games/career-rpg/proto/hangzhou/review/hangzhou-debt.mp4",
     "frames": 89
   },
-  "debtText": "需求做完了，债也欠下了。四周撑过来了。有的单子延期了，技术债还在。"
+  "debtText": "需求做完了，债也欠下了。四周撑过来了。有的单子延期了，技术债还在。",
+  "boss": {
+    "file": "games/career-rpg/proto/hangzhou/review/hangzhou-boss.mp4",
+    "frames": 94
+  },
+  "bossView": {
+    "debt": "32",
+    "banner": "技术债 32，所有单子 +1 点",
+    "slots": [
+      "模块 1 + 技术债 1 = 2 点",
+      "已按期交付",
+      "硬写 4 + 技术债 1 = 5 点",
+      "模块 1 + 技术债 1 = 2 点",
+      "硬写 4 + 技术债 1 = 5 点"
+    ]
+  }
 }

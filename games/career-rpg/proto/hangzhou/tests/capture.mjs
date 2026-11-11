@@ -249,17 +249,19 @@ try {
     if (!report.winText.includes('一套架构，撑起五条业务线')) throw new Error(`win ${report.winText}`);
   }
   if (want('hangzhou-debt')) {
-    report.debt = await record('hangzhou-debt', 'h3', play('greedy', 'h3').actions, { fps: 4, endHold: 8 });
+    report.debt = await record('hangzhou-debt', 'h1', play('greedy', 'h1').actions, { fps: 4, endHold: 8 });
     report.debtText = await evaluate('document.querySelector("#ending-text").textContent');
     if (!report.debtText.includes('需求做完了，债也欠下了')) throw new Error(`debt ${report.debtText}`);
   }
   if (want('hangzhou-boss')) {
-    report.boss = await record('hangzhou-boss', 'h1', bossReviewActions('h1'), { fps: 4, tail: 2, tailCopies: 8, endHold: 12 });
+    report.boss = await record('hangzhou-boss', 'h2', bossReviewActions('h2'), { fps: 4, tail: 2, tailCopies: 8, endHold: 12 });
     report.bossView = await evaluate(`(() => ({
       debt: document.querySelector('#debt').textContent,
       banner: document.querySelector('#debt-banner').textContent,
-      week: document.querySelector('#when').textContent,
+      slots: [...document.querySelectorAll('[data-slot]')].map(node => node.getAttribute('data-label')),
     }))()`);
+    if (report.bossView.banner !== '技术债 32，所有单子 +1 点') throw new Error(`banner ${report.bossView.banner}`);
+    if (!report.bossView.slots.some(label => label.includes('技术债 1'))) throw new Error(report.bossView.slots.join(' | '));
   }
 
   if (errors.length) throw new Error(`console errors\n${errors.join('\n')}`);

@@ -17,6 +17,9 @@ test('three strategies on h0–h239 stay inside the brief', () => {
   assert.ok(byId.planned.goodRate >= 0.4 && byId.planned.goodRate <= 0.6);
   assert.ok(byId.random.clearRate <= 0.15);
   assert.ok(byId.random.goodRate <= 0.03);
+  const week4Losses = report.strategies.reduce((sum, item) => sum + (item.lossWeeks['4'] || 0), 0);
+  assert.ok(week4Losses > 0);
+  assert.ok(byId.greedy.lossWeeks['4'] > 0);
   for (const item of report.strategies) {
     assert.equal(item.clears / item.games, item.clearRate);
     assert.equal(item.goodEndings / item.games, item.goodRate);

@@ -49,7 +49,9 @@ test('shared days and the Hangzhou numbers live in one config', () => {
   assert.equal(CONFIG.babelClear, 10);
   assert.equal(CONFIG.bossWeek, 4);
   assert.equal(CONFIG.bossDay, 1);
-  assert.deepEqual([weekLine(1), weekLine(2), weekLine(3), weekLine(4)], [39, 55, 8, 8]);
+  const lines = [weekLine(1), weekLine(2), weekLine(3), weekLine(4)];
+  assert.deepEqual(lines, [64, 64, 64, 100]);
+  assert.equal(lines.every((line, index) => index === 0 || line >= lines[index - 1]), true);
   assert.equal(BOSS_TICKETS.length, 5);
   for (const ticket of BOSS_TICKETS) assert.ok(ticket.difficulty >= 2 && ticket.difficulty <= 4);
   assert.equal(CONFIG.difficultyTable.every(cost => cost >= 2 && cost <= 4), true);
@@ -212,8 +214,12 @@ test('the two wins and the boss debt step are reachable', () => {
   assert.equal(debt.ending, 'debt');
   assert.equal(debt.bossOnTime < 5, true);
 
-  const shown = present(replay('h1', bossReviewActions('h1')));
-  assert.equal(shown.bossOn, true);
-  assert.equal(shown.whiteboard.length, 5);
-  assert.equal(shown.surcharge, debtSurcharge(shown.debt));
+  const actions = bossReviewActions('h2');
+  const before = present(replay('h2', actions.slice(0, -1)));
+  const after = present(replay('h2', actions));
+  assert.equal(before.bossOn, true);
+  assert.equal(before.surcharge, 0);
+  assert.equal(after.surcharge, 1);
+  assert.equal(after.debt, before.debt + CONFIG.debtPerHard);
+  assert.match(after.log[0], /所有单子 \+1/);
 });
