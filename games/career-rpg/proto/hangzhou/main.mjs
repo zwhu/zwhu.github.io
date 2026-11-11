@@ -63,6 +63,9 @@ function readSeed() {
 let state = createGame(readSeed());
 let talkWho = null;
 let panel = null;
+let toastText = '';
+let toastUntil = 0;
+let toastTimer = 0;
 let dota = null;
 let dotaTick = 0;
 let dotaResult = 0;
@@ -160,6 +163,8 @@ function start(seed) {
   dota = null;
   talkWho = null;
   panel = null;
+  toastText = '';
+  toastUntil = 0;
   state = createGame(next);
   render();
 }
@@ -685,10 +690,24 @@ function modulePanel(view) {
 function sceneNotes(view) {
   const notes = el('div', { class: 'scene-notes' });
   if (panel) return notes;
+  const latest = view.log[0] || '';
+  const now = Date.now();
+  if (latest && latest !== toastText) {
+    toastText = latest;
+    toastUntil = now + 4000;
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toastTimer = 0;
+      if (Date.now() >= toastUntil) render();
+    }, 4100);
+  }
+  if (latest && now < toastUntil) {
+    notes.append(el('p', { class: 'flash', id: 'log' }, [latest]));
+    return notes;
+  }
   if (view.nightLock) notes.append(el('p', { class: 'night', id: 'night-lock' }, [view.nightLock]));
-  if (view.forecast) notes.append(el('p', { class: 'forecast', id: 'forecast' }, [`下一周字段：${view.forecastText}`]));
-  notes.append(debtBanner(view));
-  if (view.log[0]) notes.append(el('ol', { class: 'log', id: 'log' }, [el('li', {}, [view.log[0]])]));
+  else if (view.forecast) notes.append(el('p', { class: 'forecast', id: 'forecast' }, [`下一周字段：${view.forecastText}`]));
+  else notes.append(debtBanner(view));
   return notes;
 }
 
@@ -737,9 +756,13 @@ function sceneActions(view) {
     play.addEventListener('click', () => startDotaMatch());
     bar.append(play);
   }
-  if (view.canSleep) {
+  if (view.night || view.canSleep) {
     const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉']);
-    sleep.addEventListener('click', () => { panel = null; act({ type: 'sleep' }); });
+    sleep.addEventListener('click', () => {
+      panel = null;
+      if (present(state).night) enterNight();
+      else act({ type: 'sleep' });
+    });
     bar.append(sleep);
   }
   return bar;
