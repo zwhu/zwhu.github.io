@@ -42,5 +42,12 @@ export function resolveSprites(data) {
 export function frameIndex(frameCount, durationMs, elapsedMs, moving) {
   if (!moving || frameCount <= 1) return 0;
   const duration = durationMs > 0 ? durationMs : 160;
-  return Math.floor(elapsedMs / duration) % frameCount;
+  const walkCount = frameCount - 1;
+  return 1 + (Math.floor(elapsedMs / duration) % walkCount);
+}
+
+export function poseKind({ seated = false, moving = false } = {}) {
+  if (seated && !moving) return 'sit';
+  if (!moving) return 'stand';
+  return 'walk';
 }

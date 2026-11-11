@@ -7,6 +7,7 @@ import { pathToFileURL } from 'node:url';
 const NAMES = ['down', 'up', 'left', 'right'];
 
 export function convertMeta(meta) {
+  if (meta.cells && meta.sheet) return convertSheet(meta);
   const frameDuration = meta.frameDuration > 0 ? meta.frameDuration : 160;
   const directions = {};
   for (const name of NAMES) {
@@ -16,6 +17,31 @@ export function convertMeta(meta) {
       file: spec.file,
       frames: framesOf(spec),
       anchor: spec.anchor || [Math.round((spec.frameWidth || spec.frames[0].w) / 2), spec.frameHeight || spec.frames[0].h],
+      mirror: false,
+    };
+  }
+  return { frameDuration, directions };
+}
+
+function convertSheet(meta) {
+  const frameDuration = meta.suggested_interval_ms > 0 ? meta.suggested_interval_ms : 140;
+  const standName = meta.stand || 'stand';
+  const loop = (meta.walk_loop || []).filter(name => name !== standName);
+  const anchor = meta.foot_anchor;
+  const directions = {};
+  for (const name of meta.rows || NAMES) {
+    const order = meta.frame_order?.[name] || [standName, ...loop];
+    const sequenced = order[0] === standName ? order : [standName, ...order.filter(item => item !== standName)];
+    const frames = sequenced.map(frameName => {
+      const cell = meta.cells?.[name]?.[frameName];
+      if (!cell?.rect) throw new Error(`meta.json 缺少 ${name}/${frameName}`);
+      const [x0, y0, x1, y1] = cell.rect;
+      return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+    });
+    directions[name] = {
+      file: meta.sheet,
+      frames,
+      anchor: anchor || meta.cells[name][standName].foot,
       mirror: false,
     };
   }

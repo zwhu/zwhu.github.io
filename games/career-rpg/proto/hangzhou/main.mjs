@@ -2,7 +2,7 @@ import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickM
 import { NAV } from './nav.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
 import { cellCenter, effectFor, findPath, nearestWalkable, sceneFile, visibleSpots } from './walk.mjs';
-import { frameIndex, resolveSprites } from './walk-sprites.mjs';
+import { frameIndex, poseKind, resolveSprites } from './walk-sprites.mjs';
 
 const app = document.querySelector('#app');
 
@@ -301,7 +301,8 @@ function drawWalker() {
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, SCENE.w, SCENE.h);
   const view = present(state);
-  if (seated && !route.length && !view.bossOn) {
+  const moving = route.length > 0;
+  if (poseKind({ seated, moving }) === 'sit' && !view.bossOn) {
     // 夜景底图已经叠好显示器和坐姿，头发压在屏幕下沿。再画一张白天坐姿会重影。
     if (view.night) return;
     ctx.drawImage(sitImage, NAV.seat.sit[0], NAV.seat.sit[1]);
@@ -310,7 +311,7 @@ function drawWalker() {
   const spec = sprites.directions[facing] || sprites.directions.down;
   const image = spriteImages.get(spec.file);
   if (!image?.complete) return;
-  const index = frameIndex(spec.frames.length, sprites.frameDuration, walkElapsed, route.length > 0);
+  const index = frameIndex(spec.frames.length, sprites.frameDuration, walkElapsed, moving);
   const rect = spec.frames[index];
   const [ax, ay] = spec.anchor;
   ctx.save();
@@ -823,6 +824,7 @@ loadWalkSprites();
 window.hangzhou = {
   present() { return present(state); },
   walking() { return route.length > 0; },
+  facing() { return facing; },
   foot() { return { x: foot.x, y: foot.y, seated }; },
   clickScene(x, y) {
     beginWalk({ kind: 'ground', at: [x, y] });
