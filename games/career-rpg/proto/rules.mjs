@@ -192,6 +192,7 @@ export function createGame(seed, config = CONFIG) {
     stamina: config.staminaStart,
     favor: config.favorStart,
     overnightUsed: false,
+    dotaPending: false,
     skills: { linux: 0, git: 0, database: 0, java: 0, jquery: 0 },
     learned: { linux: false, git: false, database: false, java: false, jquery: false },
     tickets: [],
@@ -305,8 +306,18 @@ function overnight(state) {
     ap: state.ap + state.config.overnightAp,
     stamina,
     overnightUsed: true,
+    dotaPending: true,
     stats: { ...state.stats, overnights: state.stats.overnights + 1 },
   }, `${state.config.overnightName}，行动点 +${state.config.overnightAp}，体力 ${stamina}`);
+}
+
+function dotaResult(state, won) {
+  if (state.phase !== 'play' || !state.dotaPending) return state;
+  if (!won) return withLog({ ...state, dotaPending: false }, 'Dota 没打过，体力不返还');
+  const stamina = Math.min(state.config.staminaMax, state.stamina + state.config.dotaWinStamina);
+  const gained = stamina - state.stamina;
+  const note = gained > 0 ? `Dota 打赢了，体力 +${gained}，现在 ${stamina}` : 'Dota 打赢了，体力已经满了';
+  return withLog({ ...state, stamina, dotaPending: false }, note);
 }
 
 function resolveDeadlines(state) {
@@ -346,7 +357,7 @@ function resolveDeadlines(state) {
 
 function sleep(state) {
   if (state.phase !== 'play' || state.ap > 0) return state;
-  let next = resolveDeadlines(state);
+  let next = resolveDeadlines({ ...state, dotaPending: false });
   if (next.day === next.config.daysPerWeek) {
     const line = weekLine(next.week, next.config);
     if (next.favor < line) {
@@ -380,6 +391,7 @@ export function applyAction(state, action) {
   if (action.type === 'study') return study(state, action.skill);
   if (action.type === 'rest') return rest(state);
   if (action.type === 'overnight') return overnight(state);
+  if (action.type === 'dota') return dotaResult(state, action.won === true);
   if (action.type === 'sleep') return sleep(state);
   return state;
 }

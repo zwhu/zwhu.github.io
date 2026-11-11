@@ -142,9 +142,108 @@ const framesRoot = path.join(tmpdir(), 'hefei-proto-frames');
 rmSync(framesRoot, { recursive: true, force: true });
 mkdirSync(framesRoot);
 
+async function recordMinigame(name, seed, play) {
+  const dir = path.join(framesRoot, name);
+  mkdirSync(dir);
+  await goto(seed);
+  let index = 0;
+  const save = async () => {
+    await shot(path.join(dir, String(index).padStart(4, '0') + '.png'));
+    index += 1;
+  };
+  const before = await evaluate('document.querySelector("#stamina").textContent');
+  if (before !== '10') throw new Error(name + ' stamina before ' + before);
+  for (let i = 0; i < 4; i += 1) await save();
+  const opened = await evaluate(`(() => {
+    const node = document.querySelector('[data-action="overnight"]');
+    if (!node) return false;
+    node.click();
+    return true;
+  })()`);
+  if (!opened) throw new Error(name + ' did not open');
+  await sleep(80);
+  const started = Date.now();
+  let outcome = '';
+  let sawLane = false;
+  let nextShot = 0;
+  while (Date.now() - started < 50000) {
+    const sample = await evaluate(`(() => {
+      const root = document.querySelector('#dota');
+      if (!root) return { phase: 'closed', text: '' };
+      const result = root.querySelector('[data-result]');
+      return { phase: result ? 'result' : 'play', result: result ? result.getAttribute('data-result') : '', text: root.innerText };
+    })()`);
+    if (sample.phase === 'play') {
+      if (/[ZXC]/.test(sample.text)) throw new Error(name + ' shows a key label ' + sample.text);
+      if (sample.text.includes('短') && sample.text.includes('影魔')) sawLane = true;
+    }
+    if (Date.now() >= nextShot) {
+      await save();
+      nextShot = Date.now() + 500;
+    }
+    if (sample.phase === 'result') { outcome = sample.result; break; }
+    outcome = await evaluate(`(${play})()`);
+    if (outcome === 'win' || outcome === 'loss') continue;
+    await sleep(100);
+  }
+  if (!sawLane) throw new Error(name + ' never showed the lane');
+  if (outcome !== 'win' && outcome !== 'loss') throw new Error(name + ' did not finish ' + outcome);
+  await save();
+  await evaluate(`document.querySelector('[data-dota="back"]')?.click()`);
+  await sleep(80);
+  for (let i = 0; i < 6; i += 1) await save();
+  const after = await evaluate(`(() => ({
+    stamina: document.querySelector('#stamina').textContent,
+    log: document.querySelector('.log')?.innerText || '',
+    dota: !!document.querySelector('#dota'),
+  }))()`);
+  if (after.dota) throw new Error(name + ' overlay still open');
+  const file = path.join(OUT, name + '.mp4');
+  await encode(dir, file, 2);
+  return {
+    file: path.relative(ROOT, file),
+    frames: index,
+    seconds: +((Date.now() - started) / 1000).toFixed(1),
+    before,
+    after,
+  };
+}
+
+const AIM = `() => {
+  const panel = document.querySelector('[data-result]');
+  if (panel) return panel.getAttribute('data-result');
+  if (!document.querySelector('#dota')) return 'closed';
+  const spots = [...document.querySelectorAll('.creep-wrap')].map(node => Number(node.dataset.pos)).sort((a, b) => a - b);
+  for (const pos of spots) {
+    const button = document.querySelector('[data-distance="' + pos + '"]');
+    if (button && !button.disabled) { button.click(); return 'cast'; }
+  }
+  return 'wait';
+}`;
+
+const IDLE = `() => {
+  const panel = document.querySelector('[data-result]');
+  if (panel) return panel.getAttribute('data-result');
+  return document.querySelector('#dota') ? 'wait' : 'closed';
+}`;
+
 try {
   await connect();
   await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
+
+  if (process.argv.includes('dota')) {
+    const win = await recordMinigame('dota-win', 's1', AIM);
+    if (win.after.stamina !== '9' || !win.after.log.includes('体力 +2，现在 9')) {
+      throw new Error('win stamina ' + JSON.stringify(win.after));
+    }
+    const loss = await recordMinigame('dota-loss', 's1', IDLE);
+    if (loss.after.stamina !== '7' || !loss.after.log.includes('体力不返还') || !loss.after.log.includes('体力 7')) {
+      throw new Error('loss stamina ' + JSON.stringify(loss.after));
+    }
+    const report = { win, loss };
+    writeFileSync(path.join(OUT, 'dota-capture.json'), JSON.stringify(report, null, 2) + '\n');
+    console.log(JSON.stringify(report, null, 2));
+  } else {
 
   async function cardText(kind) {
     return evaluate(`document.querySelector('[data-kind="${kind}"]')?.innerText || ''`);
@@ -281,6 +380,7 @@ try {
   };
   writeFileSync(path.join(OUT, 'capture-log.json'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report, null, 2));
+  }
 } catch (error) {
   console.error('CAPTURE_FAIL', error);
   process.exitCode = 1;

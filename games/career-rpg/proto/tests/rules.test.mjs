@@ -129,6 +129,33 @@ test('overnight adds one point, costs 3 stamina, and empty stamina leaves 1 poin
   assert.deepEqual(drained, [7, 4, 1, 0]);
 });
 
+test('winning dota refunds 2 stamina and losing refunds none', () => {
+  const fresh = createGame('dota-pay');
+  assert.equal(applyAction(fresh, { type: 'dota', won: true }), fresh);
+  let state = applyAction(fresh, { type: 'overnight' });
+  assert.equal(state.ap, 4);
+  assert.equal(state.stamina, 7);
+  assert.equal(state.dotaPending, true);
+  const lost = applyAction(state, { type: 'dota', won: false });
+  assert.equal(lost.stamina, 7);
+  assert.equal(lost.ap, 4);
+  assert.equal(lost.dotaPending, false);
+  assert.equal(lost.log[0], 'Dota 没打过，体力不返还');
+  assert.equal(applyAction(lost, { type: 'dota', won: true }), lost);
+  const won = applyAction(state, { type: 'dota', won: true });
+  assert.equal(won.stamina, 9);
+  assert.equal(won.ap, 4);
+  assert.equal(present(won).stamina, 9);
+  assert.equal(won.log[0], 'Dota 打赢了，体力 +2，现在 9');
+  assert.equal(CONFIG.dotaWinStamina, 2);
+  const capped = applyAction({ ...state, stamina: 9 }, { type: 'dota', won: true });
+  assert.equal(capped.stamina, 10);
+  assert.equal(capped.log[0], 'Dota 打赢了，体力 +1，现在 10');
+  const full = applyAction({ ...state, stamina: 10 }, { type: 'dota', won: true });
+  assert.equal(full.stamina, 10);
+  assert.equal(full.log[0], 'Dota 打赢了，体力已经满了');
+});
+
 test('rest restores 2 stamina and does not pass 10', () => {
   let state = createGame('rest-cap');
   state = applyAction(state, { type: 'overnight' });
