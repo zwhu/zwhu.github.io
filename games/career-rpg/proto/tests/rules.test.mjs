@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { accessSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { CONFIG, ENDINGS, SKILL_IDS } from '../config.mjs';
 import { BARELY_ACTIONS, BARELY_SEED, LOSS_ACTIONS, LOSS_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from '../line.mjs';
@@ -20,6 +20,7 @@ import {
   weekLine,
 } from '../rules.mjs';
 import { ratesOnly, runStrategies } from '../sim.mjs';
+import { WALK_GRID, commitArrival, findPath, pointBlocked, resolveClick } from '../walk.mjs';
 
 const rulesSource = readFileSync(new URL('../rules.mjs', import.meta.url), 'utf8');
 
@@ -522,4 +523,65 @@ test('fixed lines reproduce a firing, a bare survival, and a remembered win', ()
   assert.match(present(barely).victoryText, /还没写完/);
   assert.equal(present(barely).victoryTitle, '勉强留下来');
   assert.ok(barely.favor >= weekLine(4));
+});
+
+test('each clickable target has a path that stays off obstacles', () => {
+  const start = WALK_GRID.start;
+  assert.equal(pointBlocked(start.x, start.y), false);
+  for (const id of ['boss', 'lunch', 'neighbor', 'computer', 'shelf', 'party']) {
+    const target = WALK_GRID.targets[id];
+    assert.equal(pointBlocked(target.x, target.y), false, id);
+    const path = findPath(start, target);
+    assert.ok(path, id);
+    for (const point of path) assert.equal(pointBlocked(point.x, point.y), false, id);
+    const end = path.length ? path[path.length - 1] : start;
+    assert.ok(Math.abs(end.x - target.x) < WALK_GRID.cell, id);
+    assert.ok(Math.abs(end.y - target.y) < WALK_GRID.cell, id);
+  }
+  const midway = findPath(start, WALK_GRID.targets.neighbor)[8];
+  const retarget = findPath(midway, WALK_GRID.targets.boss);
+  assert.ok(retarget);
+  for (const point of retarget) assert.equal(pointBlocked(point.x, point.y), false);
+});
+
+test('clicking empty floor does not change the game, including ap and stamina', () => {
+  const game = createGame('hefei');
+  const before = snapshot(game);
+  const hit = resolveClick({ x: 190, y: 196 }, { night: false, canStudy: true });
+  assert.equal(hit.kind, 'walk');
+  assert.equal(hit.action, null);
+  const path = findPath(WALK_GRID.start, hit.target);
+  assert.ok(path);
+  for (const point of path) assert.equal(pointBlocked(point.x, point.y), false);
+  const after = commitArrival(game, hit, applyAction);
+  assert.equal(after, game);
+  assert.equal(after.ap, before.ap);
+  assert.equal(after.stamina, before.stamina);
+  assert.deepEqual(snapshot(after), before);
+});
+
+test('scene clicks use the same actions as the buttons', () => {
+  const day = { night: false, canStudy: false };
+  assert.deepEqual(resolveClick({ x: 326, y: 100 }, day).action, { type: 'talk', person: 'boss' });
+  assert.deepEqual(resolveClick({ x: 266, y: 160 }, day).action, { type: 'talk', person: 'lunch' });
+  assert.deepEqual(resolveClick({ x: 147, y: 150 }, day).action, { type: 'talk', person: 'neighbor' });
+  assert.equal(resolveClick({ x: 75, y: 132 }, day).action, null);
+  assert.equal(resolveClick({ x: 20, y: 40 }, day).kind, 'go');
+  assert.equal(resolveClick({ x: 20, y: 40 }, day).action, null);
+  assert.deepEqual(resolveClick({ x: 20, y: 40 }, { night: false, canStudy: true }).action, { type: 'study', skill: 'jquery' });
+  assert.equal(resolveClick({ x: 326, y: 100 }, { night: true, canStudy: true }).kind, 'none');
+  assert.deepEqual(resolveClick({ x: 106, y: 180 }, { night: true, canStudy: false }).action, { type: 'talk', person: 'party' });
+  const game = createGame('hefei');
+  const walked = commitArrival(game, resolveClick({ x: 24, y: 140 }, day), applyAction);
+  assert.equal(walked.ap, game.ap);
+  assert.equal(walked.stamina, game.stamina);
+  const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
+  assert.match(mainSource, /openPerson\(action\.person\)/);
+  assert.match(mainSource, /act\(\{ type: 'study', skill: present\(state\)\.shelf\.id \}\)/);
+  for (const dir of ['down', 'up', 'left', 'right']) {
+    accessSync(new URL(`../../art/player-walk-v2/frames/${dir}/walk-01.png`, import.meta.url));
+    accessSync(new URL(`../../art/player-walk-v2/frames/${dir}/idle.png`, import.meta.url));
+  }
+  const actionCss = readFileSync(new URL('../style.css', import.meta.url), 'utf8').match(/\.actions\s*\{[^}]*\}/)[0];
+  assert.equal(/position:\s*(?:sticky|fixed)/.test(actionCss), false);
 });

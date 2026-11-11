@@ -1,5 +1,6 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from './dota.mjs';
 import { CONFIG, SCRIPT, applyAction, createGame, present } from './rules.mjs';
+import { WALK_GRID, facingOf, findPath, frameSrc, resolveClick } from './walk.mjs';
 
 const app = document.querySelector('#app');
 
@@ -15,6 +16,166 @@ let dotaResult = 0;
 let dialogue = null;
 let toldNight = '';
 let toldWeek = 0;
+const walker = {
+  x: WALK_GRID.start.x,
+  y: WALK_GRID.start.y,
+  facing: 'up',
+  pose: 'seated',
+  frame: 0,
+  path: [],
+  action: null,
+  arrivePose: 'seated',
+  arriveFacing: 'up',
+  loop: false,
+  last: 0,
+  step: 0,
+};
+
+function resetWalker() {
+  walker.x = WALK_GRID.start.x;
+  walker.y = WALK_GRID.start.y;
+  walker.facing = 'up';
+  walker.pose = 'seated';
+  walker.frame = 0;
+  walker.path = [];
+  walker.action = null;
+  walker.arrivePose = 'seated';
+  walker.arriveFacing = 'up';
+  walker.step = 0;
+}
+
+function walkerView() {
+  if (walker.pose === 'seated') {
+    const seat = WALK_GRID.seat;
+    return {
+      className: 'walker seated',
+      src: './art/player-seated.png',
+      style: `left:${(seat.x / 384) * 100}%;top:${(seat.y / 216) * 100}%;width:${(seat.w / 384) * 100}%;height:${(seat.h / 216) * 100}%`,
+    };
+  }
+  const sprite = WALK_GRID.sprite;
+  const left = walker.x - sprite.footX;
+  const top = walker.y - sprite.footY;
+  return {
+    className: 'walker',
+    src: frameSrc(walker.facing, walker.path.length ? walker.frame : -1),
+    style: `left:${(left / 384) * 100}%;top:${(top / 216) * 100}%;width:${(sprite.w / 384) * 100}%;height:${(sprite.h / 216) * 100}%`,
+  };
+}
+
+function paintWalker() {
+  const img = document.querySelector('#walker');
+  if (!img) return;
+  const view = walkerView();
+  img.className = view.className;
+  if (img.getAttribute('src') !== view.src) img.src = view.src;
+  img.style.cssText = view.style;
+  const spot = document.querySelector('[data-spot="player"]');
+  if (!spot) return;
+  const box = walker.pose === 'seated'
+    ? [63, 134, 88, 163]
+    : [walker.x - 10, walker.y - 44, walker.x + 10, walker.y - 16];
+  spot.style.cssText = spotStyle(box);
+}
+
+function arriveWalker() {
+  walker.pose = walker.arrivePose;
+  walker.frame = 0;
+  if (walker.arriveFacing) walker.facing = walker.arriveFacing;
+  if (walker.pose === 'seated') {
+    walker.x = WALK_GRID.start.x;
+    walker.y = WALK_GRID.start.y;
+    walker.facing = 'up';
+  }
+  const action = walker.action;
+  walker.action = null;
+  if (!action) {
+    paintWalker();
+    return;
+  }
+  if (action.type === 'talk') {
+    openPerson(action.person);
+    return;
+  }
+  if (action.type === 'study' && present(state).shelf.canStudy) act({ type: 'study', skill: present(state).shelf.id });
+  else paintWalker();
+}
+
+function walkLoop(now) {
+  if (!walker.path.length) {
+    walker.loop = false;
+    arriveWalker();
+    return;
+  }
+  const dt = walker.last ? Math.min(0.05, (now - walker.last) / 1000) : 0.016;
+  walker.last = now;
+  let left = 56 * dt;
+  while (left > 0 && walker.path.length) {
+    const next = walker.path[0];
+    const dx = next.x - walker.x;
+    const dy = next.y - walker.y;
+    const dist = Math.hypot(dx, dy);
+    if (dist < 0.4) {
+      walker.path.shift();
+      continue;
+    }
+    walker.facing = facingOf(dx, dy);
+    const step = Math.min(left, dist);
+    walker.x += (dx / dist) * step;
+    walker.y += (dy / dist) * step;
+    left -= step;
+    walker.step += step;
+    if (walker.step >= 5) {
+      walker.frame = (walker.frame + 1) % 6;
+      walker.step = 0;
+    }
+  }
+  walker.pose = 'stand';
+  paintWalker();
+  if (!walker.path.length) {
+    walker.loop = false;
+    arriveWalker();
+    return;
+  }
+  requestAnimationFrame(walkLoop);
+}
+
+function goTo(hit) {
+  if (!hit || hit.kind === 'none' || !hit.target) return false;
+  const path = findPath(walker, hit.target);
+  if (!path) return false;
+  walker.path = path;
+  walker.action = hit.action;
+  walker.arrivePose = hit.target.pose || 'stand';
+  walker.arriveFacing = hit.target.facing || null;
+  walker.pose = path.length ? 'stand' : walker.arrivePose;
+  paintWalker();
+  if (!path.length) {
+    arriveWalker();
+    return true;
+  }
+  if (!walker.loop) {
+    walker.loop = true;
+    walker.last = 0;
+    requestAnimationFrame(walkLoop);
+  }
+  return true;
+}
+
+function scenePoint(event) {
+  const rect = event.currentTarget.getBoundingClientRect();
+  return {
+    x: ((event.clientX - rect.left) / rect.width) * WALK_GRID.scene.width,
+    y: ((event.clientY - rect.top) / rect.height) * WALK_GRID.scene.height,
+  };
+}
+
+function onSceneClick(event) {
+  if (dota || state.phase !== 'play') return;
+  if (event.target.closest('.dialogue, .week-chip, button, a')) return;
+  const view = present(state);
+  goTo(resolveClick(scenePoint(event), { night: view.night, canStudy: view.shelf.canStudy }));
+}
 
 function clearDotaTimers() {
   if (dotaTick) clearInterval(dotaTick);
@@ -124,6 +285,7 @@ function start(seed) {
   dialogue = null;
   toldNight = '';
   toldWeek = 0;
+  resetWalker();
   state = createGame(next);
   render();
 }
@@ -394,20 +556,13 @@ function spotStyle(box) {
 }
 
 function hotspot(person, speaking, box) {
-  const button = el('button', {
-    type: 'button',
-    class: 'figure',
-    'data-person': person.id,
-    'aria-label': person.name,
-  }, [el('i', { class: 'body' })]);
-  button.addEventListener('click', () => openPerson(person.id));
   return el('div', {
     class: speaking ? 'spot speaking' : 'spot',
     'data-spot': person.id,
     style: spotStyle(box),
   }, [
     el('i', { class: 'arrow', 'data-arrow': speaking ? person.id : '' }),
-    button,
+    el('i', { class: 'body' }),
   ]);
 }
 
@@ -415,7 +570,9 @@ function office(view) {
   const speaker = dialogue && !dialogue.narrator ? dialogue.speaker : '';
   const boxes = view.night ? NIGHT_BOXES : DAY_BOXES;
   const spots = [];
-  const playerBox = boxes.player;
+  const playerBox = walker.pose === 'seated'
+    ? boxes.player
+    : [walker.x - 10, walker.y - 44, walker.x + 10, walker.y - 16];
   if (playerBox) {
     spots.push(el('div', {
       class: speaker === 'player' ? 'spot speaking' : 'spot',
@@ -435,18 +592,22 @@ function office(view) {
   const chip = el('p', { class: 'week-chip', id: 'scene-when' }, [
     `第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`,
   ]);
+  const sprite = walkerView();
   const children = [
     el('img', {
       class: 'scene-img',
       alt: '',
       src: view.night ? './art/02-main-night-v2.png' : './art/01-main-day.png',
     }),
+    el('img', { id: 'walker', class: sprite.className, alt: '', src: sprite.src, style: sprite.style }),
     chip,
     el('div', { class: 'spots' }, spots),
   ];
   const box = dialogueBox(view);
   if (box) children.push(box);
-  return el('section', { class: view.night ? 'office night' : 'office', id: 'office' }, children);
+  const officeNode = el('section', { class: view.night ? 'office night' : 'office', id: 'office' }, children);
+  officeNode.addEventListener('click', onSceneClick);
+  return officeNode;
 }
 
 function dialogueBox(view) {
@@ -663,4 +824,17 @@ window.hefei = {
   present() { return present(state); },
   act(action) { act(action); return present(state); },
   start,
+  walker() {
+    return {
+      x: walker.x,
+      y: walker.y,
+      pose: walker.pose,
+      facing: walker.facing,
+      moving: walker.path.length > 0,
+    };
+  },
+  clickScene(x, y) {
+    const view = present(state);
+    return goTo(resolveClick({ x, y }, { night: view.night, canStudy: view.shelf.canStudy }));
+  },
 };

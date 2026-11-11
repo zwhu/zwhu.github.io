@@ -1,0 +1,117 @@
+import { WALK_GRID } from './walk-grid.mjs';
+
+const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+export { WALK_GRID };
+
+function key(cell) {
+  return `${cell[0]},${cell[1]}`;
+}
+
+function cellOf(point) {
+  const size = WALK_GRID.cell;
+  return [Math.floor(point.x / size), Math.floor(point.y / size)];
+}
+
+function centerOf(cell) {
+  const size = WALK_GRID.cell;
+  return { x: cell[0] * size + size / 2, y: cell[1] * size + size / 2 };
+}
+
+export function pointBlocked(x, y) {
+  const { bounds, obstacles } = WALK_GRID;
+  if (x < bounds.left || x > bounds.right || y < bounds.top || y > bounds.bottom) return true;
+  return obstacles.some(item => x >= item.x && x < item.x + item.w && y >= item.y && y < item.y + item.h);
+}
+
+function cellBlocked(cell) {
+  const point = centerOf(cell);
+  return pointBlocked(point.x, point.y);
+}
+
+export function findPath(from, to) {
+  const start = cellOf(from);
+  const goal = cellOf(to);
+  if (cellBlocked(start) || cellBlocked(goal)) return null;
+  if (start[0] === goal[0] && start[1] === goal[1]) return [];
+  const heuristic = cell => Math.abs(cell[0] - goal[0]) + Math.abs(cell[1] - goal[1]);
+  const open = [start];
+  const openKeys = new Set([key(start)]);
+  const cost = new Map([[key(start), 0]]);
+  const previous = new Map();
+  while (open.length) {
+    let best = 0;
+    for (let i = 1; i < open.length; i += 1) {
+      const score = cost.get(key(open[i])) + heuristic(open[i]);
+      const bestScore = cost.get(key(open[best])) + heuristic(open[best]);
+      if (score < bestScore) best = i;
+    }
+    const current = open.splice(best, 1)[0];
+    openKeys.delete(key(current));
+    if (current[0] === goal[0] && current[1] === goal[1]) {
+      const path = [];
+      let step = current;
+      while (previous.has(key(step))) {
+        path.push(centerOf(step));
+        step = previous.get(key(step));
+      }
+      path.reverse();
+      return path;
+    }
+    for (const [dx, dy] of DIRS) {
+      const next = [current[0] + dx, current[1] + dy];
+      if (cellBlocked(next)) continue;
+      const nextCost = cost.get(key(current)) + 1;
+      if (nextCost >= (cost.get(key(next)) ?? Infinity)) continue;
+      cost.set(key(next), nextCost);
+      previous.set(key(next), current);
+      if (!openKeys.has(key(next))) {
+        open.push(next);
+        openKeys.add(key(next));
+      }
+    }
+  }
+  return null;
+}
+
+function inside(point, box) {
+  const [x0, y0, x1, y1] = box;
+  return point.x >= x0 && point.x < x1 && point.y >= y0 && point.y < y1;
+}
+
+export function resolveClick(point, ctx) {
+  const night = Boolean(ctx && ctx.night);
+  if (night) {
+    const party = WALK_GRID.targets.party;
+    if (inside(point, party.hit)) return { kind: 'go', target: party, action: party.action };
+    if (WALK_GRID.nightMute.some(box => inside(point, box))) return { kind: 'none', target: null, action: null };
+  } else {
+    for (const target of Object.values(WALK_GRID.targets)) {
+      if (target.when !== 'day' || !inside(point, target.hit)) continue;
+      const action = target.needs === 'canStudy' && !(ctx && ctx.canStudy) ? null : target.action;
+      return { kind: 'go', target, action };
+    }
+  }
+  if (pointBlocked(point.x, point.y)) return { kind: 'none', target: null, action: null };
+  return {
+    kind: 'walk',
+    target: { x: point.x, y: point.y, facing: null, pose: 'stand' },
+    action: null,
+  };
+}
+
+export function commitArrival(state, hit, apply) {
+  if (!hit || !hit.action) return state;
+  return apply(state, hit.action);
+}
+
+export function facingOf(dx, dy) {
+  if (Math.abs(dx) > Math.abs(dy)) return dx >= 0 ? 'right' : 'left';
+  return dy >= 0 ? 'down' : 'up';
+}
+
+export function frameSrc(facing, frame) {
+  const dir = facing === 'up' || facing === 'down' || facing === 'left' || facing === 'right' ? facing : 'down';
+  const name = frame < 0 ? 'idle' : `walk-0${(frame % 6) + 1}`;
+  return `../art/player-walk-v2/frames/${dir}/${name}.png`;
+}

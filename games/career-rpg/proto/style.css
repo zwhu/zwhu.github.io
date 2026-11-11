@@ -149,10 +149,6 @@ h2 {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 16px;
-  position: sticky;
-  bottom: 0;
-  background: #efece4;
-  padding: 8px 0;
 }
 
 .log {
@@ -282,9 +278,16 @@ dd { margin: 0; }
   image-rendering: pixelated;
 }
 
+.walker {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
 .week-chip {
   position: absolute;
-  z-index: 2;
+  z-index: 5;
   left: 1.6%;
   top: 0.9%;
   width: 42%;
@@ -300,7 +303,7 @@ dd { margin: 0; }
   line-height: 1;
 }
 
-.spots { position: absolute; inset: 0; z-index: 3; }
+.spots { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 
 .spot {
   position: absolute;
