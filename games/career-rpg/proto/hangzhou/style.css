@@ -1,0 +1,96 @@
+body {
+  font-family: "Segoe UI", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+
+#app { max-width: 1100px; }
+
+.status { grid-template-columns: repeat(4, 1fr); }
+
+.night, .forecast, .debt-banner {
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border: 1px solid #1a1a1a;
+  background: #fffdf8;
+}
+
+.debt-banner { font-size: 18px; }
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.slot {
+  border: 1px solid #1a1a1a;
+  background: #fffdf8;
+  padding: 8px;
+  min-height: 108px;
+}
+
+.slot.covered { background: #e4efe8; }
+.slot.hard { background: #f8efe6; }
+.slot.done { background: #efece4; }
+
+.slot .label {
+  margin: 6px 0 0;
+  font-size: 14px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.mark.sku { background: #243056; }
+.mark.date { background: #8a3b12; }
+.mark.upload { background: #2f5d50; }
+.mark.link { background: #1d4e89; }
+.mark.check { background: #6b3fa0; }
+.mark.boss { background: #111; }
+
+.card.boss { border-width: 2px; }
+
+.surcharge { font-weight: 650; }
+
+.people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+.people button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.person {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #1a1a1a;
+  display: inline-block;
+}
+
+.person.plus { background: #243056; }
+.person.sister { background: #a16207; }
+.person.neighbor { background: #2f5d50; }
+.person.tea { background: #8a3b12; }
+
+.talk {
+  position: fixed;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fffef8;
+  border-top: 1px solid #1a1a1a;
+  padding: 12px 16px 16px;
+}
+
+.talk p { margin: 6px 0 10px; }
+
+#app { padding-bottom: 132px; }
+
+@media (max-width: 720px) {
+  .slots { grid-template-columns: 1fr; }
+  .actions { position: static; }
+}
