@@ -35,6 +35,40 @@ const server = http.createServer((req, res) => {
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const origin = `http://127.0.0.1:${server.address().port}/games/career-rpg/proto/index.html?seed=hefei`;
 
+function zoomStill(file) {
+  const py = `
+import json
+from PIL import Image, ImageDraw, ImageFont
+root = ${JSON.stringify(path.join(ROOT, 'games/career-rpg/proto'))}
+sheet = json.load(open(root + '/walk/walk.sprites.json'))
+image = Image.open(root + '/walk/player-walk-hefei.png').convert('RGBA')
+font = ImageFont.truetype('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc', 28)
+cell = 224
+panels = []
+for facing, label in (('down', '下'), ('up', '上'), ('left', '左'), ('right', '右')):
+    frame = sheet['directions'][facing]['frames'][2]
+    crop = image.crop((frame['x'], frame['y'], frame['x'] + frame['w'], frame['y'] + frame['h']))
+    panels.append((label, crop.resize((frame['w'] * 4, frame['h'] * 4), Image.NEAREST)))
+sit = Image.open(root + '/art/player-seated.png').convert('RGBA')
+panels.append(('坐', sit.resize((sit.width * 4, sit.height * 4), Image.NEAREST)))
+out = Image.new('RGBA', (cell * len(panels), cell + 40), (239, 236, 228, 255))
+draw = ImageDraw.Draw(out)
+for index, (label, sprite) in enumerate(panels):
+    x = index * cell + (cell - sprite.width) // 2
+    y = 36 + (cell - sprite.height) // 2
+    out.alpha_composite(sprite, (x, y))
+    draw.text((index * cell + 16, 6), label, fill=(32, 30, 28, 255), font=font)
+out.convert('RGB').save(${JSON.stringify(file)})
+`;
+  return new Promise((resolve, reject) => {
+    const child = spawn('python3', ['-'], { stdio: ['pipe', 'inherit', 'pipe'] });
+    let err = '';
+    child.stderr.on('data', chunk => { err += chunk; });
+    child.on('exit', code => (code === 0 ? resolve() : reject(new Error(err.slice(-400)))));
+    child.stdin.end(py);
+  });
+}
+
 const videoDir = path.join(tmpdir(), 'hefei-walk-video');
 mkdirSync(videoDir, { recursive: true });
 const browser = await chromium.launch({
@@ -57,38 +91,57 @@ try {
   const seated = await page.evaluate(() => window.hefei.walker().pose);
   if (seated !== 'seated') throw new Error('did not start seated');
 
-  async function walk(x, y, facing) {
+  async function walk(x, y, facing, holdMs = 1500) {
     const started = await page.evaluate(({ x, y }) => window.hefei.clickScene(x, y), { x, y });
     if (!started) throw new Error(`no path to ${x},${y}`);
-    await page.waitForFunction(want => {
-      const walker = window.hefei.walker();
-      return walker.moving && walker.facing === want && walker.pose === 'stand';
-    }, facing, { timeout: 5000 });
     const seen = new Set();
-    for (let i = 0; i < 8; i += 1) {
-      seen.add(await page.evaluate(() => document.querySelector('#walker img')?.style.left || ''));
-      await page.waitForTimeout(120);
+    let matched = 0;
+    let last = Date.now();
+    const deadline = Date.now() + 8000;
+    while (matched < holdMs) {
+      if (Date.now() > deadline) throw new Error(`${facing} only faced that way for ${matched}ms`);
+      const now = await page.evaluate(() => {
+        const walker = window.hefei.walker();
+        return {
+          moving: walker.moving,
+          facing: walker.facing,
+          pose: walker.pose,
+          frame: document.querySelector('#walker img')?.style.left || '',
+        };
+      });
+      const tick = Date.now();
+      if (now.moving && now.facing === facing && now.pose === 'stand') {
+        matched += tick - last;
+        seen.add(now.frame);
+      }
+      last = tick;
+      await page.waitForTimeout(40);
     }
     if (seen.size < 2) throw new Error(`${facing} frames did not change ${[...seen].join('|')}`);
-    return facing;
+    return matched;
   }
 
-  await walk(210, 194, 'right');
+  await page.evaluate(() => window.hefei.clickScene(26, 194));
+  await page.waitForFunction(() => !window.hefei.walker().moving, null, { timeout: 5000 });
+  const timings = {
+    right: await walk(112, 194, 'right'),
+    left: await walk(26, 194, 'left'),
+    up: await walk(26, 96, 'up'),
+    down: await walk(26, 194, 'down'),
+  };
   await page.screenshot({ path: path.join(STILLS, 'walk-4dir.png') });
-  await walk(28, 192, 'left');
-  await walk(28, 108, 'up');
-  await walk(28, 192, 'down');
   const back = await page.evaluate(() => window.hefei.clickScene(75, 132));
   if (!back) throw new Error('no path back to the desk');
   await page.waitForFunction(() => window.hefei.walker().pose === 'seated', null, { timeout: 8000 });
   const sat = await page.evaluate(() => {
     const node = document.querySelector('#walker');
-    return { pose: window.hefei.walker().pose, tag: node.tagName, src: node.getAttribute('src') };
+    return { pose: window.hefei.walker().pose, tag: node.tagName, src: node.getAttribute('src') || '' };
   });
   if (sat.tag !== 'IMG' || !sat.src.includes('player-seated.png')) throw new Error('still standing ' + JSON.stringify(sat));
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(2000);
   if (errors.length) throw new Error(errors.join('\n'));
-  console.log(JSON.stringify({ directions: ['right', 'left', 'up', 'down'], sat }));
+  await zoomStill(path.join(STILLS, 'walk-4dir-zoom.png'));
+  console.log(JSON.stringify({ timings, sat }));
 } finally {
   const video = page.video();
   await context.close();

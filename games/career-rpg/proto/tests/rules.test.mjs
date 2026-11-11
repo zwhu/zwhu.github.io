@@ -621,6 +621,38 @@ test('a missing walk direction falls back without mirroring', () => {
   assert.equal(resolveSprite({}, 'up').frames.length, 1);
 });
 
+test('each facing reads its own sheet row, and walking is not the stand frame', () => {
+  const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
+  const meta = JSON.parse(readFileSync(new URL('../walk/meta.json', import.meta.url), 'utf8'));
+  const cellH = meta.cell[1];
+  for (const facing of ['up', 'down', 'left', 'right']) {
+    const row = meta.rows.indexOf(facing);
+    const sprite = resolveSprite(sheet, facing);
+    const walk = sprite.frames.map(frame => `(${frame.x},${frame.y},${frame.w},${frame.h})`).join(' ');
+    console.log(`${facing} row ${row} y=${row * cellH} idle=(${sprite.idle.x},${sprite.idle.y},${sprite.idle.w},${sprite.idle.h}) walk=${walk}`);
+    assert.equal(sprite.idle.y, row * cellH, facing);
+    assert.equal(sprite.frames.length, meta.cycles.walk6.length, facing);
+    for (const [index, name] of meta.cycles.walk6.entries()) {
+      const rect = meta.frames[facing][name].rect;
+      assert.deepEqual([sprite.frames[index].x, sprite.frames[index].y, sprite.frames[index].w, sprite.frames[index].h], rect, `${facing} ${name}`);
+      assert.notEqual(sprite.frames[index].x, sprite.idle.x, `${facing} ${name} is the stand cell`);
+    }
+  }
+  assert.equal(meta.rows[0], 'down');
+  assert.equal(meta.rows[1], 'up');
+  assert.notEqual(resolveSprite(sheet, 'up').idle.y, resolveSprite(sheet, 'left').idle.y);
+  assert.notEqual(resolveSprite(sheet, 'down').idle.y, resolveSprite(sheet, 'up').idle.y);
+  const moving = spritePose(sheet, { facing: 'down', moving: true, seated: false, elapsedMs: sheet.frameMs });
+  const stopped = spritePose(sheet, { facing: 'down', moving: false, seated: false, elapsedMs: sheet.frameMs });
+  const seated = spritePose(sheet, { facing: 'down', moving: false, seated: true, elapsedMs: 0 });
+  assert.equal(moving.kind, 'walk');
+  assert.notEqual(moving.frame.x, stopped.frame.x);
+  assert.deepEqual(stopped.frame, resolveSprite(sheet, 'down').idle);
+  assert.equal(seated.kind, 'seated');
+  const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
+  assert.match(mainSource, /player-seated\.png/);
+});
+
 test('walking changes frames, stopping shows the stand pose, and sitting leaves the walk sheet', () => {
   const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
   const started = spritePose(sheet, { facing: 'left', moving: true, seated: false, elapsedMs: 0 });
