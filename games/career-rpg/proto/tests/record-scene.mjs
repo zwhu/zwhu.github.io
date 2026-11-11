@@ -64,7 +64,27 @@ async function playSequence(page, prefix) {
   const opened = await page.evaluate(() => window.hefei.clickScene(75, 132));
   if (!opened) throw new Error('computer has no path');
   await page.waitForSelector('#desk-panel', { timeout: 8000 });
+  const workBox = await page.evaluate(() => {
+    const office = document.querySelector('#office').getBoundingClientRect();
+    const panel = document.querySelector('#desk-panel').getBoundingClientRect();
+    const button = document.querySelector('#desk-panel [data-action="work"]');
+    const title = document.querySelector('#desk-panel .ticket-top');
+    const buttonRect = button.getBoundingClientRect();
+    const titleRect = title.getBoundingClientRect();
+    const font = parseFloat(getComputedStyle(button).fontSize);
+    const inside = (rect, box) => rect.top >= box.top - 1 && rect.bottom <= box.bottom + 1 && rect.left >= box.left - 1 && rect.right <= box.right + 1 && rect.height > 12;
+    return {
+      font,
+      button: inside(buttonRect, office) && inside(buttonRect, panel),
+      title: inside(titleRect, office) && inside(titleRect, panel),
+      height: buttonRect.height,
+    };
+  });
+  if (!workBox.button || !workBox.title || workBox.font < 13) {
+    throw new Error(`${prefix} desk clipped ${JSON.stringify(workBox)}`);
+  }
   await page.screenshot({ path: path.join(STILLS, `scene-desk-${prefix}.png`) });
+  if (prefix === '390') await page.screenshot({ path: path.join(STILLS, 'scene-desk-390-do.png') });
   const worked = await page.evaluate(() => {
     const button = document.querySelector('[data-action="work"]');
     if (!button) return false;
@@ -79,7 +99,20 @@ async function playSequence(page, prefix) {
   const night = await page.evaluate(() => window.hefei.clickScene(190, 190));
   if (!night) throw new Error('door has no path');
   await page.waitForFunction(() => window.hefei.present().night);
-  await page.evaluate(() => document.querySelector('[data-dialogue="close"], [data-dialogue="next"]')?.click());
+  const nightBox = await page.evaluate(() => {
+    const dialogue = document.querySelector('.dialogue')?.getBoundingClientRect();
+    const hint = document.querySelector('.hint')?.getBoundingClientRect();
+    const buttons = [...document.querySelectorAll('.scene-actions button')].map(button => ({
+      text: button.textContent,
+      rect: button.getBoundingClientRect(),
+    }));
+    const hit = (a, b) => a && b && a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    return {
+      texts: buttons.map(button => button.text),
+      overlap: buttons.some(button => hit(button.rect, dialogue) || hit(button.rect, hint)),
+    };
+  });
+  if (!nightBox.texts.includes('睡觉') || nightBox.overlap) throw new Error(`${prefix} night actions ${JSON.stringify(nightBox)}`);
   await page.screenshot({ path: path.join(STILLS, `scene-night-${prefix}.png`) });
   const layout = await page.evaluate(() => ({
     board: !!document.querySelector('.board'),

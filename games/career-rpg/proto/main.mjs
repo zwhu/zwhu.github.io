@@ -35,6 +35,7 @@ const walker = {
 let walkSprites = null;
 let panel = false;
 let panelPage = 'tickets';
+let ticketIndex = 0;
 let banner = '';
 
 function resetWalker() {
@@ -147,6 +148,7 @@ function arriveWalker() {
   if (arrival.panel) {
     panel = true;
     panelPage = 'tickets';
+    ticketIndex = 0;
     banner = '';
     render();
     return;
@@ -348,6 +350,7 @@ function start(seed) {
   toldWeek = 0;
   panel = false;
   panelPage = 'tickets';
+  ticketIndex = 0;
   banner = '';
   resetWalker();
   state = createGame(next);
@@ -650,7 +653,10 @@ function office(view) {
   if (panel) children.push(deskPanel(view));
   const box = dialogueBox(view);
   if (box) children.push(box);
-  const officeNode = el('section', { class: view.night ? 'office night' : 'office', id: 'office' }, children);
+  const officeNode = el('section', {
+    class: `${view.night ? 'office night' : 'office'}${dialogue ? ' has-dialogue' : ''}`,
+    id: 'office',
+  }, children);
   officeNode.addEventListener('click', onSceneClick);
   return officeNode;
 }
@@ -701,9 +707,21 @@ function sceneActions(view) {
     night.addEventListener('click', () => act({ type: 'night' }));
     bar.append(night);
   }
-  if (view.canSleep) {
-    const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉，进入下一天']);
-    sleep.addEventListener('click', () => act({ type: 'sleep' }));
+  if (view.night) {
+    const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉']);
+    sleep.addEventListener('click', () => {
+      const arrival = sceneArrival('door', {
+        interviewed: view.interviewed,
+        night: true,
+        canRest: view.canRest,
+        canSleep: view.canSleep,
+      });
+      if (arrival.action) act(arrival.action);
+      else if (arrival.banner) {
+        banner = arrival.banner;
+        render();
+      }
+    });
     bar.append(sleep);
   }
   if (view.night && state.dotaPending) {
@@ -721,15 +739,31 @@ function deskPanel(view) {
   tickets.addEventListener('click', () => { panelPage = 'tickets'; render(); });
   skills.addEventListener('click', () => { panelPage = 'skills'; render(); });
   close.addEventListener('click', () => { panel = false; render(); });
-  const pages = panelPage === 'skills'
-    ? learningSkills(view.skills).map(skillCard)
-    : view.tickets.map(ticketCard);
-  const note = sceneHint(view);
+  const body = [];
+  if (panelPage === 'skills') {
+    const note = sceneHint(view);
+    if (note) body.push(el('p', { class: 'hint-line' }, [note]));
+    body.push(el('div', { class: 'desk-pages', id: 'skills' }, learningSkills(view.skills).map(skillCard)));
+    body.push(el('p', { class: 'meta' }, ['《锋利的 jQuery》在左边书架。']));
+  } else {
+    const list = view.tickets;
+    const index = Math.min(ticketIndex, Math.max(0, list.length - 1));
+    ticketIndex = index;
+    if (list[index]) body.push(el('div', { class: 'desk-pages', id: 'tickets' }, [ticketCard(list[index])]));
+    if (list.length > 1) {
+      const prev = el('button', { type: 'button', 'data-desk': 'prev' }, ['上一张']);
+      const next = el('button', { type: 'button', 'data-desk': 'next' }, ['下一张']);
+      const label = el('span', { class: 'meta' }, [`${index + 1}/${list.length}`]);
+      prev.disabled = index === 0;
+      next.disabled = index === list.length - 1;
+      prev.addEventListener('click', () => { ticketIndex = Math.max(0, index - 1); render(); });
+      next.addEventListener('click', () => { ticketIndex = Math.min(list.length - 1, index + 1); render(); });
+      body.push(el('div', { class: 'desk-pager' }, [prev, label, next]));
+    }
+  }
   return el('section', { class: 'desk-panel', id: 'desk-panel', 'data-page': panelPage }, [
     el('div', { class: 'desk-tabs' }, [tickets, skills, close]),
-    note && panelPage === 'skills' ? el('p', { class: 'hint-line' }, [note]) : '',
-    el('div', { class: 'desk-pages', id: panelPage === 'skills' ? 'skills' : 'tickets' }, pages),
-    el('p', { class: 'meta' }, ['《锋利的 jQuery》在左边书架。']),
+    ...body,
   ]);
 }
 

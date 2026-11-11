@@ -207,6 +207,10 @@ h2 {
   gap: 4px;
 }
 
+.office.has-dialogue .scene-actions {
+  bottom: calc(64 / 216 * 100%);
+}
+
 .scene-actions button {
   min-height: 0;
   padding: 2px 6px;
@@ -217,9 +221,10 @@ h2 {
   position: absolute;
   z-index: 5;
   left: calc(12 / 384 * 100%);
-  top: calc(32 / 216 * 100%);
+  top: 18cqh;
   width: calc(300 / 384 * 100%);
-  bottom: calc(36 / 216 * 100%);
+  height: 64cqh;
+  max-height: 64cqh;
   box-sizing: border-box;
   overflow: auto;
   padding: 8px;
@@ -233,13 +238,20 @@ h2 {
   font-size: max(13px, calc(12 / 384 * 100cqw));
 }
 
-.desk-tabs {
+.desk-tabs, .desk-pager {
   display: flex;
   gap: 6px;
   margin-bottom: 8px;
 }
 
-.desk-tabs button { min-height: 0; padding: 2px 8px; }
+.desk-panel button {
+  min-height: 0;
+  padding: 4px 8px;
+  font-size: max(13px, calc(12 / 384 * 100cqw));
+}
+
+.desk-panel .card { margin: 0 0 8px; }
+.desk-panel .meta, .desk-panel .nums { margin: 2px 0; }
 
 .log {
   margin-top: 16px;
@@ -611,8 +623,13 @@ button:disabled, button:disabled:hover {
     height: calc(88 / 216 * 100%);
   }
   .desk-panel {
-    width: calc(250 / 384 * 100%);
-    bottom: calc(40 / 216 * 100%);
+    top: 22cqh;
+    width: calc(248 / 384 * 100%);
+    height: 74cqh;
+    max-height: 74cqh;
+  }
+  .office.has-dialogue .scene-actions {
+    bottom: calc(100 / 216 * 100%);
   }
 }
 
