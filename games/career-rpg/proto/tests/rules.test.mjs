@@ -100,6 +100,8 @@ test('overnight adds one point, costs 3 stamina, and empty stamina leaves 1 poin
   let state = applyAction(fresh, { type: 'overnight' });
   assert.equal(state.ap, 4);
   assert.equal(state.stamina, 7);
+  assert.equal(CONFIG.overnightName, '打 Dota');
+  assert.equal(state.log[0], '打 Dota，行动点 +1，体力 7');
   assert.deepEqual(snapshot(fresh), before);
   const tired = [];
   let probe = createGame('burn');

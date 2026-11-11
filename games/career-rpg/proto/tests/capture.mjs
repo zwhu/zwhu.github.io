@@ -119,6 +119,12 @@ async function click(action) {
     return true;
   })()`);
   if (!found) throw new Error('missing button ' + JSON.stringify(action));
+  if (action.type === 'overnight') {
+    await sleep(40);
+    await evaluate(`document.querySelector('[data-dota="skip"]')?.click()`);
+    await sleep(40);
+    await evaluate(`document.querySelector('[data-dota="back"]')?.click()`);
+  }
 }
 async function encode(framesDir, file, fps) {
   await new Promise((resolve, reject) => {

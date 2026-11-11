@@ -1,4 +1,5 @@
-import { applyAction, createGame, present } from './rules.mjs';
+import { castRaze, createMatch, MATCH_TICKS, RAZES, tickMatch, TICK_MS } from './dota.mjs';
+import { CONFIG, applyAction, createGame, present } from './rules.mjs';
 
 const app = document.querySelector('#app');
 
@@ -8,6 +9,52 @@ function readSeed() {
 }
 
 let state = createGame(readSeed());
+let dota = null;
+let dotaTick = 0;
+let dotaResult = 0;
+
+function clearDotaTimers() {
+  if (dotaTick) clearInterval(dotaTick);
+  if (dotaResult) clearTimeout(dotaResult);
+  dotaTick = 0;
+  dotaResult = 0;
+}
+
+function closeDota() {
+  clearDotaTimers();
+  dota = null;
+  render();
+}
+
+function showDotaResult() {
+  if (!dota || dota.mode === 'result') return;
+  if (dotaTick) clearInterval(dotaTick);
+  dotaTick = 0;
+  dota = { ...dota, mode: 'result' };
+  render();
+  dotaResult = setTimeout(closeDota, 1800);
+}
+
+function openDota() {
+  if (dota) return;
+  const next = applyAction(state, { type: 'overnight' });
+  if (next === state) return;
+  state = next;
+  dota = { match: createMatch(state.seed), mode: 'play' };
+  render();
+  dotaTick = setInterval(() => {
+    if (!dota || dota.mode !== 'play') return;
+    dota = { ...dota, match: tickMatch(dota.match) };
+    if (dota.match.over) showDotaResult();
+    else render();
+  }, TICK_MS);
+}
+
+function pressRaze(id) {
+  if (!dota || dota.mode !== 'play') return;
+  dota = { ...dota, match: castRaze(dota.match, id) };
+  render();
+}
 
 function el(tag, attrs, children) {
   const node = document.createElement(tag);
@@ -35,6 +82,8 @@ function start(seed) {
   const url = new URL(location.href);
   url.searchParams.set('seed', next);
   history.replaceState(null, '', url);
+  clearDotaTimers();
+  dota = null;
   state = createGame(next);
   render();
 }
@@ -144,8 +193,8 @@ function actionBar(view) {
     bar.append(rest);
   }
   if (view.canOvernight) {
-    const night = el('button', { type: 'button', 'data-action': 'overnight' }, ['熬夜 +1 点 / -3 体力']);
-    night.addEventListener('click', () => act({ type: 'overnight' }));
+    const night = el('button', { type: 'button', 'data-action': 'overnight' }, [`${CONFIG.overnightName} +${CONFIG.overnightAp} 点 / -${CONFIG.overnightStaminaCost} 体力`]);
+    night.addEventListener('click', () => openDota());
     bar.append(night);
   }
   if (view.canSleep) {
@@ -175,10 +224,66 @@ function ending(view) {
       el('dt', {}, ['延期与事故']), el('dd', {}, [String(stats.lateCount)]),
       el('dt', {}, ['好感增加']), el('dd', {}, [String(stats.favorGained)]),
       el('dt', {}, ['好感减少']), el('dd', {}, [String(stats.favorLost)]),
-      el('dt', {}, ['熬夜']), el('dd', {}, [String(stats.overnights)]),
+      el('dt', {}, [CONFIG.overnightName]), el('dd', {}, [String(stats.overnights)]),
       el('dt', {}, ['学会']), el('dd', {}, [stats.skills.length ? stats.skills.join('、') : '无']),
     ]),
     el('div', { class: 'actions' }, [again, fresh]),
+  ]);
+}
+
+function dotaLane(match) {
+  const cells = [el('div', { class: 'cell sf' }, ['影魔'])];
+  for (let pos = 1; pos <= 7; pos += 1) {
+    const raze = RAZES.find(item => item.distance === pos);
+    const hot = match.lastRaze && raze && raze.id === match.lastRaze;
+    const creeps = match.creeps.filter(creep => creep.pos === pos);
+    const body = creeps.map(creep => el('span', { class: 'creep-wrap', 'data-creep': creep.id, 'data-pos': String(pos) }, [
+      el('i', { class: 'creep' }),
+      creep.name,
+    ]));
+    if (raze) body.push(el('span', {}, [raze.name]));
+    cells.push(el('div', { class: hot ? 'cell hot' : 'cell', 'data-cell': pos }, body));
+  }
+  return el('div', { class: 'lane' }, cells);
+}
+
+function dotaOverlay() {
+  const match = dota.match;
+  if (dota.mode === 'result') {
+    const back = el('button', { type: 'button', 'data-dota': 'back' }, ['回到试用期']);
+    back.addEventListener('click', () => closeDota());
+    return el('div', { class: 'dota', id: 'dota' }, [
+      el('div', { class: 'dota-panel' }, [
+        el('h2', {}, ['这局打完了']),
+        el('p', { id: 'dota-kills' }, [`击杀 ${match.kills}`]),
+        back,
+      ]),
+    ]);
+  }
+  const seconds = Math.max(0, Math.ceil((MATCH_TICKS - match.tick) * TICK_MS / 1000));
+  const skip = el('button', { type: 'button', 'data-dota': 'skip' }, ['跳过']);
+  skip.addEventListener('click', () => showDotaResult());
+  const buttons = RAZES.map(raze => {
+    const button = el('button', { type: 'button', 'data-dota': raze.id }, [`${raze.name} ${raze.key.toUpperCase()}`]);
+    button.addEventListener('click', () => pressRaze(raze.id));
+    return button;
+  });
+  return el('div', { class: 'dota', id: 'dota' }, [
+    el('div', { class: 'dota-panel' }, [
+      el('div', { class: 'dota-top' }, [
+        el('div', {}, [
+          el('h2', {}, ['打 Dota']),
+          el('p', { class: 'meta' }, ['影魔，三个影压']),
+        ]),
+        el('div', {}, [
+          el('strong', { id: 'dota-kills' }, [`击杀 ${match.kills}`]),
+          el('div', {}, [`还剩 ${seconds} 秒`]),
+        ]),
+        skip,
+      ]),
+      dotaLane(match),
+      el('div', { class: 'actions' }, buttons),
+    ]),
   ]);
 }
 
@@ -199,8 +304,17 @@ function render() {
     parts.push(ending(view));
   }
   parts.push(logList(view));
+  if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
 }
+
+window.addEventListener('keydown', event => {
+  if (!dota || dota.mode !== 'play' || event.repeat) return;
+  const raze = RAZES.find(item => item.key === event.key.toLowerCase());
+  if (!raze) return;
+  event.preventDefault();
+  pressRaze(raze.id);
+});
 
 render();
 

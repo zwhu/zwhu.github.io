@@ -272,7 +272,7 @@ function overnight(state) {
     stamina,
     overnightUsed: true,
     stats: { ...state.stats, overnights: state.stats.overnights + 1 },
-  }, `熬夜，行动点 +${state.config.overnightAp}，体力 ${stamina}`);
+  }, `${state.config.overnightName}，行动点 +${state.config.overnightAp}，体力 ${stamina}`);
 }
 
 function resolveDeadlines(state) {
