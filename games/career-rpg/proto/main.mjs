@@ -644,6 +644,11 @@ function office(view) {
       alt: '',
       src: view.night ? './art/02-main-night-v2.png' : './art/01-main-day.png',
     }),
+    el('img', {
+      class: 'cooler',
+      alt: '',
+      src: view.night ? './art/water-cooler-night.png' : './art/water-cooler-day.png',
+    }),
     walkerElement(),
     hud(view),
     el('div', { class: 'spots' }, spots),

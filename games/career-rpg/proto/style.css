@@ -380,6 +380,17 @@ dd { margin: 0; }
   image-rendering: pixelated;
 }
 
+.cooler {
+  position: absolute;
+  z-index: 2;
+  left: calc(166 / 384 * 100%);
+  top: calc(52 / 216 * 100%);
+  width: calc(24 / 384 * 100%);
+  height: calc(36 / 216 * 100%);
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
 .walker {
   position: absolute;
   z-index: 3;
