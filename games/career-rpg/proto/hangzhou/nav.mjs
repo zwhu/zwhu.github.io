@@ -34,7 +34,6 @@ export const NAV = {
   ],
   seat: { stand: [82, 198], sit: [70, 135], sitSize: [23, 22] },
   bossStand: [286, 168],
-  frame: { w: 28, h: 44, columns: 7, directions: ['down', 'left', 'right', 'up'] },
   spots: [
     { id: 'plus', kind: 'colleague', who: 'plus', at: [232, 136], day: [222, 90, 19, 46], boss: [298, 102, 19, 46] },
     { id: 'neighbor', kind: 'colleague', who: 'neighbor', at: [142, 198], day: [133, 133, 18, 44], boss: [355, 104, 18, 46] },

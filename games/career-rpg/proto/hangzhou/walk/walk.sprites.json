@@ -1,0 +1,29 @@
+{
+  "frameDuration": 160,
+  "directions": {
+    "down": {
+      "file": "down.png",
+      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }],
+      "anchor": [14, 44],
+      "mirror": false
+    },
+    "up": {
+      "file": "up.png",
+      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }],
+      "anchor": [14, 44],
+      "mirror": false
+    },
+    "left": {
+      "file": "down.png",
+      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }],
+      "anchor": [14, 44],
+      "mirror": true
+    },
+    "right": {
+      "file": "down.png",
+      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }],
+      "anchor": [14, 44],
+      "mirror": false
+    }
+  }
+}

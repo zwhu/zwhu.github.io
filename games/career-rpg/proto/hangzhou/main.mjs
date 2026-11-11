@@ -2,6 +2,7 @@ import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickM
 import { NAV } from './nav.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
 import { cellCenter, effectFor, findPath, nearestWalkable, sceneFile, visibleSpots } from './walk.mjs';
+import { frameIndex, resolveSprites } from './walk-sprites.mjs';
 
 const app = document.querySelector('#app');
 
@@ -37,16 +38,15 @@ const SKILL_COPY = Object.freeze({
 const SCENE = Object.freeze({ w: 384, h: 216 });
 const WALK_SPEED = 140;
 
-const walkSheet = new Image();
-walkSheet.src = './art/player-walk.png';
 const sitImage = new Image();
 sitImage.src = './art/player-sit.png';
 
+let sprites = null;
+const spriteImages = new Map();
 let foot = { x: NAV.seat.stand[0], y: NAV.seat.stand[1] };
 let seated = true;
 let facing = 'down';
-let frame = 0;
-let frameTime = 0;
+let walkElapsed = 0;
 let route = [];
 let routeIndex = 0;
 let pending = null;
@@ -230,6 +230,7 @@ function beginWalk(spot) {
   routeIndex = 0;
   pending = effectFor(spot, { night: present(state).night });
   seated = false;
+  walkElapsed = 0;
   const here = route[0];
   if (route.length === 1 && Math.hypot(foot.x - here[0], foot.y - here[1]) < 6) {
     arrive();
@@ -241,7 +242,7 @@ function beginWalk(spot) {
 function arrive() {
   route = [];
   routeIndex = 0;
-  frame = 0;
+  walkElapsed = 0;
   const effect = pending;
   pending = null;
   if (!effect) {
@@ -282,11 +283,7 @@ function stepWalker(now) {
       foot.x += (dx / distance) * step;
       foot.y += (dy / distance) * step;
       facing = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
-      frameTime += dt;
-      if (frameTime > 0.12) {
-        frameTime = 0;
-        frame = (frame + 1) % 6;
-      }
+      walkElapsed += dt * 1000;
     }
   }
   drawWalker();
@@ -299,7 +296,7 @@ function stepWalker(now) {
 
 function drawWalker() {
   const canvas = document.querySelector('#walker');
-  if (!canvas || !walkSheet.complete || !sitImage.complete) return;
+  if (!canvas || !sitImage.complete || !sprites) return;
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, SCENE.w, SCENE.h);
@@ -310,20 +307,35 @@ function drawWalker() {
     ctx.drawImage(sitImage, NAV.seat.sit[0], NAV.seat.sit[1]);
     return;
   }
-  const { w, h, directions } = NAV.frame;
-  const col = route.length ? 1 + (frame % 6) : 0;
-  const row = Math.max(0, directions.indexOf(facing));
-  ctx.drawImage(
-    walkSheet,
-    col * w,
-    row * h,
-    w,
-    h,
-    Math.round(foot.x - w / 2),
-    Math.round(foot.y - h),
-    w,
-    h,
-  );
+  const spec = sprites.directions[facing] || sprites.directions.down;
+  const image = spriteImages.get(spec.file);
+  if (!image?.complete) return;
+  const index = frameIndex(spec.frames.length, sprites.frameDuration, walkElapsed, route.length > 0);
+  const rect = spec.frames[index];
+  const [ax, ay] = spec.anchor;
+  ctx.save();
+  if (spec.mirror) {
+    ctx.translate(Math.round(foot.x), 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(image, rect.x, rect.y, rect.w, rect.h, -ax, Math.round(foot.y - ay), rect.w, rect.h);
+  } else {
+    ctx.drawImage(image, rect.x, rect.y, rect.w, rect.h, Math.round(foot.x - ax), Math.round(foot.y - ay), rect.w, rect.h);
+  }
+  ctx.restore();
+}
+
+function loadWalkSprites() {
+  const dataUrl = new URL('./walk/walk.sprites.json', import.meta.url);
+  return fetch(dataUrl).then(response => response.json()).then(data => {
+    sprites = resolveSprites(data);
+    const files = [...new Set(Object.values(sprites.directions).map(item => item.file))];
+    return Promise.all(files.map(file => new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => { spriteImages.set(file, image); resolve(); };
+      image.onerror = () => reject(new Error(file));
+      image.src = new URL(`./walk/${file}`, import.meta.url).href;
+    })));
+  }).then(() => drawWalker());
 }
 
 function placeForBoss() {
@@ -805,8 +817,8 @@ window.addEventListener('keydown', event => {
 
 render();
 
-walkSheet.addEventListener('load', () => drawWalker());
 sitImage.addEventListener('load', () => drawWalker());
+loadWalkSprites();
 
 window.hangzhou = {
   present() { return present(state); },
