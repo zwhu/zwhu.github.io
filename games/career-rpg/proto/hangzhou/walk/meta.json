@@ -1,0 +1,33 @@
+{
+  "frameDuration": 160,
+  "directions": {
+    "down": {
+      "file": "down.png",
+      "frameWidth": 28,
+      "frameHeight": 44,
+      "count": 1,
+      "anchor": [14, 44]
+    },
+    "up": {
+      "file": "up.png",
+      "frameWidth": 28,
+      "frameHeight": 44,
+      "count": 1,
+      "anchor": [14, 44]
+    },
+    "left": {
+      "file": "left.png",
+      "frameWidth": 28,
+      "frameHeight": 44,
+      "count": 1,
+      "anchor": [14, 44]
+    },
+    "right": {
+      "file": "right.png",
+      "frameWidth": 28,
+      "frameHeight": 44,
+      "count": 1,
+      "anchor": [14, 44]
+    }
+  }
+}

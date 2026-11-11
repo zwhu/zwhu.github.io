@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { convertMeta } from '../walk/build-sprites.mjs';
 import { frameIndex, resolveSprites } from '../walk-sprites.mjs';
 
 const data = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
@@ -12,12 +13,21 @@ test('the sprite json resolves a frame for every direction', () => {
     assert.equal(sprites.directions[name].frames[0].w, 28);
     assert.equal(sprites.directions[name].frames[0].h, 44);
   }
-  assert.equal(sprites.directions.down.mirror, false);
-  assert.equal(sprites.directions.up.file, 'up.png');
-  assert.equal(sprites.directions.left.mirror, true);
-  assert.equal(sprites.directions.left.file, 'down.png');
-  assert.equal(sprites.directions.right.mirror, false);
-  assert.equal(sprites.directions.right.file, 'down.png');
+  for (const name of ['down', 'up', 'left', 'right']) {
+    assert.equal(sprites.directions[name].mirror, false, name);
+  }
+  assert.equal(sprites.directions.left.file, 'left.png');
+  assert.equal(sprites.directions.right.file, 'right.png');
+  assert.notEqual(sprites.directions.left.file, sprites.directions.right.file);
+});
+
+test('meta.json converts to walk.sprites.json with mirror off', () => {
+  const meta = JSON.parse(readFileSync(new URL('../walk/meta.json', import.meta.url), 'utf8'));
+  const converted = convertMeta(meta);
+  assert.deepEqual(converted, data);
+  for (const name of ['down', 'up', 'left', 'right']) {
+    assert.equal(converted.directions[name].mirror, false);
+  }
 });
 
 test('a missing direction falls back without throwing', () => {
@@ -28,10 +38,10 @@ test('a missing direction falls back without throwing', () => {
       up: data.directions.up,
     },
   });
-  assert.equal(sprites.directions.left.mirror, true);
-  assert.equal(sprites.directions.left.file, 'down.png');
+  assert.equal(sprites.directions.left.mirror, false);
+  assert.equal(sprites.directions.left.file, 'left.png');
   assert.equal(sprites.directions.right.mirror, false);
-  assert.equal(sprites.directions.right.file, 'down.png');
+  assert.equal(sprites.directions.right.file, 'right.png');
   assert.equal(sprites.directions.up.file, 'up.png');
   assert.equal(sprites.directions.down.file, 'down.png');
 });

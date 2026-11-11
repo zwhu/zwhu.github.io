@@ -1,4 +1,4 @@
-// 主角四向帧从 walk/walk.sprites.json 读。缺某个方向时才退回：上=背面，下=正面，左=正面镜像，右=正面。
+// 主角四向帧只从 walk/walk.sprites.json 读。缺某个方向时退回同名站姿图，mirror 保持 false。
 
 export const SPRITE_DIRECTIONS = Object.freeze(['down', 'up', 'left', 'right']);
 
@@ -11,13 +11,15 @@ function standFrame(file) {
   };
 }
 
-export function fallbackDirection(name, data = {}) {
-  const given = data.directions || {};
-  const front = given.down?.frames?.length ? given.down : standFrame('down.png');
-  const back = given.up?.frames?.length ? given.up : standFrame('up.png');
-  if (name === 'up') return { ...back, mirror: false };
-  if (name === 'left') return { ...front, mirror: true };
-  return { ...front, mirror: false };
+const FALLBACK_FILE = Object.freeze({
+  down: 'down.png',
+  up: 'up.png',
+  left: 'left.png',
+  right: 'right.png',
+});
+
+export function fallbackDirection(name) {
+  return standFrame(FALLBACK_FILE[name] || 'down.png');
 }
 
 export function resolveSprites(data) {

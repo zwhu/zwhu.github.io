@@ -3,26 +3,66 @@
   "directions": {
     "down": {
       "file": "down.png",
-      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }],
-      "anchor": [14, 44],
+      "frames": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 28,
+          "h": 44
+        }
+      ],
+      "anchor": [
+        14,
+        44
+      ],
       "mirror": false
     },
     "up": {
       "file": "up.png",
-      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }],
-      "anchor": [14, 44],
+      "frames": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 28,
+          "h": 44
+        }
+      ],
+      "anchor": [
+        14,
+        44
+      ],
       "mirror": false
     },
     "left": {
-      "file": "down.png",
-      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }],
-      "anchor": [14, 44],
-      "mirror": true
+      "file": "left.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 28,
+          "h": 44
+        }
+      ],
+      "anchor": [
+        14,
+        44
+      ],
+      "mirror": false
     },
     "right": {
-      "file": "down.png",
-      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }],
-      "anchor": [14, 44],
+      "file": "right.png",
+      "frames": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 28,
+          "h": 44
+        }
+      ],
+      "anchor": [
+        14,
+        44
+      ],
       "mirror": false
     }
   }
