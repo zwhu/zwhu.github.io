@@ -1,0 +1,681 @@
+{
+ "cell": [
+  56,
+  56
+ ],
+ "cols": [
+  "stand_front",
+  "stand_back",
+  "seat_back_body",
+  "seat_back_on_chair",
+  "seat_front_body",
+  "seat_front_on_chair"
+ ],
+ "rows": [
+  "pusher",
+  "manager",
+  "cto",
+  "player",
+  "feixiang",
+  "beige",
+  "newbie"
+ ],
+ "names": {
+  "pusher": "催上线的创始人",
+  "manager": "管事的创始人",
+  "cto": "第三位创始人",
+  "player": "我",
+  "feixiang": "费翔🐘",
+  "beige": "米色新人",
+  "newbie": "新人 4"
+ },
+ "cells": {
+  "pusher": {
+   "stand_front": {
+    "origin": [
+     0,
+     0
+    ],
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     19,
+     10,
+     38,
+     54
+    ]
+   },
+   "stand_back": {
+    "origin": [
+     56,
+     0
+    ],
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     20,
+     10,
+     37,
+     54
+    ]
+   },
+   "seat_back_body": {
+    "origin": [
+     112,
+     0
+    ],
+    "foot": [
+     28,
+     48
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "clip_from_y": 30,
+    "how": "draw body, then redraw the chair pixels over it (chair back covers the hips)"
+   },
+   "seat_back_on_chair": {
+    "origin": [
+     168,
+     0
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "foot": [
+     28,
+     48
+    ]
+   },
+   "seat_front_body": {
+    "origin": [
+     224,
+     0
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "feet_y": 54,
+    "bbox": [
+     18,
+     13,
+     39,
+     54
+    ]
+   },
+   "seat_front_on_chair": {
+    "origin": [
+     280,
+     0
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "how": "chair behind, body in front"
+   }
+  },
+  "manager": {
+   "stand_front": {
+    "origin": [
+     0,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     18,
+     10,
+     38,
+     54
+    ]
+   },
+   "stand_back": {
+    "origin": [
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     18,
+     10,
+     38,
+     54
+    ]
+   },
+   "seat_back_body": {
+    "origin": [
+     112,
+     56
+    ],
+    "foot": [
+     28,
+     48
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "clip_from_y": 30,
+    "how": "draw body, then redraw the chair pixels over it (chair back covers the hips)"
+   },
+   "seat_back_on_chair": {
+    "origin": [
+     168,
+     56
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "foot": [
+     28,
+     48
+    ]
+   },
+   "seat_front_body": {
+    "origin": [
+     224,
+     56
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "feet_y": 54,
+    "bbox": [
+     17,
+     12,
+     39,
+     54
+    ]
+   },
+   "seat_front_on_chair": {
+    "origin": [
+     280,
+     56
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "how": "chair behind, body in front"
+   }
+  },
+  "cto": {
+   "stand_front": {
+    "origin": [
+     0,
+     112
+    ],
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     20,
+     12,
+     37,
+     54
+    ]
+   },
+   "stand_back": {
+    "origin": [
+     56,
+     112
+    ],
+    "empty": "沿用原图：仓库里没有背面站姿"
+   },
+   "seat_back_body": {
+    "origin": [
+     112,
+     112
+    ],
+    "foot": [
+     28,
+     48
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "clip_from_y": 30,
+    "how": "draw body, then redraw the chair pixels over it (chair back covers the hips)"
+   },
+   "seat_back_on_chair": {
+    "origin": [
+     168,
+     112
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "foot": [
+     28,
+     48
+    ]
+   },
+   "seat_front_body": {
+    "origin": [
+     224,
+     112
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "feet_y": 54,
+    "bbox": [
+     19,
+     14,
+     38,
+     54
+    ]
+   },
+   "seat_front_on_chair": {
+    "origin": [
+     280,
+     112
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "how": "chair behind, body in front"
+   }
+  },
+  "player": {
+   "stand_front": {
+    "origin": [
+     0,
+     168
+    ],
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     14,
+     10,
+     42,
+     54
+    ]
+   },
+   "stand_back": {
+    "origin": [
+     56,
+     168
+    ],
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     14,
+     10,
+     42,
+     54
+    ]
+   },
+   "seat_back_body": {
+    "origin": [
+     112,
+     168
+    ],
+    "foot": [
+     28,
+     48
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "clip_from_y": 30,
+    "how": "draw body, then redraw the chair pixels over it (chair back covers the hips)"
+   },
+   "seat_back_on_chair": {
+    "origin": [
+     168,
+     168
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "foot": [
+     28,
+     48
+    ]
+   },
+   "seat_front_body": {
+    "origin": [
+     224,
+     168
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "feet_y": 54,
+    "bbox": [
+     13,
+     13,
+     43,
+     54
+    ]
+   },
+   "seat_front_on_chair": {
+    "origin": [
+     280,
+     168
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "how": "chair behind, body in front"
+   }
+  },
+  "feixiang": {
+   "stand_front": {
+    "origin": [
+     0,
+     224
+    ],
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     20,
+     12,
+     37,
+     54
+    ]
+   },
+   "stand_back": {
+    "origin": [
+     56,
+     224
+    ],
+    "empty": "沿用原图：仓库里没有背面站姿"
+   },
+   "seat_back_body": {
+    "origin": [
+     112,
+     224
+    ],
+    "foot": [
+     28,
+     48
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "clip_from_y": 30,
+    "how": "draw body, then redraw the chair pixels over it (chair back covers the hips)"
+   },
+   "seat_back_on_chair": {
+    "origin": [
+     168,
+     224
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "foot": [
+     28,
+     48
+    ]
+   },
+   "seat_front_body": {
+    "origin": [
+     224,
+     224
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "feet_y": 54,
+    "bbox": [
+     19,
+     14,
+     38,
+     54
+    ]
+   },
+   "seat_front_on_chair": {
+    "origin": [
+     280,
+     224
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "how": "chair behind, body in front"
+   }
+  },
+  "beige": {
+   "stand_front": {
+    "origin": [
+     0,
+     280
+    ],
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     18,
+     12,
+     38,
+     54
+    ]
+   },
+   "stand_back": {
+    "origin": [
+     56,
+     280
+    ],
+    "empty": "沿用原图：仓库里没有背面站姿"
+   },
+   "seat_back_body": {
+    "origin": [
+     112,
+     280
+    ],
+    "foot": [
+     28,
+     48
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "clip_from_y": 30,
+    "how": "draw body, then redraw the chair pixels over it (chair back covers the hips)"
+   },
+   "seat_back_on_chair": {
+    "origin": [
+     168,
+     280
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "foot": [
+     28,
+     48
+    ]
+   },
+   "seat_front_body": {
+    "origin": [
+     224,
+     280
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "feet_y": 54,
+    "bbox": [
+     17,
+     14,
+     39,
+     54
+    ]
+   },
+   "seat_front_on_chair": {
+    "origin": [
+     280,
+     280
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "how": "chair behind, body in front"
+   }
+  },
+  "newbie": {
+   "stand_front": {
+    "origin": [
+     0,
+     336
+    ],
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     20,
+     12,
+     37,
+     54
+    ]
+   },
+   "stand_back": {
+    "origin": [
+     56,
+     336
+    ],
+    "empty": "沿用原图：仓库里没有背面站姿"
+   },
+   "seat_back_body": {
+    "origin": [
+     112,
+     336
+    ],
+    "foot": [
+     28,
+     48
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "clip_from_y": 30,
+    "how": "draw body, then redraw the chair pixels over it (chair back covers the hips)"
+   },
+   "seat_back_on_chair": {
+    "origin": [
+     168,
+     336
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "foot": [
+     28,
+     48
+    ]
+   },
+   "seat_front_body": {
+    "origin": [
+     224,
+     336
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "feet_y": 54,
+    "bbox": [
+     19,
+     14,
+     38,
+     54
+    ]
+   },
+   "seat_front_on_chair": {
+    "origin": [
+     280,
+     336
+    ],
+    "hip": [
+     28,
+     41
+    ],
+    "chair_xy": [
+     14,
+     22
+    ],
+    "how": "chair behind, body in front"
+   }
+  }
+ },
+ "note": "anchors are cell-local pixels; 美术建议，最终以工程定的为准",
+ "chair": {
+  "source": "nanjing-office-384-base.png TL seat",
+  "crop": [
+   68,
+   84,
+   97,
+   117
+  ],
+  "back_top_local": 2
+ }
+}

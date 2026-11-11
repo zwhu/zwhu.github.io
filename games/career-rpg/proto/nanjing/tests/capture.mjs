@@ -13,7 +13,14 @@ const OUT = path.join(ROOT, 'games/career-rpg/proto/nanjing/review');
 const PAGE = '/games/career-rpg/proto/nanjing/index.html';
 mkdirSync(OUT, { recursive: true });
 
-const mime = { '.html': 'text/html; charset=utf-8', '.mjs': 'text/javascript', '.css': 'text/css' };
+const mime = {
+  '.html': 'text/html; charset=utf-8',
+  '.mjs': 'text/javascript',
+  '.css': 'text/css',
+  '.js': 'text/javascript',
+  '.json': 'application/json',
+  '.png': 'image/png',
+};
 const server = http.createServer((req, res) => {
   const url = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
   const file = path.resolve(ROOT, `.${url.endsWith('/') ? `${url}index.html` : url}`);
@@ -136,7 +143,7 @@ async function goto(seed) {
   await send('Page.navigate', { url: `${origin}?seed=${encodeURIComponent(seed)}` });
   for (let i = 0; i < 50; i += 1) {
     await sleep(80);
-    if (await evaluate('!!window.nanjing')) return;
+    if (await evaluate('!!window.nanjing?.ready')) return;
   }
   throw new Error(`page did not boot ${seed}`);
 }
@@ -238,7 +245,11 @@ try {
     await save(fps * 2, focus ? '#ending' : undefined);
     const file = path.join(OUT, `${name}.mp4`);
     await encode(dir, file, fps);
-    const ending = await evaluate(`document.querySelector('#ending-text')?.textContent || ''`);
+    const ending = await evaluate(`(() => {
+      const title = document.querySelector('#ending h2')?.textContent || '';
+      const body = document.querySelector('#ending-text')?.textContent || '';
+      return title + body;
+    })()`);
     const extra = await evaluate(`document.querySelector('#to-hangzhou')?.textContent || ''`);
     return { file: path.relative(ROOT, file), frames: index, ending, extra, texts, onScreen };
   }
