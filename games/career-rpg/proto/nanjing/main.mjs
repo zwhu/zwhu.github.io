@@ -1,6 +1,6 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from '../dota.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
-import { drawScene, hotspots, loadArt, sceneMode } from './scene.mjs';
+import { bindWalk, clickGround, drawScene, hotspots, loadArt, sceneMode, startWalk } from './scene.mjs';
 
 // 学习卡上的短字是界面里已有的效果句。悬停展开的原文取自 README 的技能条。
 const SKILL_SOURCE = {
@@ -189,21 +189,30 @@ function spotStyle(spot) {
 function sceneStage(view) {
   const mode = sceneMode(view);
   const canvas = el('canvas', { id: 'scene', width: '384', height: '216' });
+  canvas.addEventListener('click', event => {
+    const box = canvas.getBoundingClientRect();
+    const x = ((event.clientX - box.left) * canvas.width) / box.width;
+    const y = ((event.clientY - box.top) * canvas.height) / box.height;
+    clickGround(x, y, mode);
+  });
   const stage = el('div', { class: 'stage', id: 'stage', 'data-scene': mode }, [canvas]);
   const here = new Set();
   for (const spot of hotspots(mode)) {
-    const person = view.colleagues.find(item => item.id === spot.person);
-    if (!person) continue;
-    here.add(person.id);
-    const speaking = view.dialogue?.person === person.id;
-    const button = el('button', {
+    if (spot.person) here.add(spot.person);
+    const speaking = spot.person && view.dialogue?.person === spot.person;
+    const attrs = {
       type: 'button',
       class: speaking ? 'hotspot speaking' : 'hotspot',
-      'data-person': person.id,
-      'aria-label': person.name,
+      'aria-label': spot.name,
+      'data-target': spot.id,
       style: spotStyle(spot),
+    };
+    if (spot.person) attrs['data-person'] = spot.person;
+    const button = el('button', attrs);
+    button.addEventListener('click', event => {
+      event.stopPropagation();
+      startWalk(spot.id, mode);
     });
-    button.addEventListener('click', () => act({ type: 'talk', person: person.id }));
     stage.append(button);
   }
   if (mode === 'boss') stage.append(el('p', { class: 'nag', id: 'boss-nag' }, ['好了没']));
@@ -583,6 +592,19 @@ window.nanjing = {
   start,
   ready: false,
 };
+
+bindWalk({
+  onArrive(effect) {
+    if (!effect) return;
+    if (effect.kind === 'talk') {
+      act({ type: 'talk', person: effect.person });
+      return;
+    }
+    const target = effect.kind === 'shelf' ? '#skills' : (effect.kind === 'computer' || effect.kind === 'seat' ? '#tickets' : '');
+    if (target) document.querySelector(target)?.scrollIntoView({ block: 'nearest' });
+  },
+  paint,
+});
 
 loadArt().then(() => {
   render();

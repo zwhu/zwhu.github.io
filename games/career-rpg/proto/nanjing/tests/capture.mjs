@@ -179,6 +179,14 @@ async function click(action) {
     return true;
   })()`);
   if (!found) throw new Error(`missing button ${JSON.stringify(action)} :: ${await evaluate('document.body.innerText.slice(0, 400)')}`);
+  if (action.type === 'talk') {
+    for (let i = 0; i < 100; i += 1) {
+      const open = await evaluate(`document.querySelector('#talk')?.dataset.person === ${JSON.stringify(action.person)}`);
+      if (open) return;
+      await sleep(50);
+    }
+    throw new Error(`talk did not open ${action.person}`);
+  }
 }
 async function encode(framesDir, file, fps) {
   await new Promise((resolve, reject) => {
