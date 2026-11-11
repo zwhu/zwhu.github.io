@@ -370,14 +370,14 @@ dd { margin: 0; }
   background: #fffef8;
   border: calc(1 / 384 * 100cqw) solid #282622;
   padding: 0 calc(4 / 384 * 100%);
-  font-size: calc(12 / 384 * 100cqw);
+  font-size: max(13px, calc(12 / 384 * 100cqw));
   line-height: 1.2;
   font-weight: 650;
 }
 
 .dialogue p {
   margin: 0;
-  font-size: calc(10 / 384 * 100cqw);
+  font-size: max(13px, calc(10 / 384 * 100cqw));
   line-height: 1.1;
 }
 
@@ -394,7 +394,7 @@ dd { margin: 0; }
   border: calc(1 / 384 * 100cqw) solid #282622;
   background: #f9f8f1;
   color: #201e1c;
-  font-size: calc(10 / 384 * 100cqw);
+  font-size: max(13px, calc(10 / 384 * 100cqw));
   line-height: 1.1;
 }
 
@@ -505,6 +505,13 @@ button:disabled, button:disabled:hover {
 }
 
 .cell.hot .creep { background: #fffdf8; }
+
+@container (max-width: 520px) {
+  .dialogue {
+    top: calc(124 / 216 * 100%);
+    height: calc(88 / 216 * 100%);
+  }
+}
 
 @media (max-width: 720px) {
   header, .status, .board { display: block; }

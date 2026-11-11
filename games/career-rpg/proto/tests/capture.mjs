@@ -92,10 +92,49 @@ async function evaluate(expression) {
   if (message.result?.exceptionDetails) throw new Error(JSON.stringify(message.result.exceptionDetails).slice(0, 800));
   return message.result?.result?.value;
 }
-async function shot(file) {
-  await evaluate('window.scrollTo(0, 0)');
+async function shot(file, scroll = true) {
+  if (scroll) await evaluate('window.scrollTo(0, 0)');
   const message = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   writeFileSync(file, Buffer.from(message.result.data, 'base64'));
+}
+async function assertActionButtons(width) {
+  const result = await evaluate(`(() => {
+    const wanted = ['休息 +2 体力', '入夜'];
+    const buttons = wanted.map(label => [...document.querySelectorAll('button')].find(button => button.textContent === label));
+    if (buttons.some(button => !button)) return { error: 'missing button' };
+    const parse = (value) => {
+      const match = String(value).match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+      return match ? [Number(match[1]), Number(match[2]), Number(match[3])] : null;
+    };
+    const channel = (value) => {
+      const scaled = value / 255;
+      return scaled <= 0.04045 ? scaled / 12.92 : ((scaled + 0.055) / 1.055) ** 2.4;
+    };
+    const luminance = (rgb) => 0.2126 * channel(rgb[0]) + 0.7152 * channel(rgb[1]) + 0.0722 * channel(rgb[2]);
+    return {
+      rows: buttons.map(button => {
+        button.scrollIntoView({ block: 'center' });
+        const rect = button.getBoundingClientRect();
+        const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        const style = getComputedStyle(button);
+        const fg = parse(style.color);
+        const bg = parse(style.backgroundColor);
+        const hi = fg && bg ? Math.max(luminance(fg), luminance(bg)) : 0;
+        const lo = fg && bg ? Math.min(luminance(fg), luminance(bg)) : 0;
+        return {
+          text: button.textContent,
+          contrast: fg && bg ? (hi + 0.05) / (lo + 0.05) : 0,
+          hit: hit === button || Boolean(hit && button.contains(hit)),
+          inView: rect.top >= 0 && rect.bottom <= window.innerHeight && rect.left >= 0 && rect.right <= window.innerWidth,
+        };
+      }),
+    };
+  })()`);
+  if (result.error) throw new Error(width + ' ' + result.error);
+  for (const row of result.rows) {
+    if (!row.hit || !row.inView || row.contrast < 4.5) throw new Error(width + ' action button ' + JSON.stringify(row));
+  }
+  return result;
 }
 async function goto(seed) {
   await send('Page.navigate', { url: `${origin}?seed=${encodeURIComponent(seed)}` });
@@ -266,6 +305,10 @@ const IDLE = `() => {
 try {
   await connect();
   await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
+  await goto('hefei');
+  const desktopActions = await assertActionButtons('1280');
+  await shot(path.join(OUT, 'stills/art-actions-desktop.png'), false);
+  console.log('actions-1280', JSON.stringify(desktopActions));
 
   if (process.argv.includes('dota')) {
     await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 1280, deviceScaleFactor: 1, mobile: false });
@@ -394,6 +437,10 @@ try {
   const bareText = await evaluate('document.querySelector("#ending-text").textContent');
   if (bareTitle !== '勉强留下来' || bareText.includes(bareTitle) || !bareText.includes('还没写完') || bareText.includes('老板记住了')) throw new Error('bare ending ' + bareTitle + ' / ' + bareText);
 
+  await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
+  await goto('hefei');
+  const phoneActions = await assertActionButtons('390');
+  console.log('actions-390', JSON.stringify(phoneActions));
   await send('Emulation.setDeviceMetricsOverride', { width: 375, height: 812, deviceScaleFactor: 1, mobile: true });
   await goto('hefei');
   await shot(path.join(OUT, 'mobile-open.png'));
