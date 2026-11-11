@@ -5,7 +5,7 @@ import { createReadStream, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import http from 'node:http';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { WIN_ACTIONS, WIN_SEED } from '../line.mjs';
+import { BARELY_ACTIONS, BARELY_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from '../line.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '../../../..');
 const OUT = path.join(ROOT, 'games/career-rpg/proto/review');
@@ -146,69 +146,74 @@ try {
   await connect();
   await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
 
+  async function cardText(kind) {
+    return evaluate(`document.querySelector('[data-kind="${kind}"]')?.innerText || ''`);
+  }
+  async function reachWeek2(seed) {
+    await goto(seed);
+    const arrived = await evaluate(`(() => {
+      let guard = 0;
+      while (hefei.present().phase === 'play' && !(hefei.present().week === 2 && hefei.present().day === 1) && guard < 400) {
+        const view = hefei.present();
+        const due = view.tickets.find(ticket => !ticket.mainline && ticket.dueIn <= 1);
+        const action = view.ap === 0 ? { type: 'sleep' } : (due ? { type: 'work', ticketId: due.id } : { type: 'rest' });
+        hefei.act(action);
+        guard += 1;
+      }
+      const view = hefei.present();
+      return view.week === 2 && view.day === 1 && view.phase === 'play';
+    })()`);
+    if (!arrived) throw new Error('did not reach week 2 ' + seed);
+  }
+
   await goto('s29');
-  const linuxBefore = await evaluate('document.querySelector(\'[data-kind="server"]\').innerText');
-  if (!linuxBefore.includes('3 点')) throw new Error('linux before ' + linuxBefore);
+  const linuxBefore = await cardText('disk');
+  if (!linuxBefore.includes('3 点') || linuxBefore.includes('Linux')) throw new Error('linux before ' + linuxBefore);
   await shot(path.join(OUT, 'skills/linux-before.png'));
   await click({ type: 'study', skill: 'linux' });
   await click({ type: 'study', skill: 'linux' });
-  const linuxAfter = await evaluate('document.querySelector(\'[data-kind="server"]\').innerText');
+  const linuxAfter = await cardText('disk');
   if (!linuxAfter.includes('1 点（Linux）')) throw new Error('linux after ' + linuxAfter);
   await shot(path.join(OUT, 'skills/linux-after.png'));
 
   await goto('s3');
-  const gitBefore = await evaluate('document.querySelector(\'[data-kind="demo"]\').innerText');
+  const gitBefore = await cardText('demo');
   if (!gitBefore.includes('逾期 -18')) throw new Error('git before ' + gitBefore);
   await shot(path.join(OUT, 'skills/git-before.png'));
   for (let i = 0; i < 3; i += 1) await click({ type: 'study', skill: 'git' });
-  const gitAfter = await evaluate('document.querySelector(\'[data-kind="demo"]\').innerText');
+  const gitAfter = await cardText('demo');
   if (!gitAfter.includes('逾期 -8（Git，否则 -18）')) throw new Error('git after ' + gitAfter);
   await shot(path.join(OUT, 'skills/git-after.png'));
 
-  await goto('java');
-  await click({ type: 'overnight' });
-  for (let i = 0; i < 3; i += 1) await click({ type: 'study', skill: 'java' });
-  const javaProgress = await evaluate('document.querySelector("#skill-java").textContent');
-  const javaCard = await evaluate('!!document.querySelector(\'[data-kind="fullstack"]\')');
-  if (javaProgress !== '3/4' || javaCard) throw new Error('java before ' + javaProgress + ' card=' + javaCard);
+  await goto('s5');
+  const databaseBefore = await cardText('schema');
+  if (!databaseBefore.includes('3 点') || databaseBefore.includes('数据库')) throw new Error('database before ' + databaseBefore);
+  await shot(path.join(OUT, 'skills/database-before.png'));
+  for (let i = 0; i < 3; i += 1) await click({ type: 'study', skill: 'database' });
+  const databaseAfter = await cardText('schema');
+  if (!databaseAfter.includes('2 点（数据库）')) throw new Error('database after ' + databaseAfter);
+  await shot(path.join(OUT, 'skills/database-after.png'));
+
+  await reachWeek2('hefei');
+  for (let i = 0; i < 3; i += 1) await click({ type: 'study', skill: 'database' });
+  const javaBefore = await cardText('filedb');
+  if (!javaBefore.includes('还差 8 点') || javaBefore.includes('+2')) throw new Error('java before ' + javaBefore);
   await shot(path.join(OUT, 'skills/java-before.png'));
-  await click({ type: 'study', skill: 'java' });
-  const javaAfter = await evaluate('document.querySelector(\'[data-kind="fullstack"]\').innerText');
-  if (!javaAfter.includes('做完 +18') || !javaAfter.includes('3 点')) throw new Error('java after ' + javaAfter);
+  await click({ type: 'sleep' });
+  await click({ type: 'overnight' });
+  for (let i = 0; i < 4; i += 1) await click({ type: 'study', skill: 'java' });
+  const javaAfter = await cardText('filedb');
+  if (!javaAfter.includes('这次 +2') || !javaAfter.includes('还差 8 点')) throw new Error('java after ' + javaAfter);
   await shot(path.join(OUT, 'skills/java-after.png'));
 
-  await goto(WIN_SEED);
-  let jqueryShot = false;
-  for (const action of WIN_ACTIONS) {
-    if (action.type === 'study' && action.skill === 'jquery') {
-      const progress = await evaluate('window.hefei.present().skills.find(skill => skill.id === "jquery").progress');
-      if (progress === 2) {
-        const ticket = await evaluate(`(() => {
-          const card = [...document.querySelectorAll('[data-kind="page"]')].find(node => node.innerText.includes('3 点') && !node.innerText.includes('jQuery'));
-          if (!card) return '';
-          card.scrollIntoView({ block: 'center' });
-          return card.innerText;
-        })()`);
-        if (!ticket.includes('3 点')) throw new Error('jquery before ' + ticket);
-        await shot(path.join(OUT, 'skills/jquery-before.png'));
-        await click(action);
-        const after = await evaluate(`(() => {
-          const card = document.querySelector('[data-kind="page"][data-cost="2"]');
-          if (!card) return '';
-          card.scrollIntoView({ block: 'center' });
-          return card.innerText;
-        })()`);
-        if (!after.includes('2 点（jQuery）')) throw new Error('jquery after ' + after);
-        await shot(path.join(OUT, 'skills/jquery-after.png'));
-        jqueryShot = true;
-        continue;
-      }
-    }
-    await click(action);
-  }
-  if (!jqueryShot) throw new Error('jquery moment not found');
-  const victory = await evaluate('document.querySelector("#ending-text").textContent');
-  if (victory !== '日夜颠倒地学新东西，拼命把活干好，争取能留下来。') throw new Error('victory ' + victory);
+  await reachWeek2('q3');
+  const jqueryBefore = await cardText('page');
+  if (!jqueryBefore.includes('2 点') || jqueryBefore.includes('jQuery')) throw new Error('jquery before ' + jqueryBefore);
+  await shot(path.join(OUT, 'skills/jquery-before.png'));
+  for (let i = 0; i < 3; i += 1) await click({ type: 'study', skill: 'jquery' });
+  const jqueryAfter = await cardText('page');
+  if (!jqueryAfter.includes('1 点（jQuery）')) throw new Error('jquery after ' + jqueryAfter);
+  await shot(path.join(OUT, 'skills/jquery-after.png'));
 
   async function record(name, seed, actions, fps) {
     const dir = path.join(framesRoot, name);
@@ -243,9 +248,13 @@ try {
   const lossText = await evaluate('document.querySelector("#ending-text").textContent');
   if (!lossText.includes('第 1 周周五') || !lossText.includes('被劝退')) throw new Error('loss ' + lossText);
 
-  const win = await record('win', WIN_SEED, WIN_ACTIONS, 2);
+  const win = await record('win', REMEMBERED_SEED, REMEMBERED_ACTIONS, 2);
   const winText = await evaluate('document.querySelector("#ending-text").textContent');
-  if (winText !== victory) throw new Error('win video ended on ' + winText);
+  if (!winText.includes('留下来，还被老板记住了') || winText.includes('争取能留下来')) throw new Error('win video ended on ' + winText);
+  await goto(BARELY_SEED);
+  for (const action of BARELY_ACTIONS) await click(action);
+  const bareText = await evaluate('document.querySelector("#ending-text").textContent');
+  if (!bareText.includes('勉强留下来') || !bareText.includes('还没写完') || bareText.includes('老板记住了')) throw new Error('bare ending ' + bareText);
 
   await send('Emulation.setDeviceMetricsOverride', { width: 375, height: 812, deviceScaleFactor: 1, mobile: true });
   await goto('hefei');
@@ -258,13 +267,15 @@ try {
     origin,
     loss,
     win,
-    victory,
+    remembered: winText,
+    barely: bareText,
     lossText,
     skills: {
       linux: ['games/career-rpg/proto/review/skills/linux-before.png', 'games/career-rpg/proto/review/skills/linux-after.png'],
       git: ['games/career-rpg/proto/review/skills/git-before.png', 'games/career-rpg/proto/review/skills/git-after.png'],
-      jquery: ['games/career-rpg/proto/review/skills/jquery-before.png', 'games/career-rpg/proto/review/skills/jquery-after.png'],
+      database: ['games/career-rpg/proto/review/skills/database-before.png', 'games/career-rpg/proto/review/skills/database-after.png'],
       java: ['games/career-rpg/proto/review/skills/java-before.png', 'games/career-rpg/proto/review/skills/java-after.png'],
+      jquery: ['games/career-rpg/proto/review/skills/jquery-before.png', 'games/career-rpg/proto/review/skills/jquery-after.png'],
     },
     consoleErrors: errors,
   };
