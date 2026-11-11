@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
-import { accessSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 import { CONFIG, ENDINGS, SKILL_IDS } from '../config.mjs';
 import { BARELY_ACTIONS, BARELY_SEED, LOSS_ACTIONS, LOSS_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from '../line.mjs';
 import {
@@ -21,6 +23,8 @@ import {
 } from '../rules.mjs';
 import { ratesOnly, runStrategies } from '../sim.mjs';
 import { WALK_GRID, commitArrival, findPath, pointBlocked, resolveClick } from '../walk.mjs';
+import { convertMeta } from '../walk/build-sprites.mjs';
+import { frameIndex, resolveSprite } from '../walk-sprites.mjs';
 
 const rulesSource = readFileSync(new URL('../rules.mjs', import.meta.url), 'utf8');
 
@@ -578,10 +582,53 @@ test('scene clicks use the same actions as the buttons', () => {
   const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
   assert.match(mainSource, /openPerson\(action\.person\)/);
   assert.match(mainSource, /act\(\{ type: 'study', skill: present\(state\)\.shelf\.id \}\)/);
-  for (const dir of ['down', 'up', 'left', 'right']) {
-    accessSync(new URL(`../../art/player-walk-v2/frames/${dir}/walk-01.png`, import.meta.url));
-    accessSync(new URL(`../../art/player-walk-v2/frames/${dir}/idle.png`, import.meta.url));
-  }
   const actionCss = readFileSync(new URL('../style.css', import.meta.url), 'utf8').match(/\.actions\s*\{[^}]*\}/)[0];
   assert.equal(/position:\s*(?:sticky|fixed)/.test(actionCss), false);
+});
+
+test('walk sprites come from walk.sprites.json and every direction is drawn', () => {
+  const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
+  const meta = JSON.parse(readFileSync(new URL('../walk/meta.json', import.meta.url), 'utf8'));
+  assert.deepEqual(sheet, convertMeta(meta));
+  const images = [];
+  for (const facing of ['down', 'up', 'left', 'right']) {
+    const sprite = resolveSprite(sheet, facing);
+    assert.ok(sprite.frames.length >= 1, facing);
+    assert.equal(sprite.mirror, false, facing);
+    assert.equal(sprite.anchor.y, 43);
+    assert.equal(sprite.frameMs, 160);
+    images.push(sprite.image);
+  }
+  assert.equal(new Set(images).size, 4);
+  assert.equal(images.includes('./walk/left.png'), true);
+  assert.equal(images.includes('./walk/right.png'), true);
+  const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
+  const loaderSource = readFileSync(new URL('../walk-sprites.mjs', import.meta.url), 'utf8');
+  assert.equal(mainSource.includes('meta.json'), false);
+  assert.equal(loaderSource.includes('meta.json'), false);
+  assert.match(mainSource, /walk\.sprites\.json/);
+  const check = spawnSync(process.execPath, ['games/career-rpg/proto/walk/build-sprites.mjs', '--check'], {
+    cwd: fileURLToPath(new URL('../../../..', import.meta.url)),
+  });
+  assert.equal(check.status, 0);
+});
+
+test('a missing walk direction falls back without mirroring', () => {
+  const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
+  delete sheet.directions.left;
+  const sprite = resolveSprite(sheet, 'left');
+  assert.equal(sprite.image, './walk/down.png');
+  assert.equal(sprite.mirror, false);
+  assert.ok(sprite.frames.length >= 1);
+  assert.equal(resolveSprite({}, 'up').frames.length, 1);
+});
+
+test('walk frames advance when a direction has more than one frame', () => {
+  const sheet = JSON.parse(readFileSync(new URL('./fixtures/walk-two-frames.json', import.meta.url), 'utf8'));
+  const sprite = resolveSprite(sheet, 'down');
+  assert.equal(sprite.frames.length, 2);
+  assert.equal(frameIndex(sprite, 0), 0);
+  assert.equal(frameIndex(sprite, 99), 0);
+  assert.equal(frameIndex(sprite, 100), 1);
+  assert.equal(frameIndex(sprite, 200), 0);
 });

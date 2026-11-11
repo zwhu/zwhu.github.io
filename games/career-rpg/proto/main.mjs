@@ -1,6 +1,7 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from './dota.mjs';
 import { CONFIG, SCRIPT, applyAction, createGame, present } from './rules.mjs';
-import { WALK_GRID, facingOf, findPath, frameSrc, resolveClick } from './walk.mjs';
+import { frameIndex, resolveSprite } from './walk-sprites.mjs';
+import { WALK_GRID, facingOf, findPath, resolveClick } from './walk.mjs';
 
 const app = document.querySelector('#app');
 
@@ -28,8 +29,9 @@ const walker = {
   arriveFacing: 'up',
   loop: false,
   last: 0,
-  step: 0,
+  walkMs: 0,
 };
+let walkSprites = null;
 
 function resetWalker() {
   walker.x = WALK_GRID.start.x;
@@ -41,35 +43,48 @@ function resetWalker() {
   walker.action = null;
   walker.arrivePose = 'seated';
   walker.arriveFacing = 'up';
-  walker.step = 0;
+  walker.walkMs = 0;
 }
 
-function walkerView() {
+function walkerElement() {
   if (walker.pose === 'seated') {
     const seat = WALK_GRID.seat;
-    return {
-      className: 'walker seated',
+    return el('img', {
+      id: 'walker',
+      class: 'walker seated',
+      alt: '',
       src: './art/player-seated.png',
       style: `left:${(seat.x / 384) * 100}%;top:${(seat.y / 216) * 100}%;width:${(seat.w / 384) * 100}%;height:${(seat.h / 216) * 100}%`,
-    };
+    });
   }
-  const sprite = WALK_GRID.sprite;
-  const left = walker.x - sprite.footX;
-  const top = walker.y - sprite.footY;
-  return {
-    className: 'walker',
-    src: frameSrc(walker.facing, walker.path.length ? walker.frame : -1),
-    style: `left:${(left / 384) * 100}%;top:${(top / 216) * 100}%;width:${(sprite.w / 384) * 100}%;height:${(sprite.h / 216) * 100}%`,
-  };
+  const pose = resolveSprite(walkSprites, walker.facing);
+  const index = walker.path.length ? frameIndex(pose, walker.walkMs) : 0;
+  const frame = pose.frames[index];
+  const left = walker.x - pose.anchor.x;
+  const top = walker.y - pose.anchor.y;
+  const box = [
+    `left:${(left / 384) * 100}%`,
+    `top:${(top / 216) * 100}%`,
+    `width:${(frame.w / 384) * 100}%`,
+    `height:${(frame.h / 216) * 100}%`,
+    pose.mirror ? 'transform:scaleX(-1)' : '',
+  ].filter(Boolean).join(';');
+  const imgStyle = [
+    'position:absolute',
+    `width:${(pose.imageSize.w / frame.w) * 100}%`,
+    `height:${(pose.imageSize.h / frame.h) * 100}%`,
+    `left:${(-frame.x / frame.w) * 100}%`,
+    `top:${(-frame.y / frame.h) * 100}%`,
+  ].join(';');
+  return el('span', { id: 'walker', class: 'walker', style: box }, [
+    el('img', { alt: '', src: pose.image, style: imgStyle }),
+  ]);
 }
 
 function paintWalker() {
-  const img = document.querySelector('#walker');
-  if (!img) return;
-  const view = walkerView();
-  img.className = view.className;
-  if (img.getAttribute('src') !== view.src) img.src = view.src;
-  img.style.cssText = view.style;
+  const current = document.querySelector('#walker');
+  if (!current) return;
+  current.replaceWith(walkerElement());
   const spot = document.querySelector('[data-spot="player"]');
   if (!spot) return;
   const box = walker.pose === 'seated'
@@ -109,6 +124,7 @@ function walkLoop(now) {
   }
   const dt = walker.last ? Math.min(0.05, (now - walker.last) / 1000) : 0.016;
   walker.last = now;
+  walker.walkMs += dt * 1000;
   let left = 56 * dt;
   while (left > 0 && walker.path.length) {
     const next = walker.path[0];
@@ -124,11 +140,6 @@ function walkLoop(now) {
     walker.x += (dx / dist) * step;
     walker.y += (dy / dist) * step;
     left -= step;
-    walker.step += step;
-    if (walker.step >= 5) {
-      walker.frame = (walker.frame + 1) % 6;
-      walker.step = 0;
-    }
   }
   walker.pose = 'stand';
   paintWalker();
@@ -148,6 +159,7 @@ function goTo(hit) {
   walker.action = hit.action;
   walker.arrivePose = hit.target.pose || 'stand';
   walker.arriveFacing = hit.target.facing || null;
+  walker.walkMs = 0;
   walker.pose = path.length ? 'stand' : walker.arrivePose;
   paintWalker();
   if (!path.length) {
@@ -592,14 +604,13 @@ function office(view) {
   const chip = el('p', { class: 'week-chip', id: 'scene-when' }, [
     `第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`,
   ]);
-  const sprite = walkerView();
   const children = [
     el('img', {
       class: 'scene-img',
       alt: '',
       src: view.night ? './art/02-main-night-v2.png' : './art/01-main-day.png',
     }),
-    el('img', { id: 'walker', class: sprite.className, alt: '', src: sprite.src, style: sprite.style }),
+    walkerElement(),
     chip,
     el('div', { class: 'spots' }, spots),
   ];
@@ -818,6 +829,7 @@ window.addEventListener('keydown', event => {
   pressRaze(raze.id);
 });
 
+walkSprites = await fetch(new URL('./walk/walk.sprites.json', import.meta.url)).then(response => response.json());
 render();
 
 window.hefei = {

@@ -1,0 +1,23 @@
+{
+  "frameMs": 160,
+  "imageSize": { "w": 28, "h": 44 },
+  "anchor": { "x": 14, "y": 43 },
+  "directions": {
+    "down": {
+      "image": "down.png",
+      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }]
+    },
+    "up": {
+      "image": "up.png",
+      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }]
+    },
+    "left": {
+      "image": "left.png",
+      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }]
+    },
+    "right": {
+      "image": "right.png",
+      "frames": [{ "x": 0, "y": 0, "w": 28, "h": 44 }]
+    }
+  }
+}

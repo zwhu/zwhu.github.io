@@ -109,9 +109,3 @@ export function facingOf(dx, dy) {
   if (Math.abs(dx) > Math.abs(dy)) return dx >= 0 ? 'right' : 'left';
   return dy >= 0 ? 'down' : 'up';
 }
-
-export function frameSrc(facing, frame) {
-  const dir = facing === 'up' || facing === 'down' || facing === 'left' || facing === 'right' ? facing : 'down';
-  const name = frame < 0 ? 'idle' : `walk-0${(frame % 6) + 1}`;
-  return `../art/player-walk-v2/frames/${dir}/${name}.png`;
-}

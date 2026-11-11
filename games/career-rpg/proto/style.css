@@ -282,7 +282,13 @@ dd { margin: 0; }
   position: absolute;
   z-index: 3;
   pointer-events: none;
+  overflow: hidden;
   image-rendering: pixelated;
+}
+
+.walker img {
+  image-rendering: pixelated;
+  max-width: none;
 }
 
 .week-chip {
