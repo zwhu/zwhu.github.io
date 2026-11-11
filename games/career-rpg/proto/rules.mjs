@@ -32,8 +32,18 @@ function clamp(value, min, max) {
 }
 
 export function weekLine(week, config = CONFIG) {
+  if (config.weekLines) return config.weekLines[week - 1];
   if (week === config.weeks && config.weekLineFinal != null) return config.weekLineFinal;
   return config.weekLineBase + (week - 1) * config.weekLineStep;
+}
+
+export function goodFavor(config = CONFIG) {
+  return config.goodFavor;
+}
+
+export function clearedEnding(favor, fileDbDone, config = CONFIG) {
+  if (fileDbDone && favor >= goodFavor(config)) return 'remembered';
+  return 'barely';
 }
 
 export const PERSON_IDS = Object.freeze(['boss', 'lunch', 'neighbor', 'party']);
@@ -411,7 +421,7 @@ function bossText(state) {
 
 function lunchText(state) {
   const dish = LUNCH_DISHES[dayIndex(state) % LUNCH_DISHES.length];
-  return `好饿，去吃面。${dayStamp(state)}想吃${dish}。`;
+  return `好饿，去吃面吗？${dayStamp(state)}想吃${dish}。`;
 }
 
 function neighborText(state) {
@@ -567,7 +577,7 @@ function sleep(state) {
       };
     }
     if (next.week >= next.config.weeks) {
-      const ending = next.fileDbDone ? 'remembered' : 'barely';
+      const ending = clearedEnding(next.favor, next.fileDbDone, next.config);
       return { ...next, phase: 'won', ending };
     }
     next = { ...next, week: next.week + 1, day: 1 };
@@ -624,6 +634,13 @@ function skillStatus(state, skillId) {
   };
 }
 
+function victoryCopy(state) {
+  const ending = ENDINGS[state.ending];
+  if (!ending) return '';
+  if (state.ending === 'barely' && state.fileDbDone) return '人留下了。文件数据库交了，好感没到记住的线。';
+  return ending.text;
+}
+
 export function present(state) {
   const learned = state.learned;
   const config = state.config;
@@ -642,7 +659,8 @@ export function present(state) {
     failReason: state.failReason,
     ending: state.ending,
     victoryTitle: ENDINGS[state.ending]?.title || '',
-    victoryText: ENDINGS[state.ending]?.text || '',
+    victoryText: victoryCopy(state),
+    goodFavor: goodFavor(config),
     fileDbDone: state.fileDbDone,
     interviewed: state.interviewed,
     night: state.night,

@@ -173,6 +173,7 @@ function status(view) {
       el('div', {}, ['老板好感']),
       el('strong', { id: 'favor' }, [String(view.favor)]),
       el('div', {}, ['本周线 ', el('strong', { id: 'line' }, [String(view.line)])]),
+      el('div', {}, ['记住线 ', el('strong', { id: 'good-favor' }, [String(view.goodFavor)])]),
     ]),
   ]);
 }

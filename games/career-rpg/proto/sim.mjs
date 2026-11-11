@@ -33,14 +33,17 @@ function dueToday(state) {
   return workable(state).find(ticket => !ticket.mainline && (ticket.dueIn <= 1 || ticket.late));
 }
 
+const PLANNED_SKILLS = ['database', 'linux', 'git'];
+
 export function plannedAction(state) {
   if (state.phase !== 'play') return null;
   if (state.ap <= 0) return { type: 'sleep' };
   const fire = dueToday(state);
-  if (!state.learned.database) {
+  for (const skill of PLANNED_SKILLS) {
+    if (state.learned[skill]) continue;
     if (fire) return { type: 'work', ticketId: fire.id };
-    const studied = applyAction(state, { type: 'study', skill: 'database' });
-    if (studied !== state) return { type: 'study', skill: 'database' };
+    const studied = applyAction(state, { type: 'study', skill });
+    if (studied !== state) return { type: 'study', skill };
   }
   if (fire) return { type: 'work', ticketId: fire.id };
   const file = fileDbOpen(state);

@@ -6,6 +6,7 @@ import { BARELY_ACTIONS, BARELY_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from
 import {
   applyAction,
   bossFavorLine,
+  clearedEnding,
   coworkerLine,
   createGame,
   forecastTomorrow,
@@ -58,7 +59,8 @@ test('documented starting numbers live in one config', () => {
   assert.equal(weekLine(4), 130);
   assert.equal(CONFIG.weekLineFinal, 130);
   assert.equal(CONFIG.favorMax, 200);
-  assert.equal(CONFIG.fileDbReward, 100);
+  assert.equal(CONFIG.fileDbReward, 50);
+  assert.equal(CONFIG.goodFavor, 200);
   assert.equal(CONFIG.noodleStamina, 3);
   assert.equal(CONFIG.noodleStamina, CONFIG.restStamina + 1);
   for (const skill of Object.values(CONFIG.skills)) assert.ok(skill.cost >= 2 && skill.cost <= 4);
@@ -245,7 +247,7 @@ test('Java is night-only and the file database stays shut until 数据库', () =
   const file = present(state).tickets.find(ticket => ticket.mainline);
   assert.equal(file.title, '写一个文件数据库');
   assert.equal(file.locked, true);
-  assert.equal(file.reward, 100);
+  assert.equal(file.reward, 50);
   assert.equal(applyAction(state, { type: 'work', ticketId: file.id }), state);
   while (!state.learned.database) {
     state = applyAction(state, state.ap > 0 ? { type: 'study', skill: 'database' } : { type: 'sleep' });
@@ -274,6 +276,13 @@ test('illegal actions leave the state untouched', () => {
   assert.equal(applyAction(done.state, { type: 'rest' }), done.state);
 });
 
+test('the good ending needs both the file database and the remember line', () => {
+  assert.equal(clearedEnding(CONFIG.goodFavor, true), 'remembered');
+  assert.equal(clearedEnding(CONFIG.goodFavor - 1, true), 'barely');
+  assert.equal(clearedEnding(CONFIG.goodFavor, false), 'barely');
+  assert.ok(CONFIG.goodFavor > weekLine(4));
+});
+
 test('the two cleared endings replace the probation reminder', () => {
   assert.equal(ENDINGS.remembered.title, '留下来，还被老板记住了');
   assert.equal(ENDINGS.barely.title, '勉强留下来');
@@ -299,7 +308,7 @@ test('before the interview everyone only sends you to the boss', () => {
   assert.equal(night.dotaPending, false);
   const hired = applyAction(night, { type: 'talk', person: 'boss' });
   assert.equal(hired.interviewed, true);
-  assert.match(coworkerLine(hired, 'lunch').text, /好饿，去吃面/);
+  assert.match(coworkerLine(hired, 'lunch').text, /好饿，去吃面吗？/);
   assert.doesNotMatch(coworkerLine(hired, 'lunch').text, /找老板/);
   assert.match(coworkerLine(hired, 'neighbor').text, /明天会来/);
   assert.match(coworkerLine(hired, 'party').text, /Dota/);
@@ -316,7 +325,7 @@ test('each coworker can be talked to once a day, and the next day is a different
   state = applyAction(state, { type: 'sleep' });
   assert.equal(state.talked.neighbor, false);
   assert.notEqual(coworkerLine(state, 'lunch').text, first);
-  assert.match(coworkerLine(state, 'lunch').text, /好饿，去吃面/);
+  assert.match(coworkerLine(state, 'lunch').text, /好饿，去吃面吗？/);
   const again = applyAction(state, { type: 'talk', person: 'neighbor' });
   assert.notEqual(again.log[0], talked.log[0]);
 });
@@ -415,13 +424,19 @@ test('three fixed strategies stay inside the tuned rates', () => {
   const saved = JSON.parse(readFileSync(new URL('../review/strategies.json', import.meta.url), 'utf8'));
   assert.equal(saved.seedCount, 240);
   assert.equal(report.seeds, 240);
-  assert.equal(report.greedy.won, saved.strategies.greedy.won);
-  assert.equal(report.planned.remembered, saved.strategies.planned.remembered);
-  assert.equal(report.random.won, saved.strategies.random.won);
+  for (const name of ['greedy', 'planned', 'random']) {
+    assert.equal(report[name].won, saved.strategies[name].won);
+    assert.equal(report[name].remembered, saved.strategies[name].remembered);
+    assert.equal(report[name].barely, saved.strategies[name].barely);
+  }
   assert.ok(report.greedy.passRate >= 0.4 && report.greedy.passRate <= 0.6);
-  assert.equal(report.greedy.goodEndingRate, 0);
+  assert.ok(report.greedy.goodEndingRate <= 0.05);
+  assert.ok(report.greedy.won === 0 || report.greedy.barely / report.greedy.won >= 0.9);
+  assert.ok(report.planned.passRate >= 0.6);
+  assert.ok(report.planned.passRate >= report.greedy.passRate);
   assert.ok(report.planned.goodEndingRate >= 0.4);
   assert.ok(report.random.passRate <= 0.15);
+  assert.ok(report.random.goodEndingRate <= 0.03);
 });
 
 test('fixed lines reproduce a remembered win and a bare survival', () => {
@@ -429,6 +444,7 @@ test('fixed lines reproduce a remembered win and a bare survival', () => {
   assert.equal(remembered.phase, 'won');
   assert.equal(remembered.ending, 'remembered');
   assert.equal(remembered.fileDbDone, true);
+  assert.ok(remembered.favor >= CONFIG.goodFavor);
   assert.equal(present(remembered).victoryTitle, '留下来，还被老板记住了');
   assert.deepEqual(snapshot(replay(REMEMBERED_SEED, REMEMBERED_ACTIONS)), snapshot(remembered));
 
@@ -436,6 +452,8 @@ test('fixed lines reproduce a remembered win and a bare survival', () => {
   assert.equal(barely.phase, 'won');
   assert.equal(barely.ending, 'barely');
   assert.equal(barely.fileDbDone, false);
+  assert.equal(clearedEnding(barely.favor, false), 'barely');
+  assert.match(present(barely).victoryText, /还没写完/);
   assert.equal(present(barely).victoryTitle, '勉强留下来');
   assert.ok(barely.favor >= weekLine(4));
 });
