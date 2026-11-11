@@ -64,18 +64,24 @@ export function sceneFile({ night = false, boss = false } = {}) {
   return 'day-384x216.png';
 }
 
-// 夜里同事已离开，白板也不开门。电脑和书架都打开学习。空地没有效果。
-export function effectFor(spot, { night = false } = {}) {
+// 夜里同事已离开，白板也不开门。电脑坐下后开需求单或学习；有一局 Dota 没打时，夜里点电脑是去打。
+// 书架开学习。饮水机休息，门口白天入夜、夜里睡觉。空地没有效果。
+export function effectFor(spot, { night = false, dotaPending = false } = {}) {
   if (!spot || !spot.kind || spot.kind === 'ground') return null;
   if (night && (spot.kind === 'colleague' || spot.kind === 'board')) return null;
   if (spot.kind === 'colleague') return { type: 'open', who: spot.who };
-  if (spot.kind === 'computer') return { type: 'show', id: night ? 'skills' : 'tickets', sit: true };
-  if (spot.kind === 'shelf') return { type: 'show', id: 'skills' };
+  if (spot.kind === 'cooler') return { type: 'rest' };
+  if (spot.kind === 'door') return { type: 'door' };
+  if (spot.kind === 'computer') {
+    if (night && dotaPending) return { type: 'dota', sit: true };
+    return { type: 'show', id: 'desk', tab: night ? 'skills' : 'tickets', sit: true };
+  }
+  if (spot.kind === 'shelf') return { type: 'show', id: 'desk', tab: 'skills' };
   if (spot.kind === 'board') return { type: 'show', id: 'whiteboard' };
   return null;
 }
 
 export function visibleSpots(spots, { night = false } = {}) {
   if (!night) return spots;
-  return spots.filter(spot => spot.kind === 'computer' || spot.kind === 'shelf');
+  return spots.filter(spot => spot.kind === 'computer' || spot.kind === 'shelf' || spot.kind === 'cooler' || spot.kind === 'door');
 }

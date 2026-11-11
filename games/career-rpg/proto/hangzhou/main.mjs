@@ -62,6 +62,7 @@ function readSeed() {
 
 let state = createGame(readSeed());
 let talkWho = null;
+let panel = null;
 let dota = null;
 let dotaTick = 0;
 let dotaResult = 0;
@@ -89,11 +90,8 @@ function showDotaResult() {
   dotaResult = setTimeout(closeDota, 1800);
 }
 
-function openDota() {
-  if (dota) return;
-  const next = applyAction(state, { type: 'overnight' });
-  if (next === state) return;
-  state = next;
+function startDotaMatch() {
+  if (dota || !state.dotaPending) return;
   dota = { match: createMatch(state.seed, state.rng), mode: 'play' };
   render();
   dotaTick = setInterval(() => {
@@ -103,6 +101,25 @@ function openDota() {
     if (match.over) showDotaResult();
     else render();
   }, TICK_MS);
+}
+
+function openDota() {
+  if (dota) return;
+  const next = applyAction(state, { type: 'overnight' });
+  if (next !== state) state = next;
+  startDotaMatch();
+}
+
+function enterNight() {
+  const view = present(state);
+  panel = null;
+  if (!view.night && view.canOvernight) {
+    state = applyAction(state, { type: 'overnight' });
+    render();
+    return;
+  }
+  if (view.canSleep) act({ type: 'sleep' });
+  else render();
 }
 
 function abandonDota() {
@@ -129,13 +146,6 @@ function el(tag, attrs, children) {
   return node;
 }
 
-function pips(filled, total) {
-  const wrap = el('span', { class: 'pips', 'aria-hidden': 'true' });
-  const count = Math.max(total, filled);
-  for (let i = 0; i < count; i += 1) wrap.append(el('i', { class: i < filled ? 'pip on' : 'pip' }));
-  return wrap;
-}
-
 function act(action) {
   state = applyAction(state, action);
   render();
@@ -149,11 +159,12 @@ function start(seed) {
   clearDotaTimers();
   dota = null;
   talkWho = null;
+  panel = null;
   state = createGame(next);
   render();
 }
 
-function header(view) {
+function seedForm(view) {
   const form = el('form', { id: 'seed-form' }, [
     el('label', { for: 'seed-input' }, ['种子']),
     el('input', { id: 'seed-input', name: 'seed', value: view.seed, autocomplete: 'off', maxlength: '64' }),
@@ -163,43 +174,19 @@ function header(view) {
     event.preventDefault();
     start(form.seed.value);
   });
-  return el('header', {}, [
-    el('div', {}, [
-      el('h1', {}, ['杭州 · 商品发布']),
-      el('p', { class: 'when', id: 'when' }, [`第 ${view.week} 周 · ${view.dayName}`]),
-    ]),
-    form,
-  ]);
+  return form;
 }
 
-function status(view) {
-  const apMax = Math.max(view.ap, CONFIG.dailyAp);
-  return el('section', { class: 'status' }, [
-    el('article', {}, [
-      el('div', {}, ['行动点']),
-      el('strong', { id: 'ap' }, [String(view.ap)]),
-      document.createTextNode(' '),
-      pips(view.ap, apMax),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['体力']),
-      el('strong', { id: 'stamina' }, [String(view.stamina)]),
-      document.createTextNode(' '),
-      pips(view.stamina, view.staminaMax),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['交付']),
-      el('strong', { id: 'delivery' }, [String(view.delivery)]),
-      el('div', {}, ['本周线 ', el('strong', { id: 'line' }, [String(view.line)])]),
-      el('div', { id: 'complaints' }, [`投诉 ${view.complaints}/${view.complaintLimit}`]),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['技术债']),
-      el('strong', { id: 'debt', 'data-surcharge': view.surcharge }, [String(view.debt)]),
-      el('div', { id: 'surcharge', class: view.surcharge ? 'surcharge' : '' }, [
-        view.surcharge ? `所有单子 +${view.surcharge} 点` : '未满 25，不加价',
-      ]),
-    ]),
+function hud(view) {
+  const item = (label, node) => el('span', { class: 'hud-item' }, [label, ' ', node]);
+  return el('div', { class: 'hud' }, [
+    el('span', { class: 'when', id: 'when' }, [`第 ${view.week} 周 · ${view.dayName}`]),
+    item('行动点', el('strong', { id: 'ap' }, [String(view.ap)])),
+    item('体力', el('strong', { id: 'stamina' }, [String(view.stamina)])),
+    item('交付', el('strong', { id: 'delivery' }, [String(view.delivery)])),
+    item('本周线', el('strong', { id: 'line' }, [String(view.line)])),
+    item('投诉', el('strong', { id: 'complaints' }, [`${view.complaints}/${view.complaintLimit}`])),
+    item('技术债', el('strong', { id: 'debt', 'data-surcharge': view.surcharge }, [String(view.debt)])),
   ]);
 }
 
@@ -244,7 +231,7 @@ function beginWalk(spot) {
   if (!cells) return;
   route = cells.map(cell => cellCenter(NAV, cell));
   routeIndex = 0;
-  pending = effectFor(spot, { night: present(state).night });
+  pending = effectFor(spot, { night: present(state).night, dotaPending: state.dotaPending });
   seated = false;
   walkElapsed = 0;
   aimFacing(route);
@@ -271,15 +258,30 @@ function arrive() {
     render();
     return;
   }
+  if (effect.type === 'rest') {
+    act({ type: 'rest' });
+    return;
+  }
+  if (effect.type === 'door') {
+    enterNight();
+    return;
+  }
+  if (effect.type === 'dota') {
+    foot.x = NAV.seat.stand[0];
+    foot.y = NAV.seat.stand[1];
+    seated = true;
+    facing = 'up';
+    startDotaMatch();
+    return;
+  }
   if (effect.sit) {
     foot.x = NAV.seat.stand[0];
     foot.y = NAV.seat.stand[1];
     seated = true;
     facing = 'up';
   }
+  if (effect.type === 'show') panel = effect.id === 'whiteboard' ? 'whiteboard' : (effect.tab || 'tickets');
   render();
-  const node = document.getElementById(effect.id);
-  if (node) node.scrollIntoView({ block: 'nearest' });
 }
 
 function stepWalker(now) {
@@ -425,7 +427,7 @@ function office(view, talk) {
       attrs['data-talked'] = person?.talked ? '1' : '0';
       attrs['aria-label'] = named(spot.who) ? person.name : '……';
     } else {
-      attrs['aria-label'] = { computer: '电脑', shelf: '书架', board: '白板' }[spot.kind];
+      attrs['aria-label'] = { computer: '电脑', shelf: '书架', board: '白板', cooler: '饮水机', door: '门口' }[spot.kind];
     }
     const button = el('button', attrs, spot.who ? [
       view.crowd ? '' : el('span', { class: 'bubble', 'aria-hidden': 'true' }, ['…']),
@@ -450,17 +452,27 @@ function office(view, talk) {
     const point = scenePoint(event);
     beginWalk({ kind: 'ground', at: [point.x, point.y] });
   });
+  const ui = el('div', { class: 'scene-ui' }, [hud(view), sceneNotes(view)]);
+  if (view.phase !== 'play') ui.append(ending(view));
+  else if (panel === 'whiteboard') ui.append(boardPanel(view));
+  else if (panel === 'tickets' || panel === 'skills') ui.append(deskPanel(view));
+  const layers = [
+    picture,
+    el('canvas', { id: 'walker', width: String(SCENE.w), height: String(SCENE.h) }),
+    ...actors,
+    ui,
+  ];
+  if (view.phase === 'play') {
+    layers.push(sceneActions(view));
+    if (talk) layers.push(talk);
+    if (dota) layers.push(dotaOverlay());
+  }
   return el('section', {
     class: 'stage',
     id: 'office',
     'data-scene': scene,
     'data-night': view.night ? '1' : '0',
-  }, [
-    picture,
-    el('canvas', { id: 'walker', width: String(SCENE.w), height: String(SCENE.h) }),
-    ...actors,
-    talk || '',
-  ]);
+  }, layers);
 }
 
 function talkBar(view) {
@@ -545,7 +557,7 @@ function boardFull(slot) {
   return `${title}。${slot.label}。做 · 还差 ${left} 点。按期 +${CONFIG.onTimeReward}。`;
 }
 
-function whiteboard(view) {
+function boardPanel(view) {
   const slots = view.whiteboard.map(slot => el('article', {
     class: `slot expand ${slot.status === 'open' && slot.covered ? 'covered' : ''} ${slot.status === 'open' && !slot.covered ? 'hard' : ''} ${slot.status === 'done' ? 'done' : ''}`,
     'data-slot': slot.field,
@@ -561,10 +573,11 @@ function whiteboard(view) {
     el('p', { class: 'full' }, [boardFull(slot)]),
     slot.status === 'open' ? el('div', {}, [`进度 ${slot.progress}/${slot.cost}`]) : '',
   ]));
-  return el('section', { id: 'whiteboard' }, [
-    el('h2', {}, ['白板']),
-    debtBanner(view),
-    el('div', { class: 'slots' }, slots),
+  const close = el('button', { type: 'button', 'data-close': 'whiteboard' }, ['关闭']);
+  close.addEventListener('click', () => { panel = null; render(); });
+  return el('div', { class: 'scene-panel', id: 'whiteboard' }, [
+    el('div', { class: 'panel-bar' }, [el('h2', {}, ['白板']), close]),
+    el('div', { class: 'sheet slots' }, slots),
   ]);
 }
 
@@ -669,21 +682,64 @@ function modulePanel(view) {
   ]);
 }
 
-function actionBar(view) {
-  const bar = el('div', { class: 'actions' });
+function sceneNotes(view) {
+  const notes = el('div', { class: 'scene-notes' });
+  if (panel) return notes;
+  if (view.nightLock) notes.append(el('p', { class: 'night', id: 'night-lock' }, [view.nightLock]));
+  if (view.forecast) notes.append(el('p', { class: 'forecast', id: 'forecast' }, [`下一周字段：${view.forecastText}`]));
+  notes.append(debtBanner(view));
+  if (view.log[0]) notes.append(el('ol', { class: 'log', id: 'log' }, [el('li', {}, [view.log[0]])]));
+  return notes;
+}
+
+function panelClose(id) {
+  const close = el('button', { type: 'button', 'data-close': id }, ['关闭']);
+  close.addEventListener('click', () => { panel = null; render(); });
+  return close;
+}
+
+function deskPanel(view) {
+  const tab = (id, label) => {
+    const button = el('button', {
+      type: 'button',
+      'data-tab': id,
+      'aria-pressed': panel === id ? 'true' : 'false',
+    }, [label]);
+    button.addEventListener('click', () => { panel = id; render(); });
+    return button;
+  };
+  const tickets = view.tickets.length
+    ? view.tickets.map(ticketCard)
+    : [el('p', { class: 'meta' }, ['没有待做的单'])];
+  const page = panel === 'skills'
+    ? modulePanel(view)
+    : el('div', { class: 'stack', id: 'tickets' }, tickets);
+  return el('div', { class: 'scene-panel', id: 'desk' }, [
+    el('div', { class: 'panel-bar' }, [tab('tickets', '需求单'), tab('skills', '学习'), panelClose('desk')]),
+    el('div', { class: 'sheet' }, [page]),
+  ]);
+}
+
+function sceneActions(view) {
+  const bar = el('div', { class: 'scene-actions' });
   if (view.canRest) {
-    const rest = el('button', { type: 'button', 'data-action': 'rest' }, [`休息 +${CONFIG.restStamina} 体力`]);
+    const rest = el('button', { type: 'button', 'data-action': 'rest' }, ['休息']);
     rest.addEventListener('click', () => act({ type: 'rest' }));
     bar.append(rest);
   }
   if (view.canOvernight) {
-    const night = el('button', { type: 'button', 'data-action': 'overnight' }, [`${CONFIG.overnightName} +${CONFIG.overnightAp} 点 / -${CONFIG.overnightStaminaCost} 体力，赢了 +${CONFIG.dotaWinStamina}`]);
-    night.addEventListener('click', () => openDota());
+    const night = el('button', { type: 'button', 'data-action': 'enter-night' }, ['入夜']);
+    night.addEventListener('click', () => enterNight());
     bar.append(night);
   }
+  if (view.night && state.dotaPending) {
+    const play = el('button', { type: 'button', 'data-action': 'dota-play' }, ['打 Dota']);
+    play.addEventListener('click', () => startDotaMatch());
+    bar.append(play);
+  }
   if (view.canSleep) {
-    const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉，进入下一天']);
-    sleep.addEventListener('click', () => act({ type: 'sleep' }));
+    const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉']);
+    sleep.addEventListener('click', () => { panel = null; act({ type: 'sleep' }); });
     bar.append(sleep);
   }
   return bar;
@@ -793,35 +849,11 @@ function dotaOverlay() {
   ]);
 }
 
-function logList(view) {
-  return el('ol', { class: 'log', id: 'log' }, view.log.map(line => el('li', {}, [line])));
-}
-
 function render() {
   placeForBoss();
   const view = present(state);
-  const parts = [header(view), status(view)];
   const talk = view.phase === 'play' ? talkBar(view) : null;
-  if (view.phase === 'play') {
-    parts.push(office(view, talk));
-    if (view.nightLock) parts.push(el('p', { class: 'night', id: 'night-lock' }, [view.nightLock]));
-    if (view.forecast) parts.push(el('p', { class: 'forecast', id: 'forecast' }, [`下一周字段：${view.forecastText}`]));
-    if (view.bossOn) parts.push(whiteboard(view));
-    else parts.push(debtBanner(view));
-    const tickets = view.tickets.length
-      ? view.tickets.map(ticketCard)
-      : [el('p', { class: 'meta' }, ['没有待做的单'])];
-    parts.push(el('div', { class: 'board' }, [
-      el('section', {}, [el('h2', {}, ['需求单']), el('div', { class: 'stack', id: 'tickets' }, tickets)]),
-      modulePanel(view),
-    ]));
-    parts.push(actionBar(view));
-  } else {
-    parts.push(ending(view));
-  }
-  parts.push(logList(view));
-  if (dota) parts.push(dotaOverlay());
-  app.replaceChildren(...parts);
+  app.replaceChildren(office(view, talk), seedForm(view));
   drawWalker();
 }
 

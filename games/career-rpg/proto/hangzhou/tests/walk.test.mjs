@@ -56,12 +56,17 @@ test('night loads the night plate and ground clicks do not change state', () => 
   assert.equal(effectFor(NAV.spots.find(spot => spot.kind === 'colleague'), { night: true }), null);
   assert.equal(effectFor(NAV.spots.find(spot => spot.kind === 'board'), { night: true }), null);
   assert.deepEqual(effectFor(NAV.spots.find(spot => spot.kind === 'shelf'), { night: true }), {
-    type: 'show', id: 'skills',
+    type: 'show', id: 'desk', tab: 'skills',
   });
   assert.deepEqual(effectFor(NAV.spots.find(spot => spot.kind === 'computer'), { night: true }), {
-    type: 'show', id: 'skills', sit: true,
+    type: 'show', id: 'desk', tab: 'skills', sit: true,
   });
-  assert.deepEqual(visibleSpots(NAV.spots, { night: true }).map(spot => spot.id), ['computer', 'shelf']);
+  assert.deepEqual(effectFor(NAV.spots.find(spot => spot.kind === 'computer'), { night: true, dotaPending: true }), {
+    type: 'dota', sit: true,
+  });
+  assert.deepEqual(effectFor(NAV.spots.find(spot => spot.kind === 'cooler'), { night: true }), { type: 'rest' });
+  assert.deepEqual(effectFor(NAV.spots.find(spot => spot.kind === 'door'), { night: false }), { type: 'door' });
+  assert.deepEqual(visibleSpots(NAV.spots, { night: true }).map(spot => spot.id), ['computer', 'shelf', 'cooler', 'door']);
   assert.equal(state.ap, ap);
   assert.equal(state.stamina, stamina);
   assert.deepEqual(snapshot(state), before);

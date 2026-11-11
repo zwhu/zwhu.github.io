@@ -1,4 +1,4 @@
-// 底部行动按钮在文档流里。滚到可见后，中心点必须点到自己，不能被别的层挡住。
+// 备用按钮在画面右下角，不固定在视口上。滚到可见后，中心点必须点到自己。
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { createReadStream } from 'node:fs';
@@ -85,12 +85,13 @@ test('action buttons and card titles are hit at 1280x720 and 390x844', async () 
     await send('Runtime.enable');
     await send('Page.enable');
     const probe = `(() => {
-      const bar = document.querySelector('.actions');
+      const bar = document.querySelector('.scene-actions');
+      const office = document.querySelector('#office');
       const position = getComputedStyle(bar).position;
+      const inside = office.contains(bar);
       const targets = [
-        ...document.querySelectorAll('.actions button'),
-        ...document.querySelectorAll('h2'),
-        ...document.querySelectorAll('.card .ticket-top strong, .slot strong'),
+        ...document.querySelectorAll('.scene-actions button'),
+        ...document.querySelectorAll('#desk button, #desk .ticket-top strong'),
       ];
       const misses = [];
       for (const node of targets) {
@@ -110,7 +111,7 @@ test('action buttons and card titles are hit at 1280x720 and 390x844', async () 
           });
         }
       }
-      return { position, count: targets.length, misses };
+      return { position, inside, count: targets.length, misses };
     })()`;
     for (const [width, height] of [[1280, 720], [390, 844]]) {
       await send('Emulation.setDeviceMetricsOverride', {
@@ -120,13 +121,22 @@ test('action buttons and card titles are hit at 1280x720 and 390x844', async () 
       let ready = false;
       for (let i = 0; i < 40; i += 1) {
         await sleep(50);
-        ready = await evaluate('!!document.querySelector(".actions button")');
+        ready = await evaluate('!!document.querySelector(".scene-actions button")');
         if (ready) break;
       }
       assert.equal(ready, true, `${width} page did not boot`);
+      await evaluate(`document.querySelector('[data-spot="computer"]').click()`);
+      let opened = false;
+      for (let i = 0; i < 80; i += 1) {
+        await sleep(50);
+        opened = await evaluate('!!document.querySelector("#desk") && !window.hangzhou.walking()');
+        if (opened) break;
+      }
+      assert.equal(opened, true, `${width} desk did not open`);
       const report = await evaluate(probe);
-      assert.equal(report.position, 'static', `${width} actions position`);
-      assert.ok(report.count > 4, `${width} targets ${report.count}`);
+      assert.equal(report.position, 'absolute', `${width} actions position`);
+      assert.equal(report.inside, true, `${width} actions outside the scene`);
+      assert.ok(report.count > 2, `${width} targets ${report.count}`);
       assert.deepEqual(report.misses, [], `${width} ${JSON.stringify(report.misses)}`);
     }
     ws.close();

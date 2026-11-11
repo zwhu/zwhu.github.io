@@ -42,5 +42,7 @@ export const NAV = {
     { id: 'computer', kind: 'computer', at: [82, 198], day: [64, 126, 40, 30], boss: [64, 126, 40, 30] },
     { id: 'shelf', kind: 'shelf', at: [336, 116], day: [338, 32, 44, 82], boss: [338, 32, 44, 82] },
     { id: 'board', kind: 'board', at: [324, 150], day: [316, 104, 60, 54], boss: [316, 104, 60, 54] },
+    { id: 'cooler', kind: 'cooler', at: [40, 108], day: [24, 32, 28, 48], boss: [24, 32, 28, 48] },
+    { id: 'door', kind: 'door', at: [192, 172], day: [172, 182, 42, 28], boss: [172, 182, 42, 28] },
   ],
 };
