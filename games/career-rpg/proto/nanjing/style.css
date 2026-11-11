@@ -197,7 +197,29 @@
 .screen > .actions,
 .screen .offstage { padding: 0 8px; }
 
-.screen > .actions { background: #141210; }
+.screen > .actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  background: #141210;
+  padding: 8px;
+}
+
+.screen > .actions button,
+.offstage button {
+  position: relative;
+  z-index: 1;
+  background: #fffdf8;
+  color: #1a1a1a;
+  border: 1px solid #1a1a1a;
+}
+
+.screen > .actions button:hover,
+.offstage button:hover {
+  background: #1a1a1a;
+  color: #fffdf8;
+}
+
 .ending .actions { background: transparent; }
 
 .offstage {
@@ -206,8 +228,6 @@
   gap: 8px;
   margin: 0 0 8px;
 }
-
-.offstage button { background: #f9f8f1; }
 
 .banner, .boss-card { margin: 8px; }
 

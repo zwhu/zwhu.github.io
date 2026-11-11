@@ -202,8 +202,45 @@ function dwellFor(action) {
   return 1;
 }
 
+async function assertActionButtons(width, height) {
+  await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 500 });
+  await goto('n0');
+  const problems = await evaluate(`(() => {
+    const bar = document.querySelector('.screen > .actions');
+    if (!bar) return ['missing action bar'];
+    bar.scrollIntoView({ block: 'center', inline: 'nearest' });
+    const problems = [];
+    for (const id of ['rest', 'overnight']) {
+      const node = bar.querySelector('[data-action="' + id + '"]');
+      if (!node) {
+        problems.push('missing ' + id);
+        continue;
+      }
+      const box = node.getBoundingClientRect();
+      const fully = box.width > 0 && box.height > 0
+        && box.top >= 0 && box.left >= 0
+        && box.bottom <= window.innerHeight && box.right <= window.innerWidth;
+      if (!fully) {
+        problems.push(id + ' outside ' + JSON.stringify({
+          top: box.top, left: box.left, bottom: box.bottom, right: box.right,
+          width: box.width, height: box.height, vw: window.innerWidth, vh: window.innerHeight,
+        }));
+      }
+      const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+      if (hit !== node) problems.push(id + ' covered by ' + (hit ? hit.tagName + '.' + hit.className : 'null'));
+      const color = getComputedStyle(node).color;
+      const fill = getComputedStyle(node).backgroundColor;
+      if (color === fill) problems.push(id + ' text matches background ' + color);
+    }
+    return problems;
+  })()`);
+  if (problems.length) throw new Error(`${width}×${height} action buttons\n${problems.join('\n')}`);
+}
+
 try {
   await connect();
+  await assertActionButtons(1280, 900);
+  await assertActionButtons(390, 844);
   await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
 
   async function record(name, seed, actions, fps, focus) {
