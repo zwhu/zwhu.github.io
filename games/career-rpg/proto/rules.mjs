@@ -568,6 +568,7 @@ export function coworkerLine(state, person) {
     narrator: false,
     interview: false,
     visible,
+    clickable: visible && (spec.nightOnly ? state.night : !state.night),
     talked: Boolean(state.talked[person]),
     gate: false,
     commit: false,

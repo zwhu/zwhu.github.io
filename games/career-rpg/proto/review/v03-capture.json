@@ -1,5 +1,5 @@
 {
-  "origin": "http://127.0.0.1:46771/games/career-rpg/proto/index.html",
+  "origin": "http://127.0.0.1:42537/games/career-rpg/proto/index.html",
   "talkSeed": "hefei",
   "forecastSeed": "forecast-seed",
   "talks": {
@@ -13,8 +13,7 @@
       "people": [
         "boss",
         "lunch",
-        "neighbor",
-        "party"
+        "neighbor"
       ],
       "name": "饭搭子",
       "text": "走，就对面那家。",
@@ -23,8 +22,10 @@
       "arrowVisible": true,
       "arrowColor": "rgb(208, 0, 0)",
       "arrowAbove": true,
-      "boxColor": "rgb(243, 230, 196)",
-      "boxAtBottom": true,
+      "boxColor": "rgba(249, 248, 241, 0.8)",
+      "insideScene": true,
+      "nearSceneBottom": true,
+      "caret": true,
       "nameVisible": true,
       "staminaVisible": true,
       "hint": false,
@@ -49,8 +50,7 @@
     "people": [
       "boss",
       "lunch",
-      "neighbor",
-      "party"
+      "neighbor"
     ],
     "name": "老板",
     "text": "今天说过了。",
@@ -59,8 +59,10 @@
     "arrowVisible": true,
     "arrowColor": "rgb(208, 0, 0)",
     "arrowAbove": true,
-    "boxColor": "rgb(243, 230, 196)",
-    "boxAtBottom": true,
+    "boxColor": "rgba(249, 248, 241, 0.8)",
+    "insideScene": true,
+    "nearSceneBottom": true,
+    "caret": true,
     "nameVisible": true,
     "staminaVisible": true,
     "hint": false,

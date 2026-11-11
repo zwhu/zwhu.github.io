@@ -1,8 +1,8 @@
 {
   "win": {
     "file": "games/career-rpg/proto/review/dota-win.mp4",
-    "frames": 35,
-    "seconds": 14.2,
+    "frames": 34,
+    "seconds": 14.1,
     "before": "10",
     "after": {
       "stamina": "9",
@@ -13,7 +13,7 @@
   "loss": {
     "file": "games/career-rpg/proto/review/dota-loss.mp4",
     "frames": 27,
-    "seconds": 9.8,
+    "seconds": 9.9,
     "before": "10",
     "after": {
       "stamina": "7",

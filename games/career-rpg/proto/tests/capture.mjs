@@ -137,6 +137,7 @@ async function click(action) {
       document.querySelector('[data-dialogue="close"]')?.click();
       document.querySelector('[data-person="party"]')?.click();
       document.querySelector('[data-choice="accept"]')?.click();
+      document.querySelector('[data-dialogue="next"]')?.click();
     })()`);
     await sleep(40);
     await evaluate(`document.querySelector('[data-dota="skip"]')?.click()`);
@@ -189,6 +190,7 @@ async function recordMinigame(name, seed, play) {
     const accept = document.querySelector('[data-choice="accept"]');
     if (!accept) return false;
     accept.click();
+    document.querySelector('[data-dialogue="next"]')?.click();
     return !!document.querySelector('#dota');
   })()`);
   if (!opened) throw new Error(name + ' did not open');
@@ -383,12 +385,14 @@ try {
   if (!lossText.includes('第 1 周周五') || !lossText.includes('被劝退')) throw new Error('loss ' + lossText);
 
   const win = await record('win', REMEMBERED_SEED, REMEMBERED_ACTIONS, 2);
+  const winTitle = await evaluate('document.querySelector("#ending-title").textContent');
   const winText = await evaluate('document.querySelector("#ending-text").textContent');
-  if (!winText.includes('留下来，还被老板记住了') || winText.includes('争取能留下来')) throw new Error('win video ended on ' + winText);
+  if (winTitle !== '留下来，还被老板记住了' || winText.includes(winTitle) || winText.includes('争取能留下来') || !winText.includes('努力工作的人一定会被看到的')) throw new Error('win video ended on ' + winTitle + ' / ' + winText);
   await goto(BARELY_SEED);
   for (const action of BARELY_ACTIONS) await click(action);
+  const bareTitle = await evaluate('document.querySelector("#ending-title").textContent');
   const bareText = await evaluate('document.querySelector("#ending-text").textContent');
-  if (!bareText.includes('勉强留下来') || !bareText.includes('还没写完') || bareText.includes('老板记住了')) throw new Error('bare ending ' + bareText);
+  if (bareTitle !== '勉强留下来' || bareText.includes(bareTitle) || !bareText.includes('还没写完') || bareText.includes('老板记住了')) throw new Error('bare ending ' + bareTitle + ' / ' + bareText);
 
   await send('Emulation.setDeviceMetricsOverride', { width: 375, height: 812, deviceScaleFactor: 1, mobile: true });
   await goto('hefei');

@@ -203,8 +203,18 @@ function chooseLine(choice) {
   if (next === state) return;
   state = next;
   if (!pending && state.dotaPending) {
-    dialogue = null;
-    startDota();
+    dialogue = {
+      person: 'party',
+      name: '开黑队友',
+      text: '开了。',
+      choices: [],
+      forecast: null,
+      speaker: 'party',
+      narrator: false,
+      advance: 'dota',
+      queue: [],
+    };
+    render();
     return;
   }
   dialogue = {
@@ -223,6 +233,11 @@ function chooseLine(choice) {
 
 function continueDialogue() {
   if (!dialogue) return;
+  if (dialogue.advance === 'dota') {
+    dialogue = null;
+    startDota();
+    return;
+  }
   if (dialogue.advance === 'interview') {
     const next = applyAction(state, { type: 'talk', person: 'boss' });
     if (next === state) return;
@@ -358,19 +373,27 @@ function skillCard(skill) {
   return el('article', { class: 'card', 'data-skill': skill.id, 'data-progress': skill.progress, 'data-learned': skill.learned ? '1' : '0' }, body);
 }
 
-const SPOTS = {
-  player: { x: 61, y: 124, w: 28, h: 52 },
-  neighbor: { x: 133, y: 124, w: 28, h: 52 },
-  lunch: { x: 248, y: 128, w: 36, h: 52 },
-  boss: { x: 306, y: 74, w: 36, h: 56 },
-  party: { x: 88, y: 150, w: 36, h: 52 },
+const DAY_BOXES = {
+  player: [63, 134, 88, 176],
+  neighbor: [135, 134, 160, 176],
+  lunch: [250, 136, 282, 178],
+  boss: [310, 82, 342, 128],
+};
+// art/source/night-v2-boxes.json。夜里只有开黑队友能点，其余三人的框不放按钮。
+const NIGHT_BOXES = {
+  player: [62, 134, 87, 175],
+  neighbor: [134, 134, 159, 175],
+  lunch: [206, 134, 232, 175],
+  boss: [320, 79, 339, 119],
+  party: [98, 158, 115, 200],
 };
 
 function spotStyle(box) {
-  return `left:${(box.x / 384) * 100}%;top:${(box.y / 216) * 100}%;width:${(box.w / 384) * 100}%;height:${(box.h / 216) * 100}%`;
+  const [x0, y0, x1, y1] = box;
+  return `left:${(x0 / 384) * 100}%;top:${(y0 / 216) * 100}%;width:${((x1 - x0) / 384) * 100}%;height:${((y1 - y0) / 216) * 100}%`;
 }
 
-function hotspot(person, speaking) {
+function hotspot(person, speaking, box) {
   const button = el('button', {
     type: 'button',
     class: 'figure',
@@ -381,7 +404,7 @@ function hotspot(person, speaking) {
   return el('div', {
     class: speaking ? 'spot speaking' : 'spot',
     'data-spot': person.id,
-    style: spotStyle(SPOTS[person.id]),
+    style: spotStyle(box),
   }, [
     el('i', { class: 'arrow', 'data-arrow': speaking ? person.id : '' }),
     button,
@@ -390,33 +413,40 @@ function hotspot(person, speaking) {
 
 function office(view) {
   const speaker = dialogue && !dialogue.narrator ? dialogue.speaker : '';
-  const spots = view.coworkers.filter(person => person.visible).map(person => hotspot(person, speaker === person.id));
-  const player = el('div', {
-    class: speaker === 'player' ? 'spot speaking' : 'spot',
-    'data-spot': 'player',
-    style: spotStyle(SPOTS.player),
-  }, [
-    el('i', { class: 'arrow' }),
-    el('i', { class: 'body' }),
-  ]);
+  const boxes = view.night ? NIGHT_BOXES : DAY_BOXES;
+  const spots = [];
+  const playerBox = boxes.player;
+  if (playerBox) {
+    spots.push(el('div', {
+      class: speaker === 'player' ? 'spot speaking' : 'spot',
+      'data-spot': 'player',
+      style: spotStyle(playerBox),
+    }, [
+      el('i', { class: 'arrow' }),
+      el('i', { class: 'body' }),
+    ]));
+  }
+  for (const person of view.coworkers) {
+    if (!person.clickable) continue;
+    const box = boxes[person.id];
+    if (!box) continue;
+    spots.push(hotspot(person, speaker === person.id, box));
+  }
   const chip = el('p', { class: 'week-chip', id: 'scene-when' }, [
     `第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`,
   ]);
-  const cast = el('div', { class: 'night-cast', 'aria-hidden': 'true' }, [
-    el('span', { class: 'cast-clip neighbor' }, [el('img', { src: './art/07-seated-sprites.png', alt: '' })]),
-    el('span', { class: 'cast-clip lunch' }, [el('img', { src: './art/07-seated-sprites.png', alt: '' })]),
-    el('img', { class: 'cast-boss', src: './art/boss-down.png', alt: '' }),
-  ]);
-  return el('section', { class: view.night ? 'office night' : 'office', id: 'office' }, [
+  const children = [
     el('img', {
       class: 'scene-img',
       alt: '',
-      src: view.night ? './art/02-main-night.png' : './art/01-main-day.png',
+      src: view.night ? './art/02-main-night-v2.png' : './art/01-main-day.png',
     }),
     chip,
-    cast,
-    el('div', { class: 'spots' }, [player, ...spots]),
-  ]);
+    el('div', { class: 'spots' }, spots),
+  ];
+  const box = dialogueBox(view);
+  if (box) children.push(box);
+  return el('section', { class: view.night ? 'office night' : 'office', id: 'office' }, children);
 }
 
 function dialogueBox(view) {
@@ -427,9 +457,15 @@ function dialogueBox(view) {
     button.addEventListener('click', () => chooseLine(choice.id));
     return button;
   });
-  const advancing = dialogue.advance === 'interview' || dialogue.advance === 'queue';
-  const dismiss = el('button', { type: 'button', 'data-dialogue': advancing ? 'next' : 'close' }, [advancing ? '继续' : '关上']);
-  dismiss.addEventListener('click', () => continueDialogue());
+  const advancing = dialogue.advance === 'interview' || dialogue.advance === 'queue' || dialogue.advance === 'dota';
+  const caret = el('button', {
+    type: 'button',
+    class: 'caret',
+    'data-caret': '1',
+    'data-dialogue': advancing ? 'next' : 'close',
+    'aria-label': '继续',
+  }, ['▼']);
+  caret.addEventListener('click', () => continueDialogue());
   const attrs = { class: 'dialogue', id: 'dialogue' };
   if (dialogue.narrator) attrs['data-narrator'] = '1';
   if (dialogue.forecast) {
@@ -442,7 +478,8 @@ function dialogueBox(view) {
   return el('section', attrs, [
     ...head,
     el('p', { id: 'dialogue-text' }, [dialogue.text]),
-    el('div', { class: 'dialogue-actions' }, choices.concat(dismiss)),
+    el('div', { class: 'dialogue-actions' }, choices),
+    caret,
   ]);
 }
 
@@ -465,9 +502,9 @@ function actionBar(view) {
 }
 
 function endingCard(view) {
-  if (view.phase === 'won' && view.ending === 'remembered') return './art/05-ending-remembered.png';
-  if (view.phase === 'won') return './art/04-ending-stay.png';
-  return './art/03-ending-quit.png';
+  if (view.phase === 'won' && view.ending === 'remembered') return './art/05-ending-remembered-notext.png';
+  if (view.phase === 'won') return './art/04-ending-stay-notext.png';
+  return './art/03-ending-quit-notext.png';
 }
 
 function ending(view) {
@@ -477,33 +514,33 @@ function ending(view) {
   const fresh = el('button', { type: 'button', 'data-action': 'new-seed' }, ['换个种子']);
   fresh.addEventListener('click', () => start(`h${Date.now().toString(36)}`));
   const stats = view.stats;
-  const picture = el('div', { class: 'ending-picture' }, [
+  const body = won ? view.victoryText : `${view.failReason}${view.failText}`;
+  const rows = [
+    ['周次', `第 ${view.week} 周 ${view.dayName}`],
+    ['好感', String(view.favor)],
+    ['本周线', String(view.line)],
+    ['体力', String(view.stamina)],
+    ['做完的单', String(stats.completed)],
+    ['延期与事故', String(stats.lateCount)],
+    ['学会', stats.skills.length ? stats.skills.join('、') : '无'],
+    ['文件数据库', stats.fileDb],
+  ];
+  const card = el('div', { class: 'ending-card' }, [
     el('img', { src: endingCard(view), alt: '' }),
-  ]);
-  return el('section', { class: 'ending', id: 'ending' }, [
-    el('div', { class: 'ending-layout' }, [
-      picture,
-      el('div', {}, [
-        el('h2', {}, [won ? view.victoryTitle : '被劝退']),
-        el('p', { id: 'ending-text' }, [won ? `${view.victoryTitle}。${view.victoryText}` : `${view.failReason}${view.failText}`]),
-    ...(view.settlementLine ? [el('p', { id: 'settlement' }, [view.settlementLine])] : []),
-    el('dl', {}, [
-      el('dt', {}, ['周次']), el('dd', {}, [`第 ${view.week} 周 ${view.dayName}`]),
-      el('dt', {}, ['好感']), el('dd', { id: 'end-favor' }, [String(view.favor)]),
-      el('dt', {}, ['本周线']), el('dd', {}, [String(view.line)]),
-      el('dt', {}, ['体力']), el('dd', {}, [String(view.stamina)]),
-      el('dt', {}, ['做完的单']), el('dd', {}, [String(stats.completed)]),
-      el('dt', {}, ['延期与事故']), el('dd', {}, [String(stats.lateCount)]),
-      el('dt', {}, ['好感增加']), el('dd', {}, [String(stats.favorGained)]),
-      el('dt', {}, ['好感减少']), el('dd', {}, [String(stats.favorLost)]),
-      el('dt', {}, [CONFIG.overnightName]), el('dd', {}, [String(stats.overnights)]),
-      el('dt', {}, ['学会']), el('dd', {}, [stats.skills.length ? stats.skills.join('、') : '无']),
-      el('dt', {}, ['文件数据库']), el('dd', {}, [stats.fileDb]),
+    el('div', { class: 'ending-header' }, [
+      el('h2', { id: 'ending-title' }, [won ? view.victoryTitle : '被劝退']),
+      el('p', { id: 'ending-text' }, [body]),
     ]),
-        el('div', { class: 'actions' }, [again, fresh]),
-      ]),
-    ]),
+    el('dl', { class: 'ending-stats' }, rows.flatMap(([name, value]) => [
+      el('dt', {}, [name]),
+      el('dd', name === '好感' ? { id: 'end-favor' } : {}, [value]),
+    ])),
+    again,
+    fresh,
   ]);
+  again.className = 'ending-retry';
+  fresh.className = 'ending-reseed';
+  return el('section', { class: 'ending', id: 'ending' }, [card]);
 }
 
 function dotaResultTitle(match) {
@@ -608,9 +645,6 @@ function render() {
     parts.push(ending(view));
   }
   parts.push(logList(view));
-  if (dialogue) parts.push(el('div', { class: 'dialogue-spacer' }));
-  const box = dialogueBox(view);
-  if (box) parts.push(box);
   if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
 }

@@ -135,6 +135,9 @@ function sceneScript() {
     const arrowBox = arrow ? arrow.getBoundingClientRect() : null;
     const bodyBox = body ? body.getBoundingClientRect() : null;
     const plateBox = plate ? plate.getBoundingClientRect() : null;
+    const office = document.querySelector('#office');
+    const officeBox = office ? office.getBoundingClientRect() : null;
+    const rect = box ? box.getBoundingClientRect() : null;
     const stamina = document.querySelector('#stamina');
     const staminaBox = stamina ? stamina.getBoundingClientRect() : null;
     return {
@@ -147,7 +150,9 @@ function sceneScript() {
       arrowColor: arrowStyle ? arrowStyle.borderTopColor : '',
       arrowAbove: Boolean(arrowBox && bodyBox && arrowBox.bottom <= bodyBox.top + 1),
       boxColor: boxStyle ? boxStyle.backgroundColor : '',
-      boxAtBottom: Boolean(box && Math.abs(box.getBoundingClientRect().bottom - window.innerHeight) < 2),
+      insideScene: Boolean(officeBox && rect && rect.left >= officeBox.left - 1 && rect.right <= officeBox.right + 1 && rect.top >= officeBox.top - 1 && rect.bottom <= officeBox.bottom + 1),
+      nearSceneBottom: Boolean(officeBox && rect && officeBox.bottom - rect.bottom >= -1 && officeBox.bottom - rect.bottom <= officeBox.height * 0.08),
+      caret: !!document.querySelector('.caret'),
       nameVisible: Boolean(plateBox && plateBox.width > 0 && plateBox.height > 0 && plateBox.top < window.innerHeight),
       staminaVisible: Boolean(staminaBox && staminaBox.top >= 0 && staminaBox.bottom <= window.innerHeight),
       hint: /快捷键|[ZXC]键/.test(document.body.innerText),
@@ -202,8 +207,19 @@ try {
     })()`);
     if (!hired) throw new Error('interview did not finish');
     await save(2);
+
+    const boss = await speak('boss', '老板');
+    if (boss.text.includes('面试')) throw new Error('boss line still the interview ' + boss.text);
+    await evaluate(`document.querySelector('[data-dialogue="close"]').click()`);
+    await save(2);
+
+    const neighbor = await speak('neighbor', '隔壁工位老哥');
+    if (!neighbor.text.includes('明天会来')) throw new Error('neighbor line ' + neighbor.text);
+    await evaluate(`document.querySelector('[data-dialogue="close"]').click()`);
+    await save(2);
+
     const night = await evaluate(`(() => { document.querySelector('[data-action="night"]').click(); return [...document.querySelectorAll('[data-person]')].map(node => node.getAttribute('data-person')).join(','); })()`);
-    if (night !== 'boss,lunch,neighbor,party') throw new Error('night people ' + night);
+    if (night !== 'party') throw new Error('night people ' + night);
     const nightLine = await evaluate(`document.querySelector('#dialogue-text')?.textContent || ''`);
     if (nightLine !== '白天的活告一段落。天黑了，我还没走。') throw new Error('night line ' + nightLine);
     await save(3);
@@ -217,22 +233,29 @@ try {
       if (!scene.text) throw new Error(person + ' empty line');
       if (!scene.arrowVisible || !scene.arrowAbove) throw new Error(person + ' arrow ' + JSON.stringify(scene));
       if (scene.arrowColor !== 'rgb(208, 0, 0)') throw new Error(person + ' arrow color ' + scene.arrowColor);
-      if (scene.boxColor !== 'rgb(243, 230, 196)') throw new Error(person + ' box ' + scene.boxColor);
-      if (!scene.boxAtBottom || !scene.nameVisible || !scene.staminaVisible) throw new Error(person + ' layout ' + JSON.stringify(scene));
+      if (!/249,\s*248,\s*241/.test(scene.boxColor)) throw new Error(person + ' box ' + scene.boxColor);
+      if (!scene.insideScene || !scene.nearSceneBottom || !scene.caret || !scene.nameVisible || !scene.staminaVisible) throw new Error(person + ' layout ' + JSON.stringify(scene));
       if (scene.hint) throw new Error(person + ' shows a shortcut hint');
       return scene;
     }
 
-    const boss = await speak('boss', '老板');
-    if (boss.text.includes('面试')) throw new Error('boss line still the interview ' + boss.text);
-    await evaluate(`document.querySelector('[data-dialogue="close"]').click()`);
-    await save(2);
+    const blocked = await evaluate(`(() => {
+      const before = window.hefei.present().log[0];
+      for (const person of ['boss', 'lunch', 'neighbor']) {
+        if (document.querySelector('[data-person="' + person + '"]')) return 'button ' + person;
+      }
+      return before;
+    })()`);
+    if (String(blocked).startsWith('button')) throw new Error('night still clickable ' + blocked);
 
     const teammate = await speak('party', '开黑队友');
     if (!teammate.text.includes('Dota')) throw new Error('party line ' + teammate.text);
     if (teammate.stamina !== '10') throw new Error('stamina before dota ' + teammate.stamina);
     await save(2);
     await evaluate(`document.querySelector('[data-choice="accept"]').click()`);
+    const openedLine = await evaluate(`document.querySelector('#dialogue-text')?.textContent || ''`);
+    if (openedLine !== '开了。') throw new Error('opened line ' + openedLine);
+    await evaluate(`document.querySelector('[data-dialogue="next"]').click()`);
     await sleep(60);
     await evaluate(`document.querySelector('[data-dota="skip"]').click()`);
     await sleep(40);
@@ -243,11 +266,7 @@ try {
     if (await evaluate(`!!document.querySelector('#dota')`)) throw new Error('dota still open');
     await save(3);
 
-    const neighbor = await speak('neighbor', '隔壁工位老哥');
-    if (!neighbor.text.includes('明天会来')) throw new Error('neighbor line ' + neighbor.text);
-    await evaluate(`document.querySelector('[data-dialogue="close"]').click()`);
-    await save(2);
-
+    await evaluate(`document.querySelector('[data-action="day"]').click()`);
     const beforeNoodles = await speak('lunch', '饭搭子');
     if (!beforeNoodles.text.includes('好饿，去吃面')) throw new Error('lunch line ' + beforeNoodles.text);
     if (beforeNoodles.stamina !== '7') throw new Error('stamina before noodles ' + beforeNoodles.stamina);
@@ -258,7 +277,7 @@ try {
     if (after.stamina !== '10') throw new Error('stamina after noodles ' + after.stamina);
     if (after.ap !== '3') throw new Error('ap after noodles ' + after.ap);
     if (after.text !== '走，就对面那家。') throw new Error('noodle result ' + after.text);
-    if (after.name !== '饭搭子' || !after.arrowVisible || after.boxColor !== 'rgb(243, 230, 196)') {
+    if (after.name !== '饭搭子' || !after.arrowVisible || !/249,\s*248,\s*241/.test(after.boxColor) || !after.insideScene) {
       throw new Error('noodle scene ' + JSON.stringify(after));
     }
     const last = path.join(dir, String(index - 1).padStart(4, '0') + '.png');
@@ -305,7 +324,7 @@ try {
     if (!scene.text.includes(`${scene.forecastDifficulty} 点`) || !scene.text.includes(`期限 ${scene.forecastDue} 天`)) {
       throw new Error('forecast numbers ' + scene.text);
     }
-    if (!scene.arrowVisible || scene.boxColor !== 'rgb(243, 230, 196)') throw new Error('forecast scene ' + JSON.stringify(scene));
+    if (!scene.arrowVisible || !scene.insideScene || !/249,\s*248,\s*241/.test(scene.boxColor)) throw new Error('forecast scene ' + JSON.stringify(scene));
     const fs = await import('node:fs');
     fs.copyFileSync(path.join(dir, String(index - 1).padStart(4, '0') + '.png'), path.join(stills, 'forecast-said.png'));
     await evaluate(`document.querySelector('[data-dialogue="close"]').click()`);
@@ -352,11 +371,10 @@ try {
     }
     document.querySelector('[data-dialogue="close"]')?.click();
   })()`);
-  await evaluate(`document.querySelector('[data-action="night"]').click()`);
   await evaluate(`document.querySelector('[data-person="boss"]').click()`);
   await shot(path.join(stills, 'mobile-dialogue.png'));
   const mobile = await evaluate(sceneScript());
-  if (!mobile.boxAtBottom || mobile.name !== '老板' || !mobile.arrowVisible) throw new Error('mobile ' + JSON.stringify(mobile));
+  if (!mobile.insideScene || !mobile.caret || mobile.name !== '老板' || !mobile.arrowVisible) throw new Error('mobile ' + JSON.stringify(mobile));
 
   if (errors.length) throw new Error('console errors\n' + errors.join('\n'));
   const report = { origin, talkSeed: TALK_SEED, forecastSeed: FORECAST_SEED, talks, forecast, mobile, consoleErrors: errors };

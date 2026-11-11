@@ -214,6 +214,8 @@ try {
     await save(3);
     const night = await evaluate(`document.querySelector('#dialogue-text')?.textContent || ''`);
     if (night !== '白天的活告一段落。天黑了，我还没走。') throw new Error('night ' + night);
+    const nightPeople = await evaluate(`[...document.querySelectorAll('[data-person]')].map(node => node.getAttribute('data-person')).join(',')`);
+    if (nightPeople !== 'party') throw new Error('night people ' + nightPeople);
     if (await evaluate(`!!document.querySelector('#nameplate') || !!document.querySelector('.spot.speaking')`)) throw new Error('night narration has a speaker');
     const nightFile = await save(1);
     const fs = await import('node:fs');
@@ -229,6 +231,12 @@ try {
     const party = await evaluate(`document.querySelector('#dialogue-text')?.textContent || ''`);
     if (!party.includes('Dota')) throw new Error('party ' + party);
     await evaluate(`document.querySelector('[data-choice="accept"]').click()`);
+    const opened = await evaluate(`document.querySelector('#dialogue-text')?.textContent || ''`);
+    if (opened !== '开了。') throw new Error('opened ' + opened);
+    const openedFile = await save(2);
+    const fs2 = await import('node:fs');
+    fs2.copyFileSync(openedFile, path.join(STILLS, 'art-opened.png'));
+    await evaluate(`document.querySelector('[data-dialogue="next"]').click()`);
     await sleep(300);
     const dotaFile = await save(2);
     fs.copyFileSync(dotaFile, path.join(STILLS, 'art-night-dota.png'));
@@ -270,9 +278,10 @@ try {
             document.querySelector('[data-action="night"]')?.click();
             document.querySelector('[data-dialogue="next"]')?.click();
             document.querySelector('[data-dialogue="close"]')?.click();
-            document.querySelector('[data-person="party"]')?.click();
-            document.querySelector('[data-choice="accept"]')?.click();
-          })()`);
+      document.querySelector('[data-person="party"]')?.click();
+      document.querySelector('[data-choice="accept"]')?.click();
+      document.querySelector('[data-dialogue="next"]')?.click();
+    })()`);
           await sleep(40);
           await evaluate(`document.querySelector('[data-dota="skip"]')?.click()`);
           await sleep(40);
@@ -282,7 +291,7 @@ try {
       await evaluate(`document.querySelector('#ending')?.scrollIntoView({block:'start'})`);
       const text = await evaluate(`document.querySelector('#ending-text')?.textContent || ''`);
       const title = await evaluate(`document.querySelector('#ending h2')?.textContent || ''`);
-      if (!text.includes(expect) || text.includes('争取')) throw new Error(name + ' text ' + text);
+      if (!text.includes(expect) || text.includes('争取') || text.startsWith(`${title}。`)) throw new Error(name + ' text ' + title + ' / ' + text);
       const held = await save(8);
       const fs = await import('node:fs');
       fs.copyFileSync(held, path.join(STILLS, `art-${name}.png`));
@@ -303,6 +312,39 @@ try {
   await playEnding('ending-stay', BARELY_SEED, BARELY_ACTIONS, '还没写完');
   await playEnding('ending-remembered', REMEMBERED_SEED, REMEMBERED_ACTIONS, '努力工作的人一定会被看到的');
 
+  async function talkbox(file) {
+    await goto('hefei');
+    const info = await evaluate(`(() => {
+      let guard = 0;
+      while (!window.hefei.present().interviewed && guard < 8) {
+        const next = document.querySelector('[data-dialogue="next"]');
+        if (next) next.click();
+        else document.querySelector('[data-person="boss"]')?.click();
+        guard += 1;
+      }
+      document.querySelector('[data-dialogue="close"]')?.click();
+      document.querySelector('#office').scrollIntoView({ block: 'center' });
+      document.querySelector('[data-person="lunch"]').click();
+      const office = document.querySelector('#office').getBoundingClientRect();
+      const box = document.querySelector('#dialogue').getBoundingClientRect();
+      const choice = document.querySelector('[data-choice="accept"]').getBoundingClientRect();
+      const caret = document.querySelector('.caret').getBoundingClientRect();
+      return {
+        name: document.querySelector('#nameplate')?.textContent || '',
+        choices: [...document.querySelectorAll('[data-choice]')].map(node => node.textContent).join(','),
+        inside: box.left >= office.left - 1 && box.right <= office.right + 1 && box.top >= office.top - 1 && box.bottom <= office.bottom + 1,
+        choiceInside: choice.left >= box.left && choice.right <= box.right + 1 && choice.top >= box.top && choice.bottom <= box.bottom + 1,
+        caretInside: caret.left >= box.left && caret.right <= box.right + 1 && caret.top >= box.top && caret.bottom <= box.bottom + 1,
+      };
+    })()`);
+    if (info.name !== '饭搭子' || info.choices !== '去,下次' || !info.inside || !info.choiceInside || !info.caretInside) {
+      throw new Error('talkbox ' + JSON.stringify(info));
+    }
+    await shot(file);
+  }
+  await talkbox(path.join(STILLS, 'art-talkbox-desktop.png'));
+  await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
+  await talkbox(path.join(STILLS, 'art-talkbox-390.png'));
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
   await goto('hefei');
   await shot(path.join(STILLS, 'art-mobile-day.png'));
@@ -317,6 +359,9 @@ try {
     'art-night-falls.png',
     'art-days-pass.png',
     'art-night-dota.png',
+    'art-opened.png',
+    'art-talkbox-desktop.png',
+    'art-talkbox-390.png',
     'art-ending-quit.png',
     'art-ending-stay.png',
     'art-ending-remembered.png',

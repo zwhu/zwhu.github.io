@@ -335,6 +335,21 @@ test('the opening interview is five lines and the first nameplate is 面试', ()
   assert.equal(coworkerLine(state, 'boss').text, '今天说过了。');
 });
 
+test('at night only the teammate can be clicked', () => {
+  const day = interviewed('night-click');
+  assert.equal(coworkerLine(day, 'boss').clickable, true);
+  assert.equal(coworkerLine(day, 'lunch').clickable, true);
+  assert.equal(coworkerLine(day, 'neighbor').clickable, true);
+  assert.equal(coworkerLine(day, 'party').clickable, false);
+  const night = applyAction(day, { type: 'night' });
+  assert.equal(coworkerLine(night, 'boss').clickable, false);
+  assert.equal(coworkerLine(night, 'lunch').clickable, false);
+  assert.equal(coworkerLine(night, 'neighbor').clickable, false);
+  assert.equal(coworkerLine(night, 'party').clickable, true);
+  assert.equal(night.ap, day.ap);
+  assert.equal(night.favor, day.favor);
+});
+
 test('before the interview everyone only sends you to the boss', () => {
   const night = applyAction(createGame('gate'), { type: 'night' });
   assert.equal(night.interviewed, false);
