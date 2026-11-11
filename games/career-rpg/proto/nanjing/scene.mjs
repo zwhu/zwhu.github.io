@@ -34,6 +34,21 @@ function loadImage(src) {
   });
 }
 
+// 坐回自己工位时用坐姿格，不用正面站姿。
+export function seatedSprite(table) {
+  const player = table?.cells?.player;
+  const seat = player?.seat_back_on_chair;
+  const stand = player?.stand_front;
+  if (!seat || seat.empty || !Array.isArray(seat.origin)) return null;
+  return {
+    pose: 'seat_back_on_chair',
+    origin: seat.origin,
+    w: 56,
+    h: 56,
+    standOrigin: stand?.origin || null,
+  };
+}
+
 export function poseName(id, pose) {
   const cell = meta?.cells?.[id]?.[pose];
   if (cell && !cell.empty) return pose;
@@ -229,10 +244,10 @@ export function drawScene(canvas, mode) {
     ctx.drawImage(sheet, sx, sy, 56, 56, stamp.x, stamp.y, 56, 56);
   }
   const pose = playerPoseKind({ sitting: mover.sitting, moving: mover.path.length > 0 });
-  if (pose === 'sit') {
-    const seat = meta.cells.player.seat_back_on_chair;
+  const seat = seatedSprite(meta);
+  if (pose === 'sit' && seat) {
     const [sx, sy] = seat.origin;
-    ctx.drawImage(sheet, sx, sy, 56, 56, 54, 62, 56, 56);
+    ctx.drawImage(sheet, sx, sy, seat.w, seat.h, 54, 62, seat.w, seat.h);
     return;
   }
   drawWalkFrame(ctx, walkSprites?.[mover.facing] || walkSprites?.down, mover.elapsed, pose === 'walk');

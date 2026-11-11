@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createGame, present, snapshot } from '../rules.mjs';
+import { seatedSprite } from '../scene.mjs';
 import { findPath, frameAt, isWalkable, parseGrid, planClick, playerPoseKind, resolveDirections } from '../walk.mjs';
 
 const map = JSON.parse(readFileSync(new URL('../art/walk.json', import.meta.url), 'utf8'));
@@ -44,20 +45,35 @@ test('walking to a person is the same talk action, and the plan itself does not 
 const sprites = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
 const walkMeta = JSON.parse(readFileSync(new URL('../walk/meta.json', import.meta.url), 'utf8'));
 
-test('each direction has the frame count from meta and is not mirrored', () => {
+test('each direction reads its own sheet row and frames', () => {
   const directions = resolveDirections(sprites);
-  const expected = 1 + walkMeta.cycles.walk6.length;
-  for (const name of walkMeta.rows) {
-    assert.equal(directions[name].count, expected, name);
-    assert.equal(directions[name].frames.length, expected);
-    assert.equal(directions[name].duration, walkMeta.frame_ms.walk6);
-    assert.equal(directions[name].mirror, false);
-    assert.deepEqual(directions[name].anchor, walkMeta.foot_anchor);
-    assert.deepEqual(
-      [directions[name].frames[0].x, directions[name].frames[0].y, directions[name].frames[0].w, directions[name].frames[0].h],
-      walkMeta.frames[name].idle.rect,
-    );
+  const cell = walkMeta.cell[1];
+  const order = ['idle', ...walkMeta.cycles.walk6];
+  const role = { down: '正面', up: '背面', left: '左侧面', right: '右侧面' };
+  const rowOf = { down: 0, up: 1, left: 2, right: 3 };
+  assert.deepEqual(walkMeta.rows, ['down', 'up', 'left', 'right']);
+  for (const name of ['up', 'down', 'left', 'right']) {
+    const row = walkMeta.rows.indexOf(name);
+    const spec = directions[name];
+    const rects = spec.frames.map(frame => [frame.x, frame.y, frame.w, frame.h]);
+    console.log(`${name} ${role[name]} row ${row} ${rects.map(rect => rect.join(',')).join(' | ')}`);
+    assert.equal(row, rowOf[name], name);
+    assert.equal(spec.count, order.length, name);
+    assert.equal(spec.duration, walkMeta.frame_ms.walk6, name);
+    assert.equal(spec.mirror, false, name);
+    assert.deepEqual(spec.anchor, walkMeta.foot_anchor);
+    assert.equal(rects.length, order.length, name);
+    order.forEach((id, index) => {
+      assert.deepEqual(rects[index], walkMeta.frames[name][id].rect, `${name} ${id}`);
+      assert.equal(rects[index][1], row * cell, `${name} ${id} row`);
+    });
+    for (const rect of rects.slice(1)) assert.notDeepEqual(rect, rects[0], `${name} walk frame repeats the stand frame`);
+    assert.equal(new Set(rects.map(rect => rect[0])).size, rects.length, `${name} frames share one column`);
   }
+  assert.notEqual(directions.up.frames[0].y, directions.left.frames[0].y);
+  assert.notEqual(directions.up.frames[0].y, directions.right.frames[0].y);
+  assert.notEqual(directions.down.frames[0].y, directions.up.frames[0].y);
+  assert.notEqual(directions.down.frames[0].y, directions.left.frames[0].y);
 });
 
 test('a missing direction falls back without throwing', () => {
@@ -69,18 +85,40 @@ test('a missing direction falls back without throwing', () => {
   assert.ok(directions.up.frames.length >= 1);
 });
 
-test('walking cycles the step frames and stopping returns to the stand frame', () => {
-  const spec = resolveDirections(sprites).right;
-  assert.equal(frameAt(spec, 0, false).pose, 'stand');
-  assert.equal(frameAt(spec, 500, false).index, 0);
-  assert.equal(frameAt(spec, 0, true).pose, 'walk');
-  assert.equal(frameAt(spec, 0, true).index, 1);
-  assert.equal(frameAt(spec, 120, true).index, 2);
-  assert.equal(frameAt(spec, 120 * 6, true).index, 1);
+test('walking advances the step frames and stopping returns to that direction stand', () => {
+  const directions = resolveDirections(sprites);
+  for (const name of ['up', 'down', 'left', 'right']) {
+    const spec = directions[name];
+    const row = walkMeta.rows.indexOf(name) * walkMeta.cell[1];
+    const stopped = frameAt(spec, 480, false);
+    assert.equal(stopped.pose, 'stand', name);
+    assert.equal(stopped.index, 0, name);
+    assert.deepEqual([stopped.frame.x, stopped.frame.y, stopped.frame.w, stopped.frame.h], walkMeta.frames[name].idle.rect);
+    const seen = [];
+    for (let step = 0; step < spec.frames.length - 1; step += 1) {
+      const moving = frameAt(spec, step * spec.duration, true);
+      assert.equal(moving.pose, 'walk', `${name} ${step}`);
+      assert.equal(moving.index, step + 1, `${name} ${step}`);
+      assert.equal(moving.frame.y, row, `${name} ${step}`);
+      assert.notEqual(moving.frame.x, stopped.frame.x, `${name} ${step} stays on the stand frame`);
+      seen.push(`${moving.frame.x},${moving.frame.y},${moving.frame.w},${moving.frame.h}`);
+    }
+    assert.equal(new Set(seen).size, seen.length, name);
+    const wrapped = frameAt(spec, spec.duration * (spec.frames.length - 1), true);
+    assert.equal(wrapped.index, 1, name);
+    console.log(`${name} walk ${seen.join(' | ')} stop ${stopped.frame.x},${stopped.frame.y},${stopped.frame.w},${stopped.frame.h}`);
+  }
 });
 
-test('sitting uses the sit pose instead of a standing frame', () => {
+test('sitting at the desk uses the sit sprite, not the front stand', () => {
+  const table = JSON.parse(readFileSync(new URL('../art/sprites.meta.json', import.meta.url), 'utf8'));
   assert.equal(playerPoseKind({ sitting: true, moving: false }), 'sit');
+  assert.equal(playerPoseKind({ sitting: true, moving: true }), 'sit');
   assert.equal(playerPoseKind({ sitting: false, moving: true }), 'walk');
   assert.equal(playerPoseKind({ sitting: false, moving: false }), 'stand');
+  const seat = seatedSprite(table);
+  assert.equal(seat.pose, 'seat_back_on_chair');
+  assert.deepEqual(seat.origin, table.cells.player.seat_back_on_chair.origin);
+  assert.notDeepEqual(seat.origin, table.cells.player.stand_front.origin);
+  console.log(`sit ${seat.pose} ${seat.origin.join(',')} stand_front ${seat.standOrigin.join(',')}`);
 });
