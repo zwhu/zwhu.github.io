@@ -117,12 +117,21 @@ export function resolveDirections(data) {
   return directions;
 }
 
-export function frameAt(spec, elapsedMs) {
+export function playerPoseKind({ sitting, moving }) {
+  if (sitting) return 'sit';
+  if (moving) return 'walk';
+  return 'stand';
+}
+
+// 第 0 帧是该方向的站姿，后面的帧是走路循环。停下用站姿，走动只循环后面的帧。
+export function frameAt(spec, elapsedMs, moving = false) {
   const frames = spec.frames;
-  if (frames.length <= 1) return { index: 0, frame: frames[0] };
+  if (!frames.length) return null;
+  if (!moving || frames.length <= 1) return { index: 0, frame: frames[0], pose: 'stand' };
+  const cycle = frames.slice(1);
   const duration = spec.duration > 0 ? spec.duration : 160;
-  const index = Math.floor(Math.max(0, elapsedMs) / duration) % frames.length;
-  return { index, frame: frames[index] };
+  const index = Math.floor(Math.max(0, elapsedMs) / duration) % cycle.length;
+  return { index: index + 1, frame: cycle[index], pose: 'walk' };
 }
 
 export function facingOf(dx, dy) {

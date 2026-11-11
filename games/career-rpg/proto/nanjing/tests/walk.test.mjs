@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createGame, present, snapshot } from '../rules.mjs';
-import { findPath, frameAt, isWalkable, parseGrid, planClick, resolveDirections } from '../walk.mjs';
+import { findPath, frameAt, isWalkable, parseGrid, planClick, playerPoseKind, resolveDirections } from '../walk.mjs';
 
 const map = JSON.parse(readFileSync(new URL('../art/walk.json', import.meta.url), 'utf8'));
 const grid = parseGrid(map.rows);
@@ -42,16 +42,22 @@ test('walking to a person is the same talk action, and the plan itself does not 
 });
 
 const sprites = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
+const walkMeta = JSON.parse(readFileSync(new URL('../walk/meta.json', import.meta.url), 'utf8'));
 
-test('the sprite file resolves a frame for every direction', () => {
+test('each direction has the frame count from meta and is not mirrored', () => {
   const directions = resolveDirections(sprites);
-  for (const name of ['up', 'down', 'left', 'right']) {
-    assert.ok(directions[name].frames.length >= 1, name);
-    assert.equal(directions[name].count, directions[name].frames.length);
+  const expected = 1 + walkMeta.cycles.walk6.length;
+  for (const name of walkMeta.rows) {
+    assert.equal(directions[name].count, expected, name);
+    assert.equal(directions[name].frames.length, expected);
+    assert.equal(directions[name].duration, walkMeta.frame_ms.walk6);
+    assert.equal(directions[name].mirror, false);
+    assert.deepEqual(directions[name].anchor, walkMeta.foot_anchor);
+    assert.deepEqual(
+      [directions[name].frames[0].x, directions[name].frames[0].y, directions[name].frames[0].w, directions[name].frames[0].h],
+      walkMeta.frames[name].idle.rect,
+    );
   }
-  assert.equal(directions.left.mirror, true);
-  assert.equal(directions.up.frames[0].x, 56);
-  assert.equal(directions.down.frames[0].x, 0);
 });
 
 test('a missing direction falls back without throwing', () => {
@@ -63,19 +69,18 @@ test('a missing direction falls back without throwing', () => {
   assert.ok(directions.up.frames.length >= 1);
 });
 
-test('more than one frame advances while walking', () => {
-  const spec = resolveDirections({
-    directions: {
-      down: {
-        duration: 100,
-        anchor: [4, 8],
-        mirror: false,
-        frames: [{ x: 0, y: 0, w: 8, h: 8 }, { x: 8, y: 0, w: 8, h: 8 }],
-      },
-    },
-  }).down;
-  assert.equal(frameAt(spec, 0).index, 0);
-  assert.equal(frameAt(spec, 100).index, 1);
-  assert.equal(frameAt(spec, 200).index, 0);
-  assert.equal(frameAt(spec, 100).frame.x, 8);
+test('walking cycles the step frames and stopping returns to the stand frame', () => {
+  const spec = resolveDirections(sprites).right;
+  assert.equal(frameAt(spec, 0, false).pose, 'stand');
+  assert.equal(frameAt(spec, 500, false).index, 0);
+  assert.equal(frameAt(spec, 0, true).pose, 'walk');
+  assert.equal(frameAt(spec, 0, true).index, 1);
+  assert.equal(frameAt(spec, 120, true).index, 2);
+  assert.equal(frameAt(spec, 120 * 6, true).index, 1);
+});
+
+test('sitting uses the sit pose instead of a standing frame', () => {
+  assert.equal(playerPoseKind({ sitting: true, moving: false }), 'sit');
+  assert.equal(playerPoseKind({ sitting: false, moving: true }), 'walk');
+  assert.equal(playerPoseKind({ sitting: false, moving: false }), 'stand');
 });

@@ -244,7 +244,17 @@
      56,
      112
     ],
-    "empty": "沿用原图：仓库里没有背面站姿"
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     20,
+     12,
+     37,
+     54
+    ],
+    "derived": "backs_nj.back_from_front (no back sprite in repo)"
    },
    "seat_back_body": {
     "origin": [
@@ -427,7 +437,17 @@
      56,
      224
     ],
-    "empty": "沿用原图：仓库里没有背面站姿"
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     20,
+     12,
+     37,
+     54
+    ],
+    "derived": "backs_nj.back_from_front (no back sprite in repo)"
    },
    "seat_back_body": {
     "origin": [
@@ -514,7 +534,17 @@
      56,
      280
     ],
-    "empty": "沿用原图：仓库里没有背面站姿"
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     18,
+     12,
+     38,
+     54
+    ],
+    "derived": "backs_nj.back_from_front (no back sprite in repo)"
    },
    "seat_back_body": {
     "origin": [
@@ -601,7 +631,17 @@
      56,
      336
     ],
-    "empty": "沿用原图：仓库里没有背面站姿"
+    "foot": [
+     28,
+     54
+    ],
+    "bbox": [
+     20,
+     12,
+     37,
+     54
+    ],
+    "derived": "backs_nj.back_from_front (no back sprite in repo)"
    },
    "seat_back_body": {
     "origin": [

@@ -1,0 +1,411 @@
+{
+ "chapter": "nanjing",
+ "source": "player-walk-v2 (career-rpg-hefei-art/art/processed/player-walk-v2), heads unified",
+ "cell": [
+  56,
+  56
+ ],
+ "foot_anchor": [
+  28,
+  54
+ ],
+ "frame_size": [
+  28,
+  44
+ ],
+ "frame_offset_in_cell": [
+  14,
+  11
+ ],
+ "rows": [
+  "down",
+  "up",
+  "left",
+  "right"
+ ],
+ "cols": [
+  "idle",
+  "walk-01",
+  "walk-02",
+  "walk-03",
+  "walk-04",
+  "walk-05",
+  "walk-06"
+ ],
+ "note": "anchors cell-local; 美术建议，最终以工程定的为准. Same foot anchor as 05-sprite-sheet stand_front/stand_back (28,54).",
+ "cycles": {
+  "stand": [
+   "idle"
+  ],
+  "walk6": [
+   "walk-01",
+   "walk-02",
+   "walk-03",
+   "walk-04",
+   "walk-05",
+   "walk-06"
+  ],
+  "walk4": [
+   "walk-01",
+   "walk-03",
+   "walk-04",
+   "walk-06"
+  ]
+ },
+ "frame_ms": {
+  "walk6": 120,
+  "walk4": 150
+ },
+ "mirrored": {
+  "down": false,
+  "up": false,
+  "left": "left/idle = right/idle flipped (whole frame); left walk-01..06 keep their own bodies with the flipped right/idle head",
+  "right": false
+ },
+ "frames": {
+  "down": {
+   "idle": {
+    "rect": [
+     0,
+     0,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-01": {
+    "rect": [
+     56,
+     0,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-02": {
+    "rect": [
+     112,
+     0,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-03": {
+    "rect": [
+     168,
+     0,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-04": {
+    "rect": [
+     224,
+     0,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-05": {
+    "rect": [
+     280,
+     0,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-06": {
+    "rect": [
+     336,
+     0,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   }
+  },
+  "up": {
+   "idle": {
+    "rect": [
+     0,
+     56,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-01": {
+    "rect": [
+     56,
+     56,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-02": {
+    "rect": [
+     112,
+     56,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-03": {
+    "rect": [
+     168,
+     56,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-04": {
+    "rect": [
+     224,
+     56,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-05": {
+    "rect": [
+     280,
+     56,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-06": {
+    "rect": [
+     336,
+     56,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   }
+  },
+  "left": {
+   "idle": {
+    "rect": [
+     0,
+     112,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-01": {
+    "rect": [
+     56,
+     112,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-02": {
+    "rect": [
+     112,
+     112,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-03": {
+    "rect": [
+     168,
+     112,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-04": {
+    "rect": [
+     224,
+     112,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-05": {
+    "rect": [
+     280,
+     112,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-06": {
+    "rect": [
+     336,
+     112,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   }
+  },
+  "right": {
+   "idle": {
+    "rect": [
+     0,
+     168,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-01": {
+    "rect": [
+     56,
+     168,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-02": {
+    "rect": [
+     112,
+     168,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-03": {
+    "rect": [
+     168,
+     168,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-04": {
+    "rect": [
+     224,
+     168,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-05": {
+    "rect": [
+     280,
+     168,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   },
+   "walk-06": {
+    "rect": [
+     336,
+     168,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     54
+    ]
+   }
+  }
+ }
+}

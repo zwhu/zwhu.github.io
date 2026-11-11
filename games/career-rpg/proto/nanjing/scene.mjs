@@ -1,6 +1,6 @@
 // 场景板是去掉主角之后的底图。主角坐姿仍用精灵表。走路的方向和迈步帧从 walk/walk.sprites.json 读。
 
-import { facingOf, findPath, frameAt, parseGrid, planClick, resolveDirections } from './walk.mjs';
+import { facingOf, findPath, frameAt, parseGrid, planClick, playerPoseKind, resolveDirections } from './walk.mjs';
 
 let meta = null;
 let plates = null;
@@ -10,7 +10,6 @@ let walkData = null;
 let walkImage = null;
 let walkSprites = null;
 
-const MISSING_BACK = ['cto', 'feixiang', 'beige', 'newbie'];
 const SPEED = 72;
 
 const mover = {
@@ -70,9 +69,6 @@ export async function loadArt() {
   grid = parseGrid(walk.rows);
   walkSprites = resolveDirections(walkSheet);
   walkImage = await loadImage(`./walk/${walkSheet.image}`);
-  for (const id of MISSING_BACK) {
-    if (poseName(id, 'stand_back') !== 'stand_front') throw new Error(`背面缺失未替换 ${id}`);
-  }
 }
 
 export function bindWalk(hooks) {
@@ -201,9 +197,9 @@ export function clickGround(x, y, mode) {
   arm(plan.path, plan.effect);
 }
 
-function drawWalkFrame(ctx, spec, elapsed) {
+function drawWalkFrame(ctx, spec, elapsed, moving) {
   if (!walkImage || !spec) return;
-  const { frame } = frameAt(spec, elapsed);
+  const { frame } = frameAt(spec, elapsed, moving);
   const anchor = spec.anchor;
   const dx = mover.foot.x - anchor[0];
   const dy = mover.foot.y - anchor[1];
@@ -232,11 +228,12 @@ export function drawScene(canvas, mode) {
     const [sx, sy] = cell.origin;
     ctx.drawImage(sheet, sx, sy, 56, 56, stamp.x, stamp.y, 56, 56);
   }
-  if (mover.sitting) {
+  const pose = playerPoseKind({ sitting: mover.sitting, moving: mover.path.length > 0 });
+  if (pose === 'sit') {
     const seat = meta.cells.player.seat_back_on_chair;
     const [sx, sy] = seat.origin;
     ctx.drawImage(sheet, sx, sy, 56, 56, 54, 62, 56, 56);
     return;
   }
-  drawWalkFrame(ctx, walkSprites?.[mover.facing] || walkSprites?.down, mover.elapsed);
+  drawWalkFrame(ctx, walkSprites?.[mover.facing] || walkSprites?.down, mover.elapsed, pose === 'walk');
 }
