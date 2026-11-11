@@ -120,6 +120,13 @@ async function click(action) {
   })()`);
   if (!found) throw new Error('missing button ' + JSON.stringify(action));
   if (action.type === 'overnight') {
+    await evaluate(`(() => {
+      if (!window.hefei.present().interviewed) document.querySelector('[data-person="boss"]')?.click();
+      document.querySelector('[data-dialogue="close"]')?.click();
+      document.querySelector('[data-action="night"]')?.click();
+      document.querySelector('[data-person="party"]')?.click();
+      document.querySelector('[data-choice="accept"]')?.click();
+    })()`);
     await sleep(40);
     await evaluate(`document.querySelector('[data-dota="skip"]')?.click()`);
     await sleep(40);
@@ -155,10 +162,14 @@ async function recordMinigame(name, seed, play) {
   if (before !== '10') throw new Error(name + ' stamina before ' + before);
   for (let i = 0; i < 4; i += 1) await save();
   const opened = await evaluate(`(() => {
-    const node = document.querySelector('[data-action="overnight"]');
-    if (!node) return false;
-    node.click();
-    return true;
+    if (!window.hefei.present().interviewed) document.querySelector('[data-person="boss"]')?.click();
+    document.querySelector('[data-dialogue="close"]')?.click();
+    document.querySelector('[data-action="night"]')?.click();
+    document.querySelector('[data-person="party"]')?.click();
+    const accept = document.querySelector('[data-choice="accept"]');
+    if (!accept) return false;
+    accept.click();
+    return !!document.querySelector('#dota');
   })()`);
   if (!opened) throw new Error(name + ' did not open');
   await sleep(80);
