@@ -114,10 +114,23 @@ async function evaluate(expression) {
   if (message.result?.exceptionDetails) throw new Error(JSON.stringify(message.result.exceptionDetails).slice(0, 800));
   return message.result?.result?.value;
 }
-async function shot(file) {
-  await evaluate('window.scrollTo(0, 0)');
+async function shot(file, target) {
+  await evaluate(`(() => {
+    const node = ${target ? `document.querySelector(${JSON.stringify(target)})` : 'null'};
+    if (node) node.scrollIntoView({ block: 'start' });
+    else window.scrollTo(0, 0);
+  })()`);
   const message = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   writeFileSync(file, Buffer.from(message.result.data, 'base64'));
+}
+async function visibleText() {
+  return evaluate(`(() => {
+    const nodes = [...document.querySelectorAll('#chance-banner, #boss-card, #boss-pressure, #talk, #log li, #ending-text, #rep')];
+    return nodes.filter(node => {
+      const box = node.getBoundingClientRect();
+      return box.bottom > 0 && box.top < window.innerHeight && box.height > 0;
+    }).map(node => node.innerText).join('\\n');
+  })()`);
 }
 async function goto(seed) {
   await send('Page.navigate', { url: `${origin}?seed=${encodeURIComponent(seed)}` });
@@ -187,7 +200,7 @@ try {
   await connect();
   await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
 
-  async function record(name, seed, actions, fps) {
+  async function record(name, seed, actions, fps, focus) {
     const dir = path.join(framesRoot, name);
     mkdirSync(dir);
     await goto(seed);
@@ -195,9 +208,11 @@ try {
     if (opened !== seed) throw new Error(`seed ${opened}`);
     let index = 0;
     const texts = [];
-    const save = async times => {
+    const onScreen = [];
+    const save = async (times, target) => {
       for (let i = 0; i < times; i += 1) {
-        await shot(path.join(dir, `${String(index).padStart(4, '0')}.png`));
+        await shot(path.join(dir, `${String(index).padStart(4, '0')}.png`), target);
+        if (focus) onScreen.push(await visibleText());
         index += 1;
       }
     };
@@ -210,44 +225,61 @@ try {
         const text = await evaluate('document.body.innerText');
         texts.push(before ? `${text}\nREP ${before} -> ${await evaluate(`document.querySelector('#rep')?.textContent || ''`)}` : text);
       }
-      await save(dwellFor(action));
+      if (focus && action.type === 'boss') {
+        if (await evaluate('!!document.querySelector("#boss-card")')) await save(4, '#boss-card');
+        await save(8, '#log');
+      } else if (focus && (action.type === 'pm-yes' || (action.type === 'talk' && action.person === 'pm'))) {
+        await save(8);
+      } else if (focus && action.type === 'talk' && action.person === 'boss') {
+        await save(6, '#boss-card');
+      } else {
+        await save(dwellFor(action));
+      }
     }
-    await save(fps * 2);
+    await save(fps * 2, focus ? '#ending' : undefined);
     const file = path.join(OUT, `${name}.mp4`);
     await encode(dir, file, fps);
     const ending = await evaluate(`document.querySelector('#ending-text')?.textContent || ''`);
     const extra = await evaluate(`document.querySelector('#to-hangzhou')?.textContent || ''`);
-    return { file: path.relative(ROOT, file), frames: index, ending, extra, texts };
+    return { file: path.relative(ROOT, file), frames: index, ending, extra, texts, onScreen };
   }
 
-  const endingsOnly = process.argv.includes('endings');
-  const lossPlay = play('n0', 'greedy');
-  const winPlay = play('n0', 'planned');
-  const bossPlay = endingsOnly ? null : play('n0', 'demo');
-  const loss = await record('nanjing-loss', 'n0', lossPlay.actions, 5);
-  if (!loss.ending.includes('约谈')) throw new Error(`loss ending ${loss.ending}`);
-  const win = await record('nanjing-win', 'n0', winPlay.actions, 5);
-  if (!win.ending.includes('扛住了，也学会了怎么扛') || !win.extra.includes('去杭州') || !win.extra.includes('去阿里')) {
-    throw new Error(`win ending ${win.ending} ${win.extra}`);
+  const modes = process.argv.slice(2);
+  const want = name => modes.length === 0 || modes.includes(name);
+  const report = {};
+  if (want('loss')) {
+    const loss = await record('nanjing-loss', 'n0', play('n0', 'greedy').actions, 5);
+    if (!loss.ending.includes('约谈')) throw new Error(`loss ending ${loss.ending}`);
+    report.loss = { file: loss.file, frames: loss.frames, ending: loss.ending, seed: 'n0' };
   }
-  let boss = null;
-  if (!endingsOnly) {
-    boss = await record('nanjing-boss', 'n0', bossPlay.actions, 4);
+  if (want('win')) {
+    const win = await record('nanjing-win', 'n0', play('n0', 'planned').actions, 5);
+    if (!win.ending.includes('扛住了，也学会了怎么扛') || !win.extra.includes('去杭州') || !win.extra.includes('去阿里')) {
+      throw new Error(`win ending ${win.ending} ${win.extra}`);
+    }
+    report.win = { file: win.file, frames: win.frames, ending: win.ending, extra: win.extra, seed: 'n0' };
+  }
+  if (want('alive')) {
+    const alive = await record('nanjing-alive', 'n1', play('n1', 'planned').actions, 5);
+    if (!alive.ending.includes('论坛还活着，你也还在') || !alive.ending.includes('口碑还没到 34') || alive.ending.includes('扛住了')) {
+      throw new Error(`alive ending ${alive.ending}`);
+    }
+    report.alive = { file: alive.file, frames: alive.frames, ending: alive.ending, seed: 'n1' };
+  }
+  if (want('boss')) {
+    const boss = await record('nanjing-boss', 'n0', play('n0', 'demo').actions, 3, true);
     const blob = boss.texts.join('\n');
+    const shown = boss.onScreen.join('\n');
     for (const phrase of ['产品经理', '30% 变成 45%', '30% → 45%', '首页登不上', '好了没', '对不上', '少走了一步']) {
       if (!blob.includes(phrase)) throw new Error(`boss video missed ${phrase}`);
+      if (!shown.includes(phrase)) throw new Error(`boss video phrase off screen ${phrase}`);
     }
     const repChange = blob.match(/REP (\d+) -> (\d+)/);
     if (!repChange || Number(repChange[2]) >= Number(repChange[1])) throw new Error(`boss rep did not drop ${repChange}`);
-    boss = { file: boss.file, frames: boss.frames, rep: repChange[0] };
+    report.boss = { file: boss.file, frames: boss.frames, rep: repChange[0], seed: 'n0' };
   }
   if (errors.length) throw new Error(`console errors\n${errors.join('\n')}`);
-  const report = {
-    loss: { file: loss.file, frames: loss.frames, ending: loss.ending },
-    win: { file: win.file, frames: win.frames, ending: win.ending, extra: win.extra },
-    boss,
-    consoleErrors: errors,
-  };
+  report.consoleErrors = errors;
   writeFileSync(path.join(OUT, 'capture-log.json'), `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));
 } catch (error) {
