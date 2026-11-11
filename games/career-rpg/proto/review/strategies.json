@@ -1,0 +1,5849 @@
+{
+  "seeds": "g0-g239",
+  "seedCount": 240,
+  "previousGreedyPassRate": 0.8375,
+  "changes": [
+    {
+      "name": "favorMax",
+      "v02": 100,
+      "c8f9574": 200,
+      "after": 200
+    },
+    {
+      "name": "fileDbReward",
+      "v02": 30,
+      "c8f9574": 50,
+      "after": 50
+    },
+    {
+      "name": "weekLineFinal",
+      "v02": 60,
+      "c8f9574": 130,
+      "after": 111,
+      "note": "第 1–3 周仍是 30、40、50"
+    },
+    {
+      "name": "goodFavor",
+      "v02": null,
+      "c8f9574": 200,
+      "after": 200,
+      "note": "好结局仍要文件数据库做完并且好感到 200"
+    }
+  ],
+  "strategies": {
+    "greedy": {
+      "method": "每个行动点只做当前期限最短、且能开工的单（dueIn 小的优先，相同则 id 小的优先）。文件数据库没学数据库时跳过。行动点用完就睡觉。不打 Dota，不学习，不休息，除非没有可做的单。",
+      "won": 155,
+      "lost": 85,
+      "remembered": 0,
+      "barely": 155,
+      "passRate": 0.6458333333333334,
+      "goodEndingRate": 0,
+      "barelyRate": 0.6458333333333334,
+      "lossWeeks": {
+        "1": 1,
+        "2": 5,
+        "3": 6,
+        "4": 73
+      },
+      "rows": [
+        {
+          "seed": "g0",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 113,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g1",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 23,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g2",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 167,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g3",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 154,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g4",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 123,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g5",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 15,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g6",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 108,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g7",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 144,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g8",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 108,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g9",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 115,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g10",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 134,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g11",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 119,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g12",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 129,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g13",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 116,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g14",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 175,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g15",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 91,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g16",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 96,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g17",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 132,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g18",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 47,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g19",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 133,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g20",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 73,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g21",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 71,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g22",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 139,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g23",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 141,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g24",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 24,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g25",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 162,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g26",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 190,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g27",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 188,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g28",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 177,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g29",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 173,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g30",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 107,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g31",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 139,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g32",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 156,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g33",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 169,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g34",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 42,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g35",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 130,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g36",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 174,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g37",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 65,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g38",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 93,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g39",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 135,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g40",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 77,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g41",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 178,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g42",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 108,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g43",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 61,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g44",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 161,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g45",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 139,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g46",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 132,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g47",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 30,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g48",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 104,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g49",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 195,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g50",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 95,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g51",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 183,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g52",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 68,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g53",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 45,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g54",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 139,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g55",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 164,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g56",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 102,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g57",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 50,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g58",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 131,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g59",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 109,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g60",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 145,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g61",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 147,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g62",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 159,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g63",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 101,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g64",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 111,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g65",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 61,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g66",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 144,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g67",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 156,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g68",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 31,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g69",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 165,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g70",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 158,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g71",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 125,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g72",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 96,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g73",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 154,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g74",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 199,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g75",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 165,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g76",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 119,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g77",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 106,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g78",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 196,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g79",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 148,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g80",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 125,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g81",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 101,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g82",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 88,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g83",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 121,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g84",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 177,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g85",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 119,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g86",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 107,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g87",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 179,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g88",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 63,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g89",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 157,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g90",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 39,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g91",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 185,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g92",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 173,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g93",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 71,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g94",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 39,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g95",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 112,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g96",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 159,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g97",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 134,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g98",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 138,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g99",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 128,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g100",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 167,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g101",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 130,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g102",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 116,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g103",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 85,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g104",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 146,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g105",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 176,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g106",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 154,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g107",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 115,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g108",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 123,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g109",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 96,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g110",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 135,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g111",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 86,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g112",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g113",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 45,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g114",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 61,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g115",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g116",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 186,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g117",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 106,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g118",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 78,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g119",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 60,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g120",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 23,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g121",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 124,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g122",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 62,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g123",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 191,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g124",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 156,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g125",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 27,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g126",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 123,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g127",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 174,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g128",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 128,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g129",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 157,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g130",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 119,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g131",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 137,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g132",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 86,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g133",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 181,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g134",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 106,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g135",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 159,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g136",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 100,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g137",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 115,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g138",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 129,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g139",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 151,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g140",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 157,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g141",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 142,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g142",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g143",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 177,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g144",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 110,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g145",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 84,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g146",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 174,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g147",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 141,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g148",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 81,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g149",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 136,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g150",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 117,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g151",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 126,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g152",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 31,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g153",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 13,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g154",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 180,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g155",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 77,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g156",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 131,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g157",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 172,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g158",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 99,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g159",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 124,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g160",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 158,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g161",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 154,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g162",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 99,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g163",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 137,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g164",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 80,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g165",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 63,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g166",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 189,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g167",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 117,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g168",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 137,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g169",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 133,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g170",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 106,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g171",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 186,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g172",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 44,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g173",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 175,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g174",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 85,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g175",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 148,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g176",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 148,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g177",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 96,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g178",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 121,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g179",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 154,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g180",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 87,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g181",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 171,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g182",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 168,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g183",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 135,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g184",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 114,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g185",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 163,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g186",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 142,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g187",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 160,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g188",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 188,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g189",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 160,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g190",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 99,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g191",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 196,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g192",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 152,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g193",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 120,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g194",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 189,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g195",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 182,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g196",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 90,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g197",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 144,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g198",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 76,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g199",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 178,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g200",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 168,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g201",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 158,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g202",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 188,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g203",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 64,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g204",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 56,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g205",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 120,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g206",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 171,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g207",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 158,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g208",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 105,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g209",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 140,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g210",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 47,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g211",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 170,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g212",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 145,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g213",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 189,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g214",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 134,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g215",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 165,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g216",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 178,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g217",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 170,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g218",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 58,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g219",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 154,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g220",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 91,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g221",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 125,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g222",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 23,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g223",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 136,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g224",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 120,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g225",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 61,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g226",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 126,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g227",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 94,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g228",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 181,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g229",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 50,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g230",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 110,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g231",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 166,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g232",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 86,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g233",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 112,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g234",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 182,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g235",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 142,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g236",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 155,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g237",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 84,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g238",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 116,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g239",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 93,
+          "fileDbDone": false
+        }
+      ]
+    },
+    "planned": {
+      "method": "先学数据库，再学 Linux，再学 Git。没学会时，当天到期或已延期的单优先做掉。三门都学会以后，没有这种单就推文件数据库，做完再按贪心收最急的单。不打 Dota，不吃面，不学 Java 和 jQuery。",
+      "won": 178,
+      "lost": 62,
+      "remembered": 116,
+      "barely": 62,
+      "passRate": 0.7416666666666667,
+      "goodEndingRate": 0.48333333333333334,
+      "barelyRate": 0.25833333333333336,
+      "lossWeeks": {
+        "1": 23,
+        "2": 14,
+        "3": 8,
+        "4": 17
+      },
+      "rows": [
+        {
+          "seed": "g0",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 78,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g1",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 106,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g2",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g3",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g4",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 177,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g5",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g6",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g7",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 134,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g8",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g9",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 163,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g10",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 26,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g11",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g12",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 22,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g13",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g14",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g15",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g16",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 56,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g17",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 71,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g18",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 6,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g19",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g20",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g21",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 37,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g22",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g23",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g24",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 6,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g25",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g26",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g27",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g28",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g29",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g30",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 143,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g31",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g32",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g33",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g34",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 77,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g35",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 192,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g36",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 18,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g37",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 177,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g38",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g39",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g40",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 153,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g41",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g42",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 29,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g43",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g44",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g45",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g46",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g47",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g48",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g49",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g50",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 80,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g51",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g52",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 120,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g53",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 100,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g54",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g55",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 150,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g56",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g57",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 152,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g58",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 183,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g59",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g60",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 106,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g61",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g62",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g63",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 32,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g64",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g65",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 113,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g66",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 196,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g67",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g68",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 18,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g69",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 27,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g70",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g71",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 166,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g72",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 192,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g73",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 147,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g74",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g75",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 196,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g76",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g77",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 23,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g78",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g79",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g80",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g81",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g82",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 145,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g83",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 174,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g84",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g85",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 46,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g86",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 134,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g87",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g88",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 26,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g89",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g90",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 188,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g91",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 196,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g92",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g93",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g94",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 6,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g95",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 167,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g96",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g97",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 33,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g98",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 181,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g99",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 12,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g100",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 16,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g101",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 150,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g102",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g103",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 133,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g104",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 195,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g105",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g106",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g107",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 196,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g108",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g109",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 168,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g110",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g111",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 46,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g112",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 184,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g113",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 29,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g114",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 45,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g115",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g116",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g117",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g118",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g119",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g120",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g121",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 74,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g122",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 58,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g123",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g124",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 142,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g125",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 39,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g126",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g127",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 29,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g128",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g129",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g130",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 37,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g131",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g132",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g133",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g134",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g135",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g136",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g137",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 33,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g138",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 84,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g139",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 192,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g140",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g141",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 152,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g142",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 153,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g143",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g144",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 177,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g145",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g146",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g147",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g148",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 143,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g149",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g150",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 40,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g151",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g152",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g153",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 18,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g154",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g155",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 144,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g156",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 117,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g157",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g158",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 45,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g159",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g160",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g161",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g162",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 133,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g163",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 116,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g164",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 7,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g165",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 137,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g166",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g167",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g168",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g169",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g170",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g171",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g172",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 80,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g173",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g174",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g175",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g176",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 115,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g177",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 15,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g178",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 111,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g179",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 117,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g180",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g181",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g182",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g183",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 160,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g184",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g185",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 172,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g186",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g187",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g188",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g189",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g190",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g191",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g192",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g193",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 188,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g194",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g195",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g196",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g197",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 138,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g198",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 123,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g199",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g200",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g201",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g202",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g203",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g204",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g205",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g206",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g207",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g208",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g209",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g210",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 192,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g211",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g212",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g213",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 187,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g214",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 110,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g215",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 72,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g216",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 167,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g217",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 102,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g218",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 24,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g219",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g220",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 193,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g221",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 192,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g222",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 20,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g223",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 173,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g224",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g225",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 53,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g226",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g227",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g228",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g229",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 148,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g230",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 188,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g231",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 175,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g232",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 130,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g233",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 104,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g234",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g235",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g236",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g237",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 197,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g238",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 189,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g239",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 164,
+          "fileDbDone": true
+        }
+      ]
+    },
+    "random": {
+      "method": "有行动点时，在能做的单、能学的技能、休息、以及还没打过的 Dota 里均匀抽一个。打了 Dota 就用另一套种子掷输赢，各一半。行动点用完就睡觉。随机数是 hashSeed(\"plan:\"+种子)，不碰本局 rng。",
+      "won": 34,
+      "lost": 206,
+      "remembered": 4,
+      "barely": 30,
+      "passRate": 0.14166666666666666,
+      "goodEndingRate": 0.016666666666666666,
+      "barelyRate": 0.125,
+      "lossWeeks": {
+        "1": 133,
+        "2": 53,
+        "3": 15,
+        "4": 5
+      },
+      "rows": [
+        {
+          "seed": "g0",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 11,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g1",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 23,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g2",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 8,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g3",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 68,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g4",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 24,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g5",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g6",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 21,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g7",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 5,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g8",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g9",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g10",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 16,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g11",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 62,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g12",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g13",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 20,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g14",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g15",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g16",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 5,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g17",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 21,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g18",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g19",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 5,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g20",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 6,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g21",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 10,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g22",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 191,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g23",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 19,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g24",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 9,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g25",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 164,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g26",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 21,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g27",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 29,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g28",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 13,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g29",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 8,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g30",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g31",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 15,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g32",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 38,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g33",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g34",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 23,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g35",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g36",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 140,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g37",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 13,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g38",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 20,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g39",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 20,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g40",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 49,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g41",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 40,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g42",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 45,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g43",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 13,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g44",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 22,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g45",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 27,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g46",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 23,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g47",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 198,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g48",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 23,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g49",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 41,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g50",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g51",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 16,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g52",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g53",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 7,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g54",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 12,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g55",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g56",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 36,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g57",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 21,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g58",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g59",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 2,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g60",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 4,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g61",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g62",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 151,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g63",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g64",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 15,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g65",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 116,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g66",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 16,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g67",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 22,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g68",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g69",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 20,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g70",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 38,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g71",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 162,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g72",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 145,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g73",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 24,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g74",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 198,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g75",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 26,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g76",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 173,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g77",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g78",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 42,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g79",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g80",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 22,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g81",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 34,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g82",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 5,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g83",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 70,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g84",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 10,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g85",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g86",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g87",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 142,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g88",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g89",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 35,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g90",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 7,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g91",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 21,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g92",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 22,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g93",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 3,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g94",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g95",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 128,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g96",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 2,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g97",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 5,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g98",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 22,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g99",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 13,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g100",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 13,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g101",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g102",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g103",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g104",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 48,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g105",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 20,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g106",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g107",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 20,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g108",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g109",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 5,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g110",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 35,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g111",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 5,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g112",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 12,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g113",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 9,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g114",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g115",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 26,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g116",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g117",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g118",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 10,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g119",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 27,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g120",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g121",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g122",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g123",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g124",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 6,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g125",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 19,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g126",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g127",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g128",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 194,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g129",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 16,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g130",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 34,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g131",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 16,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g132",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 30,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g133",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 27,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g134",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g135",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 19,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g136",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 44,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g137",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g138",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 24,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g139",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g140",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 27,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g141",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 6,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g142",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g143",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g144",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 24,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g145",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g146",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 10,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g147",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 25,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g148",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 7,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g149",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 140,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g150",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 188,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g151",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 154,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g152",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 4,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g153",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g154",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 134,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g155",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g156",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 7,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g157",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g158",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 9,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g159",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g160",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g161",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 155,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g162",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 5,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g163",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 20,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g164",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 1,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g165",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 9,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g166",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 35,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g167",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 29,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g168",
+          "phase": "lost",
+          "ending": "",
+          "week": 4,
+          "favor": 62,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g169",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 9,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g170",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 36,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g171",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 146,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g172",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g173",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 22,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g174",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 1,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g175",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 26,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g176",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g177",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g178",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 16,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g179",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 19,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g180",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 3,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g181",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 179,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g182",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g183",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 18,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g184",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g185",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g186",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g187",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g188",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 18,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g189",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g190",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 22,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g191",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 20,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g192",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g193",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g194",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g195",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 6,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g196",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 23,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g197",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g198",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 26,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g199",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g200",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 38,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g201",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 118,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g202",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 172,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g203",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 6,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g204",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 113,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g205",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 195,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g206",
+          "phase": "won",
+          "ending": "remembered",
+          "week": 4,
+          "favor": 200,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g207",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 17,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g208",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 14,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g209",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 157,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g210",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 30,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g211",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 32,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g212",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 30,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g213",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 7,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g214",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 21,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g215",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 22,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g216",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 8,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g217",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 196,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g218",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 20,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g219",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 27,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g220",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 22,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g221",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 178,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g222",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 18,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g223",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 29,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g224",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 174,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g225",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g226",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 31,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g227",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 21,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g228",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 15,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g229",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 19,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g230",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 19,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g231",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 153,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g232",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 6,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g233",
+          "phase": "lost",
+          "ending": "",
+          "week": 1,
+          "favor": 0,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g234",
+          "phase": "lost",
+          "ending": "",
+          "week": 3,
+          "favor": 47,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g235",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 37,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g236",
+          "phase": "won",
+          "ending": "barely",
+          "week": 4,
+          "favor": 195,
+          "fileDbDone": true
+        },
+        {
+          "seed": "g237",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 32,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g238",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 28,
+          "fileDbDone": false
+        },
+        {
+          "seed": "g239",
+          "phase": "lost",
+          "ending": "",
+          "week": 2,
+          "favor": 10,
+          "fileDbDone": false
+        }
+      ]
+    }
+  }
+}
