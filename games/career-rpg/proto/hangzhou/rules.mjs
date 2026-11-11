@@ -21,7 +21,7 @@ function clamp(value, min, max) {
 }
 
 export function weekLine(week, config = CONFIG) {
-  return config.weekLineBase + (week - 1) * config.weekLineStep;
+  return config.weekLines[week - 1];
 }
 
 export function debtSurcharge(debt, config = CONFIG) {

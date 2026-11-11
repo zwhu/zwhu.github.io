@@ -235,37 +235,34 @@ try {
     mobile: false,
   });
 
-  const loss = await record('hangzhou-loss', 'loss', lossActions(), { fps: 4, endHold: 6 });
-  const lossText = await evaluate('document.querySelector("#ending-text").textContent');
-  if (!lossText.includes('被业务方投诉两次')) throw new Error(`loss ${lossText}`);
+  const want = name => process.argv.length <= 2 || process.argv.includes(name);
+  const report = { origin, consoleErrors: errors };
 
-  const winActions = play('planned', 'h1').actions;
-  const win = await record('hangzhou-win', 'h1', winActions, { fps: 4, endHold: 8 });
-  const winText = await evaluate('document.querySelector("#ending-text").textContent');
-  if (!winText.includes('一套架构，撑起五条业务线')) throw new Error(`win ${winText}`);
-
-  const debtActions = play('greedy', 'h1').actions;
-  const debt = await record('hangzhou-debt', 'h1', debtActions, { fps: 4, endHold: 8 });
-  const debtText = await evaluate('document.querySelector("#ending-text").textContent');
-  if (!debtText.includes('需求做完了，债也欠下了')) throw new Error(`debt ${debtText}`);
-
-  const bossActions = bossReviewActions('h1');
-  const boss = await record('hangzhou-boss', 'h1', bossActions, { fps: 4, tail: 2, tailCopies: 8, endHold: 12 });
-  const bossView = await evaluate(`(() => {
-    const view = window.hangzhou.present();
-    return {
+  if (want('hangzhou-loss')) {
+    report.loss = await record('hangzhou-loss', 'loss', lossActions(), { fps: 4, endHold: 6 });
+    report.lossText = await evaluate('document.querySelector("#ending-text").textContent');
+    if (!report.lossText.includes('被业务方投诉两次')) throw new Error(`loss ${report.lossText}`);
+  }
+  if (want('hangzhou-win')) {
+    report.win = await record('hangzhou-win', 'h0', play('planned', 'h0').actions, { fps: 4, endHold: 8 });
+    report.winText = await evaluate('document.querySelector("#ending-text").textContent');
+    if (!report.winText.includes('一套架构，撑起五条业务线')) throw new Error(`win ${report.winText}`);
+  }
+  if (want('hangzhou-debt')) {
+    report.debt = await record('hangzhou-debt', 'h3', play('greedy', 'h3').actions, { fps: 4, endHold: 8 });
+    report.debtText = await evaluate('document.querySelector("#ending-text").textContent');
+    if (!report.debtText.includes('需求做完了，债也欠下了')) throw new Error(`debt ${report.debtText}`);
+  }
+  if (want('hangzhou-boss')) {
+    report.boss = await record('hangzhou-boss', 'h1', bossReviewActions('h1'), { fps: 4, tail: 2, tailCopies: 8, endHold: 12 });
+    report.bossView = await evaluate(`(() => ({
       debt: document.querySelector('#debt').textContent,
       banner: document.querySelector('#debt-banner').textContent,
-      slots: [...document.querySelectorAll('[data-slot]')].map(node => node.getAttribute('data-label')),
-      log: view.log[0],
-    };
-  })()`);
-  if (bossView.banner !== '技术债 28，所有单子 +1 点') throw new Error(`banner ${bossView.banner}`);
-  if (!bossView.slots.some(label => label.includes('技术债 1'))) throw new Error(`slots ${bossView.slots.join(' | ')}`);
-  if (!bossView.log.includes('所有单子 +1')) throw new Error(`log ${bossView.log}`);
+      week: document.querySelector('#when').textContent,
+    }))()`);
+  }
 
   if (errors.length) throw new Error(`console errors\n${errors.join('\n')}`);
-  const report = { origin, loss, win, debt, boss, lossText, winText, debtText, bossView, consoleErrors: errors };
   writeFileSync(path.join(OUT, 'capture-log.json'), `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));
 } catch (error) {

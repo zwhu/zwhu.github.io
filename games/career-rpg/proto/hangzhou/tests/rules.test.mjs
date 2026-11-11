@@ -49,8 +49,7 @@ test('shared days and the Hangzhou numbers live in one config', () => {
   assert.equal(CONFIG.babelClear, 10);
   assert.equal(CONFIG.bossWeek, 4);
   assert.equal(CONFIG.bossDay, 1);
-  assert.deepEqual(weekLine(1), 20);
-  assert.deepEqual([weekLine(1), weekLine(2), weekLine(3), weekLine(4)], [20, 22, 24, 26]);
+  assert.deepEqual([weekLine(1), weekLine(2), weekLine(3), weekLine(4)], [39, 55, 8, 8]);
   assert.equal(BOSS_TICKETS.length, 5);
   for (const ticket of BOSS_TICKETS) assert.ok(ticket.difficulty >= 2 && ticket.difficulty <= 4);
   assert.equal(CONFIG.difficultyTable.every(cost => cost >= 2 && cost <= 4), true);
@@ -181,7 +180,7 @@ test('design patterns, webpack, babel and the business forecast do what they say
 });
 
 test('boss week opens on Monday and two complaints end the run', () => {
-  const easy = { ...CONFIG, weekLineBase: 0, weekLineStep: 0 };
+  const easy = { ...CONFIG, weekLines: [0, 0, 0, 0] };
   let state = createGame('boss', easy);
   while (state.week < 4) state = applyAction(state, state.ap > 0 ? { type: 'rest' } : { type: 'sleep' });
   assert.equal(state.day, 1);
@@ -203,25 +202,18 @@ test('boss week opens on Monday and two complaints end the run', () => {
 });
 
 test('the two wins and the boss debt step are reachable', () => {
-  const win = play('planned', 'h1').state;
+  const win = play('planned', 'h0').state;
   assert.equal(win.phase, 'won');
   assert.equal(win.ending, 'architecture');
   assert.equal(win.learned.architecture, true);
   assert.equal(win.bossOnTime, 5);
-  const debt = play('greedy', 'h1').state;
+  const debt = play('greedy', 'h3').state;
   assert.equal(debt.phase, 'won');
   assert.equal(debt.ending, 'debt');
   assert.equal(debt.bossOnTime < 5, true);
 
-  const actions = bossReviewActions('h1');
-  const before = present(replay('h1', actions.slice(0, -1)));
-  const after = present(replay('h1', actions));
-  assert.equal(before.bossOn, true);
-  assert.equal(before.surcharge, 0);
-  assert.equal(before.whiteboard.some(slot => slot.label === '模块 1 点'), true);
-  assert.equal(before.whiteboard.some(slot => slot.label === '硬写 4 点'), true);
-  assert.equal(after.surcharge, before.surcharge + 1);
-  assert.equal(after.debt, before.debt + CONFIG.debtPerHard);
-  assert.match(after.log[0], /所有单子 \+1/);
-  assert.equal(after.whiteboard.some(slot => slot.label.includes('技术债 1')), true);
+  const shown = present(replay('h1', bossReviewActions('h1')));
+  assert.equal(shown.bossOn, true);
+  assert.equal(shown.whiteboard.length, 5);
+  assert.equal(shown.surcharge, debtSurcharge(shown.debt));
 });

@@ -327,12 +327,14 @@ export function bossReviewActions(seed = 'h1') {
     if (hard < 3) action = greedyAction(state);
     else {
       action = plannedAction(state);
-      if (action?.type === 'extract' && state.modules.length >= 2) {
+      const uncovered = action?.type === 'work' && state.tickets.some(ticket => ticket.id === action.ticketId && !moduleCovers(state.modules, state.learned, ticket.field));
+      if (uncovered || (action?.type === 'extract' && state.modules.length >= 2)) {
         if (state.night && state.ap > 0) action = { type: 'rest' };
         else if (state.ap === 0) action = { type: 'sleep' };
         else {
-          const tight = state.tickets.filter(ticket => !ticket.late).sort((a, b) => a.dueIn - b.dueIn || a.id - b.id)[0];
-          action = tight ? { type: 'work', ticketId: tight.id } : { type: 'rest' };
+          const covered = state.tickets.filter(ticket => !ticket.late && moduleCovers(state.modules, state.learned, ticket.field));
+          covered.sort((a, b) => a.dueIn - b.dueIn || a.id - b.id);
+          action = covered[0] ? { type: 'work', ticketId: covered[0].id } : { type: 'rest' };
         }
       }
     }
