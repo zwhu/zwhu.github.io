@@ -22,6 +22,7 @@ import {
   weekLine,
 } from '../rules.mjs';
 import { ratesOnly, runStrategies } from '../sim.mjs';
+import { learningSkills, sceneArrival } from '../scene-ui.mjs';
 import { WALK_GRID, commitArrival, findPath, pointBlocked, resolveClick } from '../walk.mjs';
 import { convertMeta, pngSize } from '../walk/build-sprites.mjs';
 import { frameIndex, resolveSprite, spritePose } from '../walk-sprites.mjs';
@@ -532,7 +533,7 @@ test('fixed lines reproduce a firing, a bare survival, and a remembered win', ()
 test('each clickable target has a path that stays off obstacles', () => {
   const start = WALK_GRID.start;
   assert.equal(pointBlocked(start.x, start.y), false);
-  for (const id of ['boss', 'lunch', 'neighbor', 'computer', 'shelf', 'party']) {
+  for (const id of ['boss', 'lunch', 'neighbor', 'computer', 'shelf', 'party', 'water', 'door']) {
     const target = WALK_GRID.targets[id];
     assert.equal(pointBlocked(target.x, target.y), false, id);
     const path = findPath(start, target);
@@ -551,7 +552,7 @@ test('each clickable target has a path that stays off obstacles', () => {
 test('clicking empty floor does not change the game, including ap and stamina', () => {
   const game = createGame('hefei');
   const before = snapshot(game);
-  const hit = resolveClick({ x: 190, y: 196 }, { night: false, canStudy: true });
+  const hit = resolveClick({ x: 100, y: 194 }, { night: false, canStudy: true });
   assert.equal(hit.kind, 'walk');
   assert.equal(hit.action, null);
   const path = findPath(WALK_GRID.start, hit.target);
@@ -569,10 +570,14 @@ test('scene clicks use the same actions as the buttons', () => {
   assert.deepEqual(resolveClick({ x: 326, y: 100 }, day).action, { type: 'talk', person: 'boss' });
   assert.deepEqual(resolveClick({ x: 266, y: 160 }, day).action, { type: 'talk', person: 'lunch' });
   assert.deepEqual(resolveClick({ x: 147, y: 150 }, day).action, { type: 'talk', person: 'neighbor' });
-  assert.equal(resolveClick({ x: 75, y: 132 }, day).action, null);
-  assert.equal(resolveClick({ x: 20, y: 40 }, day).kind, 'go');
-  assert.equal(resolveClick({ x: 20, y: 40 }, day).action, null);
-  assert.deepEqual(resolveClick({ x: 20, y: 40 }, { night: false, canStudy: true }).action, { type: 'study', skill: 'jquery' });
+  assert.deepEqual(resolveClick({ x: 75, y: 132 }, day).action, { type: 'computer' });
+  assert.deepEqual(resolveClick({ x: 20, y: 40 }, day).action, { type: 'shelf' });
+  assert.deepEqual(resolveClick({ x: 178, y: 70 }, day).action, { type: 'water' });
+  assert.deepEqual(resolveClick({ x: 190, y: 190 }, day).action, { type: 'door' });
+  assert.deepEqual(sceneArrival('computer', { interviewed: false }), { prompt: '先去找老板。' });
+  assert.deepEqual(sceneArrival('shelf', { interviewed: false }), { prompt: '先去找老板。' });
+  assert.deepEqual(sceneArrival('shelf', { interviewed: true, canStudy: true }), { action: { type: 'study', skill: 'jquery' } });
+  assert.deepEqual(learningSkills([{ id: 'linux' }, { id: 'jquery' }]).map(item => item.id), ['linux']);
   assert.equal(resolveClick({ x: 326, y: 100 }, { night: true, canStudy: true }).kind, 'none');
   assert.deepEqual(resolveClick({ x: 106, y: 180 }, { night: true, canStudy: false }).action, { type: 'talk', person: 'party' });
   const game = createGame('hefei');

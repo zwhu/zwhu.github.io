@@ -45,15 +45,26 @@ export const WALK_GRID = {
     computer: {
       x: 75, y: 176, facing: 'up', pose: 'seated',
       hit: [64, 127, 88, 143],
-      action: null,
-      when: 'day',
+      action: { type: 'computer' },
+      when: 'any',
     },
     shelf: {
       x: 48, y: 100, facing: 'left', pose: 'stand',
       hit: [6, 18, 42, 82],
-      action: { type: 'study', skill: 'jquery' },
-      needs: 'canStudy',
+      action: { type: 'shelf' },
       when: 'day',
+    },
+    water: {
+      x: 176, y: 96, facing: 'up', pose: 'stand',
+      hit: [166, 52, 190, 88],
+      action: { type: 'water' },
+      when: 'any',
+    },
+    door: {
+      x: 190, y: 196, facing: 'down', pose: 'stand',
+      hit: [168, 172, 212, 214],
+      action: { type: 'door' },
+      when: 'any',
     },
     party: {
       x: 124, y: 188, facing: 'left', pose: 'stand',
@@ -68,7 +79,6 @@ export const WALK_GRID = {
     [206, 134, 232, 175],
     [134, 134, 159, 175],
     [62, 134, 87, 175],
-    [64, 127, 88, 143],
     [6, 18, 42, 82],
     [250, 136, 282, 178],
     [135, 134, 160, 176],

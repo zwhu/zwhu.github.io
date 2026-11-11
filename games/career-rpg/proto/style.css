@@ -151,6 +151,96 @@ h2 {
   margin-top: 16px;
 }
 
+.seed-only {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  max-width: 920px;
+  margin: 12px auto 24px;
+}
+
+.hud {
+  position: absolute;
+  z-index: 6;
+  left: 3px;
+  right: 3px;
+  top: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  min-height: 28px;
+  height: auto;
+  margin: 0;
+  padding: 0 8px;
+  box-sizing: border-box;
+  background: #f9f8f1;
+  color: #201e1c;
+  border-bottom: 2px solid #282622;
+  font-size: max(13px, calc(11 / 384 * 100cqw));
+  line-height: 1.2;
+}
+
+.hint-line { margin: 0 0 6px; }
+
+.hint {
+  position: absolute;
+  z-index: 6;
+  left: calc(8 / 384 * 100%);
+  right: calc(8 / 384 * 100%);
+  top: calc(22 / 216 * 100%);
+  margin: 0;
+  padding: 2px 8px;
+  background: #f9f8f1;
+  color: #201e1c;
+  border: 2px solid #282622;
+  font-size: max(13px, calc(11 / 384 * 100cqw));
+}
+
+.scene-actions {
+  position: absolute;
+  z-index: 6;
+  right: calc(6 / 384 * 100%);
+  bottom: calc(8 / 216 * 100%);
+  margin: 0;
+  gap: 4px;
+}
+
+.scene-actions button {
+  min-height: 0;
+  padding: 2px 6px;
+  font-size: max(13px, calc(10 / 384 * 100cqw));
+}
+
+.desk-panel {
+  position: absolute;
+  z-index: 5;
+  left: calc(12 / 384 * 100%);
+  top: calc(32 / 216 * 100%);
+  width: calc(300 / 384 * 100%);
+  bottom: calc(36 / 216 * 100%);
+  box-sizing: border-box;
+  overflow: auto;
+  padding: 8px;
+  background: rgba(249, 248, 241, 0.96);
+  color: #201e1c;
+  box-shadow:
+    inset 0 0 0 calc(1 / 384 * 100cqw) #282622,
+    inset 0 0 0 calc(2 / 384 * 100cqw) #282622,
+    inset 0 0 0 calc(3 / 384 * 100cqw) #fffef8,
+    inset 0 0 0 calc(4 / 384 * 100cqw) #282622;
+  font-size: max(13px, calc(12 / 384 * 100cqw));
+}
+
+.desk-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.desk-tabs button { min-height: 0; padding: 2px 8px; }
+
 .log {
   margin-top: 16px;
   padding-left: 18px;
@@ -520,6 +610,10 @@ button:disabled, button:disabled:hover {
     top: calc(124 / 216 * 100%);
     height: calc(88 / 216 * 100%);
   }
+  .desk-panel {
+    width: calc(250 / 384 * 100%);
+    bottom: calc(40 / 216 * 100%);
+  }
 }
 
 @media (max-width: 720px) {
@@ -528,6 +622,6 @@ button:disabled, button:disabled:hover {
   header form { margin-top: 12px; }
   .status article { margin-bottom: 8px; }
   button { min-height: 44px; }
-  .dialogue button, .ending-card button, .caret { min-height: 0; }
+  .dialogue button, .ending-card button, .caret, .scene-actions button, .desk-tabs button { min-height: 0; }
   .figure { min-height: 0; }
 }

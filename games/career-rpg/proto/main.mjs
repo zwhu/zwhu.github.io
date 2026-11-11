@@ -1,5 +1,6 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from './dota.mjs';
 import { CONFIG, SCRIPT, applyAction, createGame, present } from './rules.mjs';
+import { learningSkills, sceneArrival, sceneHint } from './scene-ui.mjs';
 import { spritePose } from './walk-sprites.mjs';
 import { WALK_GRID, facingOf, findPath, resolveClick } from './walk.mjs';
 
@@ -32,6 +33,9 @@ const walker = {
   walkMs: 0,
 };
 let walkSprites = null;
+let panel = false;
+let panelPage = 'tickets';
+let banner = '';
 
 function resetWalker() {
   walker.x = WALK_GRID.start.x;
@@ -122,8 +126,42 @@ function arriveWalker() {
     openPerson(action.person);
     return;
   }
-  if (action.type === 'study' && present(state).shelf.canStudy) act({ type: 'study', skill: present(state).shelf.id });
-  else paintWalker();
+  const view = present(state);
+  const arrival = sceneArrival(action.type, {
+    interviewed: view.interviewed,
+    night: view.night,
+    dotaPending: state.dotaPending,
+    canRest: view.canRest,
+    canSleep: view.canSleep,
+    canStudy: view.shelf.canStudy,
+    blocked: view.shelf.blocked,
+  });
+  if (arrival.prompt) {
+    openNarration([arrival.prompt]);
+    return;
+  }
+  if (arrival.dota) {
+    startDota();
+    return;
+  }
+  if (arrival.panel) {
+    panel = true;
+    panelPage = 'tickets';
+    banner = '';
+    render();
+    return;
+  }
+  if (arrival.banner) {
+    banner = arrival.banner;
+    render();
+    return;
+  }
+  if (arrival.action) {
+    if (arrival.action.type === 'study') act({ type: 'study', skill: present(state).shelf.id });
+    else act(arrival.action);
+    return;
+  }
+  paintWalker();
 }
 
 function walkLoop(now) {
@@ -163,6 +201,7 @@ function walkLoop(now) {
 
 function goTo(hit) {
   if (!hit || hit.kind === 'none' || !hit.target) return false;
+  panel = false;
   const path = findPath(walker, hit.target);
   if (!path) return false;
   walker.path = path;
@@ -194,7 +233,7 @@ function scenePoint(event) {
 
 function onSceneClick(event) {
   if (dota || state.phase !== 'play') return;
-  if (event.target.closest('.dialogue, .week-chip, button, a')) return;
+  if (event.target.closest('.dialogue, .hud, .desk-panel, .hint, .scene-actions, button, a')) return;
   const view = present(state);
   goTo(resolveClick(scenePoint(event), { night: view.night, canStudy: view.shelf.canStudy }));
 }
@@ -307,6 +346,9 @@ function start(seed) {
   dialogue = null;
   toldNight = '';
   toldWeek = 0;
+  panel = false;
+  panelPage = 'tickets';
+  banner = '';
   resetWalker();
   state = createGame(next);
   render();
@@ -450,8 +492,8 @@ function continueDialogue() {
   render();
 }
 
-function header(view) {
-  const form = el('form', { id: 'seed-form' }, [
+function seedForm(view) {
+  const form = el('form', { id: 'seed-form', class: 'seed-only' }, [
     el('label', { for: 'seed-input' }, ['种子']),
     el('input', { id: 'seed-input', name: 'seed', value: view.seed, autocomplete: 'off', maxlength: '64' }),
     el('button', { type: 'submit' }, ['开局']),
@@ -460,36 +502,17 @@ function header(view) {
     event.preventDefault();
     start(form.seed.value);
   });
-  return el('header', {}, [
-    el('div', {}, [
-      el('h1', {}, ['合肥试用期']),
-      el('p', { class: 'when', id: 'when' }, [`第 ${view.week} 周 · ${view.dayName}`]),
-    ]),
-    form,
-  ]);
+  return form;
 }
 
-function status(view) {
-  const apMax = Math.max(view.ap, 3);
-  return el('section', { class: 'status' }, [
-    el('article', {}, [
-      el('div', {}, ['行动点']),
-      el('strong', { id: 'ap' }, [String(view.ap)]),
-      document.createTextNode(' '),
-      pips(view.ap, apMax),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['体力']),
-      el('strong', { id: 'stamina' }, [String(view.stamina)]),
-      document.createTextNode(' '),
-      pips(view.stamina, view.staminaMax),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['老板好感']),
-      el('strong', { id: 'favor' }, [String(view.favor)]),
-      el('div', {}, ['本周线 ', el('strong', { id: 'line' }, [String(view.line)])]),
-      el('div', {}, ['记住线 ', el('strong', { id: 'good-favor' }, [String(view.goodFavor)])]),
-    ]),
+function hud(view) {
+  return el('div', { class: 'hud', id: 'scene-when' }, [
+    el('span', {}, [`第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`]),
+    el('span', {}, ['行动点 ', el('strong', { id: 'ap' }, [String(view.ap)])]),
+    el('span', {}, ['体力 ', el('strong', { id: 'stamina' }, [String(view.stamina)])]),
+    el('span', {}, ['好感 ', el('strong', { id: 'favor' }, [String(view.favor)])]),
+    el('span', {}, ['本周线 ', el('strong', { id: 'line' }, [String(view.line)])]),
+    el('span', {}, ['记住线 ', el('strong', { id: 'good-favor' }, [String(view.goodFavor)])]),
   ]);
 }
 
@@ -612,9 +635,6 @@ function office(view) {
     if (!box) continue;
     spots.push(hotspot(person, speaker === person.id, box));
   }
-  const chip = el('p', { class: 'week-chip', id: 'scene-when' }, [
-    `第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`,
-  ]);
   const children = [
     el('img', {
       class: 'scene-img',
@@ -622,9 +642,12 @@ function office(view) {
       src: view.night ? './art/02-main-night-v2.png' : './art/01-main-day.png',
     }),
     walkerElement(),
-    chip,
+    hud(view),
     el('div', { class: 'spots' }, spots),
+    sceneActions(view),
   ];
+  if (banner) children.push(el('p', { class: 'hint' }, [banner]));
+  if (panel) children.push(deskPanel(view));
   const box = dialogueBox(view);
   if (box) children.push(box);
   const officeNode = el('section', { class: view.night ? 'office night' : 'office', id: 'office' }, children);
@@ -666,22 +689,48 @@ function dialogueBox(view) {
   ]);
 }
 
-function actionBar(view) {
-  const bar = el('div', { class: 'actions' });
+function sceneActions(view) {
+  const bar = el('div', { class: 'actions scene-actions' });
   if (view.canRest) {
     const rest = el('button', { type: 'button', 'data-action': 'rest' }, ['休息 +2 体力']);
     rest.addEventListener('click', () => act({ type: 'rest' }));
     bar.append(rest);
   }
-  const time = el('button', { type: 'button', 'data-action': view.night ? 'day' : 'night' }, [view.night ? '回白天' : '入夜']);
-  time.addEventListener('click', () => act({ type: view.night ? 'day' : 'night' }));
-  bar.append(time);
+  if (!view.night) {
+    const night = el('button', { type: 'button', 'data-action': 'night' }, ['入夜']);
+    night.addEventListener('click', () => act({ type: 'night' }));
+    bar.append(night);
+  }
   if (view.canSleep) {
     const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉，进入下一天']);
     sleep.addEventListener('click', () => act({ type: 'sleep' }));
     bar.append(sleep);
   }
+  if (view.night && state.dotaPending) {
+    const play = el('button', { type: 'button', 'data-action': 'dota' }, ['打 Dota']);
+    play.addEventListener('click', () => startDota());
+    bar.append(play);
+  }
   return bar;
+}
+
+function deskPanel(view) {
+  const tickets = el('button', { type: 'button', 'data-desk': 'tickets' }, ['需求单']);
+  const skills = el('button', { type: 'button', 'data-desk': 'skills' }, ['学习']);
+  const close = el('button', { type: 'button', 'data-desk': 'close' }, ['关闭']);
+  tickets.addEventListener('click', () => { panelPage = 'tickets'; render(); });
+  skills.addEventListener('click', () => { panelPage = 'skills'; render(); });
+  close.addEventListener('click', () => { panel = false; render(); });
+  const pages = panelPage === 'skills'
+    ? learningSkills(view.skills).map(skillCard)
+    : view.tickets.map(ticketCard);
+  const note = sceneHint(view);
+  return el('section', { class: 'desk-panel', id: 'desk-panel', 'data-page': panelPage }, [
+    el('div', { class: 'desk-tabs' }, [tickets, skills, close]),
+    note && panelPage === 'skills' ? el('p', { class: 'hint-line' }, [note]) : '',
+    el('div', { class: 'desk-pages', id: panelPage === 'skills' ? 'skills' : 'tickets' }, pages),
+    el('p', { class: 'meta' }, ['《锋利的 jQuery》在左边书架。']),
+  ]);
 }
 
 function endingCard(view) {
@@ -811,23 +860,10 @@ function logList(view) {
 
 function render() {
   const view = present(state);
-  const parts = [header(view), status(view)];
-  if (view.phase === 'play') {
-    parts.push(office(view));
-    parts.push(el('div', { class: 'board' }, [
-      el('section', {}, [el('h2', {}, ['需求单']), el('div', { class: 'stack', id: 'tickets' }, view.tickets.map(ticketCard))]),
-      el('section', {}, [
-        el('h2', {}, ['学习']),
-        el('div', { class: 'stack', id: 'skills' }, view.skills.map(skillCard)),
-        el('h2', { class: 'shelf-title' }, ['书架']),
-        el('div', { class: 'stack', id: 'shelf' }, [skillCard(view.shelf)]),
-      ]),
-    ]));
-    parts.push(actionBar(view));
-  } else {
-    parts.push(ending(view));
-  }
-  parts.push(logList(view));
+  const parts = [];
+  if (view.phase === 'play') parts.push(office(view));
+  else parts.push(ending(view));
+  parts.push(seedForm(view));
   if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
 }

@@ -81,6 +81,10 @@ function inside(point, box) {
 
 export function resolveClick(point, ctx) {
   const night = Boolean(ctx && ctx.night);
+  for (const id of ['water', 'door', 'computer']) {
+    const target = WALK_GRID.targets[id];
+    if (target && inside(point, target.hit)) return { kind: 'go', target, action: target.action };
+  }
   if (night) {
     const party = WALK_GRID.targets.party;
     if (inside(point, party.hit)) return { kind: 'go', target: party, action: party.action };
