@@ -2,7 +2,7 @@ import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickM
 import { NAV } from './nav.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
 import { cellCenter, effectFor, findPath, nearestWalkable, sceneFile, visibleSpots } from './walk.mjs';
-import { frameIndex, poseKind, resolveSprites } from './walk-sprites.mjs';
+import { clipFor, resolveSprites } from './walk-sprites.mjs';
 
 const app = document.querySelector('#app');
 
@@ -220,6 +220,22 @@ function spotHit(spot, boss) {
   return boss ? spot.boss : spot.day;
 }
 
+function faceToward(dx, dy) {
+  return Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
+}
+
+function aimFacing(points) {
+  let x = foot.x;
+  let y = foot.y;
+  for (const point of points) {
+    const dx = point[0] - x;
+    const dy = point[1] - y;
+    if (Math.hypot(dx, dy) < 0.5) continue;
+    facing = faceToward(dx, dy);
+    return;
+  }
+}
+
 function beginWalk(spot) {
   const goal = spot.at;
   const start = nearestWalkable(NAV, foot.x, foot.y);
@@ -231,6 +247,7 @@ function beginWalk(spot) {
   pending = effectFor(spot, { night: present(state).night });
   seated = false;
   walkElapsed = 0;
+  aimFacing(route);
   const here = route[0];
   if (route.length === 1 && Math.hypot(foot.x - here[0], foot.y - here[1]) < 6) {
     arrive();
@@ -282,7 +299,7 @@ function stepWalker(now) {
     } else {
       foot.x += (dx / distance) * step;
       foot.y += (dy / distance) * step;
-      facing = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down');
+      facing = faceToward(dx, dy);
       walkElapsed += dt * 1000;
     }
   }
@@ -302,17 +319,17 @@ function drawWalker() {
   ctx.clearRect(0, 0, SCENE.w, SCENE.h);
   const view = present(state);
   const moving = route.length > 0;
-  if (poseKind({ seated, moving }) === 'sit' && !view.bossOn) {
+  const clip = clipFor(sprites, facing, { seated, moving, elapsedMs: walkElapsed });
+  if (clip.pose === 'sit' && !view.bossOn) {
     // 夜景底图已经叠好显示器和坐姿，头发压在屏幕下沿。再画一张白天坐姿会重影。
     if (view.night) return;
     ctx.drawImage(sitImage, NAV.seat.sit[0], NAV.seat.sit[1]);
     return;
   }
-  const spec = sprites.directions[facing] || sprites.directions.down;
+  const spec = clip.spec;
   const image = spriteImages.get(spec.file);
-  if (!image?.complete) return;
-  const index = frameIndex(spec.frames.length, sprites.frameDuration, walkElapsed, moving);
-  const rect = spec.frames[index];
+  if (!image?.complete || !clip.rect) return;
+  const rect = clip.rect;
   const [ax, ay] = spec.anchor;
   ctx.save();
   if (spec.mirror) {

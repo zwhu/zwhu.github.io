@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { convertMeta } from '../walk/build-sprites.mjs';
-import { frameIndex, poseKind, resolveSprites } from '../walk-sprites.mjs';
+import { clipFor, frameIndex, poseKind, resolveSprites } from '../walk-sprites.mjs';
 
 const data = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
 
@@ -52,6 +52,48 @@ test('a missing direction falls back without throwing', () => {
   assert.equal(sprites.directions.right.file, 'right.png');
   assert.equal(sprites.directions.up.file, 'walk-sheet.png');
   assert.equal(sprites.directions.down.file, 'walk-sheet.png');
+});
+
+test('each direction reads its own row and walk frames on the sheet', () => {
+  const meta = JSON.parse(readFileSync(new URL('../walk/meta.json', import.meta.url), 'utf8'));
+  const sprites = resolveSprites(data);
+  const cell = meta.cell[1];
+  const standName = meta.stand;
+  const meaning = { up: '背面', down: '正面', left: '朝左', right: '朝右' };
+  for (const name of ['down', 'up', 'left', 'right']) {
+    const row = meta.rows.indexOf(name);
+    const order = meta.frame_order[name];
+    const frames = sprites.directions[name].frames;
+    const rects = frames.map(frame => `(${frame.x},${frame.y},${frame.w},${frame.h})`).join(' ');
+    console.log(`${name} row=${row} ${meaning[name]} y=${row * cell} ${rects}`);
+    assert.equal(row, meta.rows.indexOf(name), name);
+    assert.equal(frames.length, order.length, name);
+    for (let index = 0; index < order.length; index += 1) {
+      const [x0, y0, x1, y1] = meta.cells[name][order[index]].rect;
+      const frame = frames[index];
+      assert.equal(frame.y, row * cell, `${name} 行`);
+      assert.deepEqual(frame, { x: x0, y: y0, w: x1 - x0, h: y1 - y0 });
+      assert.match(meta.cells[name][order[index]].source, new RegExp(`/frames/${name}/`));
+    }
+    const stand = clipFor(sprites, name, { moving: false, elapsedMs: 800 });
+    assert.equal(stand.pose, 'stand');
+    assert.equal(stand.index, 0);
+    assert.deepEqual(stand.rect, frames[0], `${name} 停下应是该方向站姿`);
+    const first = clipFor(sprites, name, { moving: true, elapsedMs: 0 });
+    const second = clipFor(sprites, name, { moving: true, elapsedMs: sprites.frameDuration });
+    assert.equal(first.pose, 'walk');
+    assert.ok(first.index > 0, `${name} 走路不能停在站姿帧`);
+    assert.notDeepEqual(first.rect, frames[0]);
+    assert.notDeepEqual(second.rect, first.rect, `${name} 走路帧要往前`);
+    assert.equal(order[0], standName);
+    assert.deepEqual(first.rect, frames[1]);
+  }
+  assert.notEqual(sprites.directions.up.frames[0].y, sprites.directions.left.frames[0].y);
+  assert.notEqual(sprites.directions.down.frames[0].y, sprites.directions.up.frames[0].y);
+  const sitting = clipFor(sprites, 'down', { seated: true, moving: false, elapsedMs: 0 });
+  assert.equal(sitting.pose, 'sit');
+  assert.equal(sitting.rect, undefined);
+  assert.notEqual(sitting.pose, 'stand');
 });
 
 test('more than one frame advances while walking', () => {

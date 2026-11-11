@@ -51,3 +51,12 @@ export function poseKind({ seated = false, moving = false } = {}) {
   if (!moving) return 'stand';
   return 'walk';
 }
+
+// 坐下只用坐姿，不回正面站姿。走路跳过第 0 帧（站姿），停下回到该方向的站姿帧。
+export function clipFor(sprites, direction, { seated = false, moving = false, elapsedMs = 0 } = {}) {
+  const pose = poseKind({ seated, moving });
+  if (pose === 'sit') return { pose };
+  const spec = sprites.directions[direction] || sprites.directions.down;
+  const index = frameIndex(spec.frames.length, sprites.frameDuration, elapsedMs, moving);
+  return { pose, index, rect: spec.frames[index], spec };
+}
