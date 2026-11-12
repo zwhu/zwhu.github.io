@@ -1,6 +1,8 @@
 .screen {
   max-width: 768px;
   margin: 0 auto 16px;
+  display: flex;
+  flex-direction: column;
   background: #141210;
   border: 4px solid #000;
   color: #f9f8f1;
@@ -254,14 +256,15 @@
 #app { padding-bottom: 24px; }
 
 .topbar {
-  position: absolute;
+  position: relative;
   z-index: 4;
-  left: 4px;
-  right: 4px;
-  top: 4px;
+  flex: none;
+  margin: 4px 4px 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  background: #f9f8f1;
+  color: #282622;
 }
 
 .meter, .ribbon, .desk, .dock, .stage .boss-card, .stage .ending, .stage .offstage {
@@ -276,6 +279,7 @@
 .meter, .ribbon {
   margin: 0;
   padding: 3px 6px;
+  background: #f9f8f1;
   font-size: 13px;
   line-height: 1.35;
 }
@@ -289,21 +293,23 @@
 .meter span { flex: 0 0 auto; white-space: nowrap; }
 
 .ribbon {
-  position: absolute;
-  left: 42%;
-  right: 4px;
-  top: 50px;
+  position: static;
+  left: auto;
+  right: auto;
+  top: auto;
+  max-width: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   pointer-events: none;
 }
 
-.topbar .ribbon + .ribbon { top: 76px; }
+.topbar .ribbon + .ribbon { top: auto; }
 
 .night-note {
-  z-index: 4;
-  top: 50px;
+  position: static;
+  z-index: auto;
+  top: auto;
   bottom: auto;
   max-width: none;
 }
@@ -458,5 +464,5 @@
   #app { padding-left: 0; padding-right: 0; }
   .screen { max-width: none; }
   #seed-form { padding: 0 8px; }
-  .desk { top: 58px; left: 4px; right: 84px; bottom: 4px; }
+  .desk { top: 4px; left: 4px; right: 84px; bottom: 4px; }
 }

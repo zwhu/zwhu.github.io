@@ -658,7 +658,6 @@ function render() {
     const incidents = incidentRibbon(view);
     if (incidents) top.append(incidents);
   }
-  stage.append(top);
   if (view.phase === 'play') {
     const away = sceneMode(view) === 'night' ? null : offstage(view, here);
     if (away) stage.append(away);
@@ -675,7 +674,7 @@ function render() {
     stage.append(done);
   }
   if (dota) stage.append(dotaOverlay());
-  app.replaceChildren(el('div', { class: 'screen' }, [stage]), seedBar(view));
+  app.replaceChildren(el('div', { class: 'screen' }, [top, stage]), seedBar(view));
   paint();
 }
 
