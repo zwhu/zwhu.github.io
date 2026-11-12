@@ -362,7 +362,7 @@ dd { margin: 0; }
   width: min(100%, 768px);
   margin: 0 auto 16px;
   background: #141210;
-  container-type: size;
+  container-type: inline-size;
 }
 
 .stage {
