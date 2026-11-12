@@ -58,10 +58,10 @@ export function cellCenter(nav, cell) {
   return [cell[0] * nav.cell + nav.cell / 2, cell[1] * nav.cell + nav.cell / 2];
 }
 
-export function sceneFile({ night = false, boss = false } = {}) {
-  if (night) return 'night-384x216.png';
-  if (boss) return 'boss-384x216.png';
-  return 'day-384x216.png';
+// 夜里换夜景底图。Boss 周的亮白板是叠层，不换另一张底图。
+export function sceneFile({ night = false } = {}) {
+  if (night) return 'night-640x360.png';
+  return 'day-640x360.png';
 }
 
 // 夜里同事已离开，白板也不开门。电脑坐下后开需求单或学习；有一局 Dota 没打时，夜里点电脑是去打。
