@@ -1,6 +1,6 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from './dota.mjs';
 import { CONFIG, SCRIPT, applyAction, createGame, present } from './rules.mjs';
-import { learningSkills, sceneArrival, sceneHint } from './scene-ui.mjs';
+import { bannerAt, learningSkills, sceneArrival, sceneHint, showBannerState } from './scene-ui.mjs';
 import { spritePose } from './walk-sprites.mjs';
 import { WALK_GRID, facingOf, findPath, resolveClick } from './walk.mjs';
 
@@ -36,7 +36,20 @@ let walkSprites = null;
 let panel = false;
 let panelPage = 'tickets';
 let ticketIndex = 0;
-let banner = '';
+let banner = { text: '', hideAt: 0 };
+let bannerTimer = 0;
+
+function showBanner(text) {
+  if (bannerTimer) clearTimeout(bannerTimer);
+  bannerTimer = 0;
+  banner = showBannerState(text, Date.now());
+  if (!banner.hideAt) return;
+  bannerTimer = setTimeout(() => {
+    banner = { text: '', hideAt: 0 };
+    bannerTimer = 0;
+    render();
+  }, Math.max(0, banner.hideAt - Date.now()));
+}
 
 function resetWalker() {
   walker.x = WALK_GRID.start.x;
@@ -149,12 +162,12 @@ function arriveWalker() {
     panel = true;
     panelPage = 'tickets';
     ticketIndex = 0;
-    banner = '';
+    showBanner('');
     render();
     return;
   }
   if (arrival.banner) {
-    banner = arrival.banner;
+    showBanner(arrival.banner);
     render();
     return;
   }
@@ -351,7 +364,7 @@ function start(seed) {
   panel = false;
   panelPage = 'tickets';
   ticketIndex = 0;
-  banner = '';
+  showBanner('');
   resetWalker();
   state = createGame(next);
   render();
@@ -632,6 +645,7 @@ function office(view) {
       el('i', { class: 'body' }),
     ]));
   }
+  // 夜里同事已经画在夜景里。这里只留可点的热区，不再叠白天的站姿。
   for (const person of view.coworkers) {
     if (!person.clickable) continue;
     const box = boxes[person.id];
@@ -650,20 +664,23 @@ function office(view) {
       src: view.night ? './art/water-cooler-night.png' : './art/water-cooler-day.png',
     }),
     walkerElement(),
-    hud(view),
     el('div', { class: 'spots' }, spots),
     sceneActions(view),
   ];
-  if (banner) children.push(el('p', { class: 'hint' }, [banner]));
+  const line = bannerAt(banner, Date.now());
+  if (line) children.push(el('p', { class: 'hint', id: 'scene-banner' }, [line]));
   if (panel) children.push(deskPanel(view));
   const box = dialogueBox(view);
   if (box) children.push(box);
-  const officeNode = el('section', {
+  const stage = el('div', { class: 'stage', id: 'stage' }, children);
+  stage.addEventListener('click', onSceneClick);
+  return el('section', {
     class: `${view.night ? 'office night' : 'office'}${dialogue ? ' has-dialogue' : ''}`,
     id: 'office',
-  }, children);
-  officeNode.addEventListener('click', onSceneClick);
-  return officeNode;
+  }, [
+    hud(view),
+    stage,
+  ]);
 }
 
 function dialogueBox(view) {
@@ -723,7 +740,7 @@ function sceneActions(view) {
       });
       if (arrival.action) act(arrival.action);
       else if (arrival.banner) {
-        banner = arrival.banner;
+        showBanner(arrival.banner);
         render();
       }
     });

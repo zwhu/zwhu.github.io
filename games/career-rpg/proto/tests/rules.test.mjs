@@ -22,7 +22,7 @@ import {
   weekLine,
 } from '../rules.mjs';
 import { ratesOnly, runStrategies } from '../sim.mjs';
-import { learningSkills, sceneArrival } from '../scene-ui.mjs';
+import { bannerAt, learningSkills, sceneArrival, showBannerState } from '../scene-ui.mjs';
 import { WALK_GRID, commitArrival, findPath, pointBlocked, resolveClick } from '../walk.mjs';
 import { convertMeta, pngSize } from '../walk/build-sprites.mjs';
 import { frameIndex, resolveSprite, spritePose } from '../walk-sprites.mjs';
@@ -547,6 +547,25 @@ test('each clickable target has a path that stays off obstacles', () => {
   const retarget = findPath(midway, WALK_GRID.targets.boss);
   assert.ok(retarget);
   for (const point of retarget) assert.equal(pointBlocked(point.x, point.y), false);
+});
+
+test('only the newest banner stays, and it goes away after a few seconds', () => {
+  const first = showBannerState('先去找老板。', 0);
+  assert.equal(bannerAt(first, 1000), '先去找老板。');
+  const next = showBannerState('行动点还没用完。', 1000);
+  assert.equal(bannerAt(next, 2000), '行动点还没用完。');
+  assert.notEqual(next.text, first.text);
+  assert.equal(bannerAt(first, 3000), '');
+  assert.equal(bannerAt(next, 1000 + 3000), '');
+  assert.equal(bannerAt(showBannerState('', 2000), 2000), '');
+  const css = readFileSync(new URL('../style.css', import.meta.url), 'utf8');
+  assert.match(css, /\.hud\s*\{[^}]*position:\s*relative/);
+  assert.match(css, /\.stage\s*\{/);
+  assert.doesNotMatch(css, /\.dialogue\s*\{[^}]*rgba\(/);
+  const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
+  assert.equal((mainSource.match(/class: 'hint'/g) || []).length, 1);
+  assert.match(mainSource, /bannerAt\(banner/);
+  assert.doesNotMatch(mainSource, /07-seated-sprites/);
 });
 
 test('clicking empty floor does not change the game, including ap and stamina', () => {

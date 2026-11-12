@@ -35,7 +35,7 @@ const server = http.createServer((req, res) => {
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const origin = `http://127.0.0.1:${server.address().port}/games/career-rpg/proto/index.html?seed=hefei`;
 
-function zoomStill(file) {
+function zoomStill(file, seatedFile) {
   const py = `
 import json
 from PIL import Image, ImageDraw, ImageFont
@@ -49,8 +49,11 @@ for facing, label in (('down', '下'), ('up', '上'), ('left', '左'), ('right',
     frame = sheet['directions'][facing]['frames'][2]
     crop = image.crop((frame['x'], frame['y'], frame['x'] + frame['w'], frame['y'] + frame['h']))
     panels.append((label, crop.resize((frame['w'] * 4, frame['h'] * 4), Image.NEAREST)))
-sit = Image.open(root + '/art/player-seated.png').convert('RGBA')
-panels.append(('坐', sit.resize((sit.width * 4, sit.height * 4), Image.NEAREST)))
+sit = Image.open(${JSON.stringify(seatedFile)}).convert('RGBA').resize((25 * 4, 29 * 4), Image.NEAREST)
+red = sum(1 for px in sit.getdata() if len(px) > 3 and px[3] > 200 and px[0] > 120 and px[0] > px[1] + 30 and px[0] > px[2] + 30)
+if red < 8:
+    raise SystemExit('seated frame has no red shirt (%s)' % red)
+panels.append(('坐', sit))
 out = Image.new('RGBA', (cell * len(panels), cell + 40), (239, 236, 228, 255))
 draw = ImageDraw.Draw(out)
 for index, (label, sprite) in enumerate(panels):
@@ -140,7 +143,9 @@ try {
   if (sat.tag !== 'IMG' || !sat.src.includes('player-seated.png')) throw new Error('still standing ' + JSON.stringify(sat));
   await page.waitForTimeout(2000);
   if (errors.length) throw new Error(errors.join('\n'));
-  await zoomStill(path.join(STILLS, 'walk-4dir-zoom.png'));
+  const seatedShot = path.join(tmpdir(), 'hefei-seated-crop.png');
+  await page.locator('#walker').screenshot({ path: seatedShot });
+  await zoomStill(path.join(STILLS, 'walk-4dir-zoom.png'), seatedShot);
   console.log(JSON.stringify({ timings, sat }));
 } finally {
   const video = page.video();

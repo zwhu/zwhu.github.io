@@ -1,5 +1,18 @@
+export const BANNER_MS = 3000;
+
 export function learningSkills(skills) {
   return skills.filter(skill => skill.id !== 'jquery');
+}
+
+// 同一时间只留最新一条。空文本清掉；到点后 bannerAt 返回空。
+export function showBannerState(text, now, ms = BANNER_MS) {
+  if (!text) return { text: '', hideAt: 0 };
+  return { text, hideAt: now + ms };
+}
+
+export function bannerAt(state, now) {
+  if (!state || !state.text || (state.hideAt && now >= state.hideAt)) return '';
+  return state.text;
 }
 
 export function sceneArrival(kind, view) {

@@ -61,6 +61,7 @@ async function playSequence(page, prefix) {
   await boot(page);
   await finishInterview(page);
   await page.screenshot({ path: path.join(STILLS, `scene-day-${prefix}.png`) });
+  if (prefix === 'desktop') await page.screenshot({ path: path.join(STILLS, 'cooler-day-desktop.png') });
   const opened = await page.evaluate(() => window.hefei.clickScene(75, 132));
   if (!opened) throw new Error('computer has no path');
   await page.waitForSelector('#desk-panel', { timeout: 8000 });
@@ -113,7 +114,33 @@ async function playSequence(page, prefix) {
     };
   });
   if (!nightBox.texts.includes('睡觉') || nightBox.overlap) throw new Error(`${prefix} night actions ${JSON.stringify(nightBox)}`);
+  const chrome = await page.evaluate(() => {
+    const hud = document.querySelector('.hud').getBoundingClientRect();
+    const scene = document.querySelector('.scene-img').getBoundingClientRect();
+    const panel = document.querySelector('.desk-panel');
+    const fonts = {
+      hud: parseFloat(getComputedStyle(document.querySelector('.hud')).fontSize),
+      action: Math.min(...[...document.querySelectorAll('.scene-actions button')].map(node => parseFloat(getComputedStyle(node).fontSize))),
+      panel: panel ? parseFloat(getComputedStyle(panel).fontSize) : 13,
+    };
+    const dialogue = document.querySelector('.dialogue');
+    return {
+      overlap: hud.bottom > scene.top + 1,
+      fonts,
+      dialogueBg: dialogue ? getComputedStyle(dialogue).backgroundColor : '',
+      imgs: [...document.querySelectorAll('#stage img')].map(img => img.getAttribute('src') || ''),
+      hints: document.querySelectorAll('.hint').length,
+    };
+  });
+  if (chrome.overlap || chrome.fonts.hud < 13 || chrome.fonts.action < 13 || chrome.fonts.panel < 13) {
+    throw new Error(`${prefix} chrome ${JSON.stringify(chrome)}`);
+  }
+  if (chrome.hints > 1) throw new Error(`${prefix} banners ${chrome.hints}`);
+  if (/rgba\([^)]*,\s*0?\.[0-9]/.test(chrome.dialogueBg)) throw new Error(`${prefix} dialogue ${chrome.dialogueBg}`);
+  const extra = chrome.imgs.filter(src => !/02-main-night-v2|water-cooler-night|player-seated|player-walk-hefei/.test(src));
+  if (extra.length) throw new Error(`${prefix} extra night sprites ${extra.join(',')}`);
   await page.screenshot({ path: path.join(STILLS, `scene-night-${prefix}.png`) });
+  if (prefix === 'desktop') await page.screenshot({ path: path.join(STILLS, 'cooler-night-desktop.png') });
   const layout = await page.evaluate(() => ({
     board: !!document.querySelector('.board'),
     seed: !!document.querySelector('#seed-form'),
