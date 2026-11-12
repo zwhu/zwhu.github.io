@@ -162,7 +162,10 @@ async function openDesk(tab) {
   if (pressed) return;
   const spot = tab === 'skills' ? 'shelf' : 'computer';
   await evaluate(`document.querySelector('[data-spot="${spot}"]').click()`);
-  await waitFor('!!document.querySelector("#desk") && !window.hangzhou.walking()', 'desk did not open');
+  await waitFor(`(() => {
+    for (let i = 0; i < 240 && window.hangzhou.walking(); i += 1) window.hangzhou.pump(50);
+    return !!document.querySelector('#desk') && !window.hangzhou.walking();
+  })()`, 'desk did not open');
   if (tab === 'skills') await evaluate('document.querySelector(\'#desk [data-tab="skills"]\').click()');
 }
 async function click(action) {
@@ -204,7 +207,11 @@ async function click(action) {
     if (!ready) {
       const who = action.type === 'extend' ? 'plus' : action.type === 'teach' ? 'sister' : action.who;
       await click({ type: 'open', who });
-      await sleep(40);
+      await waitFor(`(() => {
+        for (let i = 0; i < 240 && window.hangzhou.walking(); i += 1) window.hangzhou.pump(50);
+        return !window.hangzhou.walking();
+      })()`, `still walking to ${who}`);
+      await sleep(80);
     }
   }
   let found = false;
@@ -405,7 +412,10 @@ try {
   if (want('hangzhou-boss')) {
     report.boss = await record('hangzhou-boss', 'h2', bossReviewActions('h2'), { fps: 4, tail: 2, tailCopies: 8, endHold: 12 });
     await evaluate(`document.querySelector('[data-spot="board"]').click()`);
-    await waitFor(`document.querySelectorAll('[data-slot]').length > 0 && !window.hangzhou.walking()`, 'board did not open');
+    await waitFor(`(() => {
+      for (let i = 0; i < 240 && window.hangzhou.walking(); i += 1) window.hangzhou.pump(50);
+      return document.querySelectorAll('[data-slot]').length > 0 && !window.hangzhou.walking();
+    })()`, 'board did not open');
     await sleep(4500);
     report.bossView = await evaluate(`(() => ({
       debt: document.querySelector('#debt').textContent,

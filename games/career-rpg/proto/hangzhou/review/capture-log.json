@@ -1,5 +1,5 @@
 {
-  "origin": "http://127.0.0.1:36439/games/career-rpg/proto/hangzhou/index.html",
+  "origin": "http://127.0.0.1:44555/games/career-rpg/proto/hangzhou/index.html",
   "consoleErrors": [],
   "loss": {
     "file": "games/career-rpg/proto/hangzhou/review/hangzhou-loss.mp4",
@@ -25,7 +25,7 @@
   },
   "nightText": "夜里只能学技能，不能做需求单",
   "nightScene": {
-    "scene": "day",
+    "scene": "night",
     "night": "1"
   },
   "colleagues": {
@@ -44,7 +44,7 @@
   },
   "bossView": {
     "debt": "32",
-    "banner": "技术债 32，所有单子 +1 点",
+    "banner": "",
     "slots": [
       "模块 1 + 技术债 1 = 2 点",
       "已按期交付",

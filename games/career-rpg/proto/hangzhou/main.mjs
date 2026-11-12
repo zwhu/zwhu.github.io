@@ -290,7 +290,7 @@ function arrive() {
 }
 
 function stepWalker(now) {
-  const dt = Math.min(0.05, walkerStamp ? (now - walkerStamp) / 1000 : 0);
+  const dt = Math.min(0.25, walkerStamp ? (now - walkerStamp) / 1000 : 0);
   walkerStamp = now;
   if (route.length) {
     const target = route[routeIndex];
@@ -327,11 +327,11 @@ function drawWalker() {
   const view = present(state);
   const moving = route.length > 0;
   const clip = clipFor(sprites, facing, { seated, moving, elapsedMs: walkElapsed });
-  if (clip.pose === 'sit' && !view.bossOn) {
-    // 夜景底图已经叠好显示器和坐姿，头发压在屏幕下沿。再画一张白天坐姿会重影。
-    if (view.night) return;
+  if (clip.pose === 'sit') {
+    // 夜景底图已经叠好坐姿。Boss 周人站在白板前，不画工位坐姿。
+    if (view.night || view.bossOn) return;
     const sheet = spriteImages.get('walk-sheet.png');
-    if (!sheet?.complete) return;
+    if (!sheet?.complete || !NAV.seat.sitFrame) return;
     const [sx, sy, sw, sh] = NAV.seat.sitFrame;
     const [dx, dy] = NAV.seat.sit;
     const [dw, dh] = NAV.seat.sitSize;
@@ -340,6 +340,7 @@ function drawWalker() {
     return;
   }
   const spec = clip.spec;
+  if (!spec?.frames?.[clip.index]) return;
   const image = spriteImages.get(spec.file);
   if (!image?.complete || !clip.rect) return;
   const rect = clip.rect;
@@ -905,6 +906,13 @@ loadWalkSprites();
 window.hangzhou = {
   present() { return present(state); },
   walking() { return route.length > 0; },
+  pump(ms = 50) {
+    if (!route.length) return false;
+    const now = performance.now();
+    walkerStamp = now - ms;
+    stepWalker(now);
+    return route.length > 0;
+  },
   facing() { return facing; },
   foot() { return { x: foot.x, y: foot.y, seated }; },
   clickScene(x, y) {
