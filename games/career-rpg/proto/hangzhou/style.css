@@ -10,14 +10,23 @@ body {
 
 .stage {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: min(100%, 768px);
-  aspect-ratio: 384 / 216;
   margin: 0 0 16px;
   border: 1px solid #1a1a1a;
   background: #1a1a1a;
   line-height: 0;
   overflow: hidden;
   container-type: inline-size;
+}
+
+.playfield {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 384 / 216;
+  container-type: inline-size;
+  line-height: 0;
 }
 
 .stage .scene {
@@ -211,13 +220,16 @@ body {
 }
 
 .hud {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
   display: flex;
   flex-wrap: wrap;
-  gap: calc(100cqi / 384 * 4) calc(100cqi / 384 * 8);
-  padding: calc(100cqi / 384 * 3) calc(100cqi / 384 * 6);
-  border-bottom: calc(100cqi / 384 * 2) solid #282622;
-  background: rgba(249, 248, 241, 0.92);
-  box-shadow: inset 0 0 0 calc(100cqi / 384 * 1) #fffef8;
+  gap: 4px 8px;
+  padding: 4px 8px;
+  border-bottom: 2px solid #282622;
+  background: #f9f8f1;
+  box-shadow: inset 0 0 0 1px #fffef8;
   color: #201e1c;
   font-size: max(13px, calc(100cqi / 384 * 11));
   line-height: 1.25;

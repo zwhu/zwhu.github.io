@@ -330,7 +330,13 @@ function drawWalker() {
   if (clip.pose === 'sit' && !view.bossOn) {
     // 夜景底图已经叠好显示器和坐姿，头发压在屏幕下沿。再画一张白天坐姿会重影。
     if (view.night) return;
-    ctx.drawImage(sitImage, NAV.seat.sit[0], NAV.seat.sit[1]);
+    const sheet = spriteImages.get('walk-sheet.png');
+    if (!sheet?.complete) return;
+    const [sx, sy, sw, sh] = NAV.seat.sitFrame;
+    const [dx, dy] = NAV.seat.sit;
+    const [dw, dh] = NAV.seat.sitSize;
+    // 背面站姿的头到红衣躯干。腿不画，椅背就不会把肩膀和手臂全挡住。
+    ctx.drawImage(sheet, sx, sy, sw, sh, dx, dy, dw, dh);
     return;
   }
   const spec = clip.spec;
@@ -457,7 +463,7 @@ function office(view, talk) {
     const point = scenePoint(event);
     beginWalk({ kind: 'ground', at: [point.x, point.y] });
   });
-  const ui = el('div', { class: 'scene-ui' }, [hud(view), sceneNotes(view)]);
+  const ui = el('div', { class: 'scene-ui' }, [sceneNotes(view)]);
   if (view.phase !== 'play') ui.append(ending(view));
   else if (panel === 'whiteboard') ui.append(boardPanel(view));
   else if (panel === 'tickets' || panel === 'skills') ui.append(deskPanel(view));
@@ -477,7 +483,10 @@ function office(view, talk) {
     id: 'office',
     'data-scene': scene,
     'data-night': view.night ? '1' : '0',
-  }, layers);
+  }, [
+    hud(view),
+    el('div', { class: 'playfield' }, layers),
+  ]);
 }
 
 function talkBar(view) {

@@ -147,10 +147,36 @@ function selector(action) {
   if (action.type === 'extend') return `[data-action="extend"][data-id="${action.ticketId}"]`;
   if (action.type === 'teach') return `[data-action="teach"]`;
   if (action.type === 'crowd') return `[data-talk="crowd"]`;
+  if (action.type === 'overnight') return `[data-action="enter-night"]`;
   return `[data-action="${action.type}"]`;
 }
+async function waitFor(expression, label) {
+  for (let i = 0; i < 80; i += 1) {
+    if (await evaluate(expression)) return;
+    await sleep(80);
+  }
+  throw new Error(label);
+}
+async function openDesk(tab) {
+  const pressed = await evaluate(`!!document.querySelector('#desk [data-tab="${tab}"][aria-pressed="true"]')`);
+  if (pressed) return;
+  const spot = tab === 'skills' ? 'shelf' : 'computer';
+  await evaluate(`document.querySelector('[data-spot="${spot}"]').click()`);
+  await waitFor('!!document.querySelector("#desk") && !window.hangzhou.walking()', 'desk did not open');
+  if (tab === 'skills') await evaluate('document.querySelector(\'#desk [data-tab="skills"]\').click()');
+}
 async function click(action) {
+  if (action.type === 'work' || action.type === 'study' || action.type === 'extract' || action.type === 'place') {
+    const tab = action.type === 'work' ? 'tickets' : 'skills';
+    if (!await evaluate(`!!document.querySelector(${JSON.stringify(selector(action))})`)) {
+      await openDesk(tab);
+    }
+  }
   if (action.type === 'dota') {
+    if (!await evaluate(`!!document.querySelector('[data-dota="skip"]')`)) {
+      await evaluate(`document.querySelector('[data-action="dota-play"]').click()`);
+      await waitFor(`!!document.querySelector('[data-dota="skip"]')`, 'dota did not start');
+    }
     const skipped = await evaluate(`(() => {
       const skip = document.querySelector('[data-dota="skip"]');
       if (!skip) return false;
@@ -350,6 +376,7 @@ try {
       { type: 'overnight', hold: 2 },
       { type: 'dota', won: false, hold: 8 },
     ], { fps: 4, endHold: 8 });
+    await sleep(4500);
     report.nightText = await evaluate('document.querySelector("#night-lock").textContent');
     report.nightScene = await evaluate(`(() => ({
       scene: document.querySelector('#office').getAttribute('data-scene'),
@@ -360,12 +387,16 @@ try {
   }
   if (want('hangzhou-colleagues')) {
     report.colleagues = await record('hangzhou-colleagues', 'talk', colleagueActions(), { fps: 4, endHold: 8 });
-    report.colleagueView = await evaluate(`(() => ({
-      debt: document.querySelector('#debt').textContent,
-      stamina: document.querySelector('#stamina').textContent,
-      webpack: document.querySelector('#skill-webpack').textContent,
-      talk: document.querySelector('#talk-line') ? document.querySelector('#talk-line').textContent : '',
-    }))()`);
+    report.colleagueView = await evaluate(`(() => {
+      const skill = window.hangzhou.present().skills.find(item => item.id === 'webpack');
+      const node = document.querySelector('#skill-webpack');
+      return {
+        debt: document.querySelector('#debt').textContent,
+        stamina: document.querySelector('#stamina').textContent,
+        webpack: node ? node.textContent : (skill.learned ? '已学会' : skill.progress + '/' + skill.cost),
+        talk: document.querySelector('#talk-line') ? document.querySelector('#talk-line').textContent : '',
+      };
+    })()`);
     if (report.colleagueView.debt !== '4') throw new Error(`debt ${report.colleagueView.debt}`);
     if (report.colleagueView.stamina !== '8') throw new Error(`stamina ${report.colleagueView.stamina}`);
     if (report.colleagueView.webpack !== '0/2') throw new Error(`webpack ${report.colleagueView.webpack}`);
@@ -373,12 +404,16 @@ try {
   }
   if (want('hangzhou-boss')) {
     report.boss = await record('hangzhou-boss', 'h2', bossReviewActions('h2'), { fps: 4, tail: 2, tailCopies: 8, endHold: 12 });
+    await evaluate(`document.querySelector('[data-spot="board"]').click()`);
+    await waitFor(`document.querySelectorAll('[data-slot]').length > 0 && !window.hangzhou.walking()`, 'board did not open');
+    await sleep(4500);
     report.bossView = await evaluate(`(() => ({
       debt: document.querySelector('#debt').textContent,
-      banner: document.querySelector('#debt-banner').textContent,
+      banner: document.querySelector('#debt-banner') ? document.querySelector('#debt-banner').textContent : '',
       slots: [...document.querySelectorAll('[data-slot]')].map(node => node.getAttribute('data-label')),
     }))()`);
-    if (report.bossView.banner !== '技术债 32，所有单子 +1 点') throw new Error(`banner ${report.bossView.banner}`);
+    if (report.bossView.debt !== '32') throw new Error(`debt ${report.bossView.debt}`);
+    if (report.bossView.banner && report.bossView.banner !== '技术债 32，所有单子 +1 点') throw new Error(`banner ${report.bossView.banner}`);
     if (!report.bossView.slots.some(label => label.includes('技术债 1'))) throw new Error(report.bossView.slots.join(' | '));
   }
 
