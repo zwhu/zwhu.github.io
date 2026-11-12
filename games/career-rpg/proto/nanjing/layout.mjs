@@ -164,3 +164,13 @@ export function integerScale(availableWidth, worldWidth = WORLD.width) {
   if (!Number.isFinite(width) || width < worldWidth) return 1;
   return Math.floor(width / worldWidth);
 }
+
+// 画面比窗口宽时，滚动原点让脚底两侧的精灵留在可见范围内。
+export function viewOrigin(footX, viewWidth, worldWidth = WORLD.width, pad = 28) {
+  const view = Math.min(worldWidth, Math.max(0, viewWidth));
+  const max = worldWidth - view;
+  let left = footX - view / 2;
+  if (left > footX - pad) left = footX - pad;
+  if (left + view < footX + pad) left = footX + pad - view;
+  return Math.max(0, Math.min(max, left));
+}

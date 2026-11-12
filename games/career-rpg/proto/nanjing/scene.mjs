@@ -4,7 +4,7 @@
 import { CAST, DOOR, PLAYER, WALK } from './layout.mjs';
 import { facingOf, findPath, frameAt, parseGrid, planClick, playerPoseKind, resolveDirections } from './walk.mjs';
 
-export { DOOR, WORLD, integerScale } from './layout.mjs';
+export { DOOR, WORLD, integerScale, viewOrigin } from './layout.mjs';
 
 let meta = null;
 let plates = null;

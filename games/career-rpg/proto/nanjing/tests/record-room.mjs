@@ -207,6 +207,51 @@ async function boot(width, night) {
   }
 }
 
+const layoutProbe = `(() => {
+  const scroll = document.querySelector('.stage-scroll');
+  const stage = document.querySelector('#stage');
+  const dock = document.querySelector('.dock');
+  const view = scroll.getBoundingClientRect();
+  const stageBox = stage.getBoundingClientRect();
+  const scale = stageBox.width / 640;
+  const foot = window.nanjing.walker().foot;
+  const player = {
+    left: stageBox.left + (foot.x - 28) * scale,
+    top: stageBox.top + (foot.y - 54) * scale,
+    right: stageBox.left + (foot.x + 28) * scale,
+    bottom: stageBox.top + (foot.y + 2) * scale,
+  };
+  const dockBox = dock.getBoundingClientRect();
+  const hit = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+  const inside = box => box.left >= -1 && box.top >= -1 && box.right <= window.innerWidth + 1 && box.bottom <= window.innerHeight + 1
+    && box.left >= view.left - 1 && box.right <= view.right + 1 && box.top >= view.top - 1 && box.bottom <= view.bottom + 1;
+  const spot = id => {
+    const node = document.querySelector('[data-target="' + id + '"]');
+    if (!node) return null;
+    const box = node.getBoundingClientRect();
+    const cx = (box.left + box.right) / 2;
+    const cy = (box.top + box.bottom) / 2;
+    return { id, visible: cx >= view.left && cx <= view.right && cy >= view.top && cy <= view.bottom };
+  };
+  return {
+    buttons: [...dock.querySelectorAll('button')].map(node => ({ text: node.textContent, inside: inside(node.getBoundingClientRect()) })),
+    coversPlayer: hit(player, dockBox),
+    playerInside: player.left >= view.left - 1 && player.right <= view.right + 1 && player.top >= view.top - 1 && player.bottom <= view.bottom + 1,
+    board: spot('board'),
+    boss: spot('boss'),
+    foot,
+  };
+})()`;
+
+function assertDock(probe, labels) {
+  if (!probe.playerInside) throw new Error(`player clipped ${JSON.stringify(probe.foot)}`);
+  if (probe.coversPlayer) throw new Error(`dock covers player ${JSON.stringify(probe)}`);
+  for (const label of labels) {
+    const button = probe.buttons.find(item => item.text === label);
+    if (!button?.inside) throw new Error(`missing ${label} ${JSON.stringify(probe.buttons)}`);
+  }
+}
+
 function assertShot(info, { night, narrow }) {
   if (info.desk) throw new Error(`popup open ${JSON.stringify(info)}`);
   if (info.ribbons > 1) throw new Error(`banners ${info.ribbons} ${info.ribbonText.join(' | ')}`);
@@ -226,6 +271,17 @@ async function hold(dir, index, count) {
     await shot(path.join(dir, `${String(index.n).padStart(4, '0')}.png`));
     index.n += 1;
   }
+}
+
+async function walkTo(x, y) {
+  await evaluate(`window.nanjing.click(${x}, ${y})`);
+  let last = null;
+  for (let i = 0; i < 120; i += 1) {
+    last = await evaluate('window.nanjing.walker()');
+    if (last && !last.moving && i > 1) return last;
+    await sleep(100);
+  }
+  throw new Error(`walk timeout ${x},${y} ${JSON.stringify(last)}`);
 }
 
 async function travel(x, y, dir, index) {
@@ -250,6 +306,8 @@ try {
   await shot(path.join(STILLS, 'ui-day-desktop.png'));
   const dayNarrow = await metrics(390);
   assertShot(dayNarrow, { night: false, narrow: true });
+  const dayDock = await evaluate(layoutProbe);
+  assertDock(dayDock, ['休息', '进入夜里']);
   await shot(path.join(STILLS, 'ui-day-390.png'));
   await boot(1440, true);
   const nightDesktop = await evaluate(`(() => {
@@ -296,7 +354,16 @@ try {
     };
   })()`);
   assertShot(nightNarrow, { night: true, narrow: true });
+  const nightDock = await evaluate(layoutProbe);
+  assertDock(nightDock, ['睡觉']);
   await shot(path.join(STILLS, 'ui-night-390.png'));
+  await boot(390, false);
+  await walkTo(560, 20);
+  const atBoard = await evaluate(layoutProbe);
+  assertDock(atBoard, ['休息', '进入夜里']);
+  if (!atBoard.board?.visible) throw new Error(`whiteboard off screen ${JSON.stringify(atBoard.board)}`);
+  if (!atBoard.boss?.visible) throw new Error(`boss off screen ${JSON.stringify(atBoard.boss)}`);
+  await shot(path.join(STILLS, 'ui-walk-whiteboard-390.png'));
   console.log(JSON.stringify({ dayDesktop, dayNarrow, nightDesktop, nightNarrow }, null, 2));
 
   await boot(1440, false);

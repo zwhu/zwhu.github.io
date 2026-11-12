@@ -9,10 +9,15 @@
   font-size: 13px;
 }
 
+.stage-frame {
+  position: relative;
+  width: 100%;
+}
+
 .stage-scroll {
   width: 100%;
   min-width: 0;
-  overflow-x: auto;
+  overflow: hidden;
   background: #000;
 }
 
@@ -385,9 +390,10 @@
 
 .dock {
   position: absolute;
-  z-index: 5;
+  z-index: 6;
   right: calc(4 * var(--u));
   bottom: calc(4 * var(--u));
+  left: auto;
   display: flex;
   flex-direction: column;
   gap: calc(3 * var(--u));

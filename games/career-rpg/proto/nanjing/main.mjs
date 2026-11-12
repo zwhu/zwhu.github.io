@@ -1,6 +1,6 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from '../dota.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
-import { bindWalk, clickGround, drawScene, hotspots, integerScale, loadArt, sceneMode, startWalk, walker, whenLabel, WORLD } from './scene.mjs';
+import { bindWalk, clickGround, drawScene, hotspots, integerScale, loadArt, sceneMode, startWalk, viewOrigin, walker, whenLabel, WORLD } from './scene.mjs';
 
 // 学习卡上的短字是界面里已有的效果句。悬停展开的原文取自 README 的技能条。
 const SKILL_SOURCE = {
@@ -612,6 +612,7 @@ function paint() {
   const canvas = app.querySelector('#scene');
   const stage = app.querySelector('#stage');
   if (canvas && stage) drawScene(canvas, stage.dataset.scene);
+  followPlayer();
 }
 
 function syncToast(view) {
@@ -636,13 +637,53 @@ function statusBanner(view) {
   return incidentRibbon(view) || chanceBanner(view);
 }
 
+function intersects(a, b) {
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+}
+
+function playerScreenBox(stage, foot, scale) {
+  const box = stage.getBoundingClientRect();
+  const left = box.left + (foot.x - 28) * scale;
+  const top = box.top + (foot.y - 54) * scale;
+  return { left, top, right: left + 56 * scale, bottom: top + 56 * scale };
+}
+
 function fitIntegerScale() {
   const scroll = app.querySelector('.stage-scroll');
   const stage = app.querySelector('#stage');
+  const frame = app.querySelector('.stage-frame');
   if (!scroll || !stage) return;
   const scale = integerScale(scroll.clientWidth, WORLD.width);
   stage.style.width = `${WORLD.width * scale}px`;
   stage.style.height = `${WORLD.height * scale}px`;
+  if (frame) frame.style.setProperty('--u', `${scale}px`);
+}
+
+function followPlayer() {
+  const scroll = app.querySelector('.stage-scroll');
+  const stage = app.querySelector('#stage');
+  const frame = app.querySelector('.stage-frame');
+  const dock = frame?.querySelector('.dock');
+  const foot = walker().foot;
+  if (!scroll || !stage || !foot || stage.clientWidth < 1) return;
+  const scale = stage.clientWidth / WORLD.width;
+  const viewWorld = scroll.clientWidth / scale;
+  scroll.scrollLeft = viewOrigin(foot.x, viewWorld, WORLD.width) * scale;
+  if (!dock) return;
+  const frameBox = frame.getBoundingClientRect();
+  const scrollBox = scroll.getBoundingClientRect();
+  const stageBox = stage.getBoundingClientRect();
+  const visibleRight = Math.min(scrollBox.right, stageBox.right);
+  const visibleLeft = Math.max(scrollBox.left, stageBox.left);
+  const visibleBottom = Math.min(scrollBox.bottom, stageBox.bottom);
+  const gap = 4 * scale;
+  dock.style.left = 'auto';
+  dock.style.right = `${frameBox.right - visibleRight + gap}px`;
+  dock.style.bottom = `${frameBox.bottom - visibleBottom + gap}px`;
+  if (intersects(playerScreenBox(stage, foot, scale), dock.getBoundingClientRect())) {
+    dock.style.right = 'auto';
+    dock.style.left = `${visibleLeft - frameBox.left + gap}px`;
+  }
 }
 
 function render() {
@@ -661,7 +702,6 @@ function render() {
     if (desk) stage.append(desk);
     const prompt = doorPrompt();
     if (prompt) stage.append(prompt);
-    stage.append(dock(view));
   } else {
     const done = ending(view);
     done.append(el('ol', { class: 'log', id: 'log' }, view.log.map(line => el('li', {}, [line]))));
@@ -669,7 +709,9 @@ function render() {
   }
   if (dota) stage.append(dotaOverlay());
   const scroll = el('div', { class: 'stage-scroll' }, [stage]);
-  app.replaceChildren(el('div', { class: 'screen' }, [top, scroll]), seedBar(view));
+  const frame = el('div', { class: 'stage-frame' }, [scroll]);
+  if (view.phase === 'play') frame.append(dock(view));
+  app.replaceChildren(el('div', { class: 'screen' }, [top, frame]), seedBar(view));
   fitIntegerScale();
   paint();
 }

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { BOUNDS, DOOR, PLAYER, WALK, WORLD } from '../layout.mjs';
+import { BOUNDS, DOOR, PLAYER, viewOrigin, WALK, WORLD } from '../layout.mjs';
 import { applyAction, createGame, present } from '../rules.mjs';
 import { paintOrder, whenLabel } from '../scene.mjs';
 import { findPath, isWalkable, parseGrid } from '../walk.mjs';
@@ -75,4 +75,16 @@ test('seats, the whiteboard, and the door stand on walkable tiles inside the bou
   assert.equal(isWalkable(grid, 17, 12), false);
   assert.equal(WALK.modes.night.pm, undefined);
   assert.ok(WALK.modes.night.feixiang);
+});
+
+test('a 390-wide view keeps the player in frame and can reach the whiteboard', () => {
+  const view = 382;
+  const home = viewOrigin(PLAYER.seat[0], view);
+  assert.equal(home, 0);
+  assert.ok(PLAYER.seat[0] - 28 >= home && PLAYER.seat[0] + 28 <= home + view);
+  const atBoard = viewOrigin(571, view);
+  assert.ok(571 - 28 >= atBoard && 571 + 28 <= atBoard + view);
+  assert.ok(553 >= atBoard && 590 <= atBoard + view);
+  assert.ok(584 >= atBoard && 604 <= atBoard + view);
+  assert.equal(viewOrigin(200, WORLD.width), 0);
 });
