@@ -505,7 +505,8 @@ function office(view, talk) {
     const point = scenePoint(event);
     beginWalk({ kind: 'ground', at: [point.x, point.y] });
   });
-  const ui = el('div', { class: 'scene-ui' }, [sceneNotes(view)]);
+  const notes = sceneNotes(view);
+  const ui = el('div', { class: 'scene-ui' });
   if (view.phase !== 'play') ui.append(ending(view));
   else if (panel === 'whiteboard') ui.append(boardPanel(view));
   else if (panel === 'tickets' || panel === 'skills') ui.append(deskPanel(view));
@@ -532,6 +533,7 @@ function office(view, talk) {
     'data-night': view.night ? '1' : '0',
   }, [
     hud(view),
+    notes,
     frame,
   ]);
 }

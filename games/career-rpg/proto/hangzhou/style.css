@@ -252,18 +252,21 @@ body {
 .hud strong { font-weight: 650; }
 
 .scene-notes {
-  display: flex;
-  flex-direction: column;
-  gap: calc(100cqi / 640 * 2);
-  margin: calc(100cqi / 640 * 3) calc(8 / 640 * 100%) 0 calc(60 / 640 * 100%);
+  position: relative;
+  z-index: 2;
+  flex: 0 0 auto;
+  width: 100%;
+  margin: 0;
+  pointer-events: none;
 }
 
 .scene-notes p,
 .scene-notes .log {
   margin: 0;
-  padding: calc(100cqi / 640 * 1) calc(100cqi / 640 * 4);
-  border: calc(100cqi / 640 * 1) solid #282622;
-  background: rgba(249, 248, 241, 0.9);
+  padding: 4px 8px;
+  border: 0;
+  border-bottom: 1px solid #282622;
+  background: #f9f8f1;
   color: #201e1c;
   font-size: max(13px, calc(100cqi / 640 * 11));
   line-height: 1.3;

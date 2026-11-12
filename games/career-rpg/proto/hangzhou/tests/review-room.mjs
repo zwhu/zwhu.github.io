@@ -136,6 +136,7 @@ async function encode(dir, file) {
   await new Promise((resolve, reject) => {
     const encoder = spawn('ffmpeg', [
       '-y', '-framerate', '10', '-i', path.join(dir, '%04d.png'),
+      '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2',
       '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-movflags', '+faststart', file,
     ], { stdio: ['ignore', 'ignore', 'pipe'] });
     let err = '';
@@ -268,6 +269,32 @@ try {
       if (!button?.inside || !button.tapped) throw new Error(`button ${label} ${JSON.stringify(probe.buttons)}`);
     }
   }
+  async function assertBanner(where) {
+    const banner = await evaluate(`(() => {
+      const node = document.querySelector('.scene-notes p');
+      const notes = document.querySelector('.scene-notes');
+      const stage = document.querySelector('.stage');
+      if (!node || !notes || !stage) return { ok: false, reason: 'missing' };
+      const box = node.getBoundingClientRect();
+      const bar = notes.getBoundingClientRect();
+      const frame = stage.getBoundingClientRect();
+      const hud = document.querySelector('.hud').getBoundingClientRect();
+      return {
+        ok: bar.left <= frame.left + 1 && bar.right >= frame.right - 1
+          && box.left >= frame.left - 1 && box.right <= frame.right + 1
+          && bar.top >= hud.bottom - 1 && bar.top <= hud.bottom + 2
+          && node.scrollWidth <= node.clientWidth + 2,
+        text: node.textContent,
+        topGap: bar.top - hud.bottom,
+        left: box.left - frame.left,
+        right: frame.right - box.right,
+        scroll: node.scrollWidth,
+        client: node.clientWidth,
+      };
+    })()`);
+    if (!banner.ok) throw new Error(`banner ${where} ${JSON.stringify(banner)}`);
+    return banner;
+  }
   async function walkTo(x, y) {
     await evaluate(`window.hangzhou.clickScene(${x}, ${y})`);
     for (let i = 0; i < 400; i += 1) {
@@ -278,10 +305,13 @@ try {
     throw new Error(`walk timeout ${x},${y}`);
   }
   assertPhone(await evaluate(phoneProbe), ['休息', '入夜']);
+  await assertBanner('day-b1');
   await shot(path.join(STILLS, 'ui-day-390.png'));
-  for (const [x, y] of [[40, 108], [336, 338], [586, 262], [546, 206]]) {
+  const dayStops = [[40, 108, 'day-left'], [336, 338, 'day-middle'], [546, 206, 'day-right']];
+  for (const [x, y, name] of dayStops) {
     await walkTo(x, y);
     assertPhone(await evaluate(phoneProbe), ['休息', '入夜']);
+    await assertBanner(name);
   }
   const atBoard = await evaluate(phoneProbe);
   if (!atBoard.board?.visible) throw new Error(`whiteboard off screen ${JSON.stringify(atBoard)}`);
@@ -304,10 +334,18 @@ try {
   if (nightNarrow.banners > 1) throw new Error(`390 night banners ${nightNarrow.banners}`);
   if (Math.abs(nightNarrow.scale - 1) > 0.02) throw new Error(`390 night scale ${nightNarrow.scale}`);
   assertPhone(await evaluate(phoneProbe), ['休息', '打 Dota', '睡觉']);
+  await assertBanner('night-b1');
   await shot(path.join(STILLS, 'ui-night-390.png'));
+  await walkTo(40, 108);
+  assertPhone(await evaluate(phoneProbe), ['休息', '打 Dota', '睡觉']);
+  await assertBanner('night-left');
+  await walkTo(546, 206);
+  assertPhone(await evaluate(phoneProbe), ['休息', '打 Dota', '睡觉']);
+  await assertBanner('night-right');
   await walkTo(336, 338);
   const atDoor = await evaluate(phoneProbe);
   assertPhone(atDoor, ['休息', '打 Dota', '睡觉']);
+  await assertBanner('night-middle');
   if (!atDoor.door?.visible) throw new Error(`door off screen ${JSON.stringify(atDoor)}`);
   await shot(path.join(STILLS, 'night-at-door.png'));
 
@@ -406,6 +444,37 @@ try {
   }
   await encode(walkDir, path.join(OUT, 'walk-4dir.mp4'));
   await shot(path.join(STILLS, 'walk-4dir.png'));
+
+  await metrics(390, 844);
+  const phoneDir = path.join(framesRoot, 'walk-390');
+  mkdirSync(phoneDir);
+  frame = await hold(phoneDir, 0, 6);
+  const phoneLegs = [
+    [228, 320],
+    [48, 320],
+    [520, 320],
+    [520, 150],
+  ];
+  const phoneFacings = [];
+  for (const [x, y] of phoneLegs) {
+    const leg = await march(phoneDir, frame, x, y);
+    frame = leg.index;
+    phoneFacings.push([...leg.seen]);
+    frame = await hold(phoneDir, frame, 4);
+  }
+  const phoneHome = await march(phoneDir, frame, 226, 247);
+  frame = phoneHome.index;
+  await evaluate('window.hangzhou.sitAtDesk()');
+  frame = await hold(phoneDir, frame, 12);
+  const phoneSeat = await evaluate('window.hangzhou.foot()');
+  if (!phoneSeat.seated) throw new Error(`390 walk end ${JSON.stringify(phoneSeat)}`);
+  const phoneDirs = new Set(phoneFacings.flat());
+  for (const dir of ['up', 'down', 'left', 'right']) {
+    if (!phoneDirs.has(dir)) throw new Error(`390 missing ${dir} ${JSON.stringify(phoneFacings)}`);
+  }
+  await assertPhone(await evaluate(phoneProbe), ['休息', '入夜']);
+  await assertBanner('walk-390-seated');
+  await encode(phoneDir, path.join(OUT, 'walk-390.mp4'));
 
   console.log(JSON.stringify({
     desktopScale: desktop.scale,
