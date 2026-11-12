@@ -5,9 +5,12 @@ import test from 'node:test';
 import { inflateSync } from 'node:zlib';
 import { NAV } from '../nav.mjs';
 
-const NIGHT = new URL('../art/night-384x216.png', import.meta.url);
+const DAY = new URL('../art/day-640x360.png', import.meta.url);
+const NIGHT = new URL('../art/night-640x360.png', import.meta.url);
+const CAST = new URL('../art/cast-day.png', import.meta.url);
 const SHEET = new URL('../walk/walk-sheet.png', import.meta.url);
-const SEAT = [72, 135, 21, 22];
+const DAY_SHA = '26ccee5c1d9b693a276fac905dfe5d60aabd685f';
+const NIGHT_SHA = '709ef74b59743763d678a080c980fedb509a3e63';
 
 function decodePng(buffer) {
   let offset = 8;
@@ -104,24 +107,43 @@ function paintSeat(plate, sheet, seated) {
   return out;
 }
 
+test('day and night plates are 640 by 360 and match the room art', () => {
+  const dayBytes = readFileSync(DAY);
+  const nightBytes = readFileSync(NIGHT);
+  assert.equal(createHash('sha1').update(dayBytes).digest('hex'), DAY_SHA);
+  assert.equal(createHash('sha1').update(nightBytes).digest('hex'), NIGHT_SHA);
+  const day = decodePng(dayBytes);
+  const night = decodePng(nightBytes);
+  assert.deepEqual([day.width, day.height], [640, 360]);
+  assert.deepEqual([night.width, night.height], [640, 360]);
+  assert.deepEqual(NAV.seat.seat, [226, 241]);
+  assert.deepEqual(NAV.door.spawn, [336, 338]);
+  assert.deepEqual(NAV.board.box, [558, 173, 54, 42]);
+});
+
 test('night sitting draws one runtime protagonist and the empty desk stays empty', () => {
-  const bytes = readFileSync(NIGHT);
-  assert.equal(createHash('sha1').update(bytes).digest('hex'), 'f491a82d369e663de41f246fad7c419a274856c0');
-  const plate = decodePng(bytes);
+  const plate = decodePng(readFileSync(NIGHT));
   const sheet = decodePng(readFileSync(SHEET));
-  assert.deepEqual([plate.width, plate.height], [384, 216]);
+  const cast = decodePng(readFileSync(CAST));
   const seat = [...NAV.seat.sit, ...NAV.seat.sitSize];
   const seated = paintSeat(plate, sheet, true);
   const away = paintSeat(plate, sheet, false);
   assert.ok(redCount(seated, plate.width, seat) > 40, '夜里坐着要画出发红衣服');
-  assert.ok(redCount(plate.pixels, plate.width, seat) < 8, '底图上不能再有一个主角');
-  assert.equal(redCount(away, plate.width, SEAT), redCount(plate.pixels, plate.width, SEAT));
+  assert.ok(redCount(plate.pixels, plate.width, seat) < 8, '夜里底图没有烤进玩家');
+  assert.equal(redCount(away, plate.width, seat), redCount(plate.pixels, plate.width, seat));
   let changed = 0;
   for (let i = 0; i < away.length; i += 4) {
     if (away[i] !== plate.pixels[i] || away[i + 1] !== plate.pixels[i + 1]) changed += 1;
   }
   assert.equal(changed, 0, '离开工位后 B1 上不留人');
-  const [screenX, screenY, screenW, screenH] = [72, 134, 26, 13];
+  let castOnSeat = 0;
+  for (let y = NAV.seat.sit[1]; y < NAV.seat.sit[1] + NAV.seat.sitSize[1]; y += 1) {
+    for (let x = NAV.seat.sit[0]; x < NAV.seat.sit[0] + 52; x += 1) {
+      if (cast.pixels[(y * cast.width + x) * 4 + 3] > 0) castOnSeat += 1;
+    }
+  }
+  assert.equal(castOnSeat, 0, '白天同事层不在 B1 再画一个玩家');
+  const [screenX, screenY, screenW, screenH] = [216, 198, 26, 13];
   let hair = 0;
   for (let y = screenY + screenH - 4; y < screenY + screenH; y += 1) {
     for (let x = screenX; x < screenX + screenW; x += 1) {

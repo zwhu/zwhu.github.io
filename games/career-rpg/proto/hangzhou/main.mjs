@@ -1,5 +1,5 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from '../dota.mjs';
-import { NAV } from './nav.mjs';
+import { NAV, WORLD, stagePixels } from './nav.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
 import { cellCenter, effectFor, findPath, nearestWalkable, sceneFile, visibleSpots } from './walk.mjs';
 import { clipFor, resolveSprites } from './walk-sprites.mjs';
@@ -35,11 +35,19 @@ const SKILL_COPY = Object.freeze({
   }),
 });
 
-const SCENE = Object.freeze({ w: 384, h: 216 });
+const SCENE = Object.freeze({ w: WORLD.w, h: WORLD.h });
 const WALK_SPEED = 140;
 
-const sitImage = new Image();
-sitImage.src = './art/player-sit.png';
+function plateImage(src) {
+  const image = new Image();
+  image.onload = () => drawWalker();
+  image.src = src;
+  return image;
+}
+
+const castDay = plateImage('./art/cast-day.png');
+const castBoss = plateImage('./art/cast-boss.png');
+const boardLit = plateImage('./art/whiteboard-lit.png');
 
 let sprites = null;
 const spriteImages = new Map();
@@ -228,8 +236,13 @@ function aimFacing(points) {
   }
 }
 
+function spotGoal(spot) {
+  if (present(state).bossOn && spot.bossAt) return spot.bossAt;
+  return spot.at;
+}
+
 function beginWalk(spot) {
-  const goal = spot.at;
+  const goal = spotGoal(spot);
   const start = nearestWalkable(NAV, foot.x, foot.y);
   const end = nearestWalkable(NAV, goal[0], goal[1]);
   const cells = findPath(NAV, start, end);
@@ -268,6 +281,7 @@ function arrive() {
     return;
   }
   if (effect.type === 'door') {
+    facing = 'up';
     enterNight();
     return;
   }
@@ -318,24 +332,39 @@ function stepWalker(now) {
   }
 }
 
+function drawPlate(ctx, image) {
+  if (!image.complete || !image.naturalWidth) return;
+  ctx.drawImage(image, 0, 0);
+}
+
 function drawWalker() {
   const canvas = document.querySelector('#walker');
-  if (!canvas || !sitImage.complete || !sprites) return;
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, SCENE.w, SCENE.h);
   const view = present(state);
+  // 同事是原尺寸精灵。门和饮水机在底图里，不再叠一层。亮白板只在 Boss 周叠上。
+  if (!view.night && view.bossOn) {
+    const [lx, ly] = NAV.board.lit;
+    const [lw, lh] = NAV.board.litSize;
+    if (boardLit.complete && boardLit.naturalWidth) ctx.drawImage(boardLit, lx, ly, lw, lh);
+    drawPlate(ctx, castBoss);
+  } else if (!view.night) {
+    drawPlate(ctx, castDay);
+  }
+  if (!sprites) return;
   const moving = route.length > 0;
   const clip = clipFor(sprites, facing, { seated, moving, elapsedMs: walkElapsed });
   if (clip.pose === 'sit') {
-    // Boss 周人站在白板前，不画工位坐姿。夜里和白天用同一张坐姿。
+    // Boss 周人站在白板前，不画工位坐姿。夜里和白天用同一张坐姿，底图上没有第二个主角。
     if (view.bossOn) return;
     const sheet = spriteImages.get('walk-sheet.png');
     if (!sheet?.complete || !NAV.seat.sitFrame) return;
     const [sx, sy, sw, sh] = NAV.seat.sitFrame;
     const [dx, dy] = NAV.seat.sit;
     const [dw, dh] = NAV.seat.sitSize;
-    // 背面站姿的头到红衣躯干。腿不画，椅背就不会把肩膀和手臂全挡住。
+    // 背面站姿的头到红衣躯干，按原图像素绘制，不缩放。腿不画，椅背就不会把肩膀和手臂全挡住。
     ctx.drawImage(sheet, sx, sy, sw, sh, dx, dy, dw, dh);
     return;
   }
@@ -374,8 +403,8 @@ function placeForBoss() {
   const view = present(state);
   if (view.night && !sawNight) {
     sawNight = true;
-    foot.x = 82;
-    foot.y = 177;
+    foot.x = NAV.seat.stand[0];
+    foot.y = NAV.seat.stand[1];
     seated = true;
     facing = 'up';
     route = [];
@@ -882,11 +911,18 @@ function dotaOverlay() {
   ]);
 }
 
+function fitStage() {
+  const stage = document.querySelector('.stage');
+  if (!stage) return;
+  stage.style.width = `${stagePixels(stage.parentElement.clientWidth, SCENE.w)}px`;
+}
+
 function render() {
   placeForBoss();
   const view = present(state);
   const talk = view.phase === 'play' ? talkBar(view) : null;
   app.replaceChildren(office(view, talk), seedForm(view));
+  fitStage();
   drawWalker();
 }
 
@@ -899,9 +935,8 @@ window.addEventListener('keydown', event => {
 });
 
 render();
-
-sitImage.addEventListener('load', () => drawWalker());
 loadWalkSprites();
+window.addEventListener('resize', () => fitStage());
 
 window.hangzhou = {
   present() { return present(state); },
@@ -915,6 +950,19 @@ window.hangzhou = {
   },
   facing() { return facing; },
   foot() { return { x: foot.x, y: foot.y, seated }; },
+  sitAtDesk() {
+    route = [];
+    routeIndex = 0;
+    pending = null;
+    panel = null;
+    foot.x = NAV.seat.stand[0];
+    foot.y = NAV.seat.stand[1];
+    seated = true;
+    facing = 'up';
+    walkerLoop = 0;
+    walkerStamp = 0;
+    render();
+  },
   clickScene(x, y) {
     beginWalk({ kind: 'ground', at: [x, y] });
   },
