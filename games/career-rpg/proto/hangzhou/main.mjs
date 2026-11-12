@@ -2,6 +2,7 @@ import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickM
 import { NAV } from './nav.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
 import { cellCenter, effectFor, findPath, nearestWalkable, sceneFile, visibleSpots } from './walk.mjs';
+import { sceneLayout } from './scene-scale.mjs';
 import { clipFor, resolveSprites } from './walk-sprites.mjs';
 
 const app = document.querySelector('#app');
@@ -882,7 +883,14 @@ function dotaOverlay() {
   ]);
 }
 
+function applySceneScale() {
+  const layout = sceneLayout(window.innerWidth, window.innerHeight);
+  document.documentElement.style.setProperty('--scene-scale', String(layout.scale));
+  return layout;
+}
+
 function render() {
+  applySceneScale();
   placeForBoss();
   const view = present(state);
   const talk = view.phase === 'play' ? talkBar(view) : null;
@@ -898,6 +906,7 @@ window.addEventListener('keydown', event => {
   pressRaze(raze.id);
 });
 
+window.addEventListener('resize', () => applySceneScale());
 render();
 
 sitImage.addEventListener('load', () => drawWalker());
@@ -929,4 +938,5 @@ window.hangzhou = {
     return present(state);
   },
   start,
+  scale() { return applySceneScale(); },
 };
