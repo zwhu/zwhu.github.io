@@ -203,7 +203,6 @@ try {
   if (Math.abs(desktop.scale - Math.round(desktop.scale)) > 0.02) throw new Error(`scale ${desktop.scale}`);
   if (desktop.sceneFilter !== 'pixelated' || desktop.walkerFilter !== 'pixelated') throw new Error('image rendering');
   await shot(path.join(STILLS, 'ui-day-1280.png'));
-  await shot(path.join(OUT, 'day-desktop.png'));
 
   await metrics(390, 844);
   const narrow = await evaluate(layout);
@@ -212,7 +211,6 @@ try {
   if (!narrow.hudOpaque || !narrow.hudAbove) throw new Error(`390 hud ${JSON.stringify(narrow)}`);
   if (narrow.small.length) throw new Error(`390 font ${JSON.stringify(narrow.small)}`);
   await shot(path.join(STILLS, 'ui-day-390.png'));
-  await shot(path.join(OUT, 'day-390.png'));
 
   await metrics(1280, 900);
   await evaluate(`document.querySelector('[data-action="enter-night"]').click()`);
@@ -222,7 +220,6 @@ try {
   if (night.banners > 1) throw new Error(`night banners ${night.banners}`);
   if (!night.foot.seated) throw new Error(`night foot ${JSON.stringify(night.foot)}`);
   await shot(path.join(STILLS, 'night-seated.png'));
-  await shot(path.join(OUT, 'night-seated.png'));
   await shot(path.join(STILLS, 'ui-night-1280.png'));
 
   await metrics(390, 844);
@@ -272,7 +269,6 @@ try {
   const toDoor = await march(nightDir, frame, 336, 338);
   frame = await hold(nightDir, toDoor.index, 10);
   await shot(path.join(STILLS, 'night-at-door.png'));
-  await shot(path.join(OUT, 'night-at-door.png'));
   const back = await march(nightDir, frame, 226, 247);
   frame = back.index;
   await evaluate('window.hangzhou.sitAtDesk()');
