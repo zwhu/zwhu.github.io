@@ -1,6 +1,17 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from '../dota.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
+import { sceneScale } from './scale.mjs';
 import { bindWalk, clickGround, drawScene, hotspots, loadArt, sceneMode, startWalk } from './scene.mjs';
+
+function applyScale() {
+  const scale = sceneScale(window.innerWidth, window.innerHeight);
+  const border = window.innerWidth <= 480 ? 2 : 4;
+  document.documentElement.style.setProperty('--scale', String(scale));
+  document.documentElement.style.setProperty('--frame-border', `${border}px`);
+}
+
+applyScale();
+window.addEventListener('resize', applyScale);
 
 // 学习卡上的短字是界面里已有的效果句。悬停展开的原文取自 README 的技能条。
 const SKILL_SOURCE = {
