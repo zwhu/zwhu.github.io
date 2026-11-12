@@ -1,0 +1,17 @@
+{
+  "frameMs": 100,
+  "directions": {
+    "down": {
+      "image": "down.png",
+      "mirror": false,
+      "anchor": { "x": 14, "y": 43 },
+      "imageSize": { "w": 56, "h": 44 },
+      "frameMs": 100,
+      "frameCount": 2,
+      "frames": [
+        { "x": 0, "y": 0, "w": 28, "h": 44 },
+        { "x": 28, "y": 0, "w": 28, "h": 44 }
+      ]
+    }
+  }
+}
