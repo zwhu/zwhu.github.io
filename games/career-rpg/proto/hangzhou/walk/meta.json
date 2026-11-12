@@ -1,0 +1,600 @@
+{
+ "_note": "美术建议，最终以工程定的为准。",
+ "asset": "hangzhou-player-walk",
+ "cell": [
+  56,
+  56
+ ],
+ "sheet_size": [
+  280,
+  224
+ ],
+ "sheet": "walk-sheet.png",
+ "preview": "walk-preview-x4.png",
+ "rows": [
+  "down",
+  "up",
+  "left",
+  "right"
+ ],
+ "cols": [
+  "stand",
+  "walk-1",
+  "walk-2",
+  "walk-3",
+  "walk-4"
+ ],
+ "frame_order": {
+  "down": [
+   "stand",
+   "walk-1",
+   "walk-2",
+   "walk-3",
+   "walk-4"
+  ],
+  "up": [
+   "stand",
+   "walk-1",
+   "walk-2",
+   "walk-3",
+   "walk-4"
+  ],
+  "left": [
+   "stand",
+   "walk-1",
+   "walk-2",
+   "walk-3",
+   "walk-4"
+  ],
+  "right": [
+   "stand",
+   "walk-1",
+   "walk-2",
+   "walk-3",
+   "walk-4"
+  ]
+ },
+ "stand": "stand",
+ "walk_loop": [
+  "walk-1",
+  "walk-2",
+  "walk-3",
+  "walk-4"
+ ],
+ "suggested_interval_ms": 140,
+ "foot_anchor": [
+  28,
+  52
+ ],
+ "foot_anchor_in_sprite_28x44": [
+  14,
+  44
+ ],
+ "mirror": {
+  "right_from_left": false,
+  "right_is_independent": true,
+  "note": "来源 player-walk-v2 的右向是独立绘制，不是左向翻转。头发蓬松、领口和前后手在镜像上对不上，所以没有用镜像。"
+ },
+ "source": {
+  "set": "player-walk-v2",
+  "path": "/workspace/career-rpg-hefei-art/art/processed/player-walk-v2/frames",
+  "mapping": {
+   "stand": "idle",
+   "walk-1": "walk-01",
+   "walk-2": "walk-03",
+   "walk-3": "walk-04",
+   "walk-4": "walk-06"
+  },
+  "omitted_from_6_frame_cycle": [
+   "walk-02",
+   "walk-05"
+  ],
+  "omit_reason": "为 4 帧循环保留两只脚的迈步（contact）和过渡（passing），去掉两次回落（recoil）。"
+ },
+ "hand_fixes": [
+  {
+   "dir": "right",
+   "frame": "stand",
+   "source": "idle",
+   "pixels": [
+    [
+     12,
+     40
+    ],
+    [
+     13,
+     40
+    ]
+   ],
+   "reason": "靴缝里有两颗领口奶油色，改回靴色。"
+  },
+  {
+   "dir": "up",
+   "frame": "walk-1",
+   "source": "walk-01",
+   "pixels": [
+    [
+     14,
+     40
+    ],
+    [
+     14,
+     41
+    ]
+   ],
+   "reason": "抬起的靴面上有两颗肤色，改回靴色。"
+  }
+ ],
+ "palette_appended": [],
+ "palette_note": "13 色与 hangzhou/04-sprite-sheet 主角站姿完全相同，没有追加。",
+ "cells": {
+  "down": {
+   "stand": {
+    "origin": [
+     0,
+     0
+    ],
+    "rect": [
+     0,
+     0,
+     56,
+     56
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/down/idle.png"
+   },
+   "walk-1": {
+    "origin": [
+     56,
+     0
+    ],
+    "rect": [
+     56,
+     0,
+     112,
+     56
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     35,
+     52
+    ],
+    "source": "player-walk-v2/frames/down/walk-01.png"
+   },
+   "walk-2": {
+    "origin": [
+     112,
+     0
+    ],
+    "rect": [
+     112,
+     0,
+     168,
+     56
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     35,
+     52
+    ],
+    "source": "player-walk-v2/frames/down/walk-03.png"
+   },
+   "walk-3": {
+    "origin": [
+     168,
+     0
+    ],
+    "rect": [
+     168,
+     0,
+     224,
+     56
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     35,
+     52
+    ],
+    "source": "player-walk-v2/frames/down/walk-04.png"
+   },
+   "walk-4": {
+    "origin": [
+     224,
+     0
+    ],
+    "rect": [
+     224,
+     0,
+     280,
+     56
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/down/walk-06.png"
+   }
+  },
+  "up": {
+   "stand": {
+    "origin": [
+     0,
+     56
+    ],
+    "rect": [
+     0,
+     56,
+     56,
+     112
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/up/idle.png"
+   },
+   "walk-1": {
+    "origin": [
+     56,
+     56
+    ],
+    "rect": [
+     56,
+     56,
+     112,
+     112
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/up/walk-01.png"
+   },
+   "walk-2": {
+    "origin": [
+     112,
+     56
+    ],
+    "rect": [
+     112,
+     56,
+     168,
+     112
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/up/walk-03.png"
+   },
+   "walk-3": {
+    "origin": [
+     168,
+     56
+    ],
+    "rect": [
+     168,
+     56,
+     224,
+     112
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     19,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/up/walk-04.png"
+   },
+   "walk-4": {
+    "origin": [
+     224,
+     56
+    ],
+    "rect": [
+     224,
+     56,
+     280,
+     112
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/up/walk-06.png"
+   }
+  },
+  "left": {
+   "stand": {
+    "origin": [
+     0,
+     112
+    ],
+    "rect": [
+     0,
+     112,
+     56,
+     168
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/left/idle.png"
+   },
+   "walk-1": {
+    "origin": [
+     56,
+     112
+    ],
+    "rect": [
+     56,
+     112,
+     112,
+     168
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     18,
+     10,
+     38,
+     52
+    ],
+    "source": "player-walk-v2/frames/left/walk-01.png"
+   },
+   "walk-2": {
+    "origin": [
+     112,
+     112
+    ],
+    "rect": [
+     112,
+     112,
+     168,
+     168
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/left/walk-03.png"
+   },
+   "walk-3": {
+    "origin": [
+     168,
+     112
+    ],
+    "rect": [
+     168,
+     112,
+     224,
+     168
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     18,
+     10,
+     38,
+     52
+    ],
+    "source": "player-walk-v2/frames/left/walk-04.png"
+   },
+   "walk-4": {
+    "origin": [
+     224,
+     112
+    ],
+    "rect": [
+     224,
+     112,
+     280,
+     168
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/left/walk-06.png"
+   }
+  },
+  "right": {
+   "stand": {
+    "origin": [
+     0,
+     168
+    ],
+    "rect": [
+     0,
+     168,
+     56,
+     224
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     19,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/right/idle.png"
+   },
+   "walk-1": {
+    "origin": [
+     56,
+     168
+    ],
+    "rect": [
+     56,
+     168,
+     112,
+     224
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     18,
+     10,
+     37,
+     52
+    ],
+    "source": "player-walk-v2/frames/right/walk-01.png"
+   },
+   "walk-2": {
+    "origin": [
+     112,
+     168
+    ],
+    "rect": [
+     112,
+     168,
+     168,
+     224
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     19,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/right/walk-03.png"
+   },
+   "walk-3": {
+    "origin": [
+     168,
+     168
+    ],
+    "rect": [
+     168,
+     168,
+     224,
+     224
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     18,
+     10,
+     37,
+     52
+    ],
+    "source": "player-walk-v2/frames/right/walk-04.png"
+   },
+   "walk-4": {
+    "origin": [
+     224,
+     168
+    ],
+    "rect": [
+     224,
+     168,
+     280,
+     224
+    ],
+    "foot": [
+     28,
+     52
+    ],
+    "bbox": [
+     20,
+     10,
+     36,
+     52
+    ],
+    "source": "player-walk-v2/frames/right/walk-06.png"
+   }
+  }
+ }
+}
