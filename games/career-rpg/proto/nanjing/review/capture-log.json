@@ -2,20 +2,20 @@
   "loss": {
     "file": "games/career-rpg/proto/nanjing/review/nanjing-loss.mp4",
     "frames": 116,
-    "ending": "第 3 周周五，口碑 26，低于 30，创始人约谈。第 4 周周五，日活 120，目标 160，口碑 0，低于 30，创始人约谈。",
+    "ending": "被创始人约谈两次第 3 周周五，口碑 26，低于 30，创始人约谈。第 4 周周五，日活 120，目标 160，口碑 0，低于 30，创始人约谈。",
     "seed": "n0"
   },
   "win": {
     "file": "games/career-rpg/proto/nanjing/review/nanjing-win.mp4",
     "frames": 101,
-    "ending": "扛住了，也学会了怎么扛。首页恢复了，复盘也写了。",
+    "ending": "扛住了，也学会了怎么扛首页恢复了，复盘也写了。",
     "extra": "去杭州。下一章，去阿里。",
     "seed": "n0"
   },
   "alive": {
     "file": "games/career-rpg/proto/nanjing/review/nanjing-alive.mp4",
     "frames": 101,
-    "ending": "论坛还活着，你也还在。四周撑过来了。复盘写了，口碑还没到 34。",
+    "ending": "论坛还活着，你也还在四周撑过来了。复盘写了，口碑还没到 34。",
     "seed": "n2"
   },
   "boss": {

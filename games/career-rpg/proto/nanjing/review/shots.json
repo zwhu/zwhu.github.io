@@ -1,0 +1,27 @@
+{
+  "balance": {
+    "games": 240,
+    "greedy": { "clears": 104, "goodEndings": 0, "lossWeeks": { "3": 45, "4": 91 } },
+    "planned": { "clears": 204, "goodEndings": 105, "lossWeeks": { "2": 1, "3": 8, "4": 27 } },
+    "random": { "clears": 28, "goodEndings": 0, "lossWeeks": { "2": 62, "3": 97, "4": 53 } }
+  },
+  "clips": [
+    { "file": "day-talk.mp4", "seed": "n0", "scene": "白天。点管事的创始人，名牌和▼在黑框场景底部。" },
+    { "file": "night-incident.mp4", "seed": "n0", "scene": "有规划打到第 2 周周三，行动点 0，夜里，事故「回帖 500」未处理。" },
+    { "file": "boss.mp4", "seed": "n0", "scene": "第 4 周周二首页登不上。先看对话和「好了没」，再点「看监控」。" },
+    { "file": "ending.mp4", "seed": "n0", "scene": "有规划打完。标题「扛住了，也学会了怎么扛」和正文分开。" },
+    { "file": "nanjing-loss.mp4", "seed": "n0", "scene": "贪心整局，第 4 周周五被约谈两次。" },
+    { "file": "nanjing-win.mp4", "seed": "n0", "scene": "有规划整局，好结局，并接到去杭州。" },
+    { "file": "nanjing-alive.mp4", "seed": "n2", "scene": "有规划整局，勉强撑过，口碑没到 34。" },
+    { "file": "nanjing-boss.mp4", "seed": "n0", "scene": "演示路径：催上线、走错「看监控」、走对排查。口碑 47 到 42。" }
+  ],
+  "stills": [
+    { "file": "stills/talkbox-desktop.png", "seed": "n0", "scene": "1280 宽。白天，管事的创始人对话窗在场景框内。" },
+    { "file": "stills/talkbox-390.png", "seed": "n0", "scene": "390 宽。白天，催上线的创始人对话窗仍在场景框内。" },
+    { "file": "stills/day-talk.png", "seed": "n0", "scene": "与桌面对话截图同一帧。" },
+    { "file": "stills/night.png", "seed": "n0", "scene": "第 2 周周三夜里，只剩工位上的人。" },
+    { "file": "stills/night-incident.png", "seed": "n0", "scene": "同一时刻往下，回帖 500 未处理。" },
+    { "file": "stills/boss.png", "seed": "n0", "scene": "Boss 关。红框、好了没、首页放大框没有加载中和登录失败。" },
+    { "file": "stills/ending.png", "seed": "n0", "scene": "结局标题和正文分成两行。" }
+  ]
+}

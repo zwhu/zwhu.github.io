@@ -13,7 +13,14 @@ const OUT = path.join(ROOT, 'games/career-rpg/proto/nanjing/review');
 const PAGE = '/games/career-rpg/proto/nanjing/index.html';
 mkdirSync(OUT, { recursive: true });
 
-const mime = { '.html': 'text/html; charset=utf-8', '.mjs': 'text/javascript', '.css': 'text/css' };
+const mime = {
+  '.html': 'text/html; charset=utf-8',
+  '.mjs': 'text/javascript',
+  '.css': 'text/css',
+  '.js': 'text/javascript',
+  '.json': 'application/json',
+  '.png': 'image/png',
+};
 const server = http.createServer((req, res) => {
   const url = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
   const file = path.resolve(ROOT, `.${url.endsWith('/') ? `${url}index.html` : url}`);
@@ -136,7 +143,7 @@ async function goto(seed) {
   await send('Page.navigate', { url: `${origin}?seed=${encodeURIComponent(seed)}` });
   for (let i = 0; i < 50; i += 1) {
     await sleep(80);
-    if (await evaluate('!!window.nanjing')) return;
+    if (await evaluate('!!window.nanjing?.ready')) return;
   }
   throw new Error(`page did not boot ${seed}`);
 }
@@ -172,6 +179,14 @@ async function click(action) {
     return true;
   })()`);
   if (!found) throw new Error(`missing button ${JSON.stringify(action)} :: ${await evaluate('document.body.innerText.slice(0, 400)')}`);
+  if (action.type === 'talk') {
+    for (let i = 0; i < 100; i += 1) {
+      const open = await evaluate(`document.querySelector('#talk')?.dataset.person === ${JSON.stringify(action.person)}`);
+      if (open) return;
+      await sleep(50);
+    }
+    throw new Error(`talk did not open ${action.person}`);
+  }
 }
 async function encode(framesDir, file, fps) {
   await new Promise((resolve, reject) => {
@@ -195,8 +210,48 @@ function dwellFor(action) {
   return 1;
 }
 
+async function assertHits(width, height) {
+  await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: width < 500 });
+  await goto('n0');
+  const check = `(() => {
+    const nodes = [
+      ...document.querySelectorAll('button'),
+      ...document.querySelectorAll('h2'),
+      ...document.querySelectorAll('.card .ticket-top strong'),
+    ];
+    const problems = [];
+    const seen = new Set();
+    for (const node of nodes) {
+      if (seen.has(node)) continue;
+      seen.add(node);
+      const style = getComputedStyle(node);
+      if (style.display === 'none' || style.visibility === 'hidden') continue;
+      node.scrollIntoView({ block: 'center', inline: 'center' });
+      const box = node.getBoundingClientRect();
+      if (box.width < 2 || box.height < 2) continue;
+      const x = Math.min(window.innerWidth - 1, Math.max(0, box.left + box.width / 2));
+      const y = Math.min(window.innerHeight - 1, Math.max(0, box.top + box.height / 2));
+      const fully = box.top >= -1 && box.left >= -1 && box.bottom <= window.innerHeight + 1 && box.right <= window.innerWidth + 1;
+      const label = (node.innerText || node.getAttribute('aria-label') || node.tagName).replace(/\\s+/g, ' ').slice(0, 32);
+      if (!fully) problems.push(label + ' outside');
+      const hit = document.elementFromPoint(x, y);
+      if (hit !== node && !(hit && node.contains(hit))) problems.push(label + ' covered by ' + (hit ? hit.tagName + '.' + hit.className : 'null'));
+    }
+    return problems;
+  })()`;
+  const first = await evaluate(check);
+  if (first.length) throw new Error(`${width}×${height}\n${first.join('\n')}`);
+  await evaluate(`(() => { while (window.nanjing.present().ap > 0) window.nanjing.act({ type: 'rest' }); return true; })()`);
+  const slept = await evaluate(check);
+  if (slept.length) throw new Error(`${width}×${height} after sleep\n${slept.join('\n')}`);
+  const bar = await evaluate(`(() => { const node = document.querySelector('.dock'); return node ? getComputedStyle(node).position : ''; })()`);
+  if (bar === 'sticky' || bar === 'fixed') throw new Error(`${width} action bar is ${bar}`);
+}
+
 try {
   await connect();
+  await assertHits(1280, 720);
+  await assertHits(390, 844);
   await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
 
   async function record(name, seed, actions, fps, focus) {
@@ -238,7 +293,11 @@ try {
     await save(fps * 2, focus ? '#ending' : undefined);
     const file = path.join(OUT, `${name}.mp4`);
     await encode(dir, file, fps);
-    const ending = await evaluate(`document.querySelector('#ending-text')?.textContent || ''`);
+    const ending = await evaluate(`(() => {
+      const title = document.querySelector('#ending h2')?.textContent || '';
+      const body = document.querySelector('#ending-text')?.textContent || '';
+      return title + body;
+    })()`);
     const extra = await evaluate(`document.querySelector('#to-hangzhou')?.textContent || ''`);
     return { file: path.relative(ROOT, file), frames: index, ending, extra, texts, onScreen };
   }
