@@ -328,8 +328,8 @@ function drawWalker() {
   const moving = route.length > 0;
   const clip = clipFor(sprites, facing, { seated, moving, elapsedMs: walkElapsed });
   if (clip.pose === 'sit') {
-    // 夜景底图已经叠好坐姿。Boss 周人站在白板前，不画工位坐姿。
-    if (view.night || view.bossOn) return;
+    // Boss 周人站在白板前，不画工位坐姿。夜里和白天用同一张坐姿。
+    if (view.bossOn) return;
     const sheet = spriteImages.get('walk-sheet.png');
     if (!sheet?.complete || !NAV.seat.sitFrame) return;
     const [sx, sy, sw, sh] = NAV.seat.sitFrame;
