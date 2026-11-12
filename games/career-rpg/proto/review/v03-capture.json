@@ -1,5 +1,5 @@
 {
-  "origin": "http://127.0.0.1:42537/games/career-rpg/proto/index.html",
+  "origin": "http://127.0.0.1:37893/games/career-rpg/proto/index.html",
   "talkSeed": "hefei",
   "forecastSeed": "forecast-seed",
   "talks": {
@@ -8,7 +8,7 @@
     "boss": "今天说过了。",
     "teammate": "还没走？来打一把 Dota。",
     "neighbor": "周一啊。咖啡凉了还在喝。明天会来「改表结构」，1 点，期限 3 天。",
-    "lunch": "好饿，去吃面吗？想吃牛肉面。",
+    "lunch": "好饿，去吃面吗？来碗辣的。",
     "after": {
       "people": [
         "boss",
@@ -16,13 +16,13 @@
         "neighbor"
       ],
       "name": "饭搭子",
-      "text": "走，就对面那家。",
+      "text": "吃完了。人倒是饱了。",
       "stamina": "10",
-      "ap": "3",
+      "ap": "2",
       "arrowVisible": true,
       "arrowColor": "rgb(208, 0, 0)",
       "arrowAbove": true,
-      "boxColor": "rgba(249, 248, 241, 0.8)",
+      "boxColor": "rgb(249, 248, 241)",
       "insideScene": true,
       "nearSceneBottom": true,
       "caret": true,
@@ -59,7 +59,7 @@
     "arrowVisible": true,
     "arrowColor": "rgb(208, 0, 0)",
     "arrowAbove": true,
-    "boxColor": "rgba(249, 248, 241, 0.8)",
+    "boxColor": "rgb(249, 248, 241)",
     "insideScene": true,
     "nearSceneBottom": true,
     "caret": true,

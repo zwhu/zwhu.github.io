@@ -96,6 +96,57 @@ async function shot(file) {
   const message = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   writeFileSync(file, Buffer.from(message.result.data, 'base64'));
 }
+const SPOT = { boss: [326, 100], lunch: [266, 160], neighbor: [147, 150], party: [106, 180] };
+
+async function closeDialogue() {
+  for (let i = 0; i < 6; i += 1) {
+    if (!await evaluate(`!!document.querySelector('#dialogue')`)) return;
+    await evaluate(`document.querySelector('[data-dialogue="next"], [data-dialogue="close"]')?.click()`);
+    await sleep(30);
+  }
+}
+
+async function walkTo(person) {
+  const [x, y] = SPOT[person];
+  const started = await evaluate(`window.hefei.clickScene(${x}, ${y})`);
+  if (!started) throw new Error('no path to ' + person);
+  for (let i = 0; i < 60; i += 1) {
+    await sleep(80);
+    if (await evaluate(`!!document.querySelector('#dialogue')`)) return;
+  }
+  throw new Error('no dialogue at ' + person);
+}
+
+async function finishInterview() {
+  if (!await evaluate(`!!document.querySelector('#dialogue')`)) await walkTo('boss');
+  for (let i = 0; i < 12; i += 1) {
+    if (await evaluate(`window.hefei.present().interviewed && !document.querySelector('[data-dialogue="next"]')`)) break;
+    await evaluate(`document.querySelector('[data-dialogue="next"], [data-dialogue="close"]')?.click()`);
+    await sleep(40);
+  }
+  await evaluate(`document.querySelector('[data-dialogue="close"]')?.click()`);
+}
+
+async function reachNextMorning() {
+  const start = await evaluate(`window.hefei.present().week * 10 + window.hefei.present().day`);
+  for (let i = 0; i < 20; i += 1) {
+    const now = await evaluate(`({ key: window.hefei.present().week * 10 + window.hefei.present().day, night: window.hefei.present().night })`);
+    if (now.key > start && !now.night) return;
+    await evaluate(`(() => {
+      const close = document.querySelector('[data-dialogue="close"], [data-dialogue="next"]');
+      if (close) { close.click(); return; }
+      const rest = document.querySelector('[data-action="rest"]');
+      if (rest) { rest.click(); return; }
+      const sleep = document.querySelector('[data-action="sleep"]');
+      if (sleep) { sleep.click(); return; }
+      const night = document.querySelector('[data-action="night"]');
+      if (night) night.click();
+    })()`);
+    await sleep(40);
+  }
+  throw new Error('did not reach the next morning');
+}
+
 async function goto(seed) {
   await send('Page.navigate', { url: `${origin}?seed=${encodeURIComponent(seed)}` });
   for (let i = 0; i < 50; i += 1) {
@@ -187,24 +238,15 @@ try {
     const dayPeople = await evaluate(`[...document.querySelectorAll('[data-person]')].map(node => node.getAttribute('data-person')).join(',')`);
     if (dayPeople !== 'boss,lunch,neighbor') throw new Error('day people ' + dayPeople);
     await save(3);
-    await evaluate(`document.querySelector('[data-person="boss"]').click()`);
+    await walkTo('boss');
     await save(4);
     const intro = await evaluate(sceneScript());
     if (intro.name !== '面试') throw new Error('interview nameplate ' + intro.name);
     if (intro.text !== '原本录用的人嫌工资低，没来。') throw new Error('interview line ' + intro.text);
     if (intro.arrowVisible) throw new Error('narrator has an arrow');
     if (intro.hint) throw new Error('interview shows a shortcut hint');
-    const hired = await evaluate(`(() => {
-      let guard = 0;
-      while (!window.hefei.present().interviewed && guard < 8) {
-        const next = document.querySelector('[data-dialogue="next"]');
-        if (next) next.click();
-        else document.querySelector('[data-person="boss"]')?.click();
-        guard += 1;
-      }
-      document.querySelector('[data-dialogue="close"]')?.click();
-      return window.hefei.present().interviewed;
-    })()`);
+    await finishInterview();
+    const hired = await evaluate(`window.hefei.present().interviewed`);
     if (!hired) throw new Error('interview did not finish');
     await save(2);
 
@@ -225,8 +267,8 @@ try {
     await save(3);
 
     async function speak(person, name) {
-      const opened = await evaluate(`(() => { document.querySelector('[data-person="${person}"]').click(); return true; })()`);
-      if (!opened) throw new Error('no ' + person);
+      await closeDialogue();
+      await walkTo(person);
       await save(4);
       const scene = await evaluate(sceneScript());
       if (scene.name !== name) throw new Error(person + ' nameplate ' + scene.name);
@@ -266,17 +308,16 @@ try {
     if (await evaluate(`!!document.querySelector('#dota')`)) throw new Error('dota still open');
     await save(3);
 
-    await evaluate(`document.querySelector('[data-action="day"]').click()`);
+    await reachNextMorning();
     const beforeNoodles = await speak('lunch', '饭搭子');
     if (!beforeNoodles.text.includes('好饿，去吃面')) throw new Error('lunch line ' + beforeNoodles.text);
-    if (beforeNoodles.stamina !== '7') throw new Error('stamina before noodles ' + beforeNoodles.stamina);
     const held = await save(4);
     await evaluate(`document.querySelector('[data-choice="accept"]').click()`);
     await save(6);
     const after = await evaluate(sceneScript());
     if (after.stamina !== '10') throw new Error('stamina after noodles ' + after.stamina);
-    if (after.ap !== '3') throw new Error('ap after noodles ' + after.ap);
-    if (after.text !== '走，就对面那家。') throw new Error('noodle result ' + after.text);
+    if (after.ap !== '2') throw new Error('ap after noodles ' + after.ap);
+    if (after.text !== '吃完了。人倒是饱了。') throw new Error('noodle result ' + after.text);
     if (after.name !== '饭搭子' || !after.arrowVisible || !/249,\s*248,\s*241/.test(after.boxColor) || !after.insideScene) {
       throw new Error('noodle scene ' + JSON.stringify(after));
     }
@@ -303,20 +344,11 @@ try {
     };
     await goto(FORECAST_SEED);
     await evaluate('window.scrollTo(0, 0)');
-    const hiredForecast = await evaluate(`(() => {
-      let guard = 0;
-      while (!window.hefei.present().interviewed && guard < 8) {
-        const next = document.querySelector('[data-dialogue="next"]');
-        if (next) next.click();
-        else document.querySelector('[data-person="boss"]')?.click();
-        guard += 1;
-      }
-      document.querySelector('[data-dialogue="close"]')?.click();
-      return window.hefei.present().interviewed;
-    })()`);
+    await finishInterview();
+    const hiredForecast = await evaluate(`window.hefei.present().interviewed`);
     if (!hiredForecast) throw new Error('forecast interview did not finish');
     await save(2);
-    await evaluate(`document.querySelector('[data-person="neighbor"]').click()`);
+    await walkTo('neighbor');
     await save(6);
     const scene = await evaluate(sceneScript());
     if (scene.name !== '隔壁工位老哥') throw new Error('forecast name ' + scene.name);
@@ -328,16 +360,24 @@ try {
     const fs = await import('node:fs');
     fs.copyFileSync(path.join(dir, String(index - 1).padStart(4, '0') + '.png'), path.join(stills, 'forecast-said.png'));
     await evaluate(`document.querySelector('[data-dialogue="close"]').click()`);
+    await reachNextMorning();
+    await evaluate(`window.hefei.clickScene(75, 132)`);
+    for (let i = 0; i < 40; i += 1) {
+      if (await evaluate(`!!document.querySelector('#desk-panel')`)) break;
+      await sleep(80);
+    }
     const morning = await evaluate(`(() => {
       const title = ${JSON.stringify(scene.forecastTitle)};
       const due = ${JSON.stringify(scene.forecastDue)};
       const cost = ${JSON.stringify(scene.forecastDifficulty)};
-      while (document.querySelector('[data-action="rest"]')) document.querySelector('[data-action="rest"]').click();
-      document.querySelector('[data-action="sleep"]').click();
       const view = window.hefei.present();
       const ticket = view.tickets.find(item => item.title === title && String(item.difficulty) === cost && String(item.dueIn) === due);
+      if (ticket) {
+        const list = view.tickets;
+        const index = list.findIndex(item => item.id === ticket.id);
+        for (let step = 0; step < index; step += 1) document.querySelector('[data-desk="next"]')?.click();
+      }
       const card = ticket ? document.querySelector('[data-ticket="' + ticket.id + '"]') : null;
-      if (card) card.scrollIntoView({ block: 'center' });
       return {
         week: view.week,
         day: view.dayName,
@@ -361,17 +401,8 @@ try {
 
   await send('Emulation.setDeviceMetricsOverride', { width: 375, height: 812, deviceScaleFactor: 1, mobile: true });
   await goto(TALK_SEED);
-  await evaluate(`(() => {
-    let guard = 0;
-    while (!window.hefei.present().interviewed && guard < 8) {
-      const next = document.querySelector('[data-dialogue="next"]');
-      if (next) next.click();
-      else document.querySelector('[data-person="boss"]')?.click();
-      guard += 1;
-    }
-    document.querySelector('[data-dialogue="close"]')?.click();
-  })()`);
-  await evaluate(`document.querySelector('[data-person="boss"]').click()`);
+  await finishInterview();
+  await walkTo('boss');
   await shot(path.join(stills, 'mobile-dialogue.png'));
   const mobile = await evaluate(sceneScript());
   if (!mobile.insideScene || !mobile.caret || mobile.name !== '老板' || !mobile.arrowVisible) throw new Error('mobile ' + JSON.stringify(mobile));

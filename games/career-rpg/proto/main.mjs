@@ -620,6 +620,7 @@ function hotspot(person, speaking, box) {
   return el('div', {
     class: speaking ? 'spot speaking' : 'spot',
     'data-spot': person.id,
+    'data-person': person.id,
     style: spotStyle(box),
   }, [
     el('i', { class: 'arrow', 'data-arrow': speaking ? person.id : '' }),

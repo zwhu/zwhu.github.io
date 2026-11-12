@@ -5,7 +5,7 @@ import { createReadStream, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import http from 'node:http';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { BARELY_ACTIONS, BARELY_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from '../line.mjs';
+import { BARELY_ACTIONS, BARELY_SEED, LOSS_ACTIONS, LOSS_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from '../line.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '../../../..');
 const OUT = path.join(ROOT, 'games/career-rpg/proto/review');
@@ -98,6 +98,29 @@ async function shot(file) {
   const message = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   writeFileSync(file, Buffer.from(message.result.data, 'base64'));
 }
+const SPOT = { boss: [326, 100], lunch: [266, 160], neighbor: [147, 150], party: [106, 180] };
+
+async function walkTo(person) {
+  const [x, y] = SPOT[person];
+  const started = await evaluate(`window.hefei.clickScene(${x}, ${y})`);
+  if (!started) throw new Error('no path to ' + person);
+  for (let i = 0; i < 60; i += 1) {
+    await sleep(80);
+    if (await evaluate(`!!document.querySelector('#dialogue')`)) return;
+  }
+  throw new Error('no dialogue at ' + person);
+}
+
+async function finishInterview() {
+  if (!await evaluate(`!!document.querySelector('#dialogue')`)) await walkTo('boss');
+  for (let i = 0; i < 12; i += 1) {
+    if (await evaluate(`window.hefei.present().interviewed && !document.querySelector('[data-dialogue="next"]')`)) break;
+    await evaluate(`document.querySelector('[data-dialogue="next"], [data-dialogue="close"]')?.click()`);
+    await sleep(40);
+  }
+  await evaluate(`document.querySelector('[data-dialogue="close"]')?.click()`);
+}
+
 async function goto(seed) {
   await send('Page.navigate', { url: `${origin}?seed=${encodeURIComponent(seed)}` });
   for (let i = 0; i < 50; i += 1) {
@@ -156,14 +179,13 @@ try {
 
   await record('interview', 'hefei', async save => {
     await save(2);
+    if (!await evaluate(`!!document.querySelector('#dialogue')`)) await walkTo('boss');
     const lines = [];
     for (let i = 0; i < 6; i += 1) {
       const step = await evaluate(`(() => {
         if (window.hefei.present().interviewed && !document.querySelector('[data-dialogue="next"]')) {
           return { done: true, name: document.querySelector('#nameplate')?.textContent || '', text: document.querySelector('#dialogue-text')?.textContent || '', arrow: !!document.querySelector('.spot.speaking'), hint: /快捷键|[ZXC]键/.test(document.body.innerText) };
         }
-        const next = document.querySelector('[data-dialogue="next"]');
-        if (!next) document.querySelector('[data-person="boss"]')?.click();
         return { done: false, name: document.querySelector('#nameplate')?.textContent || '', text: document.querySelector('#dialogue-text')?.textContent || '', arrow: !!document.querySelector('.spot.speaking'), spot: document.querySelector('.spot.speaking')?.getAttribute('data-spot') || '', hint: /快捷键|[ZXC]键/.test(document.body.innerText) };
       })()`);
       if (step.hint) throw new Error('shortcut hint ' + step.text);
@@ -191,8 +213,8 @@ try {
   });
 
   await record('day-talk', 'hefei', async save => {
-    await evaluate(`(() => { let g=0; while(!window.hefei.present().interviewed && g<8){ const n=document.querySelector('[data-dialogue="next"]'); if(n)n.click(); else document.querySelector('[data-person="boss"]').click(); g++; } document.querySelector('[data-dialogue="close"]')?.click(); })()`);
-    await evaluate(`document.querySelector('[data-person="lunch"]').click()`);
+    await finishInterview();
+    await walkTo('lunch');
     await save(4);
     const before = await evaluate(`({name:document.querySelector('#nameplate')?.textContent, text:document.querySelector('#dialogue-text')?.textContent, arrow:!!document.querySelector('.spot.speaking'), spot:document.querySelector('.spot.speaking')?.getAttribute('data-spot')})`);
     if (before.name !== '饭搭子' || !before.text.includes('好饿，去吃面吗？') || before.spot !== 'lunch' || !before.arrow) {
@@ -210,7 +232,8 @@ try {
   });
 
   await record('night-dota', 'hefei', async save => {
-    await evaluate(`(() => { let g=0; while(!window.hefei.present().interviewed && g<8){ const n=document.querySelector('[data-dialogue="next"]'); if(n)n.click(); else document.querySelector('[data-person="boss"]').click(); g++; } document.querySelector('[data-dialogue="close"]')?.click(); document.querySelector('[data-action="night"]').click(); })()`);
+    await finishInterview();
+    await evaluate(`document.querySelector('[data-action="night"]').click()`);
     await save(3);
     const night = await evaluate(`document.querySelector('#dialogue-text')?.textContent || ''`);
     if (night !== '白天的活告一段落。天黑了，我还没走。') throw new Error('night ' + night);
@@ -226,7 +249,7 @@ try {
     if (pass !== '日夜颠倒地学新东西，拼命把活干好，争取能留下来。') throw new Error('days pass ' + pass);
     fs.copyFileSync(passFile, path.join(STILLS, 'art-days-pass.png'));
     await evaluate(`document.querySelector('[data-dialogue="close"]').click()`);
-    await evaluate(`document.querySelector('[data-person="party"]').click()`);
+    await walkTo('party');
     await save(3);
     const party = await evaluate(`document.querySelector('#dialogue-text')?.textContent || ''`);
     if (!party.includes('Dota')) throw new Error('party ' + party);
@@ -254,40 +277,7 @@ try {
 
   async function playEnding(name, seed, actions, expect) {
     await record(name, seed, async save => {
-      for (const action of actions) {
-        if (action.type !== 'overnight') {
-          const found = await evaluate(`(() => {
-            const node = document.querySelector(${JSON.stringify(selector(action))});
-            if (!node) return false;
-            node.click();
-            return true;
-          })()`);
-          if (!found) throw new Error(name + ' missing ' + JSON.stringify(action));
-        }
-        if (action.type === 'overnight') {
-          await evaluate(`(() => {
-            let guard = 0;
-            while (!window.hefei.present().interviewed && guard < 8) {
-              const next = document.querySelector('[data-dialogue="next"]');
-              if (next) next.click();
-              else document.querySelector('[data-person="boss"]')?.click();
-              guard += 1;
-            }
-            document.querySelector('[data-dialogue="close"]')?.click();
-            document.querySelector('[data-dialogue="next"]')?.click();
-            document.querySelector('[data-action="night"]')?.click();
-            document.querySelector('[data-dialogue="next"]')?.click();
-            document.querySelector('[data-dialogue="close"]')?.click();
-      document.querySelector('[data-person="party"]')?.click();
-      document.querySelector('[data-choice="accept"]')?.click();
-      document.querySelector('[data-dialogue="next"]')?.click();
-    })()`);
-          await sleep(40);
-          await evaluate(`document.querySelector('[data-dota="skip"]')?.click()`);
-          await sleep(40);
-          await evaluate(`document.querySelector('[data-dota="back"]')?.click()`);
-        }
-      }
+      await evaluate(`(${JSON.stringify(actions)}).forEach(action => window.hefei.act(action))`);
       await evaluate(`document.querySelector('#ending')?.scrollIntoView({block:'start'})`);
       const text = await evaluate(`document.querySelector('#ending-text')?.textContent || ''`);
       const title = await evaluate(`document.querySelector('#ending h2')?.textContent || ''`);
@@ -299,32 +289,16 @@ try {
     }, 2);
   }
 
-  const lossActions = [];
-  await goto('hefei');
-  let phase = 'play';
-  while (phase === 'play') {
-    const action = await evaluate(`document.querySelector('[data-action="rest"]') ? 'rest' : 'sleep'`);
-    lossActions.push({ type: action });
-    await evaluate(`document.querySelector('[data-action="${action}"]').click()`);
-    phase = await evaluate('window.hefei.present().phase');
-  }
-  await playEnding('ending-quit', 'hefei', lossActions, '被劝退');
+  await playEnding('ending-quit', LOSS_SEED, LOSS_ACTIONS, '被劝退');
   await playEnding('ending-stay', BARELY_SEED, BARELY_ACTIONS, '还没写完');
   await playEnding('ending-remembered', REMEMBERED_SEED, REMEMBERED_ACTIONS, '努力工作的人一定会被看到的');
 
   async function talkbox(file) {
     await goto('hefei');
+    await finishInterview();
+    await evaluate(`document.querySelector('#office').scrollIntoView({ block: 'center' })`);
+    await walkTo('lunch');
     const info = await evaluate(`(() => {
-      let guard = 0;
-      while (!window.hefei.present().interviewed && guard < 8) {
-        const next = document.querySelector('[data-dialogue="next"]');
-        if (next) next.click();
-        else document.querySelector('[data-person="boss"]')?.click();
-        guard += 1;
-      }
-      document.querySelector('[data-dialogue="close"]')?.click();
-      document.querySelector('#office').scrollIntoView({ block: 'center' });
-      document.querySelector('[data-person="lunch"]').click();
       const office = document.querySelector('#office').getBoundingClientRect();
       const box = document.querySelector('#dialogue').getBoundingClientRect();
       const choice = document.querySelector('[data-choice="accept"]').getBoundingClientRect();
@@ -348,7 +322,7 @@ try {
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
   await goto('hefei');
   await shot(path.join(STILLS, 'art-mobile-day.png'));
-  await evaluate(`document.querySelector('[data-person="boss"]').click()`);
+  await walkTo('boss');
   await shot(path.join(STILLS, 'art-mobile-interview.png'));
   report.stills = [
     'art-interview-narrator.png',
