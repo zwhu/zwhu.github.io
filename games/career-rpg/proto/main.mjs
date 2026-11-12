@@ -2,7 +2,7 @@ import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickM
 import { CONFIG, SCRIPT, applyAction, createGame, present } from './rules.mjs';
 import { bannerAt, learningSkills, sceneArrival, sceneHint, showBannerState } from './scene-ui.mjs';
 import { spritePose } from './walk-sprites.mjs';
-import { WALK_GRID, facingOf, findPath, resolveClick } from './walk.mjs';
+import { WALK_GRID, facingOf, findPath, integerScale, resolveClick, viewOrigin } from './walk.mjs';
 
 const app = document.querySelector('#app');
 
@@ -73,8 +73,19 @@ function currentPose() {
   });
 }
 
+function sceneStyle(x, y, w, h) {
+  const { width, height } = WALK_GRID.scene;
+  return `left:${(x / width) * 100}%;top:${(y / height) * 100}%;width:${(w / width) * 100}%;height:${(h / height) * 100}%`;
+}
+
+// 脚底不超过饮水机锚点时，人画在饮水机后面。
+function walkerDepth() {
+  return walker.y > WALK_GRID.cooler.ySort ? '' : 'z-index:1';
+}
+
 function walkerElement() {
   const pose = currentPose();
+  const depth = walkerDepth();
   if (pose.kind === 'seated') {
     const seat = WALK_GRID.seat;
     return el('img', {
@@ -82,19 +93,21 @@ function walkerElement() {
       class: 'walker seated',
       alt: '',
       src: './art/player-seated.png',
-      style: `left:${(seat.x / 384) * 100}%;top:${(seat.y / 216) * 100}%;width:${(seat.w / 384) * 100}%;height:${(seat.h / 216) * 100}%`,
+      style: `${sceneStyle(seat.x, seat.y, seat.w, seat.h)}${depth ? `;${depth}` : ''}`,
     });
   }
   const frame = pose.frame;
   const anchor = frame.anchor || pose.anchor;
   const left = walker.x - anchor.x;
   const top = walker.y - anchor.y;
+  const { width, height } = WALK_GRID.scene;
   const box = [
-    `left:${(left / 384) * 100}%`,
-    `top:${(top / 216) * 100}%`,
-    `width:${(frame.w / 384) * 100}%`,
-    `height:${(frame.h / 216) * 100}%`,
+    `left:${(left / width) * 100}%`,
+    `top:${(top / height) * 100}%`,
+    `width:${(frame.w / width) * 100}%`,
+    `height:${(frame.h / height) * 100}%`,
     pose.mirror ? 'transform:scaleX(-1)' : '',
+    depth,
   ].filter(Boolean).join(';');
   const imgStyle = [
     'position:absolute',
@@ -115,10 +128,12 @@ function paintWalker() {
   const spot = document.querySelector('[data-spot="player"]');
   if (!spot) return;
   const pose = currentPose();
+  const seat = WALK_GRID.seat;
   const box = pose.kind === 'seated'
-    ? [63, 134, 88, 163]
+    ? [seat.x, seat.y, seat.x + seat.w, seat.y + seat.h]
     : [walker.x - 12, walker.y - pose.anchor.y, walker.x + 12, walker.y - pose.anchor.y + 18];
   spot.style.cssText = spotStyle(box);
+  followPlayer();
 }
 
 function arriveWalker() {
@@ -524,12 +539,14 @@ function seedForm(view) {
 
 function hud(view) {
   return el('div', { class: 'hud', id: 'scene-when' }, [
-    el('span', {}, [`第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`]),
-    el('span', {}, ['行动点 ', el('strong', { id: 'ap' }, [String(view.ap)])]),
-    el('span', {}, ['体力 ', el('strong', { id: 'stamina' }, [String(view.stamina)])]),
-    el('span', {}, ['好感 ', el('strong', { id: 'favor' }, [String(view.favor)])]),
-    el('span', {}, ['本周线 ', el('strong', { id: 'line' }, [String(view.line)])]),
-    el('span', {}, ['记住线 ', el('strong', { id: 'good-favor' }, [String(view.goodFavor)])]),
+    el('span', { class: 'hud-when' }, [`第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`]),
+    el('div', { class: 'status-line', id: 'status-line' }, [
+      el('span', {}, ['行动点 ', el('strong', { id: 'ap' }, [String(view.ap)])]),
+      el('span', {}, ['体力 ', el('strong', { id: 'stamina' }, [String(view.stamina)])]),
+      el('span', {}, ['好感 ', el('strong', { id: 'favor' }, [String(view.favor)])]),
+      el('span', {}, ['本周线 ', el('strong', { id: 'line' }, [String(view.line)])]),
+      el('span', {}, ['记住线 ', el('strong', { id: 'good-favor' }, [String(view.goodFavor)])]),
+    ]),
   ]);
 }
 
@@ -598,23 +615,23 @@ function skillCard(skill) {
 }
 
 const DAY_BOXES = {
-  player: [63, 134, 88, 176],
-  neighbor: [135, 134, 160, 176],
-  lunch: [250, 136, 282, 178],
-  boss: [310, 82, 342, 128],
+  player: [99, 184, 124, 213],
+  neighbor: [170, 184, 192, 213],
+  lunch: [292, 186, 312, 228],
+  boss: [534, 149, 551, 193],
 };
-// art/source/night-v2-boxes.json。夜里只有开黑队友能点，其余三人的框不放按钮。
+// 夜里只有开黑队友能点，其余三人的框不放按钮。
 const NIGHT_BOXES = {
-  player: [62, 134, 87, 175],
-  neighbor: [134, 134, 159, 175],
-  lunch: [206, 134, 232, 175],
-  boss: [320, 79, 339, 119],
-  party: [98, 158, 115, 200],
+  player: [99, 184, 124, 213],
+  neighbor: [170, 184, 192, 213],
+  lunch: [242, 184, 268, 213],
+  boss: [535, 139, 556, 179],
+  party: [134, 208, 151, 250],
 };
 
 function spotStyle(box) {
   const [x0, y0, x1, y1] = box;
-  return `left:${(x0 / 384) * 100}%;top:${(y0 / 216) * 100}%;width:${((x1 - x0) / 384) * 100}%;height:${((y1 - y0) / 216) * 100}%`;
+  return sceneStyle(x0, y0, x1 - x0, y1 - y0);
 }
 
 function hotspot(person, speaking, box) {
@@ -654,16 +671,18 @@ function office(view) {
     if (!box) continue;
     spots.push(hotspot(person, speaker === person.id, box));
   }
+  const cooler = WALK_GRID.cooler;
   const children = [
     el('img', {
       class: 'scene-img',
       alt: '',
-      src: view.night ? './art/night-384x216.png' : './art/day-384x216.png',
+      src: view.night ? './art/night-640x360.png' : './art/day-640x360.png',
     }),
     el('img', {
       class: 'cooler',
       alt: '',
       src: view.night ? './art/water-cooler-night.png' : './art/water-cooler-day.png',
+      style: sceneStyle(cooler.x, cooler.y, cooler.w, cooler.h),
     }),
     el('img', {
       class: 'cast',
@@ -677,7 +696,6 @@ function office(view) {
   children.push(
     walkerElement(),
     el('div', { class: 'spots' }, spots),
-    sceneActions(view),
   );
   const line = bannerAt(banner, Date.now());
   if (line) children.push(el('p', { class: 'hint', id: 'scene-banner' }, [line]));
@@ -686,12 +704,16 @@ function office(view) {
   if (box) children.push(box);
   const stage = el('div', { class: 'stage', id: 'stage' }, children);
   stage.addEventListener('click', onSceneClick);
+  const frame = el('div', { class: 'stage-frame' }, [
+    el('div', { class: 'stage-scroll' }, [stage]),
+    sceneActions(view),
+  ]);
   return el('section', {
     class: `${view.night ? 'office night' : 'office'}${dialogue ? ' has-dialogue' : ''}`,
     id: 'office',
   }, [
     hud(view),
-    stage,
+    frame,
   ]);
 }
 
@@ -934,7 +956,99 @@ function render() {
   parts.push(seedForm(view));
   if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
+  fitIntegerScale();
+  followPlayer();
 }
+
+function placeBanner(whole, stage) {
+  const hint = document.querySelector('#scene-banner');
+  const bar = document.querySelector('.hud');
+  if (!hint || !bar) return;
+  hint.style.left = '';
+  hint.style.right = '';
+  hint.style.width = '';
+  hint.style.top = '';
+  if (whole) {
+    hint.classList.remove('pinned');
+    if (hint.parentElement !== stage) stage.append(hint);
+    return;
+  }
+  hint.classList.add('pinned');
+  if (hint.previousElementSibling !== bar) bar.after(hint);
+}
+
+function intersects(a, b) {
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+}
+
+function fitIntegerScale() {
+  const scroll = document.querySelector('.stage-scroll');
+  const stage = document.querySelector('#stage');
+  if (!scroll || !stage) return;
+  const scale = integerScale(scroll.clientWidth, WALK_GRID.scene.width);
+  stage.style.width = `${WALK_GRID.scene.width * scale}px`;
+  stage.style.height = `${WALK_GRID.scene.height * scale}px`;
+}
+
+// 窄画面按 1 倍裁切，滚动把人留在可见范围里。按钮钉在可见区域右下角，挡住人就换到左边。
+function followPlayer() {
+  const scroll = document.querySelector('.stage-scroll');
+  const stage = document.querySelector('#stage');
+  const frame = document.querySelector('.stage-frame');
+  const dock = frame?.querySelector('.scene-actions');
+  if (!scroll || !stage || stage.clientWidth < 1) return;
+  const scale = stage.clientWidth / WALK_GRID.scene.width;
+  const viewWorld = scroll.clientWidth / scale;
+  scroll.scrollLeft = viewOrigin(walker.x, viewWorld, WALK_GRID.scene.width) * scale;
+  const whole = scroll.clientWidth + 1 >= stage.clientWidth;
+  placeBanner(whole, stage);
+  if (!dock) return;
+  const frameBox = frame.getBoundingClientRect();
+  const scrollBox = scroll.getBoundingClientRect();
+  const stageBox = stage.getBoundingClientRect();
+  const visibleRight = Math.min(scrollBox.right, stageBox.right);
+  const visibleLeft = Math.max(scrollBox.left, stageBox.left);
+  const visibleBottom = Math.min(scrollBox.bottom, stageBox.bottom);
+  const gap = 4 * scale;
+  for (const node of stage.querySelectorAll('#desk-panel, .dialogue')) {
+    if (whole) {
+      node.style.left = '';
+      node.style.right = '';
+      node.style.width = '';
+    } else {
+      const pad = 8 * scale;
+      node.style.right = 'auto';
+      node.style.left = `${scroll.scrollLeft + pad}px`;
+      node.style.width = `${Math.max(0, scroll.clientWidth - pad * 2)}px`;
+    }
+  }
+  dock.style.left = 'auto';
+  if (whole) {
+    dock.style.right = `${(6 / 384) * stage.clientWidth}px`;
+    const lift = document.querySelector('.dialogue')
+      ? (frameBox.width < 520 ? 92 : 64) / 216
+      : 8 / 216;
+    dock.style.bottom = `${lift * stage.clientHeight}px`;
+  } else {
+    dock.style.right = `${frameBox.right - visibleRight + gap}px`;
+    dock.style.bottom = `${frameBox.bottom - visibleBottom + gap}px`;
+    const talk = document.querySelector('.dialogue');
+    if (talk && talk.getBoundingClientRect().height > 0) {
+      const talkTop = talk.getBoundingClientRect().top;
+      dock.style.bottom = `${Math.max(frameBox.bottom - visibleBottom + gap, frameBox.bottom - talkTop + gap)}px`;
+    }
+  }
+  const player = document.querySelector('#walker')?.getBoundingClientRect();
+  if (player && intersects(player, dock.getBoundingClientRect())) {
+    dock.style.right = 'auto';
+    dock.style.left = `${visibleLeft - frameBox.left + gap}px`;
+  }
+}
+
+window.addEventListener('resize', () => {
+  fitIntegerScale();
+  followPlayer();
+});
 
 window.addEventListener('keydown', event => {
   if (!dota || dota.mode !== 'play' || event.repeat) return;

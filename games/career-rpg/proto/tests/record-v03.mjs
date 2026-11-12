@@ -96,7 +96,7 @@ async function shot(file) {
   const message = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   writeFileSync(file, Buffer.from(message.result.data, 'base64'));
 }
-const SPOT = { boss: [326, 100], lunch: [266, 160], neighbor: [147, 150], party: [106, 180] };
+const SPOT = { boss: [542, 170], lunch: [300, 200], neighbor: [180, 200], party: [142, 230] };
 
 async function closeDialogue() {
   for (let i = 0; i < 6; i += 1) {
@@ -361,7 +361,7 @@ try {
     fs.copyFileSync(path.join(dir, String(index - 1).padStart(4, '0') + '.png'), path.join(stills, 'forecast-said.png'));
     await evaluate(`document.querySelector('[data-dialogue="close"]').click()`);
     await reachNextMorning();
-    await evaluate(`window.hefei.clickScene(75, 132)`);
+    await evaluate(`window.hefei.clickScene(110, 185)`);
     for (let i = 0; i < 40; i += 1) {
       if (await evaluate(`!!document.querySelector('#desk-panel')`)) break;
       await sleep(80);
