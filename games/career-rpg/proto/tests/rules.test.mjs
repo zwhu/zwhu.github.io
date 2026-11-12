@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 import { CONFIG, ENDINGS, SKILL_IDS } from '../config.mjs';
 import { BARELY_ACTIONS, BARELY_SEED, LOSS_ACTIONS, LOSS_SEED, REMEMBERED_ACTIONS, REMEMBERED_SEED } from '../line.mjs';
 import {
@@ -11,6 +13,7 @@ import {
   createGame,
   forecastTomorrow,
   present,
+  SCRIPT,
   replay,
   snapshot,
   ticketPenalty,
@@ -19,6 +22,10 @@ import {
   weekLine,
 } from '../rules.mjs';
 import { ratesOnly, runStrategies } from '../sim.mjs';
+import { bannerAt, learningSkills, sceneArrival, showBannerState } from '../scene-ui.mjs';
+import { WALK_GRID, boxesOverlap, commitArrival, findPath, occupiedBox, peopleAt, pointBlocked, resolveClick } from '../walk.mjs';
+import { convertMeta, pngSize } from '../walk/build-sprites.mjs';
+import { frameIndex, resolveSprite, spritePose } from '../walk-sprites.mjs';
 
 const rulesSource = readFileSync(new URL('../rules.mjs', import.meta.url), 'utf8');
 
@@ -286,12 +293,68 @@ test('the good ending needs both the file database and the remember line', () =>
 test('the two cleared endings replace the probation reminder', () => {
   assert.equal(ENDINGS.remembered.title, '留下来，还被老板记住了');
   assert.equal(ENDINGS.barely.title, '勉强留下来');
-  assert.equal(`${ENDINGS.remembered.title}${ENDINGS.remembered.text}${ENDINGS.barely.title}${ENDINGS.barely.text}`.includes('争取'), false);
+  const bodies = [
+    ENDINGS.remembered.title,
+    ENDINGS.remembered.text,
+    ENDINGS.barely.title,
+    ENDINGS.barely.text,
+    ENDINGS.barely.fileDbDone,
+    ENDINGS.lost.text,
+  ].join('');
+  assert.equal(bodies.includes('争取'), false);
+  assert.match(SCRIPT.daysPass, /争取能留下来/);
+  assert.equal(bodies.includes(SCRIPT.daysPass), false);
 });
 
 function interviewed(seed) {
-  return applyAction(createGame(seed), { type: 'talk', person: 'boss' });
+  let state = createGame(seed);
+  let guard = 0;
+  while (!state.interviewed && guard < 8) {
+    state = applyAction(state, { type: 'talk', person: 'boss' });
+    guard += 1;
+  }
+  return state;
 }
+
+test('the opening interview is five lines and the first nameplate is 面试', () => {
+  let state = createGame('intro');
+  const lines = [];
+  const names = [];
+  while (!state.interviewed) {
+    const line = coworkerLine(state, 'boss');
+    lines.push(line.text);
+    names.push(line.name);
+    const next = applyAction(state, { type: 'talk', person: 'boss' });
+    assert.equal(next.ap, state.ap);
+    assert.equal(next.interviewed, lines.length === 5);
+    state = next;
+  }
+  assert.deepEqual(names, ['面试', '老板', '我', '老板', '']);
+  assert.deepEqual(lines, [
+    '原本录用的人嫌工资低，没来。',
+    '你能力不行，来了也干不了活。',
+    '我不要工资，让我来试试就行。',
+    '行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。',
+    '就这样留下了。',
+  ]);
+  assert.equal(coworkerLine(createGame('intro'), 'boss').narrator, true);
+  assert.equal(coworkerLine(state, 'boss').text, '今天说过了。');
+});
+
+test('at night only the teammate can be clicked', () => {
+  const day = interviewed('night-click');
+  assert.equal(coworkerLine(day, 'boss').clickable, true);
+  assert.equal(coworkerLine(day, 'lunch').clickable, true);
+  assert.equal(coworkerLine(day, 'neighbor').clickable, true);
+  assert.equal(coworkerLine(day, 'party').clickable, false);
+  const night = applyAction(day, { type: 'night' });
+  assert.equal(coworkerLine(night, 'boss').clickable, false);
+  assert.equal(coworkerLine(night, 'lunch').clickable, false);
+  assert.equal(coworkerLine(night, 'neighbor').clickable, false);
+  assert.equal(coworkerLine(night, 'party').clickable, true);
+  assert.equal(night.ap, day.ap);
+  assert.equal(night.favor, day.favor);
+});
 
 test('before the interview everyone only sends you to the boss', () => {
   const night = applyAction(createGame('gate'), { type: 'night' });
@@ -306,8 +369,10 @@ test('before the interview everyone only sends you to the boss', () => {
   assert.equal(night.ap, CONFIG.dailyAp);
   assert.equal(night.stamina, CONFIG.staminaStart);
   assert.equal(night.dotaPending, false);
-  const hired = applyAction(night, { type: 'talk', person: 'boss' });
+  let hired = night;
+  while (!hired.interviewed) hired = applyAction(hired, { type: 'talk', person: 'boss' });
   assert.equal(hired.interviewed, true);
+  assert.equal(hired.night, true);
   assert.match(coworkerLine(hired, 'lunch').text, /好饿，去吃面吗？/);
   assert.doesNotMatch(coworkerLine(hired, 'lunch').text, /找老板/);
   assert.match(coworkerLine(hired, 'neighbor').text, /明天会来/);
@@ -343,6 +408,7 @@ test('noodles cost 1 AP and restore 3 stamina, one more than resting', () => {
   assert.equal(fresh.stamina, 10);
   assert.equal(fresh.stamina - 7, CONFIG.restStamina + 1);
   assert.match(fresh.log[0], /体力 \+3，现在 10/);
+  assert.equal(fresh.say, '走，就对面那家。');
   assert.equal(applyAction(fresh, { type: 'talk', person: 'lunch', choice: 'accept' }), fresh);
   let dry = interviewed('noodles-dry');
   while (dry.ap > 0) dry = applyAction(dry, { type: 'rest' });
@@ -462,4 +528,195 @@ test('fixed lines reproduce a firing, a bare survival, and a remembered win', ()
   assert.match(present(barely).victoryText, /还没写完/);
   assert.equal(present(barely).victoryTitle, '勉强留下来');
   assert.ok(barely.favor >= weekLine(4));
+});
+
+test('each clickable target has a path that stays off obstacles', () => {
+  const start = WALK_GRID.start;
+  assert.equal(pointBlocked(start.x, start.y), false);
+  for (const id of ['boss', 'lunch', 'neighbor', 'computer', 'shelf', 'party', 'water', 'door']) {
+    const target = WALK_GRID.targets[id];
+    assert.equal(pointBlocked(target.x, target.y), false, id);
+    const path = findPath(start, target);
+    assert.ok(path, id);
+    for (const point of path) assert.equal(pointBlocked(point.x, point.y), false, id);
+    const end = path.length ? path[path.length - 1] : start;
+    assert.ok(Math.abs(end.x - target.x) < WALK_GRID.cell, id);
+    assert.ok(Math.abs(end.y - target.y) < WALK_GRID.cell, id);
+  }
+  const midway = findPath(start, WALK_GRID.targets.neighbor)[8];
+  const retarget = findPath(midway, WALK_GRID.targets.boss);
+  assert.ok(retarget);
+  for (const point of retarget) assert.equal(pointBlocked(point.x, point.y), false);
+});
+
+test('spawn and every stop keep the player off the people who are there', () => {
+  function clearOf(point, night) {
+    const box = occupiedBox(point);
+    return peopleAt(night).every(person => !boxesOverlap(box, person));
+  }
+  const spawn = { x: WALK_GRID.start.x, y: WALK_GRID.start.y, pose: 'seated' };
+  assert.equal(clearOf(spawn, false), true, 'morning seat');
+  for (const [id, target] of Object.entries(WALK_GRID.targets)) {
+    const nights = target.when === 'night' ? [true] : target.when === 'day' ? [false] : [false, true];
+    for (const night of nights) {
+      assert.equal(clearOf(target, night), true, `${id} night=${night}`);
+      const path = findPath(WALK_GRID.start, target, { night });
+      assert.ok(path, `${id} path night=${night}`);
+      for (const point of path) {
+        assert.equal(clearOf({ ...point, pose: 'stand' }, night), true, `${id} step ${point.x},${point.y}`);
+      }
+    }
+  }
+});
+
+test('only the newest banner stays, and it goes away after a few seconds', () => {
+  const first = showBannerState('先去找老板。', 0);
+  assert.equal(bannerAt(first, 1000), '先去找老板。');
+  const next = showBannerState('行动点还没用完。', 1000);
+  assert.equal(bannerAt(next, 2000), '行动点还没用完。');
+  assert.notEqual(next.text, first.text);
+  assert.equal(bannerAt(first, 3000), '');
+  assert.equal(bannerAt(next, 1000 + 3000), '');
+  assert.equal(bannerAt(showBannerState('', 2000), 2000), '');
+  const css = readFileSync(new URL('../style.css', import.meta.url), 'utf8');
+  assert.match(css, /\.hud\s*\{[^}]*position:\s*relative/);
+  assert.match(css, /\.stage\s*\{/);
+  assert.doesNotMatch(css, /\.dialogue\s*\{[^}]*rgba\(/);
+  const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
+  assert.equal((mainSource.match(/class: 'hint'/g) || []).length, 1);
+  assert.match(mainSource, /bannerAt\(banner/);
+  assert.doesNotMatch(mainSource, /07-seated-sprites/);
+});
+
+test('clicking empty floor does not change the game, including ap and stamina', () => {
+  const game = createGame('hefei');
+  const before = snapshot(game);
+  const hit = resolveClick({ x: 100, y: 194 }, { night: false, canStudy: true });
+  assert.equal(hit.kind, 'walk');
+  assert.equal(hit.action, null);
+  const path = findPath(WALK_GRID.start, hit.target);
+  assert.ok(path);
+  for (const point of path) assert.equal(pointBlocked(point.x, point.y), false);
+  const after = commitArrival(game, hit, applyAction);
+  assert.equal(after, game);
+  assert.equal(after.ap, before.ap);
+  assert.equal(after.stamina, before.stamina);
+  assert.deepEqual(snapshot(after), before);
+});
+
+test('scene clicks use the same actions as the buttons', () => {
+  const day = { night: false, canStudy: false };
+  assert.deepEqual(resolveClick({ x: 326, y: 100 }, day).action, { type: 'talk', person: 'boss' });
+  assert.deepEqual(resolveClick({ x: 266, y: 160 }, day).action, { type: 'talk', person: 'lunch' });
+  assert.deepEqual(resolveClick({ x: 147, y: 150 }, day).action, { type: 'talk', person: 'neighbor' });
+  assert.deepEqual(resolveClick({ x: 75, y: 132 }, day).action, { type: 'computer' });
+  assert.deepEqual(resolveClick({ x: 20, y: 40 }, day).action, { type: 'shelf' });
+  assert.deepEqual(resolveClick({ x: 178, y: 70 }, day).action, { type: 'water' });
+  assert.deepEqual(resolveClick({ x: 190, y: 190 }, day).action, { type: 'door' });
+  assert.deepEqual(sceneArrival('computer', { interviewed: false }), { prompt: '先去找老板。' });
+  assert.deepEqual(sceneArrival('shelf', { interviewed: false }), { prompt: '先去找老板。' });
+  assert.deepEqual(sceneArrival('shelf', { interviewed: true, canStudy: true }), { action: { type: 'study', skill: 'jquery' } });
+  assert.deepEqual(learningSkills([{ id: 'linux' }, { id: 'jquery' }]).map(item => item.id), ['linux']);
+  assert.equal(resolveClick({ x: 326, y: 100 }, { night: true, canStudy: true }).kind, 'none');
+  assert.deepEqual(resolveClick({ x: 106, y: 180 }, { night: true, canStudy: false }).action, { type: 'talk', person: 'party' });
+  const game = createGame('hefei');
+  const walked = commitArrival(game, resolveClick({ x: 24, y: 140 }, day), applyAction);
+  assert.equal(walked.ap, game.ap);
+  assert.equal(walked.stamina, game.stamina);
+  const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
+  assert.match(mainSource, /openPerson\(action\.person\)/);
+  assert.match(mainSource, /act\(\{ type: 'study', skill: present\(state\)\.shelf\.id \}\)/);
+  const actionCss = readFileSync(new URL('../style.css', import.meta.url), 'utf8').match(/\.actions\s*\{[^}]*\}/)[0];
+  assert.equal(/position:\s*(?:sticky|fixed)/.test(actionCss), false);
+});
+
+test('walk sprites come from the generated sheet and match the designer meta', () => {
+  const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
+  const meta = JSON.parse(readFileSync(new URL('../walk/meta.json', import.meta.url), 'utf8'));
+  const image = 'player-walk-hefei.png';
+  const imageSize = pngSize(fileURLToPath(new URL(`../walk/${image}`, import.meta.url)));
+  assert.deepEqual(sheet, convertMeta(meta, { image, imageSize }));
+  for (const facing of meta.rows) {
+    const sprite = resolveSprite(sheet, facing);
+    assert.equal(sprite.frames.length, meta.cycles.walk6.length, facing);
+    assert.equal(sprite.mirror, false, facing);
+    assert.deepEqual([sprite.anchor.x, sprite.anchor.y], meta.foot_anchor);
+    assert.equal(sprite.frameMs, meta.frame_ms.walk6);
+    assert.deepEqual([sprite.idle.x, sprite.idle.y, sprite.idle.w, sprite.idle.h], meta.frames[facing].idle.rect);
+    assert.equal(sprite.image, `./walk/${image}`);
+  }
+  const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
+  const loaderSource = readFileSync(new URL('../walk-sprites.mjs', import.meta.url), 'utf8');
+  assert.equal(mainSource.includes('meta.json'), false);
+  assert.equal(loaderSource.includes('meta.json'), false);
+  assert.match(mainSource, /walk\.sprites\.json/);
+  const check = spawnSync(process.execPath, ['games/career-rpg/proto/walk/build-sprites.mjs', '--check'], {
+    cwd: fileURLToPath(new URL('../../../..', import.meta.url)),
+  });
+  assert.equal(check.status, 0, check.stderr?.toString());
+});
+
+test('a missing walk direction falls back without mirroring', () => {
+  const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
+  delete sheet.directions.left;
+  const sprite = resolveSprite(sheet, 'left');
+  assert.deepEqual(sprite.frames, resolveSprite(sheet, 'down').frames);
+  assert.equal(sprite.mirror, false);
+  assert.equal(resolveSprite({}, 'up').frames.length, 1);
+});
+
+test('each facing reads its own sheet row, and walking is not the stand frame', () => {
+  const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
+  const meta = JSON.parse(readFileSync(new URL('../walk/meta.json', import.meta.url), 'utf8'));
+  const cellH = meta.cell[1];
+  for (const facing of ['up', 'down', 'left', 'right']) {
+    const row = meta.rows.indexOf(facing);
+    const sprite = resolveSprite(sheet, facing);
+    const walk = sprite.frames.map(frame => `(${frame.x},${frame.y},${frame.w},${frame.h})`).join(' ');
+    console.log(`${facing} row ${row} y=${row * cellH} idle=(${sprite.idle.x},${sprite.idle.y},${sprite.idle.w},${sprite.idle.h}) walk=${walk}`);
+    assert.equal(sprite.idle.y, row * cellH, facing);
+    assert.equal(sprite.frames.length, meta.cycles.walk6.length, facing);
+    for (const [index, name] of meta.cycles.walk6.entries()) {
+      const rect = meta.frames[facing][name].rect;
+      assert.deepEqual([sprite.frames[index].x, sprite.frames[index].y, sprite.frames[index].w, sprite.frames[index].h], rect, `${facing} ${name}`);
+      assert.notEqual(sprite.frames[index].x, sprite.idle.x, `${facing} ${name} is the stand cell`);
+    }
+  }
+  assert.equal(meta.rows[0], 'down');
+  assert.equal(meta.rows[1], 'up');
+  assert.notEqual(resolveSprite(sheet, 'up').idle.y, resolveSprite(sheet, 'left').idle.y);
+  assert.notEqual(resolveSprite(sheet, 'down').idle.y, resolveSprite(sheet, 'up').idle.y);
+  const moving = spritePose(sheet, { facing: 'down', moving: true, seated: false, elapsedMs: sheet.frameMs });
+  const stopped = spritePose(sheet, { facing: 'down', moving: false, seated: false, elapsedMs: sheet.frameMs });
+  const seated = spritePose(sheet, { facing: 'down', moving: false, seated: true, elapsedMs: 0 });
+  assert.equal(moving.kind, 'walk');
+  assert.notEqual(moving.frame.x, stopped.frame.x);
+  assert.deepEqual(stopped.frame, resolveSprite(sheet, 'down').idle);
+  assert.equal(seated.kind, 'seated');
+  const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
+  assert.match(mainSource, /player-seated\.png/);
+});
+
+test('walking changes frames, stopping shows the stand pose, and sitting leaves the walk sheet', () => {
+  const sheet = JSON.parse(readFileSync(new URL('../walk/walk.sprites.json', import.meta.url), 'utf8'));
+  const started = spritePose(sheet, { facing: 'left', moving: true, seated: false, elapsedMs: 0 });
+  const stepped = spritePose(sheet, { facing: 'left', moving: true, seated: false, elapsedMs: sheet.frameMs });
+  const stopped = spritePose(sheet, { facing: 'left', moving: false, seated: false, elapsedMs: sheet.frameMs });
+  const seated = spritePose(sheet, { facing: 'left', moving: false, seated: true, elapsedMs: 0 });
+  assert.equal(started.kind, 'walk');
+  assert.notEqual(started.frame.x, stepped.frame.x);
+  assert.equal(stopped.kind, 'stand');
+  assert.deepEqual(stopped.frame, resolveSprite(sheet, 'left').idle);
+  assert.equal(seated.kind, 'seated');
+  assert.equal(seated.frame, undefined);
+});
+
+test('walk frames advance when a direction has more than one frame', () => {
+  const sheet = JSON.parse(readFileSync(new URL('./fixtures/walk-two-frames.json', import.meta.url), 'utf8'));
+  const sprite = resolveSprite(sheet, 'down');
+  assert.equal(sprite.frames.length, 2);
+  assert.equal(frameIndex(sprite, 0), 0);
+  assert.equal(frameIndex(sprite, 99), 0);
+  assert.equal(frameIndex(sprite, 100), 1);
+  assert.equal(frameIndex(sprite, 200), 0);
 });

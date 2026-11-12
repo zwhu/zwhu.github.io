@@ -55,7 +55,82 @@ const PEOPLE = Object.freeze({
   party: Object.freeze({ name: '开黑队友', nightOnly: true }),
 });
 
-const LUNCH_DISHES = Object.freeze(['牛肉面', '辣面', '清汤面', '鸡蛋面', '番茄面']);
+const INTERVIEW = Object.freeze([
+  Object.freeze({ name: '面试', speaker: 'narrator', text: '原本录用的人嫌工资低，没来。' }),
+  Object.freeze({ name: '老板', speaker: 'boss', text: '你能力不行，来了也干不了活。' }),
+  Object.freeze({ name: '我', speaker: 'player', text: '我不要工资，让我来试试就行。' }),
+  Object.freeze({ name: '老板', speaker: 'boss', text: '行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。' }),
+  Object.freeze({ name: '', speaker: 'narrator', text: '就这样留下了。' }),
+]);
+
+const BOSS_DAILY = Object.freeze([
+  '接口的错码写清楚。写完跟我说一声。',
+  '导库别放在中午。人少的时候再动。',
+  '日志看完再重启。别一上来就重来。',
+  '改表先跟我说。改完把脚本留着。',
+  '演示前把数对上。别到时候当场错。',
+  '能今天收的就今天收。别攒着。',
+  '单子下来先看期限。急的先做。',
+  '服务器那边有动静，优先看。',
+  '页面也要顾。别只盯着库。',
+  '有卡住的，早点开口。别闷头熬。',
+]);
+
+const LUNCH_LINES = Object.freeze([
+  '好饿，去吃面吗？想吃牛肉面。',
+  '好饿，去吃面吗？来碗辣的。',
+  '好饿，去吃面吗？熬到现在，得吃点热的。',
+  '好饿，去吃面吗？清汤也行，走吧。',
+  '好饿，去吃面吗？我请。',
+  '好饿，去吃面吗？对面那家，很快。',
+  '好饿，去吃面吗？坐太久了，去活动一下。',
+  '好饿，去吃面吗？加个蛋，我的习惯。',
+  '好饿，去吃面吗？番茄的也有。',
+  '好饿，去吃面吗？吃完再赶单。',
+]);
+
+const NEIGHBOR_LINES = Object.freeze([
+  '周一啊。咖啡凉了还在喝。',
+  '你那单看着挺急。我先说一声。',
+  '熬过星期三就是星期五。再撑两天。',
+  '星期四了，反倒安静一点。',
+  '周五下午了。还能做一张是一张。',
+  '隔壁这风对着吹。忍一下。',
+  '中午那面馆人好多。',
+  '群里又在催。先别慌。',
+  '抽屉里有饼干。饿了你拿。',
+  '敲一天了。耳朵都热。',
+]);
+
+const PARTY_LINES = Object.freeze([
+  '还没走？来打一把 Dota。',
+  '就一把 Dota。影魔，我辅助。',
+  '今晚人齐，就差你。来打 Dota？',
+  '排上了。来不来打 Dota？',
+  '打完早睡。来一把 Dota？',
+  '我开好了。就缺个影魔，打 Dota。',
+  '今天单多？打一把 Dota，换换脑子。',
+  '网上等你。来打 Dota？',
+  '一把 Dota 就走。不拖拉。',
+  '周五晚上了，不打 Dota 可惜。',
+]);
+
+const GATE_LINES = Object.freeze({
+  lunch: '你是来面试的吧？先去找老板，他在茶桌那边。',
+  neighbor: '招人的事别问我，先去找老板。',
+  party: '先去找老板。晚上再说。',
+});
+
+export const SCRIPT = Object.freeze({
+  nightFalls: '白天的活告一段落。天黑了，我还没走。',
+  daysPass: '日夜颠倒地学新东西，拼命把活干好，争取能留下来。',
+  weekOpen: Object.freeze([
+    '试用的第一周。桌上已经有单了。',
+    '第二周。大单压过来，小单也没停。',
+    '过半了。夜里灯还开着。',
+    '最后一周。能不能留下，就看这几天。',
+  ]),
+});
 
 export function bossFavorLine(favor, line) {
   if (favor >= line + 10) return `好感 ${favor}，比本周线 ${line} 高出一截。`;
@@ -103,7 +178,7 @@ function blankStats() {
 }
 
 function withLog(state, line) {
-  return { ...state, log: [line, ...state.log].slice(0, 8) };
+  return { ...state, say: '', log: [line, ...state.log].slice(0, 8) };
 }
 
 function makeTicket(roll, rng, id, config) {
@@ -249,10 +324,6 @@ function dayIndex(state) {
   return (state.week - 1) * state.config.daysPerWeek + (state.day - 1);
 }
 
-function dayStamp(state) {
-  return `第 ${state.week} 周${DAY_NAMES[state.day]}`;
-}
-
 export function createGame(seed, config = CONFIG) {
   const text = String(seed || 'hefei').slice(0, 64) || 'hefei';
   const state = {
@@ -267,6 +338,8 @@ export function createGame(seed, config = CONFIG) {
     overnightUsed: false,
     dotaPending: false,
     interviewed: false,
+    interviewStep: 0,
+    say: '',
     night: false,
     talked: freshTalked(),
     settlementLine: '',
@@ -406,40 +479,40 @@ function markTalked(state, person, line) {
 
 function bossText(state) {
   const config = state.config;
-  if (!state.interviewed) {
-    const opening = '先做个面试。试用期四周，周五看老板好感。';
-    if (state.week === config.fileDbWeek && state.day === 1) return `${opening}这周写${config.fileDbTitle}。`;
-    return opening;
-  }
   if (state.week === config.fileDbWeek && state.day === 1) {
-    return `这周的大单是${config.fileDbTitle}。先学会数据库才能开工。`;
+    return '这周有个大单：写一个文件数据库。先把数据库学会，才能开工。';
   }
   if (state.day === config.daysPerWeek) return bossFavorLine(state.favor, weekLine(state.week, config));
-  const notes = ['接口的错码写清楚。', '导库别放在中午。', '日志看完再重启。', '改表先跟我说。', '演示前把数对上。'];
-  return `${dayStamp(state)}，${notes[dayIndex(state) % notes.length]}`;
+  return BOSS_DAILY[dayIndex(state) % BOSS_DAILY.length];
 }
 
 function lunchText(state) {
-  const dish = LUNCH_DISHES[dayIndex(state) % LUNCH_DISHES.length];
-  return `好饿，去吃面吗？${dayStamp(state)}想吃${dish}。`;
+  return LUNCH_LINES[dayIndex(state) % LUNCH_LINES.length];
 }
 
 function neighborText(state) {
   const forecast = forecastTomorrow(state);
-  const flavor = state.day === 3
-    ? `第 ${state.week} 周，熬过星期三就是星期五。`
-    : `${dayStamp(state)}，隔座先说一声。`;
+  const flavor = state.day === 3 ? NEIGHBOR_LINES[2] : NEIGHBOR_LINES[dayIndex(state) % NEIGHBOR_LINES.length];
   if (!forecast) return `${flavor}明天没有新单了。`;
   return `${flavor}明天会来「${forecast.title}」，${forecast.difficulty} 点，期限 ${forecast.dueIn} 天。`;
 }
 
 function partyText(state) {
-  return `${dayStamp(state)}，来打一把 Dota？`;
+  return PARTY_LINES[dayIndex(state) % PARTY_LINES.length];
 }
 
 function talkBoss(state) {
-  const text = bossText(state);
-  return markTalked({ ...state, interviewed: true }, 'boss', `老板：${text}`);
+  if (!state.interviewed) {
+    const line = INTERVIEW[state.interviewStep];
+    if (!line) return state;
+    const step = state.interviewStep + 1;
+    const done = step >= INTERVIEW.length;
+    const next = { ...state, interviewStep: step, interviewed: done };
+    const who = line.name || '旁白';
+    const logged = `${who}：${line.text}`;
+    return done ? markTalked(next, 'boss', logged) : withLog(next, logged);
+  }
+  return markTalked(state, 'boss', `老板：${bossText(state)}`);
 }
 
 function talkLunch(state, choice) {
@@ -449,7 +522,8 @@ function talkLunch(state, choice) {
   const stamina = Math.min(state.config.staminaMax, state.stamina + state.config.noodleStamina);
   const gained = stamina - state.stamina;
   const note = gained > 0 ? `吃了面，体力 +${gained}，现在 ${stamina}` : '吃了面，体力已经满了';
-  return markTalked({ ...state, ap: state.ap - 1, stamina }, 'lunch', `饭搭子：${note}`);
+  const spoken = gained > 0 ? '走，就对面那家。' : '吃完了。人倒是饱了。';
+  return { ...markTalked({ ...state, ap: state.ap - 1, stamina }, 'lunch', `饭搭子：${note}`), say: spoken };
 }
 
 function talkNeighbor(state) {
@@ -490,7 +564,11 @@ export function coworkerLine(state, person) {
   const base = {
     id: person,
     name: spec.name,
+    speaker: person,
+    narrator: false,
+    interview: false,
     visible,
+    clickable: visible && (spec.nightOnly ? state.night : !state.night),
     talked: Boolean(state.talked[person]),
     gate: false,
     commit: false,
@@ -499,9 +577,21 @@ export function coworkerLine(state, person) {
     forecast: null,
   };
   if (!visible) return base;
+  if (person === 'boss' && !state.interviewed) {
+    const line = INTERVIEW[state.interviewStep];
+    if (!line) return base;
+    return {
+      ...base,
+      name: line.name,
+      speaker: line.speaker,
+      narrator: line.speaker === 'narrator',
+      interview: true,
+      text: line.text,
+    };
+  }
   if (state.talked[person]) return { ...base, text: '今天说过了。' };
   if (person !== 'boss' && !state.interviewed) {
-    return { ...base, gate: true, text: '先去找老板。' };
+    return { ...base, gate: true, text: GATE_LINES[person] };
   }
   if (person === 'boss') return { ...base, commit: true, text: bossText(state) };
   if (person === 'neighbor') {
@@ -512,8 +602,8 @@ export function coworkerLine(state, person) {
       ...base,
       text: lunchText(state),
       choices: [
-        { id: 'accept', label: '去吃面' },
-        { id: 'decline', label: '不去' },
+        { id: 'accept', label: '去' },
+        { id: 'decline', label: '下次' },
       ],
     };
   }
@@ -637,7 +727,7 @@ function skillStatus(state, skillId) {
 function victoryCopy(state) {
   const ending = ENDINGS[state.ending];
   if (!ending) return '';
-  if (state.ending === 'barely' && state.fileDbDone) return '人留下了。文件数据库交了，好感没到记住的线。';
+  if (state.ending === 'barely' && state.fileDbDone) return ending.fileDbDone;
   return ending.text;
 }
 
@@ -657,6 +747,7 @@ export function present(state) {
     line: weekLine(state.week, config),
     overnightUsed: state.overnightUsed,
     failReason: state.failReason,
+    failText: ENDINGS.lost.text,
     ending: state.ending,
     victoryTitle: ENDINGS[state.ending]?.title || '',
     victoryText: victoryCopy(state),

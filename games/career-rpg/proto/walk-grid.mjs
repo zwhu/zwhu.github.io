@@ -1,0 +1,100 @@
+// 可走区域。格子逻辑在 walk.mjs，坐标改这里。
+// 障碍来自美术建议，去掉玩家自己的椅子，工位才站得上去。
+export const WALK_GRID = {
+  scene: { width: 384, height: 216 },
+  cell: 4,
+  bounds: { left: 4, right: 380, top: 78, bottom: 200 },
+  start: { x: 75, y: 176, facing: 'up' },
+  seat: { x: 63, y: 134, w: 25, h: 29 },
+  sprite: { w: 28, h: 44, footX: 14, footY: 43 },
+  obstacles: [
+    { id: 'bookshelf_manual', x: 6, y: 0, w: 36, h: 82 },
+    { id: 'fridge', x: 192, y: 0, w: 26, h: 87 },
+    { id: 'microwave_cabinet', x: 217, y: 0, w: 41, h: 88 },
+    { id: 'plant', x: 263, y: 0, w: 23, h: 83 },
+    { id: 'long_table', x: 38, y: 106, w: 216, h: 68 },
+    { id: 'chair_T1', x: 64, y: 94, w: 22, h: 12 },
+    { id: 'chair_T2', x: 136, y: 94, w: 22, h: 12 },
+    { id: 'chair_T3', x: 204, y: 94, w: 22, h: 12 },
+    { id: 'chair_B2', x: 135, y: 157, w: 23, h: 27 },
+    { id: 'chair_B3', x: 204, y: 157, w: 23, h: 27 },
+    { id: 'sofa', x: 309, y: 82, w: 64, h: 39 },
+    { id: 'tea_table', x: 287, y: 131, w: 78, h: 44 },
+    { id: 'visitor_chair_L', x: 300, y: 168, w: 21, h: 25 },
+    { id: 'visitor_chair_R', x: 330, y: 168, w: 21, h: 25 },
+  ],
+  targets: {
+    boss: {
+      x: 236, y: 196, facing: 'right', pose: 'stand',
+      hit: [310, 82, 342, 128],
+      action: { type: 'talk', person: 'boss' },
+      when: 'day',
+    },
+    lunch: {
+      x: 292, y: 196, facing: 'left', pose: 'stand',
+      hit: [250, 136, 282, 178],
+      action: { type: 'talk', person: 'lunch' },
+      when: 'day',
+    },
+    neighbor: {
+      x: 112, y: 196, facing: 'up', pose: 'stand',
+      hit: [135, 134, 160, 176],
+      action: { type: 'talk', person: 'neighbor' },
+      when: 'day',
+    },
+    computer: {
+      x: 75, y: 176, facing: 'up', pose: 'seated',
+      hit: [64, 127, 88, 143],
+      action: { type: 'computer' },
+      when: 'any',
+    },
+    shelf: {
+      x: 48, y: 100, facing: 'left', pose: 'stand',
+      hit: [6, 18, 42, 82],
+      action: { type: 'shelf' },
+      when: 'day',
+    },
+    water: {
+      x: 176, y: 96, facing: 'up', pose: 'stand',
+      hit: [166, 52, 190, 88],
+      action: { type: 'water' },
+      when: 'any',
+    },
+    door: {
+      x: 190, y: 196, facing: 'down', pose: 'stand',
+      hit: [168, 172, 212, 214],
+      action: { type: 'door' },
+      when: 'any',
+    },
+    party: {
+      x: 136, y: 192, facing: 'left', pose: 'stand',
+      hit: [98, 158, 115, 200],
+      action: { type: 'talk', person: 'party' },
+      when: 'night',
+    },
+  },
+  // 当天能看见的人。脚底盒子不能压到这些框。
+  people: {
+    day: [
+      { id: 'neighbor', x: 134, y: 134, w: 22, h: 29 },
+      { id: 'lunch', x: 256, y: 136, w: 20, h: 42 },
+      { id: 'boss', x: 318, y: 84, w: 17, h: 44 },
+    ],
+    night: [
+      { id: 'neighbor', x: 134, y: 134, w: 22, h: 29 },
+      { id: 'lunch', x: 206, y: 134, w: 26, h: 29 },
+      { id: 'boss', x: 321, y: 79, w: 19, h: 40 },
+      { id: 'party', x: 98, y: 158, w: 17, h: 42 },
+    ],
+  },
+  nightMute: [
+    [320, 79, 339, 119],
+    [310, 82, 342, 128],
+    [206, 134, 232, 175],
+    [134, 134, 159, 175],
+    [62, 134, 87, 175],
+    [6, 18, 42, 82],
+    [250, 136, 282, 178],
+    [135, 134, 160, 176],
+  ],
+};

@@ -1,0 +1,75 @@
+{
+  "clips": [
+    {
+      "file": "games/career-rpg/proto/review/interview.mp4",
+      "seed": "hefei",
+      "frames": 23,
+      "lines": [
+        "原本录用的人嫌工资低，没来。",
+        "你能力不行，来了也干不了活。",
+        "我不要工资，让我来试试就行。",
+        "行，那你想试试我也不拦你，反正不要工资，到时候你自己也会受不了就走。",
+        "就这样留下了。"
+      ]
+    },
+    {
+      "file": "games/career-rpg/proto/review/day-talk.mp4",
+      "seed": "hefei",
+      "frames": 10,
+      "before": "好饿，去吃面吗？想吃牛肉面。",
+      "after": {
+        "text": "吃完了。人倒是饱了。",
+        "stamina": "10",
+        "ap": "2"
+      }
+    },
+    {
+      "file": "games/career-rpg/proto/review/night-dota.mp4",
+      "seed": "hefei",
+      "frames": 19,
+      "night": "白天的活告一段落。天黑了，我还没走。",
+      "pass": "日夜颠倒地学新东西，拼命把活干好，争取能留下来。",
+      "party": "还没走？来打一把 Dota。",
+      "result": "loss"
+    },
+    {
+      "file": "games/career-rpg/proto/review/ending-quit.mp4",
+      "seed": "hefei",
+      "frames": 8,
+      "title": "被劝退",
+      "text": "第 1 周周五，老板好感 0，低于本周线 30，被劝退。茶桌那边叫你过去，话说得很短。工位上的杯子还是温的，人不用再来了。"
+    },
+    {
+      "file": "games/career-rpg/proto/review/ending-stay.mp4",
+      "seed": "p0",
+      "frames": 8,
+      "title": "勉强留下来",
+      "text": "文件数据库还没写完。日常的单做过不少，四周到头，也就这样过了线。老板点了点头，没再多说。先站稳吧。"
+    },
+    {
+      "file": "games/career-rpg/proto/review/ending-remembered.mp4",
+      "seed": "p0",
+      "frames": 8,
+      "title": "留下来，还被老板记住了",
+      "text": "文件数据库交上去了。他把那句话又说了一遍：努力工作的人一定会被看到的。这次不是安慰，是记住了。"
+    }
+  ],
+  "stills": [
+    "games/career-rpg/proto/review/stills/art-interview-narrator.png",
+    "games/career-rpg/proto/review/stills/art-interview-boss.png",
+    "games/career-rpg/proto/review/stills/art-interview-player.png",
+    "games/career-rpg/proto/review/stills/art-day-lunch.png",
+    "games/career-rpg/proto/review/stills/art-day-lunch-after.png",
+    "games/career-rpg/proto/review/stills/art-night-falls.png",
+    "games/career-rpg/proto/review/stills/art-days-pass.png",
+    "games/career-rpg/proto/review/stills/art-night-dota.png",
+    "games/career-rpg/proto/review/stills/art-opened.png",
+    "games/career-rpg/proto/review/stills/art-talkbox-desktop.png",
+    "games/career-rpg/proto/review/stills/art-talkbox-390.png",
+    "games/career-rpg/proto/review/stills/art-ending-quit.png",
+    "games/career-rpg/proto/review/stills/art-ending-stay.png",
+    "games/career-rpg/proto/review/stills/art-ending-remembered.png",
+    "games/career-rpg/proto/review/stills/art-mobile-day.png",
+    "games/career-rpg/proto/review/stills/art-mobile-interview.png"
+  ]
+}

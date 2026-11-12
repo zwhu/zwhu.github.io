@@ -1,5 +1,8 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from './dota.mjs';
-import { CONFIG, applyAction, createGame, present } from './rules.mjs';
+import { CONFIG, SCRIPT, applyAction, createGame, present } from './rules.mjs';
+import { bannerAt, learningSkills, sceneArrival, sceneHint, showBannerState } from './scene-ui.mjs';
+import { spritePose } from './walk-sprites.mjs';
+import { WALK_GRID, facingOf, findPath, resolveClick } from './walk.mjs';
 
 const app = document.querySelector('#app');
 
@@ -13,6 +16,242 @@ let dota = null;
 let dotaTick = 0;
 let dotaResult = 0;
 let dialogue = null;
+let toldNight = '';
+let toldWeek = 0;
+const walker = {
+  x: WALK_GRID.start.x,
+  y: WALK_GRID.start.y,
+  facing: 'up',
+  pose: 'seated',
+  frame: 0,
+  path: [],
+  action: null,
+  arrivePose: 'seated',
+  arriveFacing: 'up',
+  loop: false,
+  last: 0,
+  walkMs: 0,
+};
+let walkSprites = null;
+let panel = false;
+let panelPage = 'tickets';
+let ticketIndex = 0;
+let banner = { text: '', hideAt: 0 };
+let bannerTimer = 0;
+
+function showBanner(text) {
+  if (bannerTimer) clearTimeout(bannerTimer);
+  bannerTimer = 0;
+  banner = showBannerState(text, Date.now());
+  if (!banner.hideAt) return;
+  bannerTimer = setTimeout(() => {
+    banner = { text: '', hideAt: 0 };
+    bannerTimer = 0;
+    render();
+  }, Math.max(0, banner.hideAt - Date.now()));
+}
+
+function resetWalker() {
+  walker.x = WALK_GRID.start.x;
+  walker.y = WALK_GRID.start.y;
+  walker.facing = 'up';
+  walker.pose = 'seated';
+  walker.frame = 0;
+  walker.path = [];
+  walker.action = null;
+  walker.arrivePose = 'seated';
+  walker.arriveFacing = 'up';
+  walker.walkMs = 0;
+}
+
+function currentPose() {
+  return spritePose(walkSprites, {
+    facing: walker.facing,
+    moving: walker.path.length > 0 && walker.pose !== 'seated',
+    seated: walker.pose === 'seated',
+    elapsedMs: walker.walkMs,
+  });
+}
+
+function walkerElement() {
+  const pose = currentPose();
+  if (pose.kind === 'seated') {
+    const seat = WALK_GRID.seat;
+    return el('img', {
+      id: 'walker',
+      class: 'walker seated',
+      alt: '',
+      src: './art/player-seated.png',
+      style: `left:${(seat.x / 384) * 100}%;top:${(seat.y / 216) * 100}%;width:${(seat.w / 384) * 100}%;height:${(seat.h / 216) * 100}%`,
+    });
+  }
+  const frame = pose.frame;
+  const anchor = frame.anchor || pose.anchor;
+  const left = walker.x - anchor.x;
+  const top = walker.y - anchor.y;
+  const box = [
+    `left:${(left / 384) * 100}%`,
+    `top:${(top / 216) * 100}%`,
+    `width:${(frame.w / 384) * 100}%`,
+    `height:${(frame.h / 216) * 100}%`,
+    pose.mirror ? 'transform:scaleX(-1)' : '',
+  ].filter(Boolean).join(';');
+  const imgStyle = [
+    'position:absolute',
+    `width:${(pose.imageSize.w / frame.w) * 100}%`,
+    `height:${(pose.imageSize.h / frame.h) * 100}%`,
+    `left:${(-frame.x / frame.w) * 100}%`,
+    `top:${(-frame.y / frame.h) * 100}%`,
+  ].join(';');
+  return el('span', { id: 'walker', class: 'walker', style: box }, [
+    el('img', { alt: '', src: pose.image, style: imgStyle }),
+  ]);
+}
+
+function paintWalker() {
+  const current = document.querySelector('#walker');
+  if (!current) return;
+  current.replaceWith(walkerElement());
+  const spot = document.querySelector('[data-spot="player"]');
+  if (!spot) return;
+  const pose = currentPose();
+  const box = pose.kind === 'seated'
+    ? [63, 134, 88, 163]
+    : [walker.x - 12, walker.y - pose.anchor.y, walker.x + 12, walker.y - pose.anchor.y + 18];
+  spot.style.cssText = spotStyle(box);
+}
+
+function arriveWalker() {
+  walker.pose = walker.arrivePose;
+  walker.frame = 0;
+  if (walker.arriveFacing) walker.facing = walker.arriveFacing;
+  if (walker.pose === 'seated') {
+    walker.x = WALK_GRID.start.x;
+    walker.y = WALK_GRID.start.y;
+    walker.facing = 'up';
+  }
+  const action = walker.action;
+  walker.action = null;
+  if (!action) {
+    paintWalker();
+    return;
+  }
+  if (action.type === 'talk') {
+    openPerson(action.person);
+    return;
+  }
+  const view = present(state);
+  const arrival = sceneArrival(action.type, {
+    interviewed: view.interviewed,
+    night: view.night,
+    dotaPending: state.dotaPending,
+    canRest: view.canRest,
+    canSleep: view.canSleep,
+    canStudy: view.shelf.canStudy,
+    blocked: view.shelf.blocked,
+  });
+  if (arrival.prompt) {
+    openNarration([arrival.prompt]);
+    return;
+  }
+  if (arrival.dota) {
+    startDota();
+    return;
+  }
+  if (arrival.panel) {
+    panel = true;
+    panelPage = 'tickets';
+    ticketIndex = 0;
+    showBanner('');
+    render();
+    return;
+  }
+  if (arrival.banner) {
+    showBanner(arrival.banner);
+    render();
+    return;
+  }
+  if (arrival.action) {
+    if (arrival.action.type === 'study') act({ type: 'study', skill: present(state).shelf.id });
+    else act(arrival.action);
+    return;
+  }
+  paintWalker();
+}
+
+function walkLoop(now) {
+  if (!walker.path.length) {
+    walker.loop = false;
+    arriveWalker();
+    return;
+  }
+  const dt = walker.last ? Math.min(0.05, (now - walker.last) / 1000) : 0.016;
+  walker.last = now;
+  walker.walkMs += dt * 1000;
+  let left = 56 * dt;
+  while (left > 0 && walker.path.length) {
+    const next = walker.path[0];
+    const dx = next.x - walker.x;
+    const dy = next.y - walker.y;
+    const dist = Math.hypot(dx, dy);
+    if (dist < 0.4) {
+      walker.path.shift();
+      continue;
+    }
+    walker.facing = facingOf(dx, dy);
+    const step = Math.min(left, dist);
+    walker.x += (dx / dist) * step;
+    walker.y += (dy / dist) * step;
+    left -= step;
+  }
+  walker.pose = 'stand';
+  paintWalker();
+  if (!walker.path.length) {
+    walker.loop = false;
+    arriveWalker();
+    return;
+  }
+  requestAnimationFrame(walkLoop);
+}
+
+function goTo(hit) {
+  if (!hit || hit.kind === 'none' || !hit.target) return false;
+  panel = false;
+  const path = findPath(walker, hit.target, { night: present(state).night });
+  if (!path) return false;
+  walker.path = path;
+  walker.action = hit.action;
+  walker.arrivePose = hit.target.pose || 'stand';
+  walker.arriveFacing = hit.target.facing || null;
+  walker.walkMs = 0;
+  walker.pose = path.length ? 'stand' : walker.arrivePose;
+  paintWalker();
+  if (!path.length) {
+    arriveWalker();
+    return true;
+  }
+  if (!walker.loop) {
+    walker.loop = true;
+    walker.last = 0;
+    requestAnimationFrame(walkLoop);
+  }
+  return true;
+}
+
+function scenePoint(event) {
+  const rect = event.currentTarget.getBoundingClientRect();
+  return {
+    x: ((event.clientX - rect.left) / rect.width) * WALK_GRID.scene.width,
+    y: ((event.clientY - rect.top) / rect.height) * WALK_GRID.scene.height,
+  };
+}
+
+function onSceneClick(event) {
+  if (dota || state.phase !== 'play') return;
+  if (event.target.closest('.dialogue, .hud, .desk-panel, .hint, .scene-actions, button, a')) return;
+  const view = present(state);
+  goTo(resolveClick(scenePoint(event), { night: view.night, canStudy: view.shelf.canStudy }));
+}
 
 function clearDotaTimers() {
   if (dotaTick) clearInterval(dotaTick);
@@ -81,8 +320,35 @@ function pips(filled, total) {
 }
 
 function act(action) {
+  const before = state;
   state = applyAction(state, action);
-  if (action && action.type === 'sleep') dialogue = null;
+  if (action && action.type === 'sleep') {
+    dialogue = null;
+    toldNight = '';
+    if (state !== before && state.phase === 'play') resetWalker();
+    if (state.phase === 'play' && state.day === 1 && state.interviewed) {
+      openNarration([SCRIPT.weekOpen[state.week - 1]]);
+      return;
+    }
+  }
+  if (action && action.type === 'night' && state.night && !before.night) {
+    const key = `${state.week}-${state.day}`;
+    if (toldNight !== key) {
+      toldNight = key;
+      const lines = [SCRIPT.nightFalls];
+      if (toldWeek !== state.week) {
+        toldWeek = state.week;
+        lines.push(SCRIPT.daysPass);
+      }
+      openNarration(lines);
+      return;
+    }
+  }
+  if (action && action.type === 'study' && before.overnightUsed && toldWeek !== state.week && state.phase === 'play') {
+    toldWeek = state.week;
+    openNarration([SCRIPT.daysPass]);
+    return;
+  }
   render();
 }
 
@@ -94,6 +360,13 @@ function start(seed) {
   clearDotaTimers();
   dota = null;
   dialogue = null;
+  toldNight = '';
+  toldWeek = 0;
+  panel = false;
+  panelPage = 'tickets';
+  ticketIndex = 0;
+  showBanner('');
+  resetWalker();
   state = createGame(next);
   render();
 }
@@ -103,18 +376,63 @@ function sentence(line) {
   return mark === -1 ? line : line.slice(mark + 1);
 }
 
+function lineBox(line) {
+  return {
+    person: line.id,
+    name: line.name,
+    text: line.text,
+    choices: line.choices,
+    forecast: line.forecast,
+    speaker: line.speaker,
+    narrator: line.narrator,
+    advance: line.interview ? 'interview' : '',
+    queue: [],
+  };
+}
+
+function openNarration(lines) {
+  const pending = lines.filter(Boolean);
+  const text = pending.shift();
+  if (!text) {
+    render();
+    return;
+  }
+  dialogue = {
+    person: '',
+    name: '',
+    text,
+    choices: [],
+    forecast: null,
+    speaker: 'narrator',
+    narrator: true,
+    advance: pending.length ? 'queue' : '',
+    queue: pending,
+  };
+  render();
+}
+
 function openPerson(id) {
   const line = present(state).coworkers.find(item => item.id === id);
   if (!line || !line.visible) return;
   if (!line.commit || line.talked) {
-    dialogue = { person: id, name: line.name, text: line.text, choices: line.choices, forecast: line.forecast };
+    dialogue = lineBox(line);
     render();
     return;
   }
   const next = applyAction(state, { type: 'talk', person: id });
   if (next === state) return;
   state = next;
-  dialogue = { person: id, name: line.name, text: sentence(state.log[0]), choices: [], forecast: line.forecast };
+  dialogue = {
+    person: id,
+    name: line.name,
+    text: state.say || sentence(state.log[0]),
+    choices: [],
+    forecast: line.forecast,
+    speaker: line.speaker,
+    narrator: false,
+    advance: '',
+    queue: [],
+  };
   render();
 }
 
@@ -122,21 +440,77 @@ function chooseLine(choice) {
   if (!dialogue) return;
   const person = dialogue.person;
   const name = dialogue.name;
+  const speaker = dialogue.speaker;
   const pending = state.dotaPending;
   const next = applyAction(state, { type: 'talk', person, choice });
   if (next === state) return;
   state = next;
   if (!pending && state.dotaPending) {
+    dialogue = {
+      person: 'party',
+      name: '开黑队友',
+      text: '开了。',
+      choices: [],
+      forecast: null,
+      speaker: 'party',
+      narrator: false,
+      advance: 'dota',
+      queue: [],
+    };
+    render();
+    return;
+  }
+  dialogue = {
+    person,
+    name,
+    text: state.say || sentence(state.log[0]),
+    choices: [],
+    forecast: null,
+    speaker,
+    narrator: false,
+    advance: '',
+    queue: [],
+  };
+  render();
+}
+
+function continueDialogue() {
+  if (!dialogue) return;
+  if (dialogue.advance === 'dota') {
     dialogue = null;
     startDota();
     return;
   }
-  dialogue = { person, name, text: sentence(state.log[0]), choices: [], forecast: null };
+  if (dialogue.advance === 'interview') {
+    const next = applyAction(state, { type: 'talk', person: 'boss' });
+    if (next === state) return;
+    state = next;
+    if (!state.interviewed) {
+      const line = present(state).coworkers.find(item => item.id === 'boss');
+      dialogue = lineBox(line);
+      render();
+      return;
+    }
+    dialogue = null;
+    if (state.phase === 'play' && state.week === 1 && state.day === 1) {
+      openNarration([SCRIPT.weekOpen[0]]);
+      return;
+    }
+    render();
+    return;
+  }
+  if (dialogue.advance === 'queue' && dialogue.queue.length) {
+    const text = dialogue.queue.shift();
+    dialogue = { ...dialogue, text, advance: dialogue.queue.length ? 'queue' : '' };
+    render();
+    return;
+  }
+  dialogue = null;
   render();
 }
 
-function header(view) {
-  const form = el('form', { id: 'seed-form' }, [
+function seedForm(view) {
+  const form = el('form', { id: 'seed-form', class: 'seed-only' }, [
     el('label', { for: 'seed-input' }, ['种子']),
     el('input', { id: 'seed-input', name: 'seed', value: view.seed, autocomplete: 'off', maxlength: '64' }),
     el('button', { type: 'submit' }, ['开局']),
@@ -145,36 +519,17 @@ function header(view) {
     event.preventDefault();
     start(form.seed.value);
   });
-  return el('header', {}, [
-    el('div', {}, [
-      el('h1', {}, ['合肥试用期']),
-      el('p', { class: 'when', id: 'when' }, [`第 ${view.week} 周 · ${view.dayName}`]),
-    ]),
-    form,
-  ]);
+  return form;
 }
 
-function status(view) {
-  const apMax = Math.max(view.ap, 3);
-  return el('section', { class: 'status' }, [
-    el('article', {}, [
-      el('div', {}, ['行动点']),
-      el('strong', { id: 'ap' }, [String(view.ap)]),
-      document.createTextNode(' '),
-      pips(view.ap, apMax),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['体力']),
-      el('strong', { id: 'stamina' }, [String(view.stamina)]),
-      document.createTextNode(' '),
-      pips(view.stamina, view.staminaMax),
-    ]),
-    el('article', {}, [
-      el('div', {}, ['老板好感']),
-      el('strong', { id: 'favor' }, [String(view.favor)]),
-      el('div', {}, ['本周线 ', el('strong', { id: 'line' }, [String(view.line)])]),
-      el('div', {}, ['记住线 ', el('strong', { id: 'good-favor' }, [String(view.goodFavor)])]),
-    ]),
+function hud(view) {
+  return el('div', { class: 'hud', id: 'scene-when' }, [
+    el('span', {}, [`第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`]),
+    el('span', {}, ['行动点 ', el('strong', { id: 'ap' }, [String(view.ap)])]),
+    el('span', {}, ['体力 ', el('strong', { id: 'stamina' }, [String(view.stamina)])]),
+    el('span', {}, ['好感 ', el('strong', { id: 'favor' }, [String(view.favor)])]),
+    el('span', {}, ['本周线 ', el('strong', { id: 'line' }, [String(view.line)])]),
+    el('span', {}, ['记住线 ', el('strong', { id: 'good-favor' }, [String(view.goodFavor)])]),
   ]);
 }
 
@@ -242,22 +597,102 @@ function skillCard(skill) {
   return el('article', { class: 'card', 'data-skill': skill.id, 'data-progress': skill.progress, 'data-learned': skill.learned ? '1' : '0' }, body);
 }
 
+const DAY_BOXES = {
+  player: [63, 134, 88, 176],
+  neighbor: [135, 134, 160, 176],
+  lunch: [250, 136, 282, 178],
+  boss: [310, 82, 342, 128],
+};
+// art/source/night-v2-boxes.json。夜里只有开黑队友能点，其余三人的框不放按钮。
+const NIGHT_BOXES = {
+  player: [62, 134, 87, 175],
+  neighbor: [134, 134, 159, 175],
+  lunch: [206, 134, 232, 175],
+  boss: [320, 79, 339, 119],
+  party: [98, 158, 115, 200],
+};
+
+function spotStyle(box) {
+  const [x0, y0, x1, y1] = box;
+  return `left:${(x0 / 384) * 100}%;top:${(y0 / 216) * 100}%;width:${((x1 - x0) / 384) * 100}%;height:${((y1 - y0) / 216) * 100}%`;
+}
+
+function hotspot(person, speaking, box) {
+  return el('div', {
+    class: speaking ? 'spot speaking' : 'spot',
+    'data-spot': person.id,
+    'data-person': person.id,
+    style: spotStyle(box),
+  }, [
+    el('i', { class: 'arrow', 'data-arrow': speaking ? person.id : '' }),
+    el('i', { class: 'body' }),
+  ]);
+}
+
 function office(view) {
-  const spots = view.coworkers.filter(person => person.visible).map(person => {
-    const speaking = dialogue && dialogue.person === person.id;
-    const button = el('button', { type: 'button', class: 'figure', 'data-person': person.id }, [
-      el('i', { class: `body ${person.id}` }),
-      el('span', {}, [person.name]),
-    ]);
-    button.addEventListener('click', () => openPerson(person.id));
-    const prop = person.id === 'boss' ? 'table' : (person.id === 'party' ? 'door' : 'desk');
-    return el('div', { class: speaking ? 'spot speaking' : 'spot', 'data-spot': person.id }, [
-      el('i', { class: 'arrow', 'data-arrow': speaking ? person.id : '' }),
-      button,
-      el('i', { class: `prop ${prop}` }),
-    ]);
-  });
-  return el('section', { class: view.night ? 'office night' : 'office', id: 'office' }, spots);
+  const speaker = dialogue && !dialogue.narrator ? dialogue.speaker : '';
+  const boxes = view.night ? NIGHT_BOXES : DAY_BOXES;
+  const spots = [];
+  const standing = currentPose();
+  const playerBox = standing.kind === 'seated'
+    ? boxes.player
+    : [walker.x - 12, walker.y - standing.anchor.y, walker.x + 12, walker.y - standing.anchor.y + 18];
+  if (playerBox) {
+    spots.push(el('div', {
+      class: speaker === 'player' ? 'spot speaking' : 'spot',
+      'data-spot': 'player',
+      style: spotStyle(playerBox),
+    }, [
+      el('i', { class: 'arrow' }),
+      el('i', { class: 'body' }),
+    ]));
+  }
+  // 夜里同事在 night-cast 里，和底图上的人一致。热区不再另画站姿。
+  for (const person of view.coworkers) {
+    if (!person.clickable) continue;
+    const box = boxes[person.id];
+    if (!box) continue;
+    spots.push(hotspot(person, speaker === person.id, box));
+  }
+  const children = [
+    el('img', {
+      class: 'scene-img',
+      alt: '',
+      src: view.night ? './art/night-384x216.png' : './art/day-384x216.png',
+    }),
+    el('img', {
+      class: 'cooler',
+      alt: '',
+      src: view.night ? './art/water-cooler-night.png' : './art/water-cooler-day.png',
+    }),
+    el('img', {
+      class: 'cast',
+      alt: '',
+      src: view.night ? './art/night-cast.png' : './art/day-cast.png',
+    }),
+  ];
+  if (view.night && standing.kind === 'seated') {
+    children.push(el('img', { class: 'screen-code', alt: '', src: './art/night-screen-code.png' }));
+  }
+  children.push(
+    walkerElement(),
+    el('div', { class: 'spots' }, spots),
+    sceneActions(view),
+  );
+  const line = bannerAt(banner, Date.now());
+  if (line) children.push(el('p', { class: 'hint', id: 'scene-banner' }, [line]));
+  if (panel) children.push(deskPanel(view));
+  const box = dialogueBox(view);
+  if (box) children.push(box);
+  const stage = el('div', { class: 'stage', id: 'stage' }, children);
+  stage.addEventListener('click', onSceneClick);
+  return el('section', {
+    class: `${view.night ? 'office night' : 'office'}${dialogue ? ' has-dialogue' : ''}`,
+    id: 'office',
+  }, [
+    hud(view),
+    stage,
+  ]);
 }
 
 function dialogueBox(view) {
@@ -268,41 +703,108 @@ function dialogueBox(view) {
     button.addEventListener('click', () => chooseLine(choice.id));
     return button;
   });
-  const close = el('button', { type: 'button', 'data-dialogue': 'close' }, ['关上']);
-  close.addEventListener('click', () => {
-    dialogue = null;
-    render();
-  });
+  const advancing = dialogue.advance === 'interview' || dialogue.advance === 'queue' || dialogue.advance === 'dota';
+  const caret = el('button', {
+    type: 'button',
+    class: 'caret',
+    'data-caret': '1',
+    'data-dialogue': advancing ? 'next' : 'close',
+    'aria-label': '继续',
+  }, ['▼']);
+  caret.addEventListener('click', () => continueDialogue());
   const attrs = { class: 'dialogue', id: 'dialogue' };
+  if (dialogue.narrator) attrs['data-narrator'] = '1';
   if (dialogue.forecast) {
     attrs['data-forecast-title'] = dialogue.forecast.title;
     attrs['data-forecast-kind'] = dialogue.forecast.kind;
     attrs['data-forecast-difficulty'] = dialogue.forecast.difficulty;
     attrs['data-forecast-due'] = dialogue.forecast.dueIn;
   }
+  const head = dialogue.name ? [el('div', { class: 'nameplate', id: 'nameplate' }, [dialogue.name])] : [];
   return el('section', attrs, [
-    el('div', { class: 'nameplate', id: 'nameplate' }, [dialogue.name]),
+    ...head,
     el('p', { id: 'dialogue-text' }, [dialogue.text]),
-    el('div', { class: 'dialogue-actions' }, choices.concat(close)),
+    el('div', { class: 'dialogue-actions' }, choices),
+    caret,
   ]);
 }
 
-function actionBar(view) {
-  const bar = el('div', { class: 'actions' });
+function sceneActions(view) {
+  const bar = el('div', { class: 'actions scene-actions' });
   if (view.canRest) {
     const rest = el('button', { type: 'button', 'data-action': 'rest' }, ['休息 +2 体力']);
     rest.addEventListener('click', () => act({ type: 'rest' }));
     bar.append(rest);
   }
-  const time = el('button', { type: 'button', 'data-action': view.night ? 'day' : 'night' }, [view.night ? '回白天' : '入夜']);
-  time.addEventListener('click', () => act({ type: view.night ? 'day' : 'night' }));
-  bar.append(time);
-  if (view.canSleep) {
-    const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉，进入下一天']);
-    sleep.addEventListener('click', () => act({ type: 'sleep' }));
+  if (!view.night) {
+    const night = el('button', { type: 'button', 'data-action': 'night' }, ['入夜']);
+    night.addEventListener('click', () => act({ type: 'night' }));
+    bar.append(night);
+  }
+  if (view.night) {
+    const sleep = el('button', { type: 'button', 'data-action': 'sleep' }, ['睡觉']);
+    sleep.addEventListener('click', () => {
+      const arrival = sceneArrival('door', {
+        interviewed: view.interviewed,
+        night: true,
+        canRest: view.canRest,
+        canSleep: view.canSleep,
+      });
+      if (arrival.action) act(arrival.action);
+      else if (arrival.banner) {
+        showBanner(arrival.banner);
+        render();
+      }
+    });
     bar.append(sleep);
   }
+  if (view.night && state.dotaPending) {
+    const play = el('button', { type: 'button', 'data-action': 'dota' }, ['打 Dota']);
+    play.addEventListener('click', () => startDota());
+    bar.append(play);
+  }
   return bar;
+}
+
+function deskPanel(view) {
+  const tickets = el('button', { type: 'button', 'data-desk': 'tickets' }, ['需求单']);
+  const skills = el('button', { type: 'button', 'data-desk': 'skills' }, ['学习']);
+  const close = el('button', { type: 'button', 'data-desk': 'close' }, ['关闭']);
+  tickets.addEventListener('click', () => { panelPage = 'tickets'; render(); });
+  skills.addEventListener('click', () => { panelPage = 'skills'; render(); });
+  close.addEventListener('click', () => { panel = false; render(); });
+  const body = [];
+  if (panelPage === 'skills') {
+    const note = sceneHint(view);
+    if (note) body.push(el('p', { class: 'hint-line' }, [note]));
+    body.push(el('div', { class: 'desk-pages', id: 'skills' }, learningSkills(view.skills).map(skillCard)));
+    body.push(el('p', { class: 'meta' }, ['《锋利的 jQuery》在左边书架。']));
+  } else {
+    const list = view.tickets;
+    const index = Math.min(ticketIndex, Math.max(0, list.length - 1));
+    ticketIndex = index;
+    if (list[index]) body.push(el('div', { class: 'desk-pages', id: 'tickets' }, [ticketCard(list[index])]));
+    if (list.length > 1) {
+      const prev = el('button', { type: 'button', 'data-desk': 'prev' }, ['上一张']);
+      const next = el('button', { type: 'button', 'data-desk': 'next' }, ['下一张']);
+      const label = el('span', { class: 'meta' }, [`${index + 1}/${list.length}`]);
+      prev.disabled = index === 0;
+      next.disabled = index === list.length - 1;
+      prev.addEventListener('click', () => { ticketIndex = Math.max(0, index - 1); render(); });
+      next.addEventListener('click', () => { ticketIndex = Math.min(list.length - 1, index + 1); render(); });
+      body.push(el('div', { class: 'desk-pager' }, [prev, label, next]));
+    }
+  }
+  return el('section', { class: 'desk-panel', id: 'desk-panel', 'data-page': panelPage }, [
+    el('div', { class: 'desk-tabs' }, [tickets, skills, close]),
+    ...body,
+  ]);
+}
+
+function endingCard(view) {
+  if (view.phase === 'won' && view.ending === 'remembered') return './art/05-ending-remembered-notext.png';
+  if (view.phase === 'won') return './art/04-ending-stay-notext.png';
+  return './art/03-ending-quit-notext.png';
 }
 
 function ending(view) {
@@ -312,25 +814,33 @@ function ending(view) {
   const fresh = el('button', { type: 'button', 'data-action': 'new-seed' }, ['换个种子']);
   fresh.addEventListener('click', () => start(`h${Date.now().toString(36)}`));
   const stats = view.stats;
-  return el('section', { class: 'ending', id: 'ending' }, [
-    el('h2', {}, [won ? view.victoryTitle : '被劝退']),
-    el('p', { id: 'ending-text' }, [won ? `${view.victoryTitle}。${view.victoryText}` : view.failReason]),
-    ...(view.settlementLine ? [el('p', { id: 'settlement' }, [view.settlementLine])] : []),
-    el('dl', {}, [
-      el('dt', {}, ['周次']), el('dd', {}, [`第 ${view.week} 周 ${view.dayName}`]),
-      el('dt', {}, ['好感']), el('dd', { id: 'end-favor' }, [String(view.favor)]),
-      el('dt', {}, ['本周线']), el('dd', {}, [String(view.line)]),
-      el('dt', {}, ['体力']), el('dd', {}, [String(view.stamina)]),
-      el('dt', {}, ['做完的单']), el('dd', {}, [String(stats.completed)]),
-      el('dt', {}, ['延期与事故']), el('dd', {}, [String(stats.lateCount)]),
-      el('dt', {}, ['好感增加']), el('dd', {}, [String(stats.favorGained)]),
-      el('dt', {}, ['好感减少']), el('dd', {}, [String(stats.favorLost)]),
-      el('dt', {}, [CONFIG.overnightName]), el('dd', {}, [String(stats.overnights)]),
-      el('dt', {}, ['学会']), el('dd', {}, [stats.skills.length ? stats.skills.join('、') : '无']),
-      el('dt', {}, ['文件数据库']), el('dd', {}, [stats.fileDb]),
+  const body = won ? view.victoryText : `${view.failReason}${view.failText}`;
+  const rows = [
+    ['周次', `第 ${view.week} 周 ${view.dayName}`],
+    ['好感', String(view.favor)],
+    ['本周线', String(view.line)],
+    ['体力', String(view.stamina)],
+    ['做完的单', String(stats.completed)],
+    ['延期与事故', String(stats.lateCount)],
+    ['学会', stats.skills.length ? stats.skills.join('、') : '无'],
+    ['文件数据库', stats.fileDb],
+  ];
+  const card = el('div', { class: 'ending-card' }, [
+    el('img', { src: endingCard(view), alt: '' }),
+    el('div', { class: 'ending-header' }, [
+      el('h2', { id: 'ending-title' }, [won ? view.victoryTitle : '被劝退']),
+      el('p', { id: 'ending-text' }, [body]),
     ]),
-    el('div', { class: 'actions' }, [again, fresh]),
+    el('dl', { class: 'ending-stats' }, rows.flatMap(([name, value]) => [
+      el('dt', {}, [name]),
+      el('dd', name === '好感' ? { id: 'end-favor' } : {}, [value]),
+    ])),
+    again,
+    fresh,
   ]);
+  again.className = 'ending-retry';
+  fresh.className = 'ending-reseed';
+  return el('section', { class: 'ending', id: 'ending' }, [card]);
 }
 
 function dotaResultTitle(match) {
@@ -342,7 +852,11 @@ function dotaResultTitle(match) {
 
 function dotaLane(match) {
   const sfClass = match.hurt ? 'cell sf hurt' : 'cell sf';
-  const cells = [el('div', { class: sfClass, id: 'dota-hp', 'data-hp': match.hp }, ['影魔', String(match.hp)])];
+  const cells = [el('div', { class: sfClass, id: 'dota-hp', 'data-hp': match.hp }, [
+    el('img', { class: 'sf-sprite', src: './art/sf.png', alt: '' }),
+    el('span', {}, ['影魔']),
+    String(match.hp),
+  ])];
   for (let pos = 1; pos <= 7; pos += 1) {
     const raze = RAZES.find(item => item.distance === pos);
     const hot = match.lastRaze && raze && raze.id === match.lastRaze;
@@ -394,6 +908,7 @@ function dotaOverlay() {
     el('div', { class: 'dota-panel' }, [
       el('div', { class: 'dota-top' }, [
         el('h2', {}, ['打 Dota']),
+        el('p', { class: 'dota-who' }, ['影魔，三个影压']),
         el('div', {}, [
           el('strong', { id: 'dota-kills' }, [`补刀 ${match.kills}/${LAST_HITS}`]),
           el('div', {}, [`血 ${match.hp}`]),
@@ -413,26 +928,10 @@ function logList(view) {
 
 function render() {
   const view = present(state);
-  const parts = [header(view), status(view)];
-  if (view.phase === 'play') {
-    parts.push(office(view));
-    parts.push(el('div', { class: 'board' }, [
-      el('section', {}, [el('h2', {}, ['需求单']), el('div', { class: 'stack', id: 'tickets' }, view.tickets.map(ticketCard))]),
-      el('section', {}, [
-        el('h2', {}, ['学习']),
-        el('div', { class: 'stack', id: 'skills' }, view.skills.map(skillCard)),
-        el('h2', { class: 'shelf-title' }, ['书架']),
-        el('div', { class: 'stack', id: 'shelf' }, [skillCard(view.shelf)]),
-      ]),
-    ]));
-    parts.push(actionBar(view));
-  } else {
-    parts.push(ending(view));
-  }
-  parts.push(logList(view));
-  if (dialogue) parts.push(el('div', { class: 'dialogue-spacer' }));
-  const box = dialogueBox(view);
-  if (box) parts.push(box);
+  const parts = [];
+  if (view.phase === 'play') parts.push(office(view));
+  else parts.push(ending(view));
+  parts.push(seedForm(view));
   if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
 }
@@ -445,10 +944,24 @@ window.addEventListener('keydown', event => {
   pressRaze(raze.id);
 });
 
+walkSprites = await fetch(new URL('./walk/walk.sprites.json', import.meta.url)).then(response => response.json());
 render();
 
 window.hefei = {
   present() { return present(state); },
   act(action) { act(action); return present(state); },
   start,
+  walker() {
+    return {
+      x: walker.x,
+      y: walker.y,
+      pose: walker.pose,
+      facing: walker.facing,
+      moving: walker.path.length > 0,
+    };
+  },
+  clickScene(x, y) {
+    const view = present(state);
+    return goTo(resolveClick({ x, y }, { night: view.night, canStudy: view.shelf.canStudy }));
+  },
 };
