@@ -1,6 +1,6 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from '../dota.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
-import { bindWalk, clickGround, drawScene, hotspots, loadArt, sceneMode, startWalk } from './scene.mjs';
+import { bindWalk, clickGround, drawScene, hotspots, integerScale, loadArt, sceneMode, startWalk, walker, whenLabel, WORLD } from './scene.mjs';
 
 // 学习卡上的短字是界面里已有的效果句。悬停展开的原文取自 README 的技能条。
 const SKILL_SOURCE = {
@@ -134,7 +134,7 @@ function seedBar(view) {
 
 function meter(view) {
   return el('div', { class: 'meter' }, [
-    el('span', { id: 'when' }, [`第 ${view.week} 周 ${view.dayName}`]),
+    el('span', { id: 'when' }, [whenLabel(view)]),
     el('span', {}, ['行动 ', el('strong', { id: 'ap' }, [String(view.ap)])]),
     el('span', {}, ['体力 ', el('strong', { id: 'stamina' }, [String(view.stamina)]), '/', String(view.staminaMax)]),
     el('span', {}, ['日活 ', el('strong', { id: 'dau' }, [String(view.dau)]), '/', el('strong', { id: 'dau-target' }, [String(view.dauTarget)])]),
@@ -173,12 +173,12 @@ function incidentRibbon(view) {
 }
 
 function spotStyle(spot) {
-  return `left:${(spot.x / 384) * 100}%;top:${(spot.y / 216) * 100}%;width:${(spot.w / 384) * 100}%;height:${(spot.h / 216) * 100}%`;
+  return `left:${(spot.x / WORLD.width) * 100}%;top:${(spot.y / WORLD.height) * 100}%;width:${(spot.w / WORLD.width) * 100}%;height:${(spot.h / WORLD.height) * 100}%`;
 }
 
 function sceneStage(view) {
   const mode = sceneMode(view);
-  const canvas = el('canvas', { id: 'scene', width: '384', height: '216' });
+  const canvas = el('canvas', { id: 'scene', width: String(WORLD.width), height: String(WORLD.height) });
   canvas.addEventListener('click', event => {
     const box = canvas.getBoundingClientRect();
     const x = ((event.clientX - box.left) * canvas.width) / box.width;
@@ -631,33 +631,27 @@ function syncToast(view) {
   }, 3000);
 }
 
-function nightNote(view) {
-  let text = toast;
-  if (!text) {
-    const open = view.incidents.filter(item => item.stage !== 'resolved');
-    text = open.length
-      ? `事故还在：${open.map(item => item.title).join('、')}。每天口碑 -${open[0].daily}`
-      : chanceBanner(view).textContent;
-  }
-  if (!text) return null;
-  return el('p', { class: 'ribbon night-note', id: 'chance-banner' }, [text]);
+function statusBanner(view) {
+  if (toast) return el('p', { class: 'ribbon', id: 'chance-banner' }, [toast]);
+  return incidentRibbon(view) || chanceBanner(view);
+}
+
+function fitIntegerScale() {
+  const scroll = app.querySelector('.stage-scroll');
+  const stage = app.querySelector('#stage');
+  if (!scroll || !stage) return;
+  const scale = integerScale(scroll.clientWidth, WORLD.width);
+  stage.style.width = `${WORLD.width * scale}px`;
+  stage.style.height = `${WORLD.height * scale}px`;
 }
 
 function render() {
   const view = present(state);
   const { stage, here } = sceneStage(view);
-  const night = sceneMode(view) === 'night';
   syncToast(view);
   const top = el('div', { class: 'topbar' }, [meter(view)]);
   if (deskPage) stage.dataset.open = 'desk';
-  else if (night) {
-    const note = nightNote(view);
-    if (note) stage.append(note);
-  } else {
-    top.append(chanceBanner(view));
-    const incidents = incidentRibbon(view);
-    if (incidents) top.append(incidents);
-  }
+  else top.append(statusBanner(view));
   if (view.phase === 'play') {
     const away = sceneMode(view) === 'night' ? null : offstage(view, here);
     if (away) stage.append(away);
@@ -674,7 +668,9 @@ function render() {
     stage.append(done);
   }
   if (dota) stage.append(dotaOverlay());
-  app.replaceChildren(el('div', { class: 'screen' }, [top, stage]), seedBar(view));
+  const scroll = el('div', { class: 'stage-scroll' }, [stage]);
+  app.replaceChildren(el('div', { class: 'screen' }, [top, scroll]), seedBar(view));
+  fitIntegerScale();
   paint();
 }
 
@@ -690,8 +686,15 @@ window.nanjing = {
   present() { return present(state); },
   act(action) { act(action); return present(state); },
   start,
+  click(x, y) {
+    clickGround(x, y, sceneMode(present(state)));
+    return walker();
+  },
+  walker,
   ready: false,
 };
+
+window.addEventListener('resize', () => fitIntegerScale());
 
 bindWalk({
   onArrive(effect) {

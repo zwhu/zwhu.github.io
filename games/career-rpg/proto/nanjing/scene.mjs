@@ -1,27 +1,28 @@
-// 场景板是去掉主角之后的底图。主角坐姿仍用精灵表。走路的方向和迈步帧从 walk/walk.sprites.json 读。
+// 底图是空房间。人物、门按原像素叠上去，不放大。
+// 门的 y-sort 用精灵顶边。脚比顶边更靠下的人画在门前面。
 
+import { CAST, DOOR, PLAYER, WALK } from './layout.mjs';
 import { facingOf, findPath, frameAt, parseGrid, planClick, playerPoseKind, resolveDirections } from './walk.mjs';
+
+export { DOOR, WORLD, integerScale } from './layout.mjs';
 
 let meta = null;
 let plates = null;
 let sheet = null;
-let grid = null;
-let walkData = null;
+const grid = parseGrid(WALK.rows);
+let walkData = WALK;
 let walkImage = null;
 let walkSprites = null;
 let doors = null;
-
-// 门的排序值用顶边 176。先于人物画，站在脚垫上的人不会被地垫盖住。
-const DOOR_SORT_Y = 176;
 
 const SPEED = 72;
 
 const mover = {
   sitting: true,
-  foot: null,
+  foot: { x: PLAYER.seat[0], y: PLAYER.seat[1] },
   path: [],
   effect: null,
-  facing: 'down',
+  facing: 'up',
   elapsed: 0,
 };
 
@@ -47,8 +48,8 @@ export function seatedSprite(table) {
   return {
     pose: 'seat_back_body',
     origin: seat.origin,
-    w: 56,
-    h: 56,
+    w: seat.w || table.cell?.[0] || 56,
+    h: seat.h || table.cell?.[1] || 56,
     standOrigin: stand?.origin || null,
   };
 }
@@ -61,12 +62,36 @@ export function poseName(id, pose) {
   return 'seat_back_on_chair';
 }
 
+export function whenLabel(view) {
+  const night = view.ap === 0 || view.overnightUsed;
+  return `第 ${view.week} 周 · ${view.dayName}${night ? ' · 夜里' : ''}`;
+}
+
+export function paintOrder(mode, playerSortY) {
+  const cast = CAST[mode] || CAST.day;
+  const items = [{ id: 'door', kind: 'door', sort: DOOR.ySort, x: DOOR.x, y: DOOR.y }];
+  for (const actor of cast) {
+    items.push({ id: actor.id, kind: 'actor', sort: actor.foot[1], actor });
+  }
+  items.push({ id: 'player', kind: 'player', sort: playerSortY });
+  items.sort((a, b) => a.sort - b.sort || (a.kind === 'door' ? 0 : 1) - (b.kind === 'door' ? 0 : 1));
+  return items;
+}
+
+export function walker() {
+  return {
+    sitting: mover.sitting,
+    moving: mover.path.length > 0,
+    facing: mover.facing,
+    foot: mover.foot ? { x: mover.foot.x, y: mover.foot.y } : null,
+  };
+}
+
 export async function loadArt() {
   if (plates) return;
-  const [day, night, boss, sprites, doorDay, doorNight, table, walk, walkSheet] = await Promise.all([
-    loadImage('./art/day.png'),
-    loadImage('./art/night.png'),
-    loadImage('./art/boss.png'),
+  const [day, night, sprites, doorDay, doorNight, table, walkSheet] = await Promise.all([
+    loadImage('./art/day-640x360.png'),
+    loadImage('./art/night-640x360.png'),
     loadImage('./art/sprites.png'),
     loadImage('./art/door-day.png'),
     loadImage('./art/door-night.png'),
@@ -74,21 +99,16 @@ export async function loadArt() {
       if (!response.ok) throw new Error('sprites.meta.json');
       return response.json();
     }),
-    fetch('./art/walk.json').then(response => {
-      if (!response.ok) throw new Error('walk.json');
-      return response.json();
-    }),
     fetch('./walk/walk.sprites.json').then(response => {
       if (!response.ok) throw new Error('walk.sprites.json');
       return response.json();
     }),
   ]);
-  plates = { day, night, boss };
+  plates = { day, night };
   doors = { day: doorDay, night: doorNight };
   sheet = sprites;
   meta = table;
-  walkData = walk;
-  grid = parseGrid(walk.rows);
+  walkData = WALK;
   walkSprites = resolveDirections(walkSheet);
   walkImage = await loadImage(`./walk/${walkSheet.image}`);
 }
@@ -103,18 +123,6 @@ export function sceneMode(view) {
   if (view.ap === 0 || view.overnightUsed) return 'night';
   return 'day';
 }
-
-const STAMPS = {
-  day: [
-    { id: 'pusher', pose: 'stand_front', x: 95, y: 80 },
-    { id: 'manager', pose: 'stand_front', x: 310, y: 104 },
-  ],
-  night: [],
-  boss: [
-    { id: 'pusher', pose: 'stand_front', x: 11, y: 96 },
-    { id: 'manager', pose: 'stand_front', x: 76, y: 86 },
-  ],
-};
 
 export function hotspots(mode) {
   const items = walkData?.modes?.[mode] || {};
@@ -147,7 +155,12 @@ function finish() {
   mover.effect = null;
   if (frame) cancelAnimationFrame(frame);
   frame = 0;
-  if (effect && (effect.kind === 'seat' || effect.kind === 'computer')) mover.sitting = true;
+  if (effect?.face) mover.facing = effect.face;
+  if (effect && (effect.kind === 'seat' || effect.kind === 'computer')) {
+    mover.sitting = true;
+    mover.foot = { x: PLAYER.seat[0], y: PLAYER.seat[1] };
+    mover.facing = 'up';
+  }
   onArrive(effect);
   requestPaint();
 }
@@ -188,7 +201,16 @@ function step(now) {
 }
 
 function arm(cells, effect) {
+  if (mover.sitting && (effect?.kind === 'computer' || effect?.kind === 'seat')) {
+    mover.effect = effect;
+    finish();
+    return;
+  }
   const points = cells.map(tileCenter);
+  if (effect?.stand) points[points.length - 1] = { x: effect.stand[0], y: effect.stand[1] };
+  if (effect && (effect.kind === 'seat' || effect.kind === 'computer')) {
+    points.push({ x: PLAYER.seat[0], y: PLAYER.seat[1] });
+  }
   mover.sitting = false;
   if (!mover.foot) mover.foot = { ...points[0] };
   mover.path = points;
@@ -221,43 +243,60 @@ export function clickGround(x, y, mode) {
 
 function drawWalkFrame(ctx, spec, elapsed, moving) {
   if (!walkImage || !spec) return;
-  const { frame } = frameAt(spec, elapsed, moving);
+  const { frame: cell } = frameAt(spec, elapsed, moving);
   const anchor = spec.anchor;
   const dx = mover.foot.x - anchor[0];
   const dy = mover.foot.y - anchor[1];
   if (!spec.mirror) {
-    ctx.drawImage(walkImage, frame.x, frame.y, frame.w, frame.h, dx, dy, frame.w, frame.h);
+    ctx.drawImage(walkImage, cell.x, cell.y, cell.w, cell.h, dx, dy, cell.w, cell.h);
     return;
   }
   ctx.save();
-  ctx.translate(dx + frame.w, dy);
+  ctx.translate(dx + cell.w, dy);
   ctx.scale(-1, 1);
-  ctx.drawImage(walkImage, frame.x, frame.y, frame.w, frame.h, 0, 0, frame.w, frame.h);
+  ctx.drawImage(walkImage, cell.x, cell.y, cell.w, cell.h, 0, 0, cell.w, cell.h);
   ctx.restore();
+}
+
+function drawActor(ctx, id, pose, footX, footY) {
+  const name = poseName(id, pose);
+  const cell = meta?.cells?.[id]?.[name];
+  if (!cell || cell.empty || !Array.isArray(cell.origin)) return;
+  const [sx, sy] = cell.origin;
+  const anchor = cell.foot || [28, 54];
+  const cw = meta.cell?.[0] || 56;
+  const ch = meta.cell?.[1] || 56;
+  ctx.drawImage(sheet, sx, sy, cw, ch, footX - anchor[0], footY - anchor[1], cw, ch);
+}
+
+function drawPlayer(ctx) {
+  const pose = playerPoseKind({ sitting: mover.sitting, moving: mover.path.length > 0 });
+  if (pose === 'sit') {
+    drawActor(ctx, 'player', 'seat_back_body', PLAYER.seat[0], PLAYER.seat[1]);
+    return;
+  }
+  drawWalkFrame(ctx, walkSprites?.[mover.facing] || walkSprites?.down, mover.elapsed, pose === 'walk');
+}
+
+function drawDoor(ctx, mode) {
+  const door = mode === 'night' ? doors?.night : doors?.day;
+  if (door) ctx.drawImage(door, DOOR.x, DOOR.y);
 }
 
 export function drawScene(canvas, mode) {
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
-  const plate = plates?.[mode];
+  const plate = mode === 'night' ? plates?.night : plates?.day;
   if (!plate) return;
   ctx.drawImage(plate, 0, 0);
-  const door = mode === 'night' ? doors?.night : doors?.day;
-  if (door) ctx.drawImage(door, 160, DOOR_SORT_Y);
-  if (!sheet || !meta) return;
-  for (const stamp of STAMPS[mode] || []) {
-    const pose = poseName(stamp.id, stamp.pose);
-    const cell = meta.cells[stamp.id][pose];
-    if (!cell || cell.empty) continue;
-    const [sx, sy] = cell.origin;
-    ctx.drawImage(sheet, sx, sy, 56, 56, stamp.x, stamp.y, 56, 56);
-  }
-  const pose = playerPoseKind({ sitting: mover.sitting, moving: mover.path.length > 0 });
-  const seat = seatedSprite(meta);
-  if (pose === 'sit' && seat) {
-    const [sx, sy] = seat.origin;
-    ctx.drawImage(sheet, sx, sy, seat.w, seat.h, 54, 62, seat.w, seat.h);
+  if (!sheet || !meta) {
+    drawDoor(ctx, mode);
     return;
   }
-  drawWalkFrame(ctx, walkSprites?.[mover.facing] || walkSprites?.down, mover.elapsed, pose === 'walk');
+  const playerSort = mover.sitting ? PLAYER.seat[1] : (mover.foot?.y ?? PLAYER.seat[1]);
+  for (const item of paintOrder(mode, playerSort)) {
+    if (item.kind === 'door') drawDoor(ctx, mode);
+    else if (item.kind === 'actor') drawActor(ctx, item.actor.id, item.actor.pose, item.actor.foot[0], item.actor.foot[1]);
+    else drawPlayer(ctx);
+  }
 }

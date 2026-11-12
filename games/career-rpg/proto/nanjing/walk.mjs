@@ -1,4 +1,4 @@
-// 网格寻路。可走区域在 art/walk.json，不写在这里。
+// 网格寻路。可走区域在 layout.mjs，不写在这里。
 
 export function parseGrid(rows) {
   const height = rows.length;
