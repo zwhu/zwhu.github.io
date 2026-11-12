@@ -1,5 +1,5 @@
 {
-  "origin": "http://127.0.0.1:42427/games/career-rpg/proto/index.html",
+  "origin": "http://127.0.0.1:36287/games/career-rpg/proto/index.html",
   "loss": {
     "file": "games/career-rpg/proto/review/loss.mp4",
     "frames": 23
@@ -8,9 +8,9 @@
     "file": "games/career-rpg/proto/review/win.mp4",
     "frames": 89
   },
-  "remembered": "留下来，还被老板记住了。文件数据库交上去了。",
-  "barely": "勉强留下来。人留下了。文件数据库还没写完。",
-  "lossText": "第 1 周周五，老板好感 0，低于本周线 30，被劝退。",
+  "remembered": "文件数据库交上去了。他把那句话又说了一遍：努力工作的人一定会被看到的。这次不是安慰，是记住了。",
+  "barely": "文件数据库还没写完。日常的单做过不少，四周到头，也就这样过了线。老板点了点头，没再多说。先站稳吧。",
+  "lossText": "第 1 周周五，老板好感 0，低于本周线 30，被劝退。茶桌那边叫你过去，话说得很短。工位上的杯子还是温的，人不用再来了。",
   "skills": {
     "linux": [
       "games/career-rpg/proto/review/skills/linux-before.png",

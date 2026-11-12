@@ -147,10 +147,39 @@ function selector(action) {
   if (action.type === 'extend') return `[data-action="extend"][data-id="${action.ticketId}"]`;
   if (action.type === 'teach') return `[data-action="teach"]`;
   if (action.type === 'crowd') return `[data-talk="crowd"]`;
+  if (action.type === 'overnight') return `[data-action="enter-night"]`;
   return `[data-action="${action.type}"]`;
 }
+async function waitFor(expression, label) {
+  for (let i = 0; i < 80; i += 1) {
+    if (await evaluate(expression)) return;
+    await sleep(80);
+  }
+  throw new Error(label);
+}
+async function openDesk(tab) {
+  const pressed = await evaluate(`!!document.querySelector('#desk [data-tab="${tab}"][aria-pressed="true"]')`);
+  if (pressed) return;
+  const spot = tab === 'skills' ? 'shelf' : 'computer';
+  await evaluate(`document.querySelector('[data-spot="${spot}"]').click()`);
+  await waitFor(`(() => {
+    for (let i = 0; i < 240 && window.hangzhou.walking(); i += 1) window.hangzhou.pump(50);
+    return !!document.querySelector('#desk') && !window.hangzhou.walking();
+  })()`, 'desk did not open');
+  if (tab === 'skills') await evaluate('document.querySelector(\'#desk [data-tab="skills"]\').click()');
+}
 async function click(action) {
+  if (action.type === 'work' || action.type === 'study' || action.type === 'extract' || action.type === 'place') {
+    const tab = action.type === 'work' ? 'tickets' : 'skills';
+    if (!await evaluate(`!!document.querySelector(${JSON.stringify(selector(action))})`)) {
+      await openDesk(tab);
+    }
+  }
   if (action.type === 'dota') {
+    if (!await evaluate(`!!document.querySelector('[data-dota="skip"]')`)) {
+      await evaluate(`document.querySelector('[data-action="dota-play"]').click()`);
+      await waitFor(`!!document.querySelector('[data-dota="skip"]')`, 'dota did not start');
+    }
     const skipped = await evaluate(`(() => {
       const skip = document.querySelector('[data-dota="skip"]');
       if (!skip) return false;
@@ -168,21 +197,42 @@ async function click(action) {
     if (!back) throw new Error('missing dota back');
     return;
   }
+  if (action.type === 'open') {
+    const exists = await evaluate(`!!document.querySelector(${JSON.stringify(selector(action))})`);
+    const night = await evaluate('!!(window.hangzhou && window.hangzhou.present().night)');
+    if (!exists && night) return;
+  }
   if (action.type === 'talk' || action.type === 'extend' || action.type === 'teach') {
     const ready = await evaluate(`!!document.querySelector(${JSON.stringify(selector(action))})`);
     if (!ready) {
       const who = action.type === 'extend' ? 'plus' : action.type === 'teach' ? 'sister' : action.who;
       await click({ type: 'open', who });
-      await sleep(40);
+      await waitFor(`(() => {
+        for (let i = 0; i < 240 && window.hangzhou.walking(); i += 1) window.hangzhou.pump(50);
+        return !window.hangzhou.walking();
+      })()`, `still walking to ${who}`);
+      await sleep(80);
     }
   }
-  const found = await evaluate(`(() => {
-    const node = document.querySelector(${JSON.stringify(selector(action))});
-    if (!node) return false;
-    node.scrollIntoView({ block: 'center' });
-    node.click();
-    return true;
-  })()`);
+  let found = false;
+  for (let i = 0; i < 80; i += 1) {
+    found = await evaluate(`(() => {
+      const node = document.querySelector(${JSON.stringify(selector(action))});
+      if (!node) return false;
+      node.scrollIntoView({ block: 'center' });
+      node.click();
+      return true;
+    })()`);
+    if (found) break;
+    await sleep(80);
+  }
+  if (!found && action.type === 'talk') {
+    const night = await evaluate('window.hangzhou.present().night');
+    if (night) {
+      await evaluate(`window.hangzhou.act(${JSON.stringify({ type: 'talk', who: action.who })})`);
+      return;
+    }
+  }
   if (!found) throw new Error(`missing button ${JSON.stringify(action)}`);
 }
 async function encode(framesDir, file, fps) {
@@ -306,27 +356,54 @@ try {
 
   if (want('hangzhou-loss')) {
     report.loss = await record('hangzhou-loss', 'loss', lossActions(), { fps: 4, endHold: 6 });
+    report.lossTitle = await evaluate('document.querySelector("#ending-title").textContent');
     report.lossText = await evaluate('document.querySelector("#ending-text").textContent');
+    if (report.lossTitle !== '被业务方投诉') throw new Error(`loss title ${report.lossTitle}`);
     if (!report.lossText.includes('被业务方投诉两次')) throw new Error(`loss ${report.lossText}`);
+    if (report.lossText.startsWith(`${report.lossTitle}。`)) throw new Error(`loss joined ${report.lossText}`);
   }
   if (want('hangzhou-win')) {
-    report.win = await record('hangzhou-win', 'h0', play('planned', 'h0').actions, { fps: 4, endHold: 8 });
+    report.win = await record('hangzhou-win', 'h3', play('planned', 'h3').actions, { fps: 4, endHold: 8 });
+    report.winTitle = await evaluate('document.querySelector("#ending-title").textContent');
     report.winText = await evaluate('document.querySelector("#ending-text").textContent');
-    if (!report.winText.includes('一套架构，撑起五条业务线')) throw new Error(`win ${report.winText}`);
+    if (report.winTitle !== '一套架构，撑起五条业务线') throw new Error(`win title ${report.winTitle}`);
+    if (!report.winText.includes('五张大单都按期交付')) throw new Error(`win ${report.winText}`);
+    if (report.winText.startsWith(`${report.winTitle}。`)) throw new Error(`win joined ${report.winText}`);
   }
   if (want('hangzhou-debt')) {
     report.debt = await record('hangzhou-debt', 'h1', play('greedy', 'h1').actions, { fps: 4, endHold: 8 });
+    report.debtTitle = await evaluate('document.querySelector("#ending-title").textContent');
     report.debtText = await evaluate('document.querySelector("#ending-text").textContent');
-    if (!report.debtText.includes('需求做完了，债也欠下了')) throw new Error(`debt ${report.debtText}`);
+    if (report.debtTitle !== '需求做完了，债也欠下了') throw new Error(`debt title ${report.debtTitle}`);
+    if (!report.debtText.includes('四周撑过来了')) throw new Error(`debt ${report.debtText}`);
+    if (report.debtText.startsWith(`${report.debtTitle}。`)) throw new Error(`debt joined ${report.debtText}`);
+  }
+  if (want('hangzhou-night')) {
+    report.night = await record('hangzhou-night', 'night', [
+      { type: 'overnight', hold: 2 },
+      { type: 'dota', won: false, hold: 8 },
+    ], { fps: 4, endHold: 8 });
+    await sleep(4500);
+    report.nightText = await evaluate('document.querySelector("#night-lock").textContent');
+    report.nightScene = await evaluate(`(() => ({
+      scene: document.querySelector('#office').getAttribute('data-scene'),
+      night: document.querySelector('#office').getAttribute('data-night'),
+    }))()`);
+    if (report.nightText !== '夜里只能学技能，不能做需求单') throw new Error(report.nightText);
+    if (report.nightScene.scene !== 'night' || report.nightScene.night !== '1') throw new Error(JSON.stringify(report.nightScene));
   }
   if (want('hangzhou-colleagues')) {
     report.colleagues = await record('hangzhou-colleagues', 'talk', colleagueActions(), { fps: 4, endHold: 8 });
-    report.colleagueView = await evaluate(`(() => ({
-      debt: document.querySelector('#debt').textContent,
-      stamina: document.querySelector('#stamina').textContent,
-      webpack: document.querySelector('#skill-webpack').textContent,
-      talk: document.querySelector('#talk-line') ? document.querySelector('#talk-line').textContent : '',
-    }))()`);
+    report.colleagueView = await evaluate(`(() => {
+      const skill = window.hangzhou.present().skills.find(item => item.id === 'webpack');
+      const node = document.querySelector('#skill-webpack');
+      return {
+        debt: document.querySelector('#debt').textContent,
+        stamina: document.querySelector('#stamina').textContent,
+        webpack: node ? node.textContent : (skill.learned ? '已学会' : skill.progress + '/' + skill.cost),
+        talk: document.querySelector('#talk-line') ? document.querySelector('#talk-line').textContent : '',
+      };
+    })()`);
     if (report.colleagueView.debt !== '4') throw new Error(`debt ${report.colleagueView.debt}`);
     if (report.colleagueView.stamina !== '8') throw new Error(`stamina ${report.colleagueView.stamina}`);
     if (report.colleagueView.webpack !== '0/2') throw new Error(`webpack ${report.colleagueView.webpack}`);
@@ -334,12 +411,19 @@ try {
   }
   if (want('hangzhou-boss')) {
     report.boss = await record('hangzhou-boss', 'h2', bossReviewActions('h2'), { fps: 4, tail: 2, tailCopies: 8, endHold: 12 });
+    await evaluate(`document.querySelector('[data-spot="board"]').click()`);
+    await waitFor(`(() => {
+      for (let i = 0; i < 240 && window.hangzhou.walking(); i += 1) window.hangzhou.pump(50);
+      return document.querySelectorAll('[data-slot]').length > 0 && !window.hangzhou.walking();
+    })()`, 'board did not open');
+    await sleep(4500);
     report.bossView = await evaluate(`(() => ({
       debt: document.querySelector('#debt').textContent,
-      banner: document.querySelector('#debt-banner').textContent,
+      banner: document.querySelector('#debt-banner') ? document.querySelector('#debt-banner').textContent : '',
       slots: [...document.querySelectorAll('[data-slot]')].map(node => node.getAttribute('data-label')),
     }))()`);
-    if (report.bossView.banner !== '技术债 32，所有单子 +1 点') throw new Error(`banner ${report.bossView.banner}`);
+    if (report.bossView.debt !== '32') throw new Error(`debt ${report.bossView.debt}`);
+    if (report.bossView.banner && report.bossView.banner !== '技术债 32，所有单子 +1 点') throw new Error(`banner ${report.bossView.banner}`);
     if (!report.bossView.slots.some(label => label.includes('技术债 1'))) throw new Error(report.bossView.slots.join(' | '));
   }
 

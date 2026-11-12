@@ -1,35 +1,32 @@
 {
-  "origin": "http://127.0.0.1:43209/games/career-rpg/proto/hangzhou/index.html",
+  "origin": "http://127.0.0.1:44555/games/career-rpg/proto/hangzhou/index.html",
   "consoleErrors": [],
   "loss": {
     "file": "games/career-rpg/proto/hangzhou/review/hangzhou-loss.mp4",
     "frames": 47
   },
+  "lossTitle": "被业务方投诉",
   "lossText": "第 2 周周五，交付 0，低于本周线 64。被业务方投诉两次，本局结束。",
   "win": {
     "file": "games/career-rpg/proto/hangzhou/review/hangzhou-win.mp4",
-    "frames": 98
+    "frames": 109
   },
-  "winText": "一套架构，撑起五条业务线。五张大单都按期交付。淘宝、天猫、闲鱼、飞猪、盒马接在同一套表单模块上。",
+  "winTitle": "一套架构，撑起五条业务线",
+  "winText": "五张大单都按期交付。淘宝、天猫、闲鱼、飞猪、盒马接在同一套表单模块上。",
   "debt": {
     "file": "games/career-rpg/proto/hangzhou/review/hangzhou-debt.mp4",
     "frames": 89
   },
-  "debtText": "需求做完了，债也欠下了。四周撑过来了。有的单子延期了，技术债还在。",
-  "boss": {
-    "file": "games/career-rpg/proto/hangzhou/review/hangzhou-boss.mp4",
-    "frames": 94
+  "debtTitle": "需求做完了，债也欠下了",
+  "debtText": "四周撑过来了。有的单子延期了，技术债还在。",
+  "night": {
+    "file": "games/career-rpg/proto/hangzhou/review/hangzhou-night.mp4",
+    "frames": 19
   },
-  "bossView": {
-    "debt": "32",
-    "banner": "技术债 32，所有单子 +1 点",
-    "slots": [
-      "模块 1 + 技术债 1 = 2 点",
-      "已按期交付",
-      "硬写 4 + 技术债 1 = 5 点",
-      "模块 1 + 技术债 1 = 2 点",
-      "硬写 4 + 技术债 1 = 5 点"
-    ]
+  "nightText": "夜里只能学技能，不能做需求单",
+  "nightScene": {
+    "scene": "night",
+    "night": "1"
   },
   "colleagues": {
     "file": "games/career-rpg/proto/hangzhou/review/hangzhou-colleagues.mp4",
@@ -40,5 +37,20 @@
     "stamina": "8",
     "webpack": "0/2",
     "talk": "聊满 3 天，学 Webpack 少 1 点，只要 2 点"
+  },
+  "boss": {
+    "file": "games/career-rpg/proto/hangzhou/review/hangzhou-boss.mp4",
+    "frames": 94
+  },
+  "bossView": {
+    "debt": "32",
+    "banner": "",
+    "slots": [
+      "模块 1 + 技术债 1 = 2 点",
+      "已按期交付",
+      "硬写 4 + 技术债 1 = 5 点",
+      "模块 1 + 技术债 1 = 2 点",
+      "硬写 4 + 技术债 1 = 5 点"
+    ]
   }
 }

@@ -84,6 +84,16 @@ export const EVENT_TICKETS = Object.freeze([
 export const DAY_NAMES = Object.freeze(['', '周一', '周二', '周三', '周四', '周五']);
 
 export const ENDINGS = Object.freeze({
-  remembered: Object.freeze({ title: '留下来，还被老板记住了', text: '文件数据库交上去了。' }),
-  barely: Object.freeze({ title: '勉强留下来', text: '人留下了。文件数据库还没写完。' }),
+  remembered: Object.freeze({
+    title: '留下来，还被老板记住了',
+    text: '文件数据库交上去了。他把那句话又说了一遍：努力工作的人一定会被看到的。这次不是安慰，是记住了。',
+  }),
+  barely: Object.freeze({
+    title: '勉强留下来',
+    text: '文件数据库还没写完。日常的单做过不少，四周到头，也就这样过了线。老板点了点头，没再多说。先站稳吧。',
+    fileDbDone: '文件数据库交了，好感没到记住的线。人留下了。老板看过一眼，说先这样干着。也就这样了。',
+  }),
+  lost: Object.freeze({
+    text: '茶桌那边叫你过去，话说得很短。工位上的杯子还是温的，人不用再来了。',
+  }),
 });

@@ -30,7 +30,9 @@ const origin = `http://127.0.0.1:${server.address().port}${PROTO}`;
 
 const chrome = spawn('google-chrome', [
   '--headless=new', '--no-sandbox', '--disable-dev-shm-usage', '--hide-scrollbars',
-  '--lang=zh-CN', '--disable-translate', '--remote-debugging-port=0', 'about:blank',
+  '--lang=zh-CN', '--disable-translate', '--remote-debugging-port=0',
+  `--user-data-dir=${path.join(tmpdir(), 'hefei-capture-chrome')}`,
+  'about:blank',
 ], { stdio: ['ignore', 'ignore', 'pipe'] });
 const devtools = await new Promise((resolve, reject) => {
   let log = '';
@@ -92,10 +94,65 @@ async function evaluate(expression) {
   if (message.result?.exceptionDetails) throw new Error(JSON.stringify(message.result.exceptionDetails).slice(0, 800));
   return message.result?.result?.value;
 }
-async function shot(file) {
-  await evaluate('window.scrollTo(0, 0)');
+async function shot(file, scroll = true) {
+  if (scroll) await evaluate('window.scrollTo(0, 0)');
   const message = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   writeFileSync(file, Buffer.from(message.result.data, 'base64'));
+}
+async function assertActionButtons(width) {
+  const result = await evaluate(`(() => {
+    const bar = document.querySelector('.actions');
+    if (!bar) return { error: 'missing action row' };
+    const wanted = ['休息 +2 体力', '入夜'];
+    if (wanted.some(label => ![...bar.querySelectorAll('button')].some(button => button.textContent === label))) {
+      return { error: 'missing button' };
+    }
+    const parse = (value) => {
+      const match = String(value).match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/);
+      return match ? [Number(match[1]), Number(match[2]), Number(match[3])] : null;
+    };
+    const channel = (value) => {
+      const scaled = value / 255;
+      return scaled <= 0.04045 ? scaled / 12.92 : ((scaled + 0.055) / 1.055) ** 2.4;
+    };
+    const luminance = (rgb) => 0.2126 * channel(rgb[0]) + 0.7152 * channel(rgb[1]) + 0.0722 * channel(rgb[2]);
+    const targets = [
+      ...document.querySelectorAll('button'),
+      ...document.querySelectorAll('.card strong'),
+      ...document.querySelectorAll('.board h2'),
+      ...document.querySelectorAll('.card .left'),
+    ];
+    return {
+      position: getComputedStyle(bar).position,
+      rows: targets.map(node => {
+        node.scrollIntoView({ block: 'center', inline: 'nearest' });
+        const rect = node.getBoundingClientRect();
+        const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        const style = getComputedStyle(node);
+        const fg = parse(style.color);
+        const bg = parse(style.backgroundColor);
+        const hi = fg && bg ? Math.max(luminance(fg), luminance(bg)) : 0;
+        const lo = fg && bg ? Math.min(luminance(fg), luminance(bg)) : 0;
+        const action = node.closest('.actions');
+        return {
+          text: node.textContent.trim().slice(0, 32),
+          contrast: action && fg && bg ? (hi + 0.05) / (lo + 0.05) : null,
+          hit: hit === node || Boolean(hit && node.contains(hit)),
+          inView: rect.width > 0 && rect.height > 0 && rect.top >= 0 && rect.bottom <= window.innerHeight && rect.left >= 0 && rect.right <= window.innerWidth,
+        };
+      }),
+    };
+  })()`);
+  if (result.error) throw new Error(width + ' ' + result.error);
+  if (result.position === 'fixed' || result.position === 'sticky') {
+    throw new Error(width + ' action row is ' + result.position);
+  }
+  for (const row of result.rows) {
+    if (!row.hit || !row.inView || (row.contrast != null && row.contrast < 4.5)) {
+      throw new Error(width + ' covered control ' + JSON.stringify(row));
+    }
+  }
+  return result;
 }
 async function goto(seed) {
   await send('Page.navigate', { url: `${origin}?seed=${encodeURIComponent(seed)}` });
@@ -111,21 +168,33 @@ function selector(action) {
   return `[data-action="${action.type}"]`;
 }
 async function click(action) {
-  const found = await evaluate(`(() => {
-    const node = document.querySelector(${JSON.stringify(selector(action))});
-    if (!node) return false;
-    node.scrollIntoView({ block: 'center' });
-    node.click();
-    return true;
-  })()`);
-  if (!found) throw new Error('missing button ' + JSON.stringify(action));
+  if (action.type !== 'overnight') {
+    const found = await evaluate(`(() => {
+      const node = document.querySelector(${JSON.stringify(selector(action))});
+      if (!node) return false;
+      node.scrollIntoView({ block: 'center' });
+      node.click();
+      return true;
+    })()`);
+    if (!found) throw new Error('missing button ' + JSON.stringify(action));
+  }
   if (action.type === 'overnight') {
     await evaluate(`(() => {
-      if (!window.hefei.present().interviewed) document.querySelector('[data-person="boss"]')?.click();
+      let guard = 0;
+      while (!window.hefei.present().interviewed && guard < 8) {
+        const next = document.querySelector('[data-dialogue="next"]');
+        if (next) next.click();
+        else document.querySelector('[data-person="boss"]')?.click();
+        guard += 1;
+      }
       document.querySelector('[data-dialogue="close"]')?.click();
+      document.querySelector('[data-dialogue="next"]')?.click();
       document.querySelector('[data-action="night"]')?.click();
+      document.querySelector('[data-dialogue="next"]')?.click();
+      document.querySelector('[data-dialogue="close"]')?.click();
       document.querySelector('[data-person="party"]')?.click();
       document.querySelector('[data-choice="accept"]')?.click();
+      document.querySelector('[data-dialogue="next"]')?.click();
     })()`);
     await sleep(40);
     await evaluate(`document.querySelector('[data-dota="skip"]')?.click()`);
@@ -162,13 +231,23 @@ async function recordMinigame(name, seed, play) {
   if (before !== '10') throw new Error(name + ' stamina before ' + before);
   for (let i = 0; i < 4; i += 1) await save();
   const opened = await evaluate(`(() => {
-    if (!window.hefei.present().interviewed) document.querySelector('[data-person="boss"]')?.click();
+    let guard = 0;
+    while (!window.hefei.present().interviewed && guard < 8) {
+      const next = document.querySelector('[data-dialogue="next"]');
+      if (next) next.click();
+      else document.querySelector('[data-person="boss"]')?.click();
+      guard += 1;
+    }
     document.querySelector('[data-dialogue="close"]')?.click();
+    document.querySelector('[data-dialogue="next"]')?.click();
     document.querySelector('[data-action="night"]')?.click();
+    document.querySelector('[data-dialogue="next"]')?.click();
+    document.querySelector('[data-dialogue="close"]')?.click();
     document.querySelector('[data-person="party"]')?.click();
     const accept = document.querySelector('[data-choice="accept"]');
     if (!accept) return false;
     accept.click();
+    document.querySelector('[data-dialogue="next"]')?.click();
     return !!document.querySelector('#dota');
   })()`);
   if (!opened) throw new Error(name + ' did not open');
@@ -243,6 +322,21 @@ const IDLE = `() => {
 
 try {
   await connect();
+  await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 720, deviceScaleFactor: 1, mobile: false });
+  await goto('hefei');
+  const desktopActions = await assertActionButtons('1280x720');
+  await evaluate(`document.querySelector('.actions').scrollIntoView({ block: 'center' })`);
+  await shot(path.join(OUT, 'stills/art-actions-desktop.png'), false);
+  console.log('actions-1280', JSON.stringify(desktopActions));
+  await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
+  await goto('hefei');
+  const phoneActions = await assertActionButtons('390x844');
+  await evaluate(`document.querySelector('.actions').scrollIntoView({ block: 'center' })`);
+  await shot(path.join(OUT, 'stills/art-actions-390.png'), false);
+  console.log('actions-390', JSON.stringify(phoneActions));
+  if (process.argv.includes('actions')) {
+    // hit-test and stills only
+  } else {
   await send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
 
   if (process.argv.includes('dota')) {
@@ -363,13 +457,17 @@ try {
   if (!lossText.includes('第 1 周周五') || !lossText.includes('被劝退')) throw new Error('loss ' + lossText);
 
   const win = await record('win', REMEMBERED_SEED, REMEMBERED_ACTIONS, 2);
+  const winTitle = await evaluate('document.querySelector("#ending-title").textContent');
   const winText = await evaluate('document.querySelector("#ending-text").textContent');
-  if (!winText.includes('留下来，还被老板记住了') || winText.includes('争取能留下来')) throw new Error('win video ended on ' + winText);
+  if (winTitle !== '留下来，还被老板记住了' || winText.includes(winTitle) || winText.includes('争取能留下来') || !winText.includes('努力工作的人一定会被看到的')) throw new Error('win video ended on ' + winTitle + ' / ' + winText);
   await goto(BARELY_SEED);
   for (const action of BARELY_ACTIONS) await click(action);
+  const bareTitle = await evaluate('document.querySelector("#ending-title").textContent');
   const bareText = await evaluate('document.querySelector("#ending-text").textContent');
-  if (!bareText.includes('勉强留下来') || !bareText.includes('还没写完') || bareText.includes('老板记住了')) throw new Error('bare ending ' + bareText);
+  if (bareTitle !== '勉强留下来' || bareText.includes(bareTitle) || !bareText.includes('还没写完') || bareText.includes('老板记住了')) throw new Error('bare ending ' + bareTitle + ' / ' + bareText);
 
+  await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
+  await goto('hefei');
   await send('Emulation.setDeviceMetricsOverride', { width: 375, height: 812, deviceScaleFactor: 1, mobile: true });
   await goto('hefei');
   await shot(path.join(OUT, 'mobile-open.png'));
@@ -395,6 +493,7 @@ try {
   };
   writeFileSync(path.join(OUT, 'capture-log.json'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report, null, 2));
+  }
   }
 } catch (error) {
   console.error('CAPTURE_FAIL', error);
