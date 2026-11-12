@@ -1,5 +1,5 @@
 import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickMatch, TICK_MS } from '../dota.mjs';
-import { NAV, WORLD, stagePixels } from './nav.mjs';
+import { integerScale, NAV, viewOrigin, WORLD } from './nav.mjs';
 import { CONFIG, applyAction, createGame, present } from './rules.mjs';
 import { cellCenter, effectFor, findPath, nearestWalkable, sceneFile, visibleSpots } from './walk.mjs';
 import { clipFor, resolveSprites } from './walk-sprites.mjs';
@@ -339,7 +339,10 @@ function drawPlate(ctx, image) {
 
 function drawWalker() {
   const canvas = document.querySelector('#walker');
-  if (!canvas) return;
+  if (!canvas) {
+    followPlayer();
+    return;
+  }
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, SCENE.w, SCENE.h);
@@ -353,25 +356,33 @@ function drawWalker() {
   } else if (!view.night) {
     drawPlate(ctx, castDay);
   }
-  if (!sprites) return;
+  if (!sprites) {
+    followPlayer();
+    return;
+  }
   const moving = route.length > 0;
   const clip = clipFor(sprites, facing, { seated, moving, elapsedMs: walkElapsed });
   if (clip.pose === 'sit') {
     // Boss 周人站在白板前，不画工位坐姿。夜里和白天用同一张坐姿，底图上没有第二个主角。
-    if (view.bossOn) return;
-    const sheet = spriteImages.get('walk-sheet.png');
-    if (!sheet?.complete || !NAV.seat.sitFrame) return;
-    const [sx, sy, sw, sh] = NAV.seat.sitFrame;
-    const [dx, dy] = NAV.seat.sit;
-    const [dw, dh] = NAV.seat.sitSize;
-    // 背面站姿的头到红衣躯干，按原图像素绘制，不缩放。腿不画，椅背就不会把肩膀和手臂全挡住。
-    ctx.drawImage(sheet, sx, sy, sw, sh, dx, dy, dw, dh);
+    if (!view.bossOn) {
+      const sheet = spriteImages.get('walk-sheet.png');
+      if (sheet?.complete && NAV.seat.sitFrame) {
+        const [sx, sy, sw, sh] = NAV.seat.sitFrame;
+        const [dx, dy] = NAV.seat.sit;
+        const [dw, dh] = NAV.seat.sitSize;
+        // 背面站姿的头到红衣躯干，按原图像素绘制，不缩放。腿不画，椅背就不会把肩膀和手臂全挡住。
+        ctx.drawImage(sheet, sx, sy, sw, sh, dx, dy, dw, dh);
+      }
+    }
+    followPlayer();
     return;
   }
   const spec = clip.spec;
-  if (!spec?.frames?.[clip.index]) return;
+  if (!spec?.frames?.[clip.index] || !spriteImages.get(spec.file)?.complete || !clip.rect) {
+    followPlayer();
+    return;
+  }
   const image = spriteImages.get(spec.file);
-  if (!image?.complete || !clip.rect) return;
   const rect = clip.rect;
   const [ax, ay] = spec.anchor;
   ctx.save();
@@ -383,6 +394,7 @@ function drawWalker() {
     ctx.drawImage(image, rect.x, rect.y, rect.w, rect.h, Math.round(foot.x - ax), Math.round(foot.y - ay), rect.w, rect.h);
   }
   ctx.restore();
+  followPlayer();
 }
 
 function loadWalkSprites() {
@@ -504,10 +516,15 @@ function office(view, talk) {
     ui,
   ];
   if (view.phase === 'play') {
-    layers.push(sceneActions(view));
     if (talk) layers.push(talk);
     if (dota) layers.push(dotaOverlay());
   }
+  const frame = el('div', { class: 'stage-frame' }, [
+    el('div', { class: 'stage-scroll' }, [
+      el('div', { class: 'playfield' }, layers),
+    ]),
+  ]);
+  if (view.phase === 'play') frame.append(sceneActions(view));
   return el('section', {
     class: 'stage',
     id: 'office',
@@ -515,7 +532,7 @@ function office(view, talk) {
     'data-night': view.night ? '1' : '0',
   }, [
     hud(view),
-    el('div', { class: 'playfield' }, layers),
+    frame,
   ]);
 }
 
@@ -911,10 +928,51 @@ function dotaOverlay() {
   ]);
 }
 
+function intersects(a, b) {
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+}
+
+function playerScreenBox(field, scale) {
+  const box = field.getBoundingClientRect();
+  const left = box.left + (foot.x - 28) * scale;
+  const top = box.top + (foot.y - 52) * scale;
+  return { left, top, right: left + 56 * scale, bottom: top + 56 * scale };
+}
+
 function fitStage() {
-  const stage = document.querySelector('.stage');
-  if (!stage) return;
-  stage.style.width = `${stagePixels(stage.parentElement.clientWidth, SCENE.w)}px`;
+  const scroll = document.querySelector('.stage-scroll');
+  const field = document.querySelector('.playfield');
+  if (!scroll || !field) return;
+  const scale = integerScale(scroll.clientWidth, SCENE.w);
+  field.style.width = `${SCENE.w * scale}px`;
+  field.style.height = `${SCENE.h * scale}px`;
+  followPlayer();
+}
+
+function followPlayer() {
+  const scroll = document.querySelector('.stage-scroll');
+  const field = document.querySelector('.playfield');
+  const frame = document.querySelector('.stage-frame');
+  const dock = frame?.querySelector('.scene-actions');
+  if (!scroll || !field || field.clientWidth < 1) return;
+  const scale = field.clientWidth / SCENE.w;
+  const viewWorld = scroll.clientWidth / scale;
+  scroll.scrollLeft = viewOrigin(foot.x, viewWorld, SCENE.w) * scale;
+  if (!dock) return;
+  const frameBox = frame.getBoundingClientRect();
+  const scrollBox = scroll.getBoundingClientRect();
+  const fieldBox = field.getBoundingClientRect();
+  const visibleRight = Math.min(scrollBox.right, fieldBox.right);
+  const visibleLeft = Math.max(scrollBox.left, fieldBox.left);
+  const visibleBottom = Math.min(scrollBox.bottom, fieldBox.bottom);
+  const gap = 6 * scale;
+  dock.style.left = 'auto';
+  dock.style.right = `${frameBox.right - visibleRight + gap}px`;
+  dock.style.bottom = `${frameBox.bottom - visibleBottom + gap}px`;
+  if (intersects(playerScreenBox(field, scale), dock.getBoundingClientRect())) {
+    dock.style.right = 'auto';
+    dock.style.left = `${visibleLeft - frameBox.left + gap}px`;
+  }
 }
 
 function render() {

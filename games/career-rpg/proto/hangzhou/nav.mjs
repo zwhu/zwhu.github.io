@@ -1,10 +1,25 @@
 // 可走格子。1 是地面，0 是桌子、墙、盆栽和白板。格子 8px，边界和障碍按 640×360 房间。
 export const WORLD = Object.freeze({ w: 640, h: 360 });
 
-// 房间放得下时按整数倍取整；比一张底图更窄时铺满宽度，字号另有 13px 下限。
+// 房间放得下时按整数倍放大。比一张底图更窄时仍画 1×，由镜头裁出可见范围。
+export function integerScale(availableWidth, worldWidth = WORLD.w) {
+  const width = Number(availableWidth);
+  if (!Number.isFinite(width) || width < worldWidth) return 1;
+  return Math.floor(width / worldWidth);
+}
+
 export function stagePixels(avail, worldWidth = WORLD.w) {
-  if (avail >= worldWidth) return Math.floor(avail / worldWidth) * worldWidth;
-  return avail;
+  return worldWidth * integerScale(avail, worldWidth);
+}
+
+// 画面比窗口宽时，滚动原点让脚底两侧的精灵留在可见范围内。
+export function viewOrigin(footX, viewWidth, worldWidth = WORLD.w, pad = 28) {
+  const view = Math.min(worldWidth, Math.max(0, viewWidth));
+  const max = worldWidth - view;
+  let left = footX - view / 2;
+  if (left > footX - pad) left = footX - pad;
+  if (left + view < footX + pad) left = footX + pad - view;
+  return Math.max(0, Math.min(max, left));
 }
 
 export const NAV = {

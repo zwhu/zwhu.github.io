@@ -200,7 +200,7 @@ try {
   if (desktop.panel) throw new Error('day desktop opened a panel');
   if (desktop.banners > 1) throw new Error(`day banners ${desktop.banners}`);
   if (!desktop.hudOpaque || !desktop.hudAbove) throw new Error(`hud ${JSON.stringify(desktop)}`);
-  if (Math.abs(desktop.scale - Math.round(desktop.scale)) > 0.02) throw new Error(`scale ${desktop.scale}`);
+  if (Math.abs(desktop.scale - 2) > 0.02) throw new Error(`desktop scale ${desktop.scale}`);
   if (desktop.sceneFilter !== 'pixelated' || desktop.walkerFilter !== 'pixelated') throw new Error('image rendering');
   await shot(path.join(STILLS, 'ui-day-1280.png'));
 
@@ -210,7 +210,82 @@ try {
   if (narrow.banners > 1) throw new Error(`390 banners ${narrow.banners}`);
   if (!narrow.hudOpaque || !narrow.hudAbove) throw new Error(`390 hud ${JSON.stringify(narrow)}`);
   if (narrow.small.length) throw new Error(`390 font ${JSON.stringify(narrow.small)}`);
+  if (Math.abs(narrow.scale - 1) > 0.02) throw new Error(`390 scale ${narrow.scale}`);
+  const phoneProbe = `(() => {
+    const scroll = document.querySelector('.stage-scroll');
+    const field = document.querySelector('.playfield');
+    const dock = document.querySelector('.scene-actions');
+    const view = scroll.getBoundingClientRect();
+    const fieldBox = field.getBoundingClientRect();
+    const scale = fieldBox.width / 640;
+    const foot = window.hangzhou.foot();
+    const player = {
+      left: fieldBox.left + (foot.x - 28) * scale,
+      top: fieldBox.top + (foot.y - 52) * scale,
+      right: fieldBox.left + (foot.x + 28) * scale,
+      bottom: fieldBox.top + (foot.y + 4) * scale,
+    };
+    const dockBox = dock.getBoundingClientRect();
+    const hit = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    const inside = box => box.left >= view.left - 1 && box.right <= view.right + 1 && box.top >= view.top - 1 && box.bottom <= view.bottom + 1
+      && box.bottom <= window.innerHeight + 1 && box.top >= -1;
+    const spot = id => {
+      const node = document.querySelector('[data-spot="' + id + '"]');
+      if (!node) return null;
+      const box = node.getBoundingClientRect();
+      const cx = (box.left + box.right) / 2;
+      const cy = (box.top + box.bottom) / 2;
+      return { id, visible: cx >= view.left && cx <= view.right && cy >= view.top && cy <= view.bottom };
+    };
+    const buttons = [...dock.querySelectorAll('button')].map(node => {
+      const box = node.getBoundingClientRect();
+      const x = box.left + box.width / 2;
+      const y = box.top + box.height / 2;
+      const target = document.elementFromPoint(x, y);
+      return {
+        text: node.textContent,
+        inside: inside(box),
+        tapped: target === node || node.contains(target),
+      };
+    });
+    return {
+      scale,
+      buttons,
+      coversPlayer: hit(player, dockBox),
+      playerInside: player.left >= view.left - 1 && player.right <= view.right + 1 && player.top >= view.top - 1 && player.bottom <= view.bottom + 1,
+      board: spot('board'),
+      cooler: spot('cooler'),
+      door: spot('door'),
+      foot,
+    };
+  })()`;
+  function assertPhone(probe, labels) {
+    if (Math.abs(probe.scale - 1) > 0.02) throw new Error(`phone scale ${probe.scale}`);
+    if (!probe.playerInside) throw new Error(`player clipped ${JSON.stringify(probe.foot)}`);
+    if (probe.coversPlayer) throw new Error(`buttons cover player ${JSON.stringify(probe.foot)}`);
+    for (const label of labels) {
+      const button = probe.buttons.find(item => item.text === label);
+      if (!button?.inside || !button.tapped) throw new Error(`button ${label} ${JSON.stringify(probe.buttons)}`);
+    }
+  }
+  async function walkTo(x, y) {
+    await evaluate(`window.hangzhou.clickScene(${x}, ${y})`);
+    for (let i = 0; i < 400; i += 1) {
+      const moving = await evaluate('window.hangzhou.walking()');
+      if (!moving && i > 0) return await evaluate('window.hangzhou.foot()');
+      if (moving) await evaluate('window.hangzhou.pump(40)');
+    }
+    throw new Error(`walk timeout ${x},${y}`);
+  }
+  assertPhone(await evaluate(phoneProbe), ['休息', '入夜']);
   await shot(path.join(STILLS, 'ui-day-390.png'));
+  for (const [x, y] of [[40, 108], [336, 338], [586, 262], [546, 206]]) {
+    await walkTo(x, y);
+    assertPhone(await evaluate(phoneProbe), ['休息', '入夜']);
+  }
+  const atBoard = await evaluate(phoneProbe);
+  if (!atBoard.board?.visible) throw new Error(`whiteboard off screen ${JSON.stringify(atBoard)}`);
+  await shot(path.join(STILLS, 'ui-walk-whiteboard-390.png'));
 
   await metrics(1280, 900);
   await evaluate(`document.querySelector('[data-action="enter-night"]').click()`);
@@ -227,8 +302,25 @@ try {
   if (!nightNarrow.when.includes('· 夜里')) throw new Error(nightNarrow.when);
   if (nightNarrow.small.length) throw new Error(`390 night font ${JSON.stringify(nightNarrow.small)}`);
   if (nightNarrow.banners > 1) throw new Error(`390 night banners ${nightNarrow.banners}`);
+  if (Math.abs(nightNarrow.scale - 1) > 0.02) throw new Error(`390 night scale ${nightNarrow.scale}`);
+  assertPhone(await evaluate(phoneProbe), ['休息', '打 Dota', '睡觉']);
   await shot(path.join(STILLS, 'ui-night-390.png'));
+  await walkTo(336, 338);
+  const atDoor = await evaluate(phoneProbe);
+  assertPhone(atDoor, ['休息', '打 Dota', '睡觉']);
+  if (!atDoor.door?.visible) throw new Error(`door off screen ${JSON.stringify(atDoor)}`);
+  await shot(path.join(STILLS, 'night-at-door.png'));
+
+  await send('Page.navigate', { url: origin });
+  for (let i = 0; i < 50; i += 1) {
+    await sleep(80);
+    if (await evaluate('!!window.hangzhou && !window.hangzhou.present().night')) break;
+    if (i === 49) throw new Error('day reload failed');
+  }
+  await evaluate('window.requestAnimationFrame = () => 0');
   await metrics(1280, 900);
+  await evaluate(`document.querySelector('[data-action="enter-night"]').click()`);
+  await sleep(40);
 
   async function grab(dir, index) {
     const file = path.join(dir, `${String(index).padStart(4, '0')}.png`);
@@ -268,7 +360,6 @@ try {
   let frame = await hold(nightDir, 0, 8);
   const toDoor = await march(nightDir, frame, 336, 338);
   frame = await hold(nightDir, toDoor.index, 10);
-  await shot(path.join(STILLS, 'night-at-door.png'));
   const back = await march(nightDir, frame, 226, 247);
   frame = back.index;
   await evaluate('window.hangzhou.sitAtDesk()');

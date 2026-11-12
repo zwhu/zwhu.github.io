@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { NAV, WORLD, stagePixels } from '../nav.mjs';
+import { integerScale, NAV, stagePixels, viewOrigin, WORLD } from '../nav.mjs';
 import { applyAction, createGame, snapshot } from '../rules.mjs';
 import { effectFor, findPath, isWalkable, nearestWalkable, sceneFile, visibleSpots } from '../walk.mjs';
 
@@ -62,9 +62,18 @@ test('the room is 640 by 360 and the seat, door and board keep their coordinates
   assert.deepEqual(NAV.board.lit, [559, 172]);
   assert.deepEqual(NAV.board.litSize, [53, 42]);
   assert.equal(sceneFile({ night: false, boss: true }), 'day-640x360.png');
+  assert.equal(integerScale(1280), 2);
+  assert.equal(integerScale(1000), 1);
+  assert.equal(integerScale(390), 1);
   assert.equal(stagePixels(1280), 1280);
   assert.equal(stagePixels(1000), 640);
-  assert.equal(stagePixels(390), 390);
+  assert.equal(stagePixels(390), 640);
+  const view = 390;
+  for (const [name, x] of [['B1', 226], ['door', 336], ['board', 546], ['meeting', 586], ['cooler', 40]]) {
+    const left = viewOrigin(x, view);
+    assert.ok(x - 28 >= left - 0.01 && x + 28 <= left + view + 0.01, `${name} ${left}`);
+  }
+  assert.equal(viewOrigin(226, WORLD.w), 0);
   const seatCell = nearestWalkable(NAV, NAV.seat.stand[0], NAV.seat.stand[1]);
   const doorCell = nearestWalkable(NAV, NAV.door.spawn[0], NAV.door.spawn[1]);
   assert.ok(findPath(NAV, seatCell, doorCell)?.length > 1);

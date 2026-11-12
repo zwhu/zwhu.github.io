@@ -23,11 +23,22 @@ body {
   container-type: inline-size;
 }
 
+.stage-frame {
+  position: relative;
+  width: 100%;
+}
+
+.stage-scroll {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
 .playfield {
   position: relative;
-  flex: 0 0 auto;
-  width: 100%;
-  aspect-ratio: 640 / 360;
+  flex: none;
+  width: 640px;
+  height: 360px;
   container-type: inline-size;
   line-height: 0;
 }
@@ -335,13 +346,14 @@ body {
 
 .scene-actions {
   position: absolute;
-  z-index: 5;
-  right: calc(6 / 640 * 100%);
-  bottom: calc(6 / 360 * 100%);
+  z-index: 6;
+  right: 6px;
+  bottom: 6px;
+  left: auto;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: calc(100cqi / 640 * 3);
+  gap: 4px;
   width: max-content;
 }
 
