@@ -2,10 +2,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createGame, present, snapshot } from '../rules.mjs';
+import { WALK as map } from '../layout.mjs';
 import { seatedSprite } from '../scene.mjs';
 import { findPath, frameAt, isWalkable, parseGrid, planClick, playerPoseKind, resolveDirections } from '../walk.mjs';
-
-const map = JSON.parse(readFileSync(new URL('../art/walk.json', import.meta.url), 'utf8'));
 const grid = parseGrid(map.rows);
 
 test('every click target has a path that stays off the furniture', () => {
@@ -35,8 +34,9 @@ test('clicking empty floor does not change the game and does not spend action po
 test('walking to a person is the same talk action, and the plan itself does not spend points', () => {
   const state = createGame('n0');
   const before = snapshot(state);
-  const plan = planClick(grid, Object.values(map.modes.day), map.start, [120, 110]);
-  assert.deepEqual(plan.effect, { kind: 'talk', person: 'pm' });
+  const plan = planClick(grid, Object.values(map.modes.day), map.start, [184, 110]);
+  assert.equal(plan.effect.kind, 'talk');
+  assert.equal(plan.effect.person, 'pm');
   assert.deepEqual(snapshot(state), before);
   assert.equal(present(state).ap, before.ap);
   assert.equal(present(state).stamina, before.stamina);

@@ -14,6 +14,7 @@ import {
   snapshot,
 } from '../rules.mjs';
 import { play, rateProblems, runReport } from '../sim.mjs';
+import './room.test.mjs';
 
 const rulesSource = readFileSync(new URL('../rules.mjs', import.meta.url), 'utf8');
 const saved = JSON.parse(readFileSync(new URL('../review/strategies.json', import.meta.url), 'utf8'));
