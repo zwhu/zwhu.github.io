@@ -383,15 +383,25 @@ dd { margin: 0; }
   image-rendering: pixelated;
 }
 
-.cooler {
+.cooler, .cast, .screen-code {
   position: absolute;
   z-index: 2;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.cooler {
   left: calc(166 / 384 * 100%);
   top: calc(52 / 216 * 100%);
   width: calc(24 / 384 * 100%);
   height: calc(36 / 216 * 100%);
-  image-rendering: pixelated;
-  pointer-events: none;
+}
+
+.cast, .screen-code {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .walker {

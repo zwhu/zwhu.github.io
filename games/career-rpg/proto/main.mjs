@@ -646,7 +646,7 @@ function office(view) {
       el('i', { class: 'body' }),
     ]));
   }
-  // 夜里同事已经画在夜景里。这里只留可点的热区，不再叠白天的站姿。
+  // 夜里同事在 night-cast 里，和底图上的人一致。热区不再另画站姿。
   for (const person of view.coworkers) {
     if (!person.clickable) continue;
     const box = boxes[person.id];
@@ -657,17 +657,27 @@ function office(view) {
     el('img', {
       class: 'scene-img',
       alt: '',
-      src: view.night ? './art/02-main-night-v2.png' : './art/01-main-day.png',
+      src: view.night ? './art/night-384x216.png' : './art/day-384x216.png',
     }),
     el('img', {
       class: 'cooler',
       alt: '',
       src: view.night ? './art/water-cooler-night.png' : './art/water-cooler-day.png',
     }),
+    el('img', {
+      class: 'cast',
+      alt: '',
+      src: view.night ? './art/night-cast.png' : './art/day-cast.png',
+    }),
+  ];
+  if (view.night && standing.kind === 'seated') {
+    children.push(el('img', { class: 'screen-code', alt: '', src: './art/night-screen-code.png' }));
+  }
+  children.push(
     walkerElement(),
     el('div', { class: 'spots' }, spots),
     sceneActions(view),
-  ];
+  );
   const line = bannerAt(banner, Date.now());
   if (line) children.push(el('p', { class: 'hint', id: 'scene-banner' }, [line]));
   if (panel) children.push(deskPanel(view));

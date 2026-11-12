@@ -49,10 +49,13 @@ for facing, label in (('down', '下'), ('up', '上'), ('left', '左'), ('right',
     frame = sheet['directions'][facing]['frames'][2]
     crop = image.crop((frame['x'], frame['y'], frame['x'] + frame['w'], frame['y'] + frame['h']))
     panels.append((label, crop.resize((frame['w'] * 4, frame['h'] * 4), Image.NEAREST)))
-sit = Image.open(${JSON.stringify(seatedFile)}).convert('RGBA').resize((25 * 4, 29 * 4), Image.NEAREST)
+stage = Image.open(${JSON.stringify(seatedFile)}).convert('RGBA')
+scale = stage.width / 384
+box = (int(51 * scale), int(128 * scale), int(99 * scale), int(176 * scale))
+sit = stage.crop(box).resize((48 * 4, 48 * 4), Image.NEAREST)
 red = sum(1 for px in sit.getdata() if len(px) > 3 and px[3] > 200 and px[0] > 120 and px[0] > px[1] + 30 and px[0] > px[2] + 30)
-if red < 8:
-    raise SystemExit('seated frame has no red shirt (%s)' % red)
+if red < 40:
+    raise SystemExit('seated crop has no red shirt (%s)' % red)
 panels.append(('坐', sit))
 out = Image.new('RGBA', (cell * len(panels), cell + 40), (239, 236, 228, 255))
 draw = ImageDraw.Draw(out)
@@ -100,7 +103,7 @@ try {
     const seen = new Set();
     let matched = 0;
     let last = Date.now();
-    const deadline = Date.now() + 8000;
+    const deadline = Date.now() + 12000;
     while (matched < holdMs) {
       if (Date.now() > deadline) throw new Error(`${facing} only faced that way for ${matched}ms`);
       const now = await page.evaluate(() => {
@@ -124,27 +127,59 @@ try {
     return matched;
   }
 
-  await page.evaluate(() => window.hefei.clickScene(26, 194));
+  await page.evaluate(() => window.hefei.clickScene(16, 194));
   await page.waitForFunction(() => !window.hefei.walker().moving, null, { timeout: 5000 });
   const timings = {
-    right: await walk(112, 194, 'right'),
-    left: await walk(26, 194, 'left'),
-    up: await walk(26, 96, 'up'),
-    down: await walk(26, 194, 'down'),
+    right: await walk(130, 194, 'right'),
+    left: await walk(16, 194, 'left'),
+    up: await walk(16, 82, 'up'),
+    down: await walk(16, 194, 'down'),
   };
   await page.screenshot({ path: path.join(STILLS, 'walk-4dir.png') });
   const back = await page.evaluate(() => window.hefei.clickScene(75, 132));
   if (!back) throw new Error('no path back to the desk');
-  await page.waitForFunction(() => window.hefei.walker().pose === 'seated', null, { timeout: 8000 });
+  await page.waitForFunction(() => window.hefei.walker().pose === 'seated' && document.querySelector('#dialogue'), null, { timeout: 8000 });
   const sat = await page.evaluate(() => {
     const node = document.querySelector('#walker');
     return { pose: window.hefei.walker().pose, tag: node.tagName, src: node.getAttribute('src') || '' };
   });
   if (sat.tag !== 'IMG' || !sat.src.includes('player-seated.png')) throw new Error('still standing ' + JSON.stringify(sat));
-  await page.waitForTimeout(2000);
+  for (let i = 0; i < 6; i += 1) {
+    const open = await page.evaluate(() => {
+      const next = document.querySelector('[data-dialogue="close"], [data-dialogue="next"]');
+      if (!next) return false;
+      next.click();
+      return true;
+    });
+    if (!open) break;
+    await page.waitForTimeout(40);
+  }
+  await page.waitForFunction(() => !document.querySelector('#dialogue'));
+  const covered = await page.evaluate(() => {
+    const stage = document.querySelector('#stage').getBoundingClientRect();
+    const desk = {
+      left: stage.left + (51 / 384) * stage.width,
+      top: stage.top + (128 / 216) * stage.height,
+      right: stage.left + (99 / 384) * stage.width,
+      bottom: stage.top + (176 / 216) * stage.height,
+    };
+    const blockers = [...document.querySelectorAll('.dialogue, .hint, .desk-panel, .scene-actions, .hud')];
+    const hit = (node) => {
+      const box = node.getBoundingClientRect();
+      return box.left < desk.right && box.right > desk.left && box.top < desk.bottom && box.bottom > desk.top;
+    };
+    return blockers.filter(hit).map(node => node.className);
+  });
+  if (covered.length) throw new Error('desk covered by ' + covered.join(','));
+  const holdFrame = path.join(tmpdir(), 'hefei-hold.png');
+  const holdUntil = Date.now() + 2200;
+  while (Date.now() < holdUntil) {
+    await page.screenshot({ path: holdFrame });
+    await page.waitForTimeout(80);
+  }
   if (errors.length) throw new Error(errors.join('\n'));
-  const seatedShot = path.join(tmpdir(), 'hefei-seated-crop.png');
-  await page.locator('#walker').screenshot({ path: seatedShot });
+  const seatedShot = path.join(tmpdir(), 'hefei-stage.png');
+  await page.locator('#stage').screenshot({ path: seatedShot });
   await zoomStill(path.join(STILLS, 'walk-4dir-zoom.png'), seatedShot);
   console.log(JSON.stringify({ timings, sat }));
 } finally {

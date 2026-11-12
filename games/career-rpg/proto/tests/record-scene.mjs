@@ -137,7 +137,7 @@ async function playSequence(page, prefix) {
   }
   if (chrome.hints > 1) throw new Error(`${prefix} banners ${chrome.hints}`);
   if (/rgba\([^)]*,\s*0?\.[0-9]/.test(chrome.dialogueBg)) throw new Error(`${prefix} dialogue ${chrome.dialogueBg}`);
-  const extra = chrome.imgs.filter(src => !/02-main-night-v2|water-cooler-night|player-seated|player-walk-hefei/.test(src));
+  const extra = chrome.imgs.filter(src => !/night-384x216|water-cooler-night|night-cast|night-screen-code|player-seated|player-walk-hefei/.test(src));
   if (extra.length) throw new Error(`${prefix} extra night sprites ${extra.join(',')}`);
   await page.screenshot({ path: path.join(STILLS, `scene-night-${prefix}.png`) });
   if (prefix === 'desktop') await page.screenshot({ path: path.join(STILLS, 'cooler-night-desktop.png') });
