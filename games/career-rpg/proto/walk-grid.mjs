@@ -25,19 +25,19 @@ export const WALK_GRID = {
   ],
   targets: {
     boss: {
-      x: 268, y: 160, facing: 'right', pose: 'stand',
+      x: 236, y: 196, facing: 'right', pose: 'stand',
       hit: [310, 82, 342, 128],
       action: { type: 'talk', person: 'boss' },
       when: 'day',
     },
     lunch: {
-      x: 266, y: 186, facing: 'up', pose: 'stand',
+      x: 292, y: 196, facing: 'left', pose: 'stand',
       hit: [250, 136, 282, 178],
       action: { type: 'talk', person: 'lunch' },
       when: 'day',
     },
     neighbor: {
-      x: 147, y: 192, facing: 'up', pose: 'stand',
+      x: 112, y: 196, facing: 'up', pose: 'stand',
       hit: [135, 134, 160, 176],
       action: { type: 'talk', person: 'neighbor' },
       when: 'day',
@@ -67,11 +67,25 @@ export const WALK_GRID = {
       when: 'any',
     },
     party: {
-      x: 124, y: 188, facing: 'left', pose: 'stand',
+      x: 136, y: 192, facing: 'left', pose: 'stand',
       hit: [98, 158, 115, 200],
       action: { type: 'talk', person: 'party' },
       when: 'night',
     },
+  },
+  // 当天能看见的人。脚底盒子不能压到这些框。
+  people: {
+    day: [
+      { id: 'neighbor', x: 134, y: 134, w: 22, h: 29 },
+      { id: 'lunch', x: 256, y: 136, w: 20, h: 42 },
+      { id: 'boss', x: 318, y: 84, w: 17, h: 44 },
+    ],
+    night: [
+      { id: 'neighbor', x: 134, y: 134, w: 22, h: 29 },
+      { id: 'lunch', x: 206, y: 134, w: 26, h: 29 },
+      { id: 'boss', x: 321, y: 79, w: 19, h: 40 },
+      { id: 'party', x: 98, y: 158, w: 17, h: 42 },
+    ],
   },
   nightMute: [
     [320, 79, 339, 119],

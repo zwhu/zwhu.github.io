@@ -643,8 +643,8 @@ button:disabled, button:disabled:hover {
 
 @container (max-width: 520px) {
   .dialogue {
-    top: calc(124 / 216 * 100%);
-    height: calc(88 / 216 * 100%);
+    top: calc(130 / 216 * 100%);
+    height: calc(86 / 216 * 100%);
   }
   .desk-panel {
     top: 22cqh;
@@ -653,7 +653,7 @@ button:disabled, button:disabled:hover {
     max-height: 74cqh;
   }
   .office.has-dialogue .scene-actions {
-    bottom: calc(100 / 216 * 100%);
+    bottom: calc(92 / 216 * 100%);
   }
 }
 

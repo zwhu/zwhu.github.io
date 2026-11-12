@@ -24,15 +24,40 @@ export function pointBlocked(x, y) {
   return obstacles.some(item => x >= item.x && x < item.x + item.w && y >= item.y && y < item.y + item.h);
 }
 
-function cellBlocked(cell) {
-  const point = centerOf(cell);
-  return pointBlocked(point.x, point.y);
+export function footBox(x, y) {
+  const w = 14;
+  const h = 10;
+  return { x: x - w / 2, y: y - h, w, h };
 }
 
-export function findPath(from, to) {
+export function occupiedBox(point) {
+  if (point.pose === 'seated') {
+    const seat = WALK_GRID.seat;
+    return { x: seat.x, y: seat.y, w: seat.w, h: seat.h };
+  }
+  return footBox(point.x, point.y);
+}
+
+export function boxesOverlap(a, b) {
+  return a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+}
+
+export function peopleAt(night) {
+  return night ? WALK_GRID.people.night : WALK_GRID.people.day;
+}
+
+function cellBlocked(cell, night) {
+  const point = centerOf(cell);
+  if (pointBlocked(point.x, point.y)) return true;
+  const foot = footBox(point.x, point.y);
+  return peopleAt(night).some(person => boxesOverlap(foot, person));
+}
+
+export function findPath(from, to, ctx) {
+  const night = Boolean(ctx && ctx.night);
   const start = cellOf(from);
   const goal = cellOf(to);
-  if (cellBlocked(start) || cellBlocked(goal)) return null;
+  if (cellBlocked(start, night) || cellBlocked(goal, night)) return null;
   if (start[0] === goal[0] && start[1] === goal[1]) return [];
   const heuristic = cell => Math.abs(cell[0] - goal[0]) + Math.abs(cell[1] - goal[1]);
   const open = [start];
@@ -60,7 +85,7 @@ export function findPath(from, to) {
     }
     for (const [dx, dy] of DIRS) {
       const next = [current[0] + dx, current[1] + dy];
-      if (cellBlocked(next)) continue;
+      if (cellBlocked(next, night)) continue;
       const nextCost = cost.get(key(current)) + 1;
       if (nextCost >= (cost.get(key(next)) ?? Infinity)) continue;
       cost.set(key(next), nextCost);

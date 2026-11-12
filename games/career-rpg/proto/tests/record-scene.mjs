@@ -132,6 +132,17 @@ async function playSequence(page, prefix) {
       hints: document.querySelectorAll('.hint').length,
     };
   });
+  if (prefix === '390') {
+    const dialogueFit = await page.evaluate(() => {
+      const stage = document.querySelector('#stage').getBoundingClientRect();
+      const box = document.querySelector('.dialogue').getBoundingClientRect();
+      const font = parseFloat(getComputedStyle(document.querySelector('#dialogue-text')).fontSize);
+      return { ratio: box.height / stage.height, font };
+    });
+    if (dialogueFit.ratio > 0.4 || dialogueFit.font < 13) {
+      throw new Error(`${prefix} dialogue ${JSON.stringify(dialogueFit)}`);
+    }
+  }
   if (chrome.overlap || chrome.fonts.hud < 13 || chrome.fonts.action < 13 || chrome.fonts.panel < 13) {
     throw new Error(`${prefix} chrome ${JSON.stringify(chrome)}`);
   }
@@ -141,6 +152,24 @@ async function playSequence(page, prefix) {
   if (extra.length) throw new Error(`${prefix} extra night sprites ${extra.join(',')}`);
   await page.screenshot({ path: path.join(STILLS, `scene-night-${prefix}.png`) });
   if (prefix === 'desktop') await page.screenshot({ path: path.join(STILLS, 'cooler-night-desktop.png') });
+  for (let i = 0; i < 6; i += 1) {
+    const open = await page.evaluate(() => {
+      const next = document.querySelector('[data-dialogue="close"], [data-dialogue="next"]');
+      if (!next) return false;
+      next.click();
+      return true;
+    });
+    if (!open) break;
+    await page.waitForTimeout(40);
+  }
+  const home = await page.evaluate(() => window.hefei.clickScene(75, 132));
+  if (!home) throw new Error(`${prefix} cannot return to the desk`);
+  await page.waitForFunction(() => window.hefei.walker().pose === 'seated', null, { timeout: 20000 });
+  await page.evaluate(() => document.querySelector('[data-desk="close"]')?.click());
+  await page.waitForFunction(() => !document.querySelector('#desk-panel') && !document.querySelector('#dialogue'));
+  const seated = await page.evaluate(() => window.hefei.walker().pose);
+  if (seated !== 'seated') throw new Error(`${prefix} not seated at night`);
+  await page.screenshot({ path: path.join(STILLS, `scene-night-${prefix}-closed.png`) });
   const layout = await page.evaluate(() => ({
     board: !!document.querySelector('.board'),
     seed: !!document.querySelector('#seed-form'),

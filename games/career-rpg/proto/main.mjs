@@ -217,7 +217,7 @@ function walkLoop(now) {
 function goTo(hit) {
   if (!hit || hit.kind === 'none' || !hit.target) return false;
   panel = false;
-  const path = findPath(walker, hit.target);
+  const path = findPath(walker, hit.target, { night: present(state).night });
   if (!path) return false;
   walker.path = path;
   walker.action = hit.action;
@@ -325,6 +325,7 @@ function act(action) {
   if (action && action.type === 'sleep') {
     dialogue = null;
     toldNight = '';
+    if (state !== before && state.phase === 'play') resetWalker();
     if (state.phase === 'play' && state.day === 1 && state.interviewed) {
       openNarration([SCRIPT.weekOpen[state.week - 1]]);
       return;

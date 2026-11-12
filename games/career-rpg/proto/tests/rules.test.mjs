@@ -23,7 +23,7 @@ import {
 } from '../rules.mjs';
 import { ratesOnly, runStrategies } from '../sim.mjs';
 import { bannerAt, learningSkills, sceneArrival, showBannerState } from '../scene-ui.mjs';
-import { WALK_GRID, commitArrival, findPath, pointBlocked, resolveClick } from '../walk.mjs';
+import { WALK_GRID, boxesOverlap, commitArrival, findPath, occupiedBox, peopleAt, pointBlocked, resolveClick } from '../walk.mjs';
 import { convertMeta, pngSize } from '../walk/build-sprites.mjs';
 import { frameIndex, resolveSprite, spritePose } from '../walk-sprites.mjs';
 
@@ -547,6 +547,26 @@ test('each clickable target has a path that stays off obstacles', () => {
   const retarget = findPath(midway, WALK_GRID.targets.boss);
   assert.ok(retarget);
   for (const point of retarget) assert.equal(pointBlocked(point.x, point.y), false);
+});
+
+test('spawn and every stop keep the player off the people who are there', () => {
+  function clearOf(point, night) {
+    const box = occupiedBox(point);
+    return peopleAt(night).every(person => !boxesOverlap(box, person));
+  }
+  const spawn = { x: WALK_GRID.start.x, y: WALK_GRID.start.y, pose: 'seated' };
+  assert.equal(clearOf(spawn, false), true, 'morning seat');
+  for (const [id, target] of Object.entries(WALK_GRID.targets)) {
+    const nights = target.when === 'night' ? [true] : target.when === 'day' ? [false] : [false, true];
+    for (const night of nights) {
+      assert.equal(clearOf(target, night), true, `${id} night=${night}`);
+      const path = findPath(WALK_GRID.start, target, { night });
+      assert.ok(path, `${id} path night=${night}`);
+      for (const point of path) {
+        assert.equal(clearOf({ ...point, pose: 'stand' }, night), true, `${id} step ${point.x},${point.y}`);
+      }
+    }
+  }
 });
 
 test('only the newest banner stays, and it goes away after a few seconds', () => {
