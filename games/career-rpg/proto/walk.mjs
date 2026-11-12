@@ -1,8 +1,8 @@
-import { WALK_GRID } from './walk-grid.mjs';
+import { WALK_GRID, integerScale, viewOrigin } from './walk-grid.mjs';
 
 const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 
-export { WALK_GRID };
+export { WALK_GRID, integerScale, viewOrigin };
 
 function key(cell) {
   return `${cell[0]},${cell[1]}`;

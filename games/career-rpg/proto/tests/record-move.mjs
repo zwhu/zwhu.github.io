@@ -116,10 +116,13 @@ async function officeRect() {
   })()`);
 }
 async function clickScene(x, y) {
-  const rect = await officeRect();
+  const rect = await evaluate(`(() => {
+    const stage = document.querySelector('#stage').getBoundingClientRect();
+    return { left: stage.left, top: stage.top, width: stage.width, height: stage.height };
+  })()`);
   const point = {
-    x: rect.left + (x / 384) * rect.width,
-    y: rect.top + (y / 216) * rect.height,
+    x: rect.left + (x / 640) * rect.width,
+    y: rect.top + (y / 360) * rect.height,
   };
   await send('Input.dispatchMouseEvent', { type: 'mousePressed', x: point.x, y: point.y, button: 'left', clickCount: 1 });
   await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: point.x, y: point.y, button: 'left', clickCount: 1 });
@@ -159,7 +162,7 @@ try {
     index += 1;
   };
   await save();
-  await clickScene(147, 155);
+  await clickScene(180, 200);
   let moved = null;
   let arrived = null;
   for (let i = 0; i < 40; i += 1) {
@@ -210,7 +213,7 @@ try {
 
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
   await goto();
-  await clickScene(147, 155);
+  await clickScene(180, 200);
   let phone = null;
   for (let i = 0; i < 40; i += 1) {
     await sleep(100);
