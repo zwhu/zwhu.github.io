@@ -185,7 +185,7 @@ function seedForm(view) {
 function hud(view) {
   const item = (label, node) => el('span', { class: 'hud-item' }, [label, ' ', node]);
   return el('div', { class: 'hud' }, [
-    el('span', { class: 'when', id: 'when' }, [`第 ${view.week} 周 · ${view.dayName}`]),
+    el('span', { class: 'when', id: 'when' }, [`第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`]),
     item('行动点', el('strong', { id: 'ap' }, [String(view.ap)])),
     item('体力', el('strong', { id: 'stamina' }, [String(view.stamina)])),
     item('交付', el('strong', { id: 'delivery' }, [String(view.delivery)])),
