@@ -40,7 +40,7 @@ async function boot(page) {
 }
 
 async function finishInterview(page) {
-  const started = await page.evaluate(() => window.hefei.clickScene(326, 100));
+  const started = await page.evaluate(() => window.hefei.clickScene(542, 170));
   if (!started) throw new Error('boss has no path');
   await page.waitForFunction(() => document.querySelector('[data-dialogue]'), null, { timeout: 12000 });
   for (let i = 0; i < 20; i += 1) {
@@ -57,14 +57,51 @@ async function finishInterview(page) {
   await page.evaluate(() => document.querySelector('[data-dialogue="close"]')?.click());
 }
 
+async function legsClear(page) {
+  return page.evaluate(() => {
+    const stage = document.querySelector('#stage').getBoundingClientRect();
+    const rest = document.querySelector('[data-action="rest"]')?.getBoundingClientRect();
+    const walker = document.querySelector('#walker')?.getBoundingClientRect();
+    const hit = (a, b) => a && b && a.width > 0 && b.width > 0 && a.left < b.right - 0.5 && a.right > b.left + 0.5 && a.top < b.bottom - 0.5 && a.bottom > b.top + 0.5;
+    const legsOf = (rect) => ({
+      left: rect.left,
+      right: rect.right,
+      top: rect.top + rect.height * 0.5,
+      bottom: rect.bottom,
+      width: rect.width,
+      height: rect.height * 0.5,
+    });
+    const people = [
+      [170, 184, 22, 29],
+      [292, 186, 20, 42],
+      [534, 149, 17, 44],
+    ].map(([x, y, w, h]) => ({
+      left: stage.left + (x / 640) * stage.width,
+      top: stage.top + (y / 360) * stage.height,
+      right: stage.left + ((x + w) / 640) * stage.width,
+      bottom: stage.top + ((y + h) / 360) * stage.height,
+      width: (w / 640) * stage.width,
+      height: (h / 360) * stage.height,
+    }));
+    const covered = [];
+    if (walker && hit(rest, legsOf(walker))) covered.push('player');
+    people.forEach((person, index) => {
+      if (hit(rest, legsOf(person))) covered.push(`person${index}`);
+    });
+    return covered;
+  });
+}
+
 async function playSequence(page, prefix) {
   await boot(page);
-  await finishInterview(page);
+  const covered = await legsClear(page);
+  if (covered.length) throw new Error(`${prefix} rest covers legs ${covered.join(',')}`);
   await page.screenshot({ path: path.join(STILLS, `scene-day-${prefix}.png`) });
   if (prefix === 'desktop') await page.screenshot({ path: path.join(STILLS, 'cooler-day-desktop.png') });
-  const opened = await page.evaluate(() => window.hefei.clickScene(75, 132));
+  await finishInterview(page);
+  const opened = await page.evaluate(() => window.hefei.clickScene(110, 185));
   if (!opened) throw new Error('computer has no path');
-  await page.waitForSelector('#desk-panel', { timeout: 8000 });
+  await page.waitForSelector('#desk-panel', { timeout: 25000 });
   const workBox = await page.evaluate(() => {
     const office = document.querySelector('#office').getBoundingClientRect();
     const panel = document.querySelector('#desk-panel').getBoundingClientRect();
@@ -94,10 +131,10 @@ async function playSequence(page, prefix) {
   });
   if (!worked) throw new Error('no ticket button');
   await page.waitForFunction(() => window.hefei.present().ap < 3);
-  const rested = await page.evaluate(() => window.hefei.clickScene(178, 70));
+  const rested = await page.evaluate(() => window.hefei.clickScene(346, 70));
   if (!rested) throw new Error('water has no path');
   await page.waitForFunction(() => window.hefei.present().log.some(line => line.includes('休息')));
-  const night = await page.evaluate(() => window.hefei.clickScene(190, 190));
+  const night = await page.evaluate(() => window.hefei.clickScene(334, 330));
   if (!night) throw new Error('door has no path');
   await page.waitForFunction(() => window.hefei.present().night);
   const nightBox = await page.evaluate(() => {
@@ -148,7 +185,7 @@ async function playSequence(page, prefix) {
   }
   if (chrome.hints > 1) throw new Error(`${prefix} banners ${chrome.hints}`);
   if (/rgba\([^)]*,\s*0?\.[0-9]/.test(chrome.dialogueBg)) throw new Error(`${prefix} dialogue ${chrome.dialogueBg}`);
-  const extra = chrome.imgs.filter(src => !/night-384x216|water-cooler-night|night-cast|night-screen-code|player-seated|player-walk-hefei/.test(src));
+  const extra = chrome.imgs.filter(src => !/night-640x360|water-cooler-night|night-cast|night-screen-code|player-seated|player-walk-hefei/.test(src));
   if (extra.length) throw new Error(`${prefix} extra night sprites ${extra.join(',')}`);
   await page.screenshot({ path: path.join(STILLS, `scene-night-${prefix}.png`) });
   if (prefix === 'desktop') await page.screenshot({ path: path.join(STILLS, 'cooler-night-desktop.png') });
@@ -162,13 +199,16 @@ async function playSequence(page, prefix) {
     if (!open) break;
     await page.waitForTimeout(40);
   }
-  const home = await page.evaluate(() => window.hefei.clickScene(75, 132));
+  const home = await page.evaluate(() => window.hefei.clickScene(110, 185));
   if (!home) throw new Error(`${prefix} cannot return to the desk`);
   await page.waitForFunction(() => window.hefei.walker().pose === 'seated', null, { timeout: 20000 });
   await page.evaluate(() => document.querySelector('[data-desk="close"]')?.click());
   await page.waitForFunction(() => !document.querySelector('#desk-panel') && !document.querySelector('#dialogue'));
-  const seated = await page.evaluate(() => window.hefei.walker().pose);
-  if (seated !== 'seated') throw new Error(`${prefix} not seated at night`);
+  const seated = await page.evaluate(() => {
+    const hud = document.querySelector('.hud')?.textContent || '';
+    return { pose: window.hefei.walker().pose, hud };
+  });
+  if (seated.pose !== 'seated' || !seated.hud.includes('· 夜里')) throw new Error(`${prefix} night seat ${JSON.stringify(seated)}`);
   await page.screenshot({ path: path.join(STILLS, `scene-night-${prefix}-closed.png`) });
   const layout = await page.evaluate(() => ({
     board: !!document.querySelector('.board'),
@@ -190,8 +230,8 @@ const browser = await chromium.launch({
 const videoDir = path.join(tmpdir(), 'hefei-scene-video');
 mkdirSync(videoDir, { recursive: true });
 const context = await browser.newContext({
-  viewport: { width: 1280, height: 720 },
-  recordVideo: { dir: videoDir, size: { width: 1280, height: 720 } },
+  viewport: { width: 1280, height: 960 },
+  recordVideo: { dir: videoDir, size: { width: 1280, height: 960 } },
 });
 const page = await context.newPage();
 const errors = [];

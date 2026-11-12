@@ -98,7 +98,7 @@ async function shot(file) {
   const message = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
   writeFileSync(file, Buffer.from(message.result.data, 'base64'));
 }
-const SPOT = { boss: [326, 100], lunch: [266, 160], neighbor: [147, 150], party: [106, 180] };
+const SPOT = { boss: [542, 170], lunch: [300, 200], neighbor: [180, 200], party: [142, 230] };
 
 async function walkTo(person) {
   const [x, y] = SPOT[person];

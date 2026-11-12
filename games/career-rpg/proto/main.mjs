@@ -73,8 +73,19 @@ function currentPose() {
   });
 }
 
+function sceneStyle(x, y, w, h) {
+  const { width, height } = WALK_GRID.scene;
+  return `left:${(x / width) * 100}%;top:${(y / height) * 100}%;width:${(w / width) * 100}%;height:${(h / height) * 100}%`;
+}
+
+// 脚底不超过饮水机锚点时，人画在饮水机后面。
+function walkerDepth() {
+  return walker.y > WALK_GRID.cooler.ySort ? '' : 'z-index:1';
+}
+
 function walkerElement() {
   const pose = currentPose();
+  const depth = walkerDepth();
   if (pose.kind === 'seated') {
     const seat = WALK_GRID.seat;
     return el('img', {
@@ -82,19 +93,21 @@ function walkerElement() {
       class: 'walker seated',
       alt: '',
       src: './art/player-seated.png',
-      style: `left:${(seat.x / 384) * 100}%;top:${(seat.y / 216) * 100}%;width:${(seat.w / 384) * 100}%;height:${(seat.h / 216) * 100}%`,
+      style: `${sceneStyle(seat.x, seat.y, seat.w, seat.h)}${depth ? `;${depth}` : ''}`,
     });
   }
   const frame = pose.frame;
   const anchor = frame.anchor || pose.anchor;
   const left = walker.x - anchor.x;
   const top = walker.y - anchor.y;
+  const { width, height } = WALK_GRID.scene;
   const box = [
-    `left:${(left / 384) * 100}%`,
-    `top:${(top / 216) * 100}%`,
-    `width:${(frame.w / 384) * 100}%`,
-    `height:${(frame.h / 216) * 100}%`,
+    `left:${(left / width) * 100}%`,
+    `top:${(top / height) * 100}%`,
+    `width:${(frame.w / width) * 100}%`,
+    `height:${(frame.h / height) * 100}%`,
     pose.mirror ? 'transform:scaleX(-1)' : '',
+    depth,
   ].filter(Boolean).join(';');
   const imgStyle = [
     'position:absolute',
@@ -115,8 +128,9 @@ function paintWalker() {
   const spot = document.querySelector('[data-spot="player"]');
   if (!spot) return;
   const pose = currentPose();
+  const seat = WALK_GRID.seat;
   const box = pose.kind === 'seated'
-    ? [63, 134, 88, 163]
+    ? [seat.x, seat.y, seat.x + seat.w, seat.y + seat.h]
     : [walker.x - 12, walker.y - pose.anchor.y, walker.x + 12, walker.y - pose.anchor.y + 18];
   spot.style.cssText = spotStyle(box);
 }
@@ -598,23 +612,23 @@ function skillCard(skill) {
 }
 
 const DAY_BOXES = {
-  player: [63, 134, 88, 176],
-  neighbor: [135, 134, 160, 176],
-  lunch: [250, 136, 282, 178],
-  boss: [310, 82, 342, 128],
+  player: [99, 184, 124, 213],
+  neighbor: [170, 184, 192, 213],
+  lunch: [292, 186, 312, 228],
+  boss: [534, 149, 551, 193],
 };
-// art/source/night-v2-boxes.json。夜里只有开黑队友能点，其余三人的框不放按钮。
+// 夜里只有开黑队友能点，其余三人的框不放按钮。
 const NIGHT_BOXES = {
-  player: [62, 134, 87, 175],
-  neighbor: [134, 134, 159, 175],
-  lunch: [206, 134, 232, 175],
-  boss: [320, 79, 339, 119],
-  party: [98, 158, 115, 200],
+  player: [99, 184, 124, 213],
+  neighbor: [170, 184, 192, 213],
+  lunch: [242, 184, 268, 213],
+  boss: [535, 139, 556, 179],
+  party: [134, 208, 151, 250],
 };
 
 function spotStyle(box) {
   const [x0, y0, x1, y1] = box;
-  return `left:${(x0 / 384) * 100}%;top:${(y0 / 216) * 100}%;width:${((x1 - x0) / 384) * 100}%;height:${((y1 - y0) / 216) * 100}%`;
+  return sceneStyle(x0, y0, x1 - x0, y1 - y0);
 }
 
 function hotspot(person, speaking, box) {
@@ -654,16 +668,18 @@ function office(view) {
     if (!box) continue;
     spots.push(hotspot(person, speaker === person.id, box));
   }
+  const cooler = WALK_GRID.cooler;
   const children = [
     el('img', {
       class: 'scene-img',
       alt: '',
-      src: view.night ? './art/night-384x216.png' : './art/day-384x216.png',
+      src: view.night ? './art/night-640x360.png' : './art/day-640x360.png',
     }),
     el('img', {
       class: 'cooler',
       alt: '',
       src: view.night ? './art/water-cooler-night.png' : './art/water-cooler-day.png',
+      style: sceneStyle(cooler.x, cooler.y, cooler.w, cooler.h),
     }),
     el('img', {
       class: 'cast',
@@ -934,7 +950,20 @@ function render() {
   parts.push(seedForm(view));
   if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
+  fitOffice();
 }
+
+// 宽得下整张房间时按 1 倍或 2 倍显示；更窄就缩进窗口，像素仍用 pixelated。
+function fitOffice() {
+  const office = document.querySelector('#office');
+  if (!office) return;
+  const avail = office.parentElement.clientWidth;
+  const sceneW = WALK_GRID.scene.width;
+  const scale = Math.min(2, Math.floor(avail / sceneW));
+  office.style.width = scale >= 1 ? `${scale * sceneW}px` : '100%';
+}
+
+window.addEventListener('resize', fitOffice);
 
 window.addEventListener('keydown', event => {
   if (!dota || dota.mode !== 'play' || event.repeat) return;

@@ -50,8 +50,8 @@ for facing, label in (('down', '下'), ('up', '上'), ('left', '左'), ('right',
     crop = image.crop((frame['x'], frame['y'], frame['x'] + frame['w'], frame['y'] + frame['h']))
     panels.append((label, crop.resize((frame['w'] * 4, frame['h'] * 4), Image.NEAREST)))
 stage = Image.open(${JSON.stringify(seatedFile)}).convert('RGBA')
-scale = stage.width / 384
-box = (int(51 * scale), int(128 * scale), int(99 * scale), int(176 * scale))
+scale = stage.width / 640
+box = (int(90 * scale), int(175 * scale), int(135 * scale), int(220 * scale))
 sit = stage.crop(box).resize((48 * 4, 48 * 4), Image.NEAREST)
 red = sum(1 for px in sit.getdata() if len(px) > 3 and px[3] > 200 and px[0] > 120 and px[0] > px[1] + 30 and px[0] > px[2] + 30)
 if red < 40:
@@ -83,8 +83,8 @@ const browser = await chromium.launch({
   args: ['--no-sandbox', '--disable-dev-shm-usage'],
 });
 const context = await browser.newContext({
-  viewport: { width: 1280, height: 720 },
-  recordVideo: { dir: videoDir, size: { width: 1280, height: 720 } },
+  viewport: { width: 1280, height: 960 },
+  recordVideo: { dir: videoDir, size: { width: 1280, height: 960 } },
 });
 const page = await context.newPage();
 const errors = [];
@@ -127,16 +127,16 @@ try {
     return matched;
   }
 
-  await page.evaluate(() => window.hefei.clickScene(16, 194));
-  await page.waitForFunction(() => !window.hefei.walker().moving, null, { timeout: 5000 });
+  await page.evaluate(() => window.hefei.clickScene(48, 300));
+  await page.waitForFunction(() => !window.hefei.walker().moving, null, { timeout: 8000 });
   const timings = {
-    right: await walk(130, 194, 'right'),
-    left: await walk(16, 194, 'left'),
-    up: await walk(16, 82, 'up'),
-    down: await walk(16, 194, 'down'),
+    right: await walk(220, 300, 'right'),
+    left: await walk(48, 300, 'left'),
+    up: await walk(48, 100, 'up'),
+    down: await walk(48, 300, 'down'),
   };
   await page.screenshot({ path: path.join(STILLS, 'walk-4dir.png') });
-  const back = await page.evaluate(() => window.hefei.clickScene(75, 132));
+  const back = await page.evaluate(() => window.hefei.clickScene(110, 185));
   if (!back) throw new Error('no path back to the desk');
   await page.waitForFunction(() => window.hefei.walker().pose === 'seated' && document.querySelector('#dialogue'), null, { timeout: 8000 });
   const sat = await page.evaluate(() => {
@@ -158,10 +158,10 @@ try {
   const covered = await page.evaluate(() => {
     const stage = document.querySelector('#stage').getBoundingClientRect();
     const desk = {
-      left: stage.left + (51 / 384) * stage.width,
-      top: stage.top + (128 / 216) * stage.height,
-      right: stage.left + (99 / 384) * stage.width,
-      bottom: stage.top + (176 / 216) * stage.height,
+      left: stage.left + (99 / 640) * stage.width,
+      top: stage.top + (184 / 360) * stage.height,
+      right: stage.left + (124 / 640) * stage.width,
+      bottom: stage.top + (213 / 360) * stage.height,
     };
     const blockers = [...document.querySelectorAll('.dialogue, .hint, .desk-panel, .scene-actions, .hud')];
     const hit = (node) => {

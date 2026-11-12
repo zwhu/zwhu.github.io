@@ -19,9 +19,9 @@ button, input {
 }
 
 #app {
-  max-width: 920px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 20px 16px 40px;
+  padding: 12px 0 24px;
 }
 
 header {
@@ -359,7 +359,7 @@ dd { margin: 0; }
 
 .office {
   position: relative;
-  width: min(100%, 768px);
+  width: min(100%, 1280px);
   margin: 0 auto 16px;
   background: #141210;
   container-type: inline-size;
@@ -368,7 +368,7 @@ dd { margin: 0; }
 .stage {
   position: relative;
   width: 100%;
-  aspect-ratio: 384 / 216;
+  aspect-ratio: 640 / 360;
   overflow: hidden;
   background: #141210;
   container-type: size;
@@ -379,7 +379,7 @@ dd { margin: 0; }
   left: 0;
   top: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
   image-rendering: pixelated;
 }
 
@@ -391,10 +391,10 @@ dd { margin: 0; }
 }
 
 .cooler {
-  left: calc(166 / 384 * 100%);
-  top: calc(52 / 216 * 100%);
-  width: calc(24 / 384 * 100%);
-  height: calc(36 / 216 * 100%);
+  left: calc(334 / 640 * 100%);
+  top: calc(52 / 360 * 100%);
+  width: calc(24 / 640 * 100%);
+  height: calc(36 / 360 * 100%);
 }
 
 .cast, .screen-code {
