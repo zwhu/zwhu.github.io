@@ -181,15 +181,101 @@ try {
   const seatedShot = path.join(tmpdir(), 'hefei-stage.png');
   await page.locator('#stage').screenshot({ path: seatedShot });
   await zoomStill(path.join(STILLS, 'walk-4dir-zoom.png'), seatedShot);
-  console.log(JSON.stringify({ timings, sat }));
+  const phoneDir = path.join(tmpdir(), 'hefei-walk-390');
+  mkdirSync(phoneDir, { recursive: true });
+  const phoneContext = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    recordVideo: { dir: phoneDir, size: { width: 390, height: 844 } },
+  });
+  const narrow = await phoneContext.newPage();
+  narrow.on('pageerror', error => errors.push(String(error)));
+  await narrow.goto(origin);
+  await narrow.waitForFunction(() => window.hefei);
+  await narrow.evaluate(() => document.querySelector('#office').scrollIntoView({ block: 'start' }));
+  async function walkNarrow(x, y, facing) {
+    const started = await narrow.evaluate(({ x, y }) => window.hefei.clickScene(x, y), { x, y });
+    if (!started) throw new Error(`390 no path to ${x},${y}`);
+    const seen = new Set();
+    const scrolls = [];
+    let matched = 0;
+    let last = Date.now();
+    const deadline = Date.now() + 15000;
+    while (matched < 1500) {
+      if (Date.now() > deadline) throw new Error(`390 ${facing} only faced that way for ${matched}ms`);
+      const now = await narrow.evaluate(() => {
+        const walker = window.hefei.walker();
+        return {
+          moving: walker.moving,
+          facing: walker.facing,
+          pose: walker.pose,
+          frame: document.querySelector('#walker img')?.style.left || '',
+          scroll: document.querySelector('.stage-scroll').scrollLeft,
+          stageW: document.querySelector('#stage').getBoundingClientRect().width,
+        };
+      });
+      if (Math.abs(now.stageW - 640) > 1) throw new Error(`390 not 1x ${now.stageW}`);
+      const tick = Date.now();
+      if (now.moving && now.facing === facing && now.pose === 'stand') {
+        matched += tick - last;
+        seen.add(now.frame);
+        scrolls.push(now.scroll);
+      }
+      last = tick;
+      await narrow.waitForTimeout(40);
+    }
+    if (seen.size < 2) throw new Error(`390 ${facing} frames did not change`);
+    return { matched, scrolls };
+  }
+  await narrow.evaluate(() => window.hefei.clickScene(300, 300));
+  await narrow.waitForFunction(() => !window.hefei.walker().moving, null, { timeout: 15000 });
+  const right = await walkNarrow(560, 300, 'right');
+  const left = await walkNarrow(48, 300, 'left');
+  await walkNarrow(48, 100, 'up');
+  await walkNarrow(48, 300, 'down');
+  const followed = Math.max(...right.scrolls) - Math.min(...right.scrolls) > 20
+    || Math.max(...left.scrolls) - Math.min(...left.scrolls) > 20;
+  if (!followed) throw new Error(`390 camera stayed put ${JSON.stringify({ right: right.scrolls, left: left.scrolls })}`);
+  const backNarrow = await narrow.evaluate(() => window.hefei.clickScene(110, 185));
+  if (!backNarrow) throw new Error('390 no path back to B1');
+  await narrow.waitForFunction(() => window.hefei.walker().pose === 'seated', null, { timeout: 20000 });
+  for (let i = 0; i < 6; i += 1) {
+    const open = await narrow.evaluate(() => {
+      const next = document.querySelector('[data-dialogue="close"], [data-dialogue="next"]');
+      if (!next) return false;
+      next.click();
+      return true;
+    });
+    if (!open) break;
+    await narrow.waitForTimeout(40);
+  }
+  await narrow.waitForFunction(() => !document.querySelector('#dialogue'));
+  const ended = await narrow.evaluate(() => {
+    const walker = window.hefei.walker();
+    const player = document.querySelector('#walker').getBoundingClientRect();
+    const view = document.querySelector('.stage-scroll').getBoundingClientRect();
+    return {
+      pose: walker.pose,
+      x: walker.x,
+      onScreen: player.left >= view.left - 1 && player.right <= view.right + 1 && player.bottom <= view.bottom + 1,
+    };
+  });
+  if (ended.pose !== 'seated' || Math.abs(ended.x - 111) > 4 || !ended.onScreen) {
+    throw new Error(`390 did not sit at B1 ${JSON.stringify(ended)}`);
+  }
+  await narrow.waitForTimeout(1600);
+  if (errors.length) throw new Error(errors.join('\n'));
+  const phoneRecording = narrow.video();
+  await phoneContext.close();
+  const phoneWebm = await phoneRecording.path();
+  console.log(JSON.stringify({ timings, sat, phone: ended }));
+  var phoneVideo = phoneWebm;
 } finally {
   const video = page.video();
   await context.close();
   await browser.close();
   server.close();
-  if (video) {
-    const webm = await video.path();
-    const mp4 = path.join(OUT, 'walk-4dir.mp4');
+  async function encode(webm, mp4) {
     await new Promise((resolve, reject) => {
       const encoder = spawn('ffmpeg', [
         '-y', '-i', webm, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20', '-movflags', '+faststart', mp4,
@@ -199,4 +285,6 @@ try {
       encoder.on('exit', code => (code === 0 ? resolve() : reject(new Error(err.slice(-600)))));
     });
   }
+  if (video) await encode(await video.path(), path.join(OUT, 'walk-4dir.mp4'));
+  if (typeof phoneVideo !== 'undefined' && phoneVideo) await encode(phoneVideo, path.join(OUT, 'walk-390.mp4'));
 }

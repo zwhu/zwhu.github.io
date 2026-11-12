@@ -108,3 +108,20 @@ export const WALK_GRID = {
     [18, 18, 54, 82],
   ],
 };
+
+// 窗口比房间窄时仍按 1 倍画，不把整间缩小塞进屏幕。放得下时取整数倍。
+export function integerScale(availableWidth, worldWidth = WALK_GRID.scene.width) {
+  const width = Number(availableWidth);
+  if (!Number.isFinite(width) || width < worldWidth) return 1;
+  return Math.floor(width / worldWidth);
+}
+
+// 画面比窗口宽时，滚动原点让脚底两侧的精灵留在可见范围内。
+export function viewOrigin(footX, viewWidth, worldWidth = WALK_GRID.scene.width, pad = 28) {
+  const view = Math.min(worldWidth, Math.max(0, viewWidth));
+  const max = Math.max(0, worldWidth - view);
+  let left = footX - view / 2;
+  if (left > footX - pad) left = footX - pad;
+  if (left + view < footX + pad) left = footX + pad - view;
+  return Math.max(0, Math.min(max, left));
+}

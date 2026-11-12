@@ -92,13 +92,97 @@ async function legsClear(page) {
   });
 }
 
+async function assertPinned(page, label) {
+  const report = await page.evaluate(() => {
+    const office = document.querySelector('#office').getBoundingClientRect();
+    const hudNode = document.querySelector('.hud');
+    const hud = hudNode.getBoundingClientRect();
+    const hudStyle = getComputedStyle(hudNode);
+    const inner = hudNode.clientWidth - parseFloat(hudStyle.paddingLeft) - parseFloat(hudStyle.paddingRight);
+    const when = document.querySelector('.hud-when').getBoundingClientRect();
+    const scroll = document.querySelector('.stage-scroll');
+    const saved = scroll.scrollLeft;
+    const max = Math.max(0, scroll.scrollWidth - scroll.clientWidth);
+    const places = [0, max / 2, max];
+    const cuts = [];
+    const rows = [];
+    for (const left of places) {
+      scroll.scrollLeft = left;
+      const status = document.querySelector('#status-line');
+      const banner = document.querySelector('#scene-banner');
+      const statusBox = status.getBoundingClientRect();
+      const bannerBox = banner ? banner.getBoundingClientRect() : null;
+      const clipped = (node) => node.scrollWidth > node.clientWidth + 1;
+      if (statusBox.width < inner - 2 || statusBox.left < hud.left - 1 || statusBox.right > hud.right + 1) {
+        cuts.push(`status@${Math.round(left)}`);
+      }
+      if (statusBox.top + 1 < when.bottom) cuts.push(`status above week@${Math.round(left)}`);
+      if (clipped(status)) cuts.push(`status clipped@${Math.round(left)}`);
+      if (!bannerBox || banner.parentElement === document.querySelector('#stage')) cuts.push(`banner scrolled@${Math.round(left)}`);
+      if (bannerBox && (bannerBox.width < office.width - 4 || bannerBox.left < office.left - 1 || bannerBox.right > office.right + 1 || bannerBox.top + 1 < hud.bottom)) {
+        cuts.push(`banner@${Math.round(left)}`);
+      }
+      if (banner && clipped(banner)) cuts.push(`banner clipped@${Math.round(left)}`);
+      rows.push({ left: Math.round(scroll.scrollLeft), status: Math.round(statusBox.left), banner: bannerBox ? Math.round(bannerBox.left) : null });
+    }
+    scroll.scrollLeft = saved;
+    const moved = rows.some(row => Math.abs(row.status - rows[0].status) > 1 || row.banner !== rows[0].banner);
+    const font = parseFloat(getComputedStyle(document.querySelector('.hud')).fontSize);
+    return { cuts, moved, font, rows };
+  });
+  if (report.cuts.length || report.moved || report.font < 13) {
+    throw new Error(`${label} pinned copy ${JSON.stringify(report)}`);
+  }
+}
+
+async function sceneScale(page) {
+  return page.evaluate(() => {
+    const stage = document.querySelector('#stage').getBoundingClientRect();
+    return { w: stage.width, h: stage.height };
+  });
+}
+
 async function playSequence(page, prefix) {
   await boot(page);
+  const scale = await sceneScale(page);
+  const expected = prefix === '390' ? [640, 360] : [1280, 720];
+  if (Math.abs(scale.w - expected[0]) > 1 || Math.abs(scale.h - expected[1]) > 1) {
+    throw new Error(`${prefix} scale ${JSON.stringify(scale)}`);
+  }
   const covered = await legsClear(page);
   if (covered.length) throw new Error(`${prefix} rest covers legs ${covered.join(',')}`);
   await page.screenshot({ path: path.join(STILLS, `scene-day-${prefix}.png`) });
   if (prefix === 'desktop') await page.screenshot({ path: path.join(STILLS, 'cooler-day-desktop.png') });
+  if (prefix === '390') {
+    const walked = await page.evaluate(() => window.hefei.clickScene(346, 110));
+    if (!walked) throw new Error('cooler approach has no path');
+    await page.waitForFunction(() => !window.hefei.walker().moving, null, { timeout: 20000 });
+    const far = await page.evaluate(() => {
+      const stage = document.querySelector('#stage').getBoundingClientRect();
+      const scroll = document.querySelector('.stage-scroll');
+      const view = scroll.getBoundingClientRect();
+      const player = document.querySelector('#walker').getBoundingClientRect();
+      const rest = document.querySelector('[data-action="rest"]').getBoundingClientRect();
+      const hit = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+      return {
+        scrollLeft: scroll.scrollLeft,
+        playerInside: player.left >= view.left - 1 && player.right <= view.right + 1 && player.top >= view.top - 1 && player.bottom <= view.bottom + 1,
+        covered: hit(rest, player),
+        stageW: stage.width,
+      };
+    });
+    if (!far.playerInside || far.covered || far.stageW < 600 || far.scrollLeft < 40) {
+      throw new Error(`far camera ${JSON.stringify(far)}`);
+    }
+    await page.screenshot({ path: path.join(STILLS, 'scene-walk-far-390.png') });
+  }
   await finishInterview(page);
+  if (prefix === '390') {
+    const shelf = await page.evaluate(() => window.hefei.clickScene(30, 40));
+    if (!shelf) throw new Error('shelf has no path');
+    await page.waitForFunction(() => !window.hefei.walker().moving && document.querySelector('#scene-banner'), null, { timeout: 20000 });
+    await assertPinned(page, 'day');
+  }
   const opened = await page.evaluate(() => window.hefei.clickScene(110, 185));
   if (!opened) throw new Error('computer has no path');
   await page.waitForSelector('#desk-panel', { timeout: 25000 });
@@ -198,6 +282,12 @@ async function playSequence(page, prefix) {
     });
     if (!open) break;
     await page.waitForTimeout(40);
+  }
+  if (prefix === '390') {
+    const again = await page.evaluate(() => window.hefei.clickScene(334, 330));
+    if (!again) throw new Error('night banner door has no path');
+    await page.waitForFunction(() => !window.hefei.walker().moving && document.querySelector('#scene-banner'), null, { timeout: 20000 });
+    await assertPinned(page, 'night');
   }
   const home = await page.evaluate(() => window.hefei.clickScene(110, 185));
   if (!home) throw new Error(`${prefix} cannot return to the desk`);

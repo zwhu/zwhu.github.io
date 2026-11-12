@@ -24,7 +24,7 @@ import {
 } from '../rules.mjs';
 import { ratesOnly, runStrategies } from '../sim.mjs';
 import { bannerAt, learningSkills, sceneArrival, showBannerState } from '../scene-ui.mjs';
-import { WALK_GRID, boxesOverlap, commitArrival, findPath, footBox, occupiedBox, peopleAt, pointBlocked, resolveClick } from '../walk.mjs';
+import { WALK_GRID, boxesOverlap, commitArrival, findPath, footBox, integerScale, occupiedBox, peopleAt, pointBlocked, resolveClick, viewOrigin } from '../walk.mjs';
 import { convertMeta, pngSize } from '../walk/build-sprites.mjs';
 import { frameIndex, resolveSprite, spritePose } from '../walk-sprites.mjs';
 
@@ -588,6 +588,26 @@ test('the hefei room is 640 by 360 and keeps the approved plates', () => {
       assert.equal(boxesOverlap(footBox(door.x, door.y), person), false, `door ${person.id}`);
     }
   }
+});
+
+test('a narrow window stays at 1x and keeps the player in view', () => {
+  assert.equal(integerScale(390, 640), 1);
+  assert.equal(integerScale(100, 640), 1);
+  assert.equal(integerScale(1280, 640), 2);
+  assert.equal(integerScale(640, 640), 1);
+  const places = {
+    B1: 111,
+    door: 334,
+    cooler: 346,
+    tea: 542,
+    sofa: 542,
+  };
+  for (const [name, foot] of Object.entries(places)) {
+    const origin = viewOrigin(foot, 390, 640);
+    assert.ok(foot >= origin - 0.01 && foot <= origin + 390 + 0.01, name);
+    assert.ok(origin >= 0 && origin <= 640 - 390, name);
+  }
+  assert.equal(viewOrigin(111, 1280, 640), 0);
 });
 
 test('npc cells cannot be walked through', () => {

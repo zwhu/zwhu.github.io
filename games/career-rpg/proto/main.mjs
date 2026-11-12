@@ -2,7 +2,7 @@ import { castRaze, createMatch, LAST_HITS, MATCH_TICKS, RAZES, THREAT_POS, tickM
 import { CONFIG, SCRIPT, applyAction, createGame, present } from './rules.mjs';
 import { bannerAt, learningSkills, sceneArrival, sceneHint, showBannerState } from './scene-ui.mjs';
 import { spritePose } from './walk-sprites.mjs';
-import { WALK_GRID, facingOf, findPath, resolveClick } from './walk.mjs';
+import { WALK_GRID, facingOf, findPath, integerScale, resolveClick, viewOrigin } from './walk.mjs';
 
 const app = document.querySelector('#app');
 
@@ -133,6 +133,7 @@ function paintWalker() {
     ? [seat.x, seat.y, seat.x + seat.w, seat.y + seat.h]
     : [walker.x - 12, walker.y - pose.anchor.y, walker.x + 12, walker.y - pose.anchor.y + 18];
   spot.style.cssText = spotStyle(box);
+  followPlayer();
 }
 
 function arriveWalker() {
@@ -538,12 +539,14 @@ function seedForm(view) {
 
 function hud(view) {
   return el('div', { class: 'hud', id: 'scene-when' }, [
-    el('span', {}, [`第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`]),
-    el('span', {}, ['行动点 ', el('strong', { id: 'ap' }, [String(view.ap)])]),
-    el('span', {}, ['体力 ', el('strong', { id: 'stamina' }, [String(view.stamina)])]),
-    el('span', {}, ['好感 ', el('strong', { id: 'favor' }, [String(view.favor)])]),
-    el('span', {}, ['本周线 ', el('strong', { id: 'line' }, [String(view.line)])]),
-    el('span', {}, ['记住线 ', el('strong', { id: 'good-favor' }, [String(view.goodFavor)])]),
+    el('span', { class: 'hud-when' }, [`第 ${view.week} 周 · ${view.dayName}${view.night ? ' · 夜里' : ''}`]),
+    el('div', { class: 'status-line', id: 'status-line' }, [
+      el('span', {}, ['行动点 ', el('strong', { id: 'ap' }, [String(view.ap)])]),
+      el('span', {}, ['体力 ', el('strong', { id: 'stamina' }, [String(view.stamina)])]),
+      el('span', {}, ['好感 ', el('strong', { id: 'favor' }, [String(view.favor)])]),
+      el('span', {}, ['本周线 ', el('strong', { id: 'line' }, [String(view.line)])]),
+      el('span', {}, ['记住线 ', el('strong', { id: 'good-favor' }, [String(view.goodFavor)])]),
+    ]),
   ]);
 }
 
@@ -693,7 +696,6 @@ function office(view) {
   children.push(
     walkerElement(),
     el('div', { class: 'spots' }, spots),
-    sceneActions(view),
   );
   const line = bannerAt(banner, Date.now());
   if (line) children.push(el('p', { class: 'hint', id: 'scene-banner' }, [line]));
@@ -702,12 +704,16 @@ function office(view) {
   if (box) children.push(box);
   const stage = el('div', { class: 'stage', id: 'stage' }, children);
   stage.addEventListener('click', onSceneClick);
+  const frame = el('div', { class: 'stage-frame' }, [
+    el('div', { class: 'stage-scroll' }, [stage]),
+    sceneActions(view),
+  ]);
   return el('section', {
     class: `${view.night ? 'office night' : 'office'}${dialogue ? ' has-dialogue' : ''}`,
     id: 'office',
   }, [
     hud(view),
-    stage,
+    frame,
   ]);
 }
 
@@ -950,20 +956,99 @@ function render() {
   parts.push(seedForm(view));
   if (dota) parts.push(dotaOverlay());
   app.replaceChildren(...parts);
-  fitOffice();
+  fitIntegerScale();
+  followPlayer();
 }
 
-// 宽得下整张房间时按 1 倍或 2 倍显示；更窄就缩进窗口，像素仍用 pixelated。
-function fitOffice() {
-  const office = document.querySelector('#office');
-  if (!office) return;
-  const avail = office.parentElement.clientWidth;
-  const sceneW = WALK_GRID.scene.width;
-  const scale = Math.min(2, Math.floor(avail / sceneW));
-  office.style.width = scale >= 1 ? `${scale * sceneW}px` : '100%';
+function placeBanner(whole, stage) {
+  const hint = document.querySelector('#scene-banner');
+  const bar = document.querySelector('.hud');
+  if (!hint || !bar) return;
+  hint.style.left = '';
+  hint.style.right = '';
+  hint.style.width = '';
+  hint.style.top = '';
+  if (whole) {
+    hint.classList.remove('pinned');
+    if (hint.parentElement !== stage) stage.append(hint);
+    return;
+  }
+  hint.classList.add('pinned');
+  if (hint.previousElementSibling !== bar) bar.after(hint);
 }
 
-window.addEventListener('resize', fitOffice);
+function intersects(a, b) {
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+}
+
+function fitIntegerScale() {
+  const scroll = document.querySelector('.stage-scroll');
+  const stage = document.querySelector('#stage');
+  if (!scroll || !stage) return;
+  const scale = integerScale(scroll.clientWidth, WALK_GRID.scene.width);
+  stage.style.width = `${WALK_GRID.scene.width * scale}px`;
+  stage.style.height = `${WALK_GRID.scene.height * scale}px`;
+}
+
+// 窄画面按 1 倍裁切，滚动把人留在可见范围里。按钮钉在可见区域右下角，挡住人就换到左边。
+function followPlayer() {
+  const scroll = document.querySelector('.stage-scroll');
+  const stage = document.querySelector('#stage');
+  const frame = document.querySelector('.stage-frame');
+  const dock = frame?.querySelector('.scene-actions');
+  if (!scroll || !stage || stage.clientWidth < 1) return;
+  const scale = stage.clientWidth / WALK_GRID.scene.width;
+  const viewWorld = scroll.clientWidth / scale;
+  scroll.scrollLeft = viewOrigin(walker.x, viewWorld, WALK_GRID.scene.width) * scale;
+  const whole = scroll.clientWidth + 1 >= stage.clientWidth;
+  placeBanner(whole, stage);
+  if (!dock) return;
+  const frameBox = frame.getBoundingClientRect();
+  const scrollBox = scroll.getBoundingClientRect();
+  const stageBox = stage.getBoundingClientRect();
+  const visibleRight = Math.min(scrollBox.right, stageBox.right);
+  const visibleLeft = Math.max(scrollBox.left, stageBox.left);
+  const visibleBottom = Math.min(scrollBox.bottom, stageBox.bottom);
+  const gap = 4 * scale;
+  for (const node of stage.querySelectorAll('#desk-panel, .dialogue')) {
+    if (whole) {
+      node.style.left = '';
+      node.style.right = '';
+      node.style.width = '';
+    } else {
+      const pad = 8 * scale;
+      node.style.right = 'auto';
+      node.style.left = `${scroll.scrollLeft + pad}px`;
+      node.style.width = `${Math.max(0, scroll.clientWidth - pad * 2)}px`;
+    }
+  }
+  dock.style.left = 'auto';
+  if (whole) {
+    dock.style.right = `${(6 / 384) * stage.clientWidth}px`;
+    const lift = document.querySelector('.dialogue')
+      ? (frameBox.width < 520 ? 92 : 64) / 216
+      : 8 / 216;
+    dock.style.bottom = `${lift * stage.clientHeight}px`;
+  } else {
+    dock.style.right = `${frameBox.right - visibleRight + gap}px`;
+    dock.style.bottom = `${frameBox.bottom - visibleBottom + gap}px`;
+    const talk = document.querySelector('.dialogue');
+    if (talk && talk.getBoundingClientRect().height > 0) {
+      const talkTop = talk.getBoundingClientRect().top;
+      dock.style.bottom = `${Math.max(frameBox.bottom - visibleBottom + gap, frameBox.bottom - talkTop + gap)}px`;
+    }
+  }
+  const player = document.querySelector('#walker')?.getBoundingClientRect();
+  if (player && intersects(player, dock.getBoundingClientRect())) {
+    dock.style.right = 'auto';
+    dock.style.left = `${visibleLeft - frameBox.left + gap}px`;
+  }
+}
+
+window.addEventListener('resize', () => {
+  fitIntegerScale();
+  followPlayer();
+});
 
 window.addEventListener('keydown', event => {
   if (!dota || dota.mode !== 'play' || event.repeat) return;
