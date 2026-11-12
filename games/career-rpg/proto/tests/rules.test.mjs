@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import test from 'node:test';
@@ -23,7 +24,7 @@ import {
 } from '../rules.mjs';
 import { ratesOnly, runStrategies } from '../sim.mjs';
 import { bannerAt, learningSkills, sceneArrival, showBannerState } from '../scene-ui.mjs';
-import { WALK_GRID, boxesOverlap, commitArrival, findPath, occupiedBox, peopleAt, pointBlocked, resolveClick } from '../walk.mjs';
+import { WALK_GRID, boxesOverlap, commitArrival, findPath, footBox, integerScale, occupiedBox, peopleAt, pointBlocked, resolveClick, viewOrigin } from '../walk.mjs';
 import { convertMeta, pngSize } from '../walk/build-sprites.mjs';
 import { frameIndex, resolveSprite, spritePose } from '../walk-sprites.mjs';
 
@@ -543,10 +544,79 @@ test('each clickable target has a path that stays off obstacles', () => {
     assert.ok(Math.abs(end.x - target.x) < WALK_GRID.cell, id);
     assert.ok(Math.abs(end.y - target.y) < WALK_GRID.cell, id);
   }
-  const midway = findPath(start, WALK_GRID.targets.neighbor)[8];
+  const toNeighbor = findPath(start, WALK_GRID.targets.neighbor);
+  assert.ok(toNeighbor.length > 2);
+  const midway = toNeighbor[Math.min(8, toNeighbor.length - 1)];
   const retarget = findPath(midway, WALK_GRID.targets.boss);
   assert.ok(retarget);
   for (const point of retarget) assert.equal(pointBlocked(point.x, point.y), false);
+});
+
+test('the hefei room is 640 by 360 and keeps the approved plates', () => {
+  assert.deepEqual([WALK_GRID.scene.width, WALK_GRID.scene.height], [640, 360]);
+  assert.equal(WALK_GRID.seats.B3.x, 255);
+  assert.deepEqual(WALK_GRID.seats.B3.interaction, [255, 242]);
+  assert.deepEqual([WALK_GRID.seats.B1.x, WALK_GRID.seats.B1.y], [111, 226]);
+  assert.deepEqual(WALK_GRID.seats.B1.interaction, [111, 242]);
+  assert.deepEqual(WALK_GRID.bounds, { left: 4, right: 636, top: 78, bottom: 340 });
+  assert.deepEqual(
+    [WALK_GRID.targets.door.x, WALK_GRID.targets.door.y, WALK_GRID.targets.door.facing],
+    [334, 336, 'up'],
+  );
+  assert.deepEqual(WALK_GRID.targets.door.hit, [316, 324, 352, 342]);
+  const cooler = WALK_GRID.cooler;
+  assert.deepEqual([cooler.x, cooler.y, cooler.w, cooler.h], [334, 52, 24, 36]);
+  assert.deepEqual([cooler.anchorX, cooler.anchorY, cooler.ySort], [346, 85, 85]);
+  const plates = {
+    'day-640x360.png': '991acef9f4e1a23a7f6d9f1c44816a7bb2e9ca7b',
+    'night-640x360.png': '90d1ef6c97c69dbb7a14fcb73ff5a4674ec92b4d',
+  };
+  for (const [name, sha] of Object.entries(plates)) {
+    const file = fileURLToPath(new URL(`../art/${name}`, import.meta.url));
+    const bytes = readFileSync(file);
+    assert.equal(createHash('sha1').update(bytes).digest('hex'), sha, name);
+    assert.deepEqual([pngSize(file).w, pngSize(file).h], [640, 360], name);
+  }
+  const css = readFileSync(new URL('../style.css', import.meta.url), 'utf8');
+  assert.match(css, /aspect-ratio:\s*640\s*\/\s*360/);
+  assert.match(css, /image-rendering:\s*pixelated/);
+  const spawn = { x: WALK_GRID.start.x, y: WALK_GRID.start.y, pose: 'seated' };
+  const door = { x: WALK_GRID.targets.door.x, y: WALK_GRID.targets.door.y, pose: 'stand' };
+  for (const night of [false, true]) {
+    for (const person of peopleAt(night)) {
+      assert.equal(boxesOverlap(occupiedBox(spawn), person), false, `seat ${person.id}`);
+      assert.equal(boxesOverlap(footBox(door.x, door.y), person), false, `door ${person.id}`);
+    }
+  }
+});
+
+test('a narrow window stays at 1x and keeps the player in view', () => {
+  assert.equal(integerScale(390, 640), 1);
+  assert.equal(integerScale(100, 640), 1);
+  assert.equal(integerScale(1280, 640), 2);
+  assert.equal(integerScale(640, 640), 1);
+  const places = {
+    B1: 111,
+    door: 334,
+    cooler: 346,
+    tea: 542,
+    sofa: 542,
+  };
+  for (const [name, foot] of Object.entries(places)) {
+    const origin = viewOrigin(foot, 390, 640);
+    assert.ok(foot >= origin - 0.01 && foot <= origin + 390 + 0.01, name);
+    assert.ok(origin >= 0 && origin <= 640 - 390, name);
+  }
+  assert.equal(viewOrigin(111, 1280, 640), 0);
+});
+
+test('npc cells cannot be walked through', () => {
+  for (const night of [false, true]) {
+    for (const person of peopleAt(night)) {
+      const goal = { x: person.x + person.w / 2, y: person.y + person.h - 2 };
+      assert.equal(findPath(WALK_GRID.start, goal, { night }), null, `${person.id} night=${night}`);
+    }
+  }
 });
 
 test('spawn and every stop keep the player off the people who are there', () => {
@@ -591,7 +661,7 @@ test('only the newest banner stays, and it goes away after a few seconds', () =>
 test('clicking empty floor does not change the game, including ap and stamina', () => {
   const game = createGame('hefei');
   const before = snapshot(game);
-  const hit = resolveClick({ x: 100, y: 194 }, { night: false, canStudy: true });
+  const hit = resolveClick({ x: 400, y: 300 }, { night: false, canStudy: true });
   assert.equal(hit.kind, 'walk');
   assert.equal(hit.action, null);
   const path = findPath(WALK_GRID.start, hit.target);
@@ -606,21 +676,21 @@ test('clicking empty floor does not change the game, including ap and stamina', 
 
 test('scene clicks use the same actions as the buttons', () => {
   const day = { night: false, canStudy: false };
-  assert.deepEqual(resolveClick({ x: 326, y: 100 }, day).action, { type: 'talk', person: 'boss' });
-  assert.deepEqual(resolveClick({ x: 266, y: 160 }, day).action, { type: 'talk', person: 'lunch' });
-  assert.deepEqual(resolveClick({ x: 147, y: 150 }, day).action, { type: 'talk', person: 'neighbor' });
-  assert.deepEqual(resolveClick({ x: 75, y: 132 }, day).action, { type: 'computer' });
-  assert.deepEqual(resolveClick({ x: 20, y: 40 }, day).action, { type: 'shelf' });
-  assert.deepEqual(resolveClick({ x: 178, y: 70 }, day).action, { type: 'water' });
-  assert.deepEqual(resolveClick({ x: 190, y: 190 }, day).action, { type: 'door' });
+  assert.deepEqual(resolveClick({ x: 542, y: 170 }, day).action, { type: 'talk', person: 'boss' });
+  assert.deepEqual(resolveClick({ x: 300, y: 200 }, day).action, { type: 'talk', person: 'lunch' });
+  assert.deepEqual(resolveClick({ x: 180, y: 200 }, day).action, { type: 'talk', person: 'neighbor' });
+  assert.deepEqual(resolveClick({ x: 110, y: 185 }, day).action, { type: 'computer' });
+  assert.deepEqual(resolveClick({ x: 30, y: 40 }, day).action, { type: 'shelf' });
+  assert.deepEqual(resolveClick({ x: 346, y: 70 }, day).action, { type: 'water' });
+  assert.deepEqual(resolveClick({ x: 334, y: 330 }, day).action, { type: 'door' });
   assert.deepEqual(sceneArrival('computer', { interviewed: false }), { prompt: '先去找老板。' });
   assert.deepEqual(sceneArrival('shelf', { interviewed: false }), { prompt: '先去找老板。' });
   assert.deepEqual(sceneArrival('shelf', { interviewed: true, canStudy: true }), { action: { type: 'study', skill: 'jquery' } });
   assert.deepEqual(learningSkills([{ id: 'linux' }, { id: 'jquery' }]).map(item => item.id), ['linux']);
-  assert.equal(resolveClick({ x: 326, y: 100 }, { night: true, canStudy: true }).kind, 'none');
-  assert.deepEqual(resolveClick({ x: 106, y: 180 }, { night: true, canStudy: false }).action, { type: 'talk', person: 'party' });
+  assert.equal(resolveClick({ x: 545, y: 160 }, { night: true, canStudy: true }).kind, 'none');
+  assert.deepEqual(resolveClick({ x: 142, y: 230 }, { night: true, canStudy: false }).action, { type: 'talk', person: 'party' });
   const game = createGame('hefei');
-  const walked = commitArrival(game, resolveClick({ x: 24, y: 140 }, day), applyAction);
+  const walked = commitArrival(game, resolveClick({ x: 48, y: 280 }, day), applyAction);
   assert.equal(walked.ap, game.ap);
   assert.equal(walked.stamina, game.stamina);
   const mainSource = readFileSync(new URL('../main.mjs', import.meta.url), 'utf8');
