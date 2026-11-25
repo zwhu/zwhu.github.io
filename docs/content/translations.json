@@ -1,5 +1,11 @@
 [
   {
+    "path": "shipping-with-claude-code.html",
+    "title": "用 Claude Code 交付的实践指南",
+    "excerpt": "介绍 Claude Ship：用 /code-review、/ship 和 /steward 处理 PR 的审查、修复与批准，再把规则写进仓库、推广到团队。",
+    "labels": ["Addy Osmani", "英中对照"]
+  },
+  {
     "path": "agent-design-system.html",
     "title": "搭建 Agent 能遵循的设计系统与 skill",
     "excerpt": "从设计原语、语义 token、组件到区块，再用规则和 skill 写下“什么算好”，让 Agent 不必再猜。",
