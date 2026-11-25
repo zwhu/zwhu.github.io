@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>用 Claude Code 交付的实践指南 · 全文对照翻译</title>
+<link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./translation.css?v=20261103">
+<link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<!-- SEO:start -->
+<meta name="description" content="Addy Osmani 关于 Claude Ship 的全文中英对照翻译，介绍用 /code-review、/ship 和 /steward 处理 PR 的审查、修复与批准，再把规则写进仓库、推广到团队，保留原文插图。">
+<link rel="canonical" href="https://zwhu.github.io/shipping-with-claude-code.html">
+<meta name="author" content="Addy Osmani">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="zwhu 的技术博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="用 Claude Code 交付的实践指南 · 全文对照翻译">
+<meta property="og:description" content="Addy Osmani 关于 Claude Ship 的全文中英对照翻译，介绍用 /code-review、/ship 和 /steward 处理 PR 的审查、修复与批准，再把规则写进仓库、推广到团队，保留原文插图。">
+<meta property="og:url" content="https://zwhu.github.io/shipping-with-claude-code.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用 Claude Code 交付的实践指南 · 全文对照翻译">
+<meta name="twitter:description" content="Addy Osmani 关于 Claude Ship 的全文中英对照翻译，介绍用 /code-review、/ship 和 /steward 处理 PR 的审查、修复与批准，再把规则写进仓库、推广到团队，保留原文插图。">
+<meta name="twitter:site" content="@zwhu__">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://zwhu.github.io/#website","url":"https://zwhu.github.io/","name":"zwhu 的技术博客","inLanguage":"zh-CN","publisher":{"@id":"https://zwhu.github.io/#author"}},{"@type":"Person","@id":"https://zwhu.github.io/#author","name":"zwhu","url":"https://zwhu.github.io/about.html","sameAs":["https://github.com/zwhu","https://x.com/zwhu__"]},{"@type":"WebPage","@id":"https://zwhu.github.io/shipping-with-claude-code.html#webpage","url":"https://zwhu.github.io/shipping-with-claude-code.html","name":"用 Claude Code 交付的实践指南 · 全文对照翻译","description":"Addy Osmani 关于 Claude Ship 的全文中英对照翻译，介绍用 /code-review、/ship 和 /steward 处理 PR 的审查、修复与批准，再把规则写进仓库、推广到团队，保留原文插图。","inLanguage":"zh-CN","isPartOf":{"@id":"https://zwhu.github.io/#website"},"mainEntity":{"@id":"https://zwhu.github.io/shipping-with-claude-code.html#article"}},{"@type":"BlogPosting","@id":"https://zwhu.github.io/shipping-with-claude-code.html#article","url":"https://zwhu.github.io/shipping-with-claude-code.html","headline":"用 Claude Code 交付的实践指南","description":"Addy Osmani 关于 Claude Ship 的全文中英对照翻译，介绍用 /code-review、/ship 和 /steward 处理 PR 的审查、修复与批准，再把规则写进仓库、推广到团队，保留原文插图。","inLanguage":["zh-CN","en"],"mainEntityOfPage":{"@id":"https://zwhu.github.io/shipping-with-claude-code.html#webpage"},"author":{"@type":"Person","name":"Addy Osmani","url":"https://x.com/addyosmani"},"publisher":{"@id":"https://zwhu.github.io/#author"},"datePublished":"2026-11-25","translationOfWork":{"@type":"Article","name":"A practical guide to shipping with Claude Code","url":"https://x.com/addyosmani/status/2125492213903978917","inLanguage":"en","datePublished":"2026-11-25"}}]}</script>
+<!-- SEO:end -->
+</head>
+<body class="translation-page"><!-- site:header:start --><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html" aria-current="location">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./about.html">关于</a></nav></header><!-- site:header:end -->
+<section class="translation-header">
+<div class="eyebrow">翻译留档 / 英中对照</div>
+<h1>用 Claude Code 交付的实践指南</h1>
+<p class="subtitle" lang="en">A practical guide to shipping with Claude Code</p>
+<div class="meta"><span>作者：Addy Osmani</span><span>原文发布：2026 年 11 月 25 日</span><span>阅读时长：约 20 分钟</span><a href="https://x.com/addyosmani/status/2125492213903978917" target="_blank" rel="noopener noreferrer">在 X 阅读原文 ↗</a></div>
+<div class="notice"><strong>英中逐段对照翻译。</strong>左侧为原文全文，右侧为对应中文译文。原文作者 Addy Osmani，原文链接见上方，翻译 zwhu。保留原文插图，含文字的插图附中文翻译。译文为参考，专有名词保留英文。</div>
+<div class="toolbar" aria-label="阅读设置">
+  <button id="mode" type="button" aria-pressed="false">只看中文</button>
+  <button id="size" type="button" aria-pressed="false">放大字号</button>
+  <button id="print" type="button">打印 / 保存 PDF</button>
+  <span class="hint">中英对照 · 正文与插图离线可读</span>
+</div>
+<figure class="cover"><a href="./assets/translations/original/c859858cdae78678.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/c859858cdae78678.jpg"><source type="image/webp" srcset="./assets/optimized/c859858cdae78678-640-q88.webp 640w, ./assets/optimized/c859858cdae78678-1024-q88.webp 1024w, ./assets/optimized/c859858cdae78678-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/c859858cdae78678.jpg" alt="Article cover" width="3000" height="1200" decoding="async" loading="lazy"></picture></a><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>用 Claude Code 交付的实践指南</h4>
+<div class="step"><strong>时间线</strong><br>PR opened（PR 已开出）→ failing CI（CI 失败）→ review comments（审查评论）→ merge conflicts（合并冲突）→ merge（合并）</div>
+</details></figure>
+
+</section>
+<main id="content" class="translation-content">
+<div class="columns"><span>ENGLISH / 英文原文</span><span>中文 / 对应译文</span></div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p>We just launched <a href="https://claude.com/resources/articles/introducing-claude-ship" target="_blank" rel="noopener noreferrer">Claude Ship</a> which can review your pull requests, work on fixes and approve the ones your team's policy allows. You may have a custom skill or workflow for these steps, but we wanted to offer an alternative. This guide walks through them based on my experience on the Claude Code team.</p>
+<p>When you open a pull request, there's usually a bunch of follow-up work to be done:</p>
+<ul>
+<li>CI fails</li>
+<li>A review comes back with six comments</li>
+<li>A main merge creates a conflict</li>
+</ul>
+<p>They're all tiny little tasks, but each one takes you off your focus work.</p>
+<p>On our team an agent commonly does this follow-up work. For example, it can pick up an issue a reviewer found, so when the author gets back, the PR has already been updated once.</p>
+<p>In my experience this is a more productive and enjoyable way to code. It minimizes context switching and keeps me in a flow state.</p>
+<p>We've talked about the process the Claude Code team uses for code review <a href="https://claude.dev/blog/solving-code-review-at-anthropic/" target="_blank" rel="noopener noreferrer">here</a>, and about the verification process underneath it <a href="https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/" target="_blank" rel="noopener noreferrer">here</a>.</p>
+</div><div class="cell cn">
+<p>我们刚刚发布了 <a href="https://claude.com/resources/articles/introducing-claude-ship" target="_blank" rel="noopener noreferrer">Claude Ship</a>，它可以审查你的 pull request，着手修复，并在团队政策允许的范围内批准变更。你也许已经有自定义的 skill 或工作流来做这些事，但我们想再提供一个选择。这份指南会根据我在 Claude Code 团队的经验，把这些步骤走一遍。</p>
+<p>你开出一个 PR 之后，通常还跟着一堆收尾工作：</p>
+<ul>
+<li>CI 挂了</li>
+<li>审查回来六条评论</li>
+<li>有人往 main 合并，制造了一个冲突</li>
+</ul>
+<p>每件都不大，但每一件都会把你从正在专注的工作里拉开。</p>
+<p>在我们团队，这类收尾工作常常交给一个 agent。比如，它可以先接住审查者指出的问题，等作者回来时，PR 已经被更新过一轮。</p>
+<p>以我的经验，这样写代码更高效，也更愉快。它减少了上下文切换，让我保持在心流里。</p>
+<p>我们在<a href="https://claude.dev/blog/solving-code-review-at-anthropic/" target="_blank" rel="noopener noreferrer">这里</a>谈过 Claude Code 团队的代码审查流程，也在<a href="https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/" target="_blank" rel="noopener noreferrer">这里</a>谈过它底层的验证流程。</p>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<figure class="callout has-img"><a href="./assets/translations/original/088bf8af34259d75.png" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/088bf8af34259d75.png"><source type="image/webp" srcset="./assets/optimized/088bf8af34259d75-640-q88.webp 640w, ./assets/optimized/088bf8af34259d75-1024-q88.webp 1024w, ./assets/optimized/088bf8af34259d75-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/088bf8af34259d75.png" alt="Review, Fix, Approve: Claude Ship flow" width="3000" height="1530" decoding="async" loading="lazy"></picture></a><figcaption>Claude Ship: Review, Fix, Approve</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Claude Ship 的三条路径</h4>
+<div class="step"><strong>Review · Code Review</strong><br>PR 出现 2 findings，随后变为 1 finding，最后 no issues（没有问题）</div>
+<div class="step"><strong>Fix · PR Steward（beta）</strong><br>两次 fixes pushed / fix pushed（已推送修复）</div>
+<div class="step"><strong>Approve · Claude Approvals（beta）</strong><br>approved under team policy（按团队政策获得批准）→ Ready to merge（可以合并）</div>
+<p>图注：Claude Ship uses AI and may miss bugs, security vulnerabilities, or other issues.（Claude Ship 使用 AI，可能漏掉 bug、安全漏洞或其他问题。）</p>
+</details></figure>
+</div><div class="cell cn">
+<figure class="callout has-img"><a href="./assets/translations/original/088bf8af34259d75.png" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/088bf8af34259d75.png"><source type="image/webp" srcset="./assets/optimized/088bf8af34259d75-640-q88.webp 640w, ./assets/optimized/088bf8af34259d75-1024-q88.webp 1024w, ./assets/optimized/088bf8af34259d75-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/088bf8af34259d75.png" alt="Claude Ship 流程：Review、Fix、Approve" width="3000" height="1530" decoding="async" loading="lazy"></picture></a><figcaption>Claude Ship：审查、修复、批准</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Claude Ship 的三条路径</h4>
+<div class="step"><strong>Review · Code Review</strong><br>PR 出现 2 findings，随后变为 1 finding，最后 no issues（没有问题）</div>
+<div class="step"><strong>Fix · PR Steward（beta）</strong><br>两次 fixes pushed / fix pushed（已推送修复）</div>
+<div class="step"><strong>Approve · Claude Approvals（beta）</strong><br>approved under team policy（按团队政策获得批准）→ Ready to merge（可以合并）</div>
+<p>图注：Claude Ship uses AI and may miss bugs, security vulnerabilities, or other issues.（Claude Ship 使用 AI，可能漏掉 bug、安全漏洞或其他问题。）</p>
+</details></figure>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<p>Claude Ship is for a developer or tech lead whose team works on GitHub and who doesn't have admin privileges. You can start on your own right now by running a few commands, and save what you learn to files in your repo for the team to review. Admins only need to get involved if your team wants agents doing this automatically on the team's PRs.</p>
+<p>You're still the architect of the process, so you're defining what to build, how to build it, and what the bar for merging is.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/a2f8c0f5ce762517.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/a2f8c0f5ce762517.jpg"><source type="image/webp" srcset="./assets/optimized/a2f8c0f5ce762517-640-q88.webp 640w, ./assets/optimized/a2f8c0f5ce762517-1024-q88.webp 1024w, ./assets/optimized/a2f8c0f5ce762517-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/a2f8c0f5ce762517.jpg" alt="FIGURE 1: The post-PR process" width="1800" height="814" decoding="async" loading="lazy"></picture></a><figcaption>FIGURE 1 — The post-PR process</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>FIGURE 1 · PR 提交之后的流程</h4>
+<p>你负责：scope、design，以及合并的标准（the merge bar）。</p>
+<div class="step"><strong>Commands you run（你自己运行的命令，无需管理员）</strong><br><code>/code-review</code>、<code>/ship</code>、<code>/steward</code></div>
+<div class="step">箭头：what you learned（你学到的东西）</div>
+<div class="step"><strong>Files you commit（你提交的文件，在 PR 中审查）</strong><br>CLAUDE.md、REVIEW.md、verify skill、steward skill、<code>.claude/approvals.yml</code></div>
+<div class="step">箭头：rules they read（它们读取的规则）</div>
+<div class="step"><strong>Agents your team turns on（团队开启的 agent）</strong><br>Claude Ship：Code Review、PR Steward（beta）、Claude Approvals（beta）</div>
+<p>图注：The post-PR process. Run commands, commit files, then turn on agents for your team.（PR 提交之后的流程。先运行命令，再提交文件，然后为团队开启 agent。）</p>
+</details></figure>
+</div><div class="cell cn">
+<p>Claude Ship 面向的是开发者或技术负责人：团队在 GitHub 上工作，而你本人没有管理员权限。你现在就可以先自己跑几条命令开始用，再把学到的东西写成仓库里的文件，交给团队审阅。只有当团队希望这些 agent 自动处理团队的 PR 时，才需要管理员介入。</p>
+<p>你仍然是这套流程的设计者，所以要由你来定义做什么、怎么做，以及合并的标准是什么。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/a2f8c0f5ce762517.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/a2f8c0f5ce762517.jpg"><source type="image/webp" srcset="./assets/optimized/a2f8c0f5ce762517-640-q88.webp 640w, ./assets/optimized/a2f8c0f5ce762517-1024-q88.webp 1024w, ./assets/optimized/a2f8c0f5ce762517-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/a2f8c0f5ce762517.jpg" alt="图 1：PR 提交之后的流程" width="1800" height="814" decoding="async" loading="lazy"></picture></a><figcaption>图 1 — PR 提交之后的流程</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>FIGURE 1 · PR 提交之后的流程</h4>
+<p>你负责：scope、design，以及合并的标准（the merge bar）。</p>
+<div class="step"><strong>Commands you run（你自己运行的命令，无需管理员）</strong><br><code>/code-review</code>、<code>/ship</code>、<code>/steward</code></div>
+<div class="step">箭头：what you learned（你学到的东西）</div>
+<div class="step"><strong>Files you commit（你提交的文件，在 PR 中审查）</strong><br>CLAUDE.md、REVIEW.md、verify skill、steward skill、<code>.claude/approvals.yml</code></div>
+<div class="step">箭头：rules they read（它们读取的规则）</div>
+<div class="step"><strong>Agents your team turns on（团队开启的 agent）</strong><br>Claude Ship：Code Review、PR Steward（beta）、Claude Approvals（beta）</div>
+<p>图注：The post-PR process. Run commands, commit files, then turn on agents for your team.（PR 提交之后的流程。先运行命令，再提交文件，然后为团队开启 agent。）</p>
+</details></figure>
+</div></section>
+
+<div class="section-head">The post-PR process / PR 提交之后的流程</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p>After you've opened a PR, you want to find issues, address issues, and make a final decision on if the change can be merged.</p>
+<p><strong>Claude Ship is three agents that tackle this work: Code Review, PR Steward (beta), and Claude Approvals (beta).</strong></p>
+<p>Code Review does an in-depth review of pull requests against the codebase through multiple lenses. It collects findings, adversarially verifies them, categorizes them and posts them to a PR.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/60a4dd96c3261a45.png" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/60a4dd96c3261a45.png"><source type="image/webp" srcset="./assets/optimized/60a4dd96c3261a45-640-q88.webp 640w, ./assets/optimized/60a4dd96c3261a45-1024-q88.webp 1024w, ./assets/optimized/60a4dd96c3261a45-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/60a4dd96c3261a45.png" alt="Code Review comment on a retry.ts change" width="3000" height="2127" decoding="async" loading="lazy"></picture></a><figcaption>Code Review posts a finding on the PR</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Code Review 在 PR 上的发现示例</h4>
+<p>文件 <code>src/api/retry.ts</code> 的 diff 给 <code>fetchWithRetry</code> 增加了 <code>Retry-After</code> 等待逻辑。</p>
+<div class="step"><strong>claude（bot）</strong><br>重试可能会打回一个已经在限流的服务器。<code>Retry-After</code> 可以是 HTTP 日期（这时 <code>wait</code> 会变成 <code>NaN</code>），也可以缺失（这时会变成 <code>0</code>）。无论哪种情况，<code>sleep(wait)</code> 都会立刻返回。修复：解析该标头的两种形式，在没有可用值时回退到指数退避。</div>
+<div class="step"><strong>Why this was flagged（为什么被标出）</strong><br><code>Number("Wed, 18 Nov 2026 07:28:00 GMT")</code> 是 <code>NaN</code>，<code>Number(null)</code> 是 <code>0</code>。<code>sleep</code> 把该值交给 <code>setTimeout</code>，两者都会被当成无延迟，于是直到 <code>maxRetries</code> 的每次尝试都会在毫秒内发出。<br>Verification：<code>src/api/sleep.ts:3</code> 调用 <code>setTimeout(resolve, ms)</code> 时没有防护，且没有任何 <code>fetchWithRetry</code> 的调用方自己加延迟。</div>
+<p>Finding ID：f-3c91a7e2</p>
+</details></figure>
+</div><div class="cell cn">
+<p>开出 PR 之后，你要做的是：找出问题、处理问题，并最终决定这次变更能不能合并。</p>
+<p><strong>Claude Ship 是三个共同承接这项工作的 agent：Code Review、PR Steward（beta）和 Claude Approvals（beta）。</strong></p>
+<p>Code Review 会从多个视角，对照代码库对 PR 做深入审查。它收集发现、对抗式地核验这些发现、归类，再把结果贴到 PR 上。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/60a4dd96c3261a45.png" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/60a4dd96c3261a45.png"><source type="image/webp" srcset="./assets/optimized/60a4dd96c3261a45-640-q88.webp 640w, ./assets/optimized/60a4dd96c3261a45-1024-q88.webp 1024w, ./assets/optimized/60a4dd96c3261a45-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/60a4dd96c3261a45.png" alt="Code Review 在 retry.ts 变更上的评论" width="3000" height="2127" decoding="async" loading="lazy"></picture></a><figcaption>Code Review 把发现贴到 PR 上</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Code Review 在 PR 上的发现示例</h4>
+<p>文件 <code>src/api/retry.ts</code> 的 diff 给 <code>fetchWithRetry</code> 增加了 <code>Retry-After</code> 等待逻辑。</p>
+<div class="step"><strong>claude（bot）</strong><br>重试可能会打回一个已经在限流的服务器。<code>Retry-After</code> 可以是 HTTP 日期（这时 <code>wait</code> 会变成 <code>NaN</code>），也可以缺失（这时会变成 <code>0</code>）。无论哪种情况，<code>sleep(wait)</code> 都会立刻返回。修复：解析该标头的两种形式，在没有可用值时回退到指数退避。</div>
+<div class="step"><strong>Why this was flagged（为什么被标出）</strong><br><code>Number("Wed, 18 Nov 2026 07:28:00 GMT")</code> 是 <code>NaN</code>，<code>Number(null)</code> 是 <code>0</code>。<code>sleep</code> 把该值交给 <code>setTimeout</code>，两者都会被当成无延迟，于是直到 <code>maxRetries</code> 的每次尝试都会在毫秒内发出。<br>Verification：<code>src/api/sleep.ts:3</code> 调用 <code>setTimeout(resolve, ms)</code> 时没有防护，且没有任何 <code>fetchWithRetry</code> 的调用方自己加延迟。</div>
+<p>Finding ID：f-3c91a7e2</p>
+</details></figure>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<p>PR Steward works to keep a PR green, but is designed not to approve or merge pull requests. It jumps in on failing CI checks, merge conflicts and review feedback from Code Review, other review tools, or team members. After every push, it comments with what it changed and how to undo it.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/6e3a93b06f912ea9.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/6e3a93b06f912ea9.jpg"><source type="image/webp" srcset="./assets/optimized/6e3a93b06f912ea9-640-q88.webp 640w, ./assets/optimized/6e3a93b06f912ea9-1024-q88.webp 1024w, ./assets/optimized/6e3a93b06f912ea9-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/6e3a93b06f912ea9.jpg" alt="PR Steward comments and a passing checks list" width="3000" height="2625" decoding="async" loading="lazy"></picture></a><figcaption>PR Steward works a finding and leaves an undo path</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>PR Steward 跟进同一条发现</h4>
+<p>PR 标题：Retry rate-limited requests in the API client #481（在 API 客户端中重试被限流的请求）。作者 mira-k 希望把 2 个 commit 从 <code>retry-on-429</code> 合并进 <code>main</code>。</p>
+<div class="step">claude（bot）添加了 <code>claude-pr-steward-watching</code> 标签。</div>
+<div class="step"><strong>第一条评论</strong><br>Claude Code Review 的发现成立：<code>Retry-After</code> 可以是日期，也可以缺失，两种情况都以无延迟结束。我正在修复 <code>src/api/retry.ts</code> 里的解析，以及仍然假定无延迟的测试。<br>署名：Claude PR steward</div>
+<div class="step">随后提交：Parse both forms of Retry-After and fall back to backoff（解析 Retry-After 的两种形式，并回退到退避）</div>
+<div class="step"><strong>第二条评论</strong><br>已推送 3f9c2ab41：把 <code>Retry-After</code> 按秒或日期读取，缺失时回退到指数退避，并更新 <code>retry.test.ts</code> 以期待这些延迟。要撤回，请 revert 3f9c2ab41，或去掉 <code>claude-pr-steward-watching</code> 标签来彻底停止我。</div>
+<div class="step"><strong>All checks have passed（全部检查已通过）</strong><br>Claude Code Review：未发现问题；ci/build、ci/lint、ci/test 均成功。</div>
+</details></figure>
+</div><div class="cell cn">
+<p>PR Steward 的工作是让 PR 保持绿灯，但它被设计成不批准、不合并 PR。它会接手失败的 CI、合并冲突，以及来自 Code Review、其他审查工具或团队成员的反馈。每次推送之后，它都会评论自己改了什么、以及怎么撤回。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/6e3a93b06f912ea9.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/6e3a93b06f912ea9.jpg"><source type="image/webp" srcset="./assets/optimized/6e3a93b06f912ea9-640-q88.webp 640w, ./assets/optimized/6e3a93b06f912ea9-1024-q88.webp 1024w, ./assets/optimized/6e3a93b06f912ea9-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/6e3a93b06f912ea9.jpg" alt="PR Steward 的评论与已通过的检查" width="3000" height="2625" decoding="async" loading="lazy"></picture></a><figcaption>PR Steward 跟进一条发现，并留下撤回方法</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>PR Steward 跟进同一条发现</h4>
+<p>PR 标题：Retry rate-limited requests in the API client #481（在 API 客户端中重试被限流的请求）。作者 mira-k 希望把 2 个 commit 从 <code>retry-on-429</code> 合并进 <code>main</code>。</p>
+<div class="step">claude（bot）添加了 <code>claude-pr-steward-watching</code> 标签。</div>
+<div class="step"><strong>第一条评论</strong><br>Claude Code Review 的发现成立：<code>Retry-After</code> 可以是日期，也可以缺失，两种情况都以无延迟结束。我正在修复 <code>src/api/retry.ts</code> 里的解析，以及仍然假定无延迟的测试。<br>署名：Claude PR steward</div>
+<div class="step">随后提交：Parse both forms of Retry-After and fall back to backoff（解析 Retry-After 的两种形式，并回退到退避）</div>
+<div class="step"><strong>第二条评论</strong><br>已推送 3f9c2ab41：把 <code>Retry-After</code> 按秒或日期读取，缺失时回退到指数退避，并更新 <code>retry.test.ts</code> 以期待这些延迟。要撤回，请 revert 3f9c2ab41，或去掉 <code>claude-pr-steward-watching</code> 标签来彻底停止我。</div>
+<div class="step"><strong>All checks have passed（全部检查已通过）</strong><br>Claude Code Review：未发现问题；ci/build、ci/lint、ci/test 均成功。</div>
+</details></figure>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<p>From there, <strong>Claude Approvals</strong> applies an approval policy that the team writes as a file in the repository. Claude can approve routine changes on its own if the policy allows it, or can require deeper human sign-off for certain scenarios. It works like a smarter CODEOWNERS file. Teams can have Claude Approvals consider a variety of signals in its decision-making process, including Code Review findings or their own classifiers.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/2431108db7d1ad28.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/2431108db7d1ad28.jpg"><source type="image/webp" srcset="./assets/optimized/2431108db7d1ad28-640-q88.webp 640w, ./assets/optimized/2431108db7d1ad28-1024-q88.webp 1024w, ./assets/optimized/2431108db7d1ad28-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/2431108db7d1ad28.jpg" alt="Example .claude/approvals.yml policy file" width="3000" height="2358" decoding="async" loading="lazy"></picture></a><figcaption>A sample approval policy in the repository</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>仓库中的 <code>.claude/approvals.yml</code> 示例</h4>
+<div class="step"><strong>第一条规则</strong><br>purpose：大多数代码需要两个人；当 Claude 的审查通过时，一个人即可。</div>
+<div class="step"><strong>第二条规则（高亮）</strong><br>purpose：文档。当 Claude 的审查通过时，由 Claude 批准（seats 为 0）。</div>
+<div class="step"><strong>第三条规则</strong><br>purpose：计费。需要两个不是作者的人，其中一人来自 payments。使用 <code>nested: inherit</code>，并从 <code>humans</code> / <code>acme/payments</code> 中排除 <code>!pr/authors</code>。</div>
+</details></figure>
+</div><div class="cell cn">
+<p>接下来，<strong>Claude Approvals</strong> 会应用团队写在仓库文件里的批准政策。如果政策允许，Claude 可以自行批准常规变更；在某些情形下，也可以要求更深入的人工签字。它的作用类似于一份更聪明的 CODEOWNERS 文件。团队可以让 Claude Approvals 在决策时参考多种信号，包括 Code Review 的发现，或团队自己的 classifier。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/2431108db7d1ad28.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/2431108db7d1ad28.jpg"><source type="image/webp" srcset="./assets/optimized/2431108db7d1ad28-640-q88.webp 640w, ./assets/optimized/2431108db7d1ad28-1024-q88.webp 1024w, ./assets/optimized/2431108db7d1ad28-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/2431108db7d1ad28.jpg" alt="示例文件 .claude/approvals.yml" width="3000" height="2358" decoding="async" loading="lazy"></picture></a><figcaption>仓库里的一份批准政策示例</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>仓库中的 <code>.claude/approvals.yml</code> 示例</h4>
+<div class="step"><strong>第一条规则</strong><br>purpose：大多数代码需要两个人；当 Claude 的审查通过时，一个人即可。</div>
+<div class="step"><strong>第二条规则（高亮）</strong><br>purpose：文档。当 Claude 的审查通过时，由 Claude 批准（seats 为 0）。</div>
+<div class="step"><strong>第三条规则</strong><br>purpose：计费。需要两个不是作者的人，其中一人来自 payments。使用 <code>nested: inherit</code>，并从 <code>humans</code> / <code>acme/payments</code> 中排除 <code>!pr/authors</code>。</div>
+</details></figure>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<p>Code Review is generally available, and the other two are in beta. /ship is a command you run yourself in Claude Code to try Claude Ship on your own pull requests. It comes with the latest version of Claude Code, and it works even before an admin has turned on any of the agents.</p>
+<p>You can partially automate the first two steps today. The last step is a decision that you set in your branch protections and (if your team adopts one) your policy file. Here is how it breaks down using the three agents that are part of Claude Ship:</p>
+<figure class="callout has-img"><a href="./assets/translations/original/04c436df37821ba2.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/04c436df37821ba2.jpg"><source type="image/webp" srcset="./assets/optimized/04c436df37821ba2-640-q88.webp 640w, ./assets/optimized/04c436df37821ba2-1024-q88.webp 1024w, ./assets/optimized/04c436df37821ba2-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/04c436df37821ba2.jpg" alt="Which command, when? A timeline of /code-review, /ship and /steward" width="1800" height="916" decoding="async" loading="lazy"></picture></a><figcaption>Which command, when?</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Which command, when? · 什么时候用哪条命令？</h4>
+<div class="step"><strong>Before you push（推送之前）· <code>/code-review</code></strong><br>在其他人看到之前先找出 bug。</div>
+<div class="step"><strong>Ready to open a PR（准备开 PR）· <code>/ship</code></strong><br>打开、审查并值守你的 PR。</div>
+<div class="step"><strong>PR already open（PR 已经开出）· <code>/steward</code></strong><br>让已开出的 PR 继续向前走。</div>
+<p>下方说明：Runs in your session. Keep it open.（在你的 session 里运行。保持它开启。）</p>
+<div class="step"><strong>Claude Ship</strong><br>A team's PRs, automatically.（自动处理团队的 PR。）Agents your team turns on.（由团队开启的 agent。）Code Review 已正式可用；PR Steward、Claude Approvals 为 beta。</div>
+</details></figure>
+<figure class="callout has-img"><a href="./assets/translations/original/763ef2f618620360.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/763ef2f618620360.jpg"><source type="image/webp" srcset="./assets/optimized/763ef2f618620360-640-q88.webp 640w, ./assets/optimized/763ef2f618620360-1024-q88.webp 1024w, ./assets/optimized/763ef2f618620360-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/763ef2f618620360.jpg" alt="Which command, when? A table of commands and where they run" width="2400" height="1284" decoding="async" loading="lazy"></picture></a><figcaption>Which command, when?</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Which command, when? · 什么时候用哪条命令？</h4>
+<p>列：You want Claude to（你希望 Claude 做的事）／Run（运行）／Where it runs（在哪里运行）</p>
+<div class="step">在其他人看到之前先找出 bug → <code>/code-review</code> → Your session（你的 session）</div>
+<div class="step">开出一个 PR，审查它，并继续处理随后出现的问题 → <code>/ship</code> → Your session</div>
+<div class="step">照看一个你已经开出的 PR → <code>/steward</code> → Your session</div>
+<div class="step">在团队的 PR 上自动做这些事 → Claude Ship → 默认在 Anthropic 的云端，由团队配置</div>
+</details></figure>
+</div><div class="cell cn">
+<p>Code Review 已经正式可用，另外两个还在 beta。<code>/ship</code> 是你在 Claude Code 里自己运行的命令，用来在自己的 PR 上试用 Claude Ship。它随最新版 Claude Code 提供，即使管理员还没有开启任何 agent，它也能用。</p>
+<p>前两步你今天就可以部分自动化。最后一步是一个决定，写在分支保护规则里，以及（如果团队采用了的话）政策文件里。用 Claude Ship 包含的三个 agent 来看，分工如下：</p>
+<figure class="callout has-img"><a href="./assets/translations/original/04c436df37821ba2.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/04c436df37821ba2.jpg"><source type="image/webp" srcset="./assets/optimized/04c436df37821ba2-640-q88.webp 640w, ./assets/optimized/04c436df37821ba2-1024-q88.webp 1024w, ./assets/optimized/04c436df37821ba2-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/04c436df37821ba2.jpg" alt="什么时候用哪条命令？/code-review、/ship 与 /steward 的时间线" width="1800" height="916" decoding="async" loading="lazy"></picture></a><figcaption>什么时候用哪条命令？</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Which command, when? · 什么时候用哪条命令？</h4>
+<div class="step"><strong>Before you push（推送之前）· <code>/code-review</code></strong><br>在其他人看到之前先找出 bug。</div>
+<div class="step"><strong>Ready to open a PR（准备开 PR）· <code>/ship</code></strong><br>打开、审查并值守你的 PR。</div>
+<div class="step"><strong>PR already open（PR 已经开出）· <code>/steward</code></strong><br>让已开出的 PR 继续向前走。</div>
+<p>下方说明：Runs in your session. Keep it open.（在你的 session 里运行。保持它开启。）</p>
+<div class="step"><strong>Claude Ship</strong><br>A team's PRs, automatically.（自动处理团队的 PR。）Agents your team turns on.（由团队开启的 agent。）Code Review 已正式可用；PR Steward、Claude Approvals 为 beta。</div>
+</details></figure>
+<figure class="callout has-img"><a href="./assets/translations/original/763ef2f618620360.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/763ef2f618620360.jpg"><source type="image/webp" srcset="./assets/optimized/763ef2f618620360-640-q88.webp 640w, ./assets/optimized/763ef2f618620360-1024-q88.webp 1024w, ./assets/optimized/763ef2f618620360-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/763ef2f618620360.jpg" alt="什么时候用哪条命令？命令及其运行位置对照表" width="2400" height="1284" decoding="async" loading="lazy"></picture></a><figcaption>什么时候用哪条命令？</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Which command, when? · 什么时候用哪条命令？</h4>
+<p>列：You want Claude to（你希望 Claude 做的事）／Run（运行）／Where it runs（在哪里运行）</p>
+<div class="step">在其他人看到之前先找出 bug → <code>/code-review</code> → Your session（你的 session）</div>
+<div class="step">开出一个 PR，审查它，并继续处理随后出现的问题 → <code>/ship</code> → Your session</div>
+<div class="step">照看一个你已经开出的 PR → <code>/steward</code> → Your session</div>
+<div class="step">在团队的 PR 上自动做这些事 → Claude Ship → 默认在 Anthropic 的云端，由团队配置</div>
+</details></figure>
+</div></section>
+
+<div class="section-head">On your own PRs / 先在自己的 PR 上用</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Getting started today with /code-review</h3>
+<p>If you only do one thing from this post, review your branch before you push it. Any bugs you catch at this point are less likely to come back later as review comments or failed checks that pull you off of your next task. At the Claude Code prompt, enter this command:</p>
+<pre><code>/code-review</code></pre>
+<p>It reviews the commits on your branch and your uncommitted changes for correctness bugs. A few variations to keep in mind:</p>
+<pre><code>/code-review high 1234       # review PR 1234 at high effort
+/code-review --fix           # apply the findings to your working tree
+/code-review --comment 1234  # post the findings on the PR
+/code-review ultra           # run a deeper review in the cloud</code></pre>
+<p>The effort range goes from low to max, with low returning only the findings the review is most sure about and higher levels giving you a broader set (including some it's less sure about). The command remembers your last effort, so enter a new one if the risk level changes.</p>
+<p>A few caveats:</p>
+<ul>
+<li>You will want to take extra care when using the ultra setting, which runs in the cloud, needs a login at <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">claude.ai</a>, and can be billed separately from your plan. Read the <a href="https://code.claude.com/docs/en/ultrareview" target="_blank" rel="noopener noreferrer">ultrareview docs</a> before trying it.</li>
+<li>Edits made by --fix during a background review may not be caught by /rewind. Commit first if you want an easy way back.</li>
+<li>Local /code-review reads your CLAUDE.md files, but not REVIEW.md. This matters later.</li>
+</ul>
+<p>The first thing you should do is run /code-review a few times to understand what it catches and where it gets things wrong. You'll use this later.</p>
+</div><div class="cell cn">
+<h3>今天就开始用 /code-review</h3>
+<p>如果这篇文章你只做一件事，请在推送之前先审查自己的分支。这一步抓到的 bug，后面就不太会再以审查评论或失败检查的形式出现，把你从下一件事里拉开。在 Claude Code 的提示符下输入这条命令：</p>
+<pre><code>/code-review</code></pre>
+<p>它会审查你分支上的 commit，以及尚未提交的变更，寻找正确性方面的 bug。下面几个变体值得记住：</p>
+<pre><code>/code-review high 1234       # review PR 1234 at high effort
+/code-review --fix           # apply the findings to your working tree
+/code-review --comment 1234  # post the findings on the PR
+/code-review ultra           # run a deeper review in the cloud</code></pre>
+<p>effort 的范围从 low 到 max。low 只返回审查最有把握的发现，更高等级会给出更广的一组（其中也包括把握没那么大的）。这条命令会记住你上次用的 effort，如果风险变了，请重新指定一档。</p>
+<p>几点要注意：</p>
+<ul>
+<li>使用 ultra 档时要格外小心：它在云端运行，需要登录 <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">claude.ai</a>，费用可能与你的套餐分开计算。试用前请先阅读 <a href="https://code.claude.com/docs/en/ultrareview" target="_blank" rel="noopener noreferrer">ultrareview 文档</a>。</li>
+<li>后台审查期间由 <code>--fix</code> 做出的修改，不一定能被 <code>/rewind</code> 捕获。如果想轻松回到原状，请先 commit。</li>
+<li>本地的 <code>/code-review</code> 会读你的 CLAUDE.md 文件，但不会读 REVIEW.md。这一点后面会用到。</li>
+</ul>
+<p>你首先应该做的，是多跑几次 <code>/code-review</code>，弄清楚它能抓住什么、又会在哪里弄错。这些观察后面会用到。</p>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Run /ship for your next PR</h3>
+<p>Once you're ready, type:</p>
+<pre><code>/ship</code></pre>
+<p>If you don't have a PR for your branch yet, /ship will:</p>
+<ol>
+<li>Commit your pending changes. It behaves as if you had run <code>git add -A</code>, so it will respect your <code>.gitignore</code>. It will create a branch if necessary, and it will use your session to write the commit message. You will be notified of this before the commit, and can abort by hitting Esc.</li>
+<li>Push and create the PR as you.</li>
+<li>Perform a code review using /code-review, unless the commit has already been reviewed by Code Review. If the code review reports any issues, it will fix the ones it judges as valid for you.</li>
+<li>Watch the PR for up to seven days. It will work on failing checks, conflicts, and review comments, and will exit if the PR is merged or closed.</li>
+</ol>
+<p>The first step, where <code>/ship</code> commits your pending changes as if you had run <code>git add -A</code>, sometimes catches people by surprise, so be sure to run <code>git status</code> before running <code>/ship</code>.</p>
+<p>The command will not commit changes that touch files with names that look like secrets, or files that set rules, like CLAUDE.md, REVIEW.md, or anything in the <code>.claude/</code> or <code>.github/</code> directories. You will need to make these commits manually beforehand.</p>
+<p>Also, if you are working in a public repository, the command will not commit any changes for you. You will need to commit any pending changes manually before you can proceed, and if the PR already exists, it won't include your pending changes.</p>
+</div><div class="cell cn">
+<h3>下一次 PR 时运行 /ship</h3>
+<p>准备好了就输入：</p>
+<pre><code>/ship</code></pre>
+<p>如果你的分支还没有对应的 PR，<code>/ship</code> 会：</p>
+<ol>
+<li>提交你尚未提交的变更。行为相当于你运行了 <code>git add -A</code>，因此会尊重 <code>.gitignore</code>。必要时它会创建分支，并用当前 session 来写 commit message。提交前会通知你，按 Esc 可以中止。</li>
+<li>以你的身份推送并创建 PR。</li>
+<li>用 <code>/code-review</code> 做一次代码审查，除非这次 commit 已经被 Code Review 审查过。如果审查报告了问题，它会为你修复那些它判断为有效的问题。</li>
+<li>最多值守这个 PR 七天。它会处理失败的检查、冲突和审查评论；PR 被合并或关闭后，它会退出。</li>
+</ol>
+<p>第一步——<code>/ship</code> 会像执行了 <code>git add -A</code> 一样提交未提交的变更——有时会让人措手不及，所以运行 <code>/ship</code> 之前一定要先看 <code>git status</code>。</p>
+<p>这条命令不会提交：文件名看起来像密钥的变更，以及制定规则的文件，比如 CLAUDE.md、REVIEW.md，或 <code>.claude/</code>、<code>.github/</code> 目录下的任何内容。这些需要你事先手动提交。</p>
+<p>此外，如果你在公共仓库里工作，这条命令不会替你提交任何变更。你需要先手动提交未提交的变更才能继续；如果 PR 已经存在，它也不会把你未提交的变更加进去。</p>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Optional: specifying effort level, PR, or bot</h3>
+<pre><code>/ship high            # run at high effort
+/ship 41              # work on pull request #41
+/ship +my-lint-bot    # also read comments from my-lint-bot
+/ship stop            # end the watch</code></pre>
+<p>The command will by default read comments by you, people with write access, and the Claude GitHub App. You can specify additional bots in the form <code>+name</code>. If that bot comments, it will be treated as an assertion to check against the code.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/5072578949605b06.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/5072578949605b06.jpg"><source type="image/webp" srcset="./assets/optimized/5072578949605b06-640-q88.webp 640w, ./assets/optimized/5072578949605b06-1024-q88.webp 1024w, ./assets/optimized/5072578949605b06-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/5072578949605b06.jpg" alt="FIGURE 2: A single run of /ship, with the terminal and the PR" width="1800" height="3998" decoding="async" loading="lazy"></picture></a><figcaption>FIGURE 2 — A single run of /ship, with the terminal and the PR</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>FIGURE 2 · 一次 <code>/ship</code> 的完整运行，左侧是终端，右侧是 PR</h4>
+<div class="step"><strong>1/6 Commit</strong><br>即将把 3 个文件提交到一个新分支。Esc 可停止。右侧：尚无 PR。分支 <code>fix-invoice-rounding</code> 只存在于 mira 的电脑上。</div>
+<div class="step"><strong>2/6 Open the PR（打开 PR）</strong><br>已提交到该分支，并以 mira 的身份推送并打开 PR #41。右侧：Fix rounding on invoice totals #41，unit-tests 正在运行。</div>
+<div class="step"><strong>3/6 Review and fix（审查并修复）</strong><br>正在用 <code>/code-review</code> 审查。发现：数量为零的行会在 <code>total.ts</code> 里除以零。已修复该发现并推送。右侧：mira 推送了 “Guard zero-quantity lines”。</div>
+<div class="step"><strong>4/6 A red check, fixed（红灯检查，已修好）</strong><br>正在值守 PR #41。unit-tests 失败：过期的 rounding snapshot。已更新 snapshot 并推送，随后 unit-tests 通过。</div>
+<div class="step"><strong>5/6 回复了一条评论，并把一个设计问题交回</strong><br>jonas 的两条新评论。已将 roundup 重命名为 roundHalfEven，推送并回复。jonas 问 totals 是否应放到共享的 money 模块里——这是一个设计问题，所以没有改。该问题被标记为 BROUGHT TO MIRA（交给 mira）。</div>
+<div class="step"><strong>6/6 Waiting on a person（在等一个人）</strong><br>告诉 jonas，money 模块可以后续再做。检查已通过，评论已回复。仍在值守。还缺 1 个批准。状态：WAITING ON A PERSON。</div>
+<p>请保持 session 开启、电脑不休眠、分支处于检出状态。<code>/ship stop</code> 会结束值守。</p>
+<p>图注：工具完成了提交、打开、审查、修复失败的检查、回复评论，然后停下来等人回应。</p>
+</details></figure>
+</div><div class="cell cn">
+<h3>可选：指定 effort、PR 或 bot</h3>
+<pre><code>/ship high            # run at high effort
+/ship 41              # work on pull request #41
+/ship +my-lint-bot    # also read comments from my-lint-bot
+/ship stop            # end the watch</code></pre>
+<p>默认情况下，这条命令会阅读你本人、具有写权限的人，以及 Claude GitHub App 的评论。你可以用 <code>+name</code> 的形式指定额外的 bot。如果那个 bot 发表了评论，它会被当作一条需要对照代码核验的断言。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/5072578949605b06.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/5072578949605b06.jpg"><source type="image/webp" srcset="./assets/optimized/5072578949605b06-640-q88.webp 640w, ./assets/optimized/5072578949605b06-1024-q88.webp 1024w, ./assets/optimized/5072578949605b06-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/5072578949605b06.jpg" alt="图 2：一次 /ship 的完整运行，左侧是终端，右侧是 PR" width="1800" height="3998" decoding="async" loading="lazy"></picture></a><figcaption>图 2 — 一次 /ship 的完整运行，左侧是终端，右侧是 PR</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>FIGURE 2 · 一次 <code>/ship</code> 的完整运行，左侧是终端，右侧是 PR</h4>
+<div class="step"><strong>1/6 Commit</strong><br>即将把 3 个文件提交到一个新分支。Esc 可停止。右侧：尚无 PR。分支 <code>fix-invoice-rounding</code> 只存在于 mira 的电脑上。</div>
+<div class="step"><strong>2/6 Open the PR（打开 PR）</strong><br>已提交到该分支，并以 mira 的身份推送并打开 PR #41。右侧：Fix rounding on invoice totals #41，unit-tests 正在运行。</div>
+<div class="step"><strong>3/6 Review and fix（审查并修复）</strong><br>正在用 <code>/code-review</code> 审查。发现：数量为零的行会在 <code>total.ts</code> 里除以零。已修复该发现并推送。右侧：mira 推送了 “Guard zero-quantity lines”。</div>
+<div class="step"><strong>4/6 A red check, fixed（红灯检查，已修好）</strong><br>正在值守 PR #41。unit-tests 失败：过期的 rounding snapshot。已更新 snapshot 并推送，随后 unit-tests 通过。</div>
+<div class="step"><strong>5/6 回复了一条评论，并把一个设计问题交回</strong><br>jonas 的两条新评论。已将 roundup 重命名为 roundHalfEven，推送并回复。jonas 问 totals 是否应放到共享的 money 模块里——这是一个设计问题，所以没有改。该问题被标记为 BROUGHT TO MIRA（交给 mira）。</div>
+<div class="step"><strong>6/6 Waiting on a person（在等一个人）</strong><br>告诉 jonas，money 模块可以后续再做。检查已通过，评论已回复。仍在值守。还缺 1 个批准。状态：WAITING ON A PERSON。</div>
+<p>请保持 session 开启、电脑不休眠、分支处于检出状态。<code>/ship stop</code> 会结束值守。</p>
+<p>图注：工具完成了提交、打开、审查、修复失败的检查、回复评论，然后停下来等人回应。</p>
+</details></figure>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Letting Claude watch the PR</h3>
+<p>Claude watches the PR as you, on your machine, and uses your quota. Closing your laptop stops it, so keep the session open and the machine awake. You'll also need to be logged in to the GitHub CLI (run <code>gh auth login</code> first), and it only watches a PR that you opened.</p>
+<p>For anything other than <a href="https://code.claude.com/docs/en/permission-modes" target="_blank" rel="noopener noreferrer">auto mode</a>, <a href="https://code.claude.com/docs/en/ship-command#what-claude-does-during-a-watch" target="_blank" rel="noopener noreferrer">the watch</a> stops at every prompt and requires your response. It won't watch in bypass-permissions mode. Note that on Windows, /ship opens the PR and reviews, but the watch doesn't start.</p>
+<p>Ensure that the watch has its own checkout. You need to leave the branch checked out. If you're just going to jump straight into your next task, then make sure to use a separate worktree for one of them.</p>
+<p>If the watch fails to start, Claude will explain why but still review the PR. For example, you can't run a watch if you have a PreToolUse or PermissionRequest hook on Bash in the <code>.claude/settings.json</code> of your repo.</p>
+<p>Additionally, the watch uses up model turns while you're away, so it counts against your plan usage or API bill. The first time you use it, it's a good idea to be near your machine to make sure usage is within your expectations.</p>
+</div><div class="cell cn">
+<h3>让 Claude 值守这个 PR</h3>
+<p>Claude 会以你的身份、在你的机器上值守这个 PR，并占用你的配额。合上笔记本它就会停，所以请保持 session 开启、机器不休眠。你还需要已登录 GitHub CLI（先运行 <code>gh auth login</code>），而且它只会值守由你开出的 PR。</p>
+<p>除了 <a href="https://code.claude.com/docs/en/permission-modes" target="_blank" rel="noopener noreferrer">auto 模式</a> 以外，<a href="https://code.claude.com/docs/en/ship-command#what-claude-does-during-a-watch" target="_blank" rel="noopener noreferrer">值守</a>会在每个提示处停下来，等你回应。它不会在 bypass-permissions 模式下值守。注意：在 Windows 上，<code>/ship</code> 会打开 PR 并做审查，但值守不会启动。</p>
+<p>请确保值守有自己的 checkout。你需要保持该分支处于检出状态。如果你马上要开始下一件事，请给其中一边单独准备一个 worktree。</p>
+<p>如果值守没能启动，Claude 会说明原因，但仍会审查这个 PR。例如，如果你的仓库在 <code>.claude/settings.json</code> 里为 Bash 设置了 PreToolUse 或 PermissionRequest hook，就无法启动值守。</p>
+<p>另外，值守在你不在时也会消耗 model turn，因此会计入套餐用量或 API 账单。第一次使用时，最好人在机器旁边，确认用量符合预期。</p>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Only run the watch on repos you trust</h3>
+<p>The watch will merge the base branch into yours when necessary and then run commands like your tests. In other words, anyone who has the ability to land changes on the base branch has the ability to run commands on your machine during the watch. <strong>Only run the watch locally on a repo where you trust everyone who can land changes on the base branch.</strong></p>
+<p>Claude is told never to merge the PR, and Claude Code also constrains the gh and git commands it can run during an unattended turn, preventing direct merging or force-pushing. The watch's own commits also leave out the files that set the rules: .github/, CODEOWNERS, CLAUDE.md, .claude/, git hooks, etc.</p>
+<p>However, this doesn't protect against all vectors. For example, the test script also runs under your credentials, and if you type a message during a turn, that will allow the constraints to be lifted for that turn. Additionally, if auto-merge is enabled, a fix from the watch could end up being what allows GitHub to merge.</p>
+<p>Furthermore, the commits and pushes made by Claude during the watch are not affected by git hooks in your repo, so make sure any checks that need to be present are added to CI and branch rules.</p>
+<p>For the full terms of the watch, run /ship terms in the product before your first time using it.</p>
+</div><div class="cell cn">
+<h3>只在你信任的仓库上运行值守</h3>
+<p>必要时，值守会把基线分支合并进你的分支，然后运行测试之类的命令。换句话说，任何有权把变更合入基线分支的人，都有能力在值守期间在你的机器上运行命令。<strong>请只在这样的仓库本地运行值守：你信任每一个能把变更合入基线分支的人。</strong></p>
+<p>Claude 被要求绝不合并 PR，Claude Code 也会限制它在无人值守的 turn 里可运行的 <code>gh</code> 和 <code>git</code> 命令，防止直接合并或 force-push。值守自己产生的 commit 也会排除那些制定规则的文件：<code>.github/</code>、CODEOWNERS、CLAUDE.md、<code>.claude/</code>、git hooks 等等。</p>
+<p>不过，这并不能防住所有途径。例如，测试脚本同样会在你的凭据下运行；如果你在某个 turn 中输入了一条消息，该 turn 的限制就会被解除。此外，如果启用了 auto-merge，值守提交的一次修复，最终可能正好让 GitHub 完成合并。</p>
+<p>再者，Claude 在值守期间所做的 commit 和推送，不受仓库里 git hooks 的影响，所以任何必须存在的检查，都应当加到 CI 和分支规则中。</p>
+<p>完整的值守条款，请在第一次使用前，在产品里运行 <code>/ship terms</code> 查看。</p>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>/steward for existing PRs</h3>
+<p>Many PRs don't need another review, but need someone to see them through to merge. If you have such a PR, check out the branch and run:</p>
+<pre><code>/steward 41</code></pre>
+<p>It will run just the watch component of /ship. It will watch the PR you opened and work on things like failing checks, conflicts, and comments, without reviewing it first.</p>
+<p>If you don't specify a PR number, it will watch the PR for the current branch. It will take the same <code>+name</code> bots, and the same caveats as before apply.</p>
+<p>However, if a PR is already labeled Steward, it will not run the local watch. And if it is unable to run a watch, /steward will not do anything.</p>
+<p>If you want to stop the watch, you can use either /steward stop or /ship stop. Since a session can only run one watch at a time, starting a new one will terminate the previous one.</p>
+<p>Don't confuse /steward with PR Steward, which is a team service that runs as claude[bot] after being enabled by an admin. The /steward command runs as you, in your session.</p>
+<p>A PR that has red checks is a good place to start. A PR that gets stuck in a conflict loop is also a good candidate. On the flip side, a PR that's in the middle of a design debate is a bad one because that's your debate to settle.</p>
+</div><div class="cell cn">
+<h3>对已有 PR 使用 /steward</h3>
+<p>许多 PR 并不需要再审查一轮，但需要有人把它们送到合并。如果你有这样的 PR，检出该分支并运行：</p>
+<pre><code>/steward 41</code></pre>
+<p>它只会运行 <code>/ship</code> 的值守部分。它会值守你开出的 PR，处理失败的检查、冲突和评论，而不会先做审查。</p>
+<p>如果不指定 PR 号，它会值守当前分支对应的 PR。它同样接受 <code>+name</code> 形式的 bot，前面的注意事项同样适用。</p>
+<p>不过，如果一个 PR 已经被打上 Steward 标签，它就不会启动本地值守。如果无法启动值守，<code>/steward</code> 什么也不会做。</p>
+<p>想结束值守，可以用 <code>/steward stop</code> 或 <code>/ship stop</code>。一个 session 同时只能运行一个值守，启动新的会终止上一个。</p>
+<p>不要把 <code>/steward</code> 和 PR Steward 搞混。后者是管理员开启后、以 claude[bot] 身份运行的团队服务。<code>/steward</code> 命令是以你的身份、在你的 session 里运行的。</p>
+<p>检查已经变红的 PR，是一个合适的起点。陷入冲突循环的 PR 也适合。反过来，正处在设计争论中的 PR 就不合适，因为那场争论该由你来了结。</p>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Claude escalates bigger calls to you</h3>
+<p>As part of the watch, Claude is told to make small changes and elevate the bigger ones. Things like:</p>
+<ul>
+<li>A request to redesign something, like a new API or a bigger scope</li>
+<li>A security issue it wasn't able to resolve</li>
+</ul>
+<p>It also pushes at most 3 times for a given issue, and then reports the attempted solutions.</p>
+<p>That's roughly equivalent to our claim in the <a href="https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/" target="_blank" rel="noopener noreferrer">verification blog post</a>: if we keep running the same check and it keeps failing after three rounds, then the approach is probably wrong.</p>
+<p>At this point, it escalates to the author of the code.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/27762c8ee26b858a.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/27762c8ee26b858a.jpg"><source type="image/webp" srcset="./assets/optimized/27762c8ee26b858a-640-q88.webp 640w, ./assets/optimized/27762c8ee26b858a-1024-q88.webp 1024w, ./assets/optimized/27762c8ee26b858a-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/27762c8ee26b858a.jpg" alt="What each one covers: find problems, work through them, decide" width="1800" height="718" decoding="async" loading="lazy"></picture></a><figcaption>What each one covers</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>What each one covers · 各自覆盖什么</h4>
+<p>推送之前用 <code>/code-review</code>；准备开 PR 时用 <code>/ship</code>；PR 已经开出时用 <code>/steward</code>。</p>
+<div class="step"><strong>Find problems（找问题）</strong><br><code>/code-review</code>：finds（找）。<code>/ship</code>：finds and works through（找，并着手处理）。</div>
+<div class="step"><strong>Work through them（把问题处理掉）</strong><br><code>/ship</code>：finds and works through。<code>/steward</code>：works through（处理）。</div>
+<div class="step"><strong>Decide（做决定）</strong><br>仍然在你手里，由你的分支规则和你的政策决定。</div>
+</details></figure>
+</div><div class="cell cn">
+<h3>Claude 会把更大的决定交给你</h3>
+<p>作为值守的一部分，Claude 被要求做小的改动，并把更大的问题升级给你。比如：</p>
+<ul>
+<li>要求重新设计某样东西，比如一套新 API，或更大的范围</li>
+<li>它未能解决的安全问题</li>
+</ul>
+<p>对同一个问题，它最多推送 3 次，然后汇报尝试过的方案。</p>
+<p>这大致相当于我们在<a href="https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/" target="_blank" rel="noopener noreferrer">验证流程那篇博客</a>里的说法：如果同一个检查连续跑、连续三轮都失败，那说明做法大概不对。</p>
+<p>到了这一步，它会升级给代码的作者。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/27762c8ee26b858a.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/27762c8ee26b858a.jpg"><source type="image/webp" srcset="./assets/optimized/27762c8ee26b858a-640-q88.webp 640w, ./assets/optimized/27762c8ee26b858a-1024-q88.webp 1024w, ./assets/optimized/27762c8ee26b858a-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/27762c8ee26b858a.jpg" alt="各自覆盖什么：找问题、处理问题、做决定" width="1800" height="718" decoding="async" loading="lazy"></picture></a><figcaption>各自覆盖什么</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>What each one covers · 各自覆盖什么</h4>
+<p>推送之前用 <code>/code-review</code>；准备开 PR 时用 <code>/ship</code>；PR 已经开出时用 <code>/steward</code>。</p>
+<div class="step"><strong>Find problems（找问题）</strong><br><code>/code-review</code>：finds（找）。<code>/ship</code>：finds and works through（找，并着手处理）。</div>
+<div class="step"><strong>Work through them（把问题处理掉）</strong><br><code>/ship</code>：finds and works through。<code>/steward</code>：works through（处理）。</div>
+<div class="step"><strong>Decide（做决定）</strong><br>仍然在你手里，由你的分支规则和你的政策决定。</div>
+</details></figure>
+</div></section>
+
+<div class="section-head">In your repo / 写进你的仓库</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p>As you get a few PRs under your belt, you'll start to notice patterns. For instance:</p>
+<ul>
+<li>The same comment from the same reviewer</li>
+<li>A setup instruction that Claude has to figure out</li>
+<li>A flaky check</li>
+</ul>
+<p>You can start to write these down for your team, in one of a few files, depending on which tool needs to read it:</p>
+<figure class="callout has-img"><a href="./assets/translations/original/728ae63c7b3b0c0e.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/728ae63c7b3b0c0e.jpg"><source type="image/webp" srcset="./assets/optimized/728ae63c7b3b0c0e-640-q88.webp 640w, ./assets/optimized/728ae63c7b3b0c0e-1024-q88.webp 1024w, ./assets/optimized/728ae63c7b3b0c0e-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/728ae63c7b3b0c0e.jpg" alt="Where do I put this? A table of repeating work and the files that hold it" width="2400" height="1560" decoding="async" loading="lazy"></picture></a><figcaption>Where do I put this?</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Where do I put this? · 这段该写到哪里？</h4>
+<p>列：What keeps repeating（反复出现的东西）／Put it in（写进）／Read by（由谁读取）</p>
+<div class="step">代码应当遵守的约定 → CLAUDE.md → Claude Code、本地 <code>/code-review</code>、Code Review 和 PR Steward</div>
+<div class="step">关于 PR 该如何被审查的规则 → REVIEW.md → Code Review 和 PR Steward，不包括本地 <code>/code-review</code></div>
+<div class="step">如何启动并演练这个应用 → <code>.claude/skills/verify/SKILL.md</code> → Claude Code 在验证一次变更时读取</div>
+<div class="step">这里的 PR 应当如何被照看 → <code>.claude/skills/steward/SKILL.md</code> → <code>/ship</code>、<code>/steward</code> 和 PR Steward</div>
+</details></figure>
+<figure class="callout has-img"><a href="./assets/translations/original/d72ecaed79a8c224.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/d72ecaed79a8c224.jpg"><source type="image/webp" srcset="./assets/optimized/d72ecaed79a8c224-640-q88.webp 640w, ./assets/optimized/d72ecaed79a8c224-1024-q88.webp 1024w, ./assets/optimized/d72ecaed79a8c224-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/d72ecaed79a8c224.jpg" alt="FIGURE 3: Where do I put this? Examples of repeated rules and who reads them" width="1800" height="1614" decoding="async" loading="lazy"></picture></a><figcaption>FIGURE 3 — Where do I put this?</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>FIGURE 3 · 这段该写到哪里？反复出现的事情、该写进的文件、谁会读它，以及一条示例规则。</h4>
+<div class="step"><strong>审查者反复要求做租户范围限定</strong><br>文件：CLAUDE.md。读取者：Claude Code、本地 <code>/code-review</code>、Code Review、PR Steward。示例：Database queries are scoped to the caller's tenant.（数据库查询必须限定在调用方的租户范围内。）</div>
+<div class="step"><strong>生成文件上出现太多 nit</strong><br>文件：REVIEW.md。读取者：Code Review 和 PR Steward，不包括本地 <code>/code-review</code>。示例：Skip generated files and lockfiles.（跳过生成文件和 lockfile。）</div>
+<div class="step"><strong>我总在解释怎么启动应用</strong><br>文件：<code>.claude/skills/verify/SKILL.md</code>。读取者：Claude Code 在做验证时。示例：Start the stack with <code>npm run dev:stack</code>。</div>
+<div class="step"><strong>lockfile 冲突被人手工改掉</strong><br>文件：<code>.claude/skills/steward/SKILL.md</code>。读取者：<code>/ship</code>、<code>/steward</code>、PR Steward。示例：用 <code>npm install</code> 重新生成 lockfile，不要手工改。</div>
+<p>本地 <code>/code-review</code> 不会读取 REVIEW.md。</p>
+</details></figure>
+</div><div class="cell cn">
+<p>等你积累了几个 PR，就会开始注意到一些模式。例如：</p>
+<ul>
+<li>同一位审查者反复提出同一条评论</li>
+<li>一条 Claude 每次都得自己摸索的启动说明</li>
+<li>一个不稳定的检查</li>
+</ul>
+<p>你可以把这些写下来给团队看，写进不同的文件，取决于哪个工具需要读取：</p>
+<figure class="callout has-img"><a href="./assets/translations/original/728ae63c7b3b0c0e.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/728ae63c7b3b0c0e.jpg"><source type="image/webp" srcset="./assets/optimized/728ae63c7b3b0c0e-640-q88.webp 640w, ./assets/optimized/728ae63c7b3b0c0e-1024-q88.webp 1024w, ./assets/optimized/728ae63c7b3b0c0e-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/728ae63c7b3b0c0e.jpg" alt="这段该写到哪里？反复出现的工作与对应文件" width="2400" height="1560" decoding="async" loading="lazy"></picture></a><figcaption>这段该写到哪里？</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Where do I put this? · 这段该写到哪里？</h4>
+<p>列：What keeps repeating（反复出现的东西）／Put it in（写进）／Read by（由谁读取）</p>
+<div class="step">代码应当遵守的约定 → CLAUDE.md → Claude Code、本地 <code>/code-review</code>、Code Review 和 PR Steward</div>
+<div class="step">关于 PR 该如何被审查的规则 → REVIEW.md → Code Review 和 PR Steward，不包括本地 <code>/code-review</code></div>
+<div class="step">如何启动并演练这个应用 → <code>.claude/skills/verify/SKILL.md</code> → Claude Code 在验证一次变更时读取</div>
+<div class="step">这里的 PR 应当如何被照看 → <code>.claude/skills/steward/SKILL.md</code> → <code>/ship</code>、<code>/steward</code> 和 PR Steward</div>
+</details></figure>
+<figure class="callout has-img"><a href="./assets/translations/original/d72ecaed79a8c224.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/d72ecaed79a8c224.jpg"><source type="image/webp" srcset="./assets/optimized/d72ecaed79a8c224-640-q88.webp 640w, ./assets/optimized/d72ecaed79a8c224-1024-q88.webp 1024w, ./assets/optimized/d72ecaed79a8c224-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/d72ecaed79a8c224.jpg" alt="图 3：这段该写到哪里？反复出现的规则示例，以及谁会读它们" width="1800" height="1614" decoding="async" loading="lazy"></picture></a><figcaption>图 3 — 这段该写到哪里？</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>FIGURE 3 · 这段该写到哪里？反复出现的事情、该写进的文件、谁会读它，以及一条示例规则。</h4>
+<div class="step"><strong>审查者反复要求做租户范围限定</strong><br>文件：CLAUDE.md。读取者：Claude Code、本地 <code>/code-review</code>、Code Review、PR Steward。示例：Database queries are scoped to the caller's tenant.（数据库查询必须限定在调用方的租户范围内。）</div>
+<div class="step"><strong>生成文件上出现太多 nit</strong><br>文件：REVIEW.md。读取者：Code Review 和 PR Steward，不包括本地 <code>/code-review</code>。示例：Skip generated files and lockfiles.（跳过生成文件和 lockfile。）</div>
+<div class="step"><strong>我总在解释怎么启动应用</strong><br>文件：<code>.claude/skills/verify/SKILL.md</code>。读取者：Claude Code 在做验证时。示例：Start the stack with <code>npm run dev:stack</code>。</div>
+<div class="step"><strong>lockfile 冲突被人手工改掉</strong><br>文件：<code>.claude/skills/steward/SKILL.md</code>。读取者：<code>/ship</code>、<code>/steward</code>、PR Steward。示例：用 <code>npm install</code> 重新生成 lockfile，不要手工改。</div>
+<p>本地 <code>/code-review</code> 不会读取 REVIEW.md。</p>
+</details></figure>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Repeat comments become review rules</h3>
+<p>Let's say you get asked by a peer twice to make sure a new query contains a tenant check. If you use local review, you can write this down in CLAUDE.md, since /ship uses /code-review to review. And if you have Code Review on your repository, the review-only rules can go in the root REVIEW.md:</p>
+<pre><code># Review instructions
+
+## What Important means here
+
+Wrong results, leaked data or anything that blocks a rollback.
+Style and naming are Nit at most.
+
+## Always check
+- Database queries are scoped to the caller's tenant.
+- New API routes have an integration test.
+
+## Keep it quiet
+- Report at most five Nits.
+- Skip generated files and lockfiles.
+- Behavior claims need a file and line.</code></pre>
+<p>Code Review won't read the REVIEW.md file from the PR being reviewed. It will also only respect some instructions, like excluding paths and limiting nits, when the default branch is protected.</p>
+<p>Not every comment should be elevated. On our team, we have a principle that a pattern has to be repeated on at least 2 PRs to be considered for a rule. A person then approves the PR that adds the rule. That's a good bar to adopt. You should also be deleting rules as needed.</p>
+</div><div class="cell cn">
+<h3>反复出现的评论，变成审查规则</h3>
+<p>假设有同事两次提醒你：新查询必须包含租户检查。如果你用的是本地审查，可以把这条写进 CLAUDE.md，因为 <code>/ship</code> 是通过 <code>/code-review</code> 来审查的。如果你的仓库启用了 Code Review，只给审查器用的规则可以放在根目录的 REVIEW.md：</p>
+<pre><code># Review instructions
+
+## What Important means here
+
+Wrong results, leaked data or anything that blocks a rollback.
+Style and naming are Nit at most.
+
+## Always check
+- Database queries are scoped to the caller's tenant.
+- New API routes have an integration test.
+
+## Keep it quiet
+- Report at most five Nits.
+- Skip generated files and lockfiles.
+- Behavior claims need a file and line.</code></pre>
+<p>Code Review 不会读取正在被审查的那个 PR 里的 REVIEW.md。有些指令，比如排除路径、限制 nit 的数量，也只有在默认分支受保护时才会被遵守。</p>
+<p>不是每条评论都值得提升为规则。我们团队有一条原则：一种模式至少在 2 个 PR 上重复出现，才会被考虑写成规则。然后由一个人批准那条新增规则的 PR。这是一个值得采用的门槛。该删的规则，也应当删。</p>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Repeat setup becomes verify skills</h3>
+<p>If you find yourself constantly telling Claude how to boot up the app and navigate to specific pages, you should just write it down. Create <code>.claude/skills/verify/SKILL.md</code>. This can be in the root or in the directory of the code.</p>
+<pre><code>---
+name: verify
+description: Run the web app and exercise a change end to end. Use before committing.
+---</code></pre>
+<p>1. Start the stack with <code>npm run dev:stack</code>.</p>
+<p>2. Wait for <code>/healthz</code> on port 3000 to return 200.</p>
+<p>3. Sign in with the seeded test account.</p>
+<p>4. Exercise the changed flow in the browser and take a screenshot.</p>
+<p>5. Report the steps you ran and what you saw. Don't report success without them.</p>
+<p>Be sure to customize the commands.</p>
+<p>Have Claude run it a few times, and fix any flaky behaviors. People ignore verification they don't trust.</p>
+</div><div class="cell cn">
+<h3>反复出现的启动步骤，变成 verify skill</h3>
+<p>如果你发现自己总在告诉 Claude 怎么启动应用、怎么进到特定页面，那就直接写下来。创建 <code>.claude/skills/verify/SKILL.md</code>。可以放在仓库根目录，也可以放在对应代码的目录里。</p>
+<pre><code>---
+name: verify
+description: Run the web app and exercise a change end to end. Use before committing.
+---</code></pre>
+<p>1. 用 <code>npm run dev:stack</code> 启动整个栈。</p>
+<p>2. 等待 3000 端口上的 <code>/healthz</code> 返回 200。</p>
+<p>3. 用预置的测试账号登录。</p>
+<p>4. 在浏览器里走一遍被改动的流程，并截图。</p>
+<p>5. 汇报你执行了哪些步骤、看到了什么。没有这些内容，不要报告成功。</p>
+<p>请务必把命令改成你自己的。</p>
+<p>让 Claude 多跑几次，并修好不稳定的行为。人们不会信任自己信不过的验证。</p>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Repeat PR maintenance becomes steward rules</h3>
+<p>This one can be easy to miss. The local watch reads the <code>.claude/skills/steward/SKILL.md</code> file from your working directory, whereas PR Steward, which runs in Anthropic's cloud, reads it from the default branch. Here's an example:</p>
+<pre><code>---
+name: steward
+description: House rules for looking after PRs in this repository
+user-invocable: false
+disable-model-invocation: true
+---</code></pre>
+<p>- Regenerate the lockfile with <code>npm install</code>; don't edit it by hand.</p>
+<p>- <code>e2e-nightly</code> is flaky. Re-run it once before looking for a cause.</p>
+<p>- Run <code>npm test</code> and <code>npm run lint</code> before pushing a fix.</p>
+<p>- Leave comments about API design to the author.</p>
+<p>In that example, the two settings at the top keep it out of the / menu and out of the skills that Claude picks on its own.</p>
+<p>The steward file can't change the watch's restrictions. However, anyone who can merge to the repository can edit the file, so review changes to it as carefully as you would review any changes to CI.</p>
+<p>If your team turns on PR Steward later, those guidelines will apply in Anthropic's cloud once they're on the default branch.</p>
+</div><div class="cell cn">
+<h3>反复出现的 PR 维护工作，变成 steward 规则</h3>
+<p>这一项很容易被漏掉。本地值守读取的是工作目录里的 <code>.claude/skills/steward/SKILL.md</code>，而在 Anthropic 云端运行的 PR Steward，读取的是默认分支上的那份。下面是一个例子：</p>
+<pre><code>---
+name: steward
+description: House rules for looking after PRs in this repository
+user-invocable: false
+disable-model-invocation: true
+---</code></pre>
+<p>- 用 <code>npm install</code> 重新生成 lockfile，不要手工改。</p>
+<p>- <code>e2e-nightly</code> 不稳定。先重跑一次，再去查原因。</p>
+<p>- 推送修复之前先运行 <code>npm test</code> 和 <code>npm run lint</code>。</p>
+<p>- 关于 API 设计的评论，留给作者处理。</p>
+<p>在这个例子里，顶部的两个设置让它不出现在 / 菜单里，也不会被 Claude 自行挑选的 skill 选中。</p>
+<p>steward 文件不能改变值守本身的限制。不过，任何能向仓库合并的人都可以改这个文件，所以审查对它的改动时，应当像审查对 CI 的改动一样谨慎。</p>
+<p>如果团队稍后开启了 PR Steward，这些指引一旦进入默认分支，就会在 Anthropic 的云端生效。</p>
+</div></section>
+
+<div class="section-head">Across your team's PRs / 推广到团队的 PR</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Standardizing the post-PR process</h3>
+<p>Once you've run /ship on a few of your own PRs, you'll have a good sense of what Claude Ship could do across your team's PRs. The rest of this post is for when you have that conversation with your admins, so it covers what you should ask them for, and how to roll it out safely.</p>
+<p>To <a href="https://code.claude.com/docs/en/claude-ship#who-can-use-claude-ship" target="_blank" rel="noopener noreferrer">get started</a>, you'll need to ask your administrators for a single repository, a few volunteers, and a limited amount of time to test Claude Ship on your own pull requests.</p>
+<ol>
+<li><strong>Agree on your budget constraints ahead of time.</strong></li>
+<li><strong>Protect the default branch of the repository.</strong> A repository admin can set up this requirement, ensuring that any updates require a PR with an approval on the latest push, and that the Claude GitHub App is not on the bypass list.</li>
+<li><strong>Enable Code Review for this repository.</strong> An Owner, the admin role in your Claude organization, can enable Code Review.</li>
+<li><strong>Enable PR Steward in Manual mode.</strong> The same Owner can enable PR Steward to kick in when a user with write access comments @claude steward, or when authors opt in for it to kick in automatically. Comment @claude stop to stop Steward.</li>
+<li><strong>Create an observe mode approval policy.</strong> This file acts like any other file; you can create it in your own PR, but since merging this file enables Approvals for the repository, clear it with an Owner first.</li>
+</ol>
+<p>PR Steward is designed not to approve or merge pull requests, so make sure you use branch protection to require the approvals you want before merging.</p>
+<p>PR Steward reads the comments from reviewers and performs some actions based on them. Like any text-parsing agent, it can be fooled by what people say. Make sure you use it only in repositories with trusted collaborators, and check the changes made by PR Steward on comments from untrusted users.</p>
+</div><div class="cell cn">
+<h3>把 PR 提交之后的流程标准化</h3>
+<p>等你在自己的几个 PR 上跑过 <code>/ship</code>，就会比较清楚 Claude Ship 能在团队的 PR 上做些什么。文章接下来的部分，是为你去和管理员谈这件事时准备的：该向他们要求什么，以及如何安全地推广。</p>
+<p>要<a href="https://code.claude.com/docs/en/claude-ship#who-can-use-claude-ship" target="_blank" rel="noopener noreferrer">开始</a>，你需要向管理员申请：一个仓库、几位志愿者，以及一段有限的时间，用来在你自己的 PR 上测试 Claude Ship。</p>
+<ol>
+<li><strong>事先就预算约束达成一致。</strong></li>
+<li><strong>保护该仓库的默认分支。</strong> 仓库管理员可以设置这项要求，确保任何更新都需要带有“对最新推送的批准”的 PR，并且 Claude GitHub App 不在绕过名单上。</li>
+<li><strong>为这个仓库启用 Code Review。</strong> Owner（你所在 Claude 组织中的管理员角色）可以启用 Code Review。</li>
+<li><strong>以 Manual 模式启用 PR Steward。</strong> 同一位 Owner 可以启用 PR Steward，让具有写权限的用户评论 @claude steward 时启动，或让作者选择自动启动。评论 @claude stop 可以停止 Steward。</li>
+<li><strong>创建一份 observe 模式的批准政策。</strong> 这个文件和其他文件一样，你可以在自己的 PR 里创建；但合并它会为仓库启用 Approvals，所以先和 Owner 确认清楚。</li>
+</ol>
+<p>PR Steward 被设计成不批准、不合并 PR，所以请务必用分支保护来要求你希望在合并前获得的那些批准。</p>
+<p>PR Steward 会阅读审查者的评论，并据此执行一些操作。和任何解析文本的 agent 一样，它可能被人们写下的内容误导。请只在协作者可信的仓库里使用它，并对来自不可信用户的评论所引发的、由 PR Steward 做出的变更加以检查。</p>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Configure your first approval policy</h3>
+<p>For approval policies, Claude Approvals reads from the <code>.claude/approvals.yml</code> file on the default branch. A simple first policy could be:</p>
+<pre><code># .claude/approvals.yml
+
+version: 1
+mode: observe
+
+rules:
+- purpose: "A change takes two people."
+paths: ["**"]
+verdict: { claude: comments, seats: 2 }
+advisory: [claude/code_review]
+
+- purpose: "A change to the review rules takes two people."
+paths: ["**/.claude/**", "**/REVIEW.md", "**/CLAUDE.md", "**/CODEOWNERS", ".github/**"]
+nested: inherit
+
+verdict: { claude: comments, seats: 2 }</code></pre>
+<p><code>seats</code> is the number of people who have to approve, and the author can take one of those seats.</p>
+<p>There's one catch here, which is that after the watch has merged the base branch, the most recent commit will be a merge commit, and nobody sits in the author's seat for it. So the PR author should comment @claude approve.</p>
+<p>When a rule's verdict is <code>claude: comments</code>, Claude won't approve. If more than one rule matches, the strictest one wins. In observe mode, the check will print the outcome but not approve.</p>
+<p>Make sure to keep the advisory line. Once the policy file is on the default branch, Code Review will only start automatically on PRs that match a rule that names it, so without that line your automatic reviews stop. Advisory reviews don't affect the verdict, and they run according to your existing settings. A policy that names Code Review can start billed reviews, even where Code Review is turned off.</p>
+<p>To see where a passing Claude review could lower what a path needs, you can swap the advisory line for an override and update the rule's purpose to match (for example, "When Claude's review passes, one is enough and Claude approves.").</p>
+<pre><code>override:
+      - { if: "claude/code_review = pass", verdict: { claude: approves, seats: 1 } }</code></pre>
+<p>Because the override also names Code Review, automatic review will still be triggered for those pull requests. When the review passes, the override takes the rule's decision and replaces it with one seat plus Claude's approval. The author can fill that one seat, so the check can now report that Claude would have approved. But text in a pull request can sway Claude's review, and when it does, this override lowers what that pull request needs.</p>
+<p>If there are some paths that need to always require a human, put them in a rule without an override (next section, step 1). Tell the budget owner before you merge this, as <strong>a policy configured like this will start billed Code Reviews, even in observe mode</strong>, whenever you push, regardless of your Code Review settings.</p>
+<p>You can also build your own classifiers for questions like "is this PR related to a migration?" <a href="https://code.claude.com/docs/en/approvals-classifiers#add-a-custom-classifier" target="_blank" rel="noopener noreferrer">Custom classifiers</a> live in <code>.claude/classifiers/&lt;name&gt;/def.yml</code> on the default branch, and each run is billed, even in observe mode. Start out by focusing on paths and the Code Review result.</p>
+</div><div class="cell cn">
+<h3>配置你的第一份批准政策</h3>
+<p>对于批准政策，Claude Approvals 读取的是默认分支上的 <code>.claude/approvals.yml</code>。一份简单的初始政策可以是：</p>
+<pre><code># .claude/approvals.yml
+
+version: 1
+mode: observe
+
+rules:
+- purpose: "A change takes two people."
+paths: ["**"]
+verdict: { claude: comments, seats: 2 }
+advisory: [claude/code_review]
+
+- purpose: "A change to the review rules takes two people."
+paths: ["**/.claude/**", "**/REVIEW.md", "**/CLAUDE.md", "**/CODEOWNERS", ".github/**"]
+nested: inherit
+
+verdict: { claude: comments, seats: 2 }</code></pre>
+<p><code>seats</code> 是必须批准的人数，作者可以占用其中一个席位。</p>
+<p>这里有一个例外：值守把基线分支合并进来之后，最新的 commit 会是一个 merge commit，作者席位上没有人。所以 PR 作者应当评论 @claude approve。</p>
+<p>当一条规则的 verdict 是 <code>claude: comments</code> 时，Claude 不会批准。如果多条规则同时匹配，以最严格的那条为准。在 observe 模式下，检查会打印结果，但不会批准。</p>
+<p>请务必保留 advisory 那一行。政策文件进入默认分支之后，Code Review 只会在匹配到点名它的规则的 PR 上自动启动；没有这一行，你的自动审查就会停掉。advisory 审查不影响 verdict，运行方式仍按你现有的设置。一份点名了 Code Review 的政策可以启动计费审查，即使该仓库已关闭 Code Review。</p>
+<p>如果想看看“Claude 审查通过时，某条路径的要求可以放宽到什么程度”，可以把 advisory 行换成 override，并同步修改该规则的 purpose（例如："When Claude's review passes, one is enough and Claude approves."）。</p>
+<pre><code>override:
+      - { if: "claude/code_review = pass", verdict: { claude: approves, seats: 1 } }</code></pre>
+<p>因为这条 override 也点名了 Code Review，那些 PR 仍会触发自动审查。审查通过时，override 会拿走该规则原来的决定，替换成一个席位加上 Claude 的批准。作者可以填那个席位，于是检查现在可以报告：Claude 本可以批准。但 PR 里的文字可能影响 Claude 的审查；一旦发生这种情况，这条 override 就会降低该 PR 所需的门槛。</p>
+<p>如果有些路径必须始终需要一个人，把它们写进一条没有 override 的规则（下一节，第 1 步）。合并之前先告知预算负责人，因为<strong>这样配置的政策会启动计费的 Code Review，即使处于 observe 模式</strong>，每次推送都会发生，而不论你的 Code Review 设置如何。</p>
+<p>你也可以为自己的问题构建 classifier，比如“这个 PR 是否与一次迁移有关？”。<a href="https://code.claude.com/docs/en/approvals-classifiers#add-a-custom-classifier" target="_blank" rel="noopener noreferrer">自定义 classifier</a> 放在默认分支的 <code>.claude/classifiers/&lt;name&gt;/def.yml</code>，每次运行都会计费，即使在 observe 模式下也是如此。一开始请先关注路径和 Code Review 的结果。</p>
+</div></section>
+
+<section class="pair"><div class="cell en" lang="en">
+<h3>Monitoring and transitioning to enforcement</h3>
+<p>Our team uses the same process as observe mode for our own internal commit gate. It logs the decisions it would have made in observe mode, so we can analyze false positives before making them mandatory. You will see the decisions in the Claude Approvals check and the associated comment.</p>
+<p>Keep in mind that you only get the value of observe mode if you actually monitor it. After a week or two of having it in place, revisit the merged PRs and see how the decisions compare to your reviewers' behavior.</p>
+<p>The first two rows apply once you've added the override.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/fefe93dc48ea6630.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/fefe93dc48ea6630.jpg"><source type="image/webp" srcset="./assets/optimized/fefe93dc48ea6630-640-q88.webp 640w, ./assets/optimized/fefe93dc48ea6630-1024-q88.webp 1024w, ./assets/optimized/fefe93dc48ea6630-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/fefe93dc48ea6630.jpg" alt="What to do with an observed verdict" width="2400" height="1352" decoding="async" loading="lazy"></picture></a><figcaption>What to do with an observed verdict</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>What to do with an observed verdict · 看到一条观察中的裁决后该怎么办</h4>
+<p>列：The policy said（政策怎么说）／Your reviewers（审查者怎么做）／What to do（该怎么做）</p>
+<div class="step">Would approve（会批准）／Approved with nothing to add（批准了，没有补充）／Keep the rule（保留这条规则）</div>
+<div class="step">Would approve／Asked for changes（要求修改）／增加一条需要人的路径规则，或者，如果审查本该抓住它，就修好 REVIEW.md</div>
+<div class="step">Needs two people（需要两个人）／Approved at a glance every time（每次都一眼批准）／在看过足够多的例子后，考虑收窄这条规则</div>
+<div class="step">Needs two people／Had real questions（提出了真正的问题）／Keep the rule（保留这条规则）</div>
+</details></figure>
+<figure class="callout has-img"><a href="./assets/translations/original/df0d05fe27a7b438.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/df0d05fe27a7b438.jpg"><source type="image/webp" srcset="./assets/optimized/df0d05fe27a7b438-640-q88.webp 640w, ./assets/optimized/df0d05fe27a7b438-1024-q88.webp 1024w, ./assets/optimized/df0d05fe27a7b438-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/df0d05fe27a7b438.jpg" alt="FIGURE 4: Read an observed verdict" width="1800" height="2610" decoding="async" loading="lazy"></picture></a><figcaption>FIGURE 4 — Read an observed verdict</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>FIGURE 4 · 阅读一条观察中的裁决。先走几个示例 PR，猜测裁决，再看是哪条规则决定的、你会改什么。</h4>
+<div class="step"><strong>A · PR #52 Fix a broken link in the install docs</strong><br>改动 <code>docs/install.md</code>。Code Review：通过。（observe mode）Would be approved by Claude（观察模式：本会被 Claude 批准）。由第一条规则的 override 决定：Code Review 通过后，一个席位加上 Claude 的批准，替换原来的两个席位。审查者批准且没有补充。该做的事：保留这条规则。</div>
+<div class="step"><strong>B · PR #58 Change proration for mid-cycle upgrades</strong><br>改动 <code>src/billing/proration.ts</code>。Code Review：通过。同样会被 Claude 批准，依据同一条 override。在你加上强制执行步骤中的路径规则之前，这个 PR 会得到同样的裁决。审查者要求修改。该做的事：为 <code>src/billing/**</code> 增加一条需要非作者参与的路径规则。</div>
+<div class="step"><strong>C · PR #63 Tighten the Nit cap in REVIEW.md</strong><br>改动 REVIEW.md。Code Review：通过。Needs two people（需要两个人）。由第二条规则决定：两条规则都匹配，最严格的那条获胜，且这一条没有 override。审查者提出了真正的问题。该做的事：保留这条规则。</div>
+<p>改动 <code>approvals.yml</code> 本身的 PR，即使在 observe 模式下也会得到通过/失败检查。图下部是带 override 的政策文件，并用 A/B/C 标出了各示例命中的行。</p>
+</details></figure>
+<p>Go through a few example PRs. How would you have decided? Which rule made the decision? What would you change? Pay the most attention to the second row, and fix those before you relax any rules.</p>
+<p>One thing to know before you enforce: Claude's approvals count as real approvals on GitHub. If a ruleset only needs one approval, Claude's can be enough on its own. So read your policy and your branch rules together.</p>
+<p>If you use auto-merge, and have policies that only the author can fulfill (like the override above), you can have PRs that get merged without anyone doing anything. Decide explicitly whether that's OK for each path, and write it down.</p>
+<p>Then lock it down in this order:</p>
+<ol>
+<li>Use a rule without an <code>if</code> or override for paths where you always need a second set of eyes. No classifier result can override it, and <code>nested: inherit</code> carries it into subdirectories that have their own policies.</li>
+</ol>
+<pre><code>- purpose: "Auth, billing and CI take a person who isn't an author."
+    paths: ["src/auth/**", "src/billing/**", ".github/**"]
+    nested: inherit
+    verdict:
+      claude: comments
+      seats: [{ count: 1, from: [humans, "!pr/authors"] }]</code></pre>
+<ol start="2">
+<li>Remove <code>mode: observe</code> and merge. Now Claude can approve wherever the rules say it approves.</li>
+<li>About five minutes later, comment @claude approvals rerun on open PRs, so any stale results get cleaned up. Reruns can charge for classifiers again.</li>
+<li>Ask a repository admin to make the Claude Approvals check required, and to pick the Claude app as its source. Until then, your PR can get merged regardless of what the check says.</li>
+</ol>
+<p>Claude Ship and the local commands use AI, and they can miss bugs, security problems, and other issues, so keep all your existing tests, scanners, and reviewers.</p>
+</div><div class="cell cn">
+<h3>监控，并过渡到强制执行</h3>
+<p>我们团队把自己的内部提交门禁，也按 observe 模式同一套流程来用。它会记录自己在 observe 模式下本会做出的决定，这样我们能在强制执行之前分析误报。你会在 Claude Approvals 检查及其相关评论里看到这些决定。</p>
+<p>请记住，observe 模式只有在你真正去监控时才有价值。上线一两周后，回看已合并的 PR，比较这些决定和审查者的实际行为。</p>
+<p>前两行在你加入 override 之后才会适用。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/fefe93dc48ea6630.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/fefe93dc48ea6630.jpg"><source type="image/webp" srcset="./assets/optimized/fefe93dc48ea6630-640-q88.webp 640w, ./assets/optimized/fefe93dc48ea6630-1024-q88.webp 1024w, ./assets/optimized/fefe93dc48ea6630-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/fefe93dc48ea6630.jpg" alt="看到一条观察中的裁决后该怎么办" width="2400" height="1352" decoding="async" loading="lazy"></picture></a><figcaption>看到一条观察中的裁决后该怎么办</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>What to do with an observed verdict · 看到一条观察中的裁决后该怎么办</h4>
+<p>列：The policy said（政策怎么说）／Your reviewers（审查者怎么做）／What to do（该怎么做）</p>
+<div class="step">Would approve（会批准）／Approved with nothing to add（批准了，没有补充）／Keep the rule（保留这条规则）</div>
+<div class="step">Would approve／Asked for changes（要求修改）／增加一条需要人的路径规则，或者，如果审查本该抓住它，就修好 REVIEW.md</div>
+<div class="step">Needs two people（需要两个人）／Approved at a glance every time（每次都一眼批准）／在看过足够多的例子后，考虑收窄这条规则</div>
+<div class="step">Needs two people／Had real questions（提出了真正的问题）／Keep the rule（保留这条规则）</div>
+</details></figure>
+<figure class="callout has-img"><a href="./assets/translations/original/df0d05fe27a7b438.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/df0d05fe27a7b438.jpg"><source type="image/webp" srcset="./assets/optimized/df0d05fe27a7b438-640-q88.webp 640w, ./assets/optimized/df0d05fe27a7b438-1024-q88.webp 1024w, ./assets/optimized/df0d05fe27a7b438-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/df0d05fe27a7b438.jpg" alt="图 4：阅读一条观察中的裁决" width="1800" height="2610" decoding="async" loading="lazy"></picture></a><figcaption>图 4 — 阅读一条观察中的裁决</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>FIGURE 4 · 阅读一条观察中的裁决。先走几个示例 PR，猜测裁决，再看是哪条规则决定的、你会改什么。</h4>
+<div class="step"><strong>A · PR #52 Fix a broken link in the install docs</strong><br>改动 <code>docs/install.md</code>。Code Review：通过。（observe mode）Would be approved by Claude（观察模式：本会被 Claude 批准）。由第一条规则的 override 决定：Code Review 通过后，一个席位加上 Claude 的批准，替换原来的两个席位。审查者批准且没有补充。该做的事：保留这条规则。</div>
+<div class="step"><strong>B · PR #58 Change proration for mid-cycle upgrades</strong><br>改动 <code>src/billing/proration.ts</code>。Code Review：通过。同样会被 Claude 批准，依据同一条 override。在你加上强制执行步骤中的路径规则之前，这个 PR 会得到同样的裁决。审查者要求修改。该做的事：为 <code>src/billing/**</code> 增加一条需要非作者参与的路径规则。</div>
+<div class="step"><strong>C · PR #63 Tighten the Nit cap in REVIEW.md</strong><br>改动 REVIEW.md。Code Review：通过。Needs two people（需要两个人）。由第二条规则决定：两条规则都匹配，最严格的那条获胜，且这一条没有 override。审查者提出了真正的问题。该做的事：保留这条规则。</div>
+<p>改动 <code>approvals.yml</code> 本身的 PR，即使在 observe 模式下也会得到通过/失败检查。图下部是带 override 的政策文件，并用 A/B/C 标出了各示例命中的行。</p>
+</details></figure>
+<p>挑几个示例 PR 走一遍。你会怎么决定？是哪条规则做出的决定？你会改什么？请把最多注意力放在第二行，先修好那些，再放松任何规则。</p>
+<p>强制执行之前要知道的一点：Claude 的批准在 GitHub 上算作真正的批准。如果一套规则只需要一次批准，Claude 的批准单独就可能够用。所以请把你的政策和分支规则放在一起读。</p>
+<p>如果你使用 auto-merge，同时又有只有作者才能满足的政策（比如上面的 override），就可能出现没有任何人做任何事、PR 却被合并了的情况。请对每条路径明确决定这是否可以接受，并写下来。</p>
+<p>然后按这个顺序锁紧：</p>
+<ol>
+<li>对那些你始终需要第二双眼睛的路径，使用一条不含 <code>if</code> 或 override 的规则。任何 classifier 的结果都不能覆盖它，<code>nested: inherit</code> 会把它带进拥有自己政策的子目录。</li>
+</ol>
+<pre><code>- purpose: "Auth, billing and CI take a person who isn't an author."
+    paths: ["src/auth/**", "src/billing/**", ".github/**"]
+    nested: inherit
+    verdict:
+      claude: comments
+      seats: [{ count: 1, from: [humans, "!pr/authors"] }]</code></pre>
+<ol start="2">
+<li>去掉 <code>mode: observe</code> 并合并。此后，在规则写明 Claude 可以批准的地方，Claude 就可以批准。</li>
+<li>大约五分钟后，在仍打开的 PR 上评论 @claude approvals rerun，清掉过时的结果。重新运行可能再次为 classifier 计费。</li>
+<li>请仓库管理员把 Claude Approvals 检查设为必需，并选择 Claude app 作为其来源。在此之前，无论检查结果如何，你的 PR 都可能被合并。</li>
+</ol>
+<p>Claude Ship 和这些本地命令都使用 AI，它们可能漏掉 bug、安全问题和其他缺陷，所以请保留你现有的全部测试、扫描器和审查者。</p>
+</div></section>
+
+<div class="section-head">Things to try this week / 这周可以先做的事</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p>I'd like to make it clear that for the Claude Code team, the person who called the agent is responsible for a change. It's as if they typed it themselves.</p>
+<p>Your team should still be responsible for the PR scope, design, evidence, and rules for when it can merge. With these principles in mind, here is where you can get started:</p>
+<ol>
+<li><strong>Today: </strong>Run /code-review on your current branch. Make a note of what it got wrong and what it missed.</li>
+<li><strong>Next PR: </strong>In a repository where you trust everyone who can merge, try /ship, and stick around. Try /steward on an existing PR, in a different terminal and git checkout.</li>
+<li><strong>By Friday: </strong>Create a small PR with the rule you repeated most, in your CLAUDE.md, REVIEW.md, or a skill. Do the commit yourself, since /ship will not commit rule files. Share the PR and the example observe-mode policy with your team.</li>
+</ol>
+<p>If you do so, I would love to know which rule file was most impactful, and which tasks you chose to keep doing yourself.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/9b728ff429d5b6e9.png" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/9b728ff429d5b6e9.png"><source type="image/webp" srcset="./assets/optimized/9b728ff429d5b6e9-640-q88.webp 640w, ./assets/optimized/9b728ff429d5b6e9-858-q88.webp 858w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/9b728ff429d5b6e9.png" alt="Pangram analysis: mostly human-written" width="858" height="304" decoding="async" loading="lazy"></picture></a><figcaption>Pangram: Mostly Human-Written</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Pangram 的检测结果</h4>
+<div class="step"><strong>Mostly Human-Written（主要为人类撰写）</strong><br>AI 16%，AI-assisted 0%，Human 84%。</div>
+<p>Analysis by Pangram suggests that this text was written with some AI assistance.（Pangram 的分析显示，这篇文章在写作中有一定的 AI 协助。）</p>
+</details></figure>
+</div><div class="cell cn">
+<p>我想说清楚：在 Claude Code 团队，调用 agent 的那个人，要对这次变更负责。就好像这些字是他们自己打出来的。</p>
+<p>你们团队仍然要对 PR 的范围、设计、证据，以及何时可以合并的规则负责。本着这些原则，你可以从这里开始：</p>
+<ol>
+<li><strong>今天：</strong> 在当前分支上运行 <code>/code-review</code>。记下它哪里弄错了、哪里漏掉了。</li>
+<li><strong>下一次 PR：</strong> 在一个你信任每个能合并的人的仓库里，试一次 <code>/ship</code>，并留在旁边。再在另一个终端和 git checkout 里，对一个已有的 PR 试 <code>/steward</code>。</li>
+<li><strong>周五之前：</strong> 针对你重复得最多的那条规则，写一个小 PR，放进 CLAUDE.md、REVIEW.md 或一个 skill。这次 commit 请自己做，因为 <code>/ship</code> 不会提交规则文件。把这个 PR，以及那份 observe 模式政策示例，分享给团队。</li>
+</ol>
+<p>如果你这样做了，我很想知道哪份规则文件最有用，以及哪些事情你选择继续自己做。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/9b728ff429d5b6e9.png" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/9b728ff429d5b6e9.png"><source type="image/webp" srcset="./assets/optimized/9b728ff429d5b6e9-640-q88.webp 640w, ./assets/optimized/9b728ff429d5b6e9-858-q88.webp 858w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/9b728ff429d5b6e9.png" alt="Pangram 分析：主要为人类撰写" width="858" height="304" decoding="async" loading="lazy"></picture></a><figcaption>Pangram：主要为人类撰写</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Pangram 的检测结果</h4>
+<div class="step"><strong>Mostly Human-Written（主要为人类撰写）</strong><br>AI 16%，AI-assisted 0%，Human 84%。</div>
+<p>Analysis by Pangram suggests that this text was written with some AI assistance.（Pangram 的分析显示，这篇文章在写作中有一定的 AI 协助。）</p>
+</details></figure>
+</div></section>
+
+</main><!-- site:comments:start --><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section><!-- site:comments:end --><!-- site:comment-scripts:start --><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=6" defer></script><!-- site:comment-scripts:end -->
+<footer class="source-footer">来源：<a href="https://x.com/addyosmani/status/2125492213903978917" target="_blank" rel="noopener noreferrer">Addy Osmani 在 X 发布的文章</a>（2026-11-25）。原文亦可在 <a href="https://x.com/i/article/2125456204969512961" target="_blank" rel="noopener noreferrer">X Article</a> 阅读。整理日期：2026-11-25。翻译 zwhu。此页为英中逐段对照翻译，供阅读参考，未独立核实文中产品细节。</footer>
+<div class="progress" aria-hidden="true"></div>
+<script>
+const mode=document.getElementById('mode'),size=document.getElementById('size');
+mode.addEventListener('click',()=>{const on=document.body.classList.toggle('single');mode.setAttribute('aria-pressed',String(on));mode.textContent=on?'恢复左右对照':'只看中文';});
+size.addEventListener('click',()=>{const on=document.body.classList.toggle('large');size.setAttribute('aria-pressed',String(on));size.textContent=on?'恢复字号':'放大字号';});
+document.getElementById('print').addEventListener('click',()=>window.print());
+function progress(){const d=document.documentElement;document.querySelector('.progress').style.width=(d.scrollHeight>d.clientHeight?100*d.scrollTop/(d.scrollHeight-d.clientHeight):100)+'%';}
+addEventListener('scroll',progress,{passive:true});addEventListener('resize',progress);progress();
+</script>
+<!-- site:analytics:start --><!-- Cloudflare Web Analytics --><script async type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --><!-- site:analytics:end --></body>
+</html>
