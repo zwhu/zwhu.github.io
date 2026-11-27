@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>我的 2026 年 RSI 十佳论文 · 全文对照翻译</title>
+<link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./translation.css?v=20261103">
+<link rel="stylesheet" href="./archive.css"><link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any"><link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<!-- SEO:start -->
+<meta name="description" content="elvis 盘点 2026 年最值得读的 10 篇递归自我改进（RSI）论文的全文中英对照翻译，涵盖 harness、训练时机、过拟合、verifier、基准投毒以及生产与预训练中的实践，保留原文插图。">
+<link rel="canonical" href="https://zwhu.github.io/top-10-rsi-papers-2026.html">
+<meta name="author" content="elvis">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="zwhu 的技术博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="我的 2026 年 RSI 十佳论文 · 全文对照翻译">
+<meta property="og:description" content="elvis 盘点 2026 年最值得读的 10 篇递归自我改进（RSI）论文的全文中英对照翻译，涵盖 harness、训练时机、过拟合、verifier、基准投毒以及生产与预训练中的实践，保留原文插图。">
+<meta property="og:url" content="https://zwhu.github.io/top-10-rsi-papers-2026.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的 2026 年 RSI 十佳论文 · 全文对照翻译">
+<meta name="twitter:description" content="elvis 盘点 2026 年最值得读的 10 篇递归自我改进（RSI）论文的全文中英对照翻译，涵盖 harness、训练时机、过拟合、verifier、基准投毒以及生产与预训练中的实践，保留原文插图。">
+<meta name="twitter:site" content="@zwhu__">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://zwhu.github.io/#website","url":"https://zwhu.github.io/","name":"zwhu 的技术博客","inLanguage":"zh-CN","publisher":{"@id":"https://zwhu.github.io/#author"}},{"@type":"Person","@id":"https://zwhu.github.io/#author","name":"zwhu","url":"https://zwhu.github.io/about.html","sameAs":["https://github.com/zwhu","https://x.com/zwhu__"]},{"@type":"WebPage","@id":"https://zwhu.github.io/top-10-rsi-papers-2026.html#webpage","url":"https://zwhu.github.io/top-10-rsi-papers-2026.html","name":"我的 2026 年 RSI 十佳论文 · 全文对照翻译","description":"elvis 盘点 2026 年最值得读的 10 篇递归自我改进（RSI）论文的全文中英对照翻译，涵盖 harness、训练时机、过拟合、verifier、基准投毒以及生产与预训练中的实践，保留原文插图。","inLanguage":"zh-CN","isPartOf":{"@id":"https://zwhu.github.io/#website"},"mainEntity":{"@id":"https://zwhu.github.io/top-10-rsi-papers-2026.html#article"}},{"@type":"BlogPosting","@id":"https://zwhu.github.io/top-10-rsi-papers-2026.html#article","url":"https://zwhu.github.io/top-10-rsi-papers-2026.html","headline":"我的 2026 年 RSI 十佳论文","description":"elvis 盘点 2026 年最值得读的 10 篇递归自我改进（RSI）论文的全文中英对照翻译，涵盖 harness、训练时机、过拟合、verifier、基准投毒以及生产与预训练中的实践，保留原文插图。","inLanguage":["zh-CN","en"],"mainEntityOfPage":{"@id":"https://zwhu.github.io/top-10-rsi-papers-2026.html#webpage"},"author":{"@type":"Person","name":"elvis","url":"https://x.com/omarsar0"},"publisher":{"@id":"https://zwhu.github.io/#author"},"datePublished":"2026-11-25","translationOfWork":{"@type":"Article","name":"My Top 10 RSI Papers of 2026","url":"https://x.com/omarsar0/status/2125234668396023943","inLanguage":"en","datePublished":"2026-11-24"}}]}</script>
+<!-- SEO:end -->
+</head>
+<body class="translation-page"><!-- site:header:start --><header class="site-header"><a class="brand" href="./index.html">zwhu<span>.</span></a><nav aria-label="主导航"><a href="./index.html#writing">思考</a><a href="./translations.html" aria-current="location">翻译留档</a><a href="./learning.html">交互式学习</a><a href="./about.html">关于</a></nav></header><!-- site:header:end -->
+<section class="translation-header">
+<div class="eyebrow">翻译留档 / 英中对照</div>
+<h1>我的 2026 年 RSI 十佳论文</h1>
+<p class="subtitle" lang="en">My Top 10 RSI Papers of 2026</p>
+<div class="meta"><span>作者：elvis</span><span>原文发布：2026 年 11 月 24 日</span><span>阅读时长：约 15 分钟</span><a href="https://x.com/omarsar0/status/2125234668396023943" target="_blank" rel="noopener noreferrer">在 X 阅读原文 ↗</a></div>
+<div class="notice"><strong>英中逐段对照翻译。</strong>左侧为原文全文，右侧为对应中文译文。原文作者 elvis，原文链接见上方，翻译 zwhu。保留原文插图，含文字的插图附中文翻译。译文为参考，专有名词保留英文。</div>
+<div class="toolbar" aria-label="阅读设置">
+  <button id="mode" type="button" aria-pressed="false">只看中文</button>
+  <button id="size" type="button" aria-pressed="false">放大字号</button>
+  <button id="print" type="button">打印 / 保存 PDF</button>
+  <span class="hint">中英对照 · 正文与插图离线可读</span>
+</div>
+<figure class="cover"><a href="./assets/translations/original/76ed42a7843ba125.png" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/76ed42a7843ba125.png"><source type="image/webp" srcset="./assets/optimized/76ed42a7843ba125-640-q88.webp 640w, ./assets/optimized/76ed42a7843ba125-1024-q88.webp 1024w, ./assets/optimized/76ed42a7843ba125-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/76ed42a7843ba125.png" alt="Article cover" width="2400" height="960" decoding="async" loading="lazy"></picture></a><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>2026 年 RSI 十佳论文</h4>
+<div class="step">中心是 AGENT。内圈：EDIT（编辑）。中圈：TEST + KEEP（测试并保留）。外圈：EDIT THE EDITOR（编辑那个负责编辑的机制）。</div>
+</details></figure>
+
+</section>
+<main id="content" class="translation-content">
+<div class="columns"><span>ENGLISH / 英文原文</span><span>中文 / 对应译文</span></div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p>Recursive self-improvement (RSI) is when an AI system can effectively edit and improve its own prompts, tools, harness, memory, code, or weights. The edited system then makes the next round of edits. In each round, the agent proposes a change, tests it, and keeps it only if the score goes up. In the strongest version, the agent also rewrites the procedure that proposes those changes, making the system recursive.</p>
+<p>Research on RSI grew quickly this year. Our <a href="https://academy.dair.ai/papers/collections/self-improving-agents" target="_blank" rel="noopener noreferrer">Self-Improving Agents collection</a> now tracks 100s of papers on the topic. A huge portion (about ~60) came out between September and November alone.</p>
+<p>If you build agents, you probably already do these steps by hand. You read the logs of failed runs, edit the prompts and tools, and rerun your tests. When building towards RSI, you build systems that have an agent do those steps instead of a person. For a company, this means the product can improve as customers use it. Engineers no longer have to rewrite every prompt themselves.</p>
+<p>Getting a self-improvement loop to run is the easy step. The hard questions come after. Does the improvement hold on new tasks, or did the agent fit the test set? Is the grader still checking the right thing? Did the loop break something that used to work?</p>
+<figure class="callout has-img"><a href="./assets/translations/original/ab63472014e24907.png" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/ab63472014e24907.png"><source type="image/webp" srcset="./assets/optimized/ab63472014e24907-640-q88.webp 640w, ./assets/optimized/ab63472014e24907-1024-q88.webp 1024w, ./assets/optimized/ab63472014e24907-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/ab63472014e24907.png" alt="An RSI improvement loop: propose an edit, run tests, keep it only if the held-out score goes up" width="2800" height="1200" decoding="async" loading="lazy"></picture></a><figcaption>The improvement loop</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>改进循环（IMPROVEMENT LOOP）</h4>
+<div class="step"><strong>Agent version n</strong> 进入循环：STEP 1 Propose an edit（提出一次编辑）→ STEP 2 Run tests（跑测试）→ STEP 3 Held-out score up?（留出分数是否上升？）</div>
+<div class="step">Yes → Keep edit（保留这次编辑）；No → Discard（丢弃）。保留后的版本 n+1 再去做下一次编辑。</div>
+<p>循环下方的追问：Fit the test set?（只是拟合了测试集吗？）Grader still right?（grader 仍然在衡量该衡量的东西吗？）Broke old tasks?（是否破坏了原来能做的任务？）</p>
+<p>底部说明：在最强的版本里，agent 还会改写自己提出编辑的方式。</p>
+</details></figure>
+<p><em>Each round, the agent proposes an edit, tests it, and keeps it only if the held-out score goes up. The kept version then makes the next edit.</em></p>
+<p>The ten papers below address these questions. They cover which <strong>parts of an agent</strong> a loop should edit and how to <strong>verify</strong> an improvement on held-out tasks. They also cover <strong>attacks</strong> on self-improvement loops, RSI in <strong>production systems,</strong> and <strong>RSI</strong> in frontier model training. The list opens with a <strong>survey</strong> of the field.</p>
+</div><div class="cell cn">
+<p>递归自我改进（RSI）指的是：一个 AI 系统能够有效地编辑并改进自己的 prompt、工具、harness、记忆、代码或权重。经过编辑的系统再去做下一轮编辑。每一轮里，agent 提出一次改动，加以测试，只有分数上升时才保留。在最强的版本中，agent 还会改写那个提出改动的程序本身，从而使整个系统成为递归的。</p>
+<p>今年，RSI 研究增长很快。我们的<a href="https://academy.dair.ai/papers/collections/self-improving-agents" target="_blank" rel="noopener noreferrer">Self-Improving Agents 论文集</a>现在已经跟踪了该主题下数百篇论文。其中很大一部分（大约 60 篇）是在 9 月到 11 月之间才出来的。</p>
+<p>如果你在做 agent，这些步骤你多半已经在手工做了：读失败运行的日志，改 prompt 和工具，再重新跑测试。走向 RSI，就是搭一套系统，让 agent 来做这些本来由人做的步骤。对公司来说，这意味着产品可以随着客户使用而改进。工程师不必再亲自改写每一条 prompt。</p>
+<p>让一条自我改进循环跑起来，只是容易的那一步。困难的问题在后面。改进在新任务上还成立吗，还是 agent 只是拟合了测试集？grader 是否仍在检查该检查的东西？这条循环有没有把原来能用的东西弄坏？</p>
+<figure class="callout has-img"><a href="./assets/translations/original/ab63472014e24907.png" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/ab63472014e24907.png"><source type="image/webp" srcset="./assets/optimized/ab63472014e24907-640-q88.webp 640w, ./assets/optimized/ab63472014e24907-1024-q88.webp 1024w, ./assets/optimized/ab63472014e24907-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/ab63472014e24907.png" alt="RSI 改进循环：提出编辑、跑测试，只有留出分数上升才保留" width="2800" height="1200" decoding="async" loading="lazy"></picture></a><figcaption>改进循环</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>改进循环（IMPROVEMENT LOOP）</h4>
+<div class="step"><strong>Agent version n</strong> 进入循环：STEP 1 Propose an edit（提出一次编辑）→ STEP 2 Run tests（跑测试）→ STEP 3 Held-out score up?（留出分数是否上升？）</div>
+<div class="step">Yes → Keep edit（保留这次编辑）；No → Discard（丢弃）。保留后的版本 n+1 再去做下一次编辑。</div>
+<p>循环下方的追问：Fit the test set?（只是拟合了测试集吗？）Grader still right?（grader 仍然在衡量该衡量的东西吗？）Broke old tasks?（是否破坏了原来能做的任务？）</p>
+<p>底部说明：在最强的版本里，agent 还会改写自己提出编辑的方式。</p>
+</details></figure>
+<p><em>每一轮，agent 提出一次编辑，加以测试，只有留出分数上升时才保留。被保留的版本再去做下一次编辑。</em></p>
+<p>下面十篇论文正是在回答这些问题。它们讨论循环应当编辑 agent 的哪些<strong>部分</strong>，以及如何在留出任务上<strong>验证</strong>一次改进。它们也讨论对自我改进循环的<strong>攻击</strong>、生产系统中的 RSI，以及前沿模型训练中的 <strong>RSI</strong>。清单以一篇该领域的<strong>综述</strong>开场。</p>
+</div></section>
+
+<div class="section-head">Start With the Survey / 先读综述</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2609.11873" target="_blank" rel="noopener noreferrer">The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement</a>, Yi Duan et al., 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/d1e0f3c98ccd9458.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/d1e0f3c98ccd9458.jpg"><source type="image/webp" srcset="./assets/optimized/d1e0f3c98ccd9458-640-q88.webp 640w, ./assets/optimized/d1e0f3c98ccd9458-1024-q88.webp 1024w, ./assets/optimized/d1e0f3c98ccd9458-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/d1e0f3c98ccd9458.jpg" alt="A map of RSI work across five levels, from in-task iteration to meta improvement" width="1734" height="701" decoding="async" loading="lazy"></picture></a><figcaption>Five levels of RSI</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>综述中的五级划分，以及各领域中的 RSI 工作地图</h4>
+<p>横轴从左到右：B0 Output → L1 Execution → L2 Strategy → L3 Experience → L4 Deployment → L5 Meta。底部标签依次是 In-Task Iteration（任务内迭代）、Execution Automation（执行自动化）、Strategy Search（策略搜索）、Experiment-Based Refinement（基于实验的 refinement）、Data Pipeline Automation（数据管线自动化）、Deployment Automation（部署自动化）、Meta Improvement（元层面改进）。</p>
+<p>图中项目与论文名称保持英文。图例颜色对应 Search &amp; Optimization、Data, Task &amp; Experience、Training &amp; Persistent Update、Verification &amp; Selection、Online &amp; Meta-Level Adaptation。</p>
+<p>顶部分类包括 AI Research、Scientific Research、AI Infrastructure、Software Engineering、Robotics、Systems Research、Math Research、Enterprise AI、Personal AI。</p>
+</details></figure>
+<p>Before the ten picks, read this survey. It is the most useful overview of the field I read this year. It covers 100s of papers and sorts RSI systems into five levels by how much of the improvement loop the AI controls.</p>
+<p>At level 1, people decide what to improve, how to improve it, and what counts as success. The AI only carries out the updates. At level 2, the AI finds the weaknesses and picks the fix. At level 3, it also chooses what experience to learn from next. At level 4, it learns from real use, within rules that people set. At level 5, it changes the process that drives future improvement.</p>
+<p>The survey also sets a minimum requirement for RSI. An agent that revises one answer inside one task is not doing RSI, because nothing carries over to the next task.</p>
+<p>By these definitions, harness search such as <a href="https://arxiv.org/abs/2603.28052" target="_blank" rel="noopener noreferrer">Meta-Harness</a> is level 2. The survey places <a href="https://arxiv.org/abs/2603.19461" target="_blank" rel="noopener noreferrer">Hyperagents</a> at level 5. Use the levels to check any RSI claim.</p>
+<p>Below are my 10 favorite RSI papers from this year. The first four cover what a self-improvement loop should change and when it runs. The next three cover how to verify that an improvement holds on new tasks. Paper eight shows how an attacker can steer a loop through its benchmark. The last two show RSI working in production and at frontier scale.</p>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2609.11873" target="_blank" rel="noopener noreferrer">The Last AI Built by Humans: Toward Genuine Recursive Self-Improvement</a>，Yi Duan 等，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/d1e0f3c98ccd9458.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/d1e0f3c98ccd9458.jpg"><source type="image/webp" srcset="./assets/optimized/d1e0f3c98ccd9458-640-q88.webp 640w, ./assets/optimized/d1e0f3c98ccd9458-1024-q88.webp 1024w, ./assets/optimized/d1e0f3c98ccd9458-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/d1e0f3c98ccd9458.jpg" alt="按五个级别整理的 RSI 工作地图，从任务内迭代到元层面改进" width="1734" height="701" decoding="async" loading="lazy"></picture></a><figcaption>RSI 的五个级别</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>综述中的五级划分，以及各领域中的 RSI 工作地图</h4>
+<p>横轴从左到右：B0 Output → L1 Execution → L2 Strategy → L3 Experience → L4 Deployment → L5 Meta。底部标签依次是 In-Task Iteration（任务内迭代）、Execution Automation（执行自动化）、Strategy Search（策略搜索）、Experiment-Based Refinement（基于实验的 refinement）、Data Pipeline Automation（数据管线自动化）、Deployment Automation（部署自动化）、Meta Improvement（元层面改进）。</p>
+<p>图中项目与论文名称保持英文。图例颜色对应 Search &amp; Optimization、Data, Task &amp; Experience、Training &amp; Persistent Update、Verification &amp; Selection、Online &amp; Meta-Level Adaptation。</p>
+<p>顶部分类包括 AI Research、Scientific Research、AI Infrastructure、Software Engineering、Robotics、Systems Research、Math Research、Enterprise AI、Personal AI。</p>
+</details></figure>
+<p>在进入十篇精选之前，先读这篇综述。这是我今年读到的、对该领域最有用的总览。它覆盖了数百篇论文，并按 AI 对改进循环的控制程度，把 RSI 系统分成五个级别。</p>
+<p>在第 1 级，由人决定改进什么、怎么改进、以及什么算成功。AI 只负责执行更新。在第 2 级，AI 自己找出弱点并选择修复。在第 3 级，它还会选择下一步该从什么经验中学习。在第 4 级，它在人设定的规则之内，从真实使用中学习。在第 5 级，它会改写驱动未来改进的那套过程。</p>
+<p>这篇综述也为 RSI 设了一条最低要求。如果一个 agent 只是在单次任务里改写一个答案，那还不算在做 RSI，因为没有任何东西会带到下一个任务。</p>
+<p>按这些定义，像 <a href="https://arxiv.org/abs/2603.28052" target="_blank" rel="noopener noreferrer">Meta-Harness</a> 这样的 harness 搜索属于第 2 级。综述把 <a href="https://arxiv.org/abs/2603.19461" target="_blank" rel="noopener noreferrer">Hyperagents</a> 放在第 5 级。可以用这套级别去核对任何 RSI 主张。</p>
+<p>下面是我今年最喜欢的 10 篇 RSI 论文。前四篇讨论自我改进循环应当改什么、以及它在何时运行。接下来三篇讨论如何验证一次改进在新任务上仍然成立。第八篇展示攻击者如何通过基准来引导一条循环。最后两篇展示 RSI 在生产环境和前沿规模上如何工作。</p>
+</div></section>
+
+<div class="section-head">1. Optimize the Harness / 1. 优化 harness</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2603.28052" target="_blank" rel="noopener noreferrer">Meta-Harness: End-to-End Optimization of Model Harnesses</a>, Yoonho Lee et al., 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/2ea4a5ff6f013de5.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/2ea4a5ff6f013de5.jpg"><source type="image/webp" srcset="./assets/optimized/2ea4a5ff6f013de5-640-q88.webp 640w, ./assets/optimized/2ea4a5ff6f013de5-1024-q88.webp 1024w, ./assets/optimized/2ea4a5ff6f013de5-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/2ea4a5ff6f013de5.jpg" alt="Meta-Harness: an agent proposes harness code, evaluates it on tasks, and stores all logs" width="2400" height="856" decoding="async" loading="lazy"></picture></a><figcaption>Meta-Harness loop</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Meta-Harness 循环</h4>
+<div class="step">左侧 Filesystem w/ All Experience（存有全部经验的文件系统）提供历史尝试。</div>
+<div class="step">① Propose Harness Code（提出 harness 代码），目标是 Maximize（把分数最大化）。新代码进入 Harness，再与 LLM 组成 Harness+LLM。</div>
+<div class="step">② 用 Tasks 做 Evaluate（评估）。结果写入文件夹，内含 Proposed Code（提出的代码）、Reasoning Traces（推理轨迹）、Eval Score（评估分数）。</div>
+<div class="step">③ Store all Logs to Filesystem（把全部日志存回文件系统），供下一轮使用。</div>
+</details></figure>
+<p>The harness is the code around a model. It decides what the model stores, what it retrieves, and what it sees at each step. Teams still write it by hand in many products.</p>
+<p>Meta-Harness lets an agent write new harness code instead. The agent can read the source code, scores, and execution traces of every earlier attempt. After each round, the new attempt's code, score, and traces are saved as files in a shared folder. With that full history, the agent can propose new harness designs instead of small edits to the last attempt.</p>
+<p>On online text classification, the harness that Meta-Harness found beat a strong context management system by 7.7 points. It also used 4x fewer context tokens. On 200 IMO-level math problems, one harness found by Meta-Harness improved accuracy by 4.7 points on average across five held-out models.</p>
+<p><em>Takeaway: If you automate harness changes, give the agent that proposes them the full execution traces. A score alone tells it that something failed. The trace tells it why.</em></p>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2603.28052" target="_blank" rel="noopener noreferrer">Meta-Harness: End-to-End Optimization of Model Harnesses</a>，Yoonho Lee 等，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/2ea4a5ff6f013de5.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/2ea4a5ff6f013de5.jpg"><source type="image/webp" srcset="./assets/optimized/2ea4a5ff6f013de5-640-q88.webp 640w, ./assets/optimized/2ea4a5ff6f013de5-1024-q88.webp 1024w, ./assets/optimized/2ea4a5ff6f013de5-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/2ea4a5ff6f013de5.jpg" alt="Meta-Harness：agent 提出 harness 代码，在任务上评估，并保存全部日志" width="2400" height="856" decoding="async" loading="lazy"></picture></a><figcaption>Meta-Harness 循环</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Meta-Harness 循环</h4>
+<div class="step">左侧 Filesystem w/ All Experience（存有全部经验的文件系统）提供历史尝试。</div>
+<div class="step">① Propose Harness Code（提出 harness 代码），目标是 Maximize（把分数最大化）。新代码进入 Harness，再与 LLM 组成 Harness+LLM。</div>
+<div class="step">② 用 Tasks 做 Evaluate（评估）。结果写入文件夹，内含 Proposed Code（提出的代码）、Reasoning Traces（推理轨迹）、Eval Score（评估分数）。</div>
+<div class="step">③ Store all Logs to Filesystem（把全部日志存回文件系统），供下一轮使用。</div>
+</details></figure>
+<p>harness 是模型周围的那层代码。它决定模型存储什么、检索什么，以及每一步看到什么。在许多产品里，团队至今仍在手工编写它。</p>
+<p>Meta-Harness 让 agent 改去写新的 harness 代码。这个 agent 可以阅读每一次先前尝试的源代码、分数和执行轨迹。每一轮结束后，新尝试的代码、分数和轨迹会作为文件存进一个共享文件夹。有了完整历史，agent 就可以提出新的 harness 设计，而不是只对上一次尝试做小改动。</p>
+<p>在在线文本分类上，Meta-Harness 找到的 harness 比一套很强的上下文管理系统高出 7.7 分，使用的 context token 也只有后者的四分之一。在 200 道 IMO 级别的数学题上，Meta-Harness 找到的一个 harness，在五个留出模型上平均把准确率提高了 4.7 分。</p>
+<p><em>要点：如果你要把 harness 的修改自动化，就把完整的执行轨迹交给那个提出修改的 agent。只给一个分数，它只知道失败了。轨迹才能告诉它为什么失败。</em></p>
+</div></section>
+
+<div class="section-head">2. Use a Self-Editing Harness / 2. 使用可自我编辑的 harness</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2611.00463" target="_blank" rel="noopener noreferrer">Exo: An Architecture for Self-Improving Systems at Runtime</a>, Alexander Krentsel et al., 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/bcea4d036676af0e.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/bcea4d036676af0e.jpg"><source type="image/webp" srcset="./assets/optimized/bcea4d036676af0e-640-q88.webp 640w, ./assets/optimized/bcea4d036676af0e-1024-q88.webp 1024w, ./assets/optimized/bcea4d036676af0e-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/bcea4d036676af0e.jpg" alt="Exo splits the harness into an editable policy and a protected mechanism, with a guardian approving replacements" width="1979" height="575" decoding="async" loading="lazy"></picture></a><figcaption>Exo policy–mechanism partition</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Exo 的两层结构</h4>
+<div class="step"><strong>(a) Policy–mechanism partition（策略与机制的划分）</strong><br>Agent Harness 里包括 Tools/Skills、Memory、Context Assembly、LLM call、adapters、Convo History、env management；secrets 在受保护一侧。Environment 在最下层。<br>中间把 Policy（可编辑、可替换的过程：tools、skills、context assembly、compaction、LLM call、adapters、snapshot policy 等）与 Mechanism（受保护、持久的状态：conversation history、secrets、artifacts、sandbox API）分开。Guardian G(·) 负责 build + replace。Policy Code 写回环境。</div>
+<div class="step"><strong>(b) State across replacement（替换时状态如何保留）</strong><br>Policy π0 经 Guardian approval（G = 1）变成 Policy π1。Execution history 保留旧事件并加入新事件。Sandbox / Same environment 保持不变。</div>
+</details></figure>
+<p>Meta-Harness improves the harness in a separate search before deployment. Exo lets the agent edit its own harness during normal use. While it works on a task, it can rewrite its own tools, skills, memory, and context handling.</p>
+<p>Exo splits the harness into two layers. A small protected layer keeps the run history, secrets, and sandbox access. The agent cannot edit this layer. Everything above it is code the agent can change. A separate component called the guardian builds each new harness version and decides whether it replaces the current one. Every change is saved as a code diff that a person can read.</p>
+<p>The Exo authors released it as open-source software. Against the same starting harness with editing turned off, Exo cut model cost on held-out tasks by 35 to 61% on AppWorld and SREGym. Correctness stayed about the same. On long tasks in the game RuneScape, Exo finished with 12 to 53% lower model cost than the Codex and Pi agents.</p>
+<p><em>Takeaway: If you let an agent change itself in production,</em> decide first which parts of the harness must stay fixed. Put those parts in a protected layer.<em> Exo provides these necessary abstractions to help with this.</em></p>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2611.00463" target="_blank" rel="noopener noreferrer">Exo: An Architecture for Self-Improving Systems at Runtime</a>，Alexander Krentsel 等，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/bcea4d036676af0e.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/bcea4d036676af0e.jpg"><source type="image/webp" srcset="./assets/optimized/bcea4d036676af0e-640-q88.webp 640w, ./assets/optimized/bcea4d036676af0e-1024-q88.webp 1024w, ./assets/optimized/bcea4d036676af0e-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/bcea4d036676af0e.jpg" alt="Exo 把 harness 分成可编辑的 policy 与受保护的 mechanism，由 guardian 决定是否替换" width="1979" height="575" decoding="async" loading="lazy"></picture></a><figcaption>Exo 的 policy 与 mechanism 划分</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Exo 的两层结构</h4>
+<div class="step"><strong>(a) Policy–mechanism partition（策略与机制的划分）</strong><br>Agent Harness 里包括 Tools/Skills、Memory、Context Assembly、LLM call、adapters、Convo History、env management；secrets 在受保护一侧。Environment 在最下层。<br>中间把 Policy（可编辑、可替换的过程：tools、skills、context assembly、compaction、LLM call、adapters、snapshot policy 等）与 Mechanism（受保护、持久的状态：conversation history、secrets、artifacts、sandbox API）分开。Guardian G(·) 负责 build + replace。Policy Code 写回环境。</div>
+<div class="step"><strong>(b) State across replacement（替换时状态如何保留）</strong><br>Policy π0 经 Guardian approval（G = 1）变成 Policy π1。Execution history 保留旧事件并加入新事件。Sandbox / Same environment 保持不变。</div>
+</details></figure>
+<p>Meta-Harness 是在部署之前，用一次单独的搜索来改进 harness。Exo 则让 agent 在正常使用过程中编辑自己的 harness。它在做任务的同时，可以改写自己的工具、skill、记忆和上下文处理。</p>
+<p>Exo 把 harness 分成两层。一层很小、受保护，保存运行历史、密钥和 sandbox 访问权限。agent 不能编辑这一层。其上的一切都是 agent 可以改的代码。一个名为 guardian 的独立组件负责构建每个新的 harness 版本，并决定它是否替换当前版本。每一次改动都会存成一份人可以阅读的代码 diff。</p>
+<p>Exo 的作者把它作为开源软件发布了。在起点相同、但关闭编辑的 harness 对照下，Exo 在 AppWorld 和 SREGym 的留出任务上把模型成本降低了 35% 到 61%。正确性大致不变。在游戏 RuneScape 的长任务上，Exo 完成时的模型成本比 Codex 和 Pi 这两个 agent 低 12% 到 53%。</p>
+<p><em>要点：如果你让一个 agent 在生产环境中改自己，</em>先决定 harness 里哪些部分必须保持固定。把这些部分放进受保护的一层。<em> Exo 提供了做这件事所需的抽象。</em></p>
+</div></section>
+
+<div class="section-head">3. Edit the Improvement Process / 3. 编辑改进过程本身</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2603.19461" target="_blank" rel="noopener noreferrer">Hyperagents</a>, Jenny Zhang et al., 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/b951340e390b0a41.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/b951340e390b0a41.jpg"><source type="image/webp" srcset="./assets/optimized/b951340e390b0a41-640-q88.webp 640w, ./assets/optimized/b951340e390b0a41-1024-q88.webp 1024w, ./assets/optimized/b951340e390b0a41-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/b951340e390b0a41.jpg" alt="Darwin Gödel Machine compared with DGM plus Hyperagents" width="2400" height="1116" decoding="async" loading="lazy"></picture></a><figcaption>DGM and Hyperagents</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Darwin Gödel Machine 与加入 Hyperagents 之后的对比</h4>
+<div class="step"><strong>DARWIN GÖDEL MACHINE (DGM)</strong><br>Coding Agent 同时充当 task agent 和 meta agent。从 archive 中 select parent，生成 child 再 add 回去。中间是 Handcrafted instruction-generation（手工写的指令生成）、Self-modify（自我修改）、Evaluate on coding tasks（在编码任务上评估）。右侧流程需要把自我改进指令与解题对齐（aligned）。</div>
+<div class="step"><strong>DGM WITH HYPERAGENTS</strong><br>Hyperagent 由 Task agent 与 Meta agent 组成。Self-modify 变成 Metacognitive Self-modify（元认知式自我修改），评估改到 Evaluate on computable tasks（在可计算任务上评估）。Meta agent 改写 Hyperagent，Task agent 负责解题，因此 no need to be aligned（不必再强制对齐）。</div>
+</details></figure>
+<p>Self-improving systems usually run a fixed improvement procedure that a person wrote. The earlier <a href="https://arxiv.org/abs/2505.22954" target="_blank" rel="noopener noreferrer">Darwin Gödel Machine (DGM)</a> worked well on coding. In that setting, a better coding agent is also better at editing its own code. Outside coding, being better at the task does not make the agent better at improving itself.</p>
+<p>Hyperagents put the task agent and the agent that edits it into one program. Hyperagents can then rewrite both, including the procedure that proposes future changes. The authors tested Hyperagents on paper review, robotics reward design, and grading Olympiad-level math.</p>
+<p>Hyperagents added persistent memory and performance tracking to themselves. These two additions transferred to other domains and compounded across runs. The authors ran the experiments with safety measures such as sandboxing and human oversight.</p>
+<p><em>Takeaway: Treat the procedure that proposes changes as something you can improve too. Log changes to that procedure separately. In Hyperagents, changes to that procedure were the ones that transferred to new domains.</em></p>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2603.19461" target="_blank" rel="noopener noreferrer">Hyperagents</a>，Jenny Zhang 等，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/b951340e390b0a41.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/b951340e390b0a41.jpg"><source type="image/webp" srcset="./assets/optimized/b951340e390b0a41-640-q88.webp 640w, ./assets/optimized/b951340e390b0a41-1024-q88.webp 1024w, ./assets/optimized/b951340e390b0a41-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/b951340e390b0a41.jpg" alt="Darwin Gödel Machine 与加入 Hyperagents 之后的对比" width="2400" height="1116" decoding="async" loading="lazy"></picture></a><figcaption>DGM 与 Hyperagents</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Darwin Gödel Machine 与加入 Hyperagents 之后的对比</h4>
+<div class="step"><strong>DARWIN GÖDEL MACHINE (DGM)</strong><br>Coding Agent 同时充当 task agent 和 meta agent。从 archive 中 select parent，生成 child 再 add 回去。中间是 Handcrafted instruction-generation（手工写的指令生成）、Self-modify（自我修改）、Evaluate on coding tasks（在编码任务上评估）。右侧流程需要把自我改进指令与解题对齐（aligned）。</div>
+<div class="step"><strong>DGM WITH HYPERAGENTS</strong><br>Hyperagent 由 Task agent 与 Meta agent 组成。Self-modify 变成 Metacognitive Self-modify（元认知式自我修改），评估改到 Evaluate on computable tasks（在可计算任务上评估）。Meta agent 改写 Hyperagent，Task agent 负责解题，因此 no need to be aligned（不必再强制对齐）。</div>
+</details></figure>
+<p>自我改进系统通常运行一套由人写好的、固定的改进程序。较早的 <a href="https://arxiv.org/abs/2505.22954" target="_blank" rel="noopener noreferrer">Darwin Gödel Machine（DGM）</a> 在编码任务上表现很好。在那种设定里，更会写代码的 agent，往往也更会改自己的代码。在编码之外，把任务本身做得更好，并不会自动让 agent 更擅长改进自己。</p>
+<p>Hyperagents 把负责任务的 agent，和编辑它的那个 agent，放进同一个程序。这样 Hyperagents 就可以同时改写两者，包括那个提出未来改动的程序。作者在论文评审、机器人奖励设计，以及奥林匹克级数学评分上测试了 Hyperagents。</p>
+<p>Hyperagents 给自己加上了持久记忆和性能跟踪。这两项增加能迁移到其他领域，并在多次运行中累积。作者在实验中采用了 sandbox 和人工监督等安全措施。</p>
+<p><em>要点：把那个提出改动的程序，也当作可以改进的对象。对它的改动要单独记录。在 Hyperagents 里，正是对这一程序的改动，迁移到了新的领域。</em></p>
+</div></section>
+
+<div class="section-head">4. Know When to Train / 4. 知道何时该训练</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2610.11655" target="_blank" rel="noopener noreferrer">Harness Evolution Hits a Ceiling: When Weight Training Should Begin</a>, Yuan Tian et al., 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/94bdbc923fa92906.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/94bdbc923fa92906.jpg"><source type="image/webp" srcset="./assets/optimized/94bdbc923fa92906-640-q88.webp 640w, ./assets/optimized/94bdbc923fa92906-1024-q88.webp 1024w, ./assets/optimized/94bdbc923fa92906-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/94bdbc923fa92906.jpg" alt="Diagnose failures, then either evolve the harness or train the weights" width="2400" height="464" decoding="async" loading="lazy"></picture></a><figcaption>When to evolve the harness and when to train</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>根据失败类型选择改 harness 还是做训练</h4>
+<div class="step">Benchmark（带可编程打分器的任务）→ Diagnose（给每条轨迹打上 F1–F4 标签：delivery × quality）。</div>
+<div class="step">F2、F3 走向 Self-evolving harness：由 LLM 对自己的 harness 提出编辑，再由 judge 核验。</div>
+<div class="step">F4 走向 Train the weights：在进化后的 harness 产生的轨迹上做 LoRA 或全量微调。</div>
+<div class="step">最后 Evaluate：比较 seed 与 evolved harness，以及 base 与 adapter，并在留出集上评估。</div>
+</details></figure>
+<p>A self-improving agent can change its harness or its weights. Tian et al. show how to choose based on the type of failure.</p>
+<p>The authors label each failed run by its first failure. A process failure means the agent got stuck, looped, or ran out of steps. A content failure means the agent finished but delivered a poor answer.</p>
+<p>Harness changes fixed process failures. On a planning benchmark, the evolved harness lifted Qwen3.5-4 B's held-out score from 0.16 to 0.30. The share of runs that delivered an answer went from 55% to 90%. Content failures stayed. Training small LoRA adapters on runs from the improved harness fixed many of the content failures. On the 9B model, content failures dropped from a quarter of runs to one in twenty. An adapter trained on shuffled answers made the model worse, so the gain came from the correct answers in the training runs.</p>
+<p><em>Takeaway: Sort your failures before you choose a fix. Use harness changes for process failures. Use training for content failures.</em></p>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2610.11655" target="_blank" rel="noopener noreferrer">Harness Evolution Hits a Ceiling: When Weight Training Should Begin</a>，Yuan Tian 等，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/94bdbc923fa92906.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/94bdbc923fa92906.jpg"><source type="image/webp" srcset="./assets/optimized/94bdbc923fa92906-640-q88.webp 640w, ./assets/optimized/94bdbc923fa92906-1024-q88.webp 1024w, ./assets/optimized/94bdbc923fa92906-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/94bdbc923fa92906.jpg" alt="先诊断失败类型，再决定进化 harness 还是训练权重" width="2400" height="464" decoding="async" loading="lazy"></picture></a><figcaption>何时进化 harness、何时训练</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>根据失败类型选择改 harness 还是做训练</h4>
+<div class="step">Benchmark（带可编程打分器的任务）→ Diagnose（给每条轨迹打上 F1–F4 标签：delivery × quality）。</div>
+<div class="step">F2、F3 走向 Self-evolving harness：由 LLM 对自己的 harness 提出编辑，再由 judge 核验。</div>
+<div class="step">F4 走向 Train the weights：在进化后的 harness 产生的轨迹上做 LoRA 或全量微调。</div>
+<div class="step">最后 Evaluate：比较 seed 与 evolved harness，以及 base 与 adapter，并在留出集上评估。</div>
+</details></figure>
+<p>一个自我改进的 agent 可以改自己的 harness，也可以改自己的权重。Tian 等人说明了如何根据失败类型来选择。</p>
+<p>作者按第一次失败给每次失败的运行打标签。过程失败指的是 agent 卡住、陷入循环，或步数用尽。内容失败指的是 agent 跑完了，但交出的答案很差。</p>
+<p>改 harness 能修好过程失败。在一个规划基准上，进化后的 harness 把 Qwen3.5-4 B 的留出分数从 0.16 提到 0.30。能交出答案的运行占比从 55% 升到 90%。内容失败仍然在。用改进后的 harness 产生的运行，训练小型 LoRA adapter，修好了其中许多内容失败。在 9B 模型上，内容失败从四分之一的运行降到了二十分之一。用打乱后的答案训练出的 adapter 会让模型变差，所以收益来自训练运行里那些正确的答案。</p>
+<p><em>要点：先把失败分类，再选择修复方式。过程失败用改 harness 来解决。内容失败用训练来解决。</em></p>
+</div></section>
+
+<div class="section-head">5. Measure Overfitting / 5. 测量过拟合</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2610.22466" target="_blank" rel="noopener noreferrer">Harness-Delta Attribution: Dissecting Gains From Harness Evolution</a>, Wenxuan Ding et al., 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/8150aafe931d2938.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/8150aafe931d2938.jpg"><source type="image/webp" srcset="./assets/optimized/8150aafe931d2938-640-q88.webp 640w, ./assets/optimized/8150aafe931d2938-1024-q88.webp 1024w, ./assets/optimized/8150aafe931d2938-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/8150aafe931d2938.jpg" alt="Gains from harness evolution split into overfitting, test-time scaling, and generalizable improvements" width="2400" height="837" decoding="async" loading="lazy"></picture></a><figcaption>Three sources of harness gains</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>把 harness 进化的收益拆成三个来源</h4>
+<div class="step"><strong>O Overfitting（过拟合）</strong>：针对特定题面写死规则。示例：LiveMath。</div>
+<div class="step"><strong>T Test-Time Scaling（测试时扩展）</strong>：采样更多回答再排序去重。示例：CREATE。</div>
+<div class="step"><strong>G Generalizable Improvements（可泛化的改进）</strong>：例如检测重复的空输出并改 prompt。示例：SWE-bench。</div>
+<p>右侧柱状图：ALFWorld 收益里过拟合约占 89%；LiveMath 约 83%；CREATE 里测试时扩展约占 75%；SWE-bench 里可泛化改进约占 90%。</p>
+</details></figure>
+<p>Automatic harness search tunes the harness on a fixed set of tasks. A higher score on that set can come from three sources. The harness may have fit quirks of those tasks. It may spend more compute at test time. Or it may really be better.</p>
+<p>Ding et al. split a reported gain into those three parts. The authors tested 11 models and three harness search frameworks. In the 21 settings with a significant gain, fitting the task set explained 54% of the gain on average. Extra compute explained another 14%. In one case, the evolved harness for ALFWorld replaced the model with a hard-coded controller that made zero model calls.</p>
+<p><em>Takeaway: Before you trust a harness gain, run the old harness with the new one's compute budget. </em>Then test both on a held-out task set.</p>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2610.22466" target="_blank" rel="noopener noreferrer">Harness-Delta Attribution: Dissecting Gains From Harness Evolution</a>，Wenxuan Ding 等，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/8150aafe931d2938.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/8150aafe931d2938.jpg"><source type="image/webp" srcset="./assets/optimized/8150aafe931d2938-640-q88.webp 640w, ./assets/optimized/8150aafe931d2938-1024-q88.webp 1024w, ./assets/optimized/8150aafe931d2938-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/8150aafe931d2938.jpg" alt="把 harness 进化的收益拆成过拟合、测试时扩展和可泛化改进" width="2400" height="837" decoding="async" loading="lazy"></picture></a><figcaption>harness 收益的三个来源</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>把 harness 进化的收益拆成三个来源</h4>
+<div class="step"><strong>O Overfitting（过拟合）</strong>：针对特定题面写死规则。示例：LiveMath。</div>
+<div class="step"><strong>T Test-Time Scaling（测试时扩展）</strong>：采样更多回答再排序去重。示例：CREATE。</div>
+<div class="step"><strong>G Generalizable Improvements（可泛化的改进）</strong>：例如检测重复的空输出并改 prompt。示例：SWE-bench。</div>
+<p>右侧柱状图：ALFWorld 收益里过拟合约占 89%；LiveMath 约 83%；CREATE 里测试时扩展约占 75%；SWE-bench 里可泛化改进约占 90%。</p>
+</details></figure>
+<p>自动的 harness 搜索会在一组固定任务上调节 harness。这组任务上分数变高，可能来自三个来源：harness 拟合了这些任务的癖性；它在测试时花了更多算力；或者它真的变得更好了。</p>
+<p>Ding 等人把报告出来的收益拆成这三部分。作者测试了 11 个模型和三个 harness 搜索框架。在 21 个有显著收益的设定里，拟合任务集平均解释了 54% 的收益。额外算力又解释了 14%。有一次，为 ALFWorld 进化出的 harness 直接用一个硬编码控制器替换了模型，一次模型调用都没有。</p>
+<p><em>要点：在相信一次 harness 收益之前，先用新 harness 的算力预算跑一遍旧 harness。</em>然后再把两者放到留出任务集上测试。</p>
+</div></section>
+
+<div class="section-head">6. Score on Fresh Data / 6. 用新数据打分</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2610.09239" target="_blank" rel="noopener noreferrer">The Winner's Curse in LLM Self-Improvement Loops: Selection Noise, Lock-in, and Acceptance Rules</a>, Litao Hu and Yutong Tang, 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/c67c270882002a4c.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/c67c270882002a4c.jpg"><source type="image/webp" srcset="./assets/optimized/c67c270882002a4c-640-q88.webp 640w, ./assets/optimized/c67c270882002a4c-1024-q88.webp 1024w, ./assets/optimized/c67c270882002a4c-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/c67c270882002a4c.jpg" alt="Reported gains overstate held-out gains when the selection set is small" width="2400" height="879" decoding="async" loading="lazy"></picture></a><figcaption>Winner's curse in self-improvement loops</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>报告收益与留出收益的差距</h4>
+<p>空心点是 reported gain（报告收益），实心点是 held-out gain（留出收益）。红线 n = 16，蓝线 n = 256。</p>
+<div class="step">(a) TREC、(b) Banking77：横轴是相对起点的收益（点数）。n = 16 时报告收益常明显高于留出收益；n = 256 时差距缩小。</div>
+<div class="step">(c) GEPA, TREC candidates：横轴 validation accuracy（验证准确率），纵轴 held-out accuracy（留出准确率）。n_val = 16 的点更容易偏离对角线。</div>
+</details></figure>
+<p>A typical self-improvement loop keeps a change if it scores higher than the current version. When scores are noisy, the change with the best score is often lucky. A/B testing teams call this the winner's curse.</p>
+<p>The authors had Qwen models rewrite their own instructions. They also scored every rewrite on a separate held-out set of 600 items. After the first round, only 4 to 39% of rewrites beat the version they replaced. When the loop picked winners using 16 items, its final score overstated true accuracy by 13 to 20 points. With 256 items, the gap fell to 1 to 5 points. The popular prompt optimizers GEPA and MIPROv2 showed the same overstated scores.</p>
+<p><em>Takeaway: Set aside a held-out test set for evaluation only. Score the starting version and the current version on it. In the paper, 64 held-out items removed the average overstatement.</em></p>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2610.09239" target="_blank" rel="noopener noreferrer">The Winner's Curse in LLM Self-Improvement Loops: Selection Noise, Lock-in, and Acceptance Rules</a>，Litao Hu 与 Yutong Tang，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/c67c270882002a4c.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/c67c270882002a4c.jpg"><source type="image/webp" srcset="./assets/optimized/c67c270882002a4c-640-q88.webp 640w, ./assets/optimized/c67c270882002a4c-1024-q88.webp 1024w, ./assets/optimized/c67c270882002a4c-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/c67c270882002a4c.jpg" alt="当用于筛选的样本很少时，报告收益会高估留出收益" width="2400" height="879" decoding="async" loading="lazy"></picture></a><figcaption>自我改进循环中的赢家诅咒</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>报告收益与留出收益的差距</h4>
+<p>空心点是 reported gain（报告收益），实心点是 held-out gain（留出收益）。红线 n = 16，蓝线 n = 256。</p>
+<div class="step">(a) TREC、(b) Banking77：横轴是相对起点的收益（点数）。n = 16 时报告收益常明显高于留出收益；n = 256 时差距缩小。</div>
+<div class="step">(c) GEPA, TREC candidates：横轴 validation accuracy（验证准确率），纵轴 held-out accuracy（留出准确率）。n_val = 16 的点更容易偏离对角线。</div>
+</details></figure>
+<p>一条典型的自我改进循环会在改动得分高于当前版本时保留它。当分数有噪声时，得分最高的那次改动往往只是运气好。做 A/B 测试的团队把这叫做赢家诅咒（winner's curse）。</p>
+<p>作者让 Qwen 模型改写自己的指令，又在另外 600 条留出样本上给每一次改写打分。第一轮之后，只有 4% 到 39% 的改写真正超过了被替换的版本。当循环用 16 条样本挑选胜者时，它的最终分数把真实准确率高估了 13 到 20 分。用 256 条样本时，差距降到 1 到 5 分。流行的 prompt 优化器 GEPA 和 MIPROv2 也表现出同样被高估的分数。</p>
+<p><em>要点：单独留出一份只用于评估的测试集。在它上面同时给起始版本和当前版本打分。在这篇论文里，64 条留出样本就消除了平均意义上的高估。</em></p>
+</div></section>
+
+<div class="section-head">7. Check the Verifier / 7. 检查 verifier</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2610.11464" target="_blank" rel="noopener noreferrer">Who Verifies the Verifier? Co-Evolving Inspectable Graders with Self-Improving Agents</a>, Xing Zhang et al., 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/a73e120a6ed17405.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/a73e120a6ed17405.jpg"><source type="image/webp" srcset="./assets/optimized/a73e120a6ed17405-640-q88.webp 640w, ./assets/optimized/a73e120a6ed17405-1024-q88.webp 1024w, ./assets/optimized/a73e120a6ed17405-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/a73e120a6ed17405.jpg" alt="An inspectable verifier co-evolves with the agent, judged against human-checked examples" width="2400" height="1271" decoding="async" loading="lazy"></picture></a><figcaption>Co-evolving inspectable graders</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>让可检查的 grader 与自我改进的 agent 一起进化</h4>
+<div class="step"><strong>THE PREMISE（前提）</strong>：“我们改了 agent。它真的变好了吗？”开放式任务没有 oracle verifier，也没有可直接信任的 reward model。真正拥有的是 10 个经人核对的锚定例子，这是唯一的监督信号。</div>
+<div class="step"><strong>WHAT WE EVOLVE（我们进化的是什么）</strong>：一个可检查的 verifier，而不是不透明的 judge。表达式由若干小检查组成（如 spec_mismatch、crash、returns_not_print_only），并给出 FAIL 及失败类别。</div>
+<div class="step"><strong>HOW IT GETS THERE</strong>：sense → synthesize → birth-gate → compose → select → curate，每轮重复。</div>
+<div class="step"><strong>WHAT IT DRIVES</strong>：agent 的 skill 循环（solve、grade、capsule、synthesize）。</div>
+<div class="step"><strong>GUARDS</strong>：dev anchor（10 个金标）、locked test（留出分数与回滚）、outer judge（循环外更强的模型做对照审查）。</div>
+</details></figure>
+<p>Unlike verifiable domains, open-ended tasks have no answer key. A self-improvement loop then relies on a rubric or an LLM judge. If the grader is designed wrong, the loop improves toward the wrong target.</p>
+<p>Zhang et al. let the grader improve alongside the agent. They build the grader from small checks that mostly run as plain code. Each new grader version is selected only by how well it agrees with ten reference examples that people checked.</p>
+<p>The key experiment removes the comparison against the human-checked examples. Without them, the grader learns to pass every answer. That broken grader still trained the agent's skills about as well as the good one. So a rising agent score cannot tell you whether the grader is any good.</p>
+<p><em>Takeaway: Keep a small set of human-checked examples. Measure your grader against them separately from the agent.</em></p>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2610.11464" target="_blank" rel="noopener noreferrer">Who Verifies the Verifier? Co-Evolving Inspectable Graders with Self-Improving Agents</a>，Xing Zhang 等，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/a73e120a6ed17405.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/a73e120a6ed17405.jpg"><source type="image/webp" srcset="./assets/optimized/a73e120a6ed17405-640-q88.webp 640w, ./assets/optimized/a73e120a6ed17405-1024-q88.webp 1024w, ./assets/optimized/a73e120a6ed17405-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/a73e120a6ed17405.jpg" alt="可检查的 verifier 与 agent 一起进化，并用人工核对的例子来衡量" width="2400" height="1271" decoding="async" loading="lazy"></picture></a><figcaption>共同进化的可检查 grader</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>让可检查的 grader 与自我改进的 agent 一起进化</h4>
+<div class="step"><strong>THE PREMISE（前提）</strong>：“我们改了 agent。它真的变好了吗？”开放式任务没有 oracle verifier，也没有可直接信任的 reward model。真正拥有的是 10 个经人核对的锚定例子，这是唯一的监督信号。</div>
+<div class="step"><strong>WHAT WE EVOLVE（我们进化的是什么）</strong>：一个可检查的 verifier，而不是不透明的 judge。表达式由若干小检查组成（如 spec_mismatch、crash、returns_not_print_only），并给出 FAIL 及失败类别。</div>
+<div class="step"><strong>HOW IT GETS THERE</strong>：sense → synthesize → birth-gate → compose → select → curate，每轮重复。</div>
+<div class="step"><strong>WHAT IT DRIVES</strong>：agent 的 skill 循环（solve、grade、capsule、synthesize）。</div>
+<div class="step"><strong>GUARDS</strong>：dev anchor（10 个金标）、locked test（留出分数与回滚）、outer judge（循环外更强的模型做对照审查）。</div>
+</details></figure>
+<p>和结果可核验的领域不同，开放式任务没有标准答案。这时，自我改进循环就得依赖一套评分细则，或一个 LLM judge。如果 grader 的设计是错的，循环就会朝着错误的目标改进。</p>
+<p>Zhang 等人让 grader 跟着 agent 一起改进。他们用许多小检查拼出 grader，这些检查大多是普通代码。每一个新的 grader 版本，只按它与十个经人核对的参考例子的一致程度来筛选。</p>
+<p>关键实验拿掉了与人工核对例子的对照。没有这些例子，grader 会学会让所有答案都通过。那个已经坏掉的 grader，把 agent 的 skill 训练得几乎和那个好的 grader 一样好。所以，agent 分数上升，并不能告诉你 grader 本身好不好。</p>
+<p><em>要点：保留一小批经人核对的例子。把对 grader 的衡量，和对 agent 的衡量分开做。</em></p>
+</div></section>
+
+<div class="section-head">8. Audit the Benchmarks / 8. 审查基准</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2609.17817" target="_blank" rel="noopener noreferrer">Reflections on Trusting Trust, Revisited: Contaminating Self-Modifying AI Coding Agents with Poisoned Benchmarks</a>, Franziska Roesner and Tadayoshi Kohno, 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/fbf23dce3fc0b014.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/fbf23dce3fc0b014.jpg"><source type="image/webp" srcset="./assets/optimized/fbf23dce3fc0b014-640-q88.webp 640w, ./assets/optimized/fbf23dce3fc0b014-1024-q88.webp 1024w, ./assets/optimized/fbf23dce3fc0b014-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/fbf23dce3fc0b014.jpg" alt="Poisoned benchmarks can implant behavior into DGM, SICA, and Hyperagents" width="2400" height="704" decoding="async" loading="lazy"></picture></a><figcaption>Poisoning self-modifying coding agents</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>投毒基准如何把行为写进自我修改的 coding agent</h4>
+<div class="step"><strong>(a) Darwin Gödel Machine</strong>：带有恶魔标记的 Benchmark 进入 Coding Agent，再经 Transcript / Diagnosis Prompt、Proposal / Self-Improvement Prompt，生成 New Coding Agent，随后在 Coding Task 上产出带有同样标记的 Program。</div>
+<div class="step"><strong>(b) Self-Improving Coding Agent</strong>：路径类似，但多了 Review Committee（审查委员会）这一环。</div>
+<div class="step"><strong>(c) Hyperagents</strong>：Task Agent 与 Meta Agent 分层。诊断与自我改进的 prompt 作用在 Meta Agent 上，最终 Program 仍可能带上被植入的行为。</div>
+<p>图中红色恶魔标记表示被投毒的基准或被污染的组件；笑脸标记表示看似正常的输出。</p>
+</details></figure>
+<p>Self-modifying coding agents use benchmarks to decide which edits to keep. Roesner and Kohno show that whoever controls that benchmark can control which behaviors the agent keeps.</p>
+<p>The authors built a benchmark where tests only pass if the code turns off security certificate checks. They used it with three self-improving systems, including Hyperagents. The evolved agents wrote tools or rules that turned off those checks. Later, the agents applied these tools and rules to ordinary web requests on clean tasks. More evolution on clean benchmarks usually did not remove this behavior.</p>
+<p><em>Takeaway: Review what goes into your self-evaluation set like you would review code. Also review the tools and rules the agent writes for itself.</em></p>
+<p>Several 2026 benchmarks now measure self-improvement directly. Read how each one is set up before you trust the numbers.</p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.08640" target="_blank" rel="noopener noreferrer">PostTrainBench</a> asks an agent to post-train a base model in 10 hours on one H100. The best agent reached 23.2%, against 51.1% for the official instruction-tuned models. Some agents trained on the test set or downloaded existing checkpoints instead of training their own.</li>
+<li><a href="https://arxiv.org/abs/2606.17546" target="_blank" rel="noopener noreferrer">SEAGym</a> scores each harness update on held-out tasks, out-of-distribution tasks, and older tasks, and it records cost. It runs on Terminal-Bench 2.0 and HLE. Frequent updates did not always improve held-out scores.</li>
+<li><a href="https://arxiv.org/abs/2611.08946" target="_blank" rel="noopener noreferrer">Flex-RSI</a> tests whether an agent can improve its own harness on vision and robotics tasks under a fixed budget. A solution is kept only if it scores higher on held-out validation data, and the final score uses hidden test data. Pass-or-fail feedback alone held back open-weight models.</li>
+<li><a href="https://arxiv.org/abs/2611.16591" target="_blank" rel="noopener noreferrer">Singularity-Bench</a> asks agents to build six core systems, from pre-training to cluster orchestration, and compares them with human-built baselines on the same hardware. Opus 5.5 with Claude Code matched or beat the human baseline on all six tasks. The authors also found reward-hacking holes in the standard Harbor test setup and built a patched version.</li>
+<li><a href="https://frontier-rsi.org/" target="_blank" rel="noopener noreferrer">FrontierRSI</a> is a new benchmark from Abundant AI with no paper yet. Its 27 open-ended tasks cover pre-training, post-training, inference, and GPU kernels on real H100s, with budgets of 2 to 8 hours. Each task's best trial from any model sets the score of 1. Eight tasks are public on <a href="https://github.com/abundant-ai/frontier-rsi" target="_blank" rel="noopener noreferrer">GitHub</a>.</li>
+</ul>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2609.17817" target="_blank" rel="noopener noreferrer">Reflections on Trusting Trust, Revisited: Contaminating Self-Modifying AI Coding Agents with Poisoned Benchmarks</a>，Franziska Roesner 与 Tadayoshi Kohno，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/fbf23dce3fc0b014.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/fbf23dce3fc0b014.jpg"><source type="image/webp" srcset="./assets/optimized/fbf23dce3fc0b014-640-q88.webp 640w, ./assets/optimized/fbf23dce3fc0b014-1024-q88.webp 1024w, ./assets/optimized/fbf23dce3fc0b014-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/fbf23dce3fc0b014.jpg" alt="被投毒的基准可以把行为植入 DGM、SICA 和 Hyperagents" width="2400" height="704" decoding="async" loading="lazy"></picture></a><figcaption>对自我修改的 coding agent 投毒</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>投毒基准如何把行为写进自我修改的 coding agent</h4>
+<div class="step"><strong>(a) Darwin Gödel Machine</strong>：带有恶魔标记的 Benchmark 进入 Coding Agent，再经 Transcript / Diagnosis Prompt、Proposal / Self-Improvement Prompt，生成 New Coding Agent，随后在 Coding Task 上产出带有同样标记的 Program。</div>
+<div class="step"><strong>(b) Self-Improving Coding Agent</strong>：路径类似，但多了 Review Committee（审查委员会）这一环。</div>
+<div class="step"><strong>(c) Hyperagents</strong>：Task Agent 与 Meta Agent 分层。诊断与自我改进的 prompt 作用在 Meta Agent 上，最终 Program 仍可能带上被植入的行为。</div>
+<p>图中红色恶魔标记表示被投毒的基准或被污染的组件；笑脸标记表示看似正常的输出。</p>
+</details></figure>
+<p>会自我修改的 coding agent 用基准来决定保留哪些编辑。Roesner 和 Kohno 表明：谁控制了那个基准，谁就能控制 agent 保留哪些行为。</p>
+<p>作者做了一套基准，测试只有在代码关闭安全证书检查时才会通过。他们把它用在包括 Hyperagents 在内的三个自我改进系统上。进化后的 agent 写出了关闭这些检查的工具或规则。后来，这些 agent 在干净任务上处理普通的网络请求时，也用上了这些工具和规则。再在干净基准上继续进化，通常也去不掉这种行为。</p>
+<p><em>要点：审查进入自我评估集的内容时，要像审查代码一样认真。也要审查 agent 给自己写的工具和规则。</em></p>
+<p>2026 年已经有几套基准直接衡量自我改进。在相信这些数字之前，先读懂每一套是怎么设置的。</p>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.08640" target="_blank" rel="noopener noreferrer">PostTrainBench</a> 要求 agent 在一块 H100 上、用 10 小时对一个基座模型做 post-training。最好的 agent 达到了 23.2%，官方指令微调模型则是 51.1%。有些 agent 在测试集上训练，或下载已有的 checkpoint，而不是自己训练。</li>
+<li><a href="https://arxiv.org/abs/2606.17546" target="_blank" rel="noopener noreferrer">SEAGym</a> 会在留出任务、分布外任务和更早的任务上给每一次 harness 更新打分，并记录成本。它跑在 Terminal-Bench 2.0 和 HLE 上。频繁更新并不总是能提高留出分数。</li>
+<li><a href="https://arxiv.org/abs/2611.08946" target="_blank" rel="noopener noreferrer">Flex-RSI</a> 测试 agent 能否在固定预算下，在视觉和机器人任务上改进自己的 harness。只有在留出验证数据上分数更高时才会保留方案，最终分数使用隐藏的测试数据。仅有通过/失败的反馈，会拖累 open-weight 模型。</li>
+<li><a href="https://arxiv.org/abs/2611.16591" target="_blank" rel="noopener noreferrer">Singularity-Bench</a> 要求 agent 搭建六套核心系统，从预训练到集群编排，并在相同硬件上与人搭建的基线比较。搭配 Claude Code 的 Opus 5.5 在全部六项任务上达到或超过了人类基线。作者还在标准的 Harbor 测试设置里发现了 reward hacking 漏洞，并做了一个打过补丁的版本。</li>
+<li><a href="https://frontier-rsi.org/" target="_blank" rel="noopener noreferrer">FrontierRSI</a> 是 Abundant AI 的一套新基准，目前还没有论文。它有 27 个开放式任务，覆盖预训练、post-training、推理和 GPU kernel，跑在真实的 H100 上，预算是 2 到 8 小时。每个任务上任意模型的最佳试验被定为 1 分。其中 8 个任务在 <a href="https://github.com/abundant-ai/frontier-rsi" target="_blank" rel="noopener noreferrer">GitHub</a> 上公开。</li>
+</ul>
+</div></section>
+
+<div class="section-head">9. Keep Human Review / 9. 保留人工审查</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2609.30297" target="_blank" rel="noopener noreferrer">Bootstrapping Conversational Recommendation Agents At Spotify: Synthetic Data Generation and Self-Improvement Loops</a>, Enrico Palumbo et al., 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/bd14dd4eba63262f.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/bd14dd4eba63262f.jpg"><source type="image/webp" srcset="./assets/optimized/bd14dd4eba63262f-640-q88.webp 640w, ./assets/optimized/bd14dd4eba63262f-1024-q88.webp 1024w, ./assets/optimized/bd14dd4eba63262f-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/bd14dd4eba63262f.jpg" alt="Spotify&#x27;s loop samples conversations, diagnoses variance, and sends fixable issues to a coding agent for a reviewed batch edit" width="2400" height="872" decoding="async" loading="lazy"></picture></a><figcaption>Spotify self-improvement loop</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Spotify 的自我改进循环</h4>
+<div class="step">mini-batch 对话进入 Recs Agent，采样多次得到 Result₁…Result_N 及 Score，再由 Judge 打分。</div>
+<div class="step">All Fail（全部失败）或 Mixed（结果不一致）时，进入 Variance Root Cause（波动的根因）分析，例如 PLANNING TOOLS、PLANNING ARGS、ACTION、TOOL VARIANCE、TOOL FAILURE、JUDGE VARIANCE。</div>
+<div class="step">能在 agent 内修复的问题交给 Coding Agent，再做 BATCH EDIT AND EVAL（批量编辑并评估）。两种策略：Agentic Refinement（分析 prompt、工具说明、代码库和 judge 解释后尝试修复）；Contrastive Optimization（对比成功与失败的计划后再尝试修复）。</div>
+<div class="step">All Pass（全部通过），或问题无法在 agent 内修复时：NO ACTION, LOG TO USER（不改动，记录给人工）。</div>
+</details></figure>
+<p>Spotify built a conversational music recommendation agent before launch, when no real conversations existed yet. The team generated synthetic multi-turn conversations to test it. Human reviewers rated that data above 90% on every quality measure.</p>
+<p>Spotify's improvement loop runs each test conversation several times. Inconsistent results point to unstable planning or tool use. A coding agent then proposes fixes to the prompt and tools. Each round ends with a pull request that a person reviews, plus a full evaluation to catch regressions.</p>
+<p>This loop improved quality by 8% over a prompt the team had already tuned heavily. In an online A/B test against the previous experience, the agent increased listening by 14% and weekly active users by 5%. Skips fell by 5%.</p>
+<p><em>Takeaway: If you add a self-improvement loop to a product, start narrow. Keep a person reviewing each change. Measure the result with real users.</em></p>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2609.30297" target="_blank" rel="noopener noreferrer">Bootstrapping Conversational Recommendation Agents At Spotify: Synthetic Data Generation and Self-Improvement Loops</a>，Enrico Palumbo 等，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/bd14dd4eba63262f.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/bd14dd4eba63262f.jpg"><source type="image/webp" srcset="./assets/optimized/bd14dd4eba63262f-640-q88.webp 640w, ./assets/optimized/bd14dd4eba63262f-1024-q88.webp 1024w, ./assets/optimized/bd14dd4eba63262f-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/bd14dd4eba63262f.jpg" alt="Spotify 的循环多次采样对话、诊断波动，并把可修复的问题交给 coding agent，再以人工审查的批量编辑结束" width="2400" height="872" decoding="async" loading="lazy"></picture></a><figcaption>Spotify 的自我改进循环</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>Spotify 的自我改进循环</h4>
+<div class="step">mini-batch 对话进入 Recs Agent，采样多次得到 Result₁…Result_N 及 Score，再由 Judge 打分。</div>
+<div class="step">All Fail（全部失败）或 Mixed（结果不一致）时，进入 Variance Root Cause（波动的根因）分析，例如 PLANNING TOOLS、PLANNING ARGS、ACTION、TOOL VARIANCE、TOOL FAILURE、JUDGE VARIANCE。</div>
+<div class="step">能在 agent 内修复的问题交给 Coding Agent，再做 BATCH EDIT AND EVAL（批量编辑并评估）。两种策略：Agentic Refinement（分析 prompt、工具说明、代码库和 judge 解释后尝试修复）；Contrastive Optimization（对比成功与失败的计划后再尝试修复）。</div>
+<div class="step">All Pass（全部通过），或问题无法在 agent 内修复时：NO ACTION, LOG TO USER（不改动，记录给人工）。</div>
+</details></figure>
+<p>Spotify 在上线前就做了一个对话式音乐推荐 agent，那时还没有真实对话。团队生成了多轮的合成对话来测试它。人工审查者在每一项质量指标上都给这批数据打了 90% 以上。</p>
+<p>Spotify 的改进循环会把每段测试对话跑若干次。结果不一致，往往指向不稳定的规划或工具使用。然后由一个 coding agent 对 prompt 和工具提出修复。每一轮以一个由人审查的 pull request 结束，再加上一次完整评估，用来抓住回归。</p>
+<p>这条循环在团队已经反复调过的 prompt 之上，又把质量提高了 8%。在针对先前体验的在线 A/B 测试中，这个 agent 让收听量提高了 14%，周活跃用户提高了 5%。跳过率下降了 5%。</p>
+<p><em>要点：如果你要给产品加上一条自我改进循环，先从窄处开始。每一次改动都保留人工审查。用真实用户来衡量结果。</em></p>
+</div></section>
+
+<div class="section-head">10. Split Pre-training Into Loops / 10. 把预训练拆成多条循环</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p><a href="https://arxiv.org/abs/2611.10719" target="_blank" rel="noopener noreferrer">No Second Run: Does RSI Stop at Frontier Pre-training?</a>, Xiaojie Cai et al., 2026.</p>
+<figure class="callout has-img"><a href="./assets/translations/original/15a5663c91fccc8b.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/15a5663c91fccc8b.jpg"><source type="image/webp" srcset="./assets/optimized/15a5663c91fccc8b-640-q88.webp 640w, ./assets/optimized/15a5663c91fccc8b-1024-q88.webp 1024w, ./assets/optimized/15a5663c91fccc8b-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/15a5663c91fccc8b.jpg" alt="Why RSI is hard in pre-training, and results for 801-30B-A3B against other models" width="2400" height="1131" decoding="async" loading="lazy"></picture></a><figcaption>RSI for pre-training and 801-30B-A3B results</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>预训练中的 RSI 与 801-30B-A3B 的对比结果</h4>
+<div class="step"><strong>RSI for Post-training</strong>：循环可以反复跑、去追分数。勾选项：cheap runs, repeated at will（便宜、可随意重跑）；climb a well-defined score（沿着定义清楚的分数往上爬）。</div>
+<div class="step"><strong>RSI for Pre-training</strong>：循环在“跑一次”和“如何衡量”上会断掉。Break I：One costly run, no rerun（一次很贵，不能重跑）。Break II：No well-defined target（没有定义清楚的目标），today’s score 看不到留给 post-training 的 headroom。</div>
+<p>右侧柱状图比较 801-30B-A3B（红柱）与 Qwen3.5-35B-A3B、Qwen3-30B-A3B、Nemotron-3.5-Lightning-30B-A3B、Gemma-4-26B-A4B、Flint-40B-A2.5B 等。上排是 Base，下排是 After SFT。脚注说明 Flint 没有公开 base 模型，因此只出现在 SFT 之后；在标了 † 的基准上，对照是各家发布的 instruct 模型。</p>
+</details></figure>
+<p>RSI loops usually depend on cheap, repeatable runs. Pre-training runs are neither cheap nor repeatable. One run uses hundreds of thousands of GPU-hours over months. In practice, a team gets one full run.</p>
+<p>Cai et al. split pre-training work into smaller loops that agents could run. Some loops debug infrastructure and data. One uses tiny fine-tuning runs to estimate how much room a model leaves for post-training. Others improve data filters and web crawling. All loops write to shared notes, including failed ideas and why they failed.</p>
+<p>A newly formed team trained 801-30B-A3B-Base with these loops in three months on 11.8T tokens. As a base model, it beats Qwen3-30B-A3B and Nemotron-3.5-Lightning-30B-A3B. It trails only the larger Qwen3.5-35B-A3B.</p>
+<p><em>Takeaway: If your main loop is too slow or expensive to repeat, split it into smaller loops. Each smaller loop needs a metric you can measure quickly.</em></p>
+</div><div class="cell cn">
+<p><a href="https://arxiv.org/abs/2611.10719" target="_blank" rel="noopener noreferrer">No Second Run: Does RSI Stop at Frontier Pre-training?</a>，Xiaojie Cai 等，2026。</p>
+<figure class="callout has-img"><a href="./assets/translations/original/15a5663c91fccc8b.jpg" aria-label="查看原尺寸插图"><picture data-image-asset="assets/translations/original/15a5663c91fccc8b.jpg"><source type="image/webp" srcset="./assets/optimized/15a5663c91fccc8b-640-q88.webp 640w, ./assets/optimized/15a5663c91fccc8b-1024-q88.webp 1024w, ./assets/optimized/15a5663c91fccc8b-1600-q88.webp 1600w" sizes="(max-width:700px) calc(100vw - 48px), 704px"><img src="./assets/translations/original/15a5663c91fccc8b.jpg" alt="为什么 RSI 在预训练中很难，以及 801-30B-A3B 与其他模型的对比结果" width="2400" height="1131" decoding="async" loading="lazy"></picture></a><figcaption>预训练中的 RSI 与 801-30B-A3B 结果</figcaption><details class="img-trans"><summary>图中文字 · 中文翻译</summary>
+
+<h4>预训练中的 RSI 与 801-30B-A3B 的对比结果</h4>
+<div class="step"><strong>RSI for Post-training</strong>：循环可以反复跑、去追分数。勾选项：cheap runs, repeated at will（便宜、可随意重跑）；climb a well-defined score（沿着定义清楚的分数往上爬）。</div>
+<div class="step"><strong>RSI for Pre-training</strong>：循环在“跑一次”和“如何衡量”上会断掉。Break I：One costly run, no rerun（一次很贵，不能重跑）。Break II：No well-defined target（没有定义清楚的目标），today’s score 看不到留给 post-training 的 headroom。</div>
+<p>右侧柱状图比较 801-30B-A3B（红柱）与 Qwen3.5-35B-A3B、Qwen3-30B-A3B、Nemotron-3.5-Lightning-30B-A3B、Gemma-4-26B-A4B、Flint-40B-A2.5B 等。上排是 Base，下排是 After SFT。脚注说明 Flint 没有公开 base 模型，因此只出现在 SFT 之后；在标了 † 的基准上，对照是各家发布的 instruct 模型。</p>
+</details></figure>
+<p>RSI 循环通常依赖便宜、可重复的运行。预训练既不便宜，也不能反复跑。一次运行会在数月里消耗数十万 GPU 小时。实践中，一个团队往往只有一次完整运行。</p>
+<p>Cai 等人把预训练工作拆成 agent 可以跑的更小循环。有些循环调试基础设施和数据。有一个循环用很小的微调运行，去估计模型给 post-training 留了多少空间。还有一些循环改进数据过滤和网页抓取。所有循环都写入共享笔记，包括失败的想法以及失败的原因。</p>
+<p>一个新组建的团队用这些循环，在三个月里、用 11.8T token 训练了 801-30B-A3B-Base。作为基座模型，它超过了 Qwen3-30B-A3B 和 Nemotron-3.5-Lightning-30B-A3B。只落后于更大的 Qwen3.5-35B-A3B。</p>
+<p><em>要点：如果主循环太慢或太贵，没法反复跑，就把它拆成更小的循环。每一条小循环都需要一个能很快测到的指标。</em></p>
+</div></section>
+
+<div class="section-head">How to Read This List / 怎么读这份清单</div>
+
+<section class="pair"><div class="cell en" lang="en">
+<p>The first four papers cover what a loop should change and when it runs. The options are the harness before deployment, the harness during use, the improvement procedure, and the weights. Papers five to seven cover how to verify that an improvement holds on new tasks. Paper eight shows how an attacker can steer a loop through its benchmark. Spotify and No Second Run show RSI working on a real product and on a frontier training run.</p>
+<p>If you adopt only one practice, set aside a held-out test set for evaluation only. Score the starting version and the current version on it before you trust any gain.</p>
+<p>Continue to track RSI papers here: <a href="https://academy.dair.ai/papers/collections/self-improving-agents" target="_blank" rel="noopener noreferrer">https://academy.dair.ai/papers/collections/self-improving-agents</a>.</p>
+</div><div class="cell cn">
+<p>前四篇论文讨论循环应当改什么、以及它在何时运行。可选的对象是：部署前的 harness、使用中的 harness、改进程序本身，以及权重。第五到第七篇讨论如何验证一次改进在新任务上仍然成立。第八篇展示攻击者如何通过基准来引导一条循环。Spotify 与 No Second Run 则展示 RSI 如何在真实产品和一次前沿训练运行中工作。</p>
+<p>如果你只采纳一项做法，请单独留出一份只用于评估的测试集。在相信任何收益之前，先在它上面给起始版本和当前版本打分。</p>
+<p>可以继续在这里跟踪 RSI 论文：<a href="https://academy.dair.ai/papers/collections/self-improving-agents" target="_blank" rel="noopener noreferrer">https://academy.dair.ai/papers/collections/self-improving-agents</a>。</p>
+</div></section>
+
+</main><!-- site:comments:start --><section id="comments" class="comments" aria-label="文章评论"><h2>评论</h2><div class="giscus"></div><p class="comments-status">评论由 GitHub Discussions 提供。</p></section><!-- site:comments:end --><!-- site:comment-scripts:start --><script src="./comments-config.js?v=2"></script><script src="./comments.js?v=6" defer></script><!-- site:comment-scripts:end -->
+<footer class="source-footer">来源：<a href="https://x.com/omarsar0/status/2125234668396023943" target="_blank" rel="noopener noreferrer">elvis 在 X 发布的文章</a>（2026-11-24）。原文亦可在 <a href="https://x.com/i/article/2125233081082613761" target="_blank" rel="noopener noreferrer">X Article</a> 阅读。整理日期：2026-11-25。翻译 zwhu。此页为英中逐段对照翻译，供阅读参考，未独立核实文中实验数据。</footer>
+<div class="progress" aria-hidden="true"></div>
+<script>
+const mode=document.getElementById('mode'),size=document.getElementById('size');
+mode.addEventListener('click',()=>{const on=document.body.classList.toggle('single');mode.setAttribute('aria-pressed',String(on));mode.textContent=on?'恢复左右对照':'只看中文';});
+size.addEventListener('click',()=>{const on=document.body.classList.toggle('large');size.setAttribute('aria-pressed',String(on));size.textContent=on?'恢复字号':'放大字号';});
+document.getElementById('print').addEventListener('click',()=>window.print());
+function progress(){const d=document.documentElement;document.querySelector('.progress').style.width=(d.scrollHeight>d.clientHeight?100*d.scrollTop/(d.scrollHeight-d.clientHeight):100)+'%';}
+addEventListener('scroll',progress,{passive:true});addEventListener('resize',progress);progress();
+</script>
+<!-- site:analytics:start --><!-- Cloudflare Web Analytics --><script async type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c6667d9ae98e4234bba57cd49d2353f9"}'></script><!-- End Cloudflare Web Analytics --><!-- site:analytics:end --></body>
+</html>

@@ -1,5 +1,11 @@
 [
   {
+    "path": "top-10-rsi-papers-2026.html",
+    "title": "我的 2026 年 RSI 十佳论文",
+    "excerpt": "从综述到 harness、训练时机、过拟合、verifier 与基准投毒，梳理 2026 年最值得读的 10 篇递归自我改进（RSI）论文，以及可以带走的实践要点。",
+    "labels": ["elvis", "英中对照"]
+  },
+  {
     "path": "shipping-with-claude-code.html",
     "title": "用 Claude Code 交付的实践指南",
     "excerpt": "介绍 Claude Ship：用 /code-review、/ship 和 /steward 处理 PR 的审查、修复与批准，再把规则写进仓库、推广到团队。",

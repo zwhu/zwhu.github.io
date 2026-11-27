@@ -96,7 +96,7 @@ def main():
 
     updated = 0
     for path, (source, images) in pages.items():
-        translation = path.name in ('claude-code-review.html', 'engineers-new-problems.html', 'agent-design-system.html', 'shipping-with-claude-code.html')
+        translation = path.name in ('claude-code-review.html', 'engineers-new-problems.html', 'agent-design-system.html', 'shipping-with-claude-code.html', 'top-10-rsi-papers-2026.html')
         for start, original, attrs, anchored, pictured in reversed(images.images):
             if attrs.get('src', '').removeprefix('./') not in assets:
                 continue
