@@ -99,6 +99,21 @@
         "datePublished": "2026-11-01"
       }
     },
+    "top-10-rsi-papers-2026.html": {
+      "description": "elvis 盘点 2026 年最值得读的 10 篇递归自我改进（RSI）论文的全文中英对照翻译，涵盖 harness、训练时机、过拟合、verifier、基准投毒以及生产与预训练中的实践，保留原文插图。",
+      "datePublished": "2026-11-25",
+      "author": {
+        "name": "elvis",
+        "url": "https://x.com/omarsar0"
+      },
+      "translationOfWork": {
+        "@type": "Article",
+        "name": "My Top 10 RSI Papers of 2026",
+        "url": "https://x.com/omarsar0/status/2125234668396023943",
+        "inLanguage": "en",
+        "datePublished": "2026-11-24"
+      }
+    },
     "shipping-with-claude-code.html": {
       "description": "Addy Osmani 关于 Claude Ship 的全文中英对照翻译，介绍用 /code-review、/ship 和 /steward 处理 PR 的审查、修复与批准，再把规则写进仓库、推广到团队，保留原文插图。",
       "datePublished": "2026-11-25",
